@@ -4,7 +4,7 @@ import ai.dqo.BaseTest;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
-import ai.dqo.sensors.column.strings.ColumnStringsStringRegexMatchPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringMatchRegexPercentSensorParametersSpec;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,15 +28,15 @@ public class SensorDocumentationModelFactoryImplTests extends BaseTest {
 
     @Test
     void createSensorDocumentation_whenCalledForClassWithSensorParameterFields_thenCreatesDocumentationModel() {
-        ColumnStringsStringRegexMatchPercentSensorParametersSpec parametersSpec = new ColumnStringsStringRegexMatchPercentSensorParametersSpec();
+        ColumnStringsStringMatchRegexPercentSensorParametersSpec parametersSpec = new ColumnStringsStringMatchRegexPercentSensorParametersSpec();
         SensorDocumentationModel sensorDocumentation = this.sut.createSensorDocumentation(parametersSpec);
 
         Assertions.assertNotNull(sensorDocumentation);
         Assertions.assertEquals("Column level sensor that calculates the percent of values that fit to a regex in a column.", sensorDocumentation.getSensorParametersJavaDoc());
         Assertions.assertEquals("column", sensorDocumentation.getTarget());
         Assertions.assertEquals("strings", sensorDocumentation.getCategory());
-        Assertions.assertEquals("string_regex_match_percent", sensorDocumentation.getSensorName());
-        Assertions.assertEquals("column/strings/string_regex_match_percent", sensorDocumentation.getFullSensorName());
+        Assertions.assertEquals("string_match_regex_percent", sensorDocumentation.getSensorName());
+        Assertions.assertEquals("column/strings/string_match_regex_percent", sensorDocumentation.getFullSensorName());
 
         Assertions.assertNotNull(sensorDocumentation.getDefinition());
         Assertions.assertEquals(1, sensorDocumentation.getDefinition().getSpec().getFields().size());

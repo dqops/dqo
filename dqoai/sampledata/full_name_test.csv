@@ -1,4 +1,4 @@
-FULL_NAME:STRING,RESULT:INTEGER,DATE:LOCAL_DATE
+full_name:STRING,result:INTEGER,date:LOCAL_DATE
 Nowak Michał,1,2023-01-11
 Kowalczyk Piotr,1,2023-01-11
 Wójcik Marcin,1,2023-01-11
