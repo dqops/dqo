@@ -14,15 +14,6 @@ public interface CommonTableNormalizationService {
     String ALL_DATA_DATA_STREAM_NAME = "all data";
 
     /**
-     * Finds a named column in the table. Performs a case-insensitive search, so the columns may be named in upper or lower case.
-     *
-     * @param resultsTable Table to analyze.
-     * @param columnName   Expected column name.
-     * @return Column that was found or null.
-     */
-    Column<?> findColumn(Table resultsTable, String columnName);
-
-    /**
      * Finds all data stream level columns and returns them as an array of columns. The array length is 9 elements (the number of data stream levels supported).
      * Data stream level columns are returned at their respective index, shifted one index down (because the array indexes start at 0).
      * The stream_level_1 column (if present) is returned at result[0] index.

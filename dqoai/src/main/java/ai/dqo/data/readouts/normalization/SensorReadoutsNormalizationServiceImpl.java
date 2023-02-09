@@ -22,6 +22,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
+import ai.dqo.utils.tables.TableColumnUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -65,7 +66,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         int resultsRowCount = resultsTable.rowCount();
         ZoneId defaultTimeZone = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         Table normalizedResults = Table.create("sensor_results_normalized");
-        Column<?> actualValueColumn = this.commonNormalizationService.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        Column<?> actualValueColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         if (actualValueColumn == null && sensorExecutionResult.isSuccess()) {
             throw new SensorResultNormalizeException(resultsTable,
                     "Missing '" + SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME + "' column, the sensor query must return this column");
@@ -234,7 +235,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * @return Requested value column, cloned and converted to a double column.
      */
     public DoubleColumn makeNormalizedDoubleColumn(Table resultsTable, String columnName) {
-        Column<?> currentColumn = this.commonNormalizationService.findColumn(resultsTable, columnName);
+        Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, columnName);
 
         if (currentColumn instanceof DoubleColumn) {
             return ((DoubleColumn)currentColumn).copy();
@@ -332,7 +333,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         LocalDateTime truncatedNow = timeSeriesGradient != null ?
                 LocalDateTimeTruncateUtility.truncateTimePeriod(timeNow, timeSeriesGradient) : timeNow;
 
-        Column<?> currentColumn = this.commonNormalizationService.findColumn(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+        Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
         if (currentColumn == null) {
             // missing time_period column, we will create a fake one
             newTimestampColumn.fillWith(() -> truncatedNow);
@@ -408,8 +409,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * @return Instant column with the time_period_utc time periods.
      */
     public InstantColumn makeNormalizedTimePeriodUtcColumn(Table resultsTable, DateTimeColumn timePeriodColumn, ZoneId defaultTimeZone) {
-
-        Column<?> currentColumn = this.commonNormalizationService.findColumn(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
+        Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
         if (currentColumn == null || !(currentColumn instanceof InstantColumn)) {
             InstantColumn newTimePeriodUtcColumn = InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, resultsTable.rowCount());
 

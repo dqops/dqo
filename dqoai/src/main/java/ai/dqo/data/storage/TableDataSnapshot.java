@@ -17,8 +17,10 @@ package ai.dqo.data.storage;
 
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
+import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
 import java.time.LocalDate;
@@ -174,6 +176,33 @@ public class TableDataSnapshot {
     }
 
     /**
+     * Fixes the schema of loaded parquet files to match the current schema.
+     * Supports only read-write parquet files (without a column list filter). Does not convert the data types of columns.
+     * @param loadedPartitions Dictionary of loaded partitions.
+     */
+    public void updateSchemaForLoadedPartitions(Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions) {
+        if (this.columnNames == null) {
+            return; // we cannot help here, we don't know what are the data types of missing columns
+        }
+
+        for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions.values()) {
+            Table partitionData = loadedMonthlyPartition.getData();
+            if (partitionData == null) {
+                continue;
+            }
+
+            HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
+
+            for (Column<?> expectedColumn : this.getTableDataChanges().getNewOrChangedRows().columns()) {
+                if (!columnNamesInPartitionData.contains(expectedColumn.name())) {
+                    Column<?> emptyColumnToAdd = expectedColumn.emptyCopy(partitionData.rowCount());
+                    partitionData.addColumns(emptyColumnToAdd);
+                }
+            }
+        }
+    }
+
+    /**
      * Ensures that all the months (monthly partitions) within the time range between <code>startMonth</code> and <code>endMonth</code> are loaded.
      * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
      * @param start The date of the start month. It could be any date within the month, because the whole month is always loaded.
@@ -193,6 +222,7 @@ public class TableDataSnapshot {
             if (this.loadedMonthlyPartitions == null) {
                 this.loadedMonthlyPartitions = new LinkedHashMap<>();
             }
+            updateSchemaForLoadedPartitions(loadedPartitions);
             this.loadedMonthlyPartitions.putAll(loadedPartitions);
             return;
         }
@@ -204,6 +234,7 @@ public class TableDataSnapshot {
 
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedEarlierPartitions = this.storageService.loadPartitionsForMonthsRange(
                     this.connectionName, this.tableName, this.firstLoadedMonth, lastMonthToLoad, this.storageSettings, this.columnNames);
+            updateSchemaForLoadedPartitions(loadedEarlierPartitions);
             this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
         }
 
@@ -215,6 +246,7 @@ public class TableDataSnapshot {
 
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedLaterPartitions = this.storageService.loadPartitionsForMonthsRange(
                     this.connectionName, this.tableName, firstMonthToLoad, this.lastLoadedMonth, this.storageSettings, this.columnNames);
+            updateSchemaForLoadedPartitions(loadedLaterPartitions);
             this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
         }
     }
