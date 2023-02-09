@@ -72,15 +72,17 @@
 
 {% macro render_time_dimension_projection(table_alias_prefix = '') %}
     {%- if time_series is not none -%}
-    , {{ render_time_dimension_expression(table_alias_prefix) }} AS time_period
+    {{ ',' }}
+    {{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,
+    TIMESTAMP({{ render_time_dimension_expression(table_alias_prefix) }}) AS time_period_utc,
     {%- endif -%}
 {% endmacro %}
 
 {% macro render_data_stream_projections(table_alias_prefix = '') %}
     {%- if data_streams is not none and (data_streams | length()) > 0 -%}
         {%- for attribute in data_streams -%}
-            {{ ', ' }}
-            {%- with data_stream_level = data_streams[attribute] -%}
+            {{ ',' }}
+            {% with data_stream_level = data_streams[attribute] -%}
                 {%- if data_stream_level.source == 'tag' -%}
                     {{ make_text_constant(data_stream_level.tag) }}
                 {%- elif data_stream_level.source == 'column_value' -%}
@@ -118,7 +120,7 @@
         {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
             {{ ', ' }}
         {%- endif -%}
-            {{ 'time_period' }}
+            {{ 'time_period' }}, {{ 'time_period_utc' }}
     {%- endif -%}
 {% endmacro %}
 

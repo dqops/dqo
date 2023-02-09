@@ -35,6 +35,7 @@ public class SensorReadoutsTableFactoryImpl implements SensorReadoutsTableFactor
                 DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
                 DoubleColumn.create(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME),
                 DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME),
                 StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "1"),
                 StringColumn.create(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "2"),

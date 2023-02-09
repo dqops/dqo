@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
+import java.util.TimeZone;
 
 /**
  * Service that returns the default time zone configured on the DQO instance.
@@ -73,6 +74,7 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
 
         synchronized (this) {
             this.cachedTimeZone = defaultTimeZoneId;
+            TimeZone.setDefault(TimeZone.getTimeZone(defaultTimeZoneId));
             return defaultTimeZoneId;
         }
     }
@@ -130,5 +132,7 @@ public class DefaultTimeZoneProviderImpl implements DefaultTimeZoneProvider {
         synchronized (this) {
             this.cachedTimeZone = null;
         }
+
+        getDefaultTimeZoneId();
     }
 }

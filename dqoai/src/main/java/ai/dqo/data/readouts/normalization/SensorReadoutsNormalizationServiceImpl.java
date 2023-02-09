@@ -86,6 +86,10 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         DateTimeColumn timePeriodColumn = makeNormalizedTimePeriodColumn(resultsTable, defaultTimeZone, timeSeriesGradient);
         normalizedResults.addColumns(timePeriodColumn);
 
+        InstantColumn normalizedTimePeriodUtcColumn = makeNormalizedTimePeriodUtcColumn(resultsTable, timePeriodColumn,
+                defaultTimeZone);
+        normalizedResults.addColumns(normalizedTimePeriodUtcColumn);
+
         // now detect data stream level columns...
         StringColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataStreamLevelColumns(
                 resultsTable, sensorRunParameters.getDataStreams(), resultsRowCount);
@@ -318,11 +322,11 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * The values in the time period column are converted to a date time column (without a time zone). Instant columns (based on an UTC timezone) are converted to the timezone of question.
      * Any values that are not aligned at the beginning of the time series gradient (week, day, month, etc.) are truncated to the beginning of the period.
      * @param resultsTable Result table to extract the time_period column.
-     * @param connectionTimeZone Expected time zone of the database.
+     * @param defaultTimeZone Default DQO time zone, used to create a time period value if the time period was not received from a sensor result.
      * @param timeSeriesGradient Time series gradient (for truncation).
      * @return A copy of a time_period column that is truncated, normalized to a datetime without the time zone.
      */
-    public DateTimeColumn makeNormalizedTimePeriodColumn(Table resultsTable, ZoneId connectionTimeZone, TimeSeriesGradient timeSeriesGradient) {
+    public DateTimeColumn makeNormalizedTimePeriodColumn(Table resultsTable, ZoneId defaultTimeZone, TimeSeriesGradient timeSeriesGradient) {
         DateTimeColumn newTimestampColumn = DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, resultsTable.rowCount());
         LocalDateTime timeNow = LocalDateTime.now();
         LocalDateTime truncatedNow = timeSeriesGradient != null ?
@@ -382,7 +386,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                     newTimestampColumn.set(i, truncatedNow);
                 }
                 else {
-                    LocalDateTime localDateTimeFromInstant = LocalDateTime.ofInstant(instant, connectionTimeZone);
+                    LocalDateTime localDateTimeFromInstant = LocalDateTime.ofInstant(instant, defaultTimeZone);
                     LocalDateTime truncatedInstant = timeSeriesGradient != null ?
                             LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTimeFromInstant, timeSeriesGradient) : localDateTimeFromInstant;
                     newTimestampColumn.set(i, truncatedInstant);
@@ -394,5 +398,42 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         // NOTE: we could parse the string, but it is better if the user casts timestamp columns that are strings to a datetime column in the sensor SQL query
 
         throw new SensorResultNormalizeException(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME + " column must be a date, datetime or an instant (utc datetime).");
+    }
+
+    /**
+     * Makes a normalized time_period_utc column. Converts non Instant (UTC date) to UTC date. Tries to convert the time period column.
+     * @param resultsTable Result table to find the column.
+     * @param timePeriodColumn Time period column used to convert the dates.
+     * @param defaultTimeZone Default DQO time zone.
+     * @return Instant column with the time_period_utc time periods.
+     */
+    public InstantColumn makeNormalizedTimePeriodUtcColumn(Table resultsTable, DateTimeColumn timePeriodColumn, ZoneId defaultTimeZone) {
+
+        Column<?> currentColumn = this.commonNormalizationService.findColumn(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
+        if (currentColumn == null || !(currentColumn instanceof InstantColumn)) {
+            InstantColumn newTimePeriodUtcColumn = InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, resultsTable.rowCount());
+
+            // missing time_period_utc column or invalid type, we will convert it from the time_period, using the default DQO server time zone
+            for (int i = 0; i < timePeriodColumn.size(); i++) {
+                LocalDateTime timePeriodLocalValue = timePeriodColumn.get(i);
+                Instant timePeriodUtc = timePeriodLocalValue.toInstant(defaultTimeZone.getRules().getOffset(timePeriodLocalValue));
+                newTimePeriodUtcColumn.set(i, timePeriodUtc);
+            }
+
+            return newTimePeriodUtcColumn;
+        }
+
+        InstantColumn timePeriodUtcColumn = (InstantColumn)currentColumn;
+        for (int i = 0; i < timePeriodUtcColumn.size(); i++) {
+            Instant instant = timePeriodUtcColumn.get(i);
+            if (instant == null) {
+                // we need to fix it
+                LocalDateTime timePeriodLocalValue = timePeriodColumn.get(i);
+                Instant timePeriodUtc = timePeriodLocalValue.toInstant(defaultTimeZone.getRules().getOffset(timePeriodLocalValue));
+                timePeriodUtcColumn.set(i, timePeriodUtc);
+            }
+        }
+
+        return timePeriodUtcColumn;
     }
 }
