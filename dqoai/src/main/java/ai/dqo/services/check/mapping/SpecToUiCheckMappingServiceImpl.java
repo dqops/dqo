@@ -18,6 +18,7 @@ package ai.dqo.services.check.mapping;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
@@ -85,6 +86,10 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                                           ProviderType providerType) {
         UIAllChecksModel uiAllChecksModel = new UIAllChecksModel();
         uiAllChecksModel.setRunChecksJobTemplate(runChecksTemplate.clone());
+        uiAllChecksModel.setDataCleanJobTemplate(
+                DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
+                        uiAllChecksModel.getRunChecksJobTemplate()));
+
         String defaultDataStreamName = tableSpec.getDataStreams().getFirstDataStreamMappingName();
 
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
@@ -148,6 +153,12 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         CheckSearchFilters runChecksCategoryTemplate = runChecksTemplate.clone();
         runChecksCategoryTemplate.setCheckCategory(categoryFieldInfo.getYamlFieldName());
         categoryModel.setRunChecksJobTemplate(runChecksCategoryTemplate);
+        categoryModel.setDataCleanJobTemplate(
+                DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
+                        runChecksCategoryTemplate
+                )
+        );
+
 
         ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
         Optional<String> checkNameFilter = Optional.ofNullable(categoryModel.getRunChecksJobTemplate().getCheckName());
@@ -256,6 +267,10 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         CheckSearchFilters runOneCheckTemplate = runChecksCategoryTemplate.clone();
         runOneCheckTemplate.setCheckName(checkFieldInfo.getYamlFieldName());
         checkModel.setRunChecksJobTemplate(runOneCheckTemplate);
+
+        DeleteStoredDataQueueJobParameters dataCleanJobTemplate = DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(runOneCheckTemplate);
+        dataCleanJobTemplate.setDataStreamName(checkSpec.getDataStream());
+        checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
 
         checkModel.setScheduleOverride(checkSpec.getScheduleOverride());
         checkModel.setComments(checkSpec.getComments());

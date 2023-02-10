@@ -16,6 +16,7 @@
 package ai.dqo.rest.models.metadata;
 
 import ai.dqo.checks.CheckType;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
@@ -87,18 +88,22 @@ public class ColumnBasicModel {
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collector within this column.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this column.")
+    private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
+
     /**
      * Creates a basic column model from a column specification by cherry-picking relevant fields.
      * This model is used for the column list screen and it has even less fields.
+     * @param connectionName    Connection name.
      * @param physicalTableName Physical table name.
      * @param columnName        Column name.
      * @param columnSpec        Source column specification.
      * @return Basic column model.
      */
     public static ColumnBasicModel fromColumnSpecificationForListEntry(String connectionName,
-                                                                      PhysicalTableName physicalTableName,
-                                                                      String columnName,
-                                                                      ColumnSpec columnSpec) {
+                                                                       PhysicalTableName physicalTableName,
+                                                                       String columnName,
+                                                                       ColumnSpec columnSpec) {
         return new ColumnBasicModel() {{
             setConnectionName(connectionName);
             setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
@@ -147,6 +152,20 @@ public class ColumnBasicModel {
                 setSchemaTableName(physicalTableName.toTableSearchFilter());
                 setColumnName(columnName);
                 setEnabled(true);
+            }});
+            setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(physicalTableName.toTableSearchFilter());
+                setColumnName(columnName);
+
+                setDateStart(null);
+                setDateEnd(null);
+
+                setDeleteProfilingResults(true);
+                setDeleteErrors(true);
+                setDeleteRuleResults(true);
+                setDeleteSensorReadouts(true);
             }});
         }};
     }

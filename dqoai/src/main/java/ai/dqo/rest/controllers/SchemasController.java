@@ -83,48 +83,8 @@ public class SchemasController {
                 .sorted()
                 .collect(Collectors.toList());
 
-        Stream<SchemaModel> modelStream = schemaNameList.stream().map(s -> new SchemaModel() {{
-            setConnectionName(connectionName);
-            setSchemaName(s);
-            setRunChecksJobTemplate(new CheckSearchFilters()
-            {{
-                setConnectionName(connectionName);
-                setSchemaTableName(s + ".*");
-                setEnabled(true);
-            }});
-            setRunProfilingChecksJobTemplate(new CheckSearchFilters()
-            {{
-                setConnectionName(connectionName);
-                setSchemaTableName(s + ".*");
-                setCheckType(CheckType.ADHOC);
-                setEnabled(true);
-            }});
-            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
-            {{
-                setConnectionName(connectionName);
-                setSchemaTableName(s + ".*");
-                setCheckType(CheckType.CHECKPOINT);
-                setEnabled(true);
-            }});
-            setRunTimePeriodChecksJobTemplate(new CheckSearchFilters()
-            {{
-                setConnectionName(connectionName);
-                setSchemaTableName(s + ".*");
-                setCheckType(CheckType.PARTITIONED);
-                setEnabled(true);
-            }});
-            setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
-            {{
-                setConnectionName(connectionName);
-                setSchemaTableName(s + ".*");
-                setEnabled(true);
-            }});
-            setImportTableJobParameters(new ImportTablesQueueJobParameters()
-            {{
-                setConnectionName(connectionName);
-                setSchemaName(s);
-            }});
-        }});
+        Stream<SchemaModel> modelStream = schemaNameList.stream()
+                .map(s -> SchemaModel.fromSchemaNameStrings(connectionName, s));
 
         return new ResponseEntity<>(Flux.fromStream(modelStream), HttpStatus.OK);
     }
