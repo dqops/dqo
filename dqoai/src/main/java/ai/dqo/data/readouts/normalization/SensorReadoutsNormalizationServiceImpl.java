@@ -124,7 +124,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         if (timeSeriesGradient != null) {
             timeGradientColumn.setMissingTo(timeSeriesGradient.name());
         }
-        sortedNormalizedTable.insertColumn(3, timeGradientColumn);
+        sortedNormalizedTable.insertColumn(4, timeGradientColumn);
 
         LongColumn connectionHashColumn = LongColumn.create(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME, resultsRowCount);
         connectionHashColumn.setMissingTo(sensorRunParameters.getConnection().getHierarchyId().hashCode64());
