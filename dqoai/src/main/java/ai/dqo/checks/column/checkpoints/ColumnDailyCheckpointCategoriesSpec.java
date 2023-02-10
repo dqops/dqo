@@ -27,7 +27,7 @@ import ai.dqo.checks.column.checkpoints.pii.ColumnPiiDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.sql.ColumnSqlDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsDailyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessDailyCheckpointsSpec;
-import ai.dqo.checks.column.checkpoints.accuracy.ColumnAccuracyDailyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.integrity.ColumnIntegrityDailyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -64,7 +64,7 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
            put("pii", o -> o.pii);
            put("sql", o -> o.sql);
            put("bool", o -> o.bool);
-           put("accuracy", o -> o.accuracy);
+           put("integrity", o -> o.integrity);
 
         }
     };
@@ -109,10 +109,10 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolDailyCheckpointsSpec bool;
 
-    @JsonPropertyDescription("Daily checkpoints of accuracy in the column")
+    @JsonPropertyDescription("Daily checkpoints of integrity in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAccuracyDailyCheckpointsSpec accuracy;
+    private ColumnIntegrityDailyCheckpointsSpec integrity;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -262,18 +262,18 @@ public class ColumnDailyCheckpointCategoriesSpec extends AbstractRootChecksConta
      * Returns the container of checkpoints for standard data quality checks.
      * @return Container of row standard data quality checkpoints.
      */
-    public ColumnAccuracyDailyCheckpointsSpec getAccuracy() {
-        return accuracy;
+    public ColumnIntegrityDailyCheckpointsSpec getIntegrity() {
+        return integrity;
     }
 
     /**
-     * Sets the container of accuracy data quality checks (checkpoints).
-     * @param accuracy New accuracy checks.
+     * Sets the container of integrity data quality checks (checkpoints).
+     * @param integrity New integrity checks.
      */
-    public void setAccuracy(ColumnAccuracyDailyCheckpointsSpec accuracy) {
-        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
-        this.accuracy = accuracy;
-        this.propagateHierarchyIdToField(accuracy, "accuracy");
+    public void setIntegrity(ColumnIntegrityDailyCheckpointsSpec integrity) {
+        this.setDirtyIf(!Objects.equals(this.integrity, integrity));
+        this.integrity = integrity;
+        this.propagateHierarchyIdToField(integrity, "integrity");
     }
 
     /**

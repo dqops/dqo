@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.bigquery.sensors.column.accuracy;
+package ai.dqo.bigquery.sensors.column.integrity;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyValueMatchCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.accuracy.ColumnAccuracyValueMatchCountSensorParametersSpec;
+import ai.dqo.sensors.column.integrity.ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnAccuracyValueMatchCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnAccuracyValueMatchCountSensorParametersSpec sut;
+public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnAccuracyValueMatchCountCheckSpec checkSpec;
+    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,15 +49,15 @@ public class BigQueryColumnAccuracyValueMatchCountSensorParametersSpecIntegratio
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnAccuracyValueMatchCountSensorParametersSpec();
-        this.checkSpec = new ColumnAccuracyValueMatchCountCheckSpec();
+        this.sut = new ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec();
+        this.checkSpec = new ColumnIntegrityForeignKeyNotMatchCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setJoinedTab("value_match_left_table_5389942149833979960");
-        this.sut.setJoinedCol("primary_key");
+        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec);
@@ -67,13 +67,13 @@ public class BigQueryColumnAccuracyValueMatchCountSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setJoinedTab("value_match_left_table_5389942149833979960");
-        this.sut.setJoinedCol("primary_key");
+        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily);
@@ -83,13 +83,13 @@ public class BigQueryColumnAccuracyValueMatchCountSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setJoinedTab("value_match_left_table_5389942149833979960");
-        this.sut.setJoinedCol("primary_key");
+        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly);
@@ -99,13 +99,13 @@ public class BigQueryColumnAccuracyValueMatchCountSensorParametersSpecIntegratio
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setJoinedTab("value_match_left_table_5389942149833979960");
-        this.sut.setJoinedCol("primary_key");
+        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily,"date");
@@ -113,15 +113,15 @@ public class BigQueryColumnAccuracyValueMatchCountSensorParametersSpecIntegratio
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(2, resultTable.rowCount());
+        Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setJoinedTab("value_match_left_table_5389942149833979960");
-        this.sut.setJoinedCol("primary_key");
+        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly,"date");
@@ -129,7 +129,7 @@ public class BigQueryColumnAccuracyValueMatchCountSensorParametersSpecIntegratio
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(2, resultTable.rowCount());
+        Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }

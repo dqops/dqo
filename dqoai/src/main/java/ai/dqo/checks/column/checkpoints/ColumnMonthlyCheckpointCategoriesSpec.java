@@ -27,7 +27,7 @@ import ai.dqo.checks.column.checkpoints.pii.ColumnPiiMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.sql.ColumnSqlMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessMonthlyCheckpointsSpec;
-import ai.dqo.checks.column.checkpoints.accuracy.ColumnAccuracyMonthlyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.integrity.ColumnIntegrityMonthlyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -64,7 +64,7 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
            put("pii", o -> o.pii);
            put("sql", o -> o.sql);
            put("bool", o -> o.bool);
-           put("accuracy", o -> o.accuracy);
+           put("integrity", o -> o.integrity);
 
         }
     };
@@ -109,10 +109,10 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolMonthlyCheckpointsSpec bool;
 
-    @JsonPropertyDescription("Monthly checkpoints of accuracy in the column")
+    @JsonPropertyDescription("Monthly checkpoints of integrity in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAccuracyMonthlyCheckpointsSpec accuracy;
+    private ColumnIntegrityMonthlyCheckpointsSpec integrity;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -262,18 +262,18 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
      * Returns the container of checkpoints for standard data quality checks.
      * @return Container of row standard data quality checkpoints.
      */
-    public ColumnAccuracyMonthlyCheckpointsSpec getAccuracy() {
-        return accuracy;
+    public ColumnIntegrityMonthlyCheckpointsSpec getIntegrity() {
+        return integrity;
     }
 
     /**
-     * Sets the container of accuracy data quality checks (checkpoints).
-     * @param accuracy New accuracy checks.
+     * Sets the container of integrity data quality checks (checkpoints).
+     * @param integrity New integrity checks.
      */
-    public void setAccuracy(ColumnAccuracyMonthlyCheckpointsSpec accuracy) {
-        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
-        this.accuracy = accuracy;
-        this.propagateHierarchyIdToField(accuracy, "accuracy");
+    public void setIntegrity(ColumnIntegrityMonthlyCheckpointsSpec integrity) {
+        this.setDirtyIf(!Objects.equals(this.integrity, integrity));
+        this.integrity = integrity;
+        this.propagateHierarchyIdToField(integrity, "integrity");
     }
 
     /**

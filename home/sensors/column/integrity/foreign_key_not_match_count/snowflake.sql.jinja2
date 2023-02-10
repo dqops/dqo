@@ -14,13 +14,18 @@
 
 
 SELECT
-    COUNT({{ lib.render_target_column('analyzed_table')}})
-    AS actual_value
+    SUM(
+        CASE
+            WHEN foreign_table.{{ render_foreign_column(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                THEN 1
+            ELSE 0
+        END
+    ) AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
-RIGHT OUTER JOIN {{ render_joined_table(parameters.joined_tab) }} AS joined_table
-ON {{ lib.render_target_column('analyzed_table')}} = joined_table.{{ render_joined_column(parameters.joined_col) }}
+LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ render_foreign_column(parameters.foreign_column) }}
 {{- lib.render_where_clause() -}}
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}

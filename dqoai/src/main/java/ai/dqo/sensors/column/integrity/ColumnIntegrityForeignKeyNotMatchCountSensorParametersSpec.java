@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package ai.dqo.sensors.column.accuracy;
+package ai.dqo.sensors.column.integrity;
 
+import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -28,55 +29,57 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the count of values that matches values in column of another table.
+ * Column level sensor that calculates the count of values that does not matche values in column of another table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAccuracyValueMatchCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyValueMatchCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
 
     @JsonPropertyDescription("This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.")
-    private String joinedTab;
+    @SampleValues(values = { "dim_customer" })
+    private String foreignTable;
 
     @JsonPropertyDescription("This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.")
-    private String joinedCol;
+    @SampleValues(values = { "customer_id" })
+    private String foreignColumn;
 
     /**
      * Returns the table name.
-     * @return joinedTab.
+     * @return foreignTable.
      */
-    public String getJoinedTab() {
-        return joinedTab;
+    public String getForeignTable() {
+        return foreignTable;
     }
 
     /**
      * Sets the table name.
-     * @param joinedTab table name.
+     * @param foreignTable table name.
      */
-    public void setJoinedTab(String joinedTab) {
-        this.setDirtyIf(!Objects.equals(this.joinedTab, joinedTab));
-        this.joinedTab = joinedTab;
+    public void setForeignTable(String foreignTable) {
+        this.setDirtyIf(!Objects.equals(this.foreignTable, foreignTable));
+        this.foreignTable = foreignTable;
     }
 
     /**
      * Returns the column name.
-     * @return joinedCol.
+     * @return foreignColumn.
      */
-    public String getJoinedCol() {
-        return joinedCol;
+    public String getForeignColumn() {
+        return foreignColumn;
     }
 
     /**
      * Sets the column name.
-     * @param joinedCol column name.
+     * @param foreignColumn column name.
      */
-    public void setJoinedCol(String joinedCol) {
-        this.setDirtyIf(!Objects.equals(this.joinedCol, joinedCol));
-        this.joinedCol = joinedCol;
+    public void setForeignColumn(String foreignColumn) {
+        this.setDirtyIf(!Objects.equals(this.foreignColumn, foreignColumn));
+        this.foreignColumn = foreignColumn;
     }
 
     /**
@@ -96,7 +99,7 @@ public class ColumnAccuracyValueMatchCountSensorParametersSpec extends AbstractC
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/accuracy/value_match_count";
+        return "column/integrity/foreign_key_not_match_count";
     }
 
 }

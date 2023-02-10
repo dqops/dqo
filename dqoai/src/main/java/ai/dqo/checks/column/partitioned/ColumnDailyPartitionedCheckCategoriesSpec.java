@@ -27,7 +27,7 @@ import ai.dqo.checks.column.partitioned.pii.ColumnPiiDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.sql.ColumnSqlDailyPartitionedSpec;
 import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
-import ai.dqo.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -64,7 +64,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
             put("bool", o -> o.bool);
-            put("accuracy", o -> o.accuracy);
+            put("integrity", o -> o.integrity);
 
         }
     };
@@ -109,10 +109,10 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolDailyPartitionedChecksSpec bool;
 
-    @JsonPropertyDescription("Daily partitioned checks for accuracy in the column")
+    @JsonPropertyDescription("Daily partitioned checks for integrity in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAccuracyDailyPartitionedChecksSpec accuracy;
+    private ColumnIntegrityDailyPartitionedChecksSpec integrity;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -259,21 +259,21 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     }
 
     /**
-     * Returns a container of custom accuracy checks on a column.
-     * @return Custom accuracy checks.
+     * Returns a container of custom integrity checks on a column.
+     * @return Custom integrity checks.
      */
-    public ColumnAccuracyDailyPartitionedChecksSpec getAccuracy() {
-        return accuracy;
+    public ColumnIntegrityDailyPartitionedChecksSpec getIntegrity() {
+        return integrity;
     }
 
     /**
-     * Sets a reference to a container of custom accuracy checks.
-     * @param accuracy Custom accuracy checks.
+     * Sets a reference to a container of custom integrity checks.
+     * @param integrity Custom integrity checks.
      */
-    public void setAccuracy(ColumnAccuracyDailyPartitionedChecksSpec accuracy) {
-        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
-        this.accuracy = accuracy;
-        propagateHierarchyIdToField(accuracy, "accuracy");
+    public void setIntegrity(ColumnIntegrityDailyPartitionedChecksSpec integrity) {
+        this.setDirtyIf(!Objects.equals(this.integrity, integrity));
+        this.integrity = integrity;
+        propagateHierarchyIdToField(integrity, "integrity");
     }
 
     /**

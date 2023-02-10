@@ -56,7 +56,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
             put("bool", o -> o.bool);
-            put("accuracy", o -> o.accuracy);
+            put("integrity", o -> o.integrity);
 
 
         }
@@ -102,10 +102,10 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAdHocBoolChecksSpec bool;
 
-    @JsonPropertyDescription("Configuration of accuracy checks on a column level.")
+    @JsonPropertyDescription("Configuration of integrity checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocAccuracyChecksSpec accuracy;
+    private ColumnAdHocIntegrityChecksSpec integrity;
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -252,21 +252,21 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     }
 
     /**
-     * Returns the accuracy check configuration on a column level.
-     * @return Accuracy check configuration.
+     * Returns the integrity check configuration on a column level.
+     * @return Integrity check configuration.
      */
-    public ColumnAdHocAccuracyChecksSpec getAccuracy() {
-        return accuracy;
+    public ColumnAdHocIntegrityChecksSpec getIntegrity() {
+        return integrity;
     }
 
     /**
-     * Sets the accuracy check configuration on a column level.
-     * @param accuracy New accuracy checks configuration.
+     * Sets the integrity check configuration on a column level.
+     * @param integrity New integrity checks configuration.
      */
-    public void setAccuracy(ColumnAdHocAccuracyChecksSpec accuracy) {
-        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
-        this.accuracy = accuracy;
-        this.propagateHierarchyIdToField(accuracy, "accuracy");
+    public void setIntegrity(ColumnAdHocIntegrityChecksSpec integrity) {
+        this.setDirtyIf(!Objects.equals(this.integrity, integrity));
+        this.integrity = integrity;
+        this.propagateHierarchyIdToField(integrity, "integrity");
     }
 
     /**
