@@ -166,8 +166,6 @@ public class ColumnBasicModel {
                 setDeleteErrors(true);
                 setDeleteRuleResults(true);
                 setDeleteSensorReadouts(true);
-
-                setColumnHash(columnSpec.getHierarchyId() != null ? columnSpec.getHierarchyId().hashCode64() : null);
             }});
         }};
     }
