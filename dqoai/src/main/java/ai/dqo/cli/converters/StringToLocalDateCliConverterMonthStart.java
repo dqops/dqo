@@ -16,18 +16,14 @@
 
 package ai.dqo.cli.converters;
 
-import ai.dqo.utils.datetime.StringToLocalDateConverter;
-import picocli.CommandLine.ITypeConverter;
-
-import java.time.LocalDate;
-
-public class StringToLocalDateCliConverter implements ITypeConverter<LocalDate> {
+public class StringToLocalDateCliConverterMonthStart extends StringToLocalDateCliConverterAbstract {
+    /**
+     * Determine whether the date resulting from converting from a yyyy.MM format should be from the end of the month.
+     *
+     * @return True if the conversion of yyyy.MM should consider end of the month. False if the first day should be considered.
+     */
     @Override
-    public LocalDate convert(String value) {
-        LocalDate result = StringToLocalDateConverter.convert(value);
-        if (result == null) {
-            throw new IllegalArgumentException("Incorrect date format (expected yyyy.MM or yyyy.MM.dd)");
-        }
-        return result;
+    protected boolean getDayAtEndMonthBias() {
+        return false;
     }
 }

@@ -30,7 +30,6 @@ public class DeleteStoredDataQueueJobParameters {
     private String schemaTableName;
     private LocalDate dateStart;
     private LocalDate dateEnd;
-    private boolean ignoreDateDay = true;
 
     private boolean deleteErrors = false;
     private boolean deleteProfilingResults = false;

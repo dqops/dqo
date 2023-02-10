@@ -21,7 +21,9 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
-import ai.dqo.cli.converters.StringToLocalDateCliConverter;
+import ai.dqo.cli.converters.StringToLocalDateCliConverterAbstract;
+import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthEnd;
+import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthStart;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.FileWritter;
 import ai.dqo.cli.terminal.TerminalTableWritter;
@@ -111,16 +113,12 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
     private String table;
 
     @CommandLine.Option(names = {"-b", "--begin"}, description = "Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
-            required = true, converter = StringToLocalDateCliConverter.class)
+            required = true, converter = StringToLocalDateCliConverterMonthStart.class)
     private LocalDate begin;
 
     @CommandLine.Option(names = {"-e", "--end"}, description = "End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD",
-            required = true, converter = StringToLocalDateCliConverter.class)
+            required = true, converter = StringToLocalDateCliConverterMonthEnd.class)
     private LocalDate end;
-
-    @CommandLine.Option(names = {"-day", "--daily-detailed"},
-            description = "Should the period consider days of the time period [begin, end]")
-    private boolean dailyDetailedSpan = false;
 
     @CommandLine.Option(names = {"-col", "--column"}, description = "Column name",
             completionCandidates = ColumnNameCompleter.class)
@@ -169,8 +167,6 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
         deleteStoredDataJobParameters.setDeleteProfilingResults(this.deleteStatistics);
         deleteStoredDataJobParameters.setDeleteRuleResults(this.deleteRuleResults);
         deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
-        
-        deleteStoredDataJobParameters.setIgnoreDateDay(!this.dailyDetailedSpan);
 
         if (!Strings.isNullOrEmpty(this.checkCategory)) {
             deleteStoredDataJobParameters.setCheckCategory(this.checkCategory);
