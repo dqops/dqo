@@ -42,4 +42,8 @@ public class SampleCsvFileNames {
     public static final String string_min_length_test = "string_min_length_test.csv";
 
     public static final String below_above_value_test = "below_above_value_test.csv";
+
+    public static final String value_match_left_table = "value_match_left_table.csv";
+
+    public static final String value_match_right_table = "value_match_right_table.csv";
 }

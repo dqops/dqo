@@ -20,6 +20,7 @@ import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -71,6 +72,9 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this connection.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this connection.")
+    private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
+
     /**
      * Creates a basic connection model from a connection specification by cherry-picking relevant fields.
      * @param connectionName Connection name to store in the model.
@@ -112,6 +116,18 @@ public class ConnectionBasicModel {
             {{
                 setConnectionName(connectionName);
                 setEnabled(true);
+            }});
+            setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
+            {{
+                setConnectionName(connectionName);
+
+                setDateStart(null);
+                setDateEnd(null);
+
+                setDeleteProfilingResults(true);
+                setDeleteErrors(true);
+                setDeleteRuleResults(true);
+                setDeleteSensorReadouts(true);
             }});
         }};
     }

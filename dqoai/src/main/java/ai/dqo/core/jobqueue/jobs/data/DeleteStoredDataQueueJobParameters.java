@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.jobqueue.jobs.data;
 
+import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
@@ -25,12 +26,11 @@ import java.time.LocalDate;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
-public class DeleteStoredDataQueueJobParameters {
+public class DeleteStoredDataQueueJobParameters implements Cloneable {
     private String connectionName;
     private String schemaTableName;
     private LocalDate dateStart;
     private LocalDate dateEnd;
-    private boolean ignoreDateDay = true;
 
     private boolean deleteErrors = false;
     private boolean deleteProfilingResults = false;
@@ -68,5 +68,38 @@ public class DeleteStoredDataQueueJobParameters {
         this.schemaTableName = schemaTableName;
         this.dateStart = dateStart;
         this.dateEnd = dateEnd;
+    }
+
+    /**
+     * Creates a job parameters object by relying on info provided in CheckSearchFilters.
+     * @param checkSearchFilters Check search filters object providing the basis for the job parameters.
+     * @return Delete stored data job parameters based on the filters.
+     */
+    public static DeleteStoredDataQueueJobParameters fromCheckSearchFilters(CheckSearchFilters checkSearchFilters) {
+        return new DeleteStoredDataQueueJobParameters() {{
+            setConnectionName(checkSearchFilters.getConnectionName());
+            setSchemaTableName(checkSearchFilters.getSchemaTableName());
+            setColumnName(checkSearchFilters.getColumnName());
+
+            setCheckType(checkSearchFilters.getCheckType().getDisplayName());
+            setCheckName(checkSearchFilters.getCheckName());
+            setSensorName(checkSearchFilters.getSensorName());
+            setCheckCategory(checkSearchFilters.getCheckCategory());
+
+            setDeleteRuleResults(true);
+            setDeleteErrors(true);
+            setDeleteProfilingResults(true);
+            setDeleteSensorReadouts(true);
+        }};
+    }
+
+    @Override
+    public DeleteStoredDataQueueJobParameters clone() {
+        try {
+            DeleteStoredDataQueueJobParameters clone = (DeleteStoredDataQueueJobParameters) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

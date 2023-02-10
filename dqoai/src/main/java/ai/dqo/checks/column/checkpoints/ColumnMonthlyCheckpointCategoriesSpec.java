@@ -27,6 +27,7 @@ import ai.dqo.checks.column.checkpoints.pii.ColumnPiiMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.sql.ColumnSqlMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.strings.ColumnStringsMonthlyCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.uniqueness.ColumnUniquenessMonthlyCheckpointsSpec;
+import ai.dqo.checks.column.checkpoints.integrity.ColumnIntegrityMonthlyCheckpointsSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -63,6 +64,8 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
            put("pii", o -> o.pii);
            put("sql", o -> o.sql);
            put("bool", o -> o.bool);
+           put("integrity", o -> o.integrity);
+
         }
     };
 
@@ -105,6 +108,11 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolMonthlyCheckpointsSpec bool;
+
+    @JsonPropertyDescription("Monthly checkpoints of integrity in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnIntegrityMonthlyCheckpointsSpec integrity;
 
     /**
      * Returns the container of checkpoints for standard data quality checks.
@@ -250,6 +258,23 @@ public class ColumnMonthlyCheckpointCategoriesSpec extends AbstractRootChecksCon
         this.propagateHierarchyIdToField(bool, "bool");
     }
 
+    /**
+     * Returns the container of checkpoints for standard data quality checks.
+     * @return Container of row standard data quality checkpoints.
+     */
+    public ColumnIntegrityMonthlyCheckpointsSpec getIntegrity() {
+        return integrity;
+    }
+
+    /**
+     * Sets the container of integrity data quality checks (checkpoints).
+     * @param integrity New integrity checks.
+     */
+    public void setIntegrity(ColumnIntegrityMonthlyCheckpointsSpec integrity) {
+        this.setDirtyIf(!Objects.equals(this.integrity, integrity));
+        this.integrity = integrity;
+        this.propagateHierarchyIdToField(integrity, "integrity");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
