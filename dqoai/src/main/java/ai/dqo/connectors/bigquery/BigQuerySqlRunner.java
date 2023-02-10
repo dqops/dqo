@@ -42,14 +42,16 @@ public class BigQuerySqlRunner {
      */
     public Table executeQuery(BigQuerySourceConnection connection, String sql) {
         try {
-            String projectId = connection.getConnectionSpec().getBigquery().getSourceProjectId();
+            BigQueryInternalConnection bigQueryInternalConnection = connection.getBigQueryInternalConnection();
+
+            String jobProjectId = bigQueryInternalConnection.getBillingProjectId();
             QueryJobConfiguration queryJobConfiguration = QueryJobConfiguration.newBuilder(sql).build();
             JobId.Builder jobBuilder = JobId.newBuilder();
-            if (!Strings.isNullOrEmpty(projectId)) {
-                jobBuilder = jobBuilder.setProject(projectId);
+            if (!Strings.isNullOrEmpty(jobProjectId)) {
+                jobBuilder = jobBuilder.setProject(jobProjectId);
             }
             JobId jobId = jobBuilder.build();
-            BigQuery bigQueryService = connection.getBigQueryService();
+            BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
 
             TableResult tableResult = bigQueryService.query(queryJobConfiguration, jobId);
             Schema tableSchema = tableResult.getSchema();
@@ -81,7 +83,6 @@ public class BigQuerySqlRunner {
                             row.setDouble(colIndex, fieldValue.getDoubleValue());
                             break;
                         case NUMERIC:
-                            row.setDouble(colIndex, fieldValue.getNumericValue().doubleValue());
                         case BIGNUMERIC:
                             row.setDouble(colIndex, fieldValue.getNumericValue().doubleValue());
                             break;
@@ -133,14 +134,16 @@ public class BigQuerySqlRunner {
      */
     public long executeStatement(BigQuerySourceConnection connection, String sql) {
         try {
-            String projectId = connection.getConnectionSpec().getBigquery().getSourceProjectId();
+            BigQueryInternalConnection bigQueryInternalConnection = connection.getBigQueryInternalConnection();
+
+            String jobProjectId = bigQueryInternalConnection.getBillingProjectId();
             QueryJobConfiguration queryJobConfiguration = QueryJobConfiguration.newBuilder(sql).build();
             JobId.Builder jobBuilder = JobId.newBuilder();
-            if (!Strings.isNullOrEmpty(projectId)) {
-                jobBuilder = jobBuilder.setProject(projectId);
+            if (!Strings.isNullOrEmpty(jobProjectId)) {
+                jobBuilder = jobBuilder.setProject(jobProjectId);
             }
             JobId jobId = jobBuilder.build();
-            BigQuery bigQueryService = connection.getBigQueryService();
+            BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
 
             TableResult tableResult = bigQueryService.query(queryJobConfiguration, jobId);
             return tableResult.getTotalRows();

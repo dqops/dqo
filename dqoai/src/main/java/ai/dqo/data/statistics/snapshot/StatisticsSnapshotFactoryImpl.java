@@ -66,6 +66,7 @@ public class StatisticsSnapshotFactoryImpl implements StatisticsSnapshotFactory 
      */
     @Override
     public StatisticsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
-        return new StatisticsSnapshot(connectionName, physicalTableName, this.storageService, columnNames);
+        Table templateStatisticsTable = this.statisticsResultsTableFactory.createEmptyStatisticsTable("template_statistics");
+        return new StatisticsSnapshot(connectionName, physicalTableName, this.storageService, columnNames, templateStatisticsTable);
     }
 }

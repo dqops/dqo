@@ -38,6 +38,7 @@ public class TableDataSnapshot {
     private final ParquetPartitionStorageService storageService;
     private final FileStorageSettings storageSettings;
     private final TableDataChanges tableDataChanges;
+    private final Table newResultsTable;
     private final String[] columnNames;
     private Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions;
     private LocalDate firstLoadedMonth;
@@ -60,6 +61,7 @@ public class TableDataSnapshot {
         this.tableName = tableName;
         this.storageService = storageService;
         this.storageSettings = storageSettings;
+        this.newResultsTable = newResults;
         this.tableDataChanges = new TableDataChanges(newResults);
         this.columnNames = null;
     }
@@ -77,12 +79,14 @@ public class TableDataSnapshot {
                              PhysicalTableName tableName,
                              ParquetPartitionStorageService storageService,
                              FileStorageSettings storageSettings,
-                             String[] columnNames) {
+                             String[] columnNames,
+                             Table newResultsTemplate) {
         assert columnNames != null && columnNames.length > 0;
         this.connectionName = connectionName;
         this.tableName = tableName;
         this.storageService = storageService;
         this.storageSettings = storageSettings;
+        this.newResultsTable = newResultsTemplate;
         this.tableDataChanges = null;
         this.columnNames = columnNames;
     }
@@ -181,22 +185,38 @@ public class TableDataSnapshot {
      * @param loadedPartitions Dictionary of loaded partitions.
      */
     public void updateSchemaForLoadedPartitions(Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions) {
-        if (this.columnNames != null ||this.tableDataChanges == null) {
-            return; // we cannot help here, because a subset of columns was requested
-        }
+        if (this.columnNames != null) {
+            for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions.values()) {
+                Table partitionData = loadedMonthlyPartition.getData();
+                if (partitionData == null) {
+                    continue;
+                }
 
-        for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions.values()) {
-            Table partitionData = loadedMonthlyPartition.getData();
-            if (partitionData == null) {
-                continue;
+                HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
+
+                for (String expectedColumnName : this.columnNames) {
+                    if (!columnNamesInPartitionData.contains(expectedColumnName)) {
+                        Column<?> expectedColumn = this.newResultsTable.column(expectedColumnName);
+                        Column<?> emptyColumnToAdd = expectedColumn.emptyCopy(partitionData.rowCount());
+                        partitionData.addColumns(emptyColumnToAdd);
+                    }
+                }
             }
+        }
+        else {
+            for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions.values()) {
+                Table partitionData = loadedMonthlyPartition.getData();
+                if (partitionData == null) {
+                    continue;
+                }
 
-            HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
+                HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
 
-            for (Column<?> expectedColumn : this.getTableDataChanges().getNewOrChangedRows().columns()) {
-                if (!columnNamesInPartitionData.contains(expectedColumn.name())) {
-                    Column<?> emptyColumnToAdd = expectedColumn.emptyCopy(partitionData.rowCount());
-                    partitionData.addColumns(emptyColumnToAdd);
+                for (Column<?> expectedColumn : this.getTableDataChanges().getNewOrChangedRows().columns()) {
+                    if (!columnNamesInPartitionData.contains(expectedColumn.name())) {
+                        Column<?> emptyColumnToAdd = expectedColumn.emptyCopy(partitionData.rowCount());
+                        partitionData.addColumns(emptyColumnToAdd);
+                    }
                 }
             }
         }
@@ -283,6 +303,7 @@ public class TableDataSnapshot {
             if (this.loadedMonthlyPartitions == null) {
                 this.loadedMonthlyPartitions = new LinkedHashMap<>();
             }
+            updateSchemaForLoadedPartitions(loadedPartitions);
             this.loadedMonthlyPartitions.putAll(loadedPartitions);
         }
         else {
@@ -300,6 +321,7 @@ public class TableDataSnapshot {
                         this.connectionName, this.tableName, firstMonthToLoad, end, this.storageSettings, this.columnNames, needToLoad);
                 Optional<LocalDate> lastLoadedLaterMonth = loadedLaterPartitions.keySet().stream().map(ParquetPartitionId::getMonth).max(LocalDate::compareTo);
                 this.lastLoadedMonth = lastLoadedLaterMonth.orElse(this.lastLoadedMonth);
+                updateSchemaForLoadedPartitions(loadedLaterPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
             }
             currentlyLoadedPartitions = loadedMonthlyPartitions == null ? 0 : loadedMonthlyPartitions.size();
@@ -322,6 +344,7 @@ public class TableDataSnapshot {
                         this.connectionName, this.tableName, start, lastMonthToLoad, this.storageSettings, this.columnNames, needToLoad);
                 Optional<LocalDate> lastLoadedEarlierMonth = loadedEarlierPartitions.keySet().stream().map(ParquetPartitionId::getMonth).max(LocalDate::compareTo);
                 this.firstLoadedMonth = lastLoadedEarlierMonth.orElse(this.firstLoadedMonth);
+                updateSchemaForLoadedPartitions(loadedEarlierPartitions);
                 this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
             }
         }

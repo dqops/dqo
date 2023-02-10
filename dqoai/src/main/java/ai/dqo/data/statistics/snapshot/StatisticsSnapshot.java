@@ -53,12 +53,14 @@ public class StatisticsSnapshot extends TableDataSnapshot {
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param columnNames Column names that will be loaded.
+     * @param tableResultsSample Empty table with the expected schema (columns).
      */
     public StatisticsSnapshot(String connectionName,
                               PhysicalTableName tableName,
                               ParquetPartitionStorageService storageService,
-                              String[] columnNames) {
-        super(connectionName, tableName, storageService, createProfilingResultsStorageSettings(), columnNames);
+                              String[] columnNames,
+                              Table tableResultsSample) {
+        super(connectionName, tableName, storageService, createProfilingResultsStorageSettings(), columnNames, tableResultsSample);
     }
 
     /**
