@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.sensors.column.datetime;
+package ai.dqo.snowflake.sensors.column.datetime;
 
-import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
-import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import ai.dqo.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -37,10 +36,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
-import java.util.Objects;
 
 @SpringBootTest
-public class PostgresqlColumnDatetimeValueInRangeDatePercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
+public class SnowflakeColumnDatetimeValueInRangeDatePercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private ColumnDatetimeValueInRangeDatePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnDatetimeValueInRangeDatePercentCheckSpec checkSpec;
@@ -48,7 +46,7 @@ public class PostgresqlColumnDatetimeValueInRangeDatePercentSensorParametersSpec
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.postgresql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_different_time_data_types, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnDatetimeValueInRangeDatePercentSensorParametersSpec();
@@ -74,7 +72,7 @@ public class PostgresqlColumnDatetimeValueInRangeDatePercentSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -95,7 +93,7 @@ public class PostgresqlColumnDatetimeValueInRangeDatePercentSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,7 +114,7 @@ public class PostgresqlColumnDatetimeValueInRangeDatePercentSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -137,7 +135,7 @@ public class PostgresqlColumnDatetimeValueInRangeDatePercentSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -158,6 +156,6 @@ public class PostgresqlColumnDatetimeValueInRangeDatePercentSensorParametersSpec
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0F, resultTable.column(0).get(0));
     }
 }
