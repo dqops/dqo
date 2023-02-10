@@ -181,8 +181,8 @@ public class TableDataSnapshot {
      * @param loadedPartitions Dictionary of loaded partitions.
      */
     public void updateSchemaForLoadedPartitions(Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions) {
-        if (this.columnNames == null) {
-            return; // we cannot help here, we don't know what are the data types of missing columns
+        if (this.columnNames != null ||this.tableDataChanges == null) {
+            return; // we cannot help here, because a subset of columns was requested
         }
 
         for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions.values()) {
