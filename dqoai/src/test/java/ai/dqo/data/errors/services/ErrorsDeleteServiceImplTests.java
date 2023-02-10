@@ -49,6 +49,8 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
+import java.time.temporal.TemporalUnit;
 import java.util.List;
 
 @SpringBootTest
@@ -142,7 +144,6 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
             }});
             setDateStart(startDate.plusDays(1).toLocalDate());
             setDateEnd(startDate.plusDays(1).toLocalDate());
-            setIgnoreDateDay(false);
         }};
 
         this.sut.deleteSelectedErrorsFragment(filter);
@@ -183,8 +184,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
                 setConnectionName(connectionName);
                 setSchemaTableName(physicalTableName1.toTableSearchFilter());
             }});
-            setDateStart(startDate.plusDays(1).toLocalDate());
-            setDateEnd(startDate.plusDays(1).toLocalDate());
+            setDateStart(startDate.withDayOfMonth(1).toLocalDate());
+            setDateEnd(startDate.withDayOfMonth(1).toLocalDate().plusMonths(1).minusDays(1));
         }};
 
         this.sut.deleteSelectedErrorsFragment(filter);
@@ -237,8 +238,8 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
                 setConnectionName(connectionName);
                 setSchemaTableName(physicalTableName.toTableSearchFilter());
             }});
-            setDateStart(startDate1.plusDays(1).toLocalDate());
-            setDateEnd(startDate1.plusDays(1).toLocalDate());
+            setDateStart(startDate1.withDayOfMonth(1).toLocalDate());
+            setDateEnd(startDate1.withDayOfMonth(1).toLocalDate().plusMonths(1).minusDays(1));
         }};
 
         this.sut.deleteSelectedErrorsFragment(filter);
@@ -300,7 +301,6 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
             }});
             setDateStart(startDate1.toLocalDate());
             setDateEnd(startDate2.toLocalDate());
-            setIgnoreDateDay(false);
         }};
 
         this.sut.deleteSelectedErrorsFragment(filter);
@@ -581,7 +581,6 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
             setDateStart(month);
             setDateEnd(month.plusDays(3));
             setSensorName("s1");
-            setIgnoreDateDay(false);
         }};
 
         this.sut.deleteSelectedErrorsFragment(filter);
