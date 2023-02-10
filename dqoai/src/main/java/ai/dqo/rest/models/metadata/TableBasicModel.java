@@ -16,6 +16,7 @@
 package ai.dqo.rest.models.metadata;
 
 import ai.dqo.checks.CheckType;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.TableOwnerSpec;
@@ -92,6 +93,9 @@ public class TableBasicModel {
 
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this table.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this table.")
+    private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     /**
      * Creates a basic table model from a table specification by cherry-picking relevant fields.
@@ -192,6 +196,19 @@ public class TableBasicModel {
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
                 setCheckType(CheckType.PARTITIONED);
                 setEnabled(true);
+            }});
+            setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+
+                setDateStart(null);
+                setDateEnd(null);
+
+                setDeleteProfilingResults(true);
+                setDeleteErrors(true);
+                setDeleteRuleResults(true);
+                setDeleteSensorReadouts(true);
             }});
         }};
     }
