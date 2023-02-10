@@ -65,7 +65,7 @@ const DatabaseConnection = ({
     setIsTesting(true);
     let testRes;
     try {
-      testRes = await SourceConnectionApi.checkConnection(database);
+      testRes = await SourceConnectionApi.testConnection(true, database);
       setIsTesting(false);
     } catch (err) {
       setIsTesting(false);
@@ -82,7 +82,7 @@ const DatabaseConnection = ({
   const onTestConnection = async () => {
     try {
       setIsTesting(true);
-      const res = await SourceConnectionApi.checkConnection(database);
+      const res = await SourceConnectionApi.testConnection(true, database);
       setTestResult(res.data);
     } catch (err) {
       console.error(err);

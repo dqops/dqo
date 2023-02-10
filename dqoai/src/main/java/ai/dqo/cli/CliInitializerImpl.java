@@ -23,6 +23,7 @@ import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -41,6 +42,7 @@ public class CliInitializerImpl implements CliInitializer {
     private CloudLoginService cloudLoginService;
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
     private JobSchedulerService jobSchedulerService;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -50,6 +52,7 @@ public class CliInitializerImpl implements CliInitializer {
      * @param cloudLoginService Cloud login service - used to log the user to dqo cloud.
      * @param dqoSchedulerConfigurationProperties Scheduler configuration parameters, decide if the scheduler should be started instantly.
      * @param jobSchedulerService Job scheduler service, may be started when the dqo.scheduler.start property is true.
+     * @param defaultTimeZoneProvider Default time zone provider, used to configure the defautl time zone.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -57,13 +60,15 @@ public class CliInitializerImpl implements CliInitializer {
                               TerminalReader terminalReader,
                               CloudLoginService cloudLoginService,
                               DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
-                              JobSchedulerService jobSchedulerService) {
+                              JobSchedulerService jobSchedulerService,
+                              DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
         this.cloudLoginService = cloudLoginService;
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
         this.jobSchedulerService = jobSchedulerService;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -74,6 +79,7 @@ public class CliInitializerImpl implements CliInitializer {
     public void initializeApp(String[] args) {
         boolean isHeadless = Arrays.stream(args).anyMatch(arg -> Objects.equals(arg, "--headless") || Objects.equals(arg, "-hl"));
         this.localUserHomeCreator.ensureDefaultUserHomeIsInitialized(isHeadless);
+        this.defaultTimeZoneProvider.invalidate();
 
         try {
             try {

@@ -27,6 +27,11 @@ public class SensorReadoutsColumnNames {
     public static final String TIME_PERIOD_COLUMN_NAME = "time_period";
 
     /**
+     * Column name that stores the time period of the sensor readout (timestamp) as a UTC timestamp: timestamp_period_utc.
+     */
+    public static final String TIME_PERIOD_UTC_COLUMN_NAME = "time_period_utc";
+
+    /**
      * Column name for a time gradient.
      */
     public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
@@ -160,6 +165,7 @@ public class SensorReadoutsColumnNames {
             EXECUTED_AT_COLUMN_NAME,
             TIME_GRADIENT_COLUMN_NAME,
             TIME_PERIOD_COLUMN_NAME,
+            TIME_PERIOD_UTC_COLUMN_NAME,
 
             PROVIDER_COLUMN_NAME,
             QUALITY_DIMENSION_COLUMN_NAME,
