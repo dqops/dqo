@@ -36,30 +36,30 @@ import java.util.Objects;
 public class ColumnIntegrityDailyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_partition_integrity_foreign_key_not_match_count", o -> o.dailyPartitionIntegrityForeignKeyNotMatchCount);
+            put("daily_partition_foreign_key_not_match_count", o -> o.dailyPartitionForeignKeyNotMatchCount);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyPartitionIntegrityForeignKeyNotMatchCount;
+    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyPartitionForeignKeyNotMatchCount;
 
     /**
      * Returns an integrity value match count check.
      * @return Integrity value match count check.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getDailyPartitionIntegrityForeignKeyNotMatchCount() {
-        return dailyPartitionIntegrityForeignKeyNotMatchCount;
+    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getDailyPartitionForeignKeyNotMatchCount() {
+        return dailyPartitionForeignKeyNotMatchCount;
     }
 
     /**
      * Sets a new definition of an integrity value match count check.
-     * @param dailyPartitionIntegrityForeignKeyNotMatchCount Integrity value match count check.
+     * @param dailyPartitionForeignKeyNotMatchCount Integrity value match count check.
      */
-    public void setDailyPartitionIntegrityForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyPartitionIntegrityForeignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionIntegrityForeignKeyNotMatchCount, dailyPartitionIntegrityForeignKeyNotMatchCount));
-        this.dailyPartitionIntegrityForeignKeyNotMatchCount = dailyPartitionIntegrityForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(dailyPartitionIntegrityForeignKeyNotMatchCount, "daily_partition_integrity_foreign_key_not_match_count");
+    public void setDailyPartitionForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyPartitionForeignKeyNotMatchCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionForeignKeyNotMatchCount, dailyPartitionForeignKeyNotMatchCount));
+        this.dailyPartitionForeignKeyNotMatchCount = dailyPartitionForeignKeyNotMatchCount;
+        propagateHierarchyIdToField(dailyPartitionForeignKeyNotMatchCount, "daily_partition_foreign_key_not_match_count");
     }
 
     /**

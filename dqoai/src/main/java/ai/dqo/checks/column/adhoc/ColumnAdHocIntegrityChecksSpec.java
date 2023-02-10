@@ -36,29 +36,29 @@ import java.util.Objects;
 public class ColumnAdHocIntegrityChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocIntegrityChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("integrity_foreign_key_not_match_count", o -> o.integrityForeignKeyNotMatchCount);
+            put("foreign_key_not_match_count", o -> o.foreignKeyNotMatchCount);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec integrityForeignKeyNotMatchCount;
+    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec foreignKeyNotMatchCount;
 
     /**
      * Returns an integrity value match count check specification.
      * @return Integrity value match count check specification.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getIntegrityForeignKeyNotMatchCount() {
-        return integrityForeignKeyNotMatchCount;
+    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getForeignKeyNotMatchCount() {
+        return foreignKeyNotMatchCount;
     }
 
     /**
      * Sets integrity value match count check specification.
-     * @param integrityForeignKeyNotMatchCount Integrity value match count check specification.
+     * @param foreignKeyNotMatchCount Integrity value match count check specification.
      */
-    public void setIntegrityForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec integrityForeignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.integrityForeignKeyNotMatchCount, integrityForeignKeyNotMatchCount));
-        this.integrityForeignKeyNotMatchCount = integrityForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(integrityForeignKeyNotMatchCount, "integrity_foreign_key_not_match_count");
+    public void setForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec foreignKeyNotMatchCount) {
+        this.setDirtyIf(!Objects.equals(this.foreignKeyNotMatchCount, foreignKeyNotMatchCount));
+        this.foreignKeyNotMatchCount = foreignKeyNotMatchCount;
+        propagateHierarchyIdToField(foreignKeyNotMatchCount, "foreign_key_not_match_count");
     }
 
     /**

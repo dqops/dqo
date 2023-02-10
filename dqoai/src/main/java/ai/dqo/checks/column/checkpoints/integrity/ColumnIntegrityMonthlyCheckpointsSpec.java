@@ -36,30 +36,30 @@ import java.util.Objects;
 public class ColumnIntegrityMonthlyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityMonthlyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_checkpoint_integrity_foreign_key_not_match_count", o -> o.monthlyCheckpointIntegrityForeignKeyNotMatchCount);
+            put("monthly_checkpoint_foreign_key_not_match_count", o -> o.monthlyCheckpointForeignKeyNotMatchCount);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyCheckpointIntegrityForeignKeyNotMatchCount;
+    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyCheckpointForeignKeyNotMatchCount;
 
     /**
      * Returns an integrity value match count check specification.
      * @return Integrity value match count check specification.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getMonthlyCheckpointIntegrityForeignKeyNotMatchCount() {
-        return monthlyCheckpointIntegrityForeignKeyNotMatchCount;
+    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getMonthlyCheckpointForeignKeyNotMatchCount() {
+        return monthlyCheckpointForeignKeyNotMatchCount;
     }
 
     /**
      * Sets a new definition of an integrity value match count check.
-     * @param monthlyCheckpointIntegrityForeignKeyNotMatchCount Integrity value match count check specification.
+     * @param monthlyCheckpointForeignKeyNotMatchCount Integrity value match count check specification.
      */
-    public void setMonthlyCheckpointIntegrityForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyCheckpointIntegrityForeignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointIntegrityForeignKeyNotMatchCount, monthlyCheckpointIntegrityForeignKeyNotMatchCount));
-        this.monthlyCheckpointIntegrityForeignKeyNotMatchCount = monthlyCheckpointIntegrityForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(monthlyCheckpointIntegrityForeignKeyNotMatchCount, "monthly_checkpoint_integrity_foreign_key_not_match_count");
+    public void setMonthlyCheckpointForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyCheckpointForeignKeyNotMatchCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointForeignKeyNotMatchCount, monthlyCheckpointForeignKeyNotMatchCount));
+        this.monthlyCheckpointForeignKeyNotMatchCount = monthlyCheckpointForeignKeyNotMatchCount;
+        propagateHierarchyIdToField(monthlyCheckpointForeignKeyNotMatchCount, "monthly_checkpoint_foreign_key_not_match_count");
     }
 
     /**

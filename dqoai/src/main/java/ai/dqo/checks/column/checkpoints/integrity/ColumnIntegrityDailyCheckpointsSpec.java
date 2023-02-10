@@ -36,30 +36,30 @@ import java.util.Objects;
 public class ColumnIntegrityDailyCheckpointsSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_checkpoint_integrity_foreign_key_not_match_count", o -> o.dailyCheckpointIntegrityForeignKeyNotMatchCount);
+            put("daily_checkpoint_foreign_key_not_match_count", o -> o.dailyCheckpointForeignKeyNotMatchCount);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyCheckpointIntegrityForeignKeyNotMatchCount;
+    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyCheckpointForeignKeyNotMatchCount;
 
     /**
      * Returns an integrity value match count check specification.
      * @return Integrity value match count check specification.
      */
-    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getDailyCheckpointIntegrityForeignKeyNotMatchCount() {
-        return dailyCheckpointIntegrityForeignKeyNotMatchCount;
+    public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getDailyCheckpointForeignKeyNotMatchCount() {
+        return dailyCheckpointForeignKeyNotMatchCount;
     }
 
     /**
      * Sets a new definition of an integrity value match count check.
-     * @param dailyCheckpointIntegrityForeignKeyNotMatchCount Integrity value match count check specification.
+     * @param dailyCheckpointForeignKeyNotMatchCount Integrity value match count check specification.
      */
-    public void setDailyCheckpointIntegrityForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyCheckpointIntegrityForeignKeyNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointIntegrityForeignKeyNotMatchCount, dailyCheckpointIntegrityForeignKeyNotMatchCount));
-        this.dailyCheckpointIntegrityForeignKeyNotMatchCount = dailyCheckpointIntegrityForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(dailyCheckpointIntegrityForeignKeyNotMatchCount, "daily_checkpoint_integrity_foreign_key_not_match_count");
+    public void setDailyCheckpointForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec dailyCheckpointForeignKeyNotMatchCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointForeignKeyNotMatchCount, dailyCheckpointForeignKeyNotMatchCount));
+        this.dailyCheckpointForeignKeyNotMatchCount = dailyCheckpointForeignKeyNotMatchCount;
+        propagateHierarchyIdToField(dailyCheckpointForeignKeyNotMatchCount, "daily_checkpoint_foreign_key_not_match_count");
     }
 
     /**
