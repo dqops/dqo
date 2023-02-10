@@ -243,6 +243,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                     key={index}
                     content={
                       <div className="text-gray-900">
+                        <div>{checkResult?.results?.[index]}</div>
                         <div className="capitalize">{getStatusLabel(status)}</div>
                         <div>{checkResult?.timePeriods ? moment(checkResult.timePeriods[index]).format('YYYY-MM-DD HH:mm:ss') : ''}</div>
                         <div>{checkResult?.dataStreams ? checkResult.dataStreams[index] : ''}</div>
