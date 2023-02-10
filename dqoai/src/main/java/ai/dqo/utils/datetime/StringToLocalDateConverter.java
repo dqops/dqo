@@ -38,28 +38,15 @@ public class StringToLocalDateConverter {
     /**
      * Converts a date string to a local date.
      * @param value Date string in format "yyyy.MM".
-     * @return The given value as a local date on the first day of the month, or null if parsing failed.
+     * @param useMonthEndDay Should the resulting local date be from the end of the month instead of the beginning.
+     * @return The given value as a local date on the first (or alternatively last) day of the month, or null if parsing failed.
      */
-    public static LocalDate convertFromYearMonth(String value) {
+    public static LocalDate convertFromYearMonth(String value, boolean useMonthEndDay) {
         try {
             YearMonth parsedValue = YearMonth.parse(value, DateTimeFormatter.ofPattern("yyyy.MM"));
-            return parsedValue.atDay(1);
+            return useMonthEndDay ? parsedValue.atEndOfMonth() : parsedValue.atDay(1);
         } catch (DateTimeParseException e) {
             return null;
         }
-    }
-
-    /**
-     * Converts a date string to a local date.
-     * @param value Date string in format "yyyy.MM.dd", or "yyyy.MM" (the day is then 01).
-     * @return The given value as a local date.
-     */
-    public static LocalDate convert(String value) {
-        LocalDate dateYearMonthDay = convertFromYearMonthDay(value);
-        if (dateYearMonthDay != null) {
-            return dateYearMonthDay;
-        }
-
-        return convertFromYearMonth(value);
     }
 }

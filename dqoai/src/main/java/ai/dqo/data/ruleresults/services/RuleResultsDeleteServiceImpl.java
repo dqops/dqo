@@ -51,10 +51,6 @@ public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
 
         LocalDate startDeletionRange = filter.getDateStart();
         LocalDate endDeletionRange = filter.getDateEnd();
-        if (filter.isIgnoreDateDay()) {
-            startDeletionRange = LocalDateTimeTruncateUtility.truncateMonth(startDeletionRange);
-            endDeletionRange = LocalDateTimeTruncateUtility.truncateMonth(endDeletionRange).plusMonths(1L).minusDays(1L);
-        }
 
         currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
         currentSnapshot.save();
