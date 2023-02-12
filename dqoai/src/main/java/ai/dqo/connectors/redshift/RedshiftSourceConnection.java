@@ -16,6 +16,7 @@
 package ai.dqo.connectors.redshift;
 
 import ai.dqo.connectors.ConnectorOperationFailedException;
+import ai.dqo.connectors.SourceSchemaModel;
 import ai.dqo.connectors.jdbc.AbstractJdbcSourceConnection;
 import ai.dqo.connectors.jdbc.JdbcConnectionPool;
 import ai.dqo.core.secrets.SecretValueProvider;
@@ -26,7 +27,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.Table;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 /**
@@ -45,6 +49,29 @@ public class RedshiftSourceConnection extends AbstractJdbcSourceConnection {
                                     SecretValueProvider secretValueProvider,
                                     RedshiftConnectionProvider redshiftConnectionProvider) {
         super(jdbcConnectionPool, secretValueProvider, redshiftConnectionProvider);
+    }
+
+    /**
+     * Returns a list of schemas from the source.
+     *
+     * @return List of schemas.
+     */
+    @Override
+    public List<SourceSchemaModel> listSchemas() {
+        StringBuilder sqlBuilder = new StringBuilder();
+        sqlBuilder.append("SELECT database_name, schema_name FROM ");
+        sqlBuilder.append("SVV_ALL_SCHEMAS\n");
+        sqlBuilder.append("WHERE SCHEMA_NAME <> 'information_schema' AND SCHEMA_NAME <> 'pg_catalog'");
+        String listSchemataSql = sqlBuilder.toString();
+        Table schemaRows = this.executeQuery(listSchemataSql);
+
+        List<SourceSchemaModel> results = new ArrayList<>();
+        for (int rowIndex = 0; rowIndex < schemaRows.rowCount() ; rowIndex++) {
+            String schemaName = schemaRows.getString(rowIndex, "schema_name");
+            SourceSchemaModel schemaModel = new SourceSchemaModel(schemaName);
+            results.add(schemaModel);
+        }
+        return results;
     }
 
     /**

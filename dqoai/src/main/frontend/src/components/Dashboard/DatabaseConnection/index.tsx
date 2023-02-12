@@ -18,6 +18,8 @@ import ErrorModal from "./ErrorModal";
 import ConfirmErrorModal from "./ConfirmErrorModal";
 import PostgreSQLConnection from "./PostgreSQLConnection";
 import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
+import RedshiftConnection from "./RedshiftConnection";
+import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -103,6 +105,8 @@ const DatabaseConnection = ({
         return 'Snowflake Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.postgresql:
         return 'PostgreSQL Connection Settings';
+      case ConnectionBasicModelProviderTypeEnum.redshift:
+        return 'Redshift Connection Settings';
       default:
         return 'Database Connection Settings'
     }
@@ -125,7 +129,14 @@ const DatabaseConnection = ({
       <PostgreSQLConnection
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
-      />)
+      />
+      ),
+    [ConnectionBasicModelProviderTypeEnum.redshift]: (
+    <RedshiftConnection
+      redshift={database.redshift}
+      onChange={(redshift) => onChange({ ...database, redshift })}
+    />
+    )
   };
 
   const dbImage = useMemo(() => {
@@ -136,6 +147,8 @@ const DatabaseConnection = ({
         return '/snowflake.png';
       case ConnectionBasicModelProviderTypeEnum.postgresql:
         return PostgreSQLLogo;
+      case ConnectionBasicModelProviderTypeEnum.redshift:
+        return RedshiftLogo;
       default:
         return '';
     }
@@ -171,9 +184,9 @@ const DatabaseConnection = ({
           value={database.time_zone}
         />
 
-{/*         <div className="mt-6"> */}
-{/*           {database.provider_type ? components[database.provider_type] : ''} */}
-{/*         </div> */}
+        <div className="mt-6">
+          {database.provider_type ? components[database.provider_type] : ''}
+        </div>
 
         <div className="flex space-x-4 justify-end items-center mt-6">
           {isTesting && (

@@ -21,14 +21,17 @@ import ai.dqo.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import ai.dqo.connectors.redshift.RedshiftSourceConnection;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.TableSpec;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 
 @SpringBootTest
@@ -53,5 +56,47 @@ public class RedshiftSourceConnectionIntegrationTests extends BaseBigQueryIntegr
         this.sut.open();
     }
 
+    @Test
+    void listSchemas_whenSchemasPresent_thenReturnsKnownSchemas() {
+        this.sut.open();
+        List<SourceSchemaModel> schemas = this.sut.listSchemas();
+
+        Assertions.assertEquals(1, schemas.size());
+        Assertions.assertTrue(schemas.stream().anyMatch(m -> Objects.equals(m.getSchemaName(), "public")));
+    }
+
+    @Test
+    void listTables_whenPUBLICSchemaListed_thenReturnsTables() {
+        this.sut.open();
+        List<SourceTableModel> tables = this.sut.listTables("public");
+
+        Assertions.assertTrue(tables.size() > 0);
+    }
+
+    @Test
+    void retrieveTableMetadata_whenFirstTableInSchemaIntrospected_thenReturnsTable() {
+        this.sut.open();
+        List<SourceTableModel> tables = this.sut.listTables("public");
+        ArrayList<String> tableNames = new ArrayList<>();
+        tableNames.add(tables.get(0).getTableName().getTableName());
+
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("public", tableNames);
+
+        Assertions.assertEquals(1, tableSpecs.size());
+        TableSpec tableSpec = tableSpecs.get(0);
+        Assertions.assertTrue(tableSpec.getColumns().size() > 0);
+    }
+
+    @Test
+    void retrieveTableMetadata_whenRetrievingMetadataOfAllTablesInPUBLICSchema_thenReturnsTables() {
+        this.sut.open();
+        List<SourceTableModel> tables = this.sut.listTables("public");
+        List<String> tableNames = tables.stream()
+                .map(m -> m.getTableName().getTableName())
+                .collect(Collectors.toList());
+        List<TableSpec> tableSpecs = this.sut.retrieveTableMetadata("public", tableNames);
+
+        Assertions.assertTrue(tableSpecs.size() > 0);
+    }
 
 }
