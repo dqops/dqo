@@ -1,24 +1,24 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 
-{% macro render_date_format_cast()%}
-    {%- if target_column_data_type == 'DATE' -%}
-{{ render_target_column('analyzed_table') }}
-    {%- elif target_column_data_type == 'DATETIME' or target_column_data_type == 'TIMESTAMP' or target_column_data_type == 'STRING'-%}
-SAFE_CAST({{ render_target_column('analyzed_table') }} AS DATE)
+{% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {%- if include_lower_bound and include_upper_bound -%}
+ {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {%- elif not include_lower_bound and include_upper_bound -%}
+{{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {%- elif include_lower_bound and not include_upper_bound -%}
+{{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
     {%- else -%}
-<INVALID DATA TYPE: {{target_column_data_type}}/>
+{{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-    {%- if include_lower_bound and include_upper_bound -%}
- {{ render_date_format_cast() }} >= {{ make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ make_text_constant(upper_bound) }}
-    {%- elif not include_lower_bound and include_upper_bound -%}
-{{ render_date_format_cast() }} > {{ make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ make_text_constant(upper_bound) }}
-    {%- elif include_lower_bound and not include_upper_bound -%}
-{{ render_date_format_cast() }} >= {{ make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ make_text_constant(upper_bound) }}
+{% macro render_date_format_cast()%}
+    {%- if lib.target_column_data_type == 'DATE' -%}
+{{ render_target_column('analyzed_table') }}
+    {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
+CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
     {%- else -%}
-{{ render_date_format_cast() }} > {{ make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ make_text_constant(upper_bound) }}
+<INVALID DATA TYPE: {{lib.target_column_data_type}}>
     {%- endif -%}
 {% endmacro %}
 
