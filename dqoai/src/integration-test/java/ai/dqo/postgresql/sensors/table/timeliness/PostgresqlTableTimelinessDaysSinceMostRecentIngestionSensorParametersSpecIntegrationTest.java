@@ -133,7 +133,7 @@ public class PostgresqlTableTimelinessDaysSinceMostRecentIngestionSensorParamete
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((Double)resultTable.column(0).get(0)>=min && (Double)resultTable.column(0).get(0)<=max);
+        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
     }
 
     @Test
