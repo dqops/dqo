@@ -55,7 +55,7 @@ const AdhocView = () => {
   };
 
   return (
-    <div>
+    <div className="flex-grow min-h-0 flex flex-col">
       <TableActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
