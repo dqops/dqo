@@ -16,8 +16,7 @@
 package ai.dqo.checks.column.partitioned.nulls;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +38,9 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
         {
             put("daily_partition_nulls_count", o -> o.dailyPartitionNullsCount);
             put("daily_partition_nulls_percent", o -> o.dailyPartitionNullsPercent);
+            put("daily_partition_not_nulls_count", o -> o.dailyPartitionNotNullsCount);
+            put("daily_partition_not_nulls_percent", o -> o.dailyPartitionNotNullsPercent);
+
         }
     };
 
@@ -47,6 +49,12 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
 
     @JsonPropertyDescription("Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnNullsPercentCheckSpec dailyPartitionNullsPercent;
+
+    @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnNotNullsCountCheckSpec dailyPartitionNotNullsCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnNotNullsPercentCheckSpec dailyPartitionNotNullsPercent;
 
     /**
      * Returns a nulls count check.
@@ -83,6 +91,43 @@ public class ColumnNullsDailyPartitionedChecksSpec extends AbstractCheckCategory
         this.dailyPartitionNullsPercent = dailyPartitionNullsPercent;
         propagateHierarchyIdToField(dailyPartitionNullsPercent, "daily_partition_nulls_percent");
     }
+
+    /**
+     * Returns a not nulls count check.
+     * @return Not nulls count check.
+     */
+    public ColumnNotNullsCountCheckSpec getDailyPartitionNotNullsCount() {
+        return dailyPartitionNotNullsCount;
+    }
+
+    /**
+     * Sets a new definition of a not nulls count check.
+     * @param dailyPartitionNotNullsCount Not nulls count check.
+     */
+    public void setDailyPartitionNotNullsCount(ColumnNotNullsCountCheckSpec dailyPartitionNotNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNotNullsCount, dailyPartitionNotNullsCount));
+        this.dailyPartitionNotNullsCount = dailyPartitionNotNullsCount;
+        propagateHierarchyIdToField(dailyPartitionNotNullsCount, "daily_partition_not_nulls_count");
+    }
+
+    /**
+     * Returns a not nulls percent check.
+     * @return Not nulls percent check.
+     */
+    public ColumnNotNullsPercentCheckSpec getDailyPartitionNotNullsPercent() {
+        return dailyPartitionNotNullsPercent;
+    }
+
+    /**
+     * Sets a new definition of a not nulls percent check.
+     * @param dailyPartitionNotNullsPercent Not nulls percent check.
+     */
+    public void setDailyPartitionNotNullsPercent(ColumnNotNullsPercentCheckSpec dailyPartitionNotNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNotNullsPercent, dailyPartitionNotNullsPercent));
+        this.dailyPartitionNotNullsPercent = dailyPartitionNotNullsPercent;
+        propagateHierarchyIdToField(dailyPartitionNotNullsPercent, "daily_partition_not_nulls_percent");
+    }
+
     /**
      * Returns the child map on the spec class with all fields.
      *

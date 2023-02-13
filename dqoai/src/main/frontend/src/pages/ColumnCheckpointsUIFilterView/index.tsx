@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
-import { getColumnCheckpointsUIFilter } from '../../redux/actions/column.actions';
+import {
+  getColumnCheckpointsUIFilter,
+  updateColumnDailyCheckpoints, updateColumnMonthlyCheckpoints
+} from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
+import { isEqual } from "lodash";
+import Button from "../../components/Button";
 
 const ColumnCheckpointsUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, timePartitioned, category, checkName }: { connection: string, schema: string, table: string, column: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
-  const { checkpointsUIFilter } = useSelector(
+  const { checkpointsUIFilter, isUpdating } = useSelector(
     (state: IRootState) => state.column
   );
   const dispatch = useActionDispatch();
@@ -24,7 +29,41 @@ const ColumnCheckpointsUIFilterView = () => {
       setCheckResultsOverview(res.data);
     });
   };
+  const onUpdate = async () => {
+    if (!updatedChecksUI) {
+      return;
+    }
+    if (timePartitioned === 'daily') {
+      await dispatch(
+        updateColumnDailyCheckpoints(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName,
+          updatedChecksUI
+        )
+      );
+    } else {
+      await dispatch(
+        updateColumnMonthlyCheckpoints(
+          connectionName,
+          schemaName,
+          tableName,
+          columnName,
+          updatedChecksUI
+        )
+      );
+    }
 
+    await dispatch(
+      getColumnCheckpointsUIFilter(connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
+    );
+  };
+
+  const isUpdated = useMemo(
+    () => !isEqual(updatedChecksUI, checkpointsUIFilter),
+    [checkpointsUIFilter, updatedChecksUI]
+  );
   useEffect(() => {
     setUpdatedChecksUI(checkpointsUIFilter);
   }, [checkpointsUIFilter]);
@@ -42,6 +81,14 @@ const ColumnCheckpointsUIFilterView = () => {
           <SvgIcon name="database" className="w-5 h-5" />
           <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}.${columnName}.checks.${category} - ${checkName}`}</div>
         </div>
+        <Button
+            color={isUpdated ? 'primary' : 'secondary'}
+            variant="contained"
+            label="Save"
+            className="ml-auto w-40"
+            onClick={onUpdate}
+            loading={isUpdating}
+        />
       </div>
       <div>
         <DataQualityChecks

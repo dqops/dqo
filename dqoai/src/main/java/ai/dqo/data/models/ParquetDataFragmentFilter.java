@@ -47,11 +47,6 @@ public abstract class ParquetDataFragmentFilter {
     private LocalDate dateEnd;
 
     /**
-     * Should the day part of date be ignored, only the month is taken into consideration. Default true.
-     */
-    private boolean ignoreDateDay = true;
-
-    /**
      * Tell which additional columns should be read from the parquet, and what their value should be.
      * @return Mapping column name to expected value.
      */

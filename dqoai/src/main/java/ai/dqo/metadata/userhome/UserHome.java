@@ -21,6 +21,7 @@ import ai.dqo.metadata.definitions.sensors.SensorDefinitionList;
 import ai.dqo.metadata.fileindices.FileIndexList;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.metadata.settings.SettingsWrapper;
 import ai.dqo.metadata.sources.*;
 
 /**

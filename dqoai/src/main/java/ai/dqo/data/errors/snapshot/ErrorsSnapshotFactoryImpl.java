@@ -66,6 +66,7 @@ public class ErrorsSnapshotFactoryImpl implements ErrorsSnapshotFactory {
      */
     @Override
     public ErrorsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
-        return new ErrorsSnapshot(connectionName, physicalTableName, this.storageService, columnNames);
+        Table templateTable = this.errorsTableFactory.createEmptyErrorsTable("template_errors_results");
+        return new ErrorsSnapshot(connectionName, physicalTableName, this.storageService, columnNames, templateTable);
     }
 }

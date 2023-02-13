@@ -36,22 +36,31 @@ public class CheckResultsOverviewDataModel {
     @JsonPropertyDescription("List of data stream names. Identifies the data stream with the highest severity or error result.")
     private List<String> dataStreams = new ArrayList<>();
 
+    @JsonPropertyDescription("List of sensor results. Returns the data quality result readout for the data stream with the alert of the higest severity level.")
+    private List<Double> results = new ArrayList<>();
+
     /**
      * Appends a new result. If the time period is not known, a new set of values are added. If the time period matches the most recent
      * time period then the current severity and data stream is replaced if the severity is higher.
      * NOTE: This method must be called in order, adding the most recent time periods first. Following time periods must be descending.
      * @param timePeriod Time period to add.
      * @param severity Check severity.
+     * @param actualValue Actual value returned by the sensor.
      * @param dataStreamName Data stream name.
      * @param resultsCount Maximum results count to store. The result is not added if the result count is exceeded.
      */
-    public void appendResult(LocalDateTime timePeriod, Integer severity, String dataStreamName, int resultsCount) {
+    public void appendResult(LocalDateTime timePeriod,
+                             Integer severity,
+                             Double actualValue,
+                             String dataStreamName,
+                             int resultsCount) {
         assert this.timePeriods.size() == 0 || !this.timePeriods.get(this.timePeriods.size() - 1).isAfter(timePeriod);
 
         if (this.timePeriods.size() == 0) {
             this.timePeriods.add(timePeriod);
             this.statuses.add(CheckResultStatus.fromSeverity(severity));
             this.dataStreams.add(dataStreamName);
+            this.results.add(actualValue);
             return;
         }
 
@@ -60,6 +69,7 @@ public class CheckResultsOverviewDataModel {
                 // another result with a higher severity, replacing the current one, we found a bigger issue
                 this.statuses.set(this.statuses.size() - 1, CheckResultStatus.fromSeverity(severity));
                 this.dataStreams.set(this.dataStreams.size() - 1, dataStreamName);
+                this.results.set(this.dataStreams.size() - 1, actualValue);
             }
         }
         else {
@@ -70,6 +80,7 @@ public class CheckResultsOverviewDataModel {
             this.timePeriods.add(timePeriod);
             this.statuses.add(CheckResultStatus.fromSeverity(severity));
             this.dataStreams.add(dataStreamName);
+            this.results.add(actualValue);
         }
     }
 
@@ -80,5 +91,6 @@ public class CheckResultsOverviewDataModel {
         this.timePeriods = Lists.reverse(this.timePeriods);
         this.statuses = Lists.reverse(this.statuses);
         this.dataStreams = Lists.reverse(this.dataStreams);
+        this.results = Lists.reverse(this.results);
     }
 }

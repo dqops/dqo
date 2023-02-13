@@ -35,6 +35,23 @@ export interface ITableState {
   isUpdatedTableBasic?: boolean;
   schedule?: RecurringScheduleSpec;
   isUpdatedSchedule?: boolean;
+  scheduleGroups?: {
+    profiling?: {
+      schedule?: RecurringScheduleSpec;
+      updatedSchedule?: RecurringScheduleSpec;
+      isUpdatedSchedule?: boolean;
+    }
+    daily?: {
+      schedule?: RecurringScheduleSpec;
+      updatedSchedule?: RecurringScheduleSpec;
+      isUpdatedSchedule?: boolean;
+    }
+    monthly?: {
+      schedule?: RecurringScheduleSpec;
+      updatedSchedule?: RecurringScheduleSpec;
+      isUpdatedSchedule?: boolean;
+    }
+  }
   comments: CommentSpec[];
   isUpdatedComments?: boolean;
   labels: string[];
@@ -154,6 +171,48 @@ const tableReducer = (state = initialState, action: any) => {
         error: null
       };
     case TABLE_ACTION.UPDATE_TABLE_SCHEDULE_ERROR:
+      return {
+        ...state,
+        isUpdating: false,
+        error: action.error
+      };
+    case TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP:
+      return {
+        ...state,
+        loading: true
+      };
+    case TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        scheduleGroups: {
+          ...state.scheduleGroups,
+          [action.schedulingGroup]: {
+            schedule: action.data,
+            updatedSchedule: action.data,
+            isUpdatedSchedule: false
+          }
+        },
+        error: null
+      };
+    case TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP_ERROR:
+      return {
+        ...state,
+        loading: false,
+        error: action.error
+      };
+    case TABLE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP:
+      return {
+        ...state,
+        isUpdating: true
+      };
+    case TABLE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP_SUCCESS:
+      return {
+        ...state,
+        isUpdating: false,
+        error: null
+      };
+    case TABLE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP_ERROR:
       return {
         ...state,
         isUpdating: false,
@@ -514,6 +573,34 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdatedSchedule: true,
         schedule: action.schedule
       };
+    case TABLE_ACTION.SET_UPDATED_SCHEDULE_GROUP: {
+      const actionSchedulingGroup = action.schedulingGroup;
+      const stateScheduleGroups = state.scheduleGroups ?? {};
+      return {
+        ...state,
+        scheduleGroups: {
+          ...stateScheduleGroups,
+          [actionSchedulingGroup]: {
+            ...(stateScheduleGroups?.[actionSchedulingGroup as keyof typeof stateScheduleGroups] || {}),
+            updatedSchedule: action.schedule
+          }
+        }
+      };
+    }
+    case TABLE_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP: {
+      const actionSchedulingGroup = action.schedulingGroup;
+      const stateScheduleGroups = state.scheduleGroups ?? {};
+      return {
+        ...state,
+        scheduleGroups: {
+          ...stateScheduleGroups,
+          [actionSchedulingGroup]: {
+            ...(stateScheduleGroups?.[actionSchedulingGroup as keyof typeof stateScheduleGroups] || {}),
+            isUpdatedSchedule: action.isUpdated
+          }
+        }
+      };
+    }
     case TABLE_ACTION.SET_UPDATED_COMMENTS:
       return {
         ...state,

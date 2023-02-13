@@ -36,38 +36,6 @@ public class ConnectionSpecTests extends BaseTest {
     }
 
     @Test
-    void zoneId_whenDefault_thenReturnsUTC() {
-        Assertions.assertEquals("UTC", this.sut.getTimeZone());
-    }
-
-    @Test
-    void getJavaTimeZoneId_whenDefault_thenReturnsUTC() {
-        ZoneId zoneId = this.sut.getJavaTimeZoneId();
-        Assertions.assertEquals("UTC", zoneId.toString());
-    }
-
-    @Test
-    void getJavaTimeZoneId_whenESTTimeZone_thenReturnsEST() {
-		this.sut.setTimeZone("EST");
-        ZoneId zoneId = this.sut.getJavaTimeZoneId();
-        Assertions.assertEquals("-05:00", zoneId.toString());  // does it change with the daylight saving time over the year?
-    }
-
-    @Test
-    void getJavaTimeZoneId_whenUSEasternTimeZone_thenReturnsEST() {
-		this.sut.setTimeZone("US/Eastern");
-        ZoneId zoneId = this.sut.getJavaTimeZoneId();
-        Assertions.assertEquals("US/Eastern", zoneId.toString());
-    }
-
-    @Test
-    void getJavaTimeZoneId_whenUnknownTimeZone_thenReturnsUTC() {
-		this.sut.setTimeZone("unknown name");
-        ZoneId zoneId = this.sut.getJavaTimeZoneId();
-        Assertions.assertEquals("UTC", zoneId.toString());
-    }
-
-    @Test
     void isDirty_whenDialectSet_thenIsDirtyIsTrue() {
 		this.sut.setProviderType(ProviderType.bigquery);
         Assertions.assertEquals(ProviderType.bigquery, this.sut.getProviderType());

@@ -52,6 +52,6 @@ public class ColumnNumericNonNegativeCountSensorParametersSpec extends AbstractC
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/validity/non_negative_count";
+        return "column/numeric/non_negative_count";
     }
 }

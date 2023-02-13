@@ -16,9 +16,7 @@
 package ai.dqo.checks.column.partitioned.uniqueness;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicateCountCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnDuplicatePercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,6 +37,7 @@ public class ColumnUniquenessDailyPartitionedChecksSpec extends AbstractCheckCat
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessDailyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_partition_unique_count", o -> o.dailyPartitionUniqueCount);
+            put("daily_partition_unique_percent", o -> o.dailyPartitionUniquePercent);
             put("daily_partition_duplicate_count", o -> o.dailyPartitionDuplicateCount);
             put("daily_partition_duplicate_percent", o -> o.dailyPartitionDuplicatePercent);
         }
@@ -46,6 +45,9 @@ public class ColumnUniquenessDailyPartitionedChecksSpec extends AbstractCheckCat
 
     @JsonPropertyDescription("Verifies that the number of unique values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnUniqueCountCheckSpec dailyPartitionUniqueCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of unique values in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnUniquePercentCheckSpec dailyPartitionUniquePercent;
 
     @JsonPropertyDescription("Verifies that the number of duplicate values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnDuplicateCountCheckSpec dailyPartitionDuplicateCount;
@@ -69,6 +71,24 @@ public class ColumnUniquenessDailyPartitionedChecksSpec extends AbstractCheckCat
         this.setDirtyIf(!Objects.equals(this.dailyPartitionUniqueCount, dailyPartitionUniqueCount));
         this.dailyPartitionUniqueCount = dailyPartitionUniqueCount;
         propagateHierarchyIdToField(dailyPartitionUniqueCount, "daily_partition_unique_count");
+    }
+
+    /**
+     * Returns a unique values percent check specification.
+     * @return Unique values percent check specification.
+     */
+    public ColumnUniquePercentCheckSpec getDailyPartitionUniquePercent() {
+        return dailyPartitionUniquePercent;
+    }
+
+    /**
+     * Sets a new specification of a unique values percent check.
+     * @param dailyPartitionUniquePercent Unique values percent check specification.
+     */
+    public void setDailyPartitionUniquePercent(ColumnUniquePercentCheckSpec dailyPartitionUniquePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionUniquePercent, dailyPartitionUniquePercent));
+        this.dailyPartitionUniquePercent = dailyPartitionUniquePercent;
+        propagateHierarchyIdToField(dailyPartitionUniquePercent, "daily_partition_unique_percent");
     }
 
     /**

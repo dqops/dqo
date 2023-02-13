@@ -20,6 +20,7 @@ import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -56,9 +57,6 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("PostgreSQL connection parameters.")
     private PostgresqlParametersSpec postgresql;
 
-    @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
-    private String timeZone = "UTC";
-
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
     private CheckSearchFilters runChecksJobTemplate;
 
@@ -74,6 +72,9 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this connection.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
 
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this connection.")
+    private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
+
     /**
      * Creates a basic connection model from a connection specification by cherry-picking relevant fields.
      * @param connectionName Connection name to store in the model.
@@ -85,7 +86,6 @@ public class ConnectionBasicModel {
             setConnectionName(connectionName);
             setConnectionHash(connectionSpec.getHierarchyId() != null ? connectionSpec.getHierarchyId().hashCode64() : null);
             setProviderType(connectionSpec.getProviderType());
-            setTimeZone(connectionSpec.getTimeZone());
             setBigquery(connectionSpec.getBigquery());
             setSnowflake(connectionSpec.getSnowflake());
             setPostgresql(connectionSpec.getPostgresql());
@@ -117,6 +117,18 @@ public class ConnectionBasicModel {
                 setConnectionName(connectionName);
                 setEnabled(true);
             }});
+            setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
+            {{
+                setConnectionName(connectionName);
+
+                setDateStart(null);
+                setDateEnd(null);
+
+                setDeleteProfilingResults(true);
+                setDeleteErrors(true);
+                setDeleteRuleResults(true);
+                setDeleteSensorReadouts(true);
+            }});
         }};
     }
 
@@ -126,7 +138,6 @@ public class ConnectionBasicModel {
      */
     public void copyToConnectionSpecification(ConnectionSpec targetConnectionSpec) {
         targetConnectionSpec.setProviderType(this.getProviderType());
-        targetConnectionSpec.setTimeZone(this.getTimeZone());
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());

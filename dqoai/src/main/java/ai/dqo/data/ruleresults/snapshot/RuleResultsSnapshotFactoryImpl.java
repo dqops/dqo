@@ -65,6 +65,7 @@ public class RuleResultsSnapshotFactoryImpl implements RuleResultsSnapshotFactor
      */
     @Override
     public RuleResultsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
-        return new RuleResultsSnapshot(connectionName, physicalTableName, this.storageService, columnNames);
+        Table templateRuleResults = this.ruleResultsTableFactory.createEmptyRuleResultsTable("template_rule_results");
+        return new RuleResultsSnapshot(connectionName, physicalTableName, this.storageService, columnNames, templateRuleResults);
     }
 }

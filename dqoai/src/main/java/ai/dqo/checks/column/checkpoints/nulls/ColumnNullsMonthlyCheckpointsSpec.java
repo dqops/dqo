@@ -17,6 +17,8 @@ package ai.dqo.checks.column.checkpoints.nulls;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNotNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
@@ -39,6 +41,8 @@ public class ColumnNullsMonthlyCheckpointsSpec extends AbstractCheckCategorySpec
         {
             put("monthly_checkpoint_nulls_count", o -> o.monthlyCheckpointNullsCount);
             put("monthly_checkpoint_nulls_percent", o -> o.monthlyCheckpointNullsPercent);
+            put("monthly_checkpoint_not_nulls_count", o -> o.monthlyCheckpointNotNullsCount);
+            put("monthly_checkpoint_not_nulls_percent", o -> o.monthlyCheckpointNotNullsPercent);
         }
     };
 
@@ -47,6 +51,12 @@ public class ColumnNullsMonthlyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the percentage of null values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnNullsPercentCheckSpec monthlyCheckpointNullsPercent;
+
+    @JsonPropertyDescription("Verifies that the number of not null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnNotNullsCountCheckSpec monthlyCheckpointNotNullsCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of not nulls in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnNotNullsPercentCheckSpec monthlyCheckpointNotNullsPercent;
 
     /**
      * Returns a nulls count check specification.
@@ -82,6 +92,42 @@ public class ColumnNullsMonthlyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointNullsPercent, monthlyCheckpointNullsPercent));
         this.monthlyCheckpointNullsPercent = monthlyCheckpointNullsPercent;
         propagateHierarchyIdToField(monthlyCheckpointNullsPercent, "monthly_checkpoint_nulls_percent");
+    }
+
+    /**
+     * Returns not nulls count check specification.
+     * @return Not nulls count check specification.
+     */
+    public ColumnNotNullsCountCheckSpec getMonthlyCheckpointNotNullsCount() {
+        return monthlyCheckpointNotNullsCount;
+    }
+
+    /**
+     * Sets a new definition of a not nulls count check.
+     * @param monthlyCheckpointNotNullsCount Not nulls count check specification.
+     */
+    public void setMonthlyCheckpointNotNullsCount(ColumnNotNullsCountCheckSpec monthlyCheckpointNotNullsCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointNotNullsCount, monthlyCheckpointNotNullsCount));
+        this.monthlyCheckpointNotNullsCount = monthlyCheckpointNotNullsCount;
+        propagateHierarchyIdToField(monthlyCheckpointNotNullsCount, "monthly_checkpoint_not_nulls_count");
+    }
+
+    /**
+     * Returns a not nulls percent check specification.
+     * @return Not nulls percent check specification.
+     */
+    public ColumnNotNullsPercentCheckSpec getMonthlyCheckpointNotNullsPercent() {
+        return monthlyCheckpointNotNullsPercent;
+    }
+
+    /**
+     * Sets a new definition of a not nulls percent check.
+     * @param monthlyCheckpointNotNullsPercent Not nulls percent check specification.
+     */
+    public void setMonthlyCheckpointNotNullsPercent(ColumnNotNullsPercentCheckSpec monthlyCheckpointNotNullsPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointNotNullsPercent, monthlyCheckpointNotNullsPercent));
+        this.monthlyCheckpointNotNullsPercent = monthlyCheckpointNotNullsPercent;
+        propagateHierarchyIdToField(monthlyCheckpointNotNullsPercent, "monthly_checkpoint_not_nulls_percent");
     }
 
     /**

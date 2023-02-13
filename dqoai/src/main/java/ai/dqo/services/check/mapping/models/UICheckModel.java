@@ -16,6 +16,7 @@
 package ai.dqo.services.check.mapping.models;
 
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
@@ -103,6 +104,9 @@ public class UICheckModel implements Cloneable {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check")
+    private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
+
     @JsonPropertyDescription("Name of a data stream mapping defined at a table that should be used for this check.")
     private String dataStream;
 
@@ -149,11 +153,14 @@ public class UICheckModel implements Cloneable {
             if (cloned.runChecksJobTemplate != null) {
                 cloned.runChecksJobTemplate = cloned.runChecksJobTemplate.clone();
             }
+            if (cloned.dataCleanJobTemplate != null) {
+                cloned.dataCleanJobTemplate = cloned.dataCleanJobTemplate.clone();
+            }
 
             if (cloned.sensorParameters != null) {
                 cloned.sensorParameters = cloned.sensorParameters
                         .stream()
-                        .map(uiFieldModel -> uiFieldModel.cloneForUpdate())
+                        .map(UIFieldModel::cloneForUpdate)
                         .collect(Collectors.toList());
             }
 

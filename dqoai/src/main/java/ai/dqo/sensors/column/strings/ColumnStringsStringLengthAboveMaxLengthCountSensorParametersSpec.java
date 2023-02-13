@@ -42,23 +42,23 @@ public class ColumnStringsStringLengthAboveMaxLengthCountSensorParametersSpec ex
 
     @JsonPropertyDescription("This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0")
     @SampleValues(values = "5")
-    private int maximumLength = 0;
+    private int maxLength = 0;
 
     /**
      * Returns the maximum length.
      * @return maximumLength.
      */
-    public int getMaximumLength() {
-        return maximumLength;
+    public int getMaxLength() {
+        return maxLength;
     }
 
     /**
      * Sets the maximum length.
-     * @param maximumLength maximum length.
+     * @param maxLength maximum length.
      */
-    public void setMaximumLength(int maximumLength) {
-        this.setDirtyIf(!Objects.equals(this.maximumLength, maximumLength));
-        this.maximumLength = maximumLength;
+    public void setMaxLength(int maxLength) {
+        this.setDirtyIf(!Objects.equals(this.maxLength, maxLength));
+        this.maxLength = maxLength;
     }
 
     /**

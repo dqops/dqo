@@ -14,7 +14,6 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
-
   const onChangeMode = (e: any) => {
     setMode(e.target.value);
 
@@ -56,11 +55,14 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   };
 
   useEffect(() => {
-    if (!schedule?.cron_expression) return;
-
-    if (/^\*\/\d\d? \* \* \* \*$/.test(schedule?.cron_expression)) {
+    // if (!schedule?.cron_expression) return;
+    const cron_expression = schedule?.cron_expression ?? "";
+    if (!cron_expression) {
+      setMode("");
+    }
+    if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
       setMode('minutes');
-      const matches = schedule?.cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
+      const matches = cron_expression.match(/^\*\/(\d\d?) \* \* \* \*$/);
       if (!matches) return;
       if (Number(matches[1]) < 0) {
         onChangeMinutes(0);
@@ -70,9 +72,9 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
         setMinutes(Number(matches[1]));
       }
     }
-    if (/^\d\d? \* \* \* \*$/.test(schedule?.cron_expression)) {
+    if (/^\d\d? \* \* \* \*$/.test(cron_expression)) {
       setMode('hour');
-      const matches = schedule?.cron_expression.match(/^(\d\d?) \* \* \* \*$/);
+      const matches = cron_expression.match(/^(\d\d?) \* \* \* \*$/);
       if (!matches) return;
       if (Number(matches[1]) < 0) {
         onChangeMinutes(0);
@@ -83,9 +85,9 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
       }
     }
 
-    if (/^\d\d? \d\d? \* \* \*$/.test(schedule?.cron_expression)) {
+    if (/^\d\d? \d\d? \* \* \*$/.test(cron_expression)) {
       setMode('day');
-      const matches = schedule?.cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
+      const matches = cron_expression.match(/^(\d\d?) (\d\d?) \* \* \*$/);
       if (!matches) return;
 
       if (Number(matches[2]) < 0) {
@@ -117,28 +119,30 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   return (
     <div>
       <table className="mb-6">
-        <tr>
-          <td className="px-4 py-2">
-            <div>Unix cron expression:</div>
-          </td>
-          <td className="px-4 py-2">
-            <Input
-              value={schedule?.cron_expression}
-              onChange={onChangeCronExpression}
-            />
-          </td>
-        </tr>
-        <tr>
-          <td className="px-4 py-2">
-            <div>Disable schedule:</div>
-          </td>
-          <td className="px-4 py-2">
-            <Checkbox
-              checked={schedule?.disabled}
-              onChange={(value) => handleChange({ disabled: value })}
-            />
-          </td>
-        </tr>
+        <tbody>
+          <tr>
+            <td className="px-4 py-2">
+              <div>Unix cron expression:</div>
+            </td>
+            <td className="px-4 py-2">
+              <Input
+                value={schedule?.cron_expression}
+                onChange={onChangeCronExpression}
+              />
+            </td>
+          </tr>
+          <tr>
+            <td className="px-4 py-2">
+              <div>Disable schedule:</div>
+            </td>
+            <td className="px-4 py-2">
+              <Checkbox
+                checked={schedule?.disabled}
+                onChange={(value) => handleChange({ disabled: value })}
+              />
+            </td>
+          </tr>
+        </tbody>
       </table>
       <div className="flex flex-col">
         <Radio

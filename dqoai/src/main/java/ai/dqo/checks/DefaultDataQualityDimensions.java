@@ -22,6 +22,7 @@ public enum DefaultDataQualityDimensions {
     Accuracy,
     Completeness,
     Consistency,
+    Integrity,
     Reasonableness,
     Timeliness,
     Uniqueness,

@@ -81,9 +81,6 @@ public class ConnectionSpec extends AbstractSpec {
     @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the Snowflake JDBC url).")
     private PostgresqlParametersSpec postgresql;
 
-    @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
-    private String timeZone = "UTC";
-
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")
     private Integer parallelRunsLimit;
 
@@ -241,40 +238,6 @@ public class ConnectionSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.schedules, schedules));
         this.schedules = schedules;
         propagateHierarchyIdToField(schedules, "schedules");
-    }
-
-    /**
-     * Get the target database timezone name. Should match one of available {@link java.time.ZoneId} time zone.
-     * @return Time zone name.
-     */
-    public String getTimeZone() {
-        return timeZone;
-    }
-
-    /**
-     * Sets a time zone name. Zone names are not validated on set.
-     * @param timeZone Time zone name.
-     */
-    public void setTimeZone(String timeZone) {
-		setDirtyIf(!Objects.equals(this.timeZone, timeZone));
-        this.timeZone = timeZone;
-    }
-
-    /**
-     * Parses the time zone. Returns a Java zoneId. Returns UTC if the time zone name is invalid.
-     * @return Time zone object with the zone rules.
-     */
-    @JsonIgnore
-    public ZoneId getJavaTimeZoneId() {
-        try {
-            ZoneId zoneId = TimeZoneUtility.parseZoneId(this.timeZone);
-            return zoneId;
-        }
-        catch (Exception ex) {
-            // ignore exceptions here, we will use UTC as a fallback
-        }
-
-        return ZoneId.of("UTC");
     }
 
     /**

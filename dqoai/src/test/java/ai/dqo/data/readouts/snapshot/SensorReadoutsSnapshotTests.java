@@ -41,6 +41,8 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Comparator;
 
 @SpringBootTest
 public class SensorReadoutsSnapshotTests extends BaseTest {
@@ -102,12 +104,15 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         Assertions.assertNotNull(table);
         Assertions.assertEquals(2, table.rowCount());
 
-        Assertions.assertEquals(20.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(0));
-        Assertions.assertEquals(LocalDateTime.of(2022, 2, 10, 14, 20, 55),
-                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(0));
-        Assertions.assertEquals(30.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(1));
-        Assertions.assertEquals(LocalDateTime.of(2022, 3, 10, 14, 30, 55),
-                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(1));
+        Assertions.assertIterableEquals(new ArrayList<Double>(){{add(20.5); add(30.5);}},
+                table.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).sorted(Comparator.comparingDouble(a -> a)));
+        Assertions.assertIterableEquals(
+                new ArrayList<LocalDateTime>(){{
+                    add(LocalDateTime.of(2022, 2, 10, 14, 20, 55));
+                    add(LocalDateTime.of(2022, 3, 10, 14, 30, 55));
+                }},
+                table.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).sorted(Comparator.comparing(dt -> dt))
+        );
     }
 
     @Test
@@ -139,15 +144,16 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         Assertions.assertNotNull(table);
         Assertions.assertEquals(3, table.rowCount());
 
-        Assertions.assertEquals(20.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(0));
-        Assertions.assertEquals(LocalDateTime.of(2022, 2, 10, 14, 20, 55),
-                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(0));
-        Assertions.assertEquals(30.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(1));
-        Assertions.assertEquals(LocalDateTime.of(2022, 3, 10, 14, 30, 55),
-                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(1));
-        Assertions.assertEquals(10.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(2));
-        Assertions.assertEquals(LocalDateTime.of(2022, 1, 10, 14, 10, 55),
-                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(2));
+        Assertions.assertIterableEquals(new ArrayList<Double>(){{add(10.5); add(20.5); add(30.5);}},
+                table.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).sorted(Comparator.comparingDouble(a -> a)));
+        Assertions.assertIterableEquals(
+                new ArrayList<LocalDateTime>(){{
+                    add(LocalDateTime.of(2022, 1, 10, 14, 10, 55));
+                    add(LocalDateTime.of(2022, 2, 10, 14, 20, 55));
+                    add(LocalDateTime.of(2022, 3, 10, 14, 30, 55));
+                }},
+                table.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).sorted(Comparator.comparing(dt -> dt))
+        );
     }
 
     @Test
@@ -164,14 +170,15 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         Assertions.assertNotNull(table);
         Assertions.assertEquals(3, table.rowCount());
 
-        Assertions.assertEquals(10.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(0));
-        Assertions.assertEquals(LocalDateTime.of(2022, 1, 10, 14, 10, 55),
-                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(0));
-        Assertions.assertEquals(20.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(1));
-        Assertions.assertEquals(LocalDateTime.of(2022, 2, 10, 14, 20, 55),
-                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(1));
-        Assertions.assertEquals(30.5, table.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).get(2));
-        Assertions.assertEquals(LocalDateTime.of(2022, 3, 10, 14, 30, 55),
-                table.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).get(2));
+        Assertions.assertIterableEquals(new ArrayList<Double>(){{add(10.5); add(20.5); add(30.5);}},
+                table.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME).sorted(Comparator.comparingDouble(a -> a)));
+        Assertions.assertIterableEquals(
+                new ArrayList<LocalDateTime>(){{
+                    add(LocalDateTime.of(2022, 1, 10, 14, 10, 55));
+                    add(LocalDateTime.of(2022, 2, 10, 14, 20, 55));
+                    add(LocalDateTime.of(2022, 3, 10, 14, 30, 55));
+                }},
+                table.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME).sorted(Comparator.comparing(dt -> dt))
+        );
     }
 }

@@ -17,17 +17,16 @@ package ai.dqo.data.storage;
 
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
+import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Contains a snapshot of data for one parquet table (such as sensor_readouts or rule_results) that was loaded
@@ -39,6 +38,7 @@ public class TableDataSnapshot {
     private final ParquetPartitionStorageService storageService;
     private final FileStorageSettings storageSettings;
     private final TableDataChanges tableDataChanges;
+    private final Table newResultsTable;
     private final String[] columnNames;
     private Map<ParquetPartitionId, LoadedMonthlyPartition> loadedMonthlyPartitions;
     private LocalDate firstLoadedMonth;
@@ -61,6 +61,7 @@ public class TableDataSnapshot {
         this.tableName = tableName;
         this.storageService = storageService;
         this.storageSettings = storageSettings;
+        this.newResultsTable = newResults;
         this.tableDataChanges = new TableDataChanges(newResults);
         this.columnNames = null;
     }
@@ -78,12 +79,14 @@ public class TableDataSnapshot {
                              PhysicalTableName tableName,
                              ParquetPartitionStorageService storageService,
                              FileStorageSettings storageSettings,
-                             String[] columnNames) {
+                             String[] columnNames,
+                             Table newResultsTemplate) {
         assert columnNames != null && columnNames.length > 0;
         this.connectionName = connectionName;
         this.tableName = tableName;
         this.storageService = storageService;
         this.storageSettings = storageSettings;
+        this.newResultsTable = newResultsTemplate;
         this.tableDataChanges = null;
         this.columnNames = columnNames;
     }
@@ -177,10 +180,53 @@ public class TableDataSnapshot {
     }
 
     /**
+     * Fixes the schema of loaded parquet files to match the current schema.
+     * Supports only read-write parquet files (without a column list filter). Does not convert the data types of columns.
+     * @param loadedPartitions Dictionary of loaded partitions.
+     */
+    public void updateSchemaForLoadedPartitions(Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions) {
+        if (this.columnNames != null) {
+            for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions.values()) {
+                Table partitionData = loadedMonthlyPartition.getData();
+                if (partitionData == null) {
+                    continue;
+                }
+
+                HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
+
+                for (String expectedColumnName : this.columnNames) {
+                    if (!columnNamesInPartitionData.contains(expectedColumnName)) {
+                        Column<?> expectedColumn = this.newResultsTable.column(expectedColumnName);
+                        Column<?> emptyColumnToAdd = expectedColumn.emptyCopy(partitionData.rowCount());
+                        partitionData.addColumns(emptyColumnToAdd);
+                    }
+                }
+            }
+        }
+        else {
+            for (LoadedMonthlyPartition loadedMonthlyPartition : loadedPartitions.values()) {
+                Table partitionData = loadedMonthlyPartition.getData();
+                if (partitionData == null) {
+                    continue;
+                }
+
+                HashSet<String> columnNamesInPartitionData = new HashSet<>(partitionData.columnNames());
+
+                for (Column<?> expectedColumn : this.getTableDataChanges().getNewOrChangedRows().columns()) {
+                    if (!columnNamesInPartitionData.contains(expectedColumn.name())) {
+                        Column<?> emptyColumnToAdd = expectedColumn.emptyCopy(partitionData.rowCount());
+                        partitionData.addColumns(emptyColumnToAdd);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
      * Ensures that all the months (monthly partitions) within the time range between <code>startMonth</code> and <code>endMonth</code> are loaded.
      * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
      * @param start The date of the start month. It could be any date within the month, because the whole month is always loaded.
-     * @param end The date fo the end month. It could be any date within the month, because the whole month is always loaded.
+     * @param end The date of the end month. It could be any date within the month, because the whole month is always loaded.
      */
     public void ensureMonthsAreLoaded(LocalDate start, LocalDate end) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);
@@ -196,6 +242,7 @@ public class TableDataSnapshot {
             if (this.loadedMonthlyPartitions == null) {
                 this.loadedMonthlyPartitions = new LinkedHashMap<>();
             }
+            updateSchemaForLoadedPartitions(loadedPartitions);
             this.loadedMonthlyPartitions.putAll(loadedPartitions);
             return;
         }
@@ -207,6 +254,7 @@ public class TableDataSnapshot {
 
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedEarlierPartitions = this.storageService.loadPartitionsForMonthsRange(
                     this.connectionName, this.tableName, this.firstLoadedMonth, lastMonthToLoad, this.storageSettings, this.columnNames);
+            updateSchemaForLoadedPartitions(loadedEarlierPartitions);
             this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
         }
 
@@ -218,7 +266,87 @@ public class TableDataSnapshot {
 
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedLaterPartitions = this.storageService.loadPartitionsForMonthsRange(
                     this.connectionName, this.tableName, firstMonthToLoad, this.lastLoadedMonth, this.storageSettings, this.columnNames);
+            updateSchemaForLoadedPartitions(loadedLaterPartitions);
             this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+        }
+    }
+
+    /**
+     * Ensures that the months (monthly partitions) within the time range between <code>startMonth</code> and <code>endMonth</code> are loaded,
+     * up to the point when the snapshot contains <code>monthCount</code> loaded partitions.
+     * Loads missing months to extend the time range of monthly partitions that are kept in a snapshot.
+     * @param start The date of the start month. If null, the date range is not left-bounded.
+     * @param end The date of the end month. If null, the date range is not right-bounded.
+     * @param monthCount Maximum number of months to have loaded.
+     */
+    public void ensureNRecentMonthsAreLoaded(LocalDate start, LocalDate end, int monthCount) {
+        int currentlyLoadedPartitions = loadedMonthlyPartitions == null ? 0 : loadedMonthlyPartitions.size();
+        int needToLoad = monthCount - currentlyLoadedPartitions;
+        if (needToLoad <= 0) {
+            // no need to load more partitions
+            return;
+        }
+
+        if (this.firstLoadedMonth == null) {
+            // no data ever loaded
+            Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
+                    this.connectionName, this.tableName, start, end, this.storageSettings, this.columnNames, monthCount);
+            this.firstLoadedMonth = loadedPartitions.keySet().stream()
+                    .map(ParquetPartitionId::getMonth)
+                    .min(LocalDate::compareTo)
+                    .orElse(null);
+            this.lastLoadedMonth = loadedPartitions.keySet().stream()
+                    .map(ParquetPartitionId::getMonth)
+                    .max(LocalDate::compareTo)
+                    .orElse(null);
+
+            if (this.loadedMonthlyPartitions == null) {
+                this.loadedMonthlyPartitions = new LinkedHashMap<>();
+            }
+            updateSchemaForLoadedPartitions(loadedPartitions);
+            this.loadedMonthlyPartitions.putAll(loadedPartitions);
+        }
+        else {
+            if (end == null || end.isAfter(this.lastLoadedMonth)) {
+                // we need to load a few months after
+                LocalDate firstMonthToLoad;
+                if (start == null || start.isBefore(this.lastLoadedMonth)) {
+                    firstMonthToLoad = this.lastLoadedMonth.plusMonths(1L);
+                }
+                else {
+                    firstMonthToLoad = start;
+                }
+
+                Map<ParquetPartitionId, LoadedMonthlyPartition> loadedLaterPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
+                        this.connectionName, this.tableName, firstMonthToLoad, end, this.storageSettings, this.columnNames, needToLoad);
+                Optional<LocalDate> lastLoadedLaterMonth = loadedLaterPartitions.keySet().stream().map(ParquetPartitionId::getMonth).max(LocalDate::compareTo);
+                this.lastLoadedMonth = lastLoadedLaterMonth.orElse(this.lastLoadedMonth);
+                updateSchemaForLoadedPartitions(loadedLaterPartitions);
+                this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+            }
+            currentlyLoadedPartitions = loadedMonthlyPartitions == null ? 0 : loadedMonthlyPartitions.size();
+            needToLoad = monthCount - currentlyLoadedPartitions;
+            if (needToLoad <= 0) {
+                // no need to load more partitions
+                return;
+            }
+
+            if (start == null || start.isBefore(this.firstLoadedMonth)) {
+                // we need to load a few months before
+                LocalDate lastMonthToLoad;
+                if (end == null || end.isAfter(this.firstLoadedMonth)) {
+                    lastMonthToLoad = this.firstLoadedMonth.minusMonths(1L);
+                } else {
+                    lastMonthToLoad = end;
+                }
+
+                Map<ParquetPartitionId, LoadedMonthlyPartition> loadedEarlierPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
+                        this.connectionName, this.tableName, start, lastMonthToLoad, this.storageSettings, this.columnNames, needToLoad);
+                Optional<LocalDate> lastLoadedEarlierMonth = loadedEarlierPartitions.keySet().stream().map(ParquetPartitionId::getMonth).max(LocalDate::compareTo);
+                this.firstLoadedMonth = lastLoadedEarlierMonth.orElse(this.firstLoadedMonth);
+                updateSchemaForLoadedPartitions(loadedEarlierPartitions);
+                this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
+            }
         }
     }
 

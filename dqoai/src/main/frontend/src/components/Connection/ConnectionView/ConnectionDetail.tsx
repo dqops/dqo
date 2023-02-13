@@ -17,7 +17,6 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useParams } from "react-router-dom";
-import TimezoneSelect from "../../TimezoneSelect";
 import ErrorModal from "../../Dashboard/DatabaseConnection/ErrorModal";
 import Loader from "../../Loader";
 import Button from "../../Button";
@@ -75,7 +74,7 @@ const ConnectionDetail = () => {
     }
 
     setIsTesting(true);
-    const testRes = await SourceConnectionApi.checkConnection(connectionBasic);
+    const testRes = await SourceConnectionApi.testConnection(false, connectionBasic);
     setIsTesting(false);
 
     if (testRes.data?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS) {
@@ -89,7 +88,7 @@ const ConnectionDetail = () => {
   const onTestConnection = async () => {
     try {
       setIsTesting(true);
-      const res = await SourceConnectionApi.checkConnection(connectionBasic);
+      const res = await SourceConnectionApi.testConnection(false, connectionBasic);
       setTestResult(res.data);
     } catch (err) {
       console.error(err);
@@ -117,17 +116,6 @@ const ConnectionDetail = () => {
             </td>
             <td className="px-4 py-2">
               <div>{connectionBasic?.connection_name}</div>
-            </td>
-          </tr>
-          <tr>
-            <td className="px-4 py-2">
-              <div>Time zone:</div>
-            </td>
-            <td className="px-4 py-2">
-              <TimezoneSelect
-                value={connectionBasic?.time_zone}
-                onChange={(value) => onChange({ time_zone: value })}
-              />
             </td>
           </tr>
         </tbody>

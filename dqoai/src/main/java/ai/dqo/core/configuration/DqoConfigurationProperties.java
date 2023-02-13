@@ -20,6 +20,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.TimeZone;
+
 /**
  * Configuration POJO with the configuration for Dqo.ai. Properties are mapped to the root "dqo." prefix.
  */
@@ -29,6 +31,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoConfigurationProperties implements Cloneable {
     private String home;
     private String yamlSchemaServer = "https://cloud.dqo.ai/dqo-yaml-schema/";
+    private String defaultTimeZone = TimeZone.getDefault().getID();
 
     /**
      * Returns the location of the dqo.io home folder (installation folder). The installation folder contains
@@ -62,6 +65,23 @@ public class DqoConfigurationProperties implements Cloneable {
      */
     public void setYamlSchemaServer(String yamlSchemaServer) {
         this.yamlSchemaServer = yamlSchemaServer;
+    }
+
+    /**
+     * Returns the default server time zone used when the time zone is not configured in the user settings.
+     * The default value of this parameter is the time zone of the DQO instance (host data zone).
+     * @return Default server time zone.
+     */
+    public String getDefaultTimeZone() {
+        return defaultTimeZone;
+    }
+
+    /**
+     * Sets the IANA default time zone for the server.
+     * @param defaultTimeZone IANA name of the default time zone.
+     */
+    public void setDefaultTimeZone(String defaultTimeZone) {
+        this.defaultTimeZone = defaultTimeZone;
     }
 
     /**

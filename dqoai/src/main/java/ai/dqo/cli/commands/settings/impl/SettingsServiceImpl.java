@@ -17,14 +17,18 @@ package ai.dqo.cli.commands.settings.impl;
 
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.metadata.basespecs.InstanceStatus;
-import ai.dqo.metadata.sources.SettingsSpec;
-import ai.dqo.metadata.sources.SettingsWrapper;
+import ai.dqo.metadata.settings.SettingsSpec;
+import ai.dqo.metadata.settings.SettingsWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.time.ZoneId;
+import java.util.TimeZone;
 
 /**
  * Settings management service.
@@ -32,14 +36,16 @@ import org.springframework.stereotype.Component;
 @Component
 public class SettingsServiceImpl implements SettingsService {
 	private final UserHomeContextFactory userHomeContextFactory;
+	private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
 	@Autowired
-	public SettingsServiceImpl(UserHomeContextFactory userHomeContextFactory) {
+	public SettingsServiceImpl(UserHomeContextFactory userHomeContextFactory,
+							   DefaultTimeZoneProvider defaultTimeZoneProvider) {
 		this.userHomeContextFactory = userHomeContextFactory;
+		this.defaultTimeZoneProvider = defaultTimeZoneProvider;
 	}
 
 	private SettingsWrapper createEmptySettingFile(UserHome userHome) {
-
 		SettingsSpec settingsSpec = new SettingsSpec();
 		SettingsWrapper settings = userHome.getSettings();
 		settings.setSpec(settingsSpec);
@@ -271,4 +277,101 @@ public class SettingsServiceImpl implements SettingsService {
 		return cliOperationStatus;
 	}
 
+	/**
+	 * Sets a new IANA time zone.
+	 * @param timeZone Time zone name.
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus setTimeZone(String timeZone) {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		if (timeZone != null) {
+			try {
+				ZoneId validatedTimeZoneId = ZoneId.of(timeZone);
+			}
+			catch (Exception ex) {
+				cliOperationStatus.setFailedMessage("Invalid time zone, use IANA time zone names");
+				return cliOperationStatus;
+			}
+		}
+
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		UserHome userHome = userHomeContext.getUserHome();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		settings.setTimeZone(timeZone);
+		userHomeContext.flush();
+		this.defaultTimeZoneProvider.invalidate();
+
+		cliOperationStatus.setSuccessMessage("Successfully set the time zone");
+
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Removes a time zone.
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus removeTimeZone() {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		UserHome userHome = userHomeContext.getUserHome();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		String timeZone = settings.getTimeZone();
+		if (Strings.isNullOrEmpty(timeZone)) {
+			cliOperationStatus.setFailedMessage(String.format("Time zone is not set"));
+			return cliOperationStatus;
+		}
+
+		settings.setApiKey(null);
+		userHomeContext.flush();
+		this.defaultTimeZoneProvider.invalidate();
+
+		cliOperationStatus.setSuccessMessage("Successfully removed the time zone");
+
+		return cliOperationStatus;
+	}
+
+	/**
+	 * Shows a time zone.
+	 * @return Cli operation status.
+	 */
+	@Override
+	public CliOperationStatus showTimeZone() {
+		CliOperationStatus cliOperationStatus = new CliOperationStatus();
+
+		UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+		UserHome userHome = userHomeContext.getUserHome();
+		SettingsSpec settings;
+		if (userHome.getSettings() == null || userHome.getSettings().getSpec() == null) {
+			settings = createEmptySettingFile(userHome).getSpec();
+		}
+		else {
+			settings = userHome.getSettings().getSpec();
+		}
+
+		String timeZone = settings.getTimeZone();
+		if (Strings.isNullOrEmpty(timeZone)) {
+			cliOperationStatus.setFailedMessage(String.format("Time zone is not set"));
+			return cliOperationStatus;
+		}
+		cliOperationStatus.setSuccessMessage(String.format("The default time zone is: %s", timeZone));
+		return cliOperationStatus;
+	}
 }

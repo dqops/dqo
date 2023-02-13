@@ -68,7 +68,7 @@ public class BigQuerySourceConnectionIntegrationTests extends BaseBigQueryIntegr
     @Test
     void getBigQueryService_whenOpenWasCalledBefore_thenReturnsBigQueryConnectionObject() {
 		this.sut.open();
-        Assertions.assertNotNull(this.sut.getBigQueryService());
+        Assertions.assertNotNull(this.sut.getBigQueryInternalConnection());
     }
 
     @Test

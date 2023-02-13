@@ -29,6 +29,7 @@ public class SensorReadoutsNormalizedResult {
     private final DoubleColumn actualValueColumn;
     private final DoubleColumn expectedValueColumn;
     private final DateTimeColumn timePeriodColumn;
+    private final InstantColumn timePeriodUtcColumn;
     private final StringColumn timeGradientColumn;
     private final LongColumn dataStreamHashColumn;
     private final StringColumn dataStreamNameColumn;
@@ -63,6 +64,7 @@ public class SensorReadoutsNormalizedResult {
         this.actualValueColumn = TableColumnUtility.getOrAddDoubleColumn (table, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         this.expectedValueColumn = TableColumnUtility.getOrAddDoubleColumn(table, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
         this.timePeriodColumn = TableColumnUtility.getOrAddDateTimeColumn(table, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+        this.timePeriodUtcColumn = TableColumnUtility.getOrAddInstantColumn(table, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
         this.timeGradientColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME);
         this.dataStreamHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.DATA_STREAM_HASH_COLUMN_NAME);
         this.dataStreamNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
@@ -125,6 +127,14 @@ public class SensorReadoutsNormalizedResult {
      */
     public DateTimeColumn getTimePeriodColumn() {
         return timePeriodColumn;
+    }
+
+    /**
+     * Return the time period UTC column that stores a UTC timestamp.
+     * @return Time period UTC column.
+     */
+    public InstantColumn getTimePeriodUtcColumn() {
+        return timePeriodUtcColumn;
     }
 
     /**

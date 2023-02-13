@@ -38,6 +38,8 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         {
             put("daily_partition_negative_count", o -> o.dailyPartitionNegativeCount);
             put("daily_partition_negative_percent", o -> o.dailyPartitionNegativePercent);
+            put("daily_partition_non_negative_count", o -> o.dailyPartitionNonNegativeCount);
+            put("daily_partition_non_negative_percent", o -> o.dailyPartitionNonNegativePercent);
             put("daily_partition_numbers_in_set_count", o -> o.dailyPartitionNumbersInSetCount);
             put("daily_partition_numbers_in_set_percent", o -> o.dailyPartitionNumbersInSetPercent);
             put("daily_partition_values_in_range_numeric_percent", o -> o.dailyPartitionValuesInRangeNumericPercent);
@@ -62,6 +64,12 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnNegativePercentCheckSpec dailyPartitionNegativePercent;
+
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnNonNegativeCountCheckSpec dailyPartitionNonNegativeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnNonNegativePercentCheckSpec dailyPartitionNonNegativePercent;
 
     @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnNumbersInSetCountCheckSpec dailyPartitionNumbersInSetCount;
@@ -147,6 +155,42 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionNegativePercent, dailyPartitionNegativePercent));
         this.dailyPartitionNegativePercent = dailyPartitionNegativePercent;
         propagateHierarchyIdToField(dailyPartitionNegativePercent, "daily_partition_negative_percent");
+    }
+
+    /**
+     * Returns a non-negative values count check specification.
+     * @return Non-negative values count check specification.
+     */
+    public ColumnNonNegativeCountCheckSpec getDailyPartitionNonNegativeCount() {
+        return dailyPartitionNonNegativeCount;
+    }
+
+    /**
+     * Sets a new specification of a maximum non-negative values count check.
+     * @param dailyPartitionNonNegativeCount Non-negative values count check specification.
+     */
+    public void setDailyPartitionNonNegativeCount(ColumnNonNegativeCountCheckSpec dailyPartitionNonNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNonNegativeCount, dailyPartitionNonNegativeCount));
+        this.dailyPartitionNonNegativeCount = dailyPartitionNonNegativeCount;
+        propagateHierarchyIdToField(dailyPartitionNonNegativeCount, "daily_partition_non_negative_count");
+    }
+
+    /**
+     * Returns a non-negative values percentage check specification.
+     * @return Non-negative values percentage check specification.
+     */
+    public ColumnNonNegativePercentCheckSpec getDailyPartitionNonNegativePercent() {
+        return dailyPartitionNonNegativePercent;
+    }
+
+    /**
+     * Sets a new specification of a non-negative values percentage check.
+     * @param dailyPartitionNonNegativePercent Non-negative values percentage check specification.
+     */
+    public void setDailyPartitionNonNegativePercent(ColumnNonNegativePercentCheckSpec dailyPartitionNonNegativePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionNonNegativePercent, dailyPartitionNonNegativePercent));
+        this.dailyPartitionNonNegativePercent = dailyPartitionNonNegativePercent;
+        propagateHierarchyIdToField(dailyPartitionNonNegativePercent, "daily_partition_non_negative_percent");
     }
 
     /**

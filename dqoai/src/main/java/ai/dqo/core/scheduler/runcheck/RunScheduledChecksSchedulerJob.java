@@ -18,7 +18,7 @@ package ai.dqo.core.scheduler.runcheck;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.scheduler.quartz.JobDataMapAdapter;
-import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
@@ -32,7 +32,6 @@ import org.springframework.stereotype.Component;
  * Quartz job implementation that executes data quality checks for a given schedule. This is a Quartz job.
  */
 @Component
-//@DisallowConcurrentExecution
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @Slf4j
 public class RunScheduledChecksSchedulerJob implements Job {
@@ -62,7 +61,7 @@ public class RunScheduledChecksSchedulerJob implements Job {
      */
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
-        final RunChecksCronSchedule runChecksCronSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
+        final RecurringScheduleSpec runChecksCronSchedule = this.jobDataMapAdapter.getSchedule(jobExecutionContext.getMergedJobDataMap());
 
         try {
             RunScheduledChecksDqoJob runScheduledChecksJob = this.dqoQueueJobFactory.createRunScheduledChecksJob();

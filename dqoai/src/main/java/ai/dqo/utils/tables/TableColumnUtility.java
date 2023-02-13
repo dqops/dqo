@@ -15,12 +15,34 @@
  */
 package ai.dqo.utils.tables;
 
+import org.apache.commons.lang3.StringUtils;
 import tech.tablesaw.api.*;
+import tech.tablesaw.columns.Column;
 
 /**
  * Helper class used to retrieve column from a table.
  */
 public final class TableColumnUtility {
+    /**
+     * Finds a named column in the table. Performs a case-insensitive search, so the columns may be named in upper or lower case.
+     * @param resultsTable Table to analyze.
+     * @param columnName Expected column name.
+     * @return Column that was found or null.
+     */
+    public static Column<?> findColumn(Table resultsTable, String columnName) {
+        if (resultsTable.containsColumn(columnName)) {
+            return resultsTable.column(columnName);
+        }
+
+        for (String existingColumnName: resultsTable.columnNames()) {
+            if (StringUtils.equalsIgnoreCase(columnName, existingColumnName)) {
+                return resultsTable.column(existingColumnName);
+            }
+        }
+
+        return null;
+    }
+
     /**
      * Retrieves or adds and returns a string column from a table.
      * @param table Table.

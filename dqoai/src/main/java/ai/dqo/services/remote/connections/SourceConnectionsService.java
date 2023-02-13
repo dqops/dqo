@@ -16,7 +16,7 @@
 package ai.dqo.services.remote.connections;
 
 import ai.dqo.metadata.sources.ConnectionSpec;
-import ai.dqo.rest.models.remote.ConnectionRemoteModel;
+import ai.dqo.rest.models.remote.ConnectionTestModel;
 
 /**
  * Management service for remote connection.
@@ -27,8 +27,9 @@ public interface SourceConnectionsService {
      * Returns the status of the remote connection.
      * @param connectionSpec Connection spec model.
      * @param connectionName Connection name.
+     * @param verifyNameUniqueness Verify if the name is unique. Name uniqueness is not verified when the connection is checked again on the connection details screen (re-tested).
      * @return Connection status acquired remotely.
      */
 
-    ConnectionRemoteModel checkConnection(String connectionName, ConnectionSpec connectionSpec);
+    ConnectionTestModel testConnection(String connectionName, ConnectionSpec connectionSpec, boolean verifyNameUniqueness);
 }

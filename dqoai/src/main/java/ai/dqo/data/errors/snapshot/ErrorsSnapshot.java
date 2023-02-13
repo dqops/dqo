@@ -37,12 +37,14 @@ public class ErrorsSnapshot extends TableDataSnapshot {
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param columnNames Column names that will be loaded.
+     * @param tableResultsSample Empty table with the expected schema (columns).
      */
     public ErrorsSnapshot(String connectionName,
-                                    PhysicalTableName tableName,
-                                    ParquetPartitionStorageService storageService,
-                                    String[] columnNames) {
-        super(connectionName, tableName, storageService, createErrorsStorageSettings(), columnNames);
+                          PhysicalTableName tableName,
+                          ParquetPartitionStorageService storageService,
+                          String[] columnNames,
+                          Table tableResultsSample) {
+        super(connectionName, tableName, storageService, createErrorsStorageSettings(), columnNames, tableResultsSample);
     }
 
     /**

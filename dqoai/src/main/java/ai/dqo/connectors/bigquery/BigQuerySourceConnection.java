@@ -44,7 +44,7 @@ import java.util.Objects;
 @Component("bigquery-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
-    private BigQuery bigQueryService;
+    private BigQueryInternalConnection bigQueryService;
     private final BigQuerySqlRunner bigQuerySqlRunner;
     private final BigQueryConnectionPool bigQueryConnectionPool;
 
@@ -66,10 +66,10 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
     }
 
     /**
-     * Returns a big query service.
-     * @return Big query service.
+     * Returns a big query internal connection (BigQuery client).
+     * @return Big query internal connection.
      */
-    public BigQuery getBigQueryService() {
+    public BigQueryInternalConnection getBigQueryInternalConnection() {
         return bigQueryService;
     }
 
@@ -78,7 +78,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
      */
     @Override
     public void open() {
-		this.bigQueryService = this.bigQueryConnectionPool.getBigQueryService(this.getConnectionSpec());
+        this.bigQueryService = this.bigQueryConnectionPool.getBigQueryService(this.getConnectionSpec());
    }
 
     /**
@@ -121,11 +121,12 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
             List<SourceSchemaModel> schemas = new ArrayList<>();
             String projectId = this.getConnectionSpec().getBigquery().getSourceProjectId();
             Page<Dataset> datasetPage = null;
+            BigQuery bigQueryClient = this.bigQueryService.getBigQueryClient();
             if (Strings.isNullOrEmpty(projectId)) {
-                datasetPage = this.bigQueryService.listDatasets(BigQuery.DatasetListOption.all());
+                datasetPage = bigQueryClient.listDatasets(BigQuery.DatasetListOption.all());
             } else {
                 // only datasets in the given GCP project
-                datasetPage = this.bigQueryService.listDatasets(projectId, BigQuery.DatasetListOption.all());
+                datasetPage = bigQueryClient.listDatasets(projectId, BigQuery.DatasetListOption.all());
             }
 
             for( Dataset dataset : datasetPage.iterateAll() ) {
@@ -159,13 +160,15 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
             List<SourceTableModel> tables = new ArrayList<>();
             String projectId = this.getConnectionSpec().getBigquery().getSourceProjectId();
             Page<Table> tablePages = null;
+            BigQuery bigQueryClient = this.bigQueryService.getBigQueryClient();
+
             if (Strings.isNullOrEmpty(projectId)) {
                 DatasetId dataSetId = DatasetId.of(schemaName);
-                tablePages = this.bigQueryService.listTables(dataSetId, BigQuery.TableListOption.pageSize(1000));
+                tablePages = bigQueryClient.listTables(dataSetId, BigQuery.TableListOption.pageSize(1000));
             } else {
                 // only datasets in the given GCP project
                 DatasetId dataSetId = DatasetId.of(projectId, schemaName);
-                tablePages = this.bigQueryService.listTables(dataSetId, BigQuery.TableListOption.pageSize(1000));
+                tablePages = bigQueryClient.listTables(dataSetId, BigQuery.TableListOption.pageSize(1000));
             }
 
             for( Table table : tablePages.iterateAll()) {

@@ -31,7 +31,7 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * Cli command to set a api key to settings.
+ * Cli command to set a api key in settings.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -56,7 +56,7 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 		this.apiKeyProvider = apiKeyProvider;
 	}
 
-	@CommandLine.Parameters(index = "0", description = "Api key")
+	@CommandLine.Parameters(index = "0", description = "DQO Cloud Api key")
 	private String key;
 
 	public String getKey() {
@@ -75,8 +75,8 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 	@Override
 	public Integer call() throws Exception {
 		if (Strings.isNullOrEmpty(this.key)) {
-			throwRequiredParameterMissingIfHeadless("--key");
-			this.key = this.terminalReader.prompt("Api key (--key)", null, false);
+			throwRequiredParameterMissingIfHeadless("<time zone>");
+			this.key = this.terminalReader.prompt("Api key", null, false);
 		}
 
 		try {

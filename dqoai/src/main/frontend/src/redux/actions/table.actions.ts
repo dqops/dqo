@@ -27,6 +27,7 @@ import {
   TableBasicModel,
   UIAllChecksModel
 } from '../../api';
+import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
 
 export const getTablesRequest = () => ({
   type: TABLE_ACTION.GET_TABLES
@@ -150,6 +151,37 @@ export const getTableSchedule =
     }
   };
 
+export const getTableSchedulingGroupRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP
+});
+
+export const getTableSchedulingGroupSuccess = (data: RecurringScheduleSpec) => ({
+  type: TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP_SUCCESS,
+  data
+});
+
+export const getTableSchedulingGroupFailed = (error: unknown) => ({
+  type: TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP_ERROR,
+  error
+});
+
+export const getTableSchedulingGroup =
+  (connectionName: string, schemaName: string, tableName: string, schedulingGroup: CheckRunRecurringScheduleGroup) =>
+  async (dispatch: Dispatch) => {
+    dispatch(getTableSchedulingGroupRequest());
+    try {
+      const res = await TableApiClient.getTableSchedulingGroupOverride(
+        connectionName,
+        schemaName,
+        tableName,
+        schedulingGroup
+      );
+      dispatch(getTableSchedulingGroupSuccess(res.data));
+    } catch (err) {
+      dispatch(getTableSchedulingGroupFailed(err));
+    }
+  };
+
 export const updateTableScheduleRequest = () => ({
   type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE
 });
@@ -182,6 +214,43 @@ export const updateTableSchedule =
       dispatch(updateTableScheduleSuccess());
     } catch (err) {
       dispatch(updateTableScheduleFailed(err));
+    }
+  };
+
+export const updateTableSchedulingGroupRequest = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP
+});
+
+export const updateTableSchedulingGroupSuccess = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP_SUCCESS
+});
+
+export const updateTableSchedulingGroupFailed = (error: unknown) => ({
+  type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP_ERROR,
+  error
+});
+
+export const updateTableSchedulingGroup =
+  (
+    connectionName: string,
+    schemaName: string,
+    tableName: string,
+    schedulingGroup: CheckRunRecurringScheduleGroup,
+    data: RecurringScheduleSpec
+  ) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateTableSchedulingGroupRequest());
+    try {
+      await TableApiClient.updateTableSchedulingGroupOverride (
+        connectionName,
+        schemaName,
+        tableName,
+        schedulingGroup,
+        data
+      );
+      dispatch(updateTableSchedulingGroupSuccess());
+    } catch (err) {
+      dispatch(updateTableSchedulingGroupFailed(err));
     }
   };
 
@@ -757,6 +826,16 @@ export const setUpdatedTableBasic = (table?: TableBasicModel) => ({
 export const setUpdatedSchedule = (schedule?: RecurringScheduleSpec) => ({
   type: TABLE_ACTION.SET_UPDATED_SCHEDULE,
   schedule
+});
+export const setUpdatedSchedulingGroup = (schedulingGroup: CheckRunRecurringScheduleGroup, schedule?: RecurringScheduleSpec) => ({
+  type: TABLE_ACTION.SET_UPDATED_SCHEDULE_GROUP,
+  schedulingGroup,
+  schedule
+});
+export const setIsUpdatedSchedulingGroup = (schedulingGroup: CheckRunRecurringScheduleGroup, isUpdated: boolean) => ({
+  type: TABLE_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP,
+  isUpdated,
+  schedulingGroup
 });
 
 export const setUpdatedComments = (comments?: CommentSpec[]) => ({

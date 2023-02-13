@@ -1,54 +1,83 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
-  getTableSchedule,
-  setUpdatedSchedule,
-  updateTableSchedule
+  getTableSchedulingGroup, setIsUpdatedSchedulingGroup,
+  setUpdatedSchedulingGroup,
+  updateTableSchedulingGroup
 } from '../../../redux/actions/table.actions';
 import { useParams } from "react-router-dom";
 import ScheduleView from "../../ScheduleView";
+import { CheckRunRecurringScheduleGroup } from "../../../shared/enums/scheduling.enum";
+import Tabs from "../../Tabs";
+
+const pageTabs = [
+  {
+    label: 'Profiling',
+    value: CheckRunRecurringScheduleGroup.profiling
+  },
+  {
+    label: 'Daily',
+    value: CheckRunRecurringScheduleGroup.daily
+  },
+  {
+    label: 'Monthly',
+    value: CheckRunRecurringScheduleGroup.monthly
+  },
+]
 
 const ScheduleDetail = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
+  const [tabs, setTabs] = useState(pageTabs);
+  const [activeTab, setActiveTab] = useState<CheckRunRecurringScheduleGroup>(CheckRunRecurringScheduleGroup.profiling);
 
-  const { schedule, isUpdating, isUpdatedSchedule, tableBasic } = useSelector(
+  const { isUpdating, tableBasic, scheduleGroups } = useSelector(
     (state: IRootState) => state.table
   );
-  const dispatch = useActionDispatch();
+  const updatedSchedule = scheduleGroups?.[activeTab]?.updatedSchedule;
+  const isUpdatedSchedule = scheduleGroups?.[activeTab]?.isUpdatedSchedule;
 
+  const dispatch = useActionDispatch();
+  const onChangeTab = (tab: CheckRunRecurringScheduleGroup) => {
+    setActiveTab(tab);
+  }
   useEffect(() => {
     if (
-      !schedule ||
+      !updatedSchedule ||
       tableBasic?.connection_name !== connectionName ||
       tableBasic?.target?.schema_name !== schemaName ||
       tableBasic?.target?.table_name !== tableName
     ) {
-      dispatch(getTableSchedule(connectionName, schemaName, tableName));
+      dispatch(getTableSchedulingGroup(connectionName, schemaName, tableName, activeTab));
     }
-  }, [connectionName, schemaName, tableName, tableBasic]);
+  }, [connectionName, schemaName, tableName, tableBasic, activeTab]);
 
   const handleChange = (obj: any) => {
+    dispatch(setIsUpdatedSchedulingGroup(activeTab, true));
     dispatch(
-      setUpdatedSchedule({
-        ...schedule,
+      setUpdatedSchedulingGroup(activeTab, {
+        ...updatedSchedule,
         ...obj
       })
     );
   };
 
   const onUpdate = async () => {
-    if (!schedule) {
+    if (!updatedSchedule) {
       return;
     }
     await dispatch(
-      updateTableSchedule(connectionName, schemaName, tableName, schedule)
+      updateTableSchedulingGroup(connectionName, schemaName, tableName, activeTab, updatedSchedule)
     );
-    await dispatch(getTableSchedule(connectionName, schemaName, tableName));
+    await dispatch(getTableSchedulingGroup(connectionName, schemaName, tableName, activeTab));
+    dispatch(setIsUpdatedSchedulingGroup(activeTab, false));
   };
-  
+
+  useEffect(() => {
+    setTabs(prev => prev.map(tab => tab.value === activeTab ? ({ ...tab, isUpdated: isUpdatedSchedule }) : tab))
+  }, [isUpdatedSchedule, activeTab])
 
   return (
     <div className="p-4">
@@ -57,7 +86,10 @@ const ScheduleDetail = () => {
         isUpdated={isUpdatedSchedule}
         isUpdating={isUpdating}
       />
-      <ScheduleView handleChange={handleChange} schedule={schedule} />
+      <div className="border-b border-gray-300">
+        <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+      </div>
+      <ScheduleView handleChange={handleChange} schedule={updatedSchedule} />
     </div>
   );
 };

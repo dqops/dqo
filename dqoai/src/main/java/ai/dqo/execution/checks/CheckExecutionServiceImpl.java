@@ -23,7 +23,6 @@ import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.notifications.NotificationService;
-import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationService;
 import ai.dqo.data.errors.normalization.ErrorsNormalizedResult;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
@@ -57,6 +56,7 @@ import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.sources.*;
@@ -183,7 +183,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      */
     @Override
     public CheckExecutionSummary executeChecksForSchedule(ExecutionContext executionContext,
-                                                          RunChecksCronSchedule targetSchedule,
+                                                          RecurringScheduleSpec targetSchedule,
                                                           CheckExecutionProgressListener progressListener) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
         ScheduledChecksCollection checksForSchedule = this.scheduledTargetChecksFindService.findChecksForSchedule(userHome, targetSchedule);
