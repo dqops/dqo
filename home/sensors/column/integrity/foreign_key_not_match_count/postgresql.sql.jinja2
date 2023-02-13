@@ -5,7 +5,7 @@
 {%- endmacro %}
 
 {%- macro render_joined_table(joined_tab) -%}
-    {{ quote_identifier(connection.bigquery.source_project_id) }}.{{ quote_identifier(table.target.schema_name) }}.{{ quote_identifier(joined_tab) }}
+    {{ quote_identifier(connection.postgresql.source_project_id) }}.{{ quote_identifier(table.target.schema_name) }}.{{ quote_identifier(joined_tab) }}
 {%- endmacro %}
 
 {%- macro render_joined_column(table_alias_prefix = '') -%}
