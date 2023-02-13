@@ -36,10 +36,12 @@ import ai.dqo.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.ChecksumException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.Table;
+import tech.tablesaw.io.RuntimeIOException;
 import tech.tablesaw.selection.Selection;
 
 import java.io.File;
@@ -150,14 +152,14 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      */
     @Override
     public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings, String[] columnNames) {
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
-            Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
-            Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
-            String hivePartitionFolderName = makeHivePartitionPath(partitionId);
-            Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
-            Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
-            File targetParquetFile = targetParquetFilePath.toFile();
+        Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
+        Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
+        String hivePartitionFolderName = makeHivePartitionPath(partitionId);
+        Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
+        Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
+        File targetParquetFile = targetParquetFilePath.toFile();
 
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
             if (!targetParquetFile.exists()) {
                 return new LoadedMonthlyPartition(partitionId, 0L, null);
             }
@@ -173,6 +175,14 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             LoadedMonthlyPartition loadedPartition = new LoadedMonthlyPartition(partitionId, targetParquetFile.lastModified(), data);
             return loadedPartition;
+        }
+        catch (RuntimeIOException ex) {
+            if (ex.getCause() instanceof ChecksumException) {
+                // Corrupted partition file -> remove the file
+                deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
+                return new LoadedMonthlyPartition(partitionId, 0L, null);
+            }
+            throw new DataStorageIOException(ex.getMessage(), ex);
         }
         catch (Exception ex) {
             throw new DataStorageIOException(ex.getMessage(), ex);
