@@ -164,7 +164,7 @@ ORDER BY {{ render_grouping_column_names() }}
     {%- if target_column_data_type == 'date' -%}
 {{ render_target_column('analyzed_table') }}
     {%- elif target_column_data_type == 'timestamp' or target_column_data_type == 'timestamp with time zone' or target_column_data_type == 'varchar'-%}
-SAFE_CAST({{ render_target_column('analyzed_table') }} AS DATE)
+CAST({{ render_target_column('analyzed_table') }} AS DATE)
     {%- else -%}
 <INVALID DATA TYPE: {{target_column_data_type}}/>
     {%- endif -%}
