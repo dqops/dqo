@@ -15,6 +15,8 @@
  */
 package ai.dqo.rest.models.metadata;
 
+import ai.dqo.checks.CheckType;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
@@ -56,4 +58,72 @@ public class SchemaModel {
 
     @JsonPropertyDescription("Job parameters for the import tables job that will import all tables from this schema.")
     private ImportTablesQueueJobParameters importTableJobParameters;
+
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this schema.")
+    private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
+
+    /**
+     * Creates a schema model from connection and schema names.
+     * @param connectionName Connection name to store in the model.
+     * @param schemaName     Schema name.
+     * @return Schema model.
+     */
+    public static SchemaModel fromSchemaNameStrings(String connectionName, String schemaName) {
+        return new SchemaModel()
+        {{
+            setConnectionName(connectionName);
+            setSchemaName(schemaName);
+            setRunChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(schemaName + ".*");
+                setEnabled(true);
+            }});
+            setRunProfilingChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(schemaName + ".*");
+                setCheckType(CheckType.ADHOC);
+                setEnabled(true);
+            }});
+            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(schemaName + ".*");
+                setCheckType(CheckType.CHECKPOINT);
+                setEnabled(true);
+            }});
+            setRunTimePeriodChecksJobTemplate(new CheckSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(schemaName + ".*");
+                setCheckType(CheckType.PARTITIONED);
+                setEnabled(true);
+            }});
+            setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(schemaName + ".*");
+                setEnabled(true);
+            }});
+            setImportTableJobParameters(new ImportTablesQueueJobParameters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaName(schemaName);
+            }});
+            setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
+            {{
+                setConnectionName(connectionName);
+                setSchemaTableName(schemaName + ".*");
+
+                setDateStart(null);
+                setDateEnd(null);
+
+                setDeleteProfilingResults(true);
+                setDeleteErrors(true);
+                setDeleteRuleResults(true);
+                setDeleteSensorReadouts(true);
+            }});
+        }};
+    }
 }

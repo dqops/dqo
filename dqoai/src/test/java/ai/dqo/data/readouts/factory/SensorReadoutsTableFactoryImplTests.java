@@ -41,13 +41,14 @@ public class SensorReadoutsTableFactoryImplTests extends BaseTest {
     @Test
     void createEmptySensorReadoutsTable_whenCalled_thenCreatesTableWithSchema() {
         Table table = this.sut.createEmptySensorReadoutsTable("empty");
-        Assertions.assertEquals(35, table.columnCount());
+        Assertions.assertEquals(36, table.columnCount());
 
         int columnIndex = 0;
         Assertions.assertEquals(SensorReadoutsColumnNames.ID_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, table.column(columnIndex++).name());
+        Assertions.assertEquals(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.TIME_GRADIENT_COLUMN_NAME, table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "1", table.column(columnIndex++).name());
         Assertions.assertEquals(SensorReadoutsColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + "2", table.column(columnIndex++).name());

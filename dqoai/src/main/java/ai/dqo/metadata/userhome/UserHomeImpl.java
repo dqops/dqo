@@ -15,14 +15,14 @@
  */
 package ai.dqo.metadata.userhome;
 
-import ai.dqo.metadata.dashboards.DashboardFolderListSpecWrapperImpl;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionListImpl;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionListImpl;
-import ai.dqo.metadata.dqohome.DqoHomeImpl;
 import ai.dqo.metadata.fileindices.FileIndexList;
 import ai.dqo.metadata.fileindices.FileIndexListImpl;
 import ai.dqo.metadata.id.*;
+import ai.dqo.metadata.settings.SettingsWrapper;
+import ai.dqo.metadata.settings.SettingsWrapperImpl;
 import ai.dqo.metadata.sources.*;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

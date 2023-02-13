@@ -20,7 +20,9 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
+import ai.dqo.utils.tables.TableColumnUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -28,7 +30,6 @@ import tech.tablesaw.columns.Column;
 
 import java.time.*;
 import java.util.Arrays;
-import java.util.Locale;
 
 /**
  * Service that parses datasets with results returned by a sensor query.
@@ -37,14 +38,17 @@ import java.util.Locale;
 @Service
 public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNormalizationService {
     private CommonTableNormalizationService commonNormalizationService;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Creates a sensor readout normalization service given the dependencies.
      * @param commonNormalizationService Common normalization service with utility methods.
      */
     @Autowired
-    public SensorReadoutsNormalizationServiceImpl(CommonTableNormalizationService commonNormalizationService) {
+    public SensorReadoutsNormalizationServiceImpl(CommonTableNormalizationService commonNormalizationService,
+                                                  DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.commonNormalizationService = commonNormalizationService;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -60,9 +64,9 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                                                            SensorExecutionRunParameters sensorRunParameters) {
         Table resultsTable = sensorExecutionResult.getResultTable();
         int resultsRowCount = resultsTable.rowCount();
-        ZoneId connectionTimeZone = sensorRunParameters.getConnectionTimeZoneId();
+        ZoneId defaultTimeZone = this.defaultTimeZoneProvider.getDefaultTimeZoneId();
         Table normalizedResults = Table.create("sensor_results_normalized");
-        Column<?> actualValueColumn = this.commonNormalizationService.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        Column<?> actualValueColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         if (actualValueColumn == null && sensorExecutionResult.isSuccess()) {
             throw new SensorResultNormalizeException(resultsTable,
                     "Missing '" + SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME + "' column, the sensor query must return this column");
@@ -80,8 +84,12 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             normalizedResults.addColumns(DoubleColumn.create(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME, resultsRowCount));
         }
 
-        DateTimeColumn timePeriodColumn = makeNormalizedTimePeriodColumn(resultsTable, connectionTimeZone, timeSeriesGradient);
+        DateTimeColumn timePeriodColumn = makeNormalizedTimePeriodColumn(resultsTable, defaultTimeZone, timeSeriesGradient);
         normalizedResults.addColumns(timePeriodColumn);
+
+        InstantColumn normalizedTimePeriodUtcColumn = makeNormalizedTimePeriodUtcColumn(resultsTable, timePeriodColumn,
+                defaultTimeZone);
+        normalizedResults.addColumns(normalizedTimePeriodUtcColumn);
 
         // now detect data stream level columns...
         StringColumn[] dataStreamLevelColumns = this.commonNormalizationService.extractAndNormalizeDataStreamLevelColumns(
@@ -116,7 +124,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         if (timeSeriesGradient != null) {
             timeGradientColumn.setMissingTo(timeSeriesGradient.name());
         }
-        sortedNormalizedTable.insertColumn(3, timeGradientColumn);
+        sortedNormalizedTable.insertColumn(4, timeGradientColumn);
 
         LongColumn connectionHashColumn = LongColumn.create(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME, resultsRowCount);
         connectionHashColumn.setMissingTo(sensorRunParameters.getConnection().getHierarchyId().hashCode64());
@@ -227,7 +235,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * @return Requested value column, cloned and converted to a double column.
      */
     public DoubleColumn makeNormalizedDoubleColumn(Table resultsTable, String columnName) {
-        Column<?> currentColumn = this.commonNormalizationService.findColumn(resultsTable, columnName);
+        Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, columnName);
 
         if (currentColumn instanceof DoubleColumn) {
             return ((DoubleColumn)currentColumn).copy();
@@ -315,17 +323,17 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
      * The values in the time period column are converted to a date time column (without a time zone). Instant columns (based on an UTC timezone) are converted to the timezone of question.
      * Any values that are not aligned at the beginning of the time series gradient (week, day, month, etc.) are truncated to the beginning of the period.
      * @param resultsTable Result table to extract the time_period column.
-     * @param connectionTimeZone Expected time zone of the database.
+     * @param defaultTimeZone Default DQO time zone, used to create a time period value if the time period was not received from a sensor result.
      * @param timeSeriesGradient Time series gradient (for truncation).
      * @return A copy of a time_period column that is truncated, normalized to a datetime without the time zone.
      */
-    public DateTimeColumn makeNormalizedTimePeriodColumn(Table resultsTable, ZoneId connectionTimeZone, TimeSeriesGradient timeSeriesGradient) {
+    public DateTimeColumn makeNormalizedTimePeriodColumn(Table resultsTable, ZoneId defaultTimeZone, TimeSeriesGradient timeSeriesGradient) {
         DateTimeColumn newTimestampColumn = DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, resultsTable.rowCount());
         LocalDateTime timeNow = LocalDateTime.now();
         LocalDateTime truncatedNow = timeSeriesGradient != null ?
                 LocalDateTimeTruncateUtility.truncateTimePeriod(timeNow, timeSeriesGradient) : timeNow;
 
-        Column<?> currentColumn = this.commonNormalizationService.findColumn(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+        Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
         if (currentColumn == null) {
             // missing time_period column, we will create a fake one
             newTimestampColumn.fillWith(() -> truncatedNow);
@@ -379,7 +387,7 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
                     newTimestampColumn.set(i, truncatedNow);
                 }
                 else {
-                    LocalDateTime localDateTimeFromInstant = LocalDateTime.ofInstant(instant, connectionTimeZone);
+                    LocalDateTime localDateTimeFromInstant = LocalDateTime.ofInstant(instant, defaultTimeZone);
                     LocalDateTime truncatedInstant = timeSeriesGradient != null ?
                             LocalDateTimeTruncateUtility.truncateTimePeriod(localDateTimeFromInstant, timeSeriesGradient) : localDateTimeFromInstant;
                     newTimestampColumn.set(i, truncatedInstant);
@@ -391,5 +399,41 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         // NOTE: we could parse the string, but it is better if the user casts timestamp columns that are strings to a datetime column in the sensor SQL query
 
         throw new SensorResultNormalizeException(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME + " column must be a date, datetime or an instant (utc datetime).");
+    }
+
+    /**
+     * Makes a normalized time_period_utc column. Converts non Instant (UTC date) to UTC date. Tries to convert the time period column.
+     * @param resultsTable Result table to find the column.
+     * @param timePeriodColumn Time period column used to convert the dates.
+     * @param defaultTimeZone Default DQO time zone.
+     * @return Instant column with the time_period_utc time periods.
+     */
+    public InstantColumn makeNormalizedTimePeriodUtcColumn(Table resultsTable, DateTimeColumn timePeriodColumn, ZoneId defaultTimeZone) {
+        Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
+        if (currentColumn == null || !(currentColumn instanceof InstantColumn)) {
+            InstantColumn newTimePeriodUtcColumn = InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, resultsTable.rowCount());
+
+            // missing time_period_utc column or invalid type, we will convert it from the time_period, using the default DQO server time zone
+            for (int i = 0; i < timePeriodColumn.size(); i++) {
+                LocalDateTime timePeriodLocalValue = timePeriodColumn.get(i);
+                Instant timePeriodUtc = timePeriodLocalValue.toInstant(defaultTimeZone.getRules().getOffset(timePeriodLocalValue));
+                newTimePeriodUtcColumn.set(i, timePeriodUtc);
+            }
+
+            return newTimePeriodUtcColumn;
+        }
+
+        InstantColumn timePeriodUtcColumn = (InstantColumn)currentColumn;
+        for (int i = 0; i < timePeriodUtcColumn.size(); i++) {
+            Instant instant = timePeriodUtcColumn.get(i);
+            if (instant == null) {
+                // we need to fix it
+                LocalDateTime timePeriodLocalValue = timePeriodColumn.get(i);
+                Instant timePeriodUtc = timePeriodLocalValue.toInstant(defaultTimeZone.getRules().getOffset(timePeriodLocalValue));
+                timePeriodUtcColumn.set(i, timePeriodUtc);
+            }
+        }
+
+        return timePeriodUtcColumn;
     }
 }

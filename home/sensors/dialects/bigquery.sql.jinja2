@@ -14,6 +14,10 @@
     {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
 {%- endmacro %}
 
+{% macro eol() -%}
+{{ '' }}
+{% endmacro %}
+
 {%- macro render_target_table() -%}
     {{ quote_identifier(macro_project_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
 {%- endmacro %}
@@ -70,21 +74,23 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_time_dimension_projection(table_alias_prefix = '') %}
+{% macro render_time_dimension_projection(table_alias_prefix = '', indentation = '    ') %}
     {%- if time_series is not none -%}
-    , {{ render_time_dimension_expression(table_alias_prefix) }} AS time_period
+        {{ ',' -}}{{- eol() -}}
+        {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
+        {{ indentation }}TIMESTAMP({{ render_time_dimension_expression(table_alias_prefix) }}) AS time_period_utc
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_data_stream_projections(table_alias_prefix = '') %}
+{% macro render_data_stream_projections(table_alias_prefix = '', indentation = '    ') %}
     {%- if data_streams is not none and (data_streams | length()) > 0 -%}
         {%- for attribute in data_streams -%}
-            {{ ', ' }}
+            {{ ',' }}
             {%- with data_stream_level = data_streams[attribute] -%}
                 {%- if data_stream_level.source == 'tag' -%}
-                    {{ make_text_constant(data_stream_level.tag) }}
+                    {{ eol() }}{{ indentation }}{{ make_text_constant(data_stream_level.tag) }}
                 {%- elif data_stream_level.source == 'column_value' -%}
-                    {{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+                    {{ eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
                 {%- endif -%}
             {%- endwith %} AS stream_{{ attribute }}
         {%- endfor -%}
@@ -118,7 +124,7 @@
         {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
             {{ ', ' }}
         {%- endif -%}
-            {{ 'time_period' }}
+            {{ 'time_period' }}, {{ 'time_period_utc' }}
     {%- endif -%}
 {% endmacro %}
 

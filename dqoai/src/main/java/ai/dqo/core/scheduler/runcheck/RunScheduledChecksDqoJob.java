@@ -23,7 +23,6 @@ import ai.dqo.core.jobqueue.DqoQueueJob;
 import ai.dqo.core.jobqueue.JobConcurrencyConstraint;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.core.scheduler.JobSchedulerService;
-import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.core.scheduler.synchronization.SchedulerFileSynchronizationService;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
@@ -32,6 +31,7 @@ import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -49,7 +49,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
     private CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider;
     private SchedulerFileSynchronizationService schedulerFileSynchronizationService;
     private TerminalTableWritter terminalTableWritter;
-    private RunChecksCronSchedule cronSchedule;
+    private RecurringScheduleSpec cronSchedule;
 
     /**
      * Creates a dqo job that runs checks scheduled for one cron expression.
@@ -79,7 +79,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
      * Cron schedule (cron expression and time zone) that is executed.
      * @return Cron schedule.
      */
-    public RunChecksCronSchedule getCronSchedule() {
+    public RecurringScheduleSpec getCronSchedule() {
         return cronSchedule;
     }
 
@@ -87,7 +87,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
      * Sets the cron schedule that is triggered and whose checks are executed.
      * @param cronSchedule Cron schedule.
      */
-    public void setCronSchedule(RunChecksCronSchedule cronSchedule) {
+    public void setCronSchedule(RecurringScheduleSpec cronSchedule) {
         this.cronSchedule = cronSchedule;
     }
 

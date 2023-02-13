@@ -17,18 +17,16 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
-import ai.dqo.metadata.sources.ColumnSpec;
-import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
-import ai.dqo.sensors.AbstractSensorParametersSpec;
 
 import java.util.Objects;
 
 /**
  * Visitor for {@link ScheduleRootsSearchFilters} that finds any node (connection, table, column, check) that has a given filter configured.
  */
-public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<SearchParameterObject> {
+public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> > {
     private final ScheduledChecksSearchFilters filters;
 
     /**
@@ -40,28 +38,6 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<S
     }
 
     /**
-     * Accept a connection spec.
-     *
-     * @param connectionSpec Connection spec.
-     * @param foundNodes     Target list where found hierarchy nodes should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(ConnectionSpec connectionSpec, SearchParameterObject foundNodes) {
-        RecurringScheduleSpec connectionSchedule = connectionSpec.getSchedule();
-        assert this.filters.getSchedule() != null;
-
-        if (connectionSchedule != null) {
-            if (!Objects.equals(connectionSchedule, this.filters.getSchedule())) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;  // this connection has a different schedule
-            }
-        }
-
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-
-    /**
      * Accepts a table specification.
      *
      * @param tableSpec  Table specification.
@@ -69,7 +45,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<S
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(TableSpec tableSpec, SearchParameterObject foundNodes) {
+    public TreeNodeTraversalResult accept(TableSpec tableSpec, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
         if (enabledFilter != null) {
             boolean tableIsEnabled = !tableSpec.isDisabled();
@@ -78,11 +54,14 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<S
             }
         }
 
-        RecurringScheduleSpec tableSchedule = tableSpec.getScheduleOverride();
+        RecurringSchedulesSpec schedulesOverride = tableSpec.getSchedulesOverride();
         assert this.filters.getSchedule() != null;
 
-        if (tableSchedule != null) {
-            if (!Objects.equals(tableSchedule, this.filters.getSchedule())) {
+        if (schedulesOverride != null) {
+            RecurringScheduleSpec scheduleForCheckSchedulingGroup = schedulesOverride.getScheduleForCheckSchedulingGroup(this.filters.getScheduleGroup());
+
+            if (scheduleForCheckSchedulingGroup != null &&
+                    !Objects.equals(scheduleForCheckSchedulingGroup, this.filters.getSchedule())) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;  // this table has a different schedule, no longer collecting nested checks
             }
         }
@@ -98,7 +77,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<S
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, SearchParameterObject foundNodes) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, FoundResultsCollector<AbstractCheckSpec<?, ?, ?, ?>> foundNodes) {
         Boolean enabledFilter = this.filters.getEnabled();
 
         if (enabledFilter != null) {
@@ -117,7 +96,7 @@ public class ScheduledChecksSearchFiltersVisitor extends AbstractSearchVisitor<S
             }
         }
 
-        foundNodes.getNodes().add(abstractCheckSpec);
+        foundNodes.add(abstractCheckSpec);
 
         return TreeNodeTraversalResult.SKIP_CHILDREN; // no need to traverse deeper
     }

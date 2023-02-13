@@ -19,7 +19,6 @@ import ai.dqo.metadata.sources.PhysicalTableName;
 
 import java.time.LocalDate;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * Service that supports reading and writing parquet file partitions from a local file system.
@@ -42,10 +41,10 @@ public interface ParquetPartitionStorageService {
     /**
      * Loads multiple monthly partitions that cover the time period between <code>start</code> and <code>end</code>.
      * This method may read more rows than expected, because it operates on full months.
-     * @param connectionName Connection name.
-     * @param tableName Table name (schema.table).
-     * @param start Start date, that is truncated to the beginning of the first loaded month.
-     * @param end End date, the whole month of the given date is loaded.
+     * @param connectionName  Connection name.
+     * @param tableName       Table name (schema.table).
+     * @param start           Start date, that is truncated to the beginning of the first loaded month.
+     * @param end             End date, the whole month of the given date is loaded.
      * @param storageSettings Storage settings to identify the parquet stored table to load.
      * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
      * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
@@ -57,6 +56,28 @@ public interface ParquetPartitionStorageService {
             LocalDate end,
             FileStorageSettings storageSettings,
             String[] columnNames);
+
+    /**
+     * Loads multiple monthly partitions that cover the time period between <code>start</code> and <code>end</code>,
+     * limited to the <code>monthsCount</code> most recent partitions.
+     * This method may read more rows than expected, because it operates on full months.
+     * @param connectionName  Connection name.
+     * @param tableName       Table name (schema.table).
+     * @param startBoundary   Start date, that is truncated to the beginning of the first loaded month. If null, then the oldest loaded partition marks the limit.
+     * @param endBoundary     End date, the whole month of the given date is loaded. If null, then the current month is taken.
+     * @param storageSettings Storage settings to identify the parquet stored table to load.
+     * @param columnNames     Optional array of requested column names. All columns are loaded without filtering when the argument is null.
+     * @param monthsCount     Limit of partitions loaded, with the preference of the most recent ones.
+     * @return Dictionary of loaded partitions, keyed by the partition id (that identifies a loaded month).
+     */
+    Map<ParquetPartitionId, LoadedMonthlyPartition> loadRecentPartitionsForMonthsRange(
+            String connectionName,
+            PhysicalTableName tableName,
+            LocalDate startBoundary,
+            LocalDate endBoundary,
+            FileStorageSettings storageSettings,
+            String[] columnNames,
+            int monthsCount);
 
     /**
      * Saves the data for a single monthly partition. Finds the range of data for that month in the <code>tableDataChanges</code>.

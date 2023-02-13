@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * Cli command to remove a api key to settings.
+ * Cli command to remove a api key in settings.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

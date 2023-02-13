@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringRegexMatchPercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringMatchRegexPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,7 +39,7 @@ import tech.tablesaw.api.Table;
 
 @SpringBootTest
 public class PostgresqlColumnStringsStringMatchRegexPercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
-    private ColumnStringsStringRegexMatchPercentSensorParametersSpec sut;
+    private ColumnStringsStringMatchRegexPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnStringMatchRegexPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
@@ -49,7 +49,7 @@ public class PostgresqlColumnStringsStringMatchRegexPercentSensorParametersSpecI
 		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringRegexMatchPercentSensorParametersSpec();
+		this.sut = new ColumnStringsStringMatchRegexPercentSensorParametersSpec();
 		this.checkSpec = new ColumnStringMatchRegexPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }

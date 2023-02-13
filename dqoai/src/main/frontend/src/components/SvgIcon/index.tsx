@@ -54,6 +54,7 @@ import { ReactComponent as HouseSvg } from './svg/house.svg';
 import { ReactComponent as ChevronRightSvg } from './svg/chevron-right.svg';
 import { ReactComponent as ChevronLeftSvg } from './svg/chevron-left.svg';
 import { ReactComponent as FolderSvg } from './svg/folder.svg';
+import { ReactComponent as ClosedFolderSvg } from './svg/close-folder.svg';
 import { ReactComponent as StarSvg } from './svg/star.svg';
 import { ReactComponent as ColumnCheckSvg } from './svg/column-check.svg';
 import { ReactComponent as TableCheckSvg } from './svg/table-check.svg';
@@ -115,6 +116,7 @@ const iconsMap: any = {
   'chevron-right': ChevronRightSvg,
   'chevron-left': ChevronLeftSvg,
   folder: FolderSvg,
+  'closed-folder': ClosedFolderSvg,
   star: StarSvg,
   'column-check': ColumnCheckSvg,
   'table-check': TableCheckSvg,

@@ -17,8 +17,8 @@ package ai.dqo.core.dqocloud.apikey;
 
 import ai.dqo.core.configuration.DqoCloudConfigurationProperties;
 import ai.dqo.core.secrets.SecretValueProvider;
-import ai.dqo.metadata.sources.SettingsSpec;
-import ai.dqo.metadata.sources.SettingsWrapper;
+import ai.dqo.metadata.settings.SettingsSpec;
+import ai.dqo.metadata.settings.SettingsWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.utils.serialization.JsonSerializer;

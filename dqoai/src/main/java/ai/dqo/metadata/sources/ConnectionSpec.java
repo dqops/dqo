@@ -267,40 +267,6 @@ public class ConnectionSpec extends AbstractSpec {
     }
 
     /**
-     * Get the target database timezone name. Should match one of available {@link java.time.ZoneId} time zone.
-     * @return Time zone name.
-     */
-    public String getTimeZone() {
-        return timeZone;
-    }
-
-    /**
-     * Sets a time zone name. Zone names are not validated on set.
-     * @param timeZone Time zone name.
-     */
-    public void setTimeZone(String timeZone) {
-		setDirtyIf(!Objects.equals(this.timeZone, timeZone));
-        this.timeZone = timeZone;
-    }
-
-    /**
-     * Parses the time zone. Returns a Java zoneId. Returns UTC if the time zone name is invalid.
-     * @return Time zone object with the zone rules.
-     */
-    @JsonIgnore
-    public ZoneId getJavaTimeZoneId() {
-        try {
-            ZoneId zoneId = TimeZoneUtility.parseZoneId(this.timeZone);
-            return zoneId;
-        }
-        catch (Exception ex) {
-            // ignore exceptions here, we will use UTC as a fallback
-        }
-
-        return ZoneId.of("UTC");
-    }
-
-    /**
      * Returns the limit of parallel data quality checks that could be started at the same time on the connection.
      * @return Concurrency limit (number of parallel jobs) that are executing checks or null when no limits are enforced.
      */

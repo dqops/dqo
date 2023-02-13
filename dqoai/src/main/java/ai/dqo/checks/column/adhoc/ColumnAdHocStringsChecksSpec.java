@@ -44,6 +44,7 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
             put("string_length_below_min_length_percent", o -> o.stringLengthBelowMinLengthPercent);
             put("string_length_above_max_length_count", o -> o.stringLengthAboveMaxLengthCount);
             put("string_length_above_max_length_percent", o -> o.stringLengthAboveMaxLengthPercent);
+            put("string_length_in_range_percent", o -> o.stringLengthInRangePercent);
 
             put("string_empty_count", o -> o.stringEmptyCount);
             put("string_empty_percent", o -> o.stringEmptyPercent);
@@ -100,6 +101,9 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("The check counts percentage of those strings with length above the one provided by the user in a column. ")
     private ColumnStringLengthAboveMaxLengthPercentCheckSpec stringLengthAboveMaxLengthPercent;
+
+    @JsonPropertyDescription("The check counts percentage of those strings with length in the range provided by the user in a column. ")
+    private ColumnStringLengthInRangePercentCheckSpec stringLengthInRangePercent;
 
     @JsonPropertyDescription("Verifies that empty strings in a column does not exceed the maximum accepted count.")
     private ColumnStringEmptyCountCheckSpec stringEmptyCount;
@@ -306,6 +310,24 @@ public class ColumnAdHocStringsChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.stringLengthAboveMaxLengthPercent, stringLengthAboveMaxLengthPercent));
         this.stringLengthAboveMaxLengthPercent = stringLengthAboveMaxLengthPercent;
         propagateHierarchyIdToField(stringLengthAboveMaxLengthPercent, "string_length_above_max_length_percent");
+    }
+
+    /**
+     * Returns a string length in range percent check.
+     * @return String length in range percent check.
+     */
+    public ColumnStringLengthInRangePercentCheckSpec getStringLengthInRangePercent() {
+        return stringLengthInRangePercent;
+    }
+
+    /**
+     * Sets a new definition of a string length in range percent check.
+     * @param stringLengthInRangePercent String length in range percent check.
+     */
+    public void setStringLengthInRangePercent(ColumnStringLengthInRangePercentCheckSpec stringLengthInRangePercent) {
+        this.setDirtyIf(!Objects.equals(this.stringLengthInRangePercent, stringLengthInRangePercent));
+        this.stringLengthInRangePercent = stringLengthInRangePercent;
+        propagateHierarchyIdToField(stringLengthInRangePercent, "string_length_in_range_percent");
     }
 
     /**

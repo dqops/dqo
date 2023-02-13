@@ -28,7 +28,7 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 /**
- * Cli command to remove a new editor to settings.
+ * Cli command to remove a new editor in settings.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

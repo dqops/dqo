@@ -22,6 +22,8 @@ import org.apache.commons.exec.CommandLine;
 import org.apache.commons.exec.DefaultExecutor;
 import org.apache.commons.exec.PumpStreamHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayInputStream;
@@ -39,6 +41,7 @@ import java.util.Map;
  * Service that starts python to execute a givens script.
  */
 @Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
 public class PythonCallerServiceImpl implements PythonCallerService {
     private final DqoConfigurationProperties configurationProperties;
     private DqoPythonConfigurationProperties pythonConfigurationProperties;

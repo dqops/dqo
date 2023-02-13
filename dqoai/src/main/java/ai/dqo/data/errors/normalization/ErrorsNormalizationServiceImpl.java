@@ -8,6 +8,7 @@ import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.DateTimeColumn;
@@ -25,6 +26,7 @@ import java.time.ZoneId;
 public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationService {
     private SensorReadoutsNormalizationService sensorReadoutsNormalizationService;
     private CommonTableNormalizationService commonNormalizationService;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     /**
      * Dependency injection constructor for the error normalization service.
@@ -33,9 +35,11 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
      */
     @Autowired
     public ErrorsNormalizationServiceImpl(SensorReadoutsNormalizationService sensorReadoutsNormalizationService,
-                                          CommonTableNormalizationService commonNormalizationService) {
+                                          CommonTableNormalizationService commonNormalizationService,
+                                          DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.sensorReadoutsNormalizationService = sensorReadoutsNormalizationService;
         this.commonNormalizationService = commonNormalizationService;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -109,7 +113,7 @@ public class ErrorsNormalizationServiceImpl implements ErrorsNormalizationServic
         table.addColumns(errorSourceColumn);
 
         DateTimeColumn errorTimestampColumn = DateTimeColumn.create(ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME, table.rowCount());
-        LocalDateTime executedAtLocalTimestamp = LocalDateTime.ofInstant(sensorExecutionResult.getFinishedAt(), sensorRunParameters.getConnectionTimeZoneId());
+        LocalDateTime executedAtLocalTimestamp = LocalDateTime.ofInstant(sensorExecutionResult.getFinishedAt(), this.defaultTimeZoneProvider.getDefaultTimeZoneId());
         errorTimestampColumn.setMissingTo(executedAtLocalTimestamp);
         table.addColumns(errorTimestampColumn);
 

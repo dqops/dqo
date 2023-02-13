@@ -33,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 
 /**
@@ -110,13 +111,17 @@ public class JinjaSqlTemplateSensorRunner extends AbstractSensorRunner {
      * @return Dummy result table.
      */
     public Table createDummyResultTable(SensorExecutionRunParameters sensorRunParameters) {
-        Table dummyResultTable = Table.create("dummy_results", DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME), DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME));
+        Table dummyResultTable = Table.create("dummy_results",
+                DoubleColumn.create(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME),
+                DateTimeColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME),
+                InstantColumn.create(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME));
         Row row = dummyResultTable.appendRow();
         row.setDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME, 10.0);
 
         TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
         if (effectiveTimeSeries != null && effectiveTimeSeries.getMode() != null) {
             row.setDateTime(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME, LocalDateTime.now());
+            row.setInstant(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME, Instant.now());
         }
 
         // TODO: we could also add some fake dimensions to make the dummy run more realistic

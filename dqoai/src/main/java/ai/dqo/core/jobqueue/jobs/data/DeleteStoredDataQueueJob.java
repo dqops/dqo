@@ -79,7 +79,6 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             }});
             setDateStart(deletionParameters.getDateStart());
             setDateEnd(deletionParameters.getDateEnd());
-            setIgnoreDateDay(deletionParameters.isIgnoreDateDay());
             setCheckCategory(deletionParameters.getCheckCategory());
             setCheckName(deletionParameters.getCheckName());
             setCheckType(deletionParameters.getCheckType());
@@ -98,7 +97,6 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             }});
             setDateStart(deletionParameters.getDateStart());
             setDateEnd(deletionParameters.getDateEnd());
-            setIgnoreDateDay(deletionParameters.isIgnoreDateDay());
             setCollectorCategory(deletionParameters.getCollectorCategory());
             setCollectorName(deletionParameters.getCollectorName());
             setCollectorTarget(deletionParameters.getCollectorTarget());
@@ -116,7 +114,6 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             }});
             setDateStart(deletionParameters.getDateStart());
             setDateEnd(deletionParameters.getDateEnd());
-            setIgnoreDateDay(deletionParameters.isIgnoreDateDay());
             setCheckCategory(deletionParameters.getCheckCategory());
             setCheckName(deletionParameters.getCheckName());
             setCheckType(deletionParameters.getCheckType());
@@ -136,7 +133,6 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             }});
             setDateStart(deletionParameters.getDateStart());
             setDateEnd(deletionParameters.getDateEnd());
-            setIgnoreDateDay(deletionParameters.isIgnoreDateDay());
             setCheckCategory(deletionParameters.getCheckCategory());
             setCheckName(deletionParameters.getCheckName());
             setCheckType(deletionParameters.getCheckType());

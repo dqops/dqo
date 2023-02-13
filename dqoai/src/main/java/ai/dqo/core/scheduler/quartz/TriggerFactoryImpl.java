@@ -16,8 +16,8 @@
 package ai.dqo.core.scheduler.quartz;
 
 import ai.dqo.core.scheduler.JobSchedulerException;
-import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import com.cronutils.mapper.CronMapper;
 import com.cronutils.model.Cron;
 import com.cronutils.model.definition.CronDefinition;
@@ -27,6 +27,8 @@ import org.apache.parquet.Strings;
 import org.quartz.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.TimeZone;
 
 import static com.cronutils.model.CronType.UNIX;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
@@ -38,14 +40,21 @@ import static org.quartz.TriggerBuilder.newTrigger;
 @Component
 public class TriggerFactoryImpl implements TriggerFactory {
     private JobDataMapAdapter jobDataMapAdapter;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
     private CronMapper cronMapperUnixToQuartz = CronMapper.fromUnixToQuartz();
     private CronDefinition unixCronDefinition = CronDefinitionBuilder.instanceDefinitionFor(UNIX);
     private CronParser unixCronParser = new CronParser(unixCronDefinition);
 
-
+    /**
+     * Creates a Quartz trigger factory that converts DQO schedules to Quartz cron triggers.
+     * @param jobDataMapAdapter DQO Job data adapter that stores and retrieves additional objects in jobs.
+     * @param defaultTimeZoneProvider Default time zone provider.
+     */
     @Autowired
-    public TriggerFactoryImpl(JobDataMapAdapter jobDataMapAdapter) {
+    public TriggerFactoryImpl(JobDataMapAdapter jobDataMapAdapter,
+                              DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.jobDataMapAdapter = jobDataMapAdapter;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -72,7 +81,7 @@ public class TriggerFactoryImpl implements TriggerFactory {
      * @return Trigger.
      */
     @Override
-    public Trigger createTrigger(RunChecksCronSchedule schedule, JobKey jobKey) {
+    public Trigger createTrigger(RecurringScheduleSpec schedule, JobKey jobKey) {
         JobDataMap triggerJobData = new JobDataMap();
         jobDataMapAdapter.setSchedule(triggerJobData, schedule);
 
@@ -82,8 +91,7 @@ public class TriggerFactoryImpl implements TriggerFactory {
 
         ScheduleBuilder<?> scheduleBuilder = null;
 
-        RecurringScheduleSpec recurringSchedule = schedule.getRecurringSchedule();
-        String unixCronExpression = recurringSchedule.getCronExpression();
+        String unixCronExpression = schedule.getCronExpression();
         String quartzCronExpression = null;
 
         try {
@@ -94,8 +102,9 @@ public class TriggerFactoryImpl implements TriggerFactory {
         }
 
         if (CronExpression.isValidExpression(quartzCronExpression)) {
+            TimeZone timeZone = TimeZone.getTimeZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId());
             scheduleBuilder = cronSchedule(quartzCronExpression)
-                    .inTimeZone(schedule.getJavaTimeZone());
+                    .inTimeZone(timeZone);
         }
         else {
             throw new JobSchedulerException("Invalid cron schedule: " + unixCronExpression);

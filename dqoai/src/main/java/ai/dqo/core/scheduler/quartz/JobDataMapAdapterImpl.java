@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.scheduler.quartz;
 
-import ai.dqo.core.scheduler.schedules.RunChecksCronSchedule;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.quartz.JobDataMap;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,7 +48,7 @@ public class JobDataMapAdapterImpl implements JobDataMapAdapter {
      * @param dataMap Target data map to store the schedule.
      * @param recurringSchedule Schedule specification to store.
      */
-    public void setSchedule(JobDataMap dataMap, RunChecksCronSchedule recurringSchedule) {
+    public void setSchedule(JobDataMap dataMap, RecurringScheduleSpec recurringSchedule) {
         String jsonString = this.jsonSerializer.serialize(recurringSchedule);
         dataMap.put(KEY_SCHEDULE, jsonString);
     }
@@ -58,13 +58,13 @@ public class JobDataMapAdapterImpl implements JobDataMapAdapter {
      * @param jobDataMap Job data map to read.
      * @return Deserialized recurring schedule specification.
      */
-    public RunChecksCronSchedule getSchedule(JobDataMap jobDataMap) {
+    public RecurringScheduleSpec getSchedule(JobDataMap jobDataMap) {
         if (jobDataMap == null || !jobDataMap.containsKey(KEY_SCHEDULE)) {
             return null;
         }
 
         String scheduleJson = jobDataMap.getString(KEY_SCHEDULE);
-        RunChecksCronSchedule recurringSchedule = this.jsonSerializer.deserialize(scheduleJson, RunChecksCronSchedule.class);
+        RecurringScheduleSpec recurringSchedule = this.jsonSerializer.deserialize(scheduleJson, RecurringScheduleSpec.class);
         return recurringSchedule;
     }
 }

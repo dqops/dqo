@@ -27,6 +27,11 @@ public class SensorReadoutsColumnNames {
     public static final String TIME_PERIOD_COLUMN_NAME = "time_period";
 
     /**
+     * Column name that stores the time period of the sensor readout (timestamp) as a UTC timestamp: timestamp_period_utc.
+     */
+    public static final String TIME_PERIOD_UTC_COLUMN_NAME = "time_period_utc";
+
+    /**
      * Column name for a time gradient.
      */
     public static final String TIME_GRADIENT_COLUMN_NAME = "time_gradient";
@@ -140,4 +145,30 @@ public class SensorReadoutsColumnNames {
      * Column name for a sensor executed at timestamp.
      */
     public static final String EXECUTED_AT_COLUMN_NAME = CommonColumnNames.EXECUTED_AT_COLUMN_NAME;
+
+    /**
+     * List of column names that should be loaded from the parquet files when the recent readouts detailed view is needed.
+     */
+    public static final String[] COLUMN_NAMES_FOR_READOUTS_DETAILED = new String[] {
+            ACTUAL_VALUE_COLUMN_NAME,
+            EXPECTED_VALUE_COLUMN_NAME,
+            CHECK_CATEGORY_COLUMN_NAME,
+            CHECK_DISPLAY_NAME_COLUMN_NAME,
+            CHECK_HASH_COLUMN_NAME,
+            CHECK_NAME_COLUMN_NAME,
+            CHECK_TYPE_COLUMN_NAME,
+
+            COLUMN_NAME_COLUMN_NAME,
+            DATA_STREAM_NAME_COLUMN_NAME,
+
+            DURATION_MS_COLUMN_NAME,
+            EXECUTED_AT_COLUMN_NAME,
+            TIME_GRADIENT_COLUMN_NAME,
+            TIME_PERIOD_COLUMN_NAME,
+            TIME_PERIOD_UTC_COLUMN_NAME,
+
+            PROVIDER_COLUMN_NAME,
+            QUALITY_DIMENSION_COLUMN_NAME,
+            SENSOR_NAME_COLUMN_NAME
+    };
 }

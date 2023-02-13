@@ -25,6 +25,7 @@ import {
   DataStreamMappingSpec,
   RecurringScheduleSpec
 } from '../../api';
+import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
 
 export const getConnectionsRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTIONS
@@ -155,6 +156,60 @@ export const updateConnectionSchedule =
       dispatch(updateConnectionScheduleSuccess());
     } catch (err) {
       dispatch(updateConnectionScheduleFailed(err));
+    }
+  };
+
+export const getConnectionSchedulingGroupRequest = () => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP
+});
+
+export const getConnectionSchedulingGroupSuccess = (schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP_SUCCESS,
+  data,
+  schedulingGroup
+});
+
+export const getConnectionSchedulingGroupFailed = (error: unknown) => ({
+  type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP_ERROR,
+  error
+});
+
+export const getConnectionSchedulingGroup =
+  (connectionName: string, schedulingGroup: CheckRunRecurringScheduleGroup) => async (dispatch: Dispatch) => {
+    dispatch(getConnectionSchedulingGroupRequest());
+    try {
+      const res = await ConnectionApiClient.getConnectionSchedulingGroup(
+        connectionName,
+        schedulingGroup
+      );
+      dispatch(getConnectionSchedulingGroupSuccess(schedulingGroup, res.data));
+    } catch (err) {
+      dispatch(getConnectionSchedulingGroupFailed(err));
+    }
+  };
+
+export const updateConnectionSchedulingGroupRequest = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP
+});
+
+export const updateConnectionSchedulingGroupSuccess = () => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP_SUCCESS
+});
+
+export const updateConnectionSchedulingGroupFailed = (error: unknown) => ({
+  type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP_ERROR,
+  error
+});
+
+export const updateConnectionSchedulingGroup =
+  (connectionName: string, schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) =>
+  async (dispatch: Dispatch) => {
+    dispatch(updateConnectionSchedulingGroupRequest());
+    try {
+      await ConnectionApiClient.updateConnectionSchedulingGroup(connectionName, schedulingGroup, data);
+      dispatch(updateConnectionSchedulingGroupSuccess());
+    } catch (err) {
+      dispatch(updateConnectionSchedulingGroupFailed(err));
     }
   };
 
@@ -341,6 +396,18 @@ export const setUpdatedSchedule = (schedule?: RecurringScheduleSpec) => ({
 export const setIsUpdatedSchedule = (isUpdated: boolean) => ({
   type: CONNECTION_ACTION.SET_IS_UPDATED_SCHEDULE,
   isUpdated
+});
+
+export const setUpdatedSchedulingGroup = (schedulingGroup: CheckRunRecurringScheduleGroup, schedule?: RecurringScheduleSpec) => ({
+  type: CONNECTION_ACTION.SET_UPDATED_SCHEDULE_GROUP,
+  schedule,
+  schedulingGroup
+});
+
+export const setIsUpdatedSchedulingGroup = (schedulingGroup: CheckRunRecurringScheduleGroup, isUpdated: boolean) => ({
+  type: CONNECTION_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP,
+  isUpdated,
+  schedulingGroup
 });
 
 export const setUpdatedComments = (comments?: CommentSpec[]) => ({

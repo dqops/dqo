@@ -38,6 +38,8 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         {
             put("monthly_partition_negative_count", o -> o.monthlyPartitionNegativeCount);
             put("monthly_partition_negative_percent", o -> o.monthlyPartitionNegativePercent);
+            put("monthly_partition_non_negative_count", o -> o.monthlyPartitionNonNegativeCount);
+            put("monthly_partition_non_negative_percent", o -> o.monthlyPartitionNonNegativePercent);
             put("monthly_partition_numbers_in_set_count", o -> o.monthlyPartitionNumbersInSetCount);
             put("monthly_partition_numbers_in_set_percent", o -> o.monthlyPartitionNumbersInSetPercent);
             put("monthly_partition_values_in_range_numeric_percent", o -> o.monthlyPartitionValuesInRangeNumericPercent);
@@ -62,7 +64,13 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNegativePercentCheckSpec monthlyPartitionNegativePercent;
-    
+
+    @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnNonNegativeCountCheckSpec monthlyPartitionNonNegativeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnNonNegativePercentCheckSpec monthlyPartitionNonNegativePercent;
+
     @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnNumbersInSetCountCheckSpec monthlyPartitionNumbersInSetCount;
 
@@ -145,6 +153,42 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionNegativePercent, monthlyPartitionNegativePercent));
         this.monthlyPartitionNegativePercent = monthlyPartitionNegativePercent;
         propagateHierarchyIdToField(monthlyPartitionNegativePercent, "monthly_partition_negative_percent");
+    }
+
+    /**
+     * Returns a non-negative values count check specification.
+     * @return Non-negative values count check specification.
+     */
+    public ColumnNonNegativeCountCheckSpec getMonthlyPartitionNonNegativeCount() {
+        return monthlyPartitionNonNegativeCount;
+    }
+
+    /**
+     * Sets a new specification of a maximum non-negative values count check.
+     * @param monthlyPartitionNonNegativeCount Non-negative values count check specification.
+     */
+    public void setMonthlyPartitionNonNegativeCount(ColumnNonNegativeCountCheckSpec monthlyPartitionNonNegativeCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNonNegativeCount, monthlyPartitionNonNegativeCount));
+        this.monthlyPartitionNonNegativeCount = monthlyPartitionNonNegativeCount;
+        propagateHierarchyIdToField(monthlyPartitionNonNegativeCount, "monthly_partition_non_negative_count");
+    }
+
+    /**
+     * Returns a non-negative values percentage check specification.
+     * @return Non-negative values percentage check specification.
+     */
+    public ColumnNonNegativePercentCheckSpec getMonthlyPartitionNonNegativePercent() {
+        return monthlyPartitionNonNegativePercent;
+    }
+
+    /**
+     * Sets a new specification of a non-negative values percentage check.
+     * @param monthlyPartitionNonNegativePercent Non-negative values percentage check specification.
+     */
+    public void setMonthlyPartitionNonNegativePercent(ColumnNonNegativePercentCheckSpec monthlyPartitionNonNegativePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionNonNegativePercent, monthlyPartitionNonNegativePercent));
+        this.monthlyPartitionNonNegativePercent = monthlyPartitionNonNegativePercent;
+        propagateHierarchyIdToField(monthlyPartitionNonNegativePercent, "monthly_partition_non_negative_percent");
     }
 
     /**

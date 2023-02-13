@@ -16,7 +16,6 @@ import TableCommentView from "../../components/Connection/TableView/TableComment
 import TableLabelsView from "../../components/Connection/TableView/TableLabelsView";
 import TableDataStream from "../../components/Connection/TableView/TableDataStream";
 import TimestampsView from "../../components/Connection/TableView/TimestampsView";
-import useSearchParams from "../../hooks/useSearchParams";
 
 const initTabs = [
   {
@@ -46,10 +45,9 @@ const initTabs = [
 ];
 
 const TablePage = () => {
-  const { connection, schema, table, tab: activeTab }: { connection: string, schema: string, table: string, tab: string } = useParams();
+  const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: string } = useParams();
   const { activeTab: pageTab, tabMap, setTabMap } = useTree();
   const history = useHistory();
-  const query = useSearchParams();
   const [tabs, setTabs] = useState(initTabs);
   const {
     isUpdatedTableBasic,
@@ -63,15 +61,15 @@ const TablePage = () => {
     isUpdatedSchedule,
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
-  const isCheckpointOnly = useMemo(() => query.get("type") === CheckTypes.CHECKPOINT, [query]);
-  const isPartitionChecksOnly = useMemo(() => query.get("type") === CheckTypes.PARTITION, [query]);
-  const isAdHocChecksOnly = useMemo(() => query.get("type") === CheckTypes.ADHOC, [query]);
+  const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
+  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.TIME_PARTITIONED, [checkTypes]);
+  const isAdHocChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
     () => !isCheckpointOnly && !isPartitionChecksOnly && !isAdHocChecksOnly,
     [isCheckpointOnly, isPartitionChecksOnly, isAdHocChecksOnly]
   );
   const onChangeTab = (tab: string) => {
-    history.push(ROUTES.TABLE_LEVEL_PAGE(connection, schema, table, tab));
+    history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab));
     setTabMap({
       ...tabMap,
       [pageTab]: tab

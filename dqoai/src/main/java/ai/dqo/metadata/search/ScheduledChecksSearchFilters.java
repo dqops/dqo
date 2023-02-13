@@ -15,6 +15,7 @@
  */
 package ai.dqo.metadata.search;
 
+import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 
 /**
@@ -24,6 +25,7 @@ import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 public class ScheduledChecksSearchFilters {
     private Boolean enabled = true;
     private RecurringScheduleSpec schedule;
+    private CheckRunRecurringScheduleGroup scheduleGroup;
 
     /**
      * Create a hierarchy tree node traversal visitor that will search for nodes matching the current filter.
@@ -65,5 +67,22 @@ public class ScheduledChecksSearchFilters {
      */
     public void setSchedule(RecurringScheduleSpec schedule) {
         this.schedule = schedule;
+    }
+
+    /**
+     * Returns an optional schedule group (daily, monthly, profiling) to filter check root nodes.
+     * The schedule group could be null to return all checks or when the search root object is an abstract check that has an individual schedule.
+     * @return Optional schedule group.
+     */
+    public CheckRunRecurringScheduleGroup getScheduleGroup() {
+        return scheduleGroup;
+    }
+
+    /**
+     * Sets a filter for a schedule group which identifies the expected type of checks.
+     * @param scheduleGroup Schedule group.
+     */
+    public void setScheduleGroup(CheckRunRecurringScheduleGroup scheduleGroup) {
+        this.scheduleGroup = scheduleGroup;
     }
 }
