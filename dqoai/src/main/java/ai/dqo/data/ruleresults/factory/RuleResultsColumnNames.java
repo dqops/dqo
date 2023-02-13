@@ -65,6 +65,7 @@ public class RuleResultsColumnNames extends SensorReadoutsColumnNames {
             ACTUAL_VALUE_COLUMN_NAME,
             SEVERITY_COLUMN_NAME,
             TIME_PERIOD_COLUMN_NAME,
+            TIME_PERIOD_UTC_COLUMN_NAME,
             EXECUTED_AT_COLUMN_NAME
     };
 
@@ -95,6 +96,7 @@ public class RuleResultsColumnNames extends SensorReadoutsColumnNames {
             EXECUTED_AT_COLUMN_NAME,
             TIME_GRADIENT_COLUMN_NAME,
             TIME_PERIOD_COLUMN_NAME,
+            TIME_PERIOD_UTC_COLUMN_NAME,
 
             INCLUDE_IN_KPI_COLUMN_NAME,
             INCLUDE_IN_SLA_COLUMN_NAME,

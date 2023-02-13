@@ -3,6 +3,7 @@ package ai.dqo.data.normalization;
 import ai.dqo.metadata.groupings.DataStreamLevelSource;
 import ai.dqo.metadata.groupings.DataStreamLevelSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
+import ai.dqo.utils.tables.TableColumnUtility;
 import com.google.common.base.Strings;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
@@ -23,27 +24,6 @@ import java.util.stream.Collectors;
 @Component
 public class CommonTableNormalizationServiceImpl implements CommonTableNormalizationService {
     /**
-     * Finds a named column in the table. Performs a case-insensitive search, so the columns may be named in upper or lower case.
-     * @param resultsTable Table to analyze.
-     * @param columnName Expected column name.
-     * @return Column that was found or null.
-     */
-    @Override
-    public Column<?> findColumn(Table resultsTable, String columnName) {
-        if (resultsTable.containsColumn(columnName)) {
-            return resultsTable.column(columnName);
-        }
-
-        for (String existingColumnName: resultsTable.columnNames()) {
-            if (StringUtils.equalsIgnoreCase(columnName, existingColumnName)) {
-                return resultsTable.column(existingColumnName);
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Finds all data stream level columns and returns them as an array of columns. The array length is 9 elements (the number of data stream levels supported).
      * Data stream level columns are returned at their respective index, shifted one index down (because the array indexes start at 0).
      * The stream_level_1 column (if present) is returned at result[0] index.
@@ -59,7 +39,7 @@ public class CommonTableNormalizationServiceImpl implements CommonTableNormaliza
 
         for (int levelIndex = 1; levelIndex <= 9; levelIndex++) {
             String dataStreamLevelColumnName = CommonColumnNames.DATA_STREAM_LEVEL_COLUMN_NAME_PREFIX + levelIndex;
-            Column<?> existingDataStreamLevelColumn = resultsTable != null ? findColumn(resultsTable, dataStreamLevelColumnName) : null;
+            Column<?> existingDataStreamLevelColumn = resultsTable != null ? TableColumnUtility.findColumn(resultsTable, dataStreamLevelColumnName) : null;
             if (existingDataStreamLevelColumn == null) {
                 continue; // no data stream level
             }

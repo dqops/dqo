@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.bool.ColumnBoolMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
@@ -63,6 +64,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("pii", o -> o.pii);
             put("sql", o -> o.sql);
             put("bool", o -> o.bool);
+            put("integrity", o -> o.integrity);
 
         }
     };
@@ -106,6 +108,11 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolMonthlyPartitionedChecksSpec bool;
+
+    @JsonPropertyDescription("Monthly partitioned checks for integrity in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnIntegrityMonthlyPartitionedChecksSpec integrity;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -250,6 +257,25 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.bool = bool;
         propagateHierarchyIdToField(bool, "bool");
     }
+
+    /**
+     * Returns a container of custom integrity checks on a column.
+     * @return Custom integrity checks.
+     */
+    public ColumnIntegrityMonthlyPartitionedChecksSpec getIntegrity() {
+        return integrity;
+    }
+
+    /**
+     * Sets a reference to a container of custom integrity checks.
+     * @param integrity Custom integrity checks.
+     */
+    public void setIntegrity(ColumnIntegrityMonthlyPartitionedChecksSpec integrity) {
+        this.setDirtyIf(!Objects.equals(this.integrity, integrity));
+        this.integrity = integrity;
+        propagateHierarchyIdToField(integrity, "integrity");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

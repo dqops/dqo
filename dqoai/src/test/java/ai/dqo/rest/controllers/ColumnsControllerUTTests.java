@@ -148,7 +148,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(8, result.getCategories().size());
+        Assertions.assertEquals(9, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -166,7 +166,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(8, result.getCategories().size());
+        Assertions.assertEquals(9, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -184,7 +184,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(8, result.getCategories().size());
+        Assertions.assertEquals(9, result.getCategories().size());
     }
 
     @Test
@@ -200,7 +200,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(8, result.getCategories().size());
+        Assertions.assertEquals(9, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -218,7 +218,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(8, result.getCategories().size());
+        Assertions.assertEquals(9, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -236,7 +236,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(8, result.getCategories().size());
+        Assertions.assertEquals(9, result.getCategories().size());
     }
 
     @Test

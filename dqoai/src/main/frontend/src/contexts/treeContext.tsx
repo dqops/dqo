@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } fro
 
 import { AxiosResponse } from 'axios';
 import {
+  CheckSearchFilters,
   ColumnBasicModel,
   ConnectionBasicModel,
   SchemaModel,
@@ -22,6 +23,13 @@ import { CheckTypes, ROUTES } from "../shared/routes";
 import { useHistory } from "react-router-dom";
 
 const TreeContext = React.createContext({} as any);
+
+const checkTypesToJobTemplateKey= {
+  [CheckTypes.SOURCES]: 'run_checks_job_template',
+  [CheckTypes.PROFILING]: 'run_profiling_checks_job_template',
+  [CheckTypes.CHECKS]: 'run_whole_table_checks_job_template',
+  [CheckTypes.TIME_PARTITIONED]: 'run_time_period_checks_job_template'
+};
 
 const checkTypesToHasConfiguredCheckKey = {
   [CheckTypes.SOURCES]: 'has_any_configured_checks',
@@ -56,7 +64,6 @@ function TreeProvider(props: any) {
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const history = useHistory();
-
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
       await ConnectionApiClient.getAllConnections();
@@ -67,7 +74,7 @@ function TreeProvider(props: any) {
       items: [],
       level: TREE_LEVEL.DATABASE,
       tooltip: item.connection_name,
-      run_checks_job_template: item.run_checks_job_template,
+      run_checks_job_template: item[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel],
       collect_statistics_job_template: item.collect_statistics_job_template,
       open: false
     }));
@@ -91,7 +98,7 @@ function TreeProvider(props: any) {
       items: [],
       level: TREE_LEVEL.DATABASE,
       tooltip: connection.connection_name,
-      run_checks_job_template: connection.run_checks_job_template,
+      run_checks_job_template: connection[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: connection.collect_statistics_job_template,
       open: false
     };
@@ -137,7 +144,7 @@ function TreeProvider(props: any) {
       parentId: node.id,
       items: [],
       tooltip: `${node?.label}.${schema.schema_name}`,
-      run_checks_job_template: schema.run_checks_job_template,
+      run_checks_job_template: schema[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof SchemaModel] as CheckSearchFilters,
       collect_statistics_job_template: schema.collect_statistics_job_template,
       open: false
     }));
@@ -159,7 +166,7 @@ function TreeProvider(props: any) {
       items: [],
       tooltip: `${connectionNode?.label}.${node.label}.${table.target?.table_name}`,
       hasCheck: !!table?.[checkTypesToHasConfiguredCheckKey[sourceRoute as keyof typeof checkTypesToHasConfiguredCheckKey] as keyof TableBasicModel],
-      run_checks_job_template: table.run_checks_job_template,
+      run_checks_job_template: table[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof TableBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: table.collect_statistics_job_template,
       open: false
     }));
@@ -323,7 +330,7 @@ function TreeProvider(props: any) {
       items: [],
       tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${column.column_name}`,
       hasCheck: !!column?.[checkTypesToHasConfiguredCheckKey[sourceRoute as keyof typeof checkTypesToHasConfiguredCheckKey] as keyof ColumnBasicModel],
-      run_checks_job_template: column.run_checks_job_template,
+      run_checks_job_template: column[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ColumnBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: column.collect_statistics_job_template,
       open: false
     }));

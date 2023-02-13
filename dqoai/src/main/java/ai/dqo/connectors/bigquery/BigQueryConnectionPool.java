@@ -16,7 +16,6 @@
 package ai.dqo.connectors.bigquery;
 
 import ai.dqo.metadata.sources.ConnectionSpec;
-import com.google.cloud.bigquery.BigQuery;
 
 /**
  * BigQuery connection pool that supports multiple connections.
@@ -27,5 +26,5 @@ public interface BigQueryConnectionPool {
      * @param connectionSpec Connection specification (should be not mutable).
      * @return BigQuery service.
      */
-    BigQuery getBigQueryService(ConnectionSpec connectionSpec);
+    BigQueryInternalConnection getBigQueryService(ConnectionSpec connectionSpec);
 }

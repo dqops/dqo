@@ -19,15 +19,15 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.utils.datetime.LocalDateTimePeriodUtility;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.DoubleColumn;
+import tech.tablesaw.api.InstantColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.index.LongIndex;
 import tech.tablesaw.selection.Selection;
 
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
+import java.time.*;
 import java.util.Arrays;
 
 /**
@@ -36,6 +36,7 @@ import java.util.Arrays;
 public class HistoricDataPointTimeSeriesCollector {
     private final Table timeSeriesData;
     private final DateTimeColumn timePeriodColumn;
+    private final InstantColumn timePeriodUtcColumn;
     private final DoubleColumn actualValueColumn;
     private final TimeSeriesGradient gradient;
     private final ZoneId timeZoneId;
@@ -53,6 +54,7 @@ public class HistoricDataPointTimeSeriesCollector {
 												ZoneId timeZoneId) {
         this.timeSeriesData = timeSeriesData;
 		this.timePeriodColumn = (DateTimeColumn) timeSeriesData.column(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+        this.timePeriodUtcColumn = (InstantColumn) timeSeriesData.column(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
 		this.actualValueColumn = (DoubleColumn) timeSeriesData.column(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         this.gradient = gradient;
         this.timeZoneId = timeZoneId;
@@ -85,10 +87,22 @@ public class HistoricDataPointTimeSeriesCollector {
 
         for (int rowIndex : rowIndexes) {
             LocalDateTime rowTimePeriod = this.timePeriodColumn.get(rowIndex);
+            Instant rowTimePeriodInDefaultTz = rowTimePeriod.toInstant(this.timeZoneId.getRules().getOffset(rowTimePeriod));
+            Instant rowTimePeriodUtc = this.timePeriodUtcColumn.get(rowIndex);
+            if (rowTimePeriodUtc == null) {
+                rowTimePeriodUtc = rowTimePeriodInDefaultTz;
+            }
+            Duration timeZoneOffsetDuration = Duration.between(rowTimePeriodUtc, rowTimePeriodInDefaultTz); // this is the difference between the database default timezone and the DQO instance default time zone
+
             LocalDateTime rowTruncatedTimePeriod = LocalDateTimeTruncateUtility.truncateTimePeriod(rowTimePeriod, this.gradient);
             Double rowActualValue = this.actualValueColumn.get(rowIndex);
             int timePeriodsDifference = (int)LocalDateTimePeriodUtility.calculateDifferenceInPeriodsCount(rowTruncatedTimePeriod, readoutTimestamp, this.gradient);
-            Instant rowTimePeriodInstant = rowTruncatedTimePeriod.toInstant(this.timeZoneId.getRules().getOffset(rowTruncatedTimePeriod));
+            ZoneOffset zoneOffsetFix = ZoneOffset.ofTotalSeconds((int) timeZoneOffsetDuration.getSeconds());
+            Instant rowTimePeriodInstant = rowTruncatedTimePeriod.toInstant(zoneOffsetFix);
+
+            if (Duration.between(rowTimePeriodInstant, rowTimePeriodUtc).getSeconds() > 10) {
+                throw new DqoRuntimeException("Time zone conversion failed, we need to reverse the minus sign");
+            }
 
             HistoricDataPoint historicDataPoint = new HistoricDataPoint(rowTimePeriodInstant, rowTruncatedTimePeriod, -timePeriodsDifference, rowActualValue);
             historicDataPoints[timePeriodsCount - timePeriodsDifference] = historicDataPoint;
@@ -120,10 +134,15 @@ public class HistoricDataPointTimeSeriesCollector {
         for (int i = 0; i < readoutsCount && i < rowIndexes.length; i++) {
             int rowIndex = rowIndexes[rowIndexes.length - i - 1];
             LocalDateTime rowTimePeriod = this.timePeriodColumn.get(rowIndex);
-            Double rowActualValue = this.actualValueColumn.get(rowIndex);
-            Instant rowTimePeriodInstant = rowTimePeriod.toInstant(this.timeZoneId.getRules().getOffset(rowTimePeriod));
+            Instant rowTimePeriodInDefaultTz = rowTimePeriod.toInstant(this.timeZoneId.getRules().getOffset(rowTimePeriod));
+            Instant rowTimePeriodUtc = this.timePeriodUtcColumn.get(rowIndex);
+            if (rowTimePeriodUtc == null) {
+                rowTimePeriodUtc = rowTimePeriodInDefaultTz;
+            }
 
-            HistoricDataPoint historicDataPoint = new HistoricDataPoint(rowTimePeriodInstant, rowTimePeriod, -i - 1, rowActualValue);
+            Double rowActualValue = this.actualValueColumn.get(rowIndex);
+
+            HistoricDataPoint historicDataPoint = new HistoricDataPoint(rowTimePeriodUtc, rowTimePeriod, -i - 1, rowActualValue);
             historicDataPoints[readoutsCount - i - 1] = historicDataPoint;
         }
 

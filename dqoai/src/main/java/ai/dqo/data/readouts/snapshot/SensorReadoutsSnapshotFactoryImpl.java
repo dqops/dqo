@@ -65,6 +65,7 @@ public class SensorReadoutsSnapshotFactoryImpl implements SensorReadoutsSnapshot
      */
     @Override
     public SensorReadoutsSnapshot createReadOnlySnapshot(String connectionName, PhysicalTableName physicalTableName, String[] columnNames) {
-        return new SensorReadoutsSnapshot(connectionName, physicalTableName, this.storageService, columnNames);
+        Table templateSensorReadouts = this.sensorReadoutsTableFactory.createEmptySensorReadoutsTable("template_sensor_readouts");
+        return new SensorReadoutsSnapshot(connectionName, physicalTableName, this.storageService, columnNames, templateSensorReadouts);
     }
 }

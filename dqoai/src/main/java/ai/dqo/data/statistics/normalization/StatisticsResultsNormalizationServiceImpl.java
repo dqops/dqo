@@ -7,6 +7,7 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorResultNormalizeException;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.utils.tables.TableColumnUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
@@ -282,7 +283,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
             return null;
         }
 
-        Column<?> currentColumn = this.commonNormalizationService.findColumn(resultsTable, columnName);
+        Column<?> currentColumn = TableColumnUtility.findColumn(resultsTable, columnName);
         if (currentColumn == null) {
             throw new SensorResultNormalizeException(resultsTable,
                     "Missing '" + columnName + "' column, the sensor query must return this column");

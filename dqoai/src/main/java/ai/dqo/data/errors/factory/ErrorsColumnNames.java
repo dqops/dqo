@@ -39,6 +39,7 @@ public class ErrorsColumnNames extends SensorReadoutsColumnNames {
             DATA_STREAM_NAME_COLUMN_NAME,
             ACTUAL_VALUE_COLUMN_NAME,
             TIME_PERIOD_COLUMN_NAME,
+            TIME_PERIOD_UTC_COLUMN_NAME,
             EXECUTED_AT_COLUMN_NAME
     };
 
@@ -62,6 +63,7 @@ public class ErrorsColumnNames extends SensorReadoutsColumnNames {
             EXECUTED_AT_COLUMN_NAME,
             TIME_GRADIENT_COLUMN_NAME,
             TIME_PERIOD_COLUMN_NAME,
+            TIME_PERIOD_UTC_COLUMN_NAME,
 
             PROVIDER_COLUMN_NAME,
             QUALITY_DIMENSION_COLUMN_NAME,

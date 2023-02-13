@@ -15,6 +15,7 @@
  */
 package ai.dqo.services.check.mapping.models;
 
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -45,6 +46,9 @@ public class UIQualityCategoryModel {
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
+
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this quality category.")
+    private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     public UIQualityCategoryModel() {
     }

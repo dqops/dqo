@@ -74,7 +74,7 @@ const ConnectionDetail = () => {
     }
 
     setIsTesting(true);
-    const testRes = await SourceConnectionApi.checkConnection(connectionBasic);
+    const testRes = await SourceConnectionApi.testConnection(false, connectionBasic);
     setIsTesting(false);
 
     if (testRes.data?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS) {
@@ -88,7 +88,7 @@ const ConnectionDetail = () => {
   const onTestConnection = async () => {
     try {
       setIsTesting(true);
-      const res = await SourceConnectionApi.checkConnection(connectionBasic);
+      const res = await SourceConnectionApi.testConnection(false, connectionBasic);
       setTestResult(res.data);
     } catch (err) {
       console.error(err);

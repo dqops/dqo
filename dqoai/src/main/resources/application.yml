@@ -62,7 +62,7 @@ dqo:
   logging:
     enable-user-home-logging: true
     max-history: 7
-    pattern: "%-12date{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%xException%n"
+    pattern: "%-12date{YYYY-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} -%kvp- %msg%rootException%n"
     total-size-cap: 10mb
   storage:
     gcp:
