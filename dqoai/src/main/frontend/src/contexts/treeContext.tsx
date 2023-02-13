@@ -64,7 +64,6 @@ function TreeProvider(props: any) {
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const history = useHistory();
-
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
       await ConnectionApiClient.getAllConnections();
