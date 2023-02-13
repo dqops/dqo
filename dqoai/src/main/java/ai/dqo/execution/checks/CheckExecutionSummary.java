@@ -173,7 +173,7 @@ public class CheckExecutionSummary {
      * @return Total number of checks that were executed.
      */
     public int getTotalChecksExecutedCount() {
-        return this.checksExecutedColumn.isGreaterThanOrEqualTo(0).size();
+        return (int)this.checksExecutedColumn.sum();
     }
 
     /**
