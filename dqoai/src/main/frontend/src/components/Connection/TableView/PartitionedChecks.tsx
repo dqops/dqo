@@ -142,7 +142,7 @@ const TablePartitionedChecksView = () => {
   };
   
   return (
-    <div className="py-2">
+    <div className="flex-grow min-h-0 flex flex-col">
       <TableActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
@@ -154,28 +154,24 @@ const TablePartitionedChecksView = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
-      <div>
-        {activeTab === 'daily' && (
-          <DataQualityChecks
-            onUpdate={onUpdate}
-            checksUI={dailyPartitionedChecks}
-            onChange={onDailyPartitionedChecksChange}
-            className="max-h-checks"
-            checkResultsOverview={dailyCheckResultsOverview}
-            getCheckOverview={getDailyCheckOverview}
-          />
-        )}
-        {activeTab === 'monthly' && (
-          <DataQualityChecks
-            onUpdate={onUpdate}
-            checksUI={monthlyPartitionedChecks}
-            onChange={onMonthlyPartitionedChecksChange}
-            className="max-h-checks"
-            checkResultsOverview={monthlyCheckResultsOverview}
-            getCheckOverview={getMonthlyCheckOverview}
-          />
-        )}
-      </div>
+      {activeTab === 'daily' && (
+        <DataQualityChecks
+          onUpdate={onUpdate}
+          checksUI={dailyPartitionedChecks}
+          onChange={onDailyPartitionedChecksChange}
+          checkResultsOverview={dailyCheckResultsOverview}
+          getCheckOverview={getDailyCheckOverview}
+        />
+      )}
+      {activeTab === 'monthly' && (
+        <DataQualityChecks
+          onUpdate={onUpdate}
+          checksUI={monthlyPartitionedChecks}
+          onChange={onMonthlyPartitionedChecksChange}
+          checkResultsOverview={monthlyCheckResultsOverview}
+          getCheckOverview={getMonthlyCheckOverview}
+        />
+      )}
     </div>
   );
 };

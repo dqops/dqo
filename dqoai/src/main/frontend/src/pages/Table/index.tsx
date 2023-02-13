@@ -165,8 +165,8 @@ const TablePage = () => {
 
   return (
     <ConnectionLayout>
-      <div className="relative">
-        <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-13 items-center">
+      <div className="relative h-full flex flex-col">
+        <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-13 items-center flex-shrink-0">
           <div className="flex items-center space-x-2">
             <SvgIcon name="database" className="w-5 h-5" />
             <div className="text-xl font-semibold">{`${connection}.${schema}.${table}`}</div>

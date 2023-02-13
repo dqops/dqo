@@ -207,7 +207,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
 
   return (
     <MainLayout>
-      <div className="flex-1 h-full flex flex-col">
+      <div className="flex-1 h-full flex flex-col overflow-hidden" style={{ maxHeight: "calc(100vh - 104px)" }}>
         <PageTabs
           tabs={tabs}
           activeTab={activeTab}
@@ -215,7 +215,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
           onRemoveTab={closeTab}
           onAddTab={onAddTab}
         />
-        <div className="flex-1 bg-white border border-gray-300 flex-auto">
+        <div className="flex-1 bg-white border border-gray-300 flex-auto min-h-0">
           {children}
         </div>
       </div>
