@@ -4,12 +4,12 @@
     {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
 {%- endmacro %}
 
-{%- macro render_joined_table(joined_tab) -%}
-    {{ quote_identifier(connection.snowflake.source_project_id) }}.{{ quote_identifier(table.target.schema_name) }}.{{ quote_identifier(joined_tab) }}
+{%- macro render_foreign_table(foreign_table) -%}
+    {{ quote_identifier(connection.snowflake.database) }}.{{ quote_identifier(table.target.schema_name) }}.{{ quote_identifier(foreign_table) }}
 {%- endmacro %}
 
-{%- macro render_joined_column(table_alias_prefix = '') -%}
-    {{ quote_identifier(parameters.joined_col) }}
+{%- macro render_foreign_column(table_alias_prefix = '') -%}
+    {{ quote_identifier(parameters.foreign_column) }}
 {%- endmacro %}
 
 

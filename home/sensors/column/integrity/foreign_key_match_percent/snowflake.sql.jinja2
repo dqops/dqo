@@ -5,7 +5,7 @@
 {%- endmacro %}
 
 {%- macro render_foreign_table(foreign_table) -%}
-    {{ quote_identifier(connection.snowflake.source_project_id) }}.{{ quote_identifier(table.target.schema_name) }}.{{ quote_identifier(foreign_table) }}
+    {{ quote_identifier(connection.snowflake.database) }}.{{ quote_identifier(table.target.schema_name) }}.{{ quote_identifier(foreign_table) }}
 {%- endmacro %}
 
 {%- macro render_foreign_column(table_alias_prefix = '') -%}
