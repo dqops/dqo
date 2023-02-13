@@ -159,6 +159,10 @@ export const updateConnectionSchedule =
     }
   };
 
+export const resetConnectionSchedulingGroup = () => ({
+  type: CONNECTION_ACTION.RESET_CONNECTION_SCHEDULE_GROUP
+})
+
 export const getConnectionSchedulingGroupRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP
 });
