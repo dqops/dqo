@@ -155,6 +155,11 @@ const connectionReducer = (state = initialState, action: any) => {
         ...state,
         loading: true
       };
+    case CONNECTION_ACTION.RESET_CONNECTION_SCHEDULE_GROUP:
+      return {
+        ...state,
+        scheduleGroups: undefined
+      }
     case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP_SUCCESS:
       return {
         ...state,
