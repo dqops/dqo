@@ -1,15 +1,12 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
-{% macro quote_identifier(name) -%}
-    {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
-{%- endmacro %}
 
 {%- macro render_foreign_table(foreign_table) -%}
-    {{ quote_identifier(connection.bigquery.source_project_id) }}.{{ quote_identifier(table.target.schema_name) }}.{{ quote_identifier(foreign_table) }}
+    {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
 {%- endmacro %}
 
 {%- macro render_foreign_column(table_alias_prefix = '') -%}
-    {{ quote_identifier(parameters.foreign_column) }}
+    {{ lib.quote_identifier(parameters.foreign_column) }}
 {%- endmacro %}
 
 SELECT
