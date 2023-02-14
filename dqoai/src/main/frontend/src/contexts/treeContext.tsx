@@ -64,7 +64,6 @@ function TreeProvider(props: any) {
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const history = useHistory();
-
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
       await ConnectionApiClient.getAllConnections();
@@ -77,6 +76,7 @@ function TreeProvider(props: any) {
       tooltip: item.connection_name,
       run_checks_job_template: item[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel],
       collect_statistics_job_template: item.collect_statistics_job_template,
+      data_clean_job_template: item.data_clean_job_template,
       open: false
     }));
     const treeDataMaps = [
@@ -101,6 +101,7 @@ function TreeProvider(props: any) {
       tooltip: connection.connection_name,
       run_checks_job_template: connection[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ConnectionBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: connection.collect_statistics_job_template,
+      data_clean_job_template: connection.data_clean_job_template,
       open: false
     };
     setTreeData([...treeData, newNode]);
@@ -147,6 +148,7 @@ function TreeProvider(props: any) {
       tooltip: `${node?.label}.${schema.schema_name}`,
       run_checks_job_template: schema[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof SchemaModel] as CheckSearchFilters,
       collect_statistics_job_template: schema.collect_statistics_job_template,
+      data_clean_job_template: schema.data_clean_job_template,
       open: false
     }));
 
@@ -169,6 +171,7 @@ function TreeProvider(props: any) {
       hasCheck: !!table?.[checkTypesToHasConfiguredCheckKey[sourceRoute as keyof typeof checkTypesToHasConfiguredCheckKey] as keyof TableBasicModel],
       run_checks_job_template: table[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof TableBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: table.collect_statistics_job_template,
+      data_clean_job_template: table.data_clean_job_template,
       open: false
     }));
     resetTreeData(node, items);
@@ -333,6 +336,7 @@ function TreeProvider(props: any) {
       hasCheck: !!column?.[checkTypesToHasConfiguredCheckKey[sourceRoute as keyof typeof checkTypesToHasConfiguredCheckKey] as keyof ColumnBasicModel],
       run_checks_job_template: column[checkTypesToJobTemplateKey[sourceRoute as keyof typeof checkTypesToJobTemplateKey] as keyof ColumnBasicModel] as CheckSearchFilters,
       collect_statistics_job_template: column.collect_statistics_job_template,
+      data_clean_job_template: column.data_clean_job_template,
       open: false
     }));
     resetTreeData(node, items);
@@ -750,6 +754,33 @@ function TreeProvider(props: any) {
     }
   };
 
+  const deleteStoredData = async (node: CustomTreeNode, dateStart: string, dateEnd: string) => {
+    if (node.data_clean_job_template) {
+      let checkType;
+      switch (sourceRoute) {
+        case CheckTypes.CHECKS:
+          checkType = 'checkpoint';
+          break;
+        case CheckTypes.PROFILING:
+          checkType = 'adhoc';
+          break;
+        case CheckTypes.TIME_PARTITIONED:
+          checkType = 'partitioned';
+          break;
+        default:
+          checkType = undefined;
+          break;
+      }
+      JobApiClient.deleteStoredData({
+        ...node.data_clean_job_template,
+        checkType,
+        dateStart,
+        dateEnd
+      });
+      return;
+    }
+  };
+
   const handleChangeActiveTab = (newActiveTab: string) => {
     const newActiveNode = findTreeNode(treeData, newActiveTab);
     setActiveTab(newActiveTab);
@@ -913,7 +944,8 @@ function TreeProvider(props: any) {
         addConnection,
         switchTab,
         activeNode,
-        setSourceRoute
+        setSourceRoute,
+        deleteStoredData
       }}
       {...props}
     />

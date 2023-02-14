@@ -17,6 +17,7 @@ package ai.dqo.checks.column.checkpoints.datetime;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,12 +38,16 @@ public class ColumnDatetimeDailyCheckpointsSpec extends AbstractCheckCategorySpe
     public static final ChildHierarchyNodeFieldMapImpl<ColumnDatetimeDailyCheckpointsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("daily_checkpoint_date_values_in_future_percent", o -> o.dailyCheckpointDateValuesInFuturePercent);
+            put("daily_checkpoint_datetime_value_in_range_date_percent", o -> o.dailyCheckpointDatetimeValueInRangeDatePercent);
 
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnDateValuesInFuturePercentCheckSpec dailyCheckpointDateValuesInFuturePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnDatetimeValueInRangeDatePercentCheckSpec dailyCheckpointDatetimeValueInRangeDatePercent;
 
     /**
      * Returns a date values in future percent check specification.
@@ -60,6 +65,24 @@ public class ColumnDatetimeDailyCheckpointsSpec extends AbstractCheckCategorySpe
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointDateValuesInFuturePercent, dailyCheckpointDateValuesInFuturePercent));
         this.dailyCheckpointDateValuesInFuturePercent = dailyCheckpointDateValuesInFuturePercent;
         propagateHierarchyIdToField(dailyCheckpointDateValuesInFuturePercent, "daily_checkpoint_date_values_in_future_percent");
+    }
+
+    /**
+     * Returns a datetime value in range date percentage check.
+     * @return Maximum datetime value in range date percentage check.
+     */
+    public ColumnDatetimeValueInRangeDatePercentCheckSpec getDailyCheckpointDatetimeValueInRangeDatePercent() {
+        return dailyCheckpointDatetimeValueInRangeDatePercent;
+    }
+
+    /**
+     * Sets a new definition of a datetime value in range date percentage check.
+     * @param dailyCheckpointDatetimeValueInRangeDatePercent Datetime value in range date percentage check.
+     */
+    public void setDailyCheckpointDatetimeValueInRangeDatePercent(ColumnDatetimeValueInRangeDatePercentCheckSpec dailyCheckpointDatetimeValueInRangeDatePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointDatetimeValueInRangeDatePercent, dailyCheckpointDatetimeValueInRangeDatePercent));
+        this.dailyCheckpointDatetimeValueInRangeDatePercent = dailyCheckpointDatetimeValueInRangeDatePercent;
+        propagateHierarchyIdToField(dailyCheckpointDatetimeValueInRangeDatePercent, "daily_checkpoint_datetime_value_in_range_date_percent");
     }
 
     /**

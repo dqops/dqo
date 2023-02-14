@@ -70,7 +70,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpec extends A
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/validity/value_in_range_date_percent";
+        return "column/datetime/value_in_range_date_percent";
     }
 
     /**

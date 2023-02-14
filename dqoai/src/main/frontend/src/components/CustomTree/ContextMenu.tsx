@@ -11,6 +11,7 @@ import { TREE_LEVEL } from '../../shared/enums';
 import { useTree } from '../../contexts/treeContext';
 import { useHistory, useParams } from 'react-router-dom';
 import { ROUTES } from "../../shared/routes";
+import DeleteOnlyDataDialog from "./DeleteOnlyDataDialog";
 
 interface ContextMenuProps {
   node: CustomTreeNode;
@@ -19,10 +20,10 @@ interface ContextMenuProps {
 
 const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
   const { checkTypes }: { checkTypes: any } = useParams();
-  const { refreshNode, runChecks, collectStatisticsOnTable } = useTree();
+  const { refreshNode, runChecks, collectStatisticsOnTable, deleteStoredData } = useTree();
   const [open, setOpen] = useState(false);
   const history = useHistory();
-
+  const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const handleRefresh = () => {
     refreshNode(node);
     setOpen(false);
@@ -129,6 +130,28 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
             >
               Delete
             </div>
+          )}
+          {(node.level === TREE_LEVEL.DATABASE ||
+            node.level === TREE_LEVEL.SCHEMA ||
+            node.level === TREE_LEVEL.TABLE ||
+            node.level === TREE_LEVEL.COLUMN) && (
+            <>
+              <div
+                className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+                onClick={() => setDeleteDataDialogOpened(true)}
+              >
+                Delete Data Only
+              </div>
+              <DeleteOnlyDataDialog
+                open={deleteDataDialogOpened}
+                onClose={() => setDeleteDataDialogOpened(false)}
+                onDelete={(startDate, endDate) => {
+                  setDeleteDataDialogOpened(false);
+                  deleteStoredData(node, startDate, endDate);
+                  setOpen(false);
+                }}
+              />
+            </>
           )}
         </div>
       </PopoverContent>

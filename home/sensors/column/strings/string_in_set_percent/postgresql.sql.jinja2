@@ -1,6 +1,5 @@
 {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
 
-
 {%- macro extract_in_list(values_list) -%}
     {%- for i in values_list -%}
         {%- if not loop.last -%}
