@@ -18,12 +18,14 @@ package ai.dqo.execution.checks.progress;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
+import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.sql.TableSqlDailyCheckpointSpec;
-import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
@@ -48,39 +50,26 @@ import ai.dqo.execution.checks.ruleeval.RuleEvaluationService;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationServiceImpl;
 import ai.dqo.execution.checks.scheduled.ScheduledTargetChecksFindService;
 import ai.dqo.execution.checks.scheduled.ScheduledTargetChecksFindServiceImpl;
-import ai.dqo.execution.rules.DataQualityRuleRunner;
 import ai.dqo.execution.rules.DataQualityRuleRunnerObjectMother;
-import ai.dqo.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindServiceObjectMother;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
-import ai.dqo.metadata.sources.ConnectionWrapper;
-import ai.dqo.metadata.sources.PhysicalTableName;
-import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.metadata.sources.TableWrapper;
+import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.metadata.userhome.UserHomeObjectMother;
+import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
-import ai.dqo.sensors.table.sql.TableSqlConditionPassedCountSensorParametersSpec;
-import ai.dqo.sensors.table.sql.TableSqlConditionPassedPercentSensorParametersSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
-import net.snowflake.client.jdbc.internal.amazonaws.event.DeliveryMode;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import tech.tablesaw.api.Table;
-
-import java.util.Arrays;
-import java.util.function.Function;
-import java.util.function.Supplier;
 
 @SpringBootTest
 public class CheckExecutionServiceImplTests extends BaseTest {
@@ -101,6 +90,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         this.tableWrapper = this.connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
         TableSpec tableSpec = this.tableWrapper.getSpec();
 
+        // Table level checks
         tableSpec.setChecks(new TableAdHocCheckCategoriesSpec());
         tableSpec.getChecks().setStandard(new TableAdHocStandardChecksSpec());
         tableSpec.getChecks().getStandard().setRowCount(new TableRowCountCheckSpec());
@@ -114,6 +104,18 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         sqlCheckSpec.getParameters().setSqlCondition("nonexistent_column = 42");
         tableSpec.getCheckpoints().getDaily().getSql().setDailyCheckpointSqlConditionPassedPercentOnTable(sqlCheckSpec);
 
+        // Column level checks
+        ColumnSpec columnSpec = new ColumnSpec(ColumnTypeSnapshotSpec.fromType("INTEGER"));
+        ColumnAdHocCheckCategoriesSpec columnAdHocCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
+        ColumnAdHocNullsChecksSpec columnAdHocNullsChecksSpec = new ColumnAdHocNullsChecksSpec();
+        ColumnNullsCountCheckSpec columnNullsCountCheckSpec = new ColumnNullsCountCheckSpec();
+        columnNullsCountCheckSpec.setError(new MaxCountRule0ParametersSpec());
+        columnAdHocNullsChecksSpec.setNullsCount(columnNullsCountCheckSpec);
+        columnAdHocCheckCategoriesSpec.setNulls(columnAdHocNullsChecksSpec);
+        columnSpec.setChecks(columnAdHocCheckCategoriesSpec);
+        tableWrapper.getSpec().getColumns().put("col1", columnSpec);
+
+        // Sut
         DefaultTimeZoneProvider defaultTimeZoneProvider = DefaultTimeZoneProviderObjectMother.getDefaultTimeZoneProvider();
 
         HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
@@ -180,15 +182,16 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         CheckExecutionSummary allSummary = this.sut.executeChecks(
                 this.executionContext, allFilters, this.progressListener, true);
 
-        Assertions.assertEquals(1, adHocSummary.getTotalChecksExecutedCount());
-        Assertions.assertEquals(1, checkpointSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(0, partitionedSummary.getTotalChecksExecutedCount());
+        Assertions.assertEquals(2, adHocSummary.getTotalChecksExecutedCount());
+        Assertions.assertEquals(1, checkpointSummary.getTotalChecksExecutedCount());
+
 
         Assertions.assertEquals(1.0, adHocSummary.getValidResultsColumn().sum());
         Assertions.assertEquals(0.0, checkpointSummary.getValidResultsColumn().sum());
         Assertions.assertEquals(0.0, partitionedSummary.getValidResultsColumn().sum());
 
-        Assertions.assertEquals(0, adHocSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(1, adHocSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(1, checkpointSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, partitionedSummary.getErrorSeverityIssuesCount());
 
