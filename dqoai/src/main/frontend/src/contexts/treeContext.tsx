@@ -6,7 +6,7 @@ import {
   ColumnBasicModel,
   ConnectionBasicModel,
   SchemaModel,
-  TableBasicModel, UIQualityCategoryBasicModel
+  TableBasicModel, UICheckBasicModel
 } from '../api';
 import {
   ColumnApiClient,
@@ -347,12 +347,12 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, node.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await TableApiClient.getTableAdHocChecksUI(
+    const res = await TableApiClient.getTableAdHocChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? ''
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
   };
 
   const refreshTableCheckpointsNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
@@ -366,7 +366,7 @@ function TreeProvider(props: any) {
       tableNode?.label ?? '',
       timePartitioned
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
   };
   
   const refreshTablePartitionedCheckpointsNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
@@ -374,13 +374,13 @@ function TreeProvider(props: any) {
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
     
-    const res = await TableApiClient.getTablePartitionedChecksUI(
+    const res = await TableApiClient.getTablePartitionedChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
       timePartitioned
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
   };
   
   const refreshColumnChecksNode = async (node: CustomTreeNode) => {
@@ -389,13 +389,13 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await ColumnApiClient.getColumnAdHocChecksUI(
+    const res = await ColumnApiClient.getColumnAdHocChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
       columnNode?.label ?? ''
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
   };
 
   const refreshColumnCheckpointsNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
@@ -411,7 +411,7 @@ function TreeProvider(props: any) {
       columnNode?.label ?? '',
       timePartitioned
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
   };
   
   const refreshColumnPartitionedChecksNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
@@ -427,23 +427,22 @@ function TreeProvider(props: any) {
       columnNode?.label ?? '',
       timePartitioned
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
   };
   
-  const addCheckCategories = (categories: UIQualityCategoryBasicModel[], node: CustomTreeNode, tooltipSuffix: string) => {
+  const addChecks = (checks: UICheckBasicModel[], node: CustomTreeNode, tooltipSuffix: string) => {
     const items: CustomTreeNode[] = [];
-    categories?.forEach((category) => {
-      category.checks?.forEach((check) => {
-        items.push({
-          id: `${node.id}.${category.category}_${check?.check_name}`,
-          label: check?.check_name || '',
-          level: TREE_LEVEL.CHECK,
-          parentId: node.id,
-          category: category?.category,
-          tooltip: `${category.category}_${check?.check_name} for ${tooltipSuffix}`,
-          items: [],
-          open: false
-        });
+    checks?.forEach((check) => {
+      items.push({
+        id: `${node.id}.${check?.check_category}_${check?.check_name}`,
+        label: check?.check_name || '',
+        level: TREE_LEVEL.CHECK,
+        parentId: node.id,
+        category: check?.check_category,
+        tooltip: `${check?.check_category}_${check?.check_name} for ${tooltipSuffix}`,
+        hasCheck: check?.configured,
+        items: [],
+        open: false
       });
     });
     resetTreeData(node, items);
