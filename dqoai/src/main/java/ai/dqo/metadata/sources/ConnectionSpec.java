@@ -27,9 +27,7 @@ import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.*;
 import ai.dqo.metadata.notifications.NotificationSettingsSpec;
-import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
-import ai.dqo.utils.datetime.TimeZoneUtility;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -42,7 +40,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import picocli.CommandLine;
 
-import java.time.ZoneId;
 import java.util.Objects;
 
 /**
@@ -85,9 +82,6 @@ public class ConnectionSpec extends AbstractSpec {
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Snowflake JDBC url).")
     private RedshiftParametersSpec redshift;
-
-    @JsonPropertyDescription("Timezone name for the time period timestamps. This should be the timezone of the monitored database. Use valid Java ZoneId name, the list of possible timezones is listed as 'TZ database name' on https://en.wikipedia.org/wiki/List_of_tz_database_time_zones")
-    private String timeZone = "UTC";
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")
     private Integer parallelRunsLimit;
