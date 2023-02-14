@@ -94,7 +94,7 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
 
   return (
     <div
-      className={clsx(className, 'p-4 max-h-table overflow-auto')}
+      className={clsx(className, 'p-4 overflow-auto')}
       style={{ maxWidth: `calc(100vw - ${sidebarWidth + 30}px` }}
     >
       <table className="w-full">

@@ -4,7 +4,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
-  getTableSchedulingGroup, setIsUpdatedSchedulingGroup,
+  getTableSchedulingGroup, resetTableSchedulingGroup, setIsUpdatedSchedulingGroup,
   setUpdatedSchedulingGroup,
   updateTableSchedulingGroup
 } from '../../../redux/actions/table.actions';
@@ -33,7 +33,7 @@ const ScheduleDetail = () => {
   const [tabs, setTabs] = useState(pageTabs);
   const [activeTab, setActiveTab] = useState<CheckRunRecurringScheduleGroup>(CheckRunRecurringScheduleGroup.profiling);
 
-  const { isUpdating, tableBasic, scheduleGroups } = useSelector(
+  const { isUpdating, scheduleGroups } = useSelector(
     (state: IRootState) => state.table
   );
   const updatedSchedule = scheduleGroups?.[activeTab]?.updatedSchedule;
@@ -44,15 +44,10 @@ const ScheduleDetail = () => {
     setActiveTab(tab);
   }
   useEffect(() => {
-    if (
-      !updatedSchedule ||
-      tableBasic?.connection_name !== connectionName ||
-      tableBasic?.target?.schema_name !== schemaName ||
-      tableBasic?.target?.table_name !== tableName
-    ) {
+    if (updatedSchedule === null || updatedSchedule === undefined) {
       dispatch(getTableSchedulingGroup(connectionName, schemaName, tableName, activeTab));
     }
-  }, [connectionName, schemaName, tableName, tableBasic, activeTab]);
+  }, [connectionName, schemaName, tableName, activeTab, updatedSchedule]);
 
   const handleChange = (obj: any) => {
     dispatch(setIsUpdatedSchedulingGroup(activeTab, true));
@@ -65,7 +60,7 @@ const ScheduleDetail = () => {
   };
 
   const onUpdate = async () => {
-    if (!updatedSchedule) {
+    if (updatedSchedule === null || updatedSchedule === undefined) {
       return;
     }
     await dispatch(
@@ -78,6 +73,11 @@ const ScheduleDetail = () => {
   useEffect(() => {
     setTabs(prev => prev.map(tab => tab.value === activeTab ? ({ ...tab, isUpdated: isUpdatedSchedule }) : tab))
   }, [isUpdatedSchedule, activeTab])
+
+  useEffect(() => {
+    setTabs(prev => prev.map(tab => ({ ...tab, isUpdate: false })))
+    dispatch(resetTableSchedulingGroup());
+  }, [connectionName, schemaName, tableName])
 
   return (
     <div className="p-4">

@@ -17,6 +17,7 @@ package ai.dqo.checks.column.adhoc;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.datetime.ColumnDateValuesInFuturePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.datetime.ColumnDatetimeValueInRangeDatePercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -37,11 +38,16 @@ public class ColumnAdHocDatetimeChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocDatetimeChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("date_values_in_future_percent", o -> o.dateValuesInFuturePercent);
+            put("datetime_value_in_range_date_percent", o -> o.datetimeValueInRangeDatePercent);
+
         }
     };
 
     @JsonPropertyDescription("Verifies that the percentage of date values in future in a column does not exceed the maximum accepted percentage.")
     private ColumnDateValuesInFuturePercentCheckSpec dateValuesInFuturePercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of date values in the range defined by the user in a column does not exceed the maximum accepted percentage.")
+    private ColumnDatetimeValueInRangeDatePercentCheckSpec datetimeValueInRangeDatePercent;
 
     /**
      * Returns a date values in future percent check specification.
@@ -59,6 +65,24 @@ public class ColumnAdHocDatetimeChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.dateValuesInFuturePercent, dateValuesInFuturePercent));
         this.dateValuesInFuturePercent = dateValuesInFuturePercent;
         propagateHierarchyIdToField(dateValuesInFuturePercent, "date_values_in_future_percent");
+    }
+
+    /**
+     * Returns a datetime value in range date percentage check.
+     * @return Maximum datetime value in range date percentage check.
+     */
+    public ColumnDatetimeValueInRangeDatePercentCheckSpec getDatetimeValueInRangeDatePercent() {
+        return datetimeValueInRangeDatePercent;
+    }
+
+    /**
+     * Sets a new definition of a datetime value in range date percentage check.
+     * @param datetimeValueInRangeDatePercent Datetime value in range date percentage check.
+     */
+    public void setDatetimeValueInRangeDatePercent(ColumnDatetimeValueInRangeDatePercentCheckSpec datetimeValueInRangeDatePercent) {
+        this.setDirtyIf(!Objects.equals(this.datetimeValueInRangeDatePercent, datetimeValueInRangeDatePercent));
+        this.datetimeValueInRangeDatePercent = datetimeValueInRangeDatePercent;
+        propagateHierarchyIdToField(datetimeValueInRangeDatePercent, "datetime_value_in_range_date_percent");
     }
 
     /**
