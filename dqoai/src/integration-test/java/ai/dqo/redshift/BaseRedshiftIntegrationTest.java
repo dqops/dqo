@@ -18,7 +18,7 @@ package ai.dqo.redshift;
 import ai.dqo.BaseIntegrationTest;
 
 /**
- * Base class for Snowflake integration tests.
+ * Base class for Redshift integration tests.
  */
 public abstract class BaseRedshiftIntegrationTest extends BaseIntegrationTest {
 }
