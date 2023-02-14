@@ -14,6 +14,10 @@
     {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
 {%- endmacro %}
 
+{% macro eol() -%}
+{{ '' }}
+{% endmacro %}
+
 {%- macro render_target_table() -%}
     {{ quote_identifier(macro_database_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
 {%- endmacro %}
@@ -29,6 +33,14 @@
         {{ quote_identifier(name) }}
     {%- endif -%}
 {%- endmacro %}
+
+{% macro render_column_cast_to_string(analyzed_table_to_render) %}
+    {%- if (target_column_data_type == 'STRING') -%}
+        {{ render_target_column(analyzed_table_to_render) }}
+    {%- else -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- endif -%}
+{% endmacro %}
 
 {% macro date_trunc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
@@ -58,36 +70,38 @@
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
             {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
-               {{ date_trunc('LOCALTIMESTAMP', time_series.time_gradient, 'timestamp') }}
+                {{ date_trunc('LOCALTIMESTAMP', time_series.time_gradient, 'timestamp') }}
             {%- else -%}
-               LOCALTIMESTAMP
+                LOCALTIMESTAMP
             {%- endif -%}
         {%- elif time_series.mode == 'timestamp_column' -%}
             {{ date_trunc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
         {%- else -%}
-          <INVALID TIME SERIES MODE: {{time_series.mode}}/>
+            <INVALID TIME SERIES MODE: {{time_series.mode}}/>
         {%- endif -%}
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_time_dimension_projection(table_alias_prefix = '') %}
-    {%- if time_series is not none -%}
-    , {{ render_time_dimension_expression(table_alias_prefix) }} AS time_period
-    {%- endif -%}
-{% endmacro %}
-
-{% macro render_data_stream_projections(table_alias_prefix = '') %}
+{% macro render_data_stream_projections(table_alias_prefix = '', indentation = '    ') %}
     {%- if data_streams is not none and (data_streams | length()) > 0 -%}
         {%- for attribute in data_streams -%}
-            {{ ', ' }}
+            {{ ',' }}
             {%- with data_stream_level = data_streams[attribute] -%}
                 {%- if data_stream_level.source == 'tag' -%}
-                    {{ make_text_constant(data_stream_level.tag) }}
+                    {{ eol() }}{{ indentation }}{{ make_text_constant(data_stream_level.tag) }}
                 {%- elif data_stream_level.source == 'column_value' -%}
-                    {{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+                    {{ eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
                 {%- endif -%}
             {%- endwith %} AS stream_{{ attribute }}
         {%- endfor -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_projection(table_alias_prefix = '', indentation = '    ') %}
+    {%- if time_series is not none -%}
+        {{ ',' -}}{{- eol() -}}
+        {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
+        {{ indentation }}TIMESTAMP({{ render_time_dimension_expression(table_alias_prefix) }}) AS time_period_utc
     {%- endif -%}
 {% endmacro %}
 
@@ -118,7 +132,7 @@
         {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
             {{ ', ' }}
         {%- endif -%}
-            {{ 'time_period' }}
+            {{ 'time_period' }}, {{ 'time_period_utc' }}
     {%- endif -%}
 {% endmacro %}
 
@@ -131,158 +145,5 @@ GROUP BY {{ render_grouping_column_names() }}
 {% macro render_order_by() %}
     {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
 ORDER BY {{ render_grouping_column_names() }}
-    {%- endif -%}
-{% endmacro %}
-
-{% macro render_current_timestamp_diff(col, time_scale) -%}
-    {%- if table.columns[col].type_snapshot.column_type == 'timestamp' -%}
-    TIMESTAMP_DIFF(CURRENT_TIMESTAMP,
-                   MAX(analyzed_table.{{ col }}),
-                   {{ time_scale }})
-    {%- elif table.columns[col].type_snapshot.column_type == 'date' or table.columns[col].type_snapshot.column_type == 'timestamp' or table.columns[col].type_snapshot.column_type == 'varchar' -%}
-    TIMESTAMP_DIFF(CURRENT_TIMESTAMP,
-                   SAFE_CAST(MAX(analyzed_table.{{ col }}) AS TIMESTAMP),
-                   {{ time_scale }})
-    {%- else -%}
-    <INVALID DATA TYPE: {{table.columns[col].type_snapshot.column_type}}/>
-    {%- endif -%}
-{%- endmacro %}
-
-{% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-    {%- if include_lower_bound and include_upper_bound -%}
- {{ render_date_format_cast() }} >= {{ make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ make_text_constant(upper_bound) }}
-    {%- elif not include_lower_bound and include_upper_bound -%}
-{{ render_date_format_cast() }} > {{ make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ make_text_constant(upper_bound) }}
-    {%- elif include_lower_bound and not include_upper_bound -%}
-{{ render_date_format_cast() }} >= {{ make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ make_text_constant(upper_bound) }}
-    {%- else -%}
-{{ render_date_format_cast() }} > {{ make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ make_text_constant(upper_bound) }}
-    {%- endif -%}
-{% endmacro %}
-
-{% macro render_date_format_cast()%}
-    {%- if target_column_data_type == 'date' -%}
-{{ render_target_column('analyzed_table') }}
-    {%- elif target_column_data_type == 'timestamp' or target_column_data_type == 'timestamp with time zone' or target_column_data_type == 'varchar'-%}
-SAFE_CAST({{ render_target_column('analyzed_table') }} AS DATE)
-    {%- else -%}
-<INVALID DATA TYPE: {{target_column_data_type}}/>
-    {%- endif -%}
-{% endmacro %}
-
-{% macro render_date_format(named_date_format, custom_date_format) %}
-    {%- if custom_date_format is not none and (custom_date_format | length()) > 0 -%}
-{{ make_text_constant(custom_date_format) }}
-    {%- else -%}
-        {%- if named_date_format == 'ISO8601'-%}
-'%Y-%m-%d'
-        {%- elif named_date_format == 'MonthDayYear' -%}
-'%m/%d/%Y'
-        {%- elif named_date_format == 'DayMonthYear' -%}
-'%d/%m/%Y'
-        {%- elif named_date_format == 'YearMonthDay'-%}
-'%Y/%m/%d'
-        {%- elif named_date_format == 'MonthNameDayYear'-%}
-'%b %d, %Y'
-        {%- endif -%}
-    {%- endif -%}
-{% endmacro %}
-
-{% macro render_data_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-    {%- if include_lower_bound and include_upper_bound -%}
- {{ render_target_column('analyzed_table') }} >= {{ lower_bound }} AND {{ render_target_column('analyzed_table') }} <= {{ upper_bound }}
-    {%- elif not include_lower_bound and include_upper_bound -%}
-{{ render_target_column('analyzed_table') }} > {{ lower_bound }} AND {{ render_target_column('analyzed_table') }} <= {{ upper_bound }}
-    {%- elif include_lower_bound and not include_upper_bound -%}
-{{ render_target_column('analyzed_table') }} >= {{ lower_bound }} AND {{ render_target_column('analyzed_table') }} < {{ upper_bound }}
-    {%- else -%}
-{{ render_target_column('analyzed_table') }} > {{ lower_bound }} AND {{ render_target_column('analyzed_table') }} < {{ upper_bound }}
-    {%- endif -%}
-{% endmacro %}
-
-{% macro render_column_cast_to_string(analyzed_table_to_render) %}
-    {%- if (target_column_data_type == 'varchar') -%}
-        {{ render_target_column(analyzed_table_to_render) }}
-    {%- else -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- endif -%}
-{% endmacro %}
-
-{%- macro render_regex(named_regex, custom_regex) -%}
-    {%- if named_regex == 'email' -%}
-        r'^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
-    {%- elif named_regex == 'phoneNumber' -%}
-        r'^[pP]?[tT]?[nN]?[oO]?[0-9]{7,11}$'
-    {%- else -%}
-        r{{ make_text_constant(custom_regex) }}
-    {%- endif -%}
-{% endmacro %}
-
-{%- macro extract_in_list(values_type, values_list) -%}
-        {%- if values_list|length == 0 -%}
-            (NULL)
-        {%- elif values_type == 'numeric' -%}
-            ({{values_list|join(', ')}})
-        {%- elif values_type == 'date' -%}
-            (
-                {%- for i in values_list -%}
-                    CAST(
-                    {%- if not loop.last -%}
-                        {{make_text_constant(i)}} AS DATE){{", "}}
-                    {%- else -%}
-                        {{make_text_constant(i)}} AS DATE)
-                    {%- endif -%}
-                {%- endfor -%}
-            )
-        {%- else -%}
-            (
-                {%- for i in values_list -%}
-                    {%- if not loop.last -%}
-                        {{make_text_constant(i)}}{{", "}}
-                    {%- else -%}
-                        {{make_text_constant(i)}}
-                    {%- endif -%}
-                {%- endfor -%}
-            )
-        {%- endif -%}
-{% endmacro %}
-
-{%- macro render_in_set(values_type, values_list) -%}
-    {%- if values_type == target_column_data_type -%}
-        {{render_target_column('analyzed_table')}} IN {{extract_in_list(values_type,values_list)}}
-    {%- else -%}
-        CAST({{render_target_column('analyzed_table')}} AS {{values_type}}) IN {{extract_in_list(values_type,values_list)}}
-    {%- endif -%}
-{% endmacro %}
-
-{%- macro choose_datetime_scale_parameter(param) -%}
-    {%- if param == 'HOUR' -%}
-        HOUR
-    {%- elif param == 'MINUTE' -%}
-        MINUTE
-    {%- elif param == 'SECOND' -%}
-        SECOND
-    {%- else -%}
-        DAY
-    {%- endif -%}
-{% endmacro %}
-
-{%- macro render_datetime_columns_to_calculate_diff(col1, col2, time_scale) -%}
-    {%- if table.columns[col1].type_snapshot.column_type != 'DATETIME' or table.columns[col2].type_snapshot.column_type != 'DATETIME'  -%}
-        CAST(analyzed_table.{{ col1 }} AS DATETIME), CAST(analyzed_table.{{ col2 }} AS DATETIME), {{ choose_datetime_scale_parameter(time_scale) -}}
-    {%- else -%}
-        analyzed_table.{{ col1 }}, analyzed_table.{{ col2 }}, {{ choose_datetime_scale_parameter(time_scale) -}}
-    {%- endif -%}
-{% endmacro %}
-
-{%- macro render_average_delay(col1, col2, time_scale) -%}
-    {%- if table.columns[col1].type_snapshot.column_type != 'TIMESTAMP' and table.columns[col2].type_snapshot.column_type != 'TIMESTAMP'  -%}
-        SAFE_CAST(analyzed_table.{{ col1 }} AS TIMESTAMP), SAFE_CAST(analyzed_table.{{ col2 }} AS TIMESTAMP), {{ time_scale -}}
-    {%- elif table.columns[col1].type_snapshot.column_type != 'TIMESTAMP' -%}
-        SAFE_CAST(analyzed_table.{{ col1 }} AS TIMESTAMP), analyzed_table.{{ col2 }}, {{ time_scale -}}
-    {%- elif table.columns[col2].type_snapshot.column_type != 'TIMESTAMP' -%}
-        analyzed_table.{{ col1 }}, SAFE_CAST(analyzed_table.{{ col2 }} AS TIMESTAMP), {{ time_scale -}}
-    {%- else -%}
-        analyzed_table.{{ col1 }}, analyzed_table.{{ col2 }}, {{ time_scale -}}
     {%- endif -%}
 {% endmacro %}
