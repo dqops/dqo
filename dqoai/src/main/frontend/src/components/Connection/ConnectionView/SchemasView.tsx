@@ -9,10 +9,11 @@ import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useHistory, useParams } from 'react-router-dom';
-import { ROUTES } from "../../../shared/routes";
+import { CheckTypes, ROUTES } from "../../../shared/routes";
 
 const SchemasView = () => {
   const { connection, checkTypes }: { connection: string; checkTypes: string } = useParams();
+  const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const [schemas, setSchemas] = useState<SchemaModel[]>([]);
   const { jobs } = useSelector((state: IRootState) => state.job);
   const history = useHistory();
@@ -67,7 +68,7 @@ const SchemasView = () => {
             >
               <td className="py-2 px-4 text-left">{item.schema_name}</td>
               <td className="py-2 px-4 text-left">
-                {!isExist(item) && (
+                {!isExist(item) && isSourceScreen && (
                   <Button
                     className="!py-2 !rounded-md"
                     textSize="sm"
@@ -81,13 +82,15 @@ const SchemasView = () => {
           ))}
         </tbody>
       </table>
-      <Button
-        variant="contained"
-        color="primary"
-        label="Import more schemas"
-        className="mt-4"
-        onClick={goToSchemas}
-      />
+      {isSourceScreen && (
+        <Button
+          variant="contained"
+          color="primary"
+          label="Import more schemas"
+          className="mt-4"
+          onClick={goToSchemas}
+        />
+      )}
     </div>
   );
 };

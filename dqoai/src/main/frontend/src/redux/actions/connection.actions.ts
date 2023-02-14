@@ -107,58 +107,6 @@ export const updateConnectionBasic =
     }
   };
 
-export const getConnectionScheduleRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE
-});
-
-export const getConnectionScheduleSuccess = (data: RecurringScheduleSpec) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_SUCCESS,
-  data
-});
-
-export const getConnectionScheduleFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_ERROR,
-  error
-});
-
-export const getConnectionSchedule =
-  (connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionScheduleRequest());
-    try {
-      const res = await ConnectionApiClient.getConnectionSchedule(
-        connectionName
-      );
-      dispatch(getConnectionScheduleSuccess(res.data));
-    } catch (err) {
-      dispatch(getConnectionScheduleFailed(err));
-    }
-  };
-
-export const updateConnectionScheduleRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE
-});
-
-export const updateConnectionScheduleSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_SUCCESS
-});
-
-export const updateConnectionScheduleFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_ERROR,
-  error
-});
-
-export const updateConnectionSchedule =
-  (connectionName: string, data: RecurringScheduleSpec) =>
-  async (dispatch: Dispatch) => {
-    dispatch(updateConnectionScheduleRequest());
-    try {
-      await ConnectionApiClient.updateConnectionSchedule(connectionName, data);
-      dispatch(updateConnectionScheduleSuccess());
-    } catch (err) {
-      dispatch(updateConnectionScheduleFailed(err));
-    }
-  };
-
 export const resetConnectionSchedulingGroup = () => ({
   type: CONNECTION_ACTION.RESET_CONNECTION_SCHEDULE_GROUP
 })

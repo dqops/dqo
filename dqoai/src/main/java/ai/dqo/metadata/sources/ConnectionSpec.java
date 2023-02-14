@@ -62,7 +62,6 @@ public class ConnectionSpec extends AbstractSpec {
             put("postgresql", o -> o.postgresql);
             put("redshift", o -> o.redshift);
             put("labels", o -> o.labels);
-            put("schedule", o -> o.schedule);
             put("schedules", o -> o.schedules);
             put("notifications", o -> o.notifications);
         }
@@ -98,12 +97,6 @@ public class ConnectionSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private DataStreamMappingSpec defaultDataStreamMapping;
-
-    @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
-    @ToString.Exclude
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private RecurringScheduleSpec schedule;
 
     @JsonPropertyDescription("Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.")
     @ToString.Exclude
@@ -228,24 +221,6 @@ public class ConnectionSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.redshift, redshift));
         this.redshift = redshift;
         propagateHierarchyIdToField(redshift, "redshift");
-    }
-
-    /**
-     * Returns the schedule configuration for running the checks automatically.
-     * @return Schedule configuration.
-     */
-    public RecurringScheduleSpec getSchedule() {
-        return schedule;
-    }
-
-    /**
-     * Stores a new schedule configuration.
-     * @param schedule New schedule configuration.
-     */
-    public void setSchedule(RecurringScheduleSpec schedule) {
-        setDirtyIf(!Objects.equals(this.schedule, schedule));
-        this.schedule = schedule;
-        propagateHierarchyIdToField(schedule, "schedule");
     }
 
     /**
@@ -411,7 +386,6 @@ public class ConnectionSpec extends AbstractSpec {
                 cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);
             }
             cloned.comments = null;
-            cloned.schedule = null; // we probably don't need it here
             cloned.schedules = null;
             return cloned;
         }
@@ -430,7 +404,6 @@ public class ConnectionSpec extends AbstractSpec {
             ConnectionSpec cloned = (ConnectionSpec) super.clone();
             cloned.defaultDataStreamMapping = null;
             cloned.comments = null;
-            cloned.schedule = null;
             cloned.schedules = null;
             cloned.notifications = null;
             return cloned;

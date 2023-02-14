@@ -67,7 +67,6 @@ public class TableSpec extends AbstractSpec {
             put("checkpoints", o -> o.checkpoints);
             put("partitioned_checks", o -> o.partitionedChecks);
             put("statistics_collector", o -> o.statisticsCollector);
-            put("schedule_override", o -> o.scheduleOverride);
             put("schedules_override", o -> o.schedulesOverride);
 			put("labels", o -> o.labels);
 			put("comments", o -> o.comments);
@@ -135,12 +134,6 @@ public class TableSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStatisticsCollectorsRootCategoriesSpec statisticsCollector;
-
-    @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
-    @ToString.Exclude
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private RecurringScheduleSpec scheduleOverride;
 
     @JsonPropertyDescription("Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.")
     @ToString.Exclude
@@ -355,24 +348,6 @@ public class TableSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.statisticsCollector, statisticsCollector));
         this.statisticsCollector = statisticsCollector;
         propagateHierarchyIdToField(statisticsCollector, "statistics_collector");
-    }
-
-    /**
-     * Returns the schedule configuration for running the checks automatically.
-     * @return Schedule configuration.
-     */
-    public RecurringScheduleSpec getScheduleOverride() {
-        return scheduleOverride;
-    }
-
-    /**
-     * Stores a new schedule configuration.
-     * @param scheduleOverride New schedule configuration.
-     */
-    public void setScheduleOverride(RecurringScheduleSpec scheduleOverride) {
-        setDirtyIf(!Objects.equals(this.scheduleOverride, scheduleOverride));
-        this.scheduleOverride = scheduleOverride;
-        propagateHierarchyIdToField(scheduleOverride, "schedule_override");
     }
 
     /**
@@ -671,7 +646,6 @@ public class TableSpec extends AbstractSpec {
             cloned.checks = null;
             cloned.checkpoints = null;
             cloned.partitionedChecks = null;
-            cloned.scheduleOverride = null;
             cloned.labels = null;
             cloned.owner = null;
             cloned.comments = null;
@@ -714,7 +688,6 @@ public class TableSpec extends AbstractSpec {
             cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;
-            cloned.scheduleOverride = null;
             cloned.statisticsCollector = null;
             cloned.columns = this.columns.trim();
             return cloned;
@@ -743,7 +716,6 @@ public class TableSpec extends AbstractSpec {
             cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;
-            cloned.scheduleOverride = null;
             cloned.columns = null;
             cloned.statisticsCollector = null;
             return cloned;
