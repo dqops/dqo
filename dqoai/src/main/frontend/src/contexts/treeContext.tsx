@@ -440,6 +440,7 @@ function TreeProvider(props: any) {
         parentId: node.id,
         category: check?.check_category,
         tooltip: `${check?.check_category}_${check?.check_name} for ${tooltipSuffix}`,
+        hasCheck: check?.configured,
         items: [],
         open: false
       });
