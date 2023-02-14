@@ -3,7 +3,7 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 import SvgIcon from "../../components/SvgIcon";
 import Tabs from "../../components/Tabs";
 import { useHistory, useLocation, useParams } from "react-router-dom";
-import { ROUTES } from "../../shared/routes";
+import { CheckTypes, ROUTES } from "../../shared/routes";
 import { useTree } from "../../contexts/treeContext";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
@@ -16,7 +16,7 @@ import SchemasView from "../../components/Connection/ConnectionView/SchemasView"
 import ConnectionDataStream from "../../components/Connection/ConnectionView/ConnectionDataStream";
 import qs from 'query-string';
 
-const initTabs = [
+const initSourceTabs = [
   {
     label: 'Connection',
     value: 'detail'
@@ -42,10 +42,20 @@ const initTabs = [
     value: 'data-streams'
   }
 ];
+const initCheckTabs = [
+  {
+    label: 'Schedule',
+    value: 'schedule'
+  },
+  {
+    label: 'Schemas',
+    value: 'schemas'
+  }
+];
 
 const ConnectionPage = () => {
   const { connection, tab: activeTab, checkTypes }: { connection: string, tab: string, checkTypes: string } = useParams();
-  const [tabs, setTabs] = useState(initTabs);
+  const [tabs, setTabs] = useState(checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs);
   const history = useHistory();
   const { tabMap, setTabMap, activeTab: pageTab } = useTree();
   const {
@@ -114,6 +124,10 @@ const ConnectionPage = () => {
       )
     );
   }, [isUpdatedDataStreamsMapping]);
+
+  useEffect(() => {
+    setTabs(checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs)
+  }, [checkTypes])
 
   return (
     <ConnectionLayout>

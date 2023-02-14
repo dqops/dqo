@@ -143,36 +143,6 @@ public class ConnectionsController {
     }
 
     /**
-     * Retrieves a schedule of a connection for a requested connection identified by the connection name.
-     * @param connectionName Connection name.
-     * @return Connection's schedule specification.
-     */
-    @GetMapping("/{connectionName}/schedule")
-    @ApiOperation(value = "getConnectionSchedule", notes = "Return the schedule for a connection", response = RecurringScheduleSpec.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Connection's schedule returned", response = RecurringScheduleSpec.class),
-            @ApiResponse(code = 404, message = "Connection not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<RecurringScheduleSpec>> getConnectionSchedule(
-            @ApiParam("Connection name") @PathVariable String connectionName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-        ConnectionSpec connectionSpec = connectionWrapper.getSpec();
-
-        RecurringScheduleSpec schedule = connectionSpec.getSchedule();
-
-        return new ResponseEntity<>(Mono.justOrEmpty(schedule), HttpStatus.OK); // 200
-    }
-
-    /**
      * Retrieves a named schedule of a connection for a requested connection identified by the connection name.
      * @param connectionName  Connection name.
      * @param schedulingGroup Scheduling group.
@@ -495,45 +465,6 @@ public class ConnectionsController {
         connectionBasicModel.copyToConnectionSpecification(existingConnectionSpec);
         // TODO: some validation should be executed before flushing
 
-        userHomeContext.flush();
-
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-    }
-
-    /**
-     * Updates the schedule of an existing connection.
-     * @param connectionName        Connection name.
-     * @param recurringScheduleSpec Schedule specification.
-     * @return Empty response.
-     */
-    @PutMapping("/{connectionName}/schedule")
-    @ApiOperation(value = "updateConnectionSchedule", notes = "Updates the schedule of a connection")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection's schedule successfully updated"),
-            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
-            @ApiResponse(code = 404, message = "Connection not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<?>> updateConnectionSchedule(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Recurring schedule definition to store") @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
-
-        ConnectionSpec existingConnectionSpec = connectionWrapper.getSpec();
-        if (recurringScheduleSpec.isPresent()) {
-            existingConnectionSpec.setSchedule(recurringScheduleSpec.get());
-        }
-        else {
-            existingConnectionSpec.setSchedule(null);
-        }
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204

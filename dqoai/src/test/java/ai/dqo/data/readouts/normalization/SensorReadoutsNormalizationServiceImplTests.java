@@ -93,10 +93,9 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         Table emptyTable = sensorReadoutTableFactory.createEmptySensorReadoutsTable("empty");
 
         Assertions.assertEquals(emptyTable.columnCount(), normalizedTable.columnCount());
-        for( int i = 0; i < emptyTable.columnCount(); i++) {
+        for(int i = 0; i < emptyTable.columnCount(); i++) {
             Assertions.assertEquals(emptyTable.column(i).name(), normalizedTable.column(i).name());
             Assertions.assertSame(emptyTable.column(i).type(), normalizedTable.column(i).type());
-
         }
     }
 
