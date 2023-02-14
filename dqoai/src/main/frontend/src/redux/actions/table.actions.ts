@@ -151,12 +151,17 @@ export const getTableSchedule =
     }
   };
 
+export const resetTableSchedulingGroup = () => ({
+  type: TABLE_ACTION.RESET_TABLE_SCHEDULE_GROUP
+});
+
 export const getTableSchedulingGroupRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP
 });
 
-export const getTableSchedulingGroupSuccess = (data: RecurringScheduleSpec) => ({
+export const getTableSchedulingGroupSuccess = (schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) => ({
   type: TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP_SUCCESS,
+  schedulingGroup,
   data
 });
 
@@ -176,7 +181,7 @@ export const getTableSchedulingGroup =
         tableName,
         schedulingGroup
       );
-      dispatch(getTableSchedulingGroupSuccess(res.data));
+      dispatch(getTableSchedulingGroupSuccess(schedulingGroup, res.data));
     } catch (err) {
       dispatch(getTableSchedulingGroupFailed(err));
     }

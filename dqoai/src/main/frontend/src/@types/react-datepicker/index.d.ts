@@ -14,19 +14,4 @@
 /// limitations under the License.
 ///
 
-import { TreeNode } from '@naisutech/react-tree/types/Tree';
-import { TREE_LEVEL } from '../enums';
-import { CheckSearchFilters, DeleteStoredDataQueueJobParameters, StatisticsCollectorSearchFilters } from '../../api';
-
-export interface CustomTreeNode extends TreeNode {
-  level: TREE_LEVEL;
-  label: string;
-  items: CustomTreeNode[];
-  tooltip?: string;
-  hasCheck?: boolean;
-  run_checks_job_template?: CheckSearchFilters;
-  collect_statistics_job_template?: StatisticsCollectorSearchFilters;
-  data_clean_job_template?: DeleteStoredDataQueueJobParameters;
-  open?: boolean;
-  category?: string;
-}
+declare module 'react-datepicker';

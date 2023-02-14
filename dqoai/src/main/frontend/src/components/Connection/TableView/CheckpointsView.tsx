@@ -139,7 +139,7 @@ const CheckpointsView = () => {
   };
   
   return (
-    <div className="py-2">
+    <div className="flex-grow min-h-0 flex flex-col">
       <TableActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
@@ -149,28 +149,24 @@ const CheckpointsView = () => {
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
       </div>
-      <div>
-        {activeTab === 'daily' && (
-          <DataQualityChecks
-            onUpdate={onUpdate}
-            checksUI={dailyCheckpoints}
-            onChange={onDailyCheckpointsChange}
-            className="max-h-checks"
-            checkResultsOverview={dailyCheckResultsOverview}
-            getCheckOverview={getDailyCheckOverview}
-          />
-        )}
-        {activeTab === 'monthly' && (
-          <DataQualityChecks
-            onUpdate={onUpdate}
-            checksUI={monthlyCheckpoints}
-            onChange={onMonthlyCheckpointsChange}
-            className="max-h-checks"
-            checkResultsOverview={monthlyCheckResultsOverview}
-            getCheckOverview={getMonthlyCheckOverview}
-          />
-        )}
-      </div>
+      {activeTab === 'daily' && (
+        <DataQualityChecks
+          onUpdate={onUpdate}
+          checksUI={dailyCheckpoints}
+          onChange={onDailyCheckpointsChange}
+          checkResultsOverview={dailyCheckResultsOverview}
+          getCheckOverview={getDailyCheckOverview}
+        />
+      )}
+      {activeTab === 'monthly' && (
+        <DataQualityChecks
+          onUpdate={onUpdate}
+          checksUI={monthlyCheckpoints}
+          onChange={onMonthlyCheckpointsChange}
+          checkResultsOverview={monthlyCheckResultsOverview}
+          getCheckOverview={getMonthlyCheckOverview}
+        />
+      )}
     </div>
   );
 };

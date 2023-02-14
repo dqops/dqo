@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
-  getConnectionSchedulingGroup, setIsUpdatedSchedulingGroup, setUpdatedSchedulingGroup,
+  getConnectionSchedulingGroup, resetConnectionSchedulingGroup, setIsUpdatedSchedulingGroup, setUpdatedSchedulingGroup,
   updateConnectionSchedulingGroup
 
 } from '../../../redux/actions/connection.actions';
@@ -55,13 +55,13 @@ const ScheduleDetail = () => {
   };
 
   useEffect(() => {
-    if (!updatedSchedule) {
+    if (updatedSchedule === null || updatedSchedule === undefined) {
       dispatch(getConnectionSchedulingGroup(connection, activeTab));
     }
   }, [connection, activeTab, updatedSchedule]);
 
   const onUpdate = async () => {
-    if (!updatedSchedule) {
+    if (updatedSchedule === null || updatedSchedule === undefined) {
       return;
     }
     await dispatch(updateConnectionSchedulingGroup(connection, activeTab, updatedSchedule));
@@ -71,7 +71,12 @@ const ScheduleDetail = () => {
 
   useEffect(() => {
     setTabs(prev => prev.map(tab => tab.value === activeTab ? ({ ...tab, isUpdated: isUpdatedSchedule }) : tab))
-  }, [isUpdatedSchedule, activeTab])
+  }, [isUpdatedSchedule, activeTab]);
+
+  useEffect(() => {
+    setTabs(prev => prev.map(tab => ({ ...tab, isUpdate: false })))
+    dispatch(resetConnectionSchedulingGroup());
+  }, [connection]);
   return (
     <div className="p-4">
       <ConnectionActionGroup

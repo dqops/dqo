@@ -176,6 +176,11 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdating: false,
         error: action.error
       };
+    case TABLE_ACTION.RESET_TABLE_SCHEDULE_GROUP:
+      return {
+        ...state,
+        scheduleGroups: undefined
+      }
     case TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP:
       return {
         ...state,
