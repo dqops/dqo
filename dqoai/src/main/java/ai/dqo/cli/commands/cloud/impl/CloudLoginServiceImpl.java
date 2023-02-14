@@ -20,6 +20,7 @@ import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.cloud.rest.api.ApiKeyRequestApi;
 import ai.dqo.cloud.rest.handler.ApiClient;
 import ai.dqo.core.configuration.DqoCloudConfigurationProperties;
+import ai.dqo.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyPayload;
 import ai.dqo.core.dqocloud.client.DqoCloudApiClientFactory;
 import ai.dqo.metadata.settings.SettingsSpec;
@@ -51,6 +52,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
     private TerminalFactory terminalFactory;
     private DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
     private DqoCloudApiClientFactory dqoCloudApiClientFactory;
+    private DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
 
     /**
      * Injection constructor.
@@ -59,18 +61,21 @@ public class CloudLoginServiceImpl implements CloudLoginService {
      * @param terminalFactory Terminal factory.
      * @param dqoCloudConfigurationProperties Configuration properties.
      * @param dqoCloudApiClientFactory DQO Cloud API client factory.
+     * @param dqoCloudAccessTokenCache DQO Cloud access key cache which must be invalidated when the api key changes.
      */
     @Autowired
     public CloudLoginServiceImpl(UserHomeContextFactory userHomeContextFactory,
                                  OpenBrowserService openBrowserService,
                                  TerminalFactory terminalFactory,
                                  DqoCloudConfigurationProperties dqoCloudConfigurationProperties,
-                                 DqoCloudApiClientFactory dqoCloudApiClientFactory) {
+                                 DqoCloudApiClientFactory dqoCloudApiClientFactory,
+                                 DqoCloudAccessTokenCache dqoCloudAccessTokenCache) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.openBrowserService = openBrowserService;
         this.terminalFactory = terminalFactory;
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
         this.dqoCloudApiClientFactory = dqoCloudApiClientFactory;
+        this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
     }
 
     /**
@@ -150,5 +155,7 @@ public class CloudLoginServiceImpl implements CloudLoginService {
         }
         settingsSpec.setApiKey(apiKey);
         userHomeContext.flush();
+
+        this.dqoCloudAccessTokenCache.invalidate();
     }
 }

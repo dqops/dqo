@@ -1,0 +1,105 @@
+/*
+ * Copyright © 2021 DQO.ai (support@dqo.ai)
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+package ai.dqo.core.dqocloud.accesskey;
+
+import ai.dqo.cloud.rest.model.TenantAccessTokenModel;
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import com.google.auth.oauth2.AccessToken;
+import com.google.common.base.Supplier;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
+/**
+ * DQO Cloud access token cache that creates new GCP access tokens when they are about to expire.
+ */
+@Component
+@Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
+    public static final int REFRESH_ACCESS_TOKEN_BEFORE_EXPIRATION_SECONDS = 60; // refresh the access token if it is about to expire in 60 seconds
+
+    private DqoCloudCredentialsProvider dqoCloudCredentialsProvider;
+    private final HashMap<DqoRoot, Supplier<DqoCloudCredentials>> rootCredentialSuppliers = new LinkedHashMap<>();
+    private final Object lock = new Object();
+
+    @Autowired
+    public DqoCloudAccessTokenCacheImpl(DqoCloudCredentialsProvider dqoCloudCredentialsProvider) {
+        this.dqoCloudCredentialsProvider = dqoCloudCredentialsProvider;
+    }
+
+    /**
+     * Returns a current GCP bucket access token used to perform read/write operations on a customer's storage bucket for a given root folder.
+     * @param dqoRoot DQO Root folder.
+     * @return Up to date access token.
+     */
+    @Override
+    public DqoCloudCredentials getCredentials(DqoRoot dqoRoot) {
+        Supplier<DqoCloudCredentials> credentialsSupplier = null;
+
+        synchronized (this.lock) {
+            credentialsSupplier = this.rootCredentialSuppliers.get(dqoRoot);
+            if (credentialsSupplier == null) {
+                credentialsSupplier = () -> {
+                    TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
+                    AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
+                    return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
+                };
+
+                this.rootCredentialSuppliers.put(dqoRoot, credentialsSupplier);
+            }
+        }
+
+        DqoCloudCredentials dqoCloudCredentials = credentialsSupplier.get();
+
+        Date testedExpirationDate = new Date(System.currentTimeMillis() + REFRESH_ACCESS_TOKEN_BEFORE_EXPIRATION_SECONDS * 1000L);
+        boolean accessTokenNotExpired = dqoCloudCredentials.getAccessToken().getExpirationTime().after(testedExpirationDate);
+        if (accessTokenNotExpired) {
+            return dqoCloudCredentials;
+        }
+
+        synchronized (this.lock) {
+            Supplier<DqoCloudCredentials> currentCredentialsSupplier = this.rootCredentialSuppliers.get(dqoRoot);
+            if (credentialsSupplier == currentCredentialsSupplier) {
+                credentialsSupplier = () -> {
+                    TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
+                    AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
+                    return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
+                };
+
+                this.rootCredentialSuppliers.put(dqoRoot, credentialsSupplier);
+            } else {
+                credentialsSupplier = currentCredentialsSupplier;
+            }
+        }
+
+        return credentialsSupplier.get();
+    }
+
+    /**
+     * Invalidates the cache. Called when all the keys should be abandoned, because the API key has changed.
+     */
+    @Override
+    public void invalidate() {
+        synchronized (this.lock) {
+            this.rootCredentialSuppliers.clear();
+        }
+    }
+}

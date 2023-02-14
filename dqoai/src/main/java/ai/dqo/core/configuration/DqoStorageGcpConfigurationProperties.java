@@ -28,6 +28,8 @@ import org.springframework.context.annotation.Configuration;
 @EqualsAndHashCode(callSuper = false)
 public class DqoStorageGcpConfigurationProperties implements Cloneable {
     private int uploadBufferSize = 15000000;
+    private boolean http2;
+    private Integer http2MaxConcurrentStreams;
 
     /**
      * Upload buffer size. This is the block size (batch) used to upload files to GCP.
@@ -43,6 +45,38 @@ public class DqoStorageGcpConfigurationProperties implements Cloneable {
      */
     public void setUploadBufferSize(int uploadBufferSize) {
         this.uploadBufferSize = uploadBufferSize;
+    }
+
+    /**
+     * Returns true if HTTP/2 should be used to download and upload files to a google bucket.
+     * @return True when http/2 is used for file operations on the google bucket.
+     */
+    public boolean isHttp2() {
+        return http2;
+    }
+
+    /**
+     * Sets the flag to enable (true) or disable (false) asynchronous GCP storage bucket operations using HTTP/2.
+     * @param http2 True when http/2 should be used in asynchronous mode, false when http/1.1 is used.
+     */
+    public void setHttp2(boolean http2) {
+        this.http2 = http2;
+    }
+
+    /**
+     * Returns the maximum number of concurrent HTTP/2 streams used to concurrently upload or download files to the data quality data warehouse stored in the DQO cloud.
+     * @return The number of concurrent http/2 streams.
+     */
+    public Integer getHttp2MaxConcurrentStreams() {
+        return http2MaxConcurrentStreams;
+    }
+
+    /**
+     * Sets the number of concurrent streams used to upload and download files to the GCP storage bucket used for storing the data quality data warehouse.
+     * @param http2MaxConcurrentStreams The number of concurrent http/2 streams.
+     */
+    public void setHttp2MaxConcurrentStreams(Integer http2MaxConcurrentStreams) {
+        this.http2MaxConcurrentStreams = http2MaxConcurrentStreams;
     }
 
     /**

@@ -33,6 +33,7 @@ import com.google.cloud.storage.Storage;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import reactor.netty.ByteBufFlux;
 
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -331,5 +332,17 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
         }
 
         return true;
+    }
+
+    /**
+     * Downloads a file asynchronously, returning a flux of file content blocks.
+     *
+     * @param fileSystemRoot   File system root (with credentials).
+     * @param relativeFilePath Relative file path inside the remote root.
+     * @return Flux with byte array blocks.
+     */
+    @Override
+    public ByteBufFlux downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+        return null;
     }
 }

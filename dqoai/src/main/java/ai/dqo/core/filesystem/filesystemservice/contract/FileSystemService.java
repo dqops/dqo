@@ -19,6 +19,8 @@ import ai.dqo.core.filesystem.metadata.FileMetadata;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
 
 import java.io.InputStream;
+import reactor.netty.ByteBufFlux;
+
 import java.nio.file.Path;
 
 /**
@@ -84,4 +86,12 @@ public interface FileSystemService {
      * @param fileHash File hash that is expected.
      */
     void uploadFile(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, byte[] fileHash);
+
+    /**
+     * Downloads a file asynchronously, returning a flux of file content blocks.
+     * @param fileSystemRoot File system root (with credentials).
+     * @param relativeFilePath Relative file path inside the remote root.
+     * @return Flux with byte array blocks.
+     */
+    ByteBufFlux downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath);
 }

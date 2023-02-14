@@ -25,7 +25,12 @@ import ai.dqo.utils.exceptions.CloseableHelper;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 import org.apache.commons.io.FileUtils;
+import org.springframework.core.io.buffer.DataBuffer;
+import org.springframework.core.io.buffer.DataBufferUtils;
+import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
+import reactor.netty.ByteBufFlux;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -220,6 +225,19 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
         catch (Exception ex) {
             throw new FileSystemReadException(fullPathToFile, ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * Downloads a file asynchronously, returning a flux of file content blocks.
+     *
+     * @param fileSystemRoot   File system root (with credentials).
+     * @param relativeFilePath Relative file path inside the remote root.
+     * @return Flux with byte array blocks.
+     */
+    @Override
+    public ByteBufFlux downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+        Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
+        return ByteBufFlux.fromPath(fullPathToFile);
     }
 
     /**
