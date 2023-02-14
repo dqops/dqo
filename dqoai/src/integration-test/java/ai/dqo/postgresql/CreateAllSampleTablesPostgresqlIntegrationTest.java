@@ -89,4 +89,12 @@ public class CreateAllSampleTablesPostgresqlIntegrationTest extends BasePostgres
         SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
     }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_value_match_left_table_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.postgresql);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
+
 }
