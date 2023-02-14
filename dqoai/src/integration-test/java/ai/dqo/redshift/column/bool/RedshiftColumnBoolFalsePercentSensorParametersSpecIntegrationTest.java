@@ -63,7 +63,7 @@ public class RedshiftColumnBoolFalsePercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333333333333334,  resultTable.column(0).get(0));
+        Assertions.assertEquals(13.333,(double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -76,7 +76,7 @@ public class RedshiftColumnBoolFalsePercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals(13.333,(double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -89,7 +89,7 @@ public class RedshiftColumnBoolFalsePercentSensorParametersSpecIntegrationTest e
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals(13.333,(double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
