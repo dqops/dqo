@@ -60,7 +60,8 @@ function TreeProvider(props: any) {
   }, [sourceRoute]);
 
   const [activeNode, setActiveNode] = useState<CustomTreeNode>();
-  const [activeTab, setActiveTab] = useState<string>();
+  const [activeTabMaps, setActiveTabMaps] = useState<Record<string, string>>({});
+  const activeTab = activeTabMaps[sourceRoute];
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const history = useHistory();
@@ -466,14 +467,24 @@ function TreeProvider(props: any) {
     }
   };
 
+  const updateActiveTabMap = (activeTabId: string) => {
+    setActiveTabMaps(prev => ({
+      ...prev,
+      [sourceRoute]: activeTabId
+    }));
+  }
+
   const closeTab = (value: string) => {
     const newTabs = tabs.filter((item) => item.value !== value);
     setTabs(newTabs);
     if (value === activeTab) {
       const newActiveTab = newTabs[newTabs.length - 1]?.value;
       const newActiveNode = findTreeNode(treeData, newActiveTab);
-      setActiveTab(newActiveTab);
+      updateActiveTabMap(newActiveTab);
       setActiveNode(newActiveNode);
+    } else {
+      updateActiveTabMap('');
+      setActiveNode(undefined)
     }
   };
 
@@ -490,20 +501,18 @@ function TreeProvider(props: any) {
     };
 
     setTabs([...tabs, newTab]);
-    setActiveTab(newTab.value);
+    updateActiveTabMap(newTab.value);
     setActiveNode(undefined);
   };
 
   const changeActiveTab = async (node: CustomTreeNode, isNew = false) => {
     if (!node) return;
+    const nodeId = node.id.toString();
     const existTab = tabs.find((item) => item.value === node.id.toString());
-    if (existTab) {
-      setActiveTab(node.id.toString());
-      setActiveNode(node);
-    } else {
+    if (!existTab) {
       const newTab = {
         label: node.label ?? '',
-        value: node.id.toString(),
+        value: nodeId,
         tooltip: node.tooltip
       };
 
@@ -515,9 +524,9 @@ function TreeProvider(props: any) {
       } else {
         setTabs([newTab]);
       }
-      setActiveTab(node.id.toString());
-      setActiveNode(node);
     }
+    updateActiveTabMap(nodeId);
+    setActiveNode(node);
   };
 
   const removeTreeNode = (id: string) => {
@@ -527,7 +536,7 @@ function TreeProvider(props: any) {
     if (tabIndex > -1) {
       const newActiveTab = tabs[(tabIndex + 1) % tabs.length]?.value;
       const newActiveNode = findTreeNode(treeData, newActiveTab);
-      setActiveTab(newActiveTab);
+      updateActiveTabMap(newActiveTab);
       setActiveNode(newActiveNode);
     }
   };
@@ -539,7 +548,7 @@ function TreeProvider(props: any) {
     if (tabIndex > -1) {
       const newActiveTab = tabs[(tabIndex + 1) % tabs.length]?.value;
       const newActiveNode = findTreeNode(treeData, newActiveTab);
-      setActiveTab(newActiveTab);
+      updateActiveTabMap(newActiveTab);
       setActiveNode(newActiveNode);
       setTabs(tabs.filter((item) => item.value !== node.id));
     }
@@ -783,7 +792,7 @@ function TreeProvider(props: any) {
 
   const handleChangeActiveTab = (newActiveTab: string) => {
     const newActiveNode = findTreeNode(treeData, newActiveTab);
-    setActiveTab(newActiveTab);
+    updateActiveTabMap(newActiveTab);
     setActiveNode(newActiveNode);
   };
 
@@ -894,17 +903,14 @@ function TreeProvider(props: any) {
   }
 
   useEffect(() => {
-    if (tabs.length && !tabs.find(t => t.value === activeTab)) {
-      setTimeout(() => {
-        const node = findTreeNode(treeData, tabs[0].value);
-        if (node) {
-          switchTab(node);
-          setActiveTab(tabs[0].value)
-        }
-      }, 0); // tricky way to ensure latest data
-
+    const _activeTab = activeTabMaps[sourceRoute];
+    if (_activeTab) {
+      const node = findTreeNode(treeData, _activeTab);
+      if (node) {
+        switchTab(node);
+      }
     }
-  }, [tabs]);
+  }, [sourceRoute]);
 
   useLayoutEffect(() => {
     const initialPathName = history.location.pathname;
