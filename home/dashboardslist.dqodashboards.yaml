@@ -4,7 +4,7 @@ kind: dashboards
 spec:
   - folder_name: Governance
     dashboards:
-      - dashboard_name: KPIs
+      - dashboard_name: Total DQ KPIs
         url: >-
           https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
         width: 1580
@@ -12,15 +12,31 @@ spec:
         dqo_cloud_credentials: true
         parameters:
           ds0.p_check_type: ''
-      - dashboard_name: KPIs adhoc
+      - dashboard_name: Total DQ KPIs per category
         url: >-
-          https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+          https://lookerstudio.google.com/embed/reporting/67fd31b1-f100-4a5c-94ba-b9bd227ecf5f/page/c5B8C
         width: 1580
-        height: 1800
+        height: 1300
         dqo_cloud_credentials: true
         parameters:
-          ds0.p_check_type: adhoc
-      - dashboard_name: KPIs checkpoint
+          ds0.p_check_type: ''
+      - dashboard_name: Total DQ KPIs per check type
+        url: >-
+          https://lookerstudio.google.com/embed/reporting/2e5a8add-14da-40f1-8b52-f5e469a4fda9/page/c5B8C
+        width: 1580
+        height: 1300
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: ''
+      - dashboard_name: Total DQ KPIs per quality dimensio
+        url: >-
+          https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
+        width: 1580
+        height: 1300
+        dqo_cloud_credentials: true
+        parameters:
+          ds0.p_check_type: ''
+      - dashboard_name: DQ KPIs for whole table checks
         url: >-
           https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
         width: 1580
@@ -28,7 +44,7 @@ spec:
         dqo_cloud_credentials: true
         parameters:
           ds0.p_check_type: checkpoint
-      - dashboard_name: KPIs partitioned
+      - dashboard_name: DQ KPIs for time time period checks
         url: >-
           https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
         width: 1580
@@ -38,8 +54,130 @@ spec:
           ds0.p_check_type: partitioned
     folders:
       - folder_name: DQ KPIs for profiling
+        dashboards:
+          - dashboard_name: Total DQ KPIs for profiling
+            url: >-
+              https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+            width: 1580
+            height: 1800
+            dqo_cloud_credentials: true
+            parameters:
+              ds0.p_check_type: adhoc
         folders:
-          - folder_name: Total DQ KPIs per DAMA dimension
+          - folder_name:  Total DQ KPIs per DAMA dimension
+            dashboards:
+              - dashboard_name: KPIs validity for profiling
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_quality_dimensions: Validity
+              - dashboard_name: KPIs reasonableness for profiling
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_quality_dimensions: Reasonableness                  
+              - dashboard_name: KPIs completeness for profiling
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_quality_dimensions: Completeness
+
+          - folder_name:  Total DQ KPIs per category
+            dashboards:
+              - dashboard_name: Total DQ KPIs - uniqueness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_check_category: uniqueness
+              - dashboard_name: Total DQ KPIs - timeliness
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_check_category: timeliness
+              - dashboard_name: Total DQ KPIs - strings
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_check_category: strings
+              - dashboard_name: Total DQ KPIs - standard
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_check_category: standard
+              - dashboard_name: Total DQ KPIs - pii
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_check_category: pii
+              - dashboard_name: Total DQ KPIs - numeric
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_check_category: numeric
+              - dashboard_name: Total DQ KPIs - nulls
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_check_category: nulls
+              - dashboard_name: Total DQ KPIs - datetime
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_check_category: datetime
+              - dashboard_name: Total DQ KPIs - bool
+                url: >-
+                  https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
+                width: 1580
+                height: 1800
+                dqo_cloud_credentials: true
+                parameters:
+                  ds0.p_check_type: adhoc
+                  ds0.p_check_category: bool
+
   - folder_name: Operational
     dashboards:
       - dashboard_name: Tables with most alerts
