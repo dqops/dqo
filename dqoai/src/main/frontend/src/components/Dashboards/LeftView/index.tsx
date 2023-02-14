@@ -3,6 +3,7 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../../../redux/reducers";
 import SvgIcon from "../../SvgIcon";
 import { useDashboard } from "../../../contexts/dashboardContext";
+import { DashboardsFolderSpec } from "../../../api";
 
 const FolderLevel = ({ folder, defaultOpen = false }: { folder: DashboardsFolderSpec; defaultOpen?: boolean }) => {
   const [isOpened, setIsOpened] = useState(defaultOpen);
