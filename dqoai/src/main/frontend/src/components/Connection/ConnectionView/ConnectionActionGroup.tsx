@@ -5,7 +5,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { useHistory, useParams } from 'react-router-dom';
-import { ROUTES } from "../../../shared/routes";
+import { CheckTypes, ROUTES } from "../../../shared/routes";
 
 interface IConnectionActionGroupProps {
   isDisabled?: boolean;
@@ -22,7 +22,8 @@ const ConnectionActionGroup = ({
   onUpdate,
   onImport
 }: IConnectionActionGroupProps) => {
-  const { checkTypes }: { checkTypes: any } = useParams();
+  const { connection: connectionName, checkTypes, tab }: { connection: any; checkTypes: any; tab: any } = useParams();
+  const isSourceScreen = checkTypes === CheckTypes.SOURCES;
   const [isOpen, setIsOpen] = useState(false);
   const { connectionBasic } = useSelector(
     (state: IRootState) => state.connection
@@ -36,8 +37,8 @@ const ConnectionActionGroup = ({
       );
     }
   };
-  const goToSchemas = () => {
-    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, connectionBasic?.connection_name || '', 'schemas')}?import_schema=true`)
+  const goToSchemas = (isImport = true) => {
+    history.push(`${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connectionName, 'schemas')}${isImport ? '?import_schema=true' : ''}`)
 
     if (onImport) {
       onImport();
@@ -46,18 +47,32 @@ const ConnectionActionGroup = ({
 
   return (
     <div className="flex space-x-4 items-center absolute right-2 top-2">
-      <Button
-        variant="text"
-        color="info"
-        label="Delete"
-        onClick={() => setIsOpen(true)}
-      />
-      <Button
-        label="Import metadata"
-        color="info"
-        variant="text"
-        onClick={goToSchemas}
-      />
+      {isSourceScreen ? (
+        <>
+          <Button
+            variant="text"
+            color="info"
+            label="Delete"
+            onClick={() => setIsOpen(true)}
+          />
+          <Button
+            label="Import metadata"
+            color="info"
+            variant="text"
+            onClick={() => goToSchemas()}
+          />
+        </>
+      ) : (
+        tab === 'schemas' ? (
+          <Button
+            label="Manage metadata"
+            color="info"
+            variant="text"
+            onClick={() => goToSchemas(false)}
+          />
+        ) : null
+      )}
+
       {onUpdate && (
         <Button
           color={isUpdated && !isDisabled ? 'primary' : 'secondary'}

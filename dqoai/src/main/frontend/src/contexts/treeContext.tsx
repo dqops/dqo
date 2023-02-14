@@ -802,8 +802,9 @@ function TreeProvider(props: any) {
 
   const switchTab = (node: CustomTreeNode) => {
     if (!node) return;
+    const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
-      pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || 'detail'));
+      pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || defaultConnectionTab));
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       const connectionNode = findTreeNode(treeData, node.parentId ?? '');
 
