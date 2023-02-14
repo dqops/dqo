@@ -131,25 +131,6 @@ const connectionReducer = (state = initialState, action: any) => {
         isUpdating: false,
         error: action.error
       };
-    case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE:
-      return {
-        ...state,
-        loading: true
-      };
-    case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_SUCCESS:
-      return {
-        ...state,
-        loading: false,
-        schedule: action.data,
-        updatedSchedule: action.data,
-        error: null
-      };
-    case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_ERROR:
-      return {
-        ...state,
-        loading: false,
-        error: action.error
-      };
     case CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP:
       return {
         ...state,
@@ -178,23 +159,6 @@ const connectionReducer = (state = initialState, action: any) => {
       return {
         ...state,
         loading: false,
-        error: action.error
-      };
-    case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE:
-      return {
-        ...state,
-        isUpdating: true
-      };
-    case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_SUCCESS:
-      return {
-        ...state,
-        isUpdating: false,
-        error: null
-      };
-    case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_ERROR:
-      return {
-        ...state,
-        isUpdating: false,
         error: action.error
       };
     case CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP:

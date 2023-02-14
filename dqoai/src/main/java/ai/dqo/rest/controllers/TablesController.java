@@ -257,46 +257,6 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the overridden schedule configuration for a table given a connection name and a table names.
-     * @param connectionName Connection name.
-     * @param schemaName     Schema name.
-     * @param tableName      Table name.
-     * @return Overridden schedule configuration for the requested table.
-     */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/scheduleoverride")
-    @ApiOperation(value = "getTableScheduleOverride", notes = "Return the schedule override configuration for a table", response = RecurringScheduleSpec.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Overridden schedule configuration for a table returned", response = RecurringScheduleSpec.class),
-            @ApiResponse(code = 404, message = "Connection or table not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<RecurringScheduleSpec>> getTableScheduleOverride(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
-                new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
-        }
-
-        TableSpec tableSpec = tableWrapper.getSpec();
-        RecurringScheduleSpec scheduleOverride = tableSpec.getScheduleOverride();
-
-        return new ResponseEntity<>(Mono.justOrEmpty(scheduleOverride), HttpStatus.OK); // 200
-    }
-
-    /**
      * Retrieves the overridden scheduling group configuration for a table given a connection name, a table name and a scheduling group (schedule name).
      * @param connectionName  Connection name.
      * @param schemaName      Schema name.
@@ -1378,63 +1338,6 @@ public class TablesController {
             tableSpec.getDataStreams().setFirstDataStreamMapping(dataStreamsMappingSpec.get());
         } else {
             tableSpec.getDataStreams().setFirstDataStreamMapping(null); // will remove the first mapping
-        }
-        userHomeContext.flush();
-
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
-    }
-
-    /**
-     * Updates the overridden schedule configuration of an existing table.
-     * @param connectionName              Connection name.
-     * @param schemaName                  Schema name.
-     * @param tableName                   Table name.
-     * @param recurringScheduleSpec       New recurring schedule configuration or an emtpy optional to clear the schedule configuration.
-     * @return Empty response.
-     */
-    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/scheduleoverride")
-    @ApiOperation(value = "updateTableScheduleOverride", notes = "Updates the overridden schedule configuration of an existing table.")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table's overridden schedule configuration successfully updated"),
-            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
-            @ApiResponse(code = 404, message = "Table not found"),
-            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<?>> updateTableScheduleOverride(
-            @ApiParam("Connection name") @PathVariable String connectionName,
-            @ApiParam("Schema name") @PathVariable String schemaName,
-            @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Table's overridden schedule configuration to store or an empty object to clear the schedule configuration on a table")
-            @RequestBody Optional<RecurringScheduleSpec> recurringScheduleSpec) {
-        if (Strings.isNullOrEmpty(connectionName) ||
-                Strings.isNullOrEmpty(schemaName) ||
-                Strings.isNullOrEmpty(tableName)) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
-
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        ConnectionList connections = userHome.getConnections();
-        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
-        if (connectionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
-        }
-
-        TableList tables = connectionWrapper.getTables();
-        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
-        if (tableWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
-        }
-
-        // TODO: validate the tableSpec
-        TableSpec tableSpec = tableWrapper.getSpec();
-        if (recurringScheduleSpec.isPresent()) {
-            tableSpec.setScheduleOverride(recurringScheduleSpec.get());
-        } else {
-            tableSpec.setScheduleOverride(new RecurringScheduleSpec());
         }
         userHomeContext.flush();
 

@@ -121,36 +121,6 @@ export const updateTableBasic =
     }
   };
 
-export const getTableScheduleRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_SCHEDULE
-});
-
-export const getTableScheduleSuccess = (data: RecurringScheduleSpec) => ({
-  type: TABLE_ACTION.GET_TABLE_SCHEDULE_SUCCESS,
-  data
-});
-
-export const getTableScheduleFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_SCHEDULE_ERROR,
-  error
-});
-
-export const getTableSchedule =
-  (connectionName: string, schemaName: string, tableName: string) =>
-  async (dispatch: Dispatch) => {
-    dispatch(getTableScheduleRequest());
-    try {
-      const res = await TableApiClient.getTableScheduleOverride(
-        connectionName,
-        schemaName,
-        tableName
-      );
-      dispatch(getTableScheduleSuccess(res.data));
-    } catch (err) {
-      dispatch(getTableScheduleFailed(err));
-    }
-  };
-
 export const resetTableSchedulingGroup = () => ({
   type: TABLE_ACTION.RESET_TABLE_SCHEDULE_GROUP
 });
@@ -184,41 +154,6 @@ export const getTableSchedulingGroup =
       dispatch(getTableSchedulingGroupSuccess(schedulingGroup, res.data));
     } catch (err) {
       dispatch(getTableSchedulingGroupFailed(err));
-    }
-  };
-
-export const updateTableScheduleRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE
-});
-
-export const updateTableScheduleSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE_SUCCESS
-});
-
-export const updateTableScheduleFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE_ERROR,
-  error
-});
-
-export const updateTableSchedule =
-  (
-    connectionName: string,
-    schemaName: string,
-    tableName: string,
-    data: RecurringScheduleSpec
-  ) =>
-  async (dispatch: Dispatch) => {
-    dispatch(updateTableScheduleRequest());
-    try {
-      await TableApiClient.updateTableScheduleOverride(
-        connectionName,
-        schemaName,
-        tableName,
-        data
-      );
-      dispatch(updateTableScheduleSuccess());
-    } catch (err) {
-      dispatch(updateTableScheduleFailed(err));
     }
   };
 
