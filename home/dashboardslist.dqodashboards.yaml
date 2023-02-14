@@ -180,7 +180,7 @@ spec:
 
   - folder_name: Operational
     dashboards:
-      - dashboard_name: Tables with most alerts
+      - dashboard_name: Total affected tables
         url: >-
           https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
         width: 1580
@@ -188,7 +188,7 @@ spec:
         dqo_cloud_credentials: true
         parameters:
           ds0.p_check_type: ''
-      - dashboard_name: Tables with most alerts - adhoc
+      - dashboard_name: Affected tables for profiling
         url: >-
           https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
         width: 1580
@@ -196,7 +196,7 @@ spec:
         dqo_cloud_credentials: true
         parameters:
           ds0.p_check_type: adhoc
-      - dashboard_name: Tables with most alerts - checkpoint
+      - dashboard_name: Affected tables for whole table checks
         url: >-
           https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
         width: 1580
@@ -204,7 +204,7 @@ spec:
         dqo_cloud_credentials: true
         parameters:
           ds0.p_check_type: checkpoint
-      - dashboard_name: Tables with most alerts - partitioned
+      - dashboard_name: Affected tables for time time period checks
         url: >-
           https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
         width: 1580
