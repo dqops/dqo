@@ -34,4 +34,11 @@ public interface CheckDocumentationModelFactory {
      * @return Documentation for each check category on a column level.
      */
     List<CheckCategoryDocumentationModel> makeDocumentationForColumnChecks();
+
+    /**
+     *Create a list of check documentation models for table and column level checks.
+     *Both category contains a list of checks grouped by category.
+     * @return Documentation for each check grouped by table and column.
+     */
+    List<CheckTargetDocumentationModel> createDocumentationsForChecks();
 }

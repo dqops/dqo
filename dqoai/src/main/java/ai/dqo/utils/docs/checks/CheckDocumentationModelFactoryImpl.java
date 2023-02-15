@@ -117,6 +117,27 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     }
 
     /**
+     *Create a list of check documentation models for table and column level checks.
+     *Both category contains a list of checks grouped by category.
+     * @return Documentation for each check grouped by table and column.
+     */
+    public List<CheckTargetDocumentationModel> createDocumentationsForChecks() {
+        List<CheckTargetDocumentationModel> checkTargetDocumentationModels = new ArrayList<>();
+
+        CheckTargetDocumentationModel checkTableDocumentationModel = new CheckTargetDocumentationModel();
+        checkTableDocumentationModel.setTarget("table");
+        checkTableDocumentationModel.setCheckCategory(makeDocumentationForTableChecks());
+        checkTargetDocumentationModels.add(checkTableDocumentationModel);
+
+        CheckTargetDocumentationModel checkColumnDocumentationModel = new CheckTargetDocumentationModel();
+        checkColumnDocumentationModel.setTarget("column");
+        checkColumnDocumentationModel.setCheckCategory(makeDocumentationForColumnChecks());
+        checkTargetDocumentationModels.add(checkColumnDocumentationModel);
+
+        return checkTargetDocumentationModels;
+    }
+
+    /**
      * Creates a column specification with a label.
      * @param label Label to add to the column.
      * @return Column specification.
@@ -312,7 +333,13 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         this.uiToSpecCheckMappingService.updateAllChecksSpecs(allChecksModel, checkRootContainer);
 
         HierarchyNode checkCategoryContainer = checkRootContainer.getChild(similarCheckModel.getCategory());
-        AbstractCheckSpec<?,?,?,?> checkSpec = (AbstractCheckSpec<?,?,?,?>) checkCategoryContainer.getChild(checkModel.getCheckName());
+        if (checkCategoryContainer == null) {
+            System.err.println("Sorry but check container: " + checkRootContainer.getClass().getName() + " has no category " + similarCheckModel.getCategory());
+        }
+        AbstractCheckSpec<?, ?, ?, ?> checkSpec = (AbstractCheckSpec<?, ?, ?, ?>) checkCategoryContainer.getChild(checkModel.getCheckName());
+        if (checkSpec == null) {
+            System.err.println("Sorry but check container: " + checkRootContainer.getClass().getName() + " has no check named " + checkModel.getCheckName());
+        }
 
         TableYaml tableYaml = new TableYaml(trimmedTableSpec);
         String yamlSample = this.yamlSerializer.serialize(tableYaml);
@@ -401,7 +428,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                     providerDocModel.setRenderedTemplate(renderedTemplate);
                 }
                 catch (Exception ex) {
-                    throw new DqoRuntimeException("Failed to render a sample SQL for check " + checkSpec.getCheckName() + ", exception: " + ex.getMessage(), ex);
+                    System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName());
                 }
             }
             results.add(providerDocModel);
