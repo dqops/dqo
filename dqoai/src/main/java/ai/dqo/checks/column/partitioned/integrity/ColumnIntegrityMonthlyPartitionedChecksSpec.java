@@ -36,7 +36,7 @@ import java.util.Objects;
 public class ColumnIntegrityMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_value_match_count", o -> o.monthlyPartitionForeignKeyNotMatchCount);
+            put("monthly_partition_foreign_key_not_match_count", o -> o.monthlyPartitionForeignKeyNotMatchCount);
 
         }
     };
@@ -59,7 +59,7 @@ public class ColumnIntegrityMonthlyPartitionedChecksSpec extends AbstractCheckCa
     public void setMonthlyPartitionForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyPartitionForeignKeyNotMatchCount) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionForeignKeyNotMatchCount, monthlyPartitionForeignKeyNotMatchCount));
         this.monthlyPartitionForeignKeyNotMatchCount = monthlyPartitionForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(monthlyPartitionForeignKeyNotMatchCount, "monthly_partition_value_match_count");
+        propagateHierarchyIdToField(monthlyPartitionForeignKeyNotMatchCount, "monthly_partition_foreign_key_not_match_count");
     }
 
     /**
