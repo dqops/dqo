@@ -49,7 +49,7 @@ const Select = ({
   addLabel
 }: SelectProps) => {
   const [menuWidth, setMenuWidth] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLButtonElement>(null);
   const selectedOption = useMemo(() => {
     return options.find((item) => item.value === value);
   }, [options, value]);
