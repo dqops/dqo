@@ -17,6 +17,8 @@ import ErrorModal from "./ErrorModal";
 import ConfirmErrorModal from "./ConfirmErrorModal";
 import PostgreSQLConnection from "./PostgreSQLConnection";
 import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
+import RedshiftConnection from "./RedshiftConnection";
+import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -103,6 +105,8 @@ const DatabaseConnection = ({
         return 'Snowflake Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.postgresql:
         return 'PostgreSQL Connection Settings';
+      case ConnectionBasicModelProviderTypeEnum.redshift:
+        return 'Redshift Connection Settings';
       default:
         return 'Database Connection Settings'
     }
@@ -126,6 +130,12 @@ const DatabaseConnection = ({
         postgresql={database.postgresql}
         onChange={(postgresql) => onChange({ ...database, postgresql })}
       />
+      ),
+    [ConnectionBasicModelProviderTypeEnum.redshift]: (
+    <RedshiftConnection
+      redshift={database.redshift}
+      onChange={(redshift) => onChange({ ...database, redshift })}
+    />
     )
   };
 
@@ -137,6 +147,8 @@ const DatabaseConnection = ({
         return '/snowflake.png';
       case ConnectionBasicModelProviderTypeEnum.postgresql:
         return PostgreSQLLogo;
+      case ConnectionBasicModelProviderTypeEnum.redshift:
+        return RedshiftLogo;
       default:
         return '';
     }

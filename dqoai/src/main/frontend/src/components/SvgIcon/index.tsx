@@ -59,6 +59,7 @@ import { ReactComponent as StarSvg } from './svg/star.svg';
 import { ReactComponent as ColumnCheckSvg } from './svg/column-check.svg';
 import { ReactComponent as TableCheckSvg } from './svg/table-check.svg';
 import { ReactComponent as PostgreSQLSvg } from './svg/postgresql.svg';
+import { ReactComponent as RedshiftSvg } from './svg/redshift.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -119,7 +120,8 @@ const iconsMap: any = {
   star: StarSvg,
   'column-check': ColumnCheckSvg,
   'table-check': TableCheckSvg,
-  postgresql: PostgreSQLSvg
+  postgresql: PostgreSQLSvg,
+  redshift: RedshiftSvg
 };
 
 interface SvgIconProps {

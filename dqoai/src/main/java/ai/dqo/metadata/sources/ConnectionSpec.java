@@ -19,6 +19,7 @@ import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
+import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
@@ -26,9 +27,7 @@ import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.*;
 import ai.dqo.metadata.notifications.NotificationSettingsSpec;
-import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
-import ai.dqo.utils.datetime.TimeZoneUtility;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -41,7 +40,6 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import picocli.CommandLine;
 
-import java.time.ZoneId;
 import java.util.Objects;
 
 /**
@@ -59,6 +57,7 @@ public class ConnectionSpec extends AbstractSpec {
 			put("bigquery", o -> o.bigquery);
 			put("snowflake", o -> o.snowflake);
             put("postgresql", o -> o.postgresql);
+            put("redshift", o -> o.redshift);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
             put("notifications", o -> o.notifications);
@@ -79,6 +78,10 @@ public class ConnectionSpec extends AbstractSpec {
     @CommandLine.Mixin // fill properties from CLI command line arguments
     @JsonPropertyDescription("PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the Snowflake JDBC url).")
     private PostgresqlParametersSpec postgresql;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Snowflake JDBC url).")
+    private RedshiftParametersSpec redshift;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")
     private Integer parallelRunsLimit;
@@ -195,6 +198,23 @@ public class ConnectionSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.postgresql, postgresql));
         this.postgresql = postgresql;
         propagateHierarchyIdToField(postgresql, "postgresql");
+    }
+    /**
+     * Returns the connection parameters for Redshift.
+     * @return Redshift connection parameters.
+     */
+    public RedshiftParametersSpec getRedshift() {
+        return redshift;
+    }
+
+    /**
+     * Sets the Redshift connection parameters.
+     * @param redshift New Redshift connection parameters.
+     */
+    public void setRedshift(RedshiftParametersSpec redshift) {
+        setDirtyIf(!Objects.equals(this.redshift, redshift));
+        this.redshift = redshift;
+        propagateHierarchyIdToField(redshift, "redshift");
     }
 
     /**
@@ -352,6 +372,9 @@ public class ConnectionSpec extends AbstractSpec {
             }
             if (cloned.postgresql != null) {
                 cloned.postgresql = cloned.postgresql.expandAndTrim(secretValueProvider);
+            }
+            if (cloned.redshift != null) {
+                cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider);
             }
             if (cloned.notifications != null) {
                 cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);
