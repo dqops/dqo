@@ -15,11 +15,11 @@
  */
 package ai.dqo.metadata.id;
 
-import ai.dqo.checks.*;
-import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
+import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
@@ -45,9 +45,9 @@ import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.profiling.AbstractStatisticsCollectorCategorySpec;
 import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
-import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -162,22 +162,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(AbstractRuleParametersSpec abstractRuleParametersSpec, P parameter);
-
-    /**
-     * Accepts a configuration of built-in table level checks.
-     * @param tableCheckCategoriesSpec Built-in table level checks.
-     * @param parameter Additional parameter.
-     * @return Accept's result.
-     */
-    R accept(TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec, P parameter);
-
-    /**
-     * Accepts a configuration of built-in column level checks.
-     * @param columnCheckCategoriesSpec Built-in column level checks.
-     * @param parameter Additional parameter.
-     * @return Accept's result.
-     */
-    R accept(ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec, P parameter);
 
     /**
      * Accepts any table level sensor specification (sensor call parameters).

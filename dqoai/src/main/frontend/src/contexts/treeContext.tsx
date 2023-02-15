@@ -6,7 +6,7 @@ import {
   ColumnBasicModel,
   ConnectionBasicModel,
   SchemaModel,
-  TableBasicModel, UIQualityCategoryBasicModel
+  TableBasicModel, UICheckBasicModel
 } from '../api';
 import {
   ColumnApiClient,
@@ -60,7 +60,8 @@ function TreeProvider(props: any) {
   }, [sourceRoute]);
 
   const [activeNode, setActiveNode] = useState<CustomTreeNode>();
-  const [activeTab, setActiveTab] = useState<string>();
+  const [activeTabMaps, setActiveTabMaps] = useState<Record<string, string>>({});
+  const activeTab = activeTabMaps[sourceRoute];
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const history = useHistory();
@@ -346,12 +347,12 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, node.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await TableApiClient.getTableAdHocChecksUI(
+    const res = await TableApiClient.getTableAdHocChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? ''
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
   };
 
   const refreshTableCheckpointsNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
@@ -365,7 +366,7 @@ function TreeProvider(props: any) {
       tableNode?.label ?? '',
       timePartitioned
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
   };
   
   const refreshTablePartitionedCheckpointsNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
@@ -373,13 +374,13 @@ function TreeProvider(props: any) {
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
     
-    const res = await TableApiClient.getTablePartitionedChecksUI(
+    const res = await TableApiClient.getTablePartitionedChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
       timePartitioned
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
   };
   
   const refreshColumnChecksNode = async (node: CustomTreeNode) => {
@@ -388,13 +389,13 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await ColumnApiClient.getColumnAdHocChecksUI(
+    const res = await ColumnApiClient.getColumnAdHocChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
       columnNode?.label ?? ''
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
   };
 
   const refreshColumnCheckpointsNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
@@ -410,7 +411,7 @@ function TreeProvider(props: any) {
       columnNode?.label ?? '',
       timePartitioned
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
   };
   
   const refreshColumnPartitionedChecksNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
@@ -426,23 +427,22 @@ function TreeProvider(props: any) {
       columnNode?.label ?? '',
       timePartitioned
     );
-    addCheckCategories(res.data.categories || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
+    addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
   };
   
-  const addCheckCategories = (categories: UIQualityCategoryBasicModel[], node: CustomTreeNode, tooltipSuffix: string) => {
+  const addChecks = (checks: UICheckBasicModel[], node: CustomTreeNode, tooltipSuffix: string) => {
     const items: CustomTreeNode[] = [];
-    categories?.forEach((category) => {
-      category.checks?.forEach((check) => {
-        items.push({
-          id: `${node.id}.${category.category}_${check?.check_name}`,
-          label: check?.check_name || '',
-          level: TREE_LEVEL.CHECK,
-          parentId: node.id,
-          category: category?.category,
-          tooltip: `${category.category}_${check?.check_name} for ${tooltipSuffix}`,
-          items: [],
-          open: false
-        });
+    checks?.forEach((check) => {
+      items.push({
+        id: `${node.id}.${check?.check_category}_${check?.check_name}`,
+        label: check?.check_name || '',
+        level: TREE_LEVEL.CHECK,
+        parentId: node.id,
+        category: check?.check_category,
+        tooltip: `${check?.check_category}_${check?.check_name} for ${tooltipSuffix}`,
+        hasCheck: check?.configured,
+        items: [],
+        open: false
       });
     });
     resetTreeData(node, items);
@@ -466,14 +466,24 @@ function TreeProvider(props: any) {
     }
   };
 
+  const updateActiveTabMap = (activeTabId: string) => {
+    setActiveTabMaps(prev => ({
+      ...prev,
+      [sourceRoute]: activeTabId
+    }));
+  }
+
   const closeTab = (value: string) => {
     const newTabs = tabs.filter((item) => item.value !== value);
     setTabs(newTabs);
     if (value === activeTab) {
       const newActiveTab = newTabs[newTabs.length - 1]?.value;
       const newActiveNode = findTreeNode(treeData, newActiveTab);
-      setActiveTab(newActiveTab);
+      updateActiveTabMap(newActiveTab);
       setActiveNode(newActiveNode);
+    } else {
+      updateActiveTabMap('');
+      setActiveNode(undefined)
     }
   };
 
@@ -490,20 +500,18 @@ function TreeProvider(props: any) {
     };
 
     setTabs([...tabs, newTab]);
-    setActiveTab(newTab.value);
+    updateActiveTabMap(newTab.value);
     setActiveNode(undefined);
   };
 
   const changeActiveTab = async (node: CustomTreeNode, isNew = false) => {
     if (!node) return;
+    const nodeId = node.id.toString();
     const existTab = tabs.find((item) => item.value === node.id.toString());
-    if (existTab) {
-      setActiveTab(node.id.toString());
-      setActiveNode(node);
-    } else {
+    if (!existTab) {
       const newTab = {
         label: node.label ?? '',
-        value: node.id.toString(),
+        value: nodeId,
         tooltip: node.tooltip
       };
 
@@ -515,9 +523,9 @@ function TreeProvider(props: any) {
       } else {
         setTabs([newTab]);
       }
-      setActiveTab(node.id.toString());
-      setActiveNode(node);
     }
+    updateActiveTabMap(nodeId);
+    setActiveNode(node);
   };
 
   const removeTreeNode = (id: string) => {
@@ -527,7 +535,7 @@ function TreeProvider(props: any) {
     if (tabIndex > -1) {
       const newActiveTab = tabs[(tabIndex + 1) % tabs.length]?.value;
       const newActiveNode = findTreeNode(treeData, newActiveTab);
-      setActiveTab(newActiveTab);
+      updateActiveTabMap(newActiveTab);
       setActiveNode(newActiveNode);
     }
   };
@@ -539,7 +547,7 @@ function TreeProvider(props: any) {
     if (tabIndex > -1) {
       const newActiveTab = tabs[(tabIndex + 1) % tabs.length]?.value;
       const newActiveNode = findTreeNode(treeData, newActiveTab);
-      setActiveTab(newActiveTab);
+      updateActiveTabMap(newActiveTab);
       setActiveNode(newActiveNode);
       setTabs(tabs.filter((item) => item.value !== node.id));
     }
@@ -783,7 +791,7 @@ function TreeProvider(props: any) {
 
   const handleChangeActiveTab = (newActiveTab: string) => {
     const newActiveNode = findTreeNode(treeData, newActiveTab);
-    setActiveTab(newActiveTab);
+    updateActiveTabMap(newActiveTab);
     setActiveNode(newActiveNode);
   };
 
@@ -793,8 +801,9 @@ function TreeProvider(props: any) {
 
   const switchTab = (node: CustomTreeNode) => {
     if (!node) return;
+    const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
-      pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || 'detail'));
+      pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || defaultConnectionTab));
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       const connectionNode = findTreeNode(treeData, node.parentId ?? '');
 
@@ -894,17 +903,14 @@ function TreeProvider(props: any) {
   }
 
   useEffect(() => {
-    if (tabs.length && !tabs.find(t => t.value === activeTab)) {
-      setTimeout(() => {
-        const node = findTreeNode(treeData, tabs[0].value);
-        if (node) {
-          switchTab(node);
-          setActiveTab(tabs[0].value)
-        }
-      }, 0); // tricky way to ensure latest data
-
+    const _activeTab = activeTabMaps[sourceRoute];
+    if (_activeTab) {
+      const node = findTreeNode(treeData, _activeTab);
+      if (node) {
+        switchTab(node);
+      }
     }
-  }, [tabs]);
+  }, [sourceRoute]);
 
   useLayoutEffect(() => {
     const initialPathName = history.location.pathname;

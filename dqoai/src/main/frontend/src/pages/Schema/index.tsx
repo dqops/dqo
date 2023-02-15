@@ -6,7 +6,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { ROUTES } from "../../shared/routes";
 import { TableBasicModel } from "../../api";
 import { TableApiClient } from "../../services/apiClient";
-import Button from "../../components/Button";
 
 const tabs = [
   {
@@ -38,12 +37,6 @@ const SchemaPage = () => {
           <SvgIcon name="schema" className="w-5 h-5" />
           <div className="text-xl font-semibold">{`${connection}.schema.${schema}`}</div>
         </div>
-        <Button
-          color="primary"
-          variant="contained"
-          label="Save"
-          className="w-40"
-        />
       </div>
       <div className="border-b border-gray-300">
         <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
