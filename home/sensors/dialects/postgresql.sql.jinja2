@@ -44,25 +44,49 @@
 
 {% macro date_trunc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
-        DATE_TRUNC('year', CAST({{value}} AS date))
+        DATE_TRUNC('YEAR', CAST({{value}} AS date))
     {%- elif part == 'quarter' -%}
-        DATE_TRUNC('quarter', CAST({{value}} AS date))
+        DATE_TRUNC('QUARTER', CAST({{value}} AS date))
     {%- elif part == 'month' -%}
-        DATE_TRUNC('month', CAST({{value}} AS date))
+        DATE_TRUNC('MONTH', CAST({{value}} AS date))
     {%- elif part == 'week' -%}
-        DATE_TRUNC('week', CAST({{value}} AS date))
+        DATE_TRUNC('WEEK', CAST({{value}} AS date))
     {%- elif part == 'day' -%}
-        {%- if datatype == 'date' -%}
+        {%- if datatype == 'DATE' -%}
             {{value}}
         {%- else -%}
             CAST({{value}} AS date)
         {%- endif -%}
     {%- elif part == 'hour' -%}
-        DATE_TRUNC('hour', CAST({{value}} AS DATETIME))
+        DATE_TRUNC('HOUR', CAST({{value}} AS datetime))
+    {%- elif part == 'millisecond' -%}
+        CAST({{value}} AS datetime)
+    {%- else -%}
+        CAST({{value}} AS date)
+    {%- endif -%}
+{% endmacro %}
+
+{% macro date_trunc_utc(value, part='day', datatype=none) %}
+    {%- if part == 'year' -%}
+        DATE_TRUNC('year', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
+    {%- elif part == 'quarter' -%}
+        DATE_TRUNC('quarter', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
+    {%- elif part == 'month' -%}
+        DATE_TRUNC('month', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP)
+    {%- elif part == 'week' -%}
+        DATE_TRUNC('week', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP)
+    {%- elif part == 'day' -%}
+        {%- if datatype == 'date' -%}
+            {{value}}
+        {%- else -%}
+            (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
+        {%- endif -%}
+    {%- elif part == 'hour' -%}
+        DATE_TRUNC('hour', (CAST({{value}} AS DATETIME)|| ' 00:00:00'):: TIMESTAMP
     {%- elif part == 'millisecond' -%}
         CAST({{value}} AS timestamp)
     {%- else -%}
-        CAST({{value}} AS date)
+        (CAST({{value}} AS date)|| ' 00:00:00'):: TIMESTAMP
     {%- endif -%}
 {% endmacro %}
 
@@ -76,6 +100,22 @@
             {%- endif -%}
         {%- elif time_series.mode == 'timestamp_column' -%}
             {{ date_trunc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
+        {%- else -%}
+            <INVALID TIME SERIES MODE: {{time_series.mode}}/>
+        {%- endif -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_expression_utc(table_alias_prefix = '') %}
+    {%- if time_series is not none-%}
+        {%- if time_series.mode == 'current_time' -%}
+            {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
+                {{ date_trunc_utc('LOCALTIMESTAMP', time_series.time_gradient, 'timestamp') }}
+            {%- else -%}
+                LOCALTIMESTAMP
+            {%- endif -%}
+        {%- elif time_series.mode == 'timestamp_column' -%}
+            {{ date_trunc_utc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
         {%- else -%}
             <INVALID TIME SERIES MODE: {{time_series.mode}}/>
         {%- endif -%}
@@ -101,7 +141,7 @@
     {%- if time_series is not none -%}
         {{ ',' -}}{{- eol() -}}
         {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
-        {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period_utc
+        {{ indentation }}{{ render_time_dimension_expression_utc(table_alias_prefix) }} AS time_period_utc
     {%- endif -%}
 {% endmacro %}
 
