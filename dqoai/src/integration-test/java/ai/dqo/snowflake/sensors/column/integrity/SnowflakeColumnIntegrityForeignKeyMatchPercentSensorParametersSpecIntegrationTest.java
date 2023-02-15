@@ -25,10 +25,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
-import ai.dqo.sampledata.SampleCsvFileNames;
-import ai.dqo.sampledata.SampleTableMetadata;
-import ai.dqo.sampledata.SampleTableMetadataObjectMother;
+import ai.dqo.sampledata.*;
 import ai.dqo.sensors.column.integrity.ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,10 +41,14 @@ public class SnowflakeColumnIntegrityForeignKeyMatchPercentSensorParametersSpecI
     private ColumnIntegrityForeignKeyMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
+    private SampleTableMetadataForeign sampleTableMetadataForeign;
+
     @BeforeEach
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.snowflake);
+        this.sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec();
         this.checkSpec = new ColumnIntegrityForeignKeyMatchPercentCheckSpec();
