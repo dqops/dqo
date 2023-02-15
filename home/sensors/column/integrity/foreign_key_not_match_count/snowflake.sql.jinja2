@@ -4,15 +4,10 @@
     {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
 {%- endmacro %}
 
-{%- macro render_foreign_column(table_alias_prefix = '') -%}
-    {{ lib.quote_identifier(parameters.foreign_column) }}
-{%- endmacro %}
-
-
 SELECT
     SUM(
         CASE
-            WHEN foreign_table.{{ render_foreign_column(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+            WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
                 THEN 1
             ELSE 0
         END
@@ -21,7 +16,7 @@ SELECT
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
 LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ render_foreign_column(parameters.foreign_column) }}
+ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
 {{- lib.render_where_clause() -}}
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}
