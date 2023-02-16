@@ -57,8 +57,8 @@ public class BigQueryColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table");
-        this.sut.setForeignColumn("primary_key_INTEGER");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec);
@@ -73,8 +73,8 @@ public class BigQueryColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table");
-        this.sut.setForeignColumn("primary_key_INTEGER");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily);
@@ -89,8 +89,8 @@ public class BigQueryColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table");
-        this.sut.setForeignColumn("primary_key_INTEGER");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly);
@@ -105,8 +105,8 @@ public class BigQueryColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table");
-        this.sut.setForeignColumn("primary_key_INTEGER");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily,"date");
@@ -121,8 +121,8 @@ public class BigQueryColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table");
-        this.sut.setForeignColumn("primary_key_INTEGER");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
+        this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly,"date");

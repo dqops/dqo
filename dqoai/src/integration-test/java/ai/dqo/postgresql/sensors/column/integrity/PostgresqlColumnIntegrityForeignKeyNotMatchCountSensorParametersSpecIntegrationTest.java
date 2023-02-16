@@ -56,7 +56,7 @@ public class PostgresqlColumnIntegrityForeignKeyNotMatchCountSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
@@ -72,7 +72,7 @@ public class PostgresqlColumnIntegrityForeignKeyNotMatchCountSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
@@ -88,7 +88,7 @@ public class PostgresqlColumnIntegrityForeignKeyNotMatchCountSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
@@ -104,7 +104,7 @@ public class PostgresqlColumnIntegrityForeignKeyNotMatchCountSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
@@ -120,7 +120,7 @@ public class PostgresqlColumnIntegrityForeignKeyNotMatchCountSensorParametersSpe
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
