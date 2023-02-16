@@ -19,7 +19,6 @@ package ai.dqo.core.scheduler.quartz;
 import ai.dqo.core.scheduler.JobSchedulerException;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
-import org.quartz.JobKey;
 import org.quartz.Trigger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,14 +51,17 @@ public class SchedulesUtilityServiceImpl implements SchedulesUtilityService {
     public LocalDateTime getTimeOfNextExecution(RecurringScheduleSpec scheduleSpec) {
         Trigger scheduleTrigger;
         try {
-            scheduleTrigger = triggerFactory.createTrigger(scheduleSpec, new JobKey(""));
+            scheduleTrigger = triggerFactory.createTrigger(scheduleSpec, JobKeys.DUMMY);
         } catch (JobSchedulerException e) {
             return null;
         }
 
-        Date nextExecutionDate = scheduleTrigger.getNextFireTime();
-        ZoneId timeZoneId = defaultTimeZoneProvider.getDefaultTimeZoneId();
+        Date nextExecutionDate = scheduleTrigger.getFireTimeAfter(new Date());
+        if (nextExecutionDate == null) {
+            return null;
+        }
 
+        ZoneId timeZoneId = defaultTimeZoneProvider.getDefaultTimeZoneId();
         return LocalDateTime.ofInstant(nextExecutionDate.toInstant(), timeZoneId);
     }
 }

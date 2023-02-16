@@ -26,6 +26,7 @@ import lombok.Data;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.function.Function;
 
 /**
@@ -62,7 +63,8 @@ public class UIEffectiveScheduleModel {
 
         if (uiEffectiveScheduleModel.timeOfExecution != null) {
             uiEffectiveScheduleModel.timeUntilExecution =
-                    Duration.between(LocalDateTime.now(), uiEffectiveScheduleModel.timeOfExecution);
+                    Duration.between(LocalDateTime.now(), uiEffectiveScheduleModel.timeOfExecution)
+                            .truncatedTo(ChronoUnit.SECONDS);
         }
 
         return uiEffectiveScheduleModel;

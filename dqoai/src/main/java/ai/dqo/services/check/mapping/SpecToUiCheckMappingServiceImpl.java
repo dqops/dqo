@@ -86,11 +86,9 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param reflectionService Reflection service used to read the list of checks.
      * @param sensorDefinitionFindService Service that finds the definition of sensors, to verify their capabilities.
      */
-    public SpecToUiCheckMappingServiceImpl(ReflectionService reflectionService,
-                                           SensorDefinitionFindService sensorDefinitionFindService) {
-        this.reflectionService = reflectionService;
-        this.sensorDefinitionFindService = sensorDefinitionFindService;
-        this.schedulesUtilityService = null;
+    public static SpecToUiCheckMappingServiceImpl createInstanceUnsafe(ReflectionService reflectionService,
+                                                                       SensorDefinitionFindService sensorDefinitionFindService) {
+        return new SpecToUiCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, null);
     }
 
     /**
