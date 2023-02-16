@@ -47,7 +47,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -173,7 +173,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         )) {
              // Info about schedule for the whole model is irrelevant.
             uiAllChecksModel.setEffectiveSchedule(null);
-            uiAllChecksModel.setEffectiveScheduleEnabledStatus(UIScheduleEnabledStatus.overridden);
+            uiAllChecksModel.setEffectiveScheduleEnabledStatus(UIScheduleEnabledStatus.overridden_by_checks);
         }
 
         return uiAllChecksModel;
@@ -572,7 +572,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param scheduleSpec Schedule configuration containing a CRON expression with execution timetable.
      * @return Time of next execution of <code>scheduleSpec</code> if it's not disabled and the service is able to get it. Else null.
      */
-    protected LocalDateTime safeGetTimeOfNextExecution(RecurringScheduleSpec scheduleSpec) {
+    protected ZonedDateTime safeGetTimeOfNextExecution(RecurringScheduleSpec scheduleSpec) {
         if (this.schedulesUtilityService == null || scheduleSpec == null || scheduleSpec.isDisabled()) {
             return null;
         }

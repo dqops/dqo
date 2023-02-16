@@ -23,8 +23,8 @@ import org.quartz.Trigger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Date;
 
 /**
@@ -48,7 +48,7 @@ public class SchedulesUtilityServiceImpl implements SchedulesUtilityService {
      * @return Date and time of the next execution. Null if <code>scheduleSpec</code> is invalid.
      */
     @Override
-    public LocalDateTime getTimeOfNextExecution(RecurringScheduleSpec scheduleSpec) {
+    public ZonedDateTime getTimeOfNextExecution(RecurringScheduleSpec scheduleSpec) {
         Trigger scheduleTrigger;
         try {
             scheduleTrigger = triggerFactory.createTrigger(scheduleSpec, JobKeys.DUMMY);
@@ -62,6 +62,6 @@ public class SchedulesUtilityServiceImpl implements SchedulesUtilityService {
         }
 
         ZoneId timeZoneId = defaultTimeZoneProvider.getDefaultTimeZoneId();
-        return LocalDateTime.ofInstant(nextExecutionDate.toInstant(), timeZoneId);
+        return ZonedDateTime.ofInstant(nextExecutionDate.toInstant(), timeZoneId);
     }
 }

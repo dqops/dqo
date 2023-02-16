@@ -43,6 +43,6 @@ public enum UIScheduleEnabledStatus {
     /**
      * An enumeration signaling that the schedule won't execute because it is overridden by every inner model.
      */
-    @JsonProperty("overridden")
-    overridden,
+    @JsonProperty("overridden_by_checks")
+    overridden_by_checks,
 }

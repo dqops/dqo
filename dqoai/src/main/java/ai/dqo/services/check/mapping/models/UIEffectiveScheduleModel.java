@@ -25,7 +25,7 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.function.Function;
 
@@ -39,15 +39,15 @@ import java.util.function.Function;
 public class UIEffectiveScheduleModel {
     @JsonPropertyDescription("Field value for a schedule group to which this schedule belongs.")
     private CheckRunRecurringScheduleGroup scheduleGroup;
+
     @JsonPropertyDescription("Field value for the level at which the schedule has been configured.")
     private UIEffectiveScheduleLevel scheduleLevel;
 
     @JsonPropertyDescription("Field value for a CRON expression defining the scheduling.")
     private String cronExpression;
 
-    @JsonPropertyDescription("Field value for the time at which the scheduled checks will be executed. Null if disabled.")
-    @JsonInclude
-    private LocalDateTime timeOfExecution;
+    @JsonPropertyDescription("Field value for the time at which the scheduled checks will be executed.")
+    private ZonedDateTime timeOfExecution;
 
     @JsonPropertyDescription("Field value for the time left until the execution of scheduled checks.")
     private Duration timeUntilExecution;
@@ -57,7 +57,7 @@ public class UIEffectiveScheduleModel {
      * @param scheduleSpec                 Schedule spec on which to base the model.
      * @param scheduleGroup                Schedule group to which the schedule should belong.
      * @param scheduleLevel                Schedule level on which the schedule has been configured.
-     * @param specToLocalDateTimeConverter Function extracting the date from <code>scheduleSpec</code>
+     * @param specToZonedDateTimeConverter Function extracting the date from <code>scheduleSpec</code>
      *                                     that will be regarded as the time of next execution, if scheduling is not disabled.
      * @return {@link UIEffectiveScheduleModel} instance based on the <code>scheduleSpec</code>.
      */
@@ -65,20 +65,20 @@ public class UIEffectiveScheduleModel {
             RecurringScheduleSpec scheduleSpec,
             CheckRunRecurringScheduleGroup scheduleGroup,
             UIEffectiveScheduleLevel scheduleLevel,
-            Function<RecurringScheduleSpec, LocalDateTime> specToLocalDateTimeConverter) {
+            Function<RecurringScheduleSpec, ZonedDateTime> specToZonedDateTimeConverter) {
         UIEffectiveScheduleModel uiEffectiveScheduleModel = new UIEffectiveScheduleModel();
         uiEffectiveScheduleModel.scheduleGroup = scheduleGroup;
         uiEffectiveScheduleModel.scheduleLevel = scheduleLevel;
         uiEffectiveScheduleModel.cronExpression = scheduleSpec.getCronExpression();
 
         if (!scheduleSpec.isDisabled()) {
-            if (specToLocalDateTimeConverter != null) {
-                uiEffectiveScheduleModel.timeOfExecution = specToLocalDateTimeConverter.apply(scheduleSpec);
+            if (specToZonedDateTimeConverter != null) {
+                uiEffectiveScheduleModel.timeOfExecution = specToZonedDateTimeConverter.apply(scheduleSpec);
             }
 
             if (uiEffectiveScheduleModel.timeOfExecution != null) {
                 uiEffectiveScheduleModel.timeUntilExecution =
-                        Duration.between(LocalDateTime.now(), uiEffectiveScheduleModel.timeOfExecution)
+                        Duration.between(ZonedDateTime.now(), uiEffectiveScheduleModel.timeOfExecution)
                                 .truncatedTo(ChronoUnit.SECONDS);
             }
         }

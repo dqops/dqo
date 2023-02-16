@@ -18,7 +18,7 @@ package ai.dqo.core.scheduler.quartz;
 
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 
 /**
  * Service for utility methods regarding schedules.
@@ -29,5 +29,5 @@ public interface SchedulesUtilityService {
      * @param scheduleSpec Schedule spec for which to get the scheduled time.
      * @return Date and time of the next execution.
      */
-    LocalDateTime getTimeOfNextExecution(RecurringScheduleSpec scheduleSpec);
+    ZonedDateTime getTimeOfNextExecution(RecurringScheduleSpec scheduleSpec);
 }
