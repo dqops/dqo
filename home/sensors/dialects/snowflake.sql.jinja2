@@ -101,7 +101,7 @@
     {%- if time_series is not none -%}
         {{ ',' -}}{{- eol() -}}
         {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
-        {{ indentation }}TIMESTAMP({{ render_time_dimension_expression(table_alias_prefix) }}) AS time_period_utc
+        {{ indentation }}TO_TIMESTAMP({{ render_time_dimension_expression(table_alias_prefix) }}) AS time_period_utc
     {%- endif -%}
 {% endmacro %}
 

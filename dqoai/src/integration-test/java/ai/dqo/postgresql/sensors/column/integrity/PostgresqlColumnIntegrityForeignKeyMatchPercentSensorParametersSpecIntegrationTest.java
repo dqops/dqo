@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.bigquery.sensors.column.integrity;
+package ai.dqo.postgresql.sensors.column.integrity;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
+import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyMatchPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -26,7 +26,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.*;
-import ai.dqo.sensors.column.integrity.ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec;
+import ai.dqo.sensors.column.integrity.ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,23 +35,23 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec sut;
+public class PostgresqlColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
+    private ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec checkSpec;
+    private ColumnIntegrityForeignKeyMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    
     private SampleTableMetadataForeign sampleTableMetadataForeign;
-
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.postgresql);
         this.sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec();
-        this.checkSpec = new ColumnIntegrityForeignKeyNotMatchCountCheckSpec();
+        this.sut = new ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec();
+        this.checkSpec = new ColumnIntegrityForeignKeyMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -68,7 +68,7 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -84,7 +84,7 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -100,7 +100,7 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -132,6 +132,6 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
     }
 }

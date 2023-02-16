@@ -1,17 +1,17 @@
-{% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
 {%- macro render_foreign_table(foreign_table) -%}
-    {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
 {%- endmacro %}
 
 SELECT
-    SUM(
+    100.0 * SUM(
         CASE
             WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                THEN 1
-            ELSE 0
+                THEN 0
+            ELSE 1
         END
-    ) AS actual_value
+    ) / COUNT(*) AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
