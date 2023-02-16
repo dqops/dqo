@@ -38,6 +38,11 @@ public class UIAllChecksModel {
     @JsonPropertyDescription("List of all data quality categories that contain data quality checks inside.")
     private List<UIQualityCategoryModel> categories = new ArrayList<>();
 
+    @JsonPropertyDescription("Model of configured schedule enabled on the check container.")
+    private UIEffectiveScheduleModel effectiveSchedule;
+    @JsonPropertyDescription("State of the effective scheduling on the check container.")
+    private UIScheduleEnabledStatus effectiveScheduleEnabledStatus;
+
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 

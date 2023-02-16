@@ -25,10 +25,7 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
-import ai.dqo.sampledata.SampleCsvFileNames;
-import ai.dqo.sampledata.SampleTableMetadata;
-import ai.dqo.sampledata.SampleTableMetadataObjectMother;
+import ai.dqo.sampledata.*;
 import ai.dqo.sensors.column.integrity.ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,11 +40,15 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
     private UserHomeContext userHomeContext;
     private ColumnIntegrityForeignKeyNotMatchCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
+    private SampleTableMetadataForeign sampleTableMetadataForeign;
+
 
     @BeforeEach
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.bigquery);
+        this.sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec();
         this.checkSpec = new ColumnIntegrityForeignKeyNotMatchCountCheckSpec();
@@ -56,7 +57,7 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
@@ -72,7 +73,7 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
@@ -88,7 +89,7 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
@@ -104,7 +105,7 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
@@ -120,7 +121,7 @@ public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setForeignTable("value_match_left_table_5389942149833979960");
+        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(

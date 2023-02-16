@@ -216,11 +216,13 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                     CURRENT_TIMESTAMP(),
                     MAX(analyzed_table.`%s`),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+                CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`earlier_datetime` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -244,11 +246,13 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                     CURRENT_TIMESTAMP(),
                     MAX(analyzed_table.`%s`),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -272,11 +276,13 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                     CURRENT_TIMESTAMP(),
                     MAX(analyzed_table.`%s`),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+                CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`earlier_datetime` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -305,7 +311,8 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                     CURRENT_TIMESTAMP(),
                     MAX(analyzed_table.`%s`),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`earlier_string` AS stream_level_1
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+                analyzed_table.`earlier_string` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
@@ -336,11 +343,14 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                     CURRENT_TIMESTAMP(),
                     MAX(analyzed_table.`%s`),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`earlier_string` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+                analyzed_table.`earlier_string` AS stream_level_1,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, time_period
-            ORDER BY stream_level_1, time_period""";
+            GROUP BY stream_level_1, time_period, time_period_utc
+            ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
@@ -367,11 +377,14 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                     CURRENT_TIMESTAMP(),
                     MAX(analyzed_table.`%s`),
                     MILLISECOND
-                ) / 24.0 / 3600.0 / 1000.0 AS actual_value, analyzed_table.`earlier_string` AS stream_level_1, CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period
+                ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
+                analyzed_table.`earlier_string` AS stream_level_1,
+                CAST(analyzed_table.`earlier_datetime` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`earlier_datetime` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, time_period
-            ORDER BY stream_level_1, time_period""";
+            GROUP BY stream_level_1, time_period, time_period_utc
+            ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getIngestionTimestampColumn(),
