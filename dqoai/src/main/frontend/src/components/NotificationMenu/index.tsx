@@ -51,7 +51,6 @@ const NotificationMenu = () => {
     const errorData = errors.map((item: IError) => ({ type: 'error', item }));
 
     const newData = jobsData.concat(errorData);
-    console.log('newDAta', newData);
 
     newData.sort((a, b) => {
       const date1 = getNotificationDate(a);

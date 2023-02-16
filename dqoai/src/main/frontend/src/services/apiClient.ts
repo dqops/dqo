@@ -28,7 +28,9 @@ import {
   DataStreamsApiFactory,
   CheckResultsOverviewApiFactory,
   DashboardsApiFactory,
-  TimezonesApiFactory, SourceConnectionControllerApiFactory
+  TimezonesApiFactory,
+  SourceConnectionControllerApiFactory,
+  CheckResultsApiFactory, SensorReadoutsApiFactory, ErrorsApiFactory
 } from '../api';
 
 export const ConnectionApiClient = ConnectionsApiFactory(
@@ -71,6 +73,12 @@ export const DataStreamsApi = DataStreamsApiFactory(
   axios
 );
 
+export const CheckResultApi = CheckResultsApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
 export const CheckResultOverviewApi = CheckResultsOverviewApiFactory(
   new Configuration(),
   '',
@@ -90,6 +98,18 @@ export const TimezonesApi = TimezonesApiFactory(
 );
 
 export const SourceConnectionApi = SourceConnectionControllerApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const SensorReadoutsApi = SensorReadoutsApiFactory(
+  new Configuration(),
+  '',
+  axios
+);
+
+export const ErrorsApi = ErrorsApiFactory(
   new Configuration(),
   '',
   axios
