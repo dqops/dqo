@@ -117,27 +117,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     }
 
     /**
-     *Create a list of check documentation models for table and column level checks.
-     *Both category contains a list of checks grouped by category.
-     * @return Documentation for each check grouped by table and column.
-     */
-    public List<CheckTargetDocumentationModel> createDocumentationsForChecks() {
-        List<CheckTargetDocumentationModel> checkTargetDocumentationModels = new ArrayList<>();
-
-        CheckTargetDocumentationModel checkTableDocumentationModel = new CheckTargetDocumentationModel();
-        checkTableDocumentationModel.setTarget("table");
-        checkTableDocumentationModel.setCheckCategory(makeDocumentationForTableChecks());
-        checkTargetDocumentationModels.add(checkTableDocumentationModel);
-
-        CheckTargetDocumentationModel checkColumnDocumentationModel = new CheckTargetDocumentationModel();
-        checkColumnDocumentationModel.setTarget("column");
-        checkColumnDocumentationModel.setCheckCategory(makeDocumentationForColumnChecks());
-        checkTargetDocumentationModels.add(checkColumnDocumentationModel);
-
-        return checkTargetDocumentationModels;
-    }
-
-    /**
      * Creates a column specification with a label.
      * @param label Label to add to the column.
      * @return Column specification.
@@ -232,6 +211,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         for (Map.Entry<String, Collection<SimilarChecksGroup>> similarChecksInGroup : checksPerGroup.entrySet()) {
             CheckCategoryDocumentationModel categoryDocumentationModel = new CheckCategoryDocumentationModel();
             String categoryName = similarChecksInGroup.getKey();
+            categoryDocumentationModel.setTarget(target.name());
             categoryDocumentationModel.setCategoryName(categoryName);
             categoryDocumentationModel.setCategoryHelp(categoryHelpMap.get(categoryName));
 
@@ -387,6 +367,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             providerDocModel.setProviderType(providerType);
             String sqlTemplate = providerSensorDefinitionWrapper.getSqlTemplate();
             providerDocModel.setJinjaTemplate(sqlTemplate);
+            providerDocModel.setListOfJinjaTemplate(splitSqlTemplates(sqlTemplate));
 
             if (sqlTemplate != null) {
                 SensorDefinitionFindResult sensorDefinitionFindResult = new SensorDefinitionFindResult(sensorDefinitionWrapper.getSpec(),
@@ -426,6 +407,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 try {
                     String renderedTemplate = this.jinjaTemplateRenderService.renderTemplate(sqlTemplate, templateRenderParameters);
                     providerDocModel.setRenderedTemplate(renderedTemplate);
+                    providerDocModel.setListOfRenderedTemplate(splitSqlTemplates(renderedTemplate));
                 }
                 catch (Exception ex) {
                     System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName());
@@ -454,5 +436,14 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }
+    }
+
+    /**
+     * Create list of split sql templates by end of line.
+     * @param sqlTemplate Sql template.
+     * @return List of split sql templates by end of line.
+     */
+    private List<String> splitSqlTemplates(String sqlTemplate) {
+        return List.of(sqlTemplate.split("\\r?\\n|\\r"));
     }
 }

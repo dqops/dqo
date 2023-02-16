@@ -22,6 +22,8 @@ import com.github.jknack.handlebars.Template;
 
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Rule documentation generator that generates documentation for rules.
@@ -47,9 +49,11 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("checks/check_documentation");
 
-        List<CheckTargetDocumentationModel> documentationForChecks = this.checkDocumentationModelFactory.createDocumentationsForChecks();
-        for (CheckTargetDocumentationModel check : documentationForChecks) {
-            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(check.getTarget() + ".md");
+        List<CheckCategoryDocumentationModel> checkCategoryDocumentationModels = Stream.concat(this.checkDocumentationModelFactory.makeDocumentationForTableChecks().stream(),
+                this.checkDocumentationModelFactory.makeDocumentationForColumnChecks().stream()).collect(Collectors.toList());
+
+        for (CheckCategoryDocumentationModel check : checkCategoryDocumentationModels) {
+            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(check.getTarget() + "/" + check.getCategoryName() + ".md");
             documentationMarkdownFile.setRenderContext(check);
 
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, check);
