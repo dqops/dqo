@@ -27,24 +27,24 @@ import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesS
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.statistics.services.StatisticsDataService;
+import ai.dqo.data.statistics.services.models.StatisticsResultsForColumnModel;
 import ai.dqo.data.statistics.services.models.StatisticsResultsForTableModel;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.comments.CommentsListSpec;
-import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
-import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
 import ai.dqo.rest.models.metadata.ColumnStatisticsModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
+import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
+import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -193,7 +193,7 @@ public class ColumnsController {
      * @return Column full specification for the requested column.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}")
-    @ApiOperation(value = "getColumn", notes = "Return the full column specification", response = ColumnModel.class)
+    @ApiOperation(value = "getColumn", notes = "Returns the full column specification", response = ColumnModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Column returned", response = ColumnModel.class),
@@ -238,7 +238,7 @@ public class ColumnsController {
      * @return Basic column details for the requested column.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basic")
-    @ApiOperation(value = "getColumnBasic", notes = "Return the column specification", response = ColumnBasicModel.class)
+    @ApiOperation(value = "getColumnBasic", notes = "Returns the column specification", response = ColumnBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Column basic details returned", response = ColumnBasicModel.class),
@@ -267,6 +267,54 @@ public class ColumnsController {
                 connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec);
 
         return new ResponseEntity<>(Mono.just(columnBasicModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Returns a basic model of requested column with the statistics metrics.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @param columnName     Column name.
+     * @return Basic column details for the requested column with additional summary of the most recent profiler session.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basicwithstatistics")
+    @ApiOperation(value = "getColumnBasicWithStatistics",
+            notes = "Returns the column specification with the metrics captured by the most recent statistics collection.",
+            response = ColumnStatisticsModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Column basic details with statistics returned", response = ColumnStatisticsModel.class),
+            @ApiResponse(code = 404, message = "Connection, table or column not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<ColumnStatisticsModel>> getColumnBasicWithStatistics(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Column name") @PathVariable String columnName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+
+        TableWrapper tableWrapper = this.readTableWrapper(userHomeContext, connectionName, schemaName, tableName);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
+        if (columnSpec == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        StatisticsResultsForColumnModel mostRecentStatisticsMetricsForColumn =
+                this.statisticsDataService.getMostRecentStatisticsForColumn(
+                        connectionName, tableWrapper.getPhysicalTableName(), columnName,
+                        CommonTableNormalizationService.ALL_DATA_DATA_STREAM_NAME);
+
+        ColumnStatisticsModel columnModel = ColumnStatisticsModel.fromColumnSpecificationAndStatistic(
+                connectionName, tableWrapper.getPhysicalTableName(), columnName, columnSpec,
+                mostRecentStatisticsMetricsForColumn);
+
+        return new ResponseEntity<>(Mono.just(columnModel), HttpStatus.OK); // 200
     }
 
     /**
