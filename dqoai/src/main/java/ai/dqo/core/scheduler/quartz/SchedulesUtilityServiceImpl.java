@@ -28,7 +28,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 /**
- * Service for utility actions regarding CRON expressions.
+ * Service for utility methods regarding CRON expressions.
  */
 @Service
 public class SchedulesUtilityServiceImpl implements SchedulesUtilityService {

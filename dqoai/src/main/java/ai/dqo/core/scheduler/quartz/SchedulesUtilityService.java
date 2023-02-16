@@ -21,7 +21,7 @@ import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import java.time.LocalDateTime;
 
 /**
- * Service for utilities regarding schedules.
+ * Service for utility methods regarding schedules.
  */
 public interface SchedulesUtilityService {
     /**

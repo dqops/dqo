@@ -52,7 +52,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -330,7 +329,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                             scheduleOverride,
                             scheduleGroup,
                             UIEffectiveScheduleLevel.check_override,
-                            getScheduleSpecToLocalDateTimeConverter()
+                            this::safeGetTimeOfNextExecution
                     )
             );
         }
@@ -551,12 +550,25 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         return fields;
     }
 
-    protected Function<RecurringScheduleSpec, LocalDateTime> getScheduleSpecToLocalDateTimeConverter() {
-        return schedulesUtilityService != null
-                ? schedulesUtilityService::getTimeOfNextExecution
-                : null;
+    /**
+     * Gets the time of the next execution of <code>scheduleSpec</code>, if the {@link SchedulesUtilityService} is initialized.
+     * @param scheduleSpec Schedule configuration containing a CRON expression with execution timetable.
+     * @return Time of next execution of <code>scheduleSpec</code> if it's not disabled and the service is able to get it. Else null.
+     */
+    protected LocalDateTime safeGetTimeOfNextExecution(RecurringScheduleSpec scheduleSpec) {
+        if (this.schedulesUtilityService == null || scheduleSpec == null || scheduleSpec.isDisabled()) {
+            return null;
+        }
+        return this.schedulesUtilityService.getTimeOfNextExecution(scheduleSpec);
     }
 
+    /**
+     * Gets the {@link UIEffectiveScheduleModel} out of <code>schedulesSpec</code>, if the schedule is enabled, provided some other arguments.
+     * @param schedulesSpec Schedule spec.
+     * @param scheduleGroup Schedule group.
+     * @param scheduleLevel Schedule level.
+     * @return Effective model of the schedule configuration. If <code>scheduleSpec</code> is null or disabled, returns null.
+     */
     protected UIEffectiveScheduleModel getEffectiveScheduleModel(RecurringSchedulesSpec schedulesSpec,
                                                                  CheckRunRecurringScheduleGroup scheduleGroup,
                                                                  UIEffectiveScheduleLevel scheduleLevel) {
@@ -569,7 +581,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                     scheduleSpec,
                     scheduleGroup,
                     scheduleLevel,
-                    getScheduleSpecToLocalDateTimeConverter()
+                    this::safeGetTimeOfNextExecution
             );
         }
         return null;

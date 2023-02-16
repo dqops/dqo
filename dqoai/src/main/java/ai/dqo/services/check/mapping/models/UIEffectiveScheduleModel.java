@@ -52,6 +52,15 @@ public class UIEffectiveScheduleModel {
     @JsonPropertyDescription("Field value for the time left until the execution of scheduled checks.")
     private Duration timeUntilExecution;
 
+    /**
+     * Creates {@link UIEffectiveScheduleModel} based on provided <code>scheduleSpec</code>.
+     * @param scheduleSpec                 Schedule spec on which to base the model.
+     * @param scheduleGroup                Schedule group to which the schedule should belong.
+     * @param scheduleLevel                Schedule level on which the schedule has been configured.
+     * @param specToLocalDateTimeConverter Function extracting the date from <code>scheduleSpec</code>
+     *                                     that will be regarded as the time of next execution, if scheduling is not disabled.
+     * @return {@link UIEffectiveScheduleModel} instance based on the <code>scheduleSpec</code>.
+     */
     public static UIEffectiveScheduleModel fromRecurringScheduleSpec(
             RecurringScheduleSpec scheduleSpec,
             CheckRunRecurringScheduleGroup scheduleGroup,
