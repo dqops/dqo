@@ -29,7 +29,7 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
     void setUp() {
         Path projectRoot = Path.of(".");
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
-        SpecToUiCheckMappingService specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(
+        SpecToUiCheckMappingService specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
                 reflectionService, new SensorDefinitionFindServiceImpl());
         SimilarCheckMatchingServiceImpl similarCheckMatchingService = new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService);
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
