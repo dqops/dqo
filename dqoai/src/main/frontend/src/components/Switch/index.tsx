@@ -11,14 +11,14 @@ const Switch: React.FC<SwitchProps> = ({ checked, onChange }) => {
     <div
       data-testid="switch"
       className={clsx(
-        'relative cursor-pointer h-6 w-12 rounded-full',
+        'relative cursor-pointer h-4 w-7 rounded-full',
         checked ? 'bg-green-400' : 'bg-gray-150'
       )}
       onClick={() => onChange && onChange(!checked)}
     >
       <div
         className={clsx(
-          'absolute transform -translate-y-1/2 top-1/2 h-5 w-5 rounded-full ease-in-input transition-all duration-200 shadow-md',
+          'absolute transform -translate-y-1/2 top-1/2 h-3 w-3 rounded-full ease-in-input transition-all duration-200 shadow-md',
           checked ? 'bg-white right-0.5' : 'bg-white left-0.5'
         )}
       />

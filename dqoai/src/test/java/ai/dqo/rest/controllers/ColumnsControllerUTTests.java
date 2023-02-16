@@ -36,6 +36,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.services.check.mapping.utils.UIAllChecksBasicModelUtility;
 import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
@@ -200,7 +201,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(9, result.getCategories().size());
+        Assertions.assertEquals(9, UIAllChecksBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -218,7 +219,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(9, result.getCategories().size());
+        Assertions.assertEquals(9, UIAllChecksBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -236,7 +237,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UIAllChecksBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(9, result.getCategories().size());
+        Assertions.assertEquals(9, UIAllChecksBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @Test

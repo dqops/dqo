@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
 import { ITab } from '../shared/interfaces';
-import { AuthenticatedDashboardModel, DashboardSpec } from "../api";
+import {AuthenticatedDashboardModel, DashboardsFolderSpec, DashboardSpec} from "../api";
 import { DashboardsApi } from "../services/apiClient";
 
 const DashboardContext = React.createContext({} as any);
@@ -35,7 +35,7 @@ function DashboardProvider(props: any) {
     setActiveTab(newTab.value);
   };
 
-  const changeActiveTab = async (dashboard: DashboardSpec, folder: string, isNew = false) => {
+  const changeActiveTab = async (dashboard: DashboardSpec, folder: string, folders: DashboardsFolderSpec[], isNew = false) => {
     const existTab = tabs.find((item) => item.value === dashboard.dashboard_name);
     if (existTab) {
       setActiveTab(dashboard.dashboard_name);
@@ -55,8 +55,18 @@ function DashboardProvider(props: any) {
       }
       setActiveTab(dashboard.dashboard_name);
 
-      const res = await DashboardsApi.getDashboardLevel1(folder, dashboard.dashboard_name ?? '');
-      const authenticatedDashboard: AuthenticatedDashboardModel = res.data;
+      let res: any;
+      if (folders.length === 0) {
+        res = await DashboardsApi.getDashboardLevel1(folder, dashboard.dashboard_name ?? '');
+      } else if (folders.length === 1) {
+        res = await DashboardsApi.getDashboardLevel2(folders[0].folder_name || '', folder, dashboard.dashboard_name ?? '');
+      } else if (folders.length === 2) {
+        res = await DashboardsApi.getDashboardLevel3(folders[0].folder_name || '', folders[1].folder_name || '', folder, dashboard.dashboard_name ?? '');
+      } else if (folders.length === 3) {
+        res = await DashboardsApi.getDashboardLevel4(folders[0].folder_name || '', folders[1].folder_name || '', folders[2].folder_name || '', folder, dashboard.dashboard_name ?? '');
+      }
+
+      const authenticatedDashboard: AuthenticatedDashboardModel = res?.data;
       setOpenedDashboards([...openedDashboards, authenticatedDashboard]);
     }
   };

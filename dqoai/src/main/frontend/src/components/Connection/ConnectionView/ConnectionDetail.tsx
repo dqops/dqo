@@ -23,6 +23,7 @@ import Button from "../../Button";
 import { SourceConnectionApi } from "../../../services/apiClient";
 import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorModal";
 import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
+import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
 
 const ConnectionDetail = () => {
   const { connection }: { connection: string } = useParams();
@@ -134,6 +135,14 @@ const ConnectionDetail = () => {
             <SnowflakeConnection
               snowflake={connectionBasic?.snowflake}
               onChange={(snowflake) => onChange({ snowflake })}
+            />
+          )
+        }
+        {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.redshift && (
+            <RedshiftConnection
+              redshift={connectionBasic?.redshift}
+              onChange={(redshift) => onChange({ redshift })}
             />
           )
         }

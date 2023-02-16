@@ -30,7 +30,6 @@ import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
 import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
-import ai.dqo.services.check.mapping.basicmodels.UIQualityCategoryBasicModel;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.services.check.mapping.models.*;
@@ -121,11 +120,22 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, Optional.empty());
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
-            Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
-            UIQualityCategoryBasicModel categoryModel = createCategoryBasicModel(categoryFieldInfo, categoryFieldValue);
-            uiAllChecksBasicModel.getCategories().add(categoryModel);
+            Object checkCategoryParentNode = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+
+            ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
+            List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, Optional.empty());
+
+            for (FieldInfo checkFieldInfo : checksFields) {
+                boolean checkIsConfigured = checkFieldInfo.getFieldValue(checkCategoryParentNode) != null;
+
+                UICheckBasicModel checkModel = createCheckBasicModel(checkFieldInfo);
+                checkModel.setConfigured(checkIsConfigured);
+                checkModel.setCheckCategory(categoryFieldInfo.getYamlFieldName());
+                uiAllChecksBasicModel.getChecks().add(checkModel);
+            }
         }
 
+        uiAllChecksBasicModel.getChecks().sort(UICheckBasicModel::compareTo);
         return uiAllChecksBasicModel;
     }
 
@@ -180,32 +190,6 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             if (checkSpecObjectNullable == null) { // this check is not configured, so we will propose the default data stream name
                 checkModel.setDataStream(defaultDataStreamName);
             }
-        }
-
-        return categoryModel;
-    }
-
-    /**
-     * Creates a UI model for all data quality checks for one category.
-     * @param categoryFieldInfo      Field info for the category field.
-     * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
-     * @return UI model for a category with all quality checks.
-     */
-    protected UIQualityCategoryBasicModel createCategoryBasicModel(FieldInfo categoryFieldInfo,
-                                                                   Object checkCategoryParentNode) {
-        UIQualityCategoryBasicModel categoryModel = new UIQualityCategoryBasicModel();
-        categoryModel.setCategory(categoryFieldInfo.getYamlFieldName());
-        categoryModel.setHelpText(categoryFieldInfo.getHelpText());
-
-        ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
-        List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, Optional.empty());
-
-        for (FieldInfo checkFieldInfo : checksFields) {
-            boolean checkIsConfigured = checkFieldInfo.getFieldValue(checkCategoryParentNode) != null;
-
-            UICheckBasicModel checkModel = createCheckBasicModel(checkFieldInfo);
-            checkModel.setConfigured(checkIsConfigured);
-            categoryModel.getChecks().add(checkModel);
         }
 
         return categoryModel;

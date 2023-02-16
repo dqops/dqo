@@ -15,11 +15,11 @@
  */
 package ai.dqo.metadata.search;
 
-import ai.dqo.checks.*;
-import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
+import ai.dqo.checks.AbstractCheckCategorySpec;
+import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
@@ -47,9 +47,9 @@ import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.profiling.AbstractStatisticsCollectorCategorySpec;
 import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
-import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -224,30 +224,6 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(AbstractRuleParametersSpec abstractRuleParametersSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in table level checks.
-     *
-     * @param tableCheckCategoriesSpec Built-in table level checks.
-     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(TableAdHocCheckCategoriesSpec tableCheckCategoriesSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts a configuration of built-in column level checks.
-     *
-     * @param columnCheckCategoriesSpec Built-in column level checks.
-     * @param parameter                        Additional parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(ColumnAdHocCheckCategoriesSpec columnCheckCategoriesSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 
