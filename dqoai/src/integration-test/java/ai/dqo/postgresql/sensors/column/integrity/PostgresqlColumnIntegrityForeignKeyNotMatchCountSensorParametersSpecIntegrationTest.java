@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.bigquery.sensors.column.integrity;
+package ai.dqo.postgresql.sensors.column.integrity;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
+import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -35,17 +35,16 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class PostgresqlColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
     private ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnIntegrityForeignKeyNotMatchCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
     private SampleTableMetadataForeign sampleTableMetadataForeign;
 
-
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.postgresql);
         this.sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
