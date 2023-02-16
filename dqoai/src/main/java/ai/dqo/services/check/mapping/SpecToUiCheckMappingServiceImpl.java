@@ -29,6 +29,7 @@ import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
@@ -44,7 +45,6 @@ import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.validation.constraints.Null;
 import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -115,21 +115,19 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
                         uiAllChecksModel.getRunChecksJobTemplate()));
 
-        if (connectionSpec != null && connectionSpec.getSchedules() != null) {
-            UIEffectiveSchedulesModel connectionSchedulesModel = UIEffectiveSchedulesModel.fromRecurringSchedulesSpec(
+        UIEffectiveScheduleModel effectiveScheduleModel = getEffectiveScheduleModel(
+                tableSpec.getSchedulesOverride(),
+                checkCategoriesSpec.getSchedulingGroup(),
+                UIEffectiveScheduleLevel.table_override
+        );
+        if (effectiveScheduleModel == null && connectionSpec != null) {
+            effectiveScheduleModel = getEffectiveScheduleModel(
                     connectionSpec.getSchedules(),
-                    getScheduleSpecToLocalDateTimeConverter()
+                    checkCategoriesSpec.getSchedulingGroup(),
+                    UIEffectiveScheduleLevel.connection
             );
-            uiAllChecksModel.setConnectionSchedules(connectionSchedulesModel);
         }
-
-        if (tableSpec.getSchedulesOverride() != null) {
-            UIEffectiveSchedulesModel tableSchedulesModel = UIEffectiveSchedulesModel.fromRecurringSchedulesSpec(
-                    tableSpec.getSchedulesOverride(),
-                    getScheduleSpecToLocalDateTimeConverter()
-            );
-            uiAllChecksModel.setTableSchedules(tableSchedulesModel);
-        }
+        uiAllChecksModel.setEffectiveSchedule(effectiveScheduleModel);
 
         String defaultDataStreamName = tableSpec.getDataStreams().getFirstDataStreamMappingName();
 
@@ -150,6 +148,17 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             if (categoryModel != null && categoryModel.getChecks().size() > 0) {
                 uiAllChecksModel.getCategories().add(categoryModel);
             }
+        }
+
+        // All checks override schedule especially in cases when CheckSearchFilters are very specific.
+        boolean allChecksOverrideSchedule = uiAllChecksModel.getCategories().stream()
+                .allMatch(
+                        checkCategory -> checkCategory.getChecks().stream()
+                                .allMatch(check -> check.getEffectiveSchedule() != null)
+                );
+        if (allChecksOverrideSchedule) {
+             // Info about schedule for the whole model is irrelevant.
+            uiAllChecksModel.setEffectiveSchedule(null);
         }
 
         return uiAllChecksModel;
@@ -313,13 +322,17 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         dataCleanJobTemplate.setDataStreamName(checkSpec.getDataStream());
         checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
 
-        RecurringScheduleSpec scheduleOverride = checkModel.getScheduleOverride();
+        RecurringScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
         checkModel.setScheduleOverride(scheduleOverride);
-        if (scheduleOverride != null) {
-            checkModel.setEffectiveScheduleModel(
+        if (scheduleOverride != null && !scheduleOverride.isDisabled()) {
+            checkModel.setEffectiveSchedule(
                     UIEffectiveScheduleModel.fromRecurringScheduleSpec(
-                            scheduleOverride, scheduleGroup, getScheduleSpecToLocalDateTimeConverter()
-            ));
+                            scheduleOverride,
+                            scheduleGroup,
+                            UIEffectiveScheduleLevel.check_override,
+                            getScheduleSpecToLocalDateTimeConverter()
+                    )
+            );
         }
 
         checkModel.setComments(checkSpec.getComments());
@@ -542,6 +555,24 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         return schedulesUtilityService != null
                 ? schedulesUtilityService::getTimeOfNextExecution
                 : null;
+    }
+
+    protected UIEffectiveScheduleModel getEffectiveScheduleModel(RecurringSchedulesSpec schedulesSpec,
+                                                                 CheckRunRecurringScheduleGroup scheduleGroup,
+                                                                 UIEffectiveScheduleLevel scheduleLevel) {
+        RecurringScheduleSpec scheduleSpec = schedulesSpec != null
+                ? schedulesSpec.getScheduleForCheckSchedulingGroup(scheduleGroup)
+                : null;
+
+        if (scheduleSpec != null && !scheduleSpec.isDisabled()) {
+            return UIEffectiveScheduleModel.fromRecurringScheduleSpec(
+                    scheduleSpec,
+                    scheduleGroup,
+                    scheduleLevel,
+                    getScheduleSpecToLocalDateTimeConverter()
+            );
+        }
+        return null;
     }
 
 }

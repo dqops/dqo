@@ -39,6 +39,8 @@ import java.util.function.Function;
 public class UIEffectiveScheduleModel {
     @JsonPropertyDescription("Field value for a schedule group to which this schedule belongs.")
     private CheckRunRecurringScheduleGroup scheduleGroup;
+    @JsonPropertyDescription("Field value for the level at which the schedule has been configured.")
+    private UIEffectiveScheduleLevel scheduleLevel;
 
     @JsonPropertyDescription("Field value for a CRON expression defining the scheduling.")
     private String cronExpression;
@@ -53,9 +55,11 @@ public class UIEffectiveScheduleModel {
     public static UIEffectiveScheduleModel fromRecurringScheduleSpec(
             RecurringScheduleSpec scheduleSpec,
             CheckRunRecurringScheduleGroup scheduleGroup,
+            UIEffectiveScheduleLevel scheduleLevel,
             Function<RecurringScheduleSpec, LocalDateTime> specToLocalDateTimeConverter) {
         UIEffectiveScheduleModel uiEffectiveScheduleModel = new UIEffectiveScheduleModel();
         uiEffectiveScheduleModel.scheduleGroup = scheduleGroup;
+        uiEffectiveScheduleModel.scheduleLevel = scheduleLevel;
         uiEffectiveScheduleModel.cronExpression = scheduleSpec.getCronExpression();
 
         if (!scheduleSpec.isDisabled()) {
