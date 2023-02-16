@@ -43,7 +43,8 @@ public class UIEffectiveScheduleModel {
     @JsonPropertyDescription("Field value for a CRON expression defining the scheduling.")
     private String cronExpression;
 
-    @JsonPropertyDescription("Field value for the time at which the scheduled checks will be executed.")
+    @JsonPropertyDescription("Field value for the time at which the scheduled checks will be executed. Null if disabled.")
+    @JsonInclude
     private LocalDateTime timeOfExecution;
 
     @JsonPropertyDescription("Field value for the time left until the execution of scheduled checks.")
@@ -57,14 +58,16 @@ public class UIEffectiveScheduleModel {
         uiEffectiveScheduleModel.scheduleGroup = scheduleGroup;
         uiEffectiveScheduleModel.cronExpression = scheduleSpec.getCronExpression();
 
-        if (specToLocalDateTimeConverter != null) {
-            uiEffectiveScheduleModel.timeOfExecution = specToLocalDateTimeConverter.apply(scheduleSpec);
-        }
+        if (!scheduleSpec.isDisabled()) {
+            if (specToLocalDateTimeConverter != null) {
+                uiEffectiveScheduleModel.timeOfExecution = specToLocalDateTimeConverter.apply(scheduleSpec);
+            }
 
-        if (uiEffectiveScheduleModel.timeOfExecution != null) {
-            uiEffectiveScheduleModel.timeUntilExecution =
-                    Duration.between(LocalDateTime.now(), uiEffectiveScheduleModel.timeOfExecution)
-                            .truncatedTo(ChronoUnit.SECONDS);
+            if (uiEffectiveScheduleModel.timeOfExecution != null) {
+                uiEffectiveScheduleModel.timeUntilExecution =
+                        Duration.between(LocalDateTime.now(), uiEffectiveScheduleModel.timeOfExecution)
+                                .truncatedTo(ChronoUnit.SECONDS);
+            }
         }
 
         return uiEffectiveScheduleModel;
