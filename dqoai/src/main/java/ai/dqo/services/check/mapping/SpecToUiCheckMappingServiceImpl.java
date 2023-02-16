@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
+import ai.dqo.core.scheduler.quartz.SchedulesUtilityService;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
@@ -26,45 +27,70 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
+import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
-import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.utils.reflection.ClassInfo;
 import ai.dqo.utils.reflection.FieldInfo;
 import ai.dqo.utils.reflection.ReflectionService;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
+import javax.validation.constraints.Null;
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.*;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
  * Service that creates the UI model from the data quality check specifications,
  * enabling transformation between the storage model (YAML compliant) with a UI friendly UI model.
  */
-@Component
+@Service
 public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingService {
-    private ReflectionService reflectionService;
-    private SensorDefinitionFindService sensorDefinitionFindService;
+    private final ReflectionService reflectionService;
+    private final SensorDefinitionFindService sensorDefinitionFindService;
+    private final SchedulesUtilityService schedulesUtilityService;
 
     /**
      * Creates a check mapping service that exchanges the data for data quality checks between UI models and the data quality check specifications.
      * @param reflectionService Reflection service used to read the list of checks.
      * @param sensorDefinitionFindService Service that finds the definition of sensors, to verify their capabilities.
+     * @param schedulesUtilityService Schedule specs utility service to get detailed info about CRON expressions.
      */
     @Autowired
-    public SpecToUiCheckMappingServiceImpl(
-            ReflectionService reflectionService,
-            SensorDefinitionFindService sensorDefinitionFindService) {
+    public SpecToUiCheckMappingServiceImpl(ReflectionService reflectionService,
+                                           SensorDefinitionFindService sensorDefinitionFindService,
+                                           SchedulesUtilityService schedulesUtilityService) {
         this.reflectionService = reflectionService;
         this.sensorDefinitionFindService = sensorDefinitionFindService;
+        this.schedulesUtilityService = schedulesUtilityService;
+    }
+
+    /**
+     * Creates a check mapping service that exchanges the data for data quality checks between UI models and the data quality check specifications.
+     * WARNING: It doesn't set the {@link SchedulesUtilityService}, therefore it's not able to resolve schedules (i.e. CRON expressions).
+     * @param reflectionService Reflection service used to read the list of checks.
+     * @param sensorDefinitionFindService Service that finds the definition of sensors, to verify their capabilities.
+     */
+    public SpecToUiCheckMappingServiceImpl(ReflectionService reflectionService,
+                                           SensorDefinitionFindService sensorDefinitionFindService) {
+        this.reflectionService = reflectionService;
+        this.sensorDefinitionFindService = sensorDefinitionFindService;
+        this.schedulesUtilityService = null;
     }
 
     /**
@@ -72,6 +98,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations. Also determines which checks will be included in the ui model.
+     * @param connectionSpec Connection specification for the connection to which the table belongs to.
      * @param tableSpec Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
@@ -80,6 +107,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     @Override
     public UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
                                           CheckSearchFilters runChecksTemplate,
+                                          ConnectionSpec connectionSpec,
                                           TableSpec tableSpec,
                                           ExecutionContext executionContext,
                                           ProviderType providerType) {
@@ -88,6 +116,22 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         uiAllChecksModel.setDataCleanJobTemplate(
                 DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
                         uiAllChecksModel.getRunChecksJobTemplate()));
+
+        if (connectionSpec != null && connectionSpec.getSchedules() != null) {
+            UIEffectiveSchedulesModel connectionSchedulesModel = UIEffectiveSchedulesModel.fromRecurringSchedulesSpec(
+                    connectionSpec.getSchedules(),
+                    getScheduleSpecToLocalDateTimeConverter()
+            );
+            uiAllChecksModel.setConnectionSchedules(connectionSchedulesModel);
+        }
+
+        if (tableSpec.getSchedulesOverride() != null) {
+            UIEffectiveSchedulesModel tableSchedulesModel = UIEffectiveSchedulesModel.fromRecurringSchedulesSpec(
+                    tableSpec.getSchedulesOverride(),
+                    getScheduleSpecToLocalDateTimeConverter()
+            );
+            uiAllChecksModel.setTableSchedules(tableSchedulesModel);
+        }
 
         String defaultDataStreamName = tableSpec.getDataStreams().getFirstDataStreamMappingName();
 
@@ -98,7 +142,13 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         for (FieldInfo categoryFieldInfo : categoryFields) {
             Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
             UIQualityCategoryModel categoryModel = createCategoryModel(categoryFieldInfo,
-                    categoryFieldValue, runChecksTemplate, tableSpec, executionContext, providerType, defaultDataStreamName);
+                    categoryFieldValue,
+                    checkCategoriesSpec.getSchedulingGroup(),
+                    runChecksTemplate,
+                    tableSpec,
+                    executionContext,
+                    providerType,
+                    defaultDataStreamName);
             if (categoryModel != null && categoryModel.getChecks().size() > 0) {
                 uiAllChecksModel.getCategories().add(categoryModel);
             }
@@ -143,6 +193,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a UI model for all data quality checks for one category.
      * @param categoryFieldInfo       Field info for the category field.
      * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
+     * @param scheduleGroup Scheduling group relevant to this check.
      * @param runChecksTemplate       Run check job template, acting as a filtering template.
      * @param tableSpec               Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
@@ -152,6 +203,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      */
     protected UIQualityCategoryModel createCategoryModel(FieldInfo categoryFieldInfo,
                                                          Object checkCategoryParentNode,
+                                                         CheckRunRecurringScheduleGroup scheduleGroup,
                                                          CheckSearchFilters runChecksTemplate,
                                                          TableSpec tableSpec,
                                                          ExecutionContext executionContext,
@@ -169,7 +221,6 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 )
         );
 
-
         ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
         Optional<String> checkNameFilter = Optional.ofNullable(categoryModel.getRunChecksJobTemplate().getCheckName());
         List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, checkNameFilter);
@@ -179,7 +230,13 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
                     (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
             AbstractCheckSpec<?,?,?,?> checkFieldValue = (AbstractCheckSpec<?,?,?,?>) checkSpecObject;
-            UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue, runChecksCategoryTemplate, tableSpec, executionContext, providerType);
+            UICheckModel checkModel = createCheckModel(checkFieldInfo,
+                    checkFieldValue,
+                    scheduleGroup,
+                    runChecksCategoryTemplate,
+                    tableSpec,
+                    executionContext,
+                    providerType);
             if (checkModel == null) {
                 continue;
             }
@@ -199,6 +256,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a UI model for a single data quality check.
      * @param checkFieldInfo Reflection info of the field in the parent object that stores the check specification field value.
      * @param checkSpec Check specification instance retrieved from the object.
+     * @param scheduleGroup Scheduling group relevant to this check.
      * @param runChecksCategoryTemplate "run check" job configuration for the parent category, used to create templates for each check.
      * @param tableSpec Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
@@ -207,6 +265,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      */
     protected UICheckModel createCheckModel(FieldInfo checkFieldInfo,
                                             AbstractCheckSpec<?,?,?,?> checkSpec,
+                                            CheckRunRecurringScheduleGroup scheduleGroup,
                                             CheckSearchFilters runChecksCategoryTemplate,
                                             TableSpec tableSpec,
                                             ExecutionContext executionContext,
@@ -256,7 +315,15 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         dataCleanJobTemplate.setDataStreamName(checkSpec.getDataStream());
         checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
 
-        checkModel.setScheduleOverride(checkSpec.getScheduleOverride());
+        RecurringScheduleSpec scheduleOverride = checkModel.getScheduleOverride();
+        checkModel.setScheduleOverride(scheduleOverride);
+        if (scheduleOverride != null && !scheduleOverride.isDisabled()) {
+            checkModel.setEffectiveScheduleModel(
+                    UIEffectiveScheduleModel.fromRecurringScheduleSpec(
+                            scheduleOverride, scheduleGroup, getScheduleSpecToLocalDateTimeConverter()
+            ));
+        }
+
         checkModel.setComments(checkSpec.getComments());
         checkModel.setDisabled(checkSpec.isDisabled());
         checkModel.setExcludeFromKpi(checkSpec.isExcludeFromKpi());
@@ -472,4 +539,11 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
 
         return fields;
     }
+
+    protected Function<RecurringScheduleSpec, LocalDateTime> getScheduleSpecToLocalDateTimeConverter() {
+        return schedulesUtilityService != null
+                ? schedulesUtilityService::getTimeOfNextExecution
+                : null;
+    }
+
 }
