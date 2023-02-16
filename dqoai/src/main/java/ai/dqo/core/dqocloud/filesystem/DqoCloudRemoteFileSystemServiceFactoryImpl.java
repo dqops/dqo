@@ -57,7 +57,8 @@ public class DqoCloudRemoteFileSystemServiceFactoryImpl implements DqoCloudRemot
         GSFileSystemRoot gsFileSystemRoot = new GSFileSystemRoot(
                 Path.of(remoteBucketClient.getObjectPrefix()),
                 remoteBucketClient.getStorage(),
-                remoteBucketClient.getBucketName());
+                remoteBucketClient.getBucketName(),
+                rootType);
         return new DqoFileSystem(gsFileSystemRoot, this.remoteFileSystemService);
     }
 }

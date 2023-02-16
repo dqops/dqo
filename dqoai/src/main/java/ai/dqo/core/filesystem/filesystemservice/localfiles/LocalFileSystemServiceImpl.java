@@ -15,21 +15,21 @@
  */
 package ai.dqo.core.filesystem.filesystemservice.localfiles;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.AbstractFileSystemRoot;
-import ai.dqo.core.filesystem.filesystemservice.contract.FileMetadataReadException;
-import ai.dqo.core.filesystem.filesystemservice.contract.FileSystemChangeException;
-import ai.dqo.core.filesystem.filesystemservice.contract.FileSystemReadException;
+import ai.dqo.core.filesystem.filesystemservice.contract.*;
 import ai.dqo.core.filesystem.metadata.FileMetadata;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
 import ai.dqo.utils.exceptions.CloseableHelper;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
+import io.netty.buffer.ByteBuf;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.core.io.buffer.DataBuffer;
 import org.springframework.core.io.buffer.DataBufferUtils;
 import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 import reactor.netty.ByteBufFlux;
 
 import java.io.*;
@@ -43,6 +43,7 @@ import java.util.stream.Stream;
  * Local file system implementation.
  */
 @Component
+@Slf4j
 public class LocalFileSystemServiceImpl implements LocalFileSystemService {
     /**
      * Returns true if the file system represents a local file system.
@@ -232,11 +233,14 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
      *
      * @param fileSystemRoot   File system root (with credentials).
      * @param relativeFilePath Relative file path inside the remote root.
-     * @return Flux with byte array blocks.
+     * @return File download response with the flux of file content and the metadata.
      */
     @Override
-    public ByteBufFlux downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+    public DownloadFileResponse downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
         Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
+
+
+
         return ByteBufFlux.fromPath(fullPathToFile);
     }
 
@@ -278,6 +282,88 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
         }
         finally {
             CloseableHelper.closeSilently(sourceStream);
+        }
+    }
+
+    /**
+     * Uploads a file to the file system as an asynchronous operation using Flux.
+     *
+     * @param fileSystemRoot   File system root.
+     * @param relativeFilePath Relative path to the uploaded file.
+     * @param bytesFlux        Source flux with byte buffers to be uploaded.
+     * @param fileMetadata     File metadata with the file length and file content hash.
+     * @return Mono returned when the file was fully uploaded.
+     */
+    @Override
+    public Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux, DqoFileMetadata fileMetadata) {
+        Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
+
+        try {
+            Path parentFolderPath = fullPathToFile.getParent();
+            if (!Files.exists(parentFolderPath)) {
+                try {
+                    Files.createDirectories(parentFolderPath);
+                }
+                catch (IOException ex) {
+                    // ignore, this could be just a race condition that another thread is trying to create the same folder
+                }
+            }
+
+            final OutputStream fileOutputStream = Files.newOutputStream(fullPathToFile);
+            return bytesFlux.doOnEach(byteBufSignal -> {
+                switch (byteBufSignal.getType()) {
+                    case ON_NEXT: {
+                        try {
+                            ByteBuf byteBuf = byteBufSignal.get();
+                            byte[] byteArray = byteBuf.array();
+                            fileOutputStream.write(byteArray);
+                        }
+                        catch (Exception ex) {
+                            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                        }
+                        break;
+                    }
+
+                    case ON_ERROR: {
+                        try {
+                            fileOutputStream.close();
+                            Files.delete(fullPathToFile);
+
+                            Path fileName = relativeFilePath.getFileName();
+                            if (fileName.endsWith(".parquet")) {
+                                Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
+                                if (Files.exists(crcFilePath)) {
+                                    Files.delete(crcFilePath);
+                                }
+                            }
+                        }
+                        catch (Exception ex) {
+                            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                        }
+
+                        break;
+                    }
+
+                    case ON_COMPLETE: {
+                        try {
+                            fileOutputStream.close();
+
+                            Path fileName = relativeFilePath.getFileName();
+                            if (fileName.endsWith(".parquet")) {
+                                Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
+                                Files.write(crcFilePath, fileMetadata.getCustomHash());
+                            }
+                        }
+                        catch (Exception ex) {
+                            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                        }
+                        break;
+                    }
+                }
+            }).then(Mono.just(relativeFilePath));
+        }
+        catch (Exception ex) {
+            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
         }
     }
 }

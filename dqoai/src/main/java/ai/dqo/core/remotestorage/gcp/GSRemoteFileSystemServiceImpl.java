@@ -16,10 +16,8 @@
 package ai.dqo.core.remotestorage.gcp;
 
 import ai.dqo.core.configuration.DqoStorageGcpConfigurationProperties;
-import ai.dqo.core.filesystem.filesystemservice.contract.AbstractFileSystemRoot;
-import ai.dqo.core.filesystem.filesystemservice.contract.FileMetadataReadException;
-import ai.dqo.core.filesystem.filesystemservice.contract.FileSystemChangeException;
-import ai.dqo.core.filesystem.filesystemservice.contract.FileSystemReadException;
+import ai.dqo.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
+import ai.dqo.core.filesystem.filesystemservice.contract.*;
 import ai.dqo.core.filesystem.metadata.FileMetadata;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
 import ai.dqo.utils.exceptions.CloseableHelper;
@@ -30,10 +28,14 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import io.netty.buffer.Unpooled;
+import io.netty.handler.codec.http.HttpHeaderNames;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 import reactor.netty.ByteBufFlux;
+import reactor.netty.http.client.HttpClientResponse;
 
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -53,15 +55,23 @@ import java.util.concurrent.CompletableFuture;
 @Component
 public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService {
     public static final String HEADER_FILE_HASH = "Hash";
-    private DqoStorageGcpConfigurationProperties gcpConfigurationProperties;
+    private final DqoStorageGcpConfigurationProperties gcpConfigurationProperties;
+    private final GcpHttpClientProvider gcpHttpClientProvider;
+    private final DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
 
     /**
      * Default injection constructor.
      * @param gcpConfigurationProperties Google Storage configuration properties.
+     * @param gcpHttpClientProvider HTTP client provider that creates HTTP clients to be used to read and write files in a GCP storage bucket.
+     * @param dqoCloudAccessTokenCache DQO Cloud access key cache. Returns the most current access token to access the google storage.
      */
     @Autowired
-    public GSRemoteFileSystemServiceImpl(DqoStorageGcpConfigurationProperties gcpConfigurationProperties) {
+    public GSRemoteFileSystemServiceImpl(DqoStorageGcpConfigurationProperties gcpConfigurationProperties,
+                                         GcpHttpClientProvider gcpHttpClientProvider,
+                                         DqoCloudAccessTokenCache dqoCloudAccessTokenCache) {
         this.gcpConfigurationProperties = gcpConfigurationProperties;
+        this.gcpHttpClientProvider = gcpHttpClientProvider;
+        this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
     }
 
     /**
@@ -234,7 +244,6 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
             Storage storage = null;
             BlobInfo blobInfo = null;
 
-
             GSFileSystemRoot gsFileSystemRoot = (GSFileSystemRoot) fileSystemRoot;
             storage = gsFileSystemRoot.getStorage();
             Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
@@ -339,10 +348,52 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
      *
      * @param fileSystemRoot   File system root (with credentials).
      * @param relativeFilePath Relative file path inside the remote root.
-     * @return Flux with byte array blocks.
+     * @return File download response with the flux of file content and the metadata.
      */
     @Override
-    public ByteBufFlux downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+    public DownloadFileResponse downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
         return null;
+    }
+
+    /**
+     * Uploads a file to the file system as an asynchronous operation using Flux.
+     *
+     * @param fileSystemRoot   File system root.
+     * @param relativeFilePath Relative path to the uploaded file.
+     * @param bytesFlux        Source flux with byte buffers to be uploaded.
+     * @param fileMetadata     File metadata with the file length and file content hash.
+     * @return Mono returned when the file was fully uploaded.
+     */
+    @Override
+    public Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux, DqoFileMetadata fileMetadata) {
+        try {
+            GSFileSystemRoot gsFileSystemRoot = (GSFileSystemRoot) fileSystemRoot;
+            Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
+                    (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
+                    relativeFilePath;
+            String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+
+            Path fileName = relativeFilePath.getFileName();
+            String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
+                    fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
+                            "application/octet-stream";
+            String fileHashHex = Hex.encodeHexString(fileMetadata.getCustomHash());
+
+            Mono<HttpClientResponse> uploadFileMono = this.gcpHttpClientProvider.getHttpClient()
+                    .headers(httpHeaders -> httpHeaders
+                            .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()))
+                            .add(HttpHeaderNames.CONTENT_TYPE, contentType)
+                            .add(HttpHeaderNames.CONTENT_LENGTH, fileMetadata.getFileLength())
+                            .add("x-goog-meta-" + HEADER_FILE_HASH, fileHashHex))
+                    .put()
+                    .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
+                    .send(bytesFlux)
+                    .response();
+
+            return uploadFileMono.thenReturn(relativeFilePath);
+        }
+        catch (Exception ex) {
+            throw new FileSystemChangeException(relativeFilePath, ex.getMessage(), ex);
+        }
     }
 }

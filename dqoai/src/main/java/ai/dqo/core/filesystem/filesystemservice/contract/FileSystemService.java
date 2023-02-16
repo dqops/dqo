@@ -19,6 +19,8 @@ import ai.dqo.core.filesystem.metadata.FileMetadata;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
 
 import java.io.InputStream;
+
+import reactor.core.publisher.Mono;
 import reactor.netty.ByteBufFlux;
 
 import java.nio.file.Path;
@@ -91,7 +93,19 @@ public interface FileSystemService {
      * Downloads a file asynchronously, returning a flux of file content blocks.
      * @param fileSystemRoot File system root (with credentials).
      * @param relativeFilePath Relative file path inside the remote root.
-     * @return Flux with byte array blocks.
+     * @param lastKnownFileMetadata Last known file metadata. Could be used for verification or skipping an extra hashing.
+     * @return File download response with the flux of file content and the metadata.
      */
-    ByteBufFlux downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath);
+    DownloadFileResponse downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, FileMetadata lastKnownFileMetadata);
+
+    /**
+     * Uploads a file to the file system as an asynchronous operation using Flux.
+     * @param fileSystemRoot File system root.
+     * @param relativeFilePath Relative path to the uploaded file.
+     * @param bytesFlux Source flux with byte buffers to be uploaded.
+     * @param fileMetadata File metadata with the file length and file content hash.
+     * @return Mono returned when the file was fully uploaded.
+     */
+    Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux,
+                                      DqoFileMetadata fileMetadata);
 }

@@ -16,6 +16,7 @@
 package ai.dqo.core.remotestorage.gcp;
 
 import ai.dqo.core.filesystem.filesystemservice.contract.AbstractFileSystemRoot;
+import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import com.google.cloud.storage.Storage;
 
 import java.nio.file.Path;
@@ -24,8 +25,9 @@ import java.nio.file.Path;
  * File system root for a google storage bucket.
  */
 public class GSFileSystemRoot extends AbstractFileSystemRoot {
-    private Storage storage;
-    private String bucketName;
+    private final Storage storage;
+    private final String bucketName;
+    private final DqoRoot rootType;
 
     /**
      * Creates a root file system.
@@ -34,10 +36,11 @@ public class GSFileSystemRoot extends AbstractFileSystemRoot {
      * @param storage Configured google storage service with credentials.
      * @param bucketName Bucket name.
      */
-    public GSFileSystemRoot(Path rootPath, Storage storage, String bucketName) {
+    public GSFileSystemRoot(Path rootPath, Storage storage, String bucketName, DqoRoot rootType) {
         super(rootPath);
         this.storage = storage;
         this.bucketName = bucketName;
+        this.rootType = rootType;
     }
 
     /**
@@ -54,5 +57,13 @@ public class GSFileSystemRoot extends AbstractFileSystemRoot {
      */
     public Storage getStorage() {
         return storage;
+    }
+
+    /**
+     * Returns the file system root.
+     * @return File system root.
+     */
+    public DqoRoot getRootType() {
+        return rootType;
     }
 }
