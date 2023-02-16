@@ -119,14 +119,27 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 checkCategoriesSpec.getSchedulingGroup(),
                 UIEffectiveScheduleLevel.table_override
         );
+        UIScheduleEnabledStatus scheduleEnabledStatus = getScheduleEnabledStatus(
+                tableSpec.getSchedulesOverride()
+                        .getScheduleForCheckSchedulingGroup(
+                                checkCategoriesSpec.getSchedulingGroup()
+                        )
+        );
         if (effectiveScheduleModel == null && connectionSpec != null) {
             effectiveScheduleModel = getEffectiveScheduleModel(
                     connectionSpec.getSchedules(),
                     checkCategoriesSpec.getSchedulingGroup(),
                     UIEffectiveScheduleLevel.connection
             );
+            scheduleEnabledStatus = getScheduleEnabledStatus(
+                    connectionSpec.getSchedules()
+                            .getScheduleForCheckSchedulingGroup(
+                                    checkCategoriesSpec.getSchedulingGroup()
+                            )
+            );
         }
         uiAllChecksModel.setEffectiveSchedule(effectiveScheduleModel);
+        uiAllChecksModel.setEffectiveScheduleEnabledStatus(scheduleEnabledStatus);
 
         String defaultDataStreamName = tableSpec.getDataStreams().getFirstDataStreamMappingName();
 
@@ -150,14 +163,17 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         }
 
         // All checks override schedule especially in cases when CheckSearchFilters are very specific.
-        boolean allChecksOverrideSchedule = uiAllChecksModel.getCategories().stream()
-                .allMatch(
-                        checkCategory -> checkCategory.getChecks().stream()
-                                .allMatch(check -> check.getEffectiveSchedule() != null)
-                );
-        if (allChecksOverrideSchedule) {
+        List<UICheckModel> allChecksFlattened = uiAllChecksModel.getCategories().stream()
+                .flatMap(checkCategory -> checkCategory.getChecks().stream())
+                .collect(Collectors.toList());
+
+        if (allChecksFlattened.stream().findAny().isPresent()
+                && allChecksFlattened.stream().allMatch(
+                        check -> check.getEffectiveSchedule() != null
+        )) {
              // Info about schedule for the whole model is irrelevant.
             uiAllChecksModel.setEffectiveSchedule(null);
+            uiAllChecksModel.setEffectiveScheduleEnabledStatus(UIScheduleEnabledStatus.overridden);
         }
 
         return uiAllChecksModel;
@@ -324,15 +340,16 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         RecurringScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
         checkModel.setScheduleOverride(scheduleOverride);
         if (scheduleOverride != null && !scheduleOverride.isDisabled()) {
-            checkModel.setEffectiveSchedule(
-                    UIEffectiveScheduleModel.fromRecurringScheduleSpec(
-                            scheduleOverride,
-                            scheduleGroup,
-                            UIEffectiveScheduleLevel.check_override,
-                            this::safeGetTimeOfNextExecution
-                    )
-            );
+                checkModel.setEffectiveSchedule(
+                        UIEffectiveScheduleModel.fromRecurringScheduleSpec(
+                                scheduleOverride,
+                                scheduleGroup,
+                                UIEffectiveScheduleLevel.check_override,
+                                this::safeGetTimeOfNextExecution
+                        )
+                );
         }
+        checkModel.setScheduleEnabledStatus(getScheduleEnabledStatus(scheduleOverride));
 
         checkModel.setComments(checkSpec.getComments());
         checkModel.setDisabled(checkSpec.isDisabled());
@@ -587,4 +604,22 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         return null;
     }
 
+    /**
+     * Gets the relevant {@link UIScheduleEnabledStatus} from <code>scheduleSpec</code>
+     * @param scheduleSpec Schedule configuration for which to get activation status.
+     * @return {@link UIScheduleEnabledStatus} indicating the activation status of <code>scheduleSpec</code>.
+     */
+    protected UIScheduleEnabledStatus getScheduleEnabledStatus(RecurringScheduleSpec scheduleSpec) {
+        if (scheduleSpec != null) {
+            if (scheduleSpec.isDisabled()) {
+                return UIScheduleEnabledStatus.disabled;
+            }
+            else {
+                return UIScheduleEnabledStatus.enabled;
+            }
+        }
+        else {
+            return UIScheduleEnabledStatus.not_configured;
+        }
+    }
 }
