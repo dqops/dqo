@@ -110,73 +110,73 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
   const { sidebarWidth } = useTree();
 
   useEffect(() => {
-    const dataStreamName: any = 'null';
+    const dataStreamName: any = undefined;
 
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.adhoc) {
       if (column) {
-        CheckResultApi.getColumnAdHocChecksResults(connection, schema, table, column, dataStreamName, '', '' ).then((res) => {
+        CheckResultApi.getColumnAdHocChecksResults(connection, schema, table, column, dataStreamName).then((res) => {
           setCheckResults(res.data);
         });
-        SensorReadoutsApi.getColumnAdHocSensorReadouts(connection, schema, table, column, dataStreamName, '', '').then((res) => {
+        SensorReadoutsApi.getColumnAdHocSensorReadouts(connection, schema, table, column, dataStreamName).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getColumnAdHocErrors(connection, schema, table, column, dataStreamName, '', '').then((res) => {
+        ErrorsApi.getColumnAdHocErrors(connection, schema, table, column, dataStreamName).then((res) => {
           setErrors(res.data);
         });
       } else {
-        CheckResultApi.getTableAdHocChecksResults(connection, schema, table, dataStreamName, '', '' ).then((res) => {
+        CheckResultApi.getTableAdHocChecksResults(connection, schema, table, dataStreamName).then((res) => {
           setCheckResults(res.data);
         });
-        SensorReadoutsApi.getTableAdHocSensorReadouts(connection, schema, table, dataStreamName, '', '' ).then((res) => {
+        SensorReadoutsApi.getTableAdHocSensorReadouts(connection, schema, table, dataStreamName).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getTableAdHocErrors(connection, schema, table, dataStreamName, '', '' ).then((res) => {
+        ErrorsApi.getTableAdHocErrors(connection, schema, table, dataStreamName).then((res) => {
           setErrors(res.data);
         });
       }
     }
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.checkpoint) {
       if (column) {
-        CheckResultApi.getColumnCheckpointsResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        CheckResultApi.getColumnCheckpointsResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setCheckResults(res.data);
         });
-        SensorReadoutsApi.getColumnCheckpointsSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        SensorReadoutsApi.getColumnCheckpointsSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getColumnCheckpointsErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        ErrorsApi.getColumnCheckpointsErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setErrors(res.data);
         });
       } else {
-        CheckResultApi.getTableCheckpointsResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        CheckResultApi.getTableCheckpointsResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setCheckResults(res.data);
         });
-        SensorReadoutsApi.getTableCheckpointsSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        SensorReadoutsApi.getTableCheckpointsSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getTableCheckpointsErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        ErrorsApi.getTableCheckpointsErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setErrors(res.data);
         });
       }
     }
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       if (column) {
-        CheckResultApi.getColumnPartitionedChecksResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        CheckResultApi.getColumnPartitionedChecksResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setCheckResults(res.data);
         });
-        SensorReadoutsApi.getColumnPartitionedSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        SensorReadoutsApi.getColumnPartitionedSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getColumnPartitionedErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        ErrorsApi.getColumnPartitionedErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setErrors(res.data);
         });
       } else {
-        CheckResultApi.getTablePartitionedChecksResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        CheckResultApi.getTablePartitionedChecksResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setCheckResults(res.data);
         });
-        SensorReadoutsApi.getTablePartitionedSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        SensorReadoutsApi.getTablePartitionedSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getTablePartitionedErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, '', '' ).then((res) => {
+        ErrorsApi.getTablePartitionedErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
           setErrors(res.data);
         });
       }
