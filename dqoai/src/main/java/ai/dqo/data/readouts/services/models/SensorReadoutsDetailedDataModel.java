@@ -46,11 +46,4 @@ public class SensorReadoutsDetailedDataModel {
 
     @JsonPropertyDescription("Single sensor readouts")
     private List<SensorReadoutDetailedSingleModel> singleSensorReadouts;
-
-    /**
-     * Reverses the lists because we are appending the most recent (newest) statuses first, but we want to return the results ordered in chronological order (the most recent is the last in the list).
-     */
-    public void reverseLists() {
-        this.singleSensorReadouts = Lists.reverse(this.singleSensorReadouts);
-    }
 }
