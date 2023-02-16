@@ -36,6 +36,13 @@ const SelectDatabase = ({ onSelect }: ISelectDatabaseProps) => {
           <SvgIcon name="postgresql" className="mb-3 w-16 text-blue-500" />
           <div className="text-3xl font-semibold text-gray-700">PostgreSQL</div>
         </div>
+        <div
+          className="bg-white rounded-lg shadow-lg p-4 flex-1 cursor-pointer border border-gray-100 min-h-40 flex flex-col items-center justify-center"
+          onClick={() => onSelect(ConnectionBasicModelProviderTypeEnum.redshift)}
+        >
+          <SvgIcon name="redshift" className="mb-3 w-16 text-blue-500" />
+          <div className="text-3xl font-semibold text-gray-700">Redshift</div>
+        </div>
       </div>
     </div>
   );

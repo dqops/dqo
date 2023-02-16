@@ -162,8 +162,8 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
           check?.disabled ? 'line-through' : ''
         )}
       >
-        <td className="py-2 px-4 pr-4">
-          <div className="flex space-x-2 items-center min-w-60">
+        <td className="py-2 pr-4">
+          <div className="flex space-x-1 items-center min-w-60">
             {/*<div className="w-5">*/}
             {/*  <Checkbox checked={checked} onChange={setChecked} />*/}
             {/*</div>*/}

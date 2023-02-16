@@ -19,6 +19,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
+import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
@@ -57,6 +58,9 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("PostgreSQL connection parameters.")
     private PostgresqlParametersSpec postgresql;
 
+    @JsonPropertyDescription("Redshift connection parameters.")
+    private RedshiftParametersSpec redshift;
+
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
     private CheckSearchFilters runChecksJobTemplate;
 
@@ -89,6 +93,7 @@ public class ConnectionBasicModel {
             setBigquery(connectionSpec.getBigquery());
             setSnowflake(connectionSpec.getSnowflake());
             setPostgresql(connectionSpec.getPostgresql());
+            setRedshift(connectionSpec.getRedshift());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -141,5 +146,6 @@ public class ConnectionBasicModel {
         targetConnectionSpec.setBigquery(this.getBigquery());
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());
+        targetConnectionSpec.setRedshift(this.getRedshift());
     }
 }

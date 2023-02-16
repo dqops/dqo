@@ -58,4 +58,30 @@ public class DevelopmentCredentialsSecretNames {
      * Secret name that holds the api key.
      */
     public static final String TESTABLE_API_KEY = "${sm://testable-api-key}";
+
+    /**
+     * Property to retrieve the Redshift host.
+     */
+    public static final String REDSHIFT_HOST = "${sm://redshift-host}";
+
+    /**
+     * Property to retrieve the Redshift port.
+     */
+    public static final String REDSHIFT_PORT = "${sm://redshift-port}";
+
+    /**
+     * Property to retrieve the Redshift database.
+     */
+    public static final String REDSHIFT_DATABASE = "${sm://redshift-database}";
+
+    /**
+     * Property to retrieve the Redshift user name.
+     */
+    public static final String REDSHIFT_USERNAME = "${sm://redshift-username}";
+
+    /**
+     * Property to retrieve the Redshift user password.
+     */
+    public static final String REDSHIFT_PASSWORD = "${sm://redshift-password}";
+
 }
