@@ -137,8 +137,8 @@ public class ColumnsController {
      * @param tableName      Table name
      * @return List of columns inside a table with additional summary of the most recent profiler session.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columnswithstatistics")
-    @ApiOperation(value = "getColumnsWithStatistics",
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/statistics")
+    @ApiOperation(value = "getColumnsStatistics",
             notes = "Returns a list of columns inside a table with the metrics captured by the most recent statistics collection.",
             response = ColumnStatisticsModel[].class)
     @ResponseStatus(HttpStatus.OK)
@@ -147,7 +147,7 @@ public class ColumnsController {
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<ColumnStatisticsModel>> getColumnsWithStatistics(
+    public ResponseEntity<Flux<ColumnStatisticsModel>> getColumnsStatistics(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -275,19 +275,19 @@ public class ColumnsController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @return Basic column details for the requested column with additional summary of the most recent profiler session.
+     * @return Basic column details for the requested column with a summary of the most recent profiler session.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/basicwithstatistics")
-    @ApiOperation(value = "getColumnBasicWithStatistics",
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/statistics")
+    @ApiOperation(value = "getColumnStatistics",
             notes = "Returns the column specification with the metrics captured by the most recent statistics collection.",
             response = ColumnStatisticsModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Column basic details with statistics returned", response = ColumnStatisticsModel.class),
+            @ApiResponse(code = 200, message = "Column statistics returned", response = ColumnStatisticsModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<ColumnStatisticsModel>> getColumnBasicWithStatistics(
+    public ResponseEntity<Mono<ColumnStatisticsModel>> getColumnStatistics(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
