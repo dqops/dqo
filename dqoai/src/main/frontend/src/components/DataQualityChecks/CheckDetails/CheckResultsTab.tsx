@@ -6,9 +6,11 @@ import { useTree } from "../../../contexts/treeContext";
 
 interface CheckResultsTabProps {
   results: CheckResultsDetailedDataModel[];
+  dataStreamName?: string;
+  onChangeDataStream: (name: string) => void;
 }
 
-const CheckResultsTab = ({ results }: CheckResultsTabProps) => {
+const CheckResultsTab = ({ results, dataStreamName, onChangeDataStream }: CheckResultsTabProps) => {
   const { sidebarWidth } = useTree();
 
   const columns = [
@@ -124,8 +126,9 @@ const CheckResultsTab = ({ results }: CheckResultsTabProps) => {
           <div className="flex space-x-4 items-center">
             <div className="text-sm">Data stream</div>
             <Select
-              value={result.dataStream}
+              value={dataStreamName}
               options={result.dataStreamNames?.map((item) => ({ label: item, value: item })) || []}
+              onChange={onChangeDataStream}
             />
           </div>
           <Table

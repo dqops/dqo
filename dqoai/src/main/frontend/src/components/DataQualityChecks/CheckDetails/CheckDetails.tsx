@@ -47,7 +47,9 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
       "checkDisplayName": "string",
       "checkType": "string",
       "dataStreamNames": [
-        "string"
+        "all data",
+        "string",
+        "good"
       ],
       "dataStream": "string",
       "singleCheckResults": [
@@ -72,7 +74,51 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
           "provider": "string",
           "qualityDimension": "string",
           "sensorName": "string"
-        }
+        },
+        {
+          "actualValue": 0,
+          "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 0,
+          "columnName": "string",
+          "dataStream": "string",
+          "durationMs": 0,
+          "executedAt": 0,
+          "timeGradient": "string",
+          "timePeriod": "2023-02-16T21:31:05.146Z",
+          "includeInKpi": true,
+          "includeInSla": true,
+          "provider": "string",
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
+        {
+          "actualValue": 0,
+          "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 0,
+          "columnName": "string",
+          "dataStream": "string",
+          "durationMs": 0,
+          "executedAt": 0,
+          "timeGradient": "string",
+          "timePeriod": "2023-02-16T21:31:05.146Z",
+          "includeInKpi": true,
+          "includeInSla": true,
+          "provider": "string",
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
       ]
     }
   ]);
@@ -97,7 +143,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
         });
       } else {
         CheckResultApi.getTableAdHocChecksResults(connection, schema, table, dataStreamName).then((res) => {
-          setCheckResults(res.data);
+          // setCheckResults(res.data);
         });
         SensorReadoutsApi.getTableAdHocSensorReadouts(connection, schema, table, dataStreamName).then((res) => {
           setSensorReadouts(res.data);
@@ -153,11 +199,15 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
         });
       }
     }
-  }, [check]);
+  }, [check, dataStreamName, connection, schema, table, column]);
 
   const openDeleteDialog = () => {
     setDeleteDataDialogOpened(true);
   };
+
+  const onChangeDataStream = (name: string) => {
+    setDataStreamName(name);
+  }
 
   return (
     <div className="my-4" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 80}px` }}>
@@ -178,13 +228,25 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
 
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         {activeTab === 'check_results' && (
-          <CheckResultsTab results={checkResults} />
+          <CheckResultsTab
+            results={checkResults}
+            dataStreamName={dataStreamName}
+            onChangeDataStream={onChangeDataStream}
+          />
         )}
         {activeTab === 'sensor_readouts' && (
-          <SensorReadoutsTab sensorReadouts={sensorReadouts} />
+          <SensorReadoutsTab
+            sensorReadouts={sensorReadouts}
+            dataStreamName={dataStreamName}
+            onChangeDataStream={onChangeDataStream}
+          />
         )}
         {activeTab === 'execution_errors' && (
-          <CheckErrorsTab errors={errors} />
+          <CheckErrorsTab
+            errors={errors}
+            dataStreamName={dataStreamName}
+            onChangeDataStream={onChangeDataStream}
+          />
         )}
 
         <DeleteOnlyDataDialog

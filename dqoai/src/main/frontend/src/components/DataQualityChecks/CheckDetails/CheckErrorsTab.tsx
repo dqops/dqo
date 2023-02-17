@@ -6,9 +6,11 @@ import { useTree } from "../../../contexts/treeContext";
 
 interface CheckErrorsTabProps {
   errors: ErrorsDetailedDataModel[];
+  dataStreamName?: string;
+  onChangeDataStream: (name: string) => void;
 }
 
-const CheckErrorsTab = ({ errors }: CheckErrorsTabProps) => {
+const CheckErrorsTab = ({ errors, dataStreamName, onChangeDataStream }: CheckErrorsTabProps) => {
   const { sidebarWidth } = useTree();
 
   const columns = [
@@ -99,8 +101,9 @@ const CheckErrorsTab = ({ errors }: CheckErrorsTabProps) => {
           <div className="flex space-x-4 items-center">
             <div className="text-sm">Data stream</div>
             <Select
-              value={result.dataStream}
+              value={dataStreamName}
               options={result.dataStreamNames?.map((item) => ({ label: item, value: item })) || []}
+              onChange={onChangeDataStream}
             />
           </div>
           <Table
