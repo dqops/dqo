@@ -38,7 +38,7 @@
     {%- if (target_column_data_type == 'STRING') -%}
         {{ render_target_column(analyzed_table_to_render) }}
     {%- else -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
     {%- endif -%}
 {% endmacro %}
 

@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.bigquery.column.numeric;
+package ai.dqo.sensors.bigquery.column.uniqueness;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnNonNegativePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniquePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,27 +30,27 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericNonNegativePercentSensorParametersSpec;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniquePercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnNumericNonNegativePercentSensorParametersSpec sut;
+public class ColumnUniquenessUniquePercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnUniquenessUniquePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnNonNegativePercentCheckSpec checkSpec;
+    private ColumnUniquePercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sut = new ColumnNumericNonNegativePercentSensorParametersSpec();
+        this.sut = new ColumnUniquenessUniquePercentSensorParametersSpec();
         this.sut.setFilter("{table}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnNonNegativePercentCheckSpec();
+        this.checkSpec = new ColumnUniquePercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -85,7 +85,7 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/numeric/non_negative_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/uniqueness/unique_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -96,12 +96,11 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -127,12 +126,11 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -156,12 +154,11 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -185,12 +182,11 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -219,12 +215,11 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
@@ -250,12 +245,11 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -283,12 +277,11 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -324,12 +317,11 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_string` AS stream_level_3,
@@ -361,12 +353,11 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_string` AS stream_level_3,
@@ -398,12 +389,11 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(%s) = 0
+                        THEN 100.0
+                    ELSE 100.0 * COUNT(DISTINCT analyzed_table.`length_int`) / COUNT(analyzed_table.`length_int`)
+                END AS actual_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_string` AS stream_level_3,

@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.sensors.column.numeric;
+package ai.dqo.snowflake.sensors.column.numeric;
 
-import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnNonNegativePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnNonNegativeCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +28,8 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericNonNegativePercentSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericNonNegativeCountSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,19 +38,19 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class PostgresqlColumnNumericNonNegativePercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
-    private ColumnNumericNonNegativePercentSensorParametersSpec sut;
+public class SnowflakeColumnNumericNonNegativeCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private ColumnNumericNonNegativeCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnNonNegativePercentCheckSpec checkSpec;
+    private ColumnNonNegativeCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.postgresql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNumericNonNegativePercentSensorParametersSpec();
-        this.checkSpec = new ColumnNonNegativePercentCheckSpec();
+        this.sut = new ColumnNumericNonNegativeCountSensorParametersSpec();
+        this.checkSpec = new ColumnNonNegativeCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -64,7 +64,7 @@ public class PostgresqlColumnNumericNonNegativePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(64.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class PostgresqlColumnNumericNonNegativePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(64.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class PostgresqlColumnNumericNonNegativePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(64.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class PostgresqlColumnNumericNonNegativePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class PostgresqlColumnNumericNonNegativePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(64.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(16L, resultTable.column(0).get(0));
     }
 }

@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors.bigquery.column.numeric;
+package ai.dqo.sensors.bigquery.column.nulls;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnNonNegativePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,40 +30,40 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericNonNegativePercentSensorParametersSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNotNullsPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnNumericNonNegativePercentSensorParametersSpec sut;
+public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnNullsNotNullsPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnNonNegativePercentCheckSpec checkSpec;
+    private ColumnNotNullsPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sut = new ColumnNumericNonNegativePercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut = new ColumnNullsNotNullsPercentSensorParametersSpec();
+        this.sut.setFilter("{table}.`id` <> 4");
 
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnNonNegativePercentCheckSpec();
+        this.checkSpec = new ColumnNotNullsPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "length_int", this.checkSpec);
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date3", this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale);
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "date3", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale, timeSeriesColumn);
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(this.sampleTableMetadata, "date3", this.checkSpec, timeScale, timeSeriesColumn);
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
@@ -85,7 +85,7 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
 
     @Test
     void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
-        Assertions.assertEquals("column/numeric/non_negative_percent", this.sut.getSensorDefinitionName());
+        Assertions.assertEquals("column/nulls/not_null_percent", this.sut.getSensorDefinitionName());
     }
 
     @Test
@@ -96,12 +96,10 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE 100.0 * COUNT(%s) / COUNT(*)
+                END AS actual_value
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s""";
 
@@ -121,20 +119,18 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
-            setTimestampColumn("date");
+            setTimestampColumn("date1");
         }});
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
-                analyzed_table.`date` AS time_period,
-                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE 100.0 * COUNT(%s) / COUNT(*)
+                END AS actual_value,
+                CAST(analyzed_table.`date1` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period, time_period_utc
@@ -156,12 +152,10 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE 100.0 * COUNT(%s) / COUNT(*)
+                END AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -180,19 +174,17 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date1");
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
-                analyzed_table.`date` AS time_period,
-                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE 100.0 * COUNT(%s) / COUNT(*)
+                END AS actual_value,
+                CAST(analyzed_table.`date1` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY time_period, time_period_utc
@@ -214,18 +206,16 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
-                analyzed_table.`length_string` AS stream_level_1
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE 100.0 * COUNT(%s) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`date2` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
@@ -245,18 +235,16 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
         SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
-                analyzed_table.`length_string` AS stream_level_1,
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE 100.0 * COUNT(%s) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`date2` AS stream_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -275,23 +263,21 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date1");
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("date2")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
-                analyzed_table.`length_string` AS stream_level_1,
-                analyzed_table.`date` AS time_period,
-                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE 100.0 * COUNT(%s) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`date2` AS stream_level_1,
+                CAST(analyzed_table.`date1` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1, time_period, time_period_utc
@@ -308,37 +294,33 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenAdHocOneTimeSeriesTwoDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
-            setTimestampColumn("date");
+            setTimestampColumn("date1");
         }});
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
-                        DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("date4")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3,
-                analyzed_table.`date` AS time_period,
-                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE 100.0 * COUNT(%s) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`date2` AS stream_level_1,
+                analyzed_table.`date4` AS stream_level_2,
+                CAST(analyzed_table.`date1` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+            GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -350,32 +332,28 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenCheckpointDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
-                        DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("date4")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3,
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE 100.0 * COUNT(%s) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`date2` AS stream_level_1,
+                analyzed_table.`date4` AS stream_level_2,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+            GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -387,32 +365,28 @@ public class ColumnNumericNonNegativePercentSensorParametersSpecBigQueryTests ex
     }
 
     @Test
-    void renderSensor_whenPartitionedDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
+    void renderSensor_whenPartitionedDefaultTimeSeriesTwoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date1");
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
-                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
-                        DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
-                        DataStreamLevelSpecObjectMother.createColumnMapping("length_string")));
+                        DataStreamLevelSpecObjectMother.createColumnMapping("date2"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("date4")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
             SELECT
-                100.0 * SUM(
-                    CASE
-                        WHEN %s < 0 THEN 0
-                        ELSE 1
-                    END
-                ) / COUNT(*) AS actual_value,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3,
-                analyzed_table.`date` AS time_period,
-                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                CASE
+                    WHEN COUNT(*) = 0 THEN NULL
+                    ELSE 100.0 * COUNT(%s) / COUNT(*)
+                END AS actual_value,
+                analyzed_table.`date2` AS stream_level_1,
+                analyzed_table.`date4` AS stream_level_2,
+                CAST(analyzed_table.`date1` AS DATE) AS time_period,
+                TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+            GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
