@@ -1,0 +1,189 @@
+{% set macro_database_name =  connection.postgresql.database -%}
+{% set macro_schema_name = table.target.schema_name -%}
+{% set macro_table_name = table.target.table_name -%}
+{% set time_series = effective_time_series | default(none, true) -%}
+{% set timestamp_column_data_type = table.columns[time_series.timestamp_column].type_snapshot.column_type | upper | default(none, true) -%}
+{% set data_streams = effective_data_streams | default(none, true) -%}
+{% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
+
+{% macro quote_identifier(name) -%}
+    {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
+{%- endmacro %}
+
+{% macro make_text_constant(string) -%}
+    {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+{%- endmacro %}
+
+{% macro eol() -%}
+{{ '' }}
+{% endmacro %}
+
+{%- macro render_target_table() -%}
+    {{ quote_identifier(macro_database_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
+{%- endmacro %}
+
+{%- macro render_target_column(table_alias_prefix = '') -%}
+    {{ quote_identifier(column_name) }}
+{%- endmacro %}
+
+{%- macro render_column(name, table_alias_prefix = '') -%}
+    {%- if table_alias_prefix != '' -%}
+        {{ table_alias_prefix }}.{{ quote_identifier(name) }}
+    {%- else -%}
+        {{ quote_identifier(name) }}
+    {%- endif -%}
+{%- endmacro %}
+
+{% macro render_column_cast_to_string(analyzed_table_to_render) %}
+    {%- if (target_column_data_type == 'STRING') -%}
+        {{ render_target_column(analyzed_table_to_render) }}
+    {%- else -%}
+        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- endif -%}
+{% endmacro %}
+
+{% macro date_trunc(value, part='day', datatype=none) %}
+    {%- if part == 'year' -%}
+        DATE_TRUNC('YEAR', CAST({{value}} AS date))
+    {%- elif part == 'quarter' -%}
+        DATE_TRUNC('QUARTER', CAST({{value}} AS date))
+    {%- elif part == 'month' -%}
+        DATE_TRUNC('MONTH', CAST({{value}} AS date))
+    {%- elif part == 'week' -%}
+        DATE_TRUNC('WEEK', CAST({{value}} AS date))
+    {%- elif part == 'day' -%}
+        {%- if datatype == 'DATE' -%}
+            {{value}}
+        {%- else -%}
+            CAST({{value}} AS date)
+        {%- endif -%}
+    {%- elif part == 'hour' -%}
+        DATE_TRUNC('HOUR', CAST({{value}} AS datetime))
+    {%- elif part == 'millisecond' -%}
+        CAST({{value}} AS datetime)
+    {%- else -%}
+        CAST({{value}} AS date)
+    {%- endif -%}
+{% endmacro %}
+
+{% macro date_trunc_utc(value, part='day', datatype=none) %}
+    {%- if part == 'year' -%}
+        DATE_TRUNC('year', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
+    {%- elif part == 'quarter' -%}
+        DATE_TRUNC('quarter', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
+    {%- elif part == 'month' -%}
+        DATE_TRUNC('month', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP)
+    {%- elif part == 'week' -%}
+        DATE_TRUNC('week', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP)
+    {%- elif part == 'day' -%}
+        {%- if datatype == 'date' -%}
+            {{value}}
+        {%- else -%}
+            (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
+        {%- endif -%}
+    {%- elif part == 'hour' -%}
+        DATE_TRUNC('hour', (CAST({{value}} AS DATETIME)|| ' 00:00:00'):: TIMESTAMP
+    {%- elif part == 'millisecond' -%}
+        CAST({{value}} AS timestamp)
+    {%- else -%}
+        (CAST({{value}} AS date)|| ' 00:00:00'):: TIMESTAMP
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_expression(table_alias_prefix = '') %}
+    {%- if time_series is not none-%}
+        {%- if time_series.mode == 'current_time' -%}
+            {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
+                {{ date_trunc('LOCALTIMESTAMP', time_series.time_gradient, 'timestamp') }}
+            {%- else -%}
+                LOCALTIMESTAMP
+            {%- endif -%}
+        {%- elif time_series.mode == 'timestamp_column' -%}
+            {{ date_trunc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
+        {%- else -%}
+            <INVALID TIME SERIES MODE: {{time_series.mode}}/>
+        {%- endif -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_expression_utc(table_alias_prefix = '') %}
+    {%- if time_series is not none-%}
+        {%- if time_series.mode == 'current_time' -%}
+            {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
+                {{ date_trunc_utc('LOCALTIMESTAMP', time_series.time_gradient, 'timestamp') }}
+            {%- else -%}
+                LOCALTIMESTAMP
+            {%- endif -%}
+        {%- elif time_series.mode == 'timestamp_column' -%}
+            {{ date_trunc_utc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
+        {%- else -%}
+            <INVALID TIME SERIES MODE: {{time_series.mode}}/>
+        {%- endif -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_data_stream_projections(table_alias_prefix = '', indentation = '    ') %}
+    {%- if data_streams is not none and (data_streams | length()) > 0 -%}
+        {%- for attribute in data_streams -%}
+            {{ ',' }}
+            {%- with data_stream_level = data_streams[attribute] -%}
+                {%- if data_stream_level.source == 'tag' -%}
+                    {{ eol() }}{{ indentation }}{{ make_text_constant(data_stream_level.tag) }}
+                {%- elif data_stream_level.source == 'column_value' -%}
+                    {{ eol() }}{{ indentation }}{{ table_alias_prefix }}.{{ quote_identifier(data_stream_level.column) }}
+                {%- endif -%}
+            {%- endwith %} AS stream_{{ attribute }}
+        {%- endfor -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_projection(table_alias_prefix = '', indentation = '    ') %}
+    {%- if time_series is not none -%}
+        {{ ',' -}}{{- eol() -}}
+        {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
+        {{ indentation }}{{ render_time_dimension_expression_utc(table_alias_prefix) }} AS time_period_utc
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_where_clause(extra_filter = none) %}
+    {%- with filters = [table.filter|default(none, true), parameters.filter|default(none, true), extra_filter|default(none, true)] | reject('none') | list -%}
+        {%- if (filters | length) > 0 %}
+{{ 'WHERE ' }}
+            {%- for filter in filters -%}
+                {%- if not loop.first -%}
+                    {{ ' AND '}}
+                {%- endif -%}
+                {{ filter }}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endwith -%}
+{% endmacro %}
+
+{% macro render_grouping_column_names() %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+        {%- for attribute in data_streams -%}
+            {%- if not loop.first -%}
+                {{ ', ' }}
+            {%- endif -%}
+                stream_{{ attribute }}
+        {%- endfor -%}
+    {%- endif -%}
+    {%- if time_series is not none -%}
+        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+            {{ ', ' }}
+        {%- endif -%}
+            {{ 'time_period' }}, {{ 'time_period_utc' }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_group_by() %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
+GROUP BY {{ render_grouping_column_names() }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_order_by() %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
+ORDER BY {{ render_grouping_column_names() }}
+    {%- endif -%}
+{% endmacro %}

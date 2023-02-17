@@ -22,6 +22,7 @@ import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
 import ai.dqo.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
+import ai.dqo.connectors.sqlserver.SqlServerConnectionSpecObjectMother;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.sources.*;
@@ -53,6 +54,9 @@ public class SampleTableMetadataObjectMother {
 
             case redshift:
                 return RedshiftConnectionSpecObjectMother.create();
+
+            case sqlserver:
+                return SqlServerConnectionSpecObjectMother.create();
         }
 
         Assertions.fail("Add a case statement for a target provider and define a connection spec object mother for " + providerType.name());
@@ -77,6 +81,9 @@ public class SampleTableMetadataObjectMother {
 
             case redshift:
                 return RedshiftConnectionSpecObjectMother.getSchemaName();
+
+            case sqlserver:
+                return SqlServerConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());
