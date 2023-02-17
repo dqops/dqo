@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.sensors.column.strings;
+package ai.dqo.snowflake.sensors.column.strings;
 
-import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthInRangePercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class PostgresqlColumnStringsStringLengthInRangePercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
+public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private ColumnStringsStringLengthInRangePercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnStringLengthInRangePercentCheckSpec checkSpec;
@@ -46,7 +46,7 @@ public class PostgresqlColumnStringsStringLengthInRangePercentSensorParametersSp
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_min_length_test, ProviderType.postgresql);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_min_length_test, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnStringsStringLengthInRangePercentSensorParametersSpec();
