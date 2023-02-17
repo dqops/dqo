@@ -6,9 +6,11 @@ import { useTree } from "../../../contexts/treeContext";
 
 interface SensorReadoutsTabProps {
   sensorReadouts: SensorReadoutsDetailedDataModel[];
+  dataStreamName?: string;
+  onChangeDataStream: (name: string) => void;
 }
 
-const SensorReadoutsTab = ({ sensorReadouts }: SensorReadoutsTabProps) => {
+const SensorReadoutsTab = ({ sensorReadouts, dataStreamName, onChangeDataStream }: SensorReadoutsTabProps) => {
   const { sidebarWidth } = useTree();
 
   const columns = [
@@ -31,11 +33,13 @@ const SensorReadoutsTab = ({ sensorReadouts }: SensorReadoutsTabProps) => {
       label: 'Actual Value',
       value: 'actualValue',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Expected Value',
       value: 'expectedValue',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Column Name',
@@ -86,8 +90,9 @@ const SensorReadoutsTab = ({ sensorReadouts }: SensorReadoutsTabProps) => {
           <div className="flex space-x-4 items-center">
             <div className="text-sm">Data stream</div>
             <Select
-              value={result.dataStream}
+              value={dataStreamName}
               options={result.dataStreamNames?.map((item) => ({ label: item, value: item })) || []}
+              onChange={onChangeDataStream}
             />
           </div>
           <Table
