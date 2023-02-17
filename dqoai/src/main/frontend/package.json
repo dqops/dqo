@@ -6,6 +6,7 @@
     "@material-tailwind/react": "^1.2.4",
     "@naisutech/react-tree": "^3.1.0",
     "@openapitools/openapi-generator-cli": "^2.5.2",
+    "@tailwindcss/line-clamp": "^0.4.2",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.3.0",
     "@testing-library/user-event": "^14.4.3",

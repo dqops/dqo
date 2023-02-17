@@ -66,7 +66,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
           "durationMs": 0,
           "executedAt": 0,
           "timeGradient": "string",
-          "timePeriod": "2023-02-16T17:32:54.990Z",
+          "timePeriod": "2023-02-16T21:31:05.146Z",
           "includeInKpi": true,
           "includeInSla": true,
           "provider": "string",
@@ -76,42 +76,14 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
       ]
     }
   ]);
-  const [sensorReadouts, setSensorReadouts] = useState<SensorReadoutsDetailedDataModel[]>([
-    {
-      "checkHash": 0,
-      "checkCategory": "string",
-      "sensorName": "string",
-      "dataStreamNames": [
-        "string"
-      ],
-      "dataStream": "string",
-      "singleSensorReadouts": [
-        {
-          "checkName": "string",
-          "checkDisplayName": "string",
-          "checkType": "string",
-          "actualValue": 0,
-          "expectedValue": 0,
-          "columnName": "string",
-          "dataStream": "string",
-          "durationMs": 0,
-          "executedAt": 0,
-          "timeGradient": "string",
-          "timePeriod": "2023-02-16T18:23:26.450Z",
-          "provider": "string",
-          "qualityDimension": "string"
-        }
-      ]
-    }
-  ]);
+  const [sensorReadouts, setSensorReadouts] = useState<SensorReadoutsDetailedDataModel[]>([]);
   const [errors, setErrors] = useState<ErrorsDetailedDataModel[]>([]);
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const [dataStreamName, setDataStreamName] = useState<string>();
 
   const { sidebarWidth } = useTree();
 
   useEffect(() => {
-    const dataStreamName: any = undefined;
-
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.adhoc) {
       if (column) {
         CheckResultApi.getColumnAdHocChecksResults(connection, schema, table, column, dataStreamName).then((res) => {

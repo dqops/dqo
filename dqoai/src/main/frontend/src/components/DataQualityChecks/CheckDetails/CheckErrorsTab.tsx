@@ -16,11 +16,13 @@ const CheckErrorsTab = ({ errors }: CheckErrorsTabProps) => {
       label: 'Actual Value',
       value: 'actualValue',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Expected Value',
       value: 'expectedValue',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Column Name',
@@ -75,7 +77,8 @@ const CheckErrorsTab = ({ errors }: CheckErrorsTabProps) => {
     {
       label: 'Error Message',
       value: 'errorMessage',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm !py-2 text-gray-700',
+      render: (text: string) => <div className="line-clamp-3">{text}</div>
     },
     {
       label: 'Error Source',

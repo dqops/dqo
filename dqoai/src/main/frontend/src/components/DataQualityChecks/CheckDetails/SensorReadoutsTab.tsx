@@ -31,11 +31,13 @@ const SensorReadoutsTab = ({ sensorReadouts }: SensorReadoutsTabProps) => {
       label: 'Actual Value',
       value: 'actualValue',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Expected Value',
       value: 'expectedValue',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Column Name',

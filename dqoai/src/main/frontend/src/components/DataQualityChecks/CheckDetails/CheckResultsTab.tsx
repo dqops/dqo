@@ -16,56 +16,13 @@ const CheckResultsTab = ({ results }: CheckResultsTabProps) => {
       label: 'Actual Value',
       value: 'actualValue',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Expected Value',
       value: 'expectedValue',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Warning Lower Bound',
-      value: 'warningLowerBound',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Warning Upper Bound',
-      value: 'warningUpperBound',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Error Lower Bound',
-      value: 'errorLowerBound',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Fatal Lower Bound',
-      value: 'fatalLowerBound',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Fatal Upper Bound',
-      value: 'fatalUpperBound',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Severity',
-      value: 'severity',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Column Name',
-      value: 'columnName',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Data Stream',
-      value: 'dataStream',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Duration Ms',
-      value: 'durationMs',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Executed At',
@@ -80,6 +37,57 @@ const CheckResultsTab = ({ results }: CheckResultsTabProps) => {
     {
       label: 'Time Period',
       value: 'timePeriod',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+    },
+    {
+      label: 'Warning Lower Bound',
+      value: 'warningLowerBound',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
+    },
+    {
+      label: 'Warning Upper Bound',
+      value: 'warningUpperBound',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
+    },
+    {
+      label: 'Error Lower Bound',
+      value: 'errorLowerBound',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
+    },
+    {
+      label: 'Fatal Lower Bound',
+      value: 'fatalLowerBound',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
+    },
+    {
+      label: 'Fatal Upper Bound',
+      value: 'fatalUpperBound',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
+    },
+    {
+      label: 'Severity',
+      value: 'severity',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
+    },
+    {
+      label: 'Column Name',
+      value: 'columnName',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+    },
+    {
+      label: 'Data Stream',
+      value: 'dataStream',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+    },
+    {
+      label: 'Duration Ms',
+      value: 'durationMs',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
     },
     {
