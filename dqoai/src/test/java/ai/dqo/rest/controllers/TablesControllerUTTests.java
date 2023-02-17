@@ -35,9 +35,9 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.services.check.mapping.utils.UIAllChecksBasicModelUtility;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.utils.UICheckContainerBasicModelUtility;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.rest.models.metadata.TableBasicModel;
@@ -139,12 +139,12 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableProfilingChecksUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksUI(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getTarget().getSchemaName(),
                 tableSpec.getTarget().getTableName());
 
-        UIAllChecksModel result = responseEntity.getBody().block();
+        UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(4, result.getCategories().size());
     }
@@ -214,12 +214,12 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableProfilingChecksUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksUI(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getTarget().getSchemaName(),
                 tableSpec.getTarget().getTableName());
 
-        UIAllChecksModel result = responseEntity.getBody().block();
+        UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(4, result.getCategories().size());
     }
@@ -229,13 +229,13 @@ public class TablesControllerUTTests extends BaseTest {
     void getTableRecurringUI_whenTableRequested_thenReturnsRecurringUi(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableRecurringUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableRecurringUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 timePartition);
 
-        UIAllChecksModel result = responseEntity.getBody().block();
+        UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(4, result.getCategories().size());
     }
@@ -245,13 +245,13 @@ public class TablesControllerUTTests extends BaseTest {
     void getTablePartitionedChecksUI_whenTableRequested_thenReturnsPartitionedChecksUi(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTablePartitionedChecksUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTablePartitionedChecksUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 timePartition);
 
-        UIAllChecksModel result = responseEntity.getBody().block();
+        UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(3, result.getCategories().size());
     }
@@ -261,14 +261,14 @@ public class TablesControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getTableProfilingChecksUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableProfilingChecksUIBasic(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getTarget().getSchemaName(),
                 tableSpec.getTarget().getTableName());
 
-        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(4, UIAllChecksBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(4, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -276,15 +276,15 @@ public class TablesControllerUTTests extends BaseTest {
     void getTableRecurringUIBasic_whenTableRequested_thenReturnsRecurringUiBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getTableRecurringUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableRecurringUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 timePartition);
 
-        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(4, UIAllChecksBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(4, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -292,15 +292,15 @@ public class TablesControllerUTTests extends BaseTest {
     void getTablePartitionedChecksUIBasic_whenTableRequested_thenReturnsPartitionedChecksUiBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getTablePartitionedChecksUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTablePartitionedChecksUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 timePartition);
 
-        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(3, UIAllChecksBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(3, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
     
     @Test

@@ -45,7 +45,7 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.sources.TableYaml;
 import ai.dqo.metadata.userhome.UserHomeImpl;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.check.mapping.models.UICheckModel;
 import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
 import ai.dqo.services.check.matching.SimilarCheckMatchingService;
@@ -300,7 +300,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             columnSpec.setColumnCheckRootContainer(checkRootContainer);
         }
 
-        UIAllChecksModel allChecksModel = new UIAllChecksModel();
+        UICheckContainerModel allChecksModel = new UICheckContainerModel();
         UIQualityCategoryModel uiCategoryModel = new UIQualityCategoryModel(similarCheckModel.getCategory());
         UICheckModel sampleCheckModel = checkModel.cloneForUpdate();
         sampleCheckModel.setConfigured(true);

@@ -54,7 +54,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
      * @param checkCategoriesSpec The target check categories spec object that will be updated.
      */
     @Override
-    public void updateAllChecksSpecs(UIAllChecksModel model, AbstractRootChecksContainerSpec checkCategoriesSpec) {
+    public void updateAllChecksSpecs(UICheckContainerModel model, AbstractRootChecksContainerSpec checkCategoriesSpec) {
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<UIQualityCategoryModel> categoryModelList = model.getCategories();
         if (categoryModelList == null) {

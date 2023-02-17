@@ -25,7 +25,7 @@ import {
   RecurringScheduleSpec,
   TableProfilingCheckCategoriesSpec,
   TableBasicModel,
-  UIAllChecksModel
+  UICheckContainerModel
 } from '../../api';
 import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
 
@@ -358,7 +358,7 @@ export const getTableChecksUiRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI
 });
 
-export const getTableChecksUiSuccess = (data: UIAllChecksModel) => ({
+export const getTableChecksUiSuccess = (data: UICheckContainerModel) => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS,
   data
 });
@@ -402,7 +402,7 @@ export const updateTableProfilingChecksUI =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableChecksUIRequest());
@@ -490,7 +490,7 @@ export const getTableDailyRecurringRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_DAILY_RECURRING
 });
 
-export const getTableDailyRecurringSuccess = (data: UIAllChecksModel) => ({
+export const getTableDailyRecurringSuccess = (data: UICheckContainerModel) => ({
   type: TABLE_ACTION.GET_TABLE_DAILY_RECURRING_SUCCESS,
   data
 });
@@ -535,7 +535,7 @@ export const updateTableDailyRecurring =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableDailyRecurringRequest());
@@ -557,7 +557,7 @@ export const getTableMonthlyRecurringRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING
 });
 
-export const getTableMonthlyRecurringSuccess = (data: UIAllChecksModel) => ({
+export const getTableMonthlyRecurringSuccess = (data: UICheckContainerModel) => ({
   type: TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING_SUCCESS,
   data
 });
@@ -602,7 +602,7 @@ export const updateTableMonthlyRecurring =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableMonthlyRecurringRequest());
@@ -625,7 +625,7 @@ export const getTableDailyPartitionedChecksRequest = () => ({
 });
 
 export const getTableDailyPartitionedChecksSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS,
   data
@@ -671,7 +671,7 @@ export const updateTableDailyPartitionedChecks =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableDailyPartitionedChecksRequest());
@@ -694,7 +694,7 @@ export const getTableMonthlyPartitionedChecksRequest = () => ({
 });
 
 export const getTableMonthlyPartitionedChecksSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
   data
@@ -740,7 +740,7 @@ export const updateTableMonthlyPartitionedChecks =
     connectionName: string,
     schemaName: string,
     tableName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateTableMonthlyPartitionedChecksRequest());
@@ -793,30 +793,30 @@ export const setUpdatedLabels = (labels?: string[]) => ({
   labels
 });
 
-export const setUpdatedChecksUi = (checksUI?: UIAllChecksModel) => ({
+export const setUpdatedChecksUi = (checksUI?: UICheckContainerModel) => ({
   type: TABLE_ACTION.SET_UPDATED_CHECKS_UI,
   checksUI
 });
 
-export const setUpdatedDailyRecurring = (checksUI?: UIAllChecksModel) => ({
+export const setUpdatedDailyRecurring = (checksUI?: UICheckContainerModel) => ({
   type: TABLE_ACTION.SET_TABLE_DAILY_RECURRING,
   checksUI
 });
 
-export const setUpdatedMonthlyRecurring = (checksUI?: UIAllChecksModel) => ({
+export const setUpdatedMonthlyRecurring = (checksUI?: UICheckContainerModel) => ({
   type: TABLE_ACTION.SET_TABLE_MONTHLY_RECURRING,
   checksUI
 });
 
 export const setUpdatedDailyPartitionedChecks = (
-  checksUI?: UIAllChecksModel
+  checksUI?: UICheckContainerModel
 ) => ({
   type: TABLE_ACTION.SET_TABLE_PARTITIONED_DAILY_CHECKS,
   checksUI
 });
 
 export const setUpdatedMonthlyPartitionedChecks = (
-  checksUI?: UIAllChecksModel
+  checksUI?: UICheckContainerModel
 ) => ({
   type: TABLE_ACTION.SET_TABLE_PARTITIONED_MONTHLY_CHECKS,
   checksUI
@@ -834,7 +834,7 @@ export const getTableProfilingChecksUIFilterRequest = () => ({
 });
 
 export const getTableProfilingChecksUIFilterSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
   data
@@ -868,7 +868,7 @@ export const getTableRecurringUIFilterRequest = () => ({
 });
 
 export const getTableRecurringUIFilterSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER_SUCCESS,
   data
@@ -903,7 +903,7 @@ export const getTablePartitionedChecksUIFilterRequest = () => ({
 });
 
 export const getTablePartitionedChecksUIFilterSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_SUCCESS,
   data
@@ -933,16 +933,16 @@ export const getTablePartitionedChecksUIFilter =
       }
     };
 
-export const setTableUpdatedCheckUiFilter = (ui: UIAllChecksModel) => ({
+export const setTableUpdatedCheckUiFilter = (ui: UICheckContainerModel) => ({
   type: TABLE_ACTION.SET_UPDATED_CHECKS_UI_FILTER,
   data: ui
 });
 
-export const setTableUpdatedRecurringUIFilter = (ui: UIAllChecksModel) => ({
+export const setTableUpdatedRecurringUIFilter = (ui: UICheckContainerModel) => ({
   type: TABLE_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
   data: ui
 });
-export const setTableUpdatedPartitionedChecksUiFilter = (ui: UIAllChecksModel) => ({
+export const setTableUpdatedPartitionedChecksUiFilter = (ui: UICheckContainerModel) => ({
   type: TABLE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
   data: ui
 });

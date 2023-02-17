@@ -29,11 +29,11 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableSpecObjectMother;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.check.mapping.models.UICheckModel;
-import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
-import ai.dqo.services.check.mapping.utils.UIAllChecksBasicModelUtility;
+import ai.dqo.services.check.mapping.utils.UICheckContainerBasicModelUtility;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
@@ -79,7 +79,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiModel_whenEmptyTableChecksModelGiven_thenCreatesUiModel() {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
+        UICheckContainerModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiModel);
@@ -89,7 +89,7 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiModel_whenEmptyColumnChecksModelGiven_thenCreatesUiModel() {
         ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
+        UICheckContainerModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiModel);
@@ -97,8 +97,8 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     }
 
     private Map.Entry<Iterable<String>, Iterable<String>> extractCheckNamesFromUIModels(
-            UIAllChecksModel uiModel,
-            UIAllChecksBasicModel uiBasicModel) {
+            UICheckContainerModel uiModel,
+            UICheckContainerBasicModel uiBasicModel) {
 
         Iterable<String> checksModel =
                 uiModel.getCategories().stream()
@@ -120,12 +120,12 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiBasicModel_whenEmptyTableChecksModelGiven_thenCreatesUiBasicModel() {
         TableProfilingCheckCategoriesSpec tableCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
+        UICheckContainerModel uiModel = this.sut.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
-        UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
+        UICheckContainerBasicModel uiBasicModel = this.sut.createUiBasicModel(tableCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(4, UIAllChecksBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(4, UICheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
         Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
 
@@ -135,12 +135,12 @@ public class SpecToUiCheckMappingServiceImplTests extends BaseTest {
     @Test
     void createUiBasicModel_whenEmptyColumnChecksModelGiven_thenCreatesUiBasicModel() {
         ColumnProfilingCheckCategoriesSpec columnCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
-        UIAllChecksModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
+        UICheckContainerModel uiModel = this.sut.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, this.executionContext, ProviderType.bigquery);
-        UIAllChecksBasicModel uiBasicModel = this.sut.createUiBasicModel(columnCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
+        UICheckContainerBasicModel uiBasicModel = this.sut.createUiBasicModel(columnCheckCategoriesSpec, this.executionContext, ProviderType.bigquery);
 
         Assertions.assertNotNull(uiBasicModel);
-        Assertions.assertEquals(9, UIAllChecksBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
+        Assertions.assertEquals(9, UICheckContainerBasicModelUtility.getCheckCategoryNames(uiBasicModel).size());
 
         Map.Entry<Iterable<String>, Iterable<String>> names = extractCheckNamesFromUIModels(uiModel, uiBasicModel);
 

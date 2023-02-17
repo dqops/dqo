@@ -36,9 +36,9 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.services.check.mapping.utils.UIAllChecksBasicModelUtility;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.utils.UICheckContainerBasicModelUtility;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
@@ -141,13 +141,13 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnProfilingChecksUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getColumnProfilingChecksUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName());
 
-        UIAllChecksModel result = responseEntity.getBody().block();
+        UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(9, result.getCategories().size());
     }
@@ -158,14 +158,14 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnRecurringUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getColumnRecurringUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
                 timePartition);
 
-        UIAllChecksModel result = responseEntity.getBody().block();
+        UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(9, result.getCategories().size());
     }
@@ -176,14 +176,14 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnPartitionedChecksUI(
+        ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getColumnPartitionedChecksUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
                 timePartition);
 
-        UIAllChecksModel result = responseEntity.getBody().block();
+        UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
         Assertions.assertEquals(9, result.getCategories().size());
     }
@@ -193,15 +193,15 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getColumnProfilingChecksUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getColumnProfilingChecksUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName());
 
-        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(9, UIAllChecksBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(9, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -210,16 +210,16 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getColumnRecurringUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getColumnRecurringUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
                 timePartition);
 
-        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(9, UIAllChecksBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(9, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -228,16 +228,16 @@ public class ColumnsControllerUTTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getColumnPartitionedChecksUIBasic(
+        ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getColumnPartitionedChecksUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
                 timePartition);
 
-        UIAllChecksBasicModel result = responseEntity.getBody().block();
+        UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(9, UIAllChecksBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(9, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @Test

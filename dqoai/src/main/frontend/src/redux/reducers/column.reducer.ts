@@ -18,7 +18,7 @@ import {
   CommentSpec,
   ColumnBasicModel,
   ColumnModel,
-  UIAllChecksModel
+  UICheckContainerModel
 } from '../../api';
 import { COLUMN_ACTION } from '../types';
 
@@ -34,21 +34,21 @@ export interface IColumnState {
   isUpdatedComments?: boolean;
   labels: string[];
   isUpdatedLabels?: boolean;
-  checksUI?: UIAllChecksModel;
+  checksUI?: UICheckContainerModel;
   isUpdatedChecksUi?: boolean;
-  dailyRecurring?: UIAllChecksModel;
+  dailyRecurring?: UICheckContainerModel;
   isUpdatedDailyRecurring?: boolean;
-  monthlyRecurring?: UIAllChecksModel;
+  monthlyRecurring?: UICheckContainerModel;
   isUpdatedMonthlyRecurring?: boolean;
-  dailyPartitionedChecks?: UIAllChecksModel;
+  dailyPartitionedChecks?: UICheckContainerModel;
   isUpdatedDailyPartitionedChecks?: boolean;
-  monthlyPartitionedChecks?: UIAllChecksModel;
+  monthlyPartitionedChecks?: UICheckContainerModel;
   isUpdatedMonthlyPartitionedChecks?: boolean;
-  checksUIFilter?: UIAllChecksModel;
+  checksUIFilter?: UICheckContainerModel;
   isUpdatedChecksUIFilter?: boolean;
-  recurringUIFilter?: UIAllChecksModel;
+  recurringUIFilter?: UICheckContainerModel;
   isUpdatedRecurringUIFilter?: boolean;
-  partitionedChecksUIFilter?: UIAllChecksModel;
+  partitionedChecksUIFilter?: UICheckContainerModel;
   isUpdatedPartitionedChecksUIFilter?: boolean;
 }
 

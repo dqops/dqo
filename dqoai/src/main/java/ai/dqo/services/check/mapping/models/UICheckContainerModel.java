@@ -15,12 +15,8 @@
  */
 package ai.dqo.services.check.mapping.models;
 
-import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.CheckType;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
-import ai.dqo.services.check.mapping.models.table.UIAllTableChecksModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -32,31 +28,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * UI model that returns the model of selected information related to all checks on a connection level.
+ * UI model that returns the form definition and the form data to edit all data quality checks divided by categories.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIAllChecksModel", description = "UI model that returns the model of selected information related to all checks on a connection level.")
-public class UIAllChecksModel {
-    @JsonPropertyDescription("Connection name.")
-    private String connectionName;
+@ApiModel(value = "UICheckContainerModel", description = "UI model that returns the form definition and the form data to edit all data quality checks divided by categories.")
+public class UICheckContainerModel {
+    @JsonPropertyDescription("List of all data quality categories that contain data quality checks inside.")
+    private List<UIQualityCategoryModel> categories = new ArrayList<>();
 
-    @JsonPropertyDescription("Checks' type.")
-    private CheckType checksType;
-
-    @JsonPropertyDescription("Checks' timescale.")
-    private CheckTimeScale checksTimeScale;
+    @JsonPropertyDescription("Model of configured schedule enabled on the check container.")
+    private UIEffectiveScheduleModel effectiveSchedule;
+    @JsonPropertyDescription("State of the effective scheduling on the check container.")
+    private UIScheduleEnabledStatus effectiveScheduleEnabledStatus;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results for this connection.")
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check container")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
-
-    @JsonPropertyDescription("Complete model of table-level checks on this connection.")
-    private UIAllTableChecksModel tableChecksModel;
-
-    @JsonPropertyDescription("Complete model of column-level checks on this connection.")
-    private UIAllColumnChecksModel columnChecksModel;
 }

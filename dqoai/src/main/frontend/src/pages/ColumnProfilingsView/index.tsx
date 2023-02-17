@@ -3,7 +3,7 @@ import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
@@ -20,7 +20,7 @@ const ColumnProfilingsView = () => {
   const { checksUI, isUpdating, loading } = useSelector(
     (state: IRootState) => state.column
   );
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   

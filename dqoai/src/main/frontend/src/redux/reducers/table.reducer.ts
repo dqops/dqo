@@ -20,10 +20,11 @@ import {
   TableModel,
   RecurringScheduleSpec,
   TableProfilingCheckCategoriesSpec,
-  UIAllChecksModel,
+  UICheckContainerModel,
   DataStreamMappingSpec
 } from '../../api';
 import { TABLE_ACTION } from '../types';
+import {UICheckContainerModel} from "../../api";
 
 export interface ITableState {
   tables: TableModel[];
@@ -57,23 +58,23 @@ export interface ITableState {
   labels: string[];
   isUpdatedLabels?: boolean;
   checks?: TableProfilingCheckCategoriesSpec;
-  checksUI?: UIAllChecksModel;
+  checksUI?: UICheckContainerModel;
   isUpdatedChecksUi?: boolean;
   dataStreamsMapping?: DataStreamMappingSpec;
   isUpdatedDataStreamsMapping?: boolean;
-  dailyRecurring?: UIAllChecksModel;
+  dailyRecurring?: UICheckContainerModel;
   isUpdatedDailyRecurring?: boolean;
-  monthlyRecurring?: UIAllChecksModel;
+  monthlyRecurring?: UICheckContainerModel;
   isUpdatedMonthlyRecurring?: boolean;
-  dailyPartitionedChecks?: UIAllChecksModel;
+  dailyPartitionedChecks?: UICheckContainerModel;
   isUpdatedDailyPartitionedChecks?: boolean;
-  monthlyPartitionedChecks?: UIAllChecksModel;
+  monthlyPartitionedChecks?: UICheckContainerModel;
   isUpdatedMonthlyPartitionedChecks?: boolean;
-  checksUIFilter?: UIAllChecksModel;
+  checksUIFilter?: UICheckContainerModel;
   isUpdatedChecksUIFilter?: boolean;
-  recurringUIFilter?: UIAllChecksModel;
+  recurringUIFilter?: UICheckContainerModel;
   isUpdatedRecurringUIFilter?: boolean;
-  partitionedChecksUIFilter?: UIAllChecksModel;
+  partitionedChecksUIFilter?: UICheckContainerModel;
   isUpdatedPartitionedChecksUIFilter?: boolean;
 }
 
