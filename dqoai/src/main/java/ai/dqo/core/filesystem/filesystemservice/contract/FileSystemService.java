@@ -107,5 +107,5 @@ public interface FileSystemService {
      * @return Mono returned when the file was fully uploaded.
      */
     Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux,
-                                      DqoFileMetadata fileMetadata);
+                                      FileMetadata fileMetadata);
 }

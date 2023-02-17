@@ -113,7 +113,7 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
             long updatedAt = blob.getUpdateTime();
 
             long statusCheckedAt = Instant.now().toEpochMilli();
-            FileMetadata fileMetadata = new FileMetadata(relativeFilePath, updatedAt, hashBytes, statusCheckedAt);
+            FileMetadata fileMetadata = new FileMetadata(relativeFilePath, updatedAt, hashBytes, statusCheckedAt, blob.getSize());
             return fileMetadata;
         }
         catch (Exception ex) {
@@ -173,7 +173,7 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
                     blobPathRelativeToRoot = fileSystemRoot.getRootPath().relativize(blobPathRelativeToRoot);
                 }
 
-                FileMetadata fileMetadata = new FileMetadata(blobPathRelativeToRoot, updatedAt, hashBytes, now);
+                FileMetadata fileMetadata = new FileMetadata(blobPathRelativeToRoot, updatedAt, hashBytes, now, blob.getSize());
                 folderMetadata.addFile(fileMetadata);
             }
 
@@ -346,12 +346,15 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
     /**
      * Downloads a file asynchronously, returning a flux of file content blocks.
      *
-     * @param fileSystemRoot   File system root (with credentials).
-     * @param relativeFilePath Relative file path inside the remote root.
+     * @param fileSystemRoot        File system root (with credentials).
+     * @param relativeFilePath      Relative file path inside the remote root.
+     * @param lastKnownFileMetadata Last known file metadata. Could be used for verification or skipping an extra hashing.
      * @return File download response with the flux of file content and the metadata.
      */
     @Override
-    public DownloadFileResponse downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+    public DownloadFileResponse downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot,
+                                                         Path relativeFilePath,
+                                                         FileMetadata lastKnownFileMetadata) {
         return null;
     }
 
@@ -365,7 +368,10 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
      * @return Mono returned when the file was fully uploaded.
      */
     @Override
-    public Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux, DqoFileMetadata fileMetadata) {
+    public Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot,
+                                             Path relativeFilePath,
+                                             ByteBufFlux bytesFlux,
+                                             FileMetadata fileMetadata) {
         try {
             GSFileSystemRoot gsFileSystemRoot = (GSFileSystemRoot) fileSystemRoot;
             Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
@@ -377,7 +383,7 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
             String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
                     fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
                             "application/octet-stream";
-            String fileHashHex = Hex.encodeHexString(fileMetadata.getCustomHash());
+            String fileHashHex = Hex.encodeHexString(fileMetadata.getFileHash());
 
             Mono<HttpClientResponse> uploadFileMono = this.gcpHttpClientProvider.getHttpClient()
                     .headers(httpHeaders -> httpHeaders

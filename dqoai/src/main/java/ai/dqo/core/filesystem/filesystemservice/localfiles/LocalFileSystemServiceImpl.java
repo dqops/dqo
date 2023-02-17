@@ -24,11 +24,7 @@ import com.google.common.hash.Hashing;
 import io.netty.buffer.ByteBuf;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
-import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.DataBufferUtils;
-import org.springframework.core.io.buffer.DefaultDataBufferFactory;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.ByteBufFlux;
 
@@ -99,7 +95,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
             }
 
             long now = Instant.now().toEpochMilli();
-            return new FileMetadata(relativeFilePath, lastModifiedMillis, fileHash, now);
+            return new FileMetadata(relativeFilePath, lastModifiedMillis, fileHash, now, file.length());
         }
         catch (IOException ex) {
             throw new FileMetadataReadException(fullPathToFile, ex.getMessage(), ex);
@@ -231,17 +227,17 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
     /**
      * Downloads a file asynchronously, returning a flux of file content blocks.
      *
-     * @param fileSystemRoot   File system root (with credentials).
-     * @param relativeFilePath Relative file path inside the remote root.
+     * @param fileSystemRoot        File system root (with credentials).
+     * @param relativeFilePath      Relative file path inside the remote root.
+     * @param lastKnownFileMetadata Last known file metadata. Could be used for verification or skipping an extra hashing.
      * @return File download response with the flux of file content and the metadata.
      */
     @Override
-    public DownloadFileResponse downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+    public DownloadFileResponse downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath,
+                                                         FileMetadata lastKnownFileMetadata) {
         Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
-
-
-
-        return ByteBufFlux.fromPath(fullPathToFile);
+        ByteBufFlux byteBufFlux = ByteBufFlux.fromPath(fullPathToFile);
+        return new DownloadFileResponse(lastKnownFileMetadata, byteBufFlux);
     }
 
     /**
@@ -295,7 +291,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
      * @return Mono returned when the file was fully uploaded.
      */
     @Override
-    public Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux, DqoFileMetadata fileMetadata) {
+    public Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux, FileMetadata fileMetadata) {
         Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
 
         try {
@@ -351,7 +347,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
                             Path fileName = relativeFilePath.getFileName();
                             if (fileName.endsWith(".parquet")) {
                                 Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
-                                Files.write(crcFilePath, fileMetadata.getCustomHash());
+                                Files.write(crcFilePath, fileMetadata.getFileHash());
                             }
                         }
                         catch (Exception ex) {
