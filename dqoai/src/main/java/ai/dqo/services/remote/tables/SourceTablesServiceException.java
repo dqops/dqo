@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.services.remote.sourcetables;
+package ai.dqo.services.remote.tables;
 
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 
