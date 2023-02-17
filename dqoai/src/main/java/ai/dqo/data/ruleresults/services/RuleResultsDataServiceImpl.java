@@ -232,8 +232,6 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
             checkResultsDetailedDataModel.getSingleCheckResults().add(singleModel);
         }
 
-        resultMap.values().forEach(CheckResultsDetailedDataModel::reverseLists);
-
         return resultMap.values().toArray(CheckResultsDetailedDataModel[]::new);
     }
 

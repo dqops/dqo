@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import ai.dqo.services.check.mapping.models.UIFieldModel;
@@ -37,6 +38,7 @@ public interface SpecToUiCheckMappingService {
      * Creates a UI friendly model of the whole checks container of table level or column level data quality checks, divided into categories.
      * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine-grained "run checks" job configurations. Also determines which checks will be included in the ui model.
+     * @param connectionSpec Connection specification for the connection to which the table belongs to.
      * @param tableSpec Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
@@ -44,6 +46,7 @@ public interface SpecToUiCheckMappingService {
      */
     UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
                                    CheckSearchFilters runChecksTemplate,
+                                   ConnectionSpec connectionSpec,
                                    TableSpec tableSpec,
                                    ExecutionContext executionContext,
                                    ProviderType providerType);

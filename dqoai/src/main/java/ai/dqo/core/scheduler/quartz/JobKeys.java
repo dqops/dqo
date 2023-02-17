@@ -30,4 +30,9 @@ public final class JobKeys {
      * Predefined job that runs the data quality checks.
      */
     public static final JobKey RUN_CHECKS = new JobKey(JobNames.RUN_CHECKS, null);
+
+    /**
+     * Predefined job that does nothing.
+     */
+    public static final JobKey DUMMY = new JobKey(JobNames.DUMMY, null);
 }

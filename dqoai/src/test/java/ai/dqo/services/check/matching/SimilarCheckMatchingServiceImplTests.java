@@ -39,7 +39,7 @@ public class SimilarCheckMatchingServiceImplTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new SimilarCheckMatchingServiceImpl(new SpecToUiCheckMappingServiceImpl(
+        this.sut = new SimilarCheckMatchingServiceImpl(SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl()));
         this.userHome = UserHomeObjectMother.createBareUserHome();
         ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");

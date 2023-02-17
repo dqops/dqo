@@ -169,8 +169,6 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
             errorsDetailedDataModel.getSingleErrors().add(singleModel);
         }
 
-        errorMap.values().forEach(ErrorsDetailedDataModel::reverseLists);
-
         return errorMap.values().toArray(ErrorsDetailedDataModel[]::new);
     }
 

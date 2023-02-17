@@ -15,8 +15,8 @@
  */
 package ai.dqo.rest.controllers.remote;
 
-import ai.dqo.services.remote.sourceschemas.SourceSchemasService;
-import ai.dqo.services.remote.sourceschemas.SourceSchemasServiceException;
+import ai.dqo.services.remote.schemas.SourceSchemasService;
+import ai.dqo.services.remote.schemas.SourceSchemasServiceException;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.remote.SchemaRemoteModel;
 import io.swagger.annotations.*;
