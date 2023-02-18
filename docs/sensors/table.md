@@ -16,7 +16,6 @@ Tabular sensor that executes a row count query on a table.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(*) AS actual_value
@@ -26,12 +25,10 @@ Tabular sensor that executes a row count query on a table.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(*) AS actual_value
@@ -41,12 +38,10 @@ Tabular sensor that executes a row count query on a table.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(*) AS actual_value
@@ -56,7 +51,6 @@ Tabular sensor that executes a row count query on a table.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -77,7 +71,6 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -128,12 +121,10 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -160,12 +151,10 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_current_event_diff() -%}
@@ -216,7 +205,6 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -233,7 +221,6 @@ Tabular sensor that runs a query calculating maximum difference in days between 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_diff() -%}
@@ -295,12 +282,10 @@ Tabular sensor that runs a query calculating maximum difference in days between 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_diff() -%}
@@ -336,12 +321,10 @@ Tabular sensor that runs a query calculating maximum difference in days between 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_diff() -%}
@@ -403,7 +386,6 @@ Tabular sensor that runs a query calculating maximum difference in days between 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -420,7 +402,6 @@ Tabular sensor that runs a query calculating the time difference in days between
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_current_ingestion_diff() -%}
@@ -471,12 +452,10 @@ Tabular sensor that runs a query calculating the time difference in days between
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_current_ingestion_diff() -%}
@@ -503,12 +482,10 @@ Tabular sensor that runs a query calculating the time difference in days between
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_current_ingestion_diff() -%}
@@ -559,7 +536,6 @@ Tabular sensor that runs a query calculating the time difference in days between
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -576,7 +552,6 @@ Tabular sensor that runs a query calculating the time difference in days between
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_max_diff() -%}
@@ -641,12 +616,10 @@ Tabular sensor that runs a query calculating the time difference in days between
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_max_diff() -%}
@@ -676,12 +649,10 @@ Tabular sensor that runs a query calculating the time difference in days between
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_ingestion_event_max_diff() -%}
@@ -741,7 +712,6 @@ Tabular sensor that runs a query calculating the time difference in days between
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -762,7 +732,6 @@ Tabular sensor that executes a row count query on a table.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -781,12 +750,10 @@ Tabular sensor that executes a row count query on a table.
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -805,12 +772,10 @@ Tabular sensor that executes a row count query on a table.
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -829,7 +794,6 @@ Tabular sensor that executes a row count query on a table.
         ) AS tab_scan
     GROUP BY time_period
     ORDER BY time_period
-    {% endraw %}
     ```
 ___
 
@@ -856,7 +820,6 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -875,12 +838,10 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -899,12 +860,10 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -923,7 +882,6 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -946,7 +904,6 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -963,12 +920,10 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -985,12 +940,10 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1007,7 +960,6 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1030,7 +982,6 @@ Table level sensor that executes a given SQL expression on a table.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression |
@@ -1041,12 +992,10 @@ Table level sensor that executes a given SQL expression on a table.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression |
@@ -1057,12 +1006,10 @@ Table level sensor that executes a given SQL expression on a table.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression |
@@ -1073,7 +1020,6 @@ Table level sensor that executes a given SQL expression on a table.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1096,7 +1042,6 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1113,12 +1058,10 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1135,12 +1078,10 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1157,7 +1098,6 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1180,7 +1120,6 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1199,12 +1138,10 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1223,12 +1160,10 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1247,7 +1182,6 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 

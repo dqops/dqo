@@ -16,7 +16,6 @@ Column level sensor that calculates the percentage of rows with a valid email va
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -35,12 +34,10 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -59,12 +56,10 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -83,7 +78,6 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -100,7 +94,6 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -119,12 +112,10 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -143,12 +134,10 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -167,7 +156,6 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -184,7 +172,6 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -203,12 +190,10 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -227,12 +212,10 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -251,7 +234,6 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -268,7 +250,6 @@ Column level sensor that calculates the percent of values that fit to a USA phon
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -289,12 +270,10 @@ Column level sensor that calculates the percent of values that fit to a USA phon
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -313,12 +292,10 @@ Column level sensor that calculates the percent of values that fit to a USA phon
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -339,7 +316,6 @@ Column level sensor that calculates the percent of values that fit to a USA phon
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -356,7 +332,6 @@ Column level sensor that calculates the percent of values that contain a USA zip
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -377,12 +352,10 @@ Column level sensor that calculates the percent of values that contain a USA zip
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -401,12 +374,10 @@ Column level sensor that calculates the percent of values that contain a USA zip
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -427,7 +398,6 @@ Column level sensor that calculates the percent of values that contain a USA zip
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -444,7 +414,6 @@ Column level sensor that calculates the percentage of rows with a valid email va
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -463,12 +432,10 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -487,12 +454,10 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -511,7 +476,6 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -528,7 +492,6 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -549,12 +512,10 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -573,12 +534,10 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -599,7 +558,6 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -616,7 +574,6 @@ Column level sensor that calculates the percent of values that contains a USA ph
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -637,12 +594,10 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -661,12 +616,10 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -687,7 +640,6 @@ Column level sensor that calculates the percent of values that contains a USA ph
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -715,26 +667,16 @@ Column level sensor that calculates the count of values that does not matche val
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro quote_identifier(name) -%}
-        {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
+    {%- macro render_foreign_table(foreign_table) -%}
+        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
     {%- endmacro %}
-    
-    {%- macro render_joined_table(joined_tab) -%}
-        {{ quote_identifier(connection.bigquery.source_project_id) }}.{{ quote_identifier(table.target.schema_name) }}.{{ quote_identifier(joined_tab) }}
-    {%- endmacro %}
-    
-    {%- macro render_joined_column(table_alias_prefix = '') -%}
-        {{ quote_identifier(parameters.joined_col) }}
-    {%- endmacro %}
-    
     
     SELECT
         SUM(
             CASE
-                WHEN foreign_table.{{ render_foreign_column(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
                     THEN 1
                 ELSE 0
             END
@@ -743,35 +685,28 @@ Column level sensor that calculates the count of values that does not matche val
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ render_foreign_column(parameters.foreign_column) }}
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro quote_identifier(name) -%}
-        {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
+    {%- macro render_target_column(table_alias_prefix = '') -%}
+        {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
     {%- endmacro %}
     
-    {%- macro render_joined_table(joined_tab) -%}
-        {{ quote_identifier(connection.bigquery.source_project_id) }}.{{ quote_identifier(table.target.schema_name) }}.{{ quote_identifier(joined_tab) }}
+    {%- macro render_foreign_table(foreign_table) -%}
+        {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
     {%- endmacro %}
-    
-    {%- macro render_joined_column(table_alias_prefix = '') -%}
-        {{ quote_identifier(parameters.joined_col) }}
-    {%- endmacro %}
-    
     
     SELECT
         SUM(
             CASE
-                WHEN foreign_table.{{ render_foreign_column(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
                     THEN 1
                 ELSE 0
             END
@@ -780,34 +715,25 @@ Column level sensor that calculates the count of values that does not matche val
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ render_foreign_column(parameters.foreign_column) }}
+    ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro quote_identifier(name) -%}
-        {{ dialect_settings.quote_begin }}{{ name | replace(dialect_settings.quote_end, dialect_settings.quote_escape) }}{{ dialect_settings.quote_end }}
-    {%- endmacro %}
-    
     {%- macro render_foreign_table(foreign_table) -%}
-        {{ quote_identifier(connection.bigquery.source_project_id) }}.{{ quote_identifier(table.target.schema_name) }}.{{ quote_identifier(foreign_table) }}
+        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
     {%- endmacro %}
     
-    {%- macro render_foreign_column(table_alias_prefix = '') -%}
-        {{ quote_identifier(parameters.foreign_column) }}
-    {%- endmacro %}
     
     SELECT
         SUM(
             CASE
-                WHEN foreign_table.{{ render_foreign_column(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
                     THEN 1
                 ELSE 0
             END
@@ -816,11 +742,107 @@ Column level sensor that calculates the count of values that does not matche val
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
-    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ render_foreign_column(parameters.foreign_column) }}
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
+    ```
+___
+
+### **foreign key match percent**
+**Full sensor name**
+```
+column/integrity/foreign_key_match_percent
+```
+**Description**  
+Column level sensor that calculates the percentage of values that matches values in column of another table.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|foreign_table|This field can be used to define the name of the table to be compared to. In order to define the name of the table, user should write correct name as a String.|string| ||
+|foreign_column|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+        {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {%- endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+        {{ lib.quote_identifier(connection.postgresql.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {%- endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+        {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {%- endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
 ___
 
@@ -841,7 +863,6 @@ Column level sensor that calculates the percentage of rows with a date value in 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -860,12 +881,10 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -904,12 +923,10 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
@@ -955,7 +972,6 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -981,7 +997,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
@@ -1019,12 +1034,10 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
@@ -1062,15 +1075,13 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -1078,9 +1089,9 @@ Column level sensor that calculates the percent of non-negative values in a colu
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -1090,7 +1101,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -1106,7 +1117,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1127,7 +1137,6 @@ Column level sensor that calculates the percentage of rows with a true value in 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1146,12 +1155,10 @@ Column level sensor that calculates the percentage of rows with a true value in 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1170,12 +1177,10 @@ Column level sensor that calculates the percentage of rows with a true value in 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1194,7 +1199,6 @@ Column level sensor that calculates the percentage of rows with a true value in 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1211,7 +1215,6 @@ Column level sensor that calculates the percentage of rows with a false value in
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1230,12 +1233,32 @@ Column level sensor that calculates the percentage of rows with a false value in
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN NOT {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1254,12 +1277,10 @@ Column level sensor that calculates the percentage of rows with a false value in
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1278,7 +1299,6 @@ Column level sensor that calculates the percentage of rows with a false value in
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1299,7 +1319,6 @@ Column level sensor that calculates the number of rows with parsable to integer 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -1315,12 +1334,10 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1335,12 +1352,10 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -1356,7 +1371,6 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1380,7 +1394,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1399,12 +1412,10 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1412,7 +1423,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1423,12 +1434,10 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1447,7 +1456,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1470,7 +1478,6 @@ Column level sensor that calculates the percentage of values that are longer tha
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -1490,12 +1497,10 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1514,12 +1519,10 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -1539,7 +1542,6 @@ Column level sensor that calculates the percentage of values that are longer tha
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1562,7 +1564,6 @@ Column level sensor that calculates the count of values that are shorter than a 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -1579,12 +1580,10 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1600,12 +1599,10 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -1622,7 +1619,6 @@ Column level sensor that calculates the count of values that are shorter than a 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1639,7 +1635,6 @@ Column level sensor that calculates the number of rows with an whitespace string
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1657,12 +1652,10 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1680,12 +1673,10 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -1703,7 +1694,6 @@ Column level sensor that calculates the number of rows with an whitespace string
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1720,7 +1710,6 @@ Column level sensor that calculates the number of rows with a boolean placeholde
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1739,12 +1728,10 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1763,12 +1750,10 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1787,7 +1772,6 @@ Column level sensor that calculates the number of rows with a boolean placeholde
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1804,7 +1788,6 @@ Column level sensor that calculates the number of rows with a valid country code
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1823,12 +1806,10 @@ Column level sensor that calculates the number of rows with a valid country code
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1847,12 +1828,10 @@ Column level sensor that calculates the number of rows with a valid country code
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -1871,7 +1850,6 @@ Column level sensor that calculates the number of rows with a valid country code
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1888,7 +1866,6 @@ Column level sensor that calculates the number of rows with a null column value.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -1900,12 +1877,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -1917,12 +1892,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
@@ -1934,7 +1907,6 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -1951,7 +1923,6 @@ Column level sensor that calculates the number of rows with a null column value.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -1963,12 +1934,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -1980,12 +1949,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MAX(
@@ -1997,7 +1964,6 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2014,7 +1980,6 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2030,12 +1995,10 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2051,12 +2014,10 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2072,7 +2033,6 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2089,7 +2049,6 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2105,12 +2064,10 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2126,12 +2083,10 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -2147,7 +2102,6 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2170,7 +2124,6 @@ Column level sensor that calculates the percent of values that fit to a regex in
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -2198,12 +2151,10 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro make_text_constant(string) -%}
@@ -2231,12 +2182,10 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -2264,7 +2213,6 @@ Column level sensor that calculates the percent of values that fit to a regex in
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2287,7 +2235,6 @@ Column level sensor that calculates the percentage of values that are shorter th
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2307,12 +2254,10 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2331,12 +2276,10 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -2356,7 +2299,6 @@ Column level sensor that calculates the percentage of values that are shorter th
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2379,7 +2321,6 @@ Column level sensor that calculates the number of rows with a null column value.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -2417,12 +2358,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -2460,12 +2399,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -2500,7 +2437,6 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2517,7 +2453,6 @@ Column level sensor that calculates the number of rows with a valid currency cod
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2537,12 +2472,10 @@ Column level sensor that calculates the number of rows with a valid currency cod
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2561,12 +2494,10 @@ Column level sensor that calculates the number of rows with a valid currency cod
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2585,7 +2516,6 @@ Column level sensor that calculates the number of rows with a valid currency cod
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2608,7 +2538,6 @@ Column level sensor that calculates the number of values that does not fit to a 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -2636,12 +2565,10 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro make_text_constant(string) -%}
@@ -2669,12 +2596,10 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro make_text_constant(string) -%}
@@ -2702,7 +2627,6 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2719,7 +2643,6 @@ Column level sensor that calculates the number of rows with a whitespace string 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2740,12 +2663,10 @@ Column level sensor that calculates the number of rows with a whitespace string 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2766,12 +2687,10 @@ Column level sensor that calculates the number of rows with a whitespace string 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2792,7 +2711,6 @@ Column level sensor that calculates the number of rows with a whitespace string 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2809,7 +2727,6 @@ Column level sensor that calculates the number of rows with a null column value.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -2821,12 +2738,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -2838,12 +2753,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
@@ -2855,7 +2768,6 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2872,7 +2784,6 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2891,12 +2802,10 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2915,12 +2824,10 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2939,7 +2846,6 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -2956,7 +2862,6 @@ Column level sensor that calculates the number of rows with string surrounded by
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -2977,12 +2882,10 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -3003,12 +2906,10 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -3029,7 +2930,6 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -3052,7 +2952,6 @@ Column level sensor that calculates the count of values that are longer than a g
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -3069,12 +2968,10 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -3090,12 +2987,10 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     SELECT
@@ -3112,7 +3007,6 @@ Column level sensor that calculates the count of values that are longer than a g
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -3135,7 +3029,6 @@ Column level sensor that calculates the number of rows with a null column value.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -3173,12 +3066,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -3216,12 +3107,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -3259,7 +3148,6 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -3276,7 +3164,6 @@ Column level sensor that calculates the number of rows with a null placeholder s
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -3292,12 +3179,10 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -3313,12 +3198,10 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -3334,7 +3217,6 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -3357,7 +3239,6 @@ Column level sensor that calculates the percentage of values that does fit a giv
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -3393,12 +3274,10 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -3431,12 +3310,10 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -3470,7 +3347,6 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -3487,7 +3363,6 @@ Column level sensor that calculates the number of rows with a null column value.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -3506,12 +3381,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -3530,12 +3403,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -3554,7 +3425,6 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -3578,7 +3448,6 @@ Column level sensor that calculates the number of rows with a null column value.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -3653,12 +3522,10 @@ Column level sensor that calculates the number of rows with a null column value.
         {{ top_value() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -3733,12 +3600,10 @@ Column level sensor that calculates the number of rows with a null column value.
         {{ top_value() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -3813,7 +3678,6 @@ Column level sensor that calculates the number of rows with a null column value.
         {{ top_value() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -3830,7 +3694,6 @@ Column level sensor that calculates the number of rows with an invalid emails va
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -3846,12 +3709,10 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -3867,12 +3728,10 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -3888,7 +3747,6 @@ Column level sensor that calculates the number of rows with an invalid emails va
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -3905,7 +3763,6 @@ Column level sensor that calculates the percentage of values that does fit a giv
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -3924,12 +3781,10 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -3948,12 +3803,10 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -3972,7 +3825,6 @@ Column level sensor that calculates the percentage of values that does fit a giv
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -3989,7 +3841,6 @@ Column level sensor that calculates the number of rows with an empty string colu
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4006,12 +3857,10 @@ Column level sensor that calculates the number of rows with an empty string colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4028,12 +3877,10 @@ Column level sensor that calculates the number of rows with an empty string colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4050,7 +3897,6 @@ Column level sensor that calculates the number of rows with an empty string colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4067,7 +3913,6 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4083,12 +3928,10 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4104,12 +3947,10 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4125,7 +3966,6 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4148,7 +3988,6 @@ Column level sensor that calculates the number of values that does not fit to a 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -4182,12 +4021,10 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
@@ -4220,12 +4057,10 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_date_formats(date_formats) %}
@@ -4259,7 +4094,6 @@ Column level sensor that calculates the number of values that does not fit to a 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4276,7 +4110,6 @@ Column level sensor that calculates the number of rows with parsable to float st
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -4292,12 +4125,10 @@ Column level sensor that calculates the number of rows with parsable to float st
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4312,12 +4143,10 @@ Column level sensor that calculates the number of rows with parsable to float st
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     {# We should think about unifying the COUNT() IN different sensors. I changed it TO * here. -#}
     SELECT
@@ -4333,7 +4162,6 @@ Column level sensor that calculates the number of rows with parsable to float st
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4350,7 +4178,6 @@ Column level sensor that calculates the number of rows with string surrounded by
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4368,12 +4195,10 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4391,12 +4216,10 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -4414,7 +4237,6 @@ Column level sensor that calculates the number of rows with string surrounded by
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4431,7 +4253,6 @@ Column level sensor that calculates the percentage of rows with an empty string 
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4451,12 +4272,10 @@ Column level sensor that calculates the percentage of rows with an empty string 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4476,12 +4295,10 @@ Column level sensor that calculates the percentage of rows with an empty string 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4501,7 +4318,6 @@ Column level sensor that calculates the percentage of rows with an empty string 
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4518,7 +4334,6 @@ Column level sensor that calculates the number of rows with a null placeholder s
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4537,12 +4352,10 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4561,12 +4374,10 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4585,7 +4396,6 @@ Column level sensor that calculates the number of rows with a null placeholder s
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4606,7 +4416,6 @@ Column level sensor that calculates the percentage of unique values in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4620,12 +4429,27 @@ Column level sensor that calculates the percentage of unique values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table')}}) = 0
+                THEN 100.0
+            ELSE 100.0 * COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }}) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4639,7 +4463,6 @@ Column level sensor that calculates the percentage of unique values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4656,7 +4479,6 @@ Column level sensor that calculates the number of rows with a null column value.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4669,12 +4491,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -4685,12 +4505,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
@@ -4701,7 +4519,6 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4718,7 +4535,6 @@ Column level sensor that calculates the percentage of rows that are duplicates.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4733,12 +4549,10 @@ Column level sensor that calculates the percentage of rows that are duplicates.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4753,12 +4567,10 @@ Column level sensor that calculates the percentage of rows that are duplicates.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4773,7 +4585,6 @@ Column level sensor that calculates the percentage of rows that are duplicates.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4790,7 +4601,6 @@ Column level sensor that calculates the number of unique non-null values.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(
@@ -4802,12 +4612,10 @@ Column level sensor that calculates the number of unique non-null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(
@@ -4819,12 +4627,10 @@ Column level sensor that calculates the number of unique non-null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT(
@@ -4836,7 +4642,6 @@ Column level sensor that calculates the number of unique non-null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4857,7 +4662,6 @@ Column-level sensor that calculates the percentage of rows with null values.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4875,12 +4679,10 @@ Column-level sensor that calculates the percentage of rows with null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4898,12 +4700,10 @@ Column-level sensor that calculates the percentage of rows with null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -4921,7 +4721,6 @@ Column-level sensor that calculates the percentage of rows with null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4938,7 +4737,6 @@ Column-level sensor that calculates the number of rows with not null values.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4949,12 +4747,10 @@ Column-level sensor that calculates the number of rows with not null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
@@ -4964,12 +4760,10 @@ Column-level sensor that calculates the number of rows with not null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -4980,7 +4774,6 @@ Column-level sensor that calculates the number of rows with not null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -4997,7 +4790,6 @@ Column level sensor that calculates the count of not null values in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5010,12 +4802,10 @@ Column level sensor that calculates the count of not null values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5028,12 +4818,10 @@ Column level sensor that calculates the count of not null values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5046,7 +4834,6 @@ Column level sensor that calculates the count of not null values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5063,7 +4850,6 @@ Column-level sensor that calculates the number of rows with null values.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5078,12 +4864,10 @@ Column-level sensor that calculates the number of rows with null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5098,12 +4882,10 @@ Column-level sensor that calculates the number of rows with null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5118,7 +4900,6 @@ Column-level sensor that calculates the number of rows with null values.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5139,7 +4920,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -5154,12 +4934,10 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -5174,12 +4952,10 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -5194,7 +4970,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5208,10 +4983,27 @@ Column level sensor that counts non negative values in a column.
 
 
 **SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5226,12 +5018,10 @@ Column level sensor that counts non negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5246,7 +5036,6 @@ Column level sensor that counts non negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5271,7 +5060,6 @@ Column level sensor that finds the maximum value. It works on any data type that
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -5286,12 +5074,10 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
       100.0 * SUM(
@@ -5307,12 +5093,10 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -5327,7 +5111,6 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5350,7 +5133,6 @@ Column level sensor that calculates the percentage of values that are above than
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -5366,12 +5148,10 @@ Column level sensor that calculates the percentage of values that are above than
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -5387,12 +5167,10 @@ Column level sensor that calculates the percentage of values that are above than
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -5408,7 +5186,6 @@ Column level sensor that calculates the percentage of values that are above than
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5425,7 +5202,6 @@ Column level sensor that counts negative values in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -5435,12 +5211,10 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -5450,12 +5224,10 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -5465,7 +5237,6 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5482,7 +5253,6 @@ Column level sensor that counts the average (mean) of values in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -5492,12 +5262,10 @@ Column level sensor that counts the average (mean) of values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -5507,12 +5275,10 @@ Column level sensor that counts the average (mean) of values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -5522,7 +5288,6 @@ Column level sensor that counts the average (mean) of values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5545,7 +5310,6 @@ Column level sensor that calculates the percentage of values that are members of
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -5577,12 +5341,10 @@ Column level sensor that calculates the percentage of values that are members of
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -5614,12 +5376,10 @@ Column level sensor that calculates the percentage of values that are members of
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -5652,7 +5412,6 @@ Column level sensor that calculates the percentage of values that are members of
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5669,7 +5428,6 @@ Column level sensor that counts negative values in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5684,12 +5442,10 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5704,12 +5460,10 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5724,7 +5478,6 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5741,7 +5494,6 @@ Column level sensor that counts percentage of negative values in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5759,12 +5511,10 @@ Column level sensor that counts percentage of negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5782,12 +5532,10 @@ Column level sensor that counts percentage of negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -5805,7 +5553,6 @@ Column level sensor that counts percentage of negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5828,7 +5575,6 @@ Column level sensor that calculates the count of values that are below than a gi
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5843,12 +5589,10 @@ Column level sensor that calculates the count of values that are below than a gi
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5864,12 +5608,10 @@ Column level sensor that calculates the count of values that are below than a gi
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5884,7 +5626,6 @@ Column level sensor that calculates the count of values that are below than a gi
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5907,7 +5648,6 @@ Column level sensor that calculates the count of values that are above than a gi
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5922,12 +5662,10 @@ Column level sensor that calculates the count of values that are above than a gi
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5943,12 +5681,10 @@ Column level sensor that calculates the count of values that are above than a gi
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -5963,7 +5699,6 @@ Column level sensor that calculates the count of values that are above than a gi
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -5986,7 +5721,6 @@ Column level sensor that calculates the percentage of values that are below than
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -6001,12 +5735,10 @@ Column level sensor that calculates the percentage of values that are below than
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -6022,12 +5754,10 @@ Column level sensor that calculates the percentage of values that are below than
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -6042,7 +5772,6 @@ Column level sensor that calculates the percentage of values that are below than
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6065,7 +5794,6 @@ Column level sensor that counts values that are members of a given set.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -6099,12 +5827,10 @@ Column level sensor that counts values that are members of a given set.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -6138,12 +5864,10 @@ Column level sensor that counts values that are members of a given set.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
@@ -6172,7 +5896,6 @@ Column level sensor that counts values that are members of a given set.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6189,7 +5912,6 @@ Column level sensor that counts negative values in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6199,12 +5921,10 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6214,12 +5934,10 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6229,7 +5947,6 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6246,7 +5963,6 @@ Column level sensor that counts the sum of values in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6256,12 +5972,10 @@ Column level sensor that counts the sum of values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6271,12 +5985,10 @@ Column level sensor that counts the sum of values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6286,7 +5998,6 @@ Column level sensor that counts the sum of values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6303,7 +6014,6 @@ Column level sensor that counts negative values in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6313,12 +6023,10 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6328,12 +6036,10 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6343,7 +6049,6 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6368,7 +6073,6 @@ Column level sensor that finds the maximum value. It works on any data type that
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
       100.0 * SUM(
@@ -6384,12 +6088,10 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
       100.0 * SUM(
@@ -6405,12 +6107,10 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
@@ -6425,7 +6125,6 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6442,7 +6141,6 @@ Column level sensor that counts negative values in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6452,12 +6150,10 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6467,12 +6163,10 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6482,7 +6176,6 @@ Column level sensor that counts negative values in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6503,7 +6196,6 @@ Column level sensor that counts minimum value in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6513,12 +6205,10 @@ Column level sensor that counts minimum value in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6528,12 +6218,10 @@ Column level sensor that counts minimum value in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6543,7 +6231,6 @@ Column level sensor that counts minimum value in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6560,7 +6247,6 @@ Column level sensor that counts maximum value in a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6570,12 +6256,10 @@ Column level sensor that counts maximum value in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6585,12 +6269,10 @@ Column level sensor that counts maximum value in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6600,7 +6282,6 @@ Column level sensor that counts maximum value in a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6618,7 +6299,6 @@ Column level sensor that finds the minimum value. It works on any data type that
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6628,12 +6308,10 @@ Column level sensor that finds the minimum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6643,12 +6321,10 @@ Column level sensor that finds the minimum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6658,7 +6334,6 @@ Column level sensor that finds the minimum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6676,7 +6351,6 @@ Column level sensor that finds the maximum value. It works on any data type that
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6686,12 +6360,10 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6701,12 +6373,10 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
@@ -6716,7 +6386,6 @@ Column level sensor that finds the maximum value. It works on any data type that
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6743,7 +6412,6 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -6760,12 +6428,10 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -6782,12 +6448,10 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -6804,7 +6468,6 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6827,7 +6490,6 @@ Column level sensor that executes a given SQL expression on a column.
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
@@ -6837,12 +6499,10 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
@@ -6852,12 +6512,10 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
@@ -6867,7 +6525,6 @@ Column level sensor that executes a given SQL expression on a column.
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6890,7 +6547,6 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -6910,12 +6566,10 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -6935,12 +6589,10 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -6960,7 +6612,6 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -6983,7 +6634,6 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -7000,12 +6650,10 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -7022,12 +6670,10 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
@@ -7044,7 +6690,6 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 
@@ -7067,7 +6712,6 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 === "snowflake"
       
     ```
-    {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -7087,12 +6731,10 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "postgresql"
       
     ```
-    {% raw %}
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -7112,12 +6754,10 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 === "bigquery"
       
     ```
-    {% raw %}
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         CASE
@@ -7137,7 +6777,6 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
-    {% endraw %}
     ```
 ___
 

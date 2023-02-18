@@ -38,7 +38,7 @@ Add connection with specified details
 
 **Summary (Shell)**
 ```
-dqo.ai>  connection add [-h] [-fw] [-hl] [--postgresql-ssl]
+dqo.ai>  connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
@@ -48,12 +48,16 @@ dqo.ai>  connection add [-h] [-fw] [-hl] [--postgresql-ssl]
                 [-of=<outputFormat>] [--postgresql-database=<database>]
                 [--postgresql-host=<host>] [--postgresql-options=<options>]
                 [--postgresql-password=<password>] [--postgresql-port=<port>]
-                [--postgresql-user=<user>] [--snowflake-account=<account>]
+                [--postgresql-user=<user>] [--redshift-database=<database>]
+                [--redshift-host=<host>] [--redshift-options=<options>]
+                [--redshift-password=<password>] [--redshift-port=<port>]
+                [--redshift-user=<user>] [--snowflake-account=<account>]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
                 [-t=<providerType>]
                 [--postgresql-properties=<String=String>]...
+                [--redshift-properties=<String=String>]...
                 [--snowflake-properties=<String=String>]...
 
 ```
@@ -82,7 +86,15 @@ dqo.ai>  connection add [-h] [-fw] [-hl] [--postgresql-ssl]
 |`--postgresql-properties`<br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |`--postgresql-ssl`<br/>|Connect to PostgreSQL using SSL| ||
 |`--postgresql-user`<br/>|PostgreSQL user name. The value could be in the format null to use dynamic substitution.| ||
-|`-t`<br/>`--provider`<br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>|
+|`-t`<br/>`--provider`<br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>|
+|`--redshift-database`<br/>|Redshift database name. The value could be in the format null to use dynamic substitution.| ||
+|`--redshift-host`<br/>|Redshift host name| ||
+|`--redshift-options`<br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|`--redshift-password`<br/>|Redshift database password. The value could be in the format null to use dynamic substitution.| ||
+|`--redshift-port`<br/>|Redshift port number| ||
+|`--redshift-properties`<br/>|Redshift additional properties that are added to the JDBC connection string| ||
+|`--redshift-ssl`<br/>|Connect to Redshift using SSL| ||
+|`--redshift-user`<br/>|Redshift user name. The value could be in the format null to use dynamic substitution.| ||
 |`--snowflake-account`<br/>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
 |`--snowflake-database`<br/>|Snowflake database name. The value could be in the format null to use dynamic substitution.| ||
 |`--snowflake-password`<br/>|Snowflake database password. The value could be in the format null to use dynamic substitution.| ||
@@ -128,7 +140,7 @@ Update connection or connections which match filters
 
 **Summary (Shell)**
 ```
-dqo.ai>  connection update [-h] [-fw] [-hl] [--postgresql-ssl]
+dqo.ai>  connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
@@ -139,12 +151,16 @@ dqo.ai>  connection update [-h] [-fw] [-hl] [--postgresql-ssl]
                    [--postgresql-host=<host>] [--postgresql-options=<options>]
                    [--postgresql-password=<password>]
                    [--postgresql-port=<port>] [--postgresql-user=<user>]
-                   [--snowflake-account=<account>]
+                   [--redshift-database=<database>] [--redshift-host=<host>]
+                   [--redshift-options=<options>]
+                   [--redshift-password=<password>] [--redshift-port=<port>]
+                   [--redshift-user=<user>] [--snowflake-account=<account>]
                    [--snowflake-database=<database>]
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
                    [--snowflake-warehouse=<warehouse>]
                    [--postgresql-properties=<String=String>]...
+                   [--redshift-properties=<String=String>]...
                    [--snowflake-properties=<String=String>]...
 
 ```
@@ -173,6 +189,14 @@ dqo.ai>  connection update [-h] [-fw] [-hl] [--postgresql-ssl]
 |`--postgresql-properties`<br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |`--postgresql-ssl`<br/>|Connect to PostgreSQL using SSL| ||
 |`--postgresql-user`<br/>|PostgreSQL user name. The value could be in the format null to use dynamic substitution.| ||
+|`--redshift-database`<br/>|Redshift database name. The value could be in the format null to use dynamic substitution.| ||
+|`--redshift-host`<br/>|Redshift host name| ||
+|`--redshift-options`<br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|`--redshift-password`<br/>|Redshift database password. The value could be in the format null to use dynamic substitution.| ||
+|`--redshift-port`<br/>|Redshift port number| ||
+|`--redshift-properties`<br/>|Redshift additional properties that are added to the JDBC connection string| ||
+|`--redshift-ssl`<br/>|Connect to Redshift using SSL| ||
+|`--redshift-user`<br/>|Redshift user name. The value could be in the format null to use dynamic substitution.| ||
 |`--snowflake-account`<br/>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
 |`--snowflake-database`<br/>|Snowflake database name. The value could be in the format null to use dynamic substitution.| ||
 |`--snowflake-password`<br/>|Snowflake database password. The value could be in the format null to use dynamic substitution.| ||
