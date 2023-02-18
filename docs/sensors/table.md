@@ -130,6 +130,38 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
     {{- lib.render_order_by() -}}
     {% endraw %}
     ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_event_diff() -%}
+        {%- if table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | lower == 'timestamp without time zone' -%}
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | lower == 'date' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | lower == 'timestamp with time zone' -%}
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- else -%}
+        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_event_diff() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
 === "bigquery"
       
     ```
@@ -251,6 +283,47 @@ Tabular sensor that runs a query calculating maximum difference in days between 
             )
         ) / 24.0 / 3600.0 / 1000.0
         {%- else -%}
+        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_diff() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_diff() -%}
+        {%- if table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | lower == 'timestamp without time zone' and
+        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | lower == 'timestamp without time zone' -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+            ))
+        ) / 24.0 / 3600.0
+        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | lower == 'date' and
+        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | lower == 'date' -%}
+        MAX(
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+            )
+        )
+        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | lower == 'timestamp with time zone' and
+        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | lower == 'timestamp with time zone' -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
+            ))
+        ) / 24.0 / 3600.0
         <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
@@ -400,6 +473,38 @@ Tabular sensor that runs a query calculating the time difference in days between
     {{- lib.render_order_by() -}}
     {% endraw %}
     ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_current_ingestion_diff() -%}
+        {%- if table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | lower == 'timestamp without time zone' -%}
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | lower == 'date' -%}
+            CURRENT_DATE - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | lower == 'timestamp with time zone' -%}
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- else -%}
+        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_current_ingestion_diff() }} AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
 === "bigquery"
       
     ```
@@ -530,6 +635,41 @@ Tabular sensor that runs a query calculating the time difference in days between
     SELECT
         {{ render_ingestion_event_max_diff() }}
         AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {% macro render_ingestion_event_max_diff() -%}
+        {%- if table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | lower == 'timestamp without time zone' and
+        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | lower == 'timestamp without time zone' -%}
+        EXTRACT(EPOCH FROM (
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | lower == 'date' and
+        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | lower == 'date' -%}
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | lower == 'timestamp with time zone' and
+        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | lower == 'timestamp with time zone' -%}
+        EXTRACT(EPOCH FROM (
+            MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
+        )) / 24.0 / 3600.0
+        {%- else -%}
+        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -737,6 +877,30 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     {{- lib.render_order_by() -}}
     {% endraw %}
     ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                             CASE
+                                 WHEN ({{ parameters.sql_condition |
+                                         replace('{table}', 'analyzed_table') }})
+                                      THEN 1
+                                 ELSE 0
+                             END) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
 === "bigquery"
       
     ```
@@ -784,6 +948,28 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     ```
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN NOT ({{ parameters.sql_condition |
+                            replace('{table}', 'analyzed_table') }})
+                     THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -857,6 +1043,22 @@ Table level sensor that executes a given SQL expression on a table.
     {{- lib.render_order_by() -}}
     {% endraw %}
     ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        ({{ parameters.sql_expression |
+           replace('{table}', 'analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
 === "bigquery"
       
     ```
@@ -896,6 +1098,28 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     ```
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN ({{ parameters.sql_condition |
+                            replace('{table}', 'analyzed_table') }})
+                     THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -958,6 +1182,30 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
     ```
     {% raw %}
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT (*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                             CASE
+                                 WHEN NOT ({{ parameters.sql_condition |
+                                         replace('{table}', 'analyzed_table') }})
+                                      THEN 1
+                                 ELSE 0
+                             END) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    {% endraw %}
+    ```
+=== "postgresql"
+      
+    ```
+    {% raw %}
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT (*) = 0 THEN 100.0

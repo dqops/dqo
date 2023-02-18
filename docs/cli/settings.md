@@ -202,3 +202,78 @@ dqo.ai>  settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 
 
+
+___
+### **dqo settings timezone set**
+
+**Description**
+
+Set the default time zone
+
+**Summary (Shell)**
+```
+dqo.ai>  settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
+
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
+
+___
+### **dqo settings timezone remove**
+
+**Description**
+
+Remove time zone
+
+**Summary (Shell)**
+```
+dqo.ai>  settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
+
+___
+### **dqo settings timezone show**
+
+**Description**
+
+Show the default time zone
+
+**Summary (Shell)**
+```
+dqo.ai>  settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+
+
+**Options**  
+  
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+

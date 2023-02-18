@@ -75,9 +75,9 @@ public class GenerateDocumentationPostProcessor {
             Path dqoHomePath = projectDir.resolve("../home").toAbsolutePath().normalize();
             DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
 
-//            generateDocumentationForSensors(projectDir, dqoHomeContext);
-//            generateDocumentationForRules(projectDir, dqoHomeContext);
-//            generateDocumentationForCliCommands(projectDir);
+            generateDocumentationForSensors(projectDir, dqoHomeContext);
+            generateDocumentationForRules(projectDir, dqoHomeContext);
+            generateDocumentationForCliCommands(projectDir);
             generateDocumentationForChecks(projectDir, dqoHomeContext);
 
         } catch (Exception e) {
