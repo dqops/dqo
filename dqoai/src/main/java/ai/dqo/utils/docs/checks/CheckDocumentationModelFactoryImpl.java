@@ -337,6 +337,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         TableYaml tableYamlWithDataStreams = new TableYaml(trimmedTableSpec);
         String yamlSampleWithDataStreams = this.yamlSerializer.serialize(tableYamlWithDataStreams);
         checkDocumentationModel.setSampleYamlWithDataStreams(yamlSampleWithDataStreams);
+        createMarksForDataStreams(checkDocumentationModel, yamlSampleWithDataStreams);
 
         checkDocumentationModel.setProviderTemplatesDataStreams(generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation));
 
@@ -345,6 +346,35 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         // TODO: in the future, we can also show the generated JSON for the "run sensors" rest rest api job and cli command to enable this sensor
 
         return checkDocumentationModel;
+    }
+
+    /**
+     * Divides string to list of string, looks for phrase and assign position of element.
+     * It's necessary for highlight data stream in yaml sample in documentation.
+     * @param checkDocumentationModel Check documentation model.
+     * @param yamlSampleWithDataStreams Yaml template.
+     */
+    private void createMarksForDataStreams(CheckDocumentationModel checkDocumentationModel, String yamlSampleWithDataStreams) {
+
+        List<String> splitYaml = List.of(yamlSampleWithDataStreams.split("\\r?\\n|\\r"));
+
+        for (int i = 0; i <= splitYaml.size(); i++) {
+            if (splitYaml.get(i).contains("data_streams")) {
+                int firstSectionBeginMarker = i + 1; // +1 because line in documentation is numerating from 1
+                int firstSectionEndMarker = firstSectionBeginMarker + 7; // +7 because first data stream section includes 7 lines
+
+                checkDocumentationModel.setFirstSectionBeginMarker(firstSectionBeginMarker);
+                checkDocumentationModel.setFirstSectionEndMarker(firstSectionEndMarker);
+            } else if (splitYaml.get(i).contains("country:")) {
+                int secondSectionBeginMarker = i + 1; // +1 because line in documentation is numerating from 1
+                int secondSectionEndMarker = secondSectionBeginMarker + 5; // +5 because first data stream section includes 5 lines
+
+                checkDocumentationModel.setSecondSectionBeginMarker(secondSectionBeginMarker);
+                checkDocumentationModel.setSecondSectionEndMarker(secondSectionEndMarker);
+
+                break;
+            }
+        }
     }
 
     /**
