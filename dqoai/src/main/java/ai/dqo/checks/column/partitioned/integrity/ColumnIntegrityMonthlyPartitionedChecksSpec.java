@@ -36,8 +36,8 @@ import java.util.Objects;
 public class ColumnIntegrityMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_value_not_match_count", o -> o.monthlyPartitionForeignKeyNotMatchCount);
-            put("monthly_partition_value_match_percent", o -> o.monthlyPartitionForeignKeyMatchPercent);
+            put("monthly_partition_foreign_key_not_match_count", o -> o.monthlyPartitionForeignKeyNotMatchCount);
+            put("monthly_partition_foreign_key_match_percent", o -> o.monthlyPartitionForeignKeyMatchPercent);
         }
     };
 
@@ -62,7 +62,7 @@ public class ColumnIntegrityMonthlyPartitionedChecksSpec extends AbstractCheckCa
     public void setMonthlyPartitionForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyPartitionForeignKeyNotMatchCount) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionForeignKeyNotMatchCount, monthlyPartitionForeignKeyNotMatchCount));
         this.monthlyPartitionForeignKeyNotMatchCount = monthlyPartitionForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(monthlyPartitionForeignKeyNotMatchCount, "monthly_partition_value_not_match_count");
+        propagateHierarchyIdToField(monthlyPartitionForeignKeyNotMatchCount, "monthly_partition_foreign_key_not_match_count");
     }
 
     /**
@@ -80,7 +80,7 @@ public class ColumnIntegrityMonthlyPartitionedChecksSpec extends AbstractCheckCa
     public void setMonthlyPartitionForeignKeyMatchPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyPartitionForeignKeyMatchPercent) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionForeignKeyMatchPercent, monthlyPartitionForeignKeyMatchPercent));
         this.monthlyPartitionForeignKeyMatchPercent = monthlyPartitionForeignKeyMatchPercent;
-        propagateHierarchyIdToField(monthlyPartitionForeignKeyMatchPercent, "monthly_partition_value_match_percent");
+        propagateHierarchyIdToField(monthlyPartitionForeignKeyMatchPercent, "monthly_partition_foreign_key_match_percent");
     }
 
     /**
