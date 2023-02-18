@@ -118,10 +118,10 @@ spec:
     ```
     SELECT
         MAX(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -134,7 +134,7 @@ spec:
             LENGTH("target_column")
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -254,12 +254,12 @@ spec:
     ```
     SELECT
         MAX(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -274,7 +274,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -396,10 +396,10 @@ spec:
     ```
     SELECT
         MAX(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -412,7 +412,7 @@ spec:
             LENGTH("target_column")
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -533,12 +533,12 @@ spec:
     ```
     SELECT
         MAX(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -553,7 +553,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -675,10 +675,10 @@ spec:
     ```
     SELECT
         MAX(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -690,8 +690,8 @@ spec:
         MAX(
             LENGTH("target_column")
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -812,12 +812,12 @@ spec:
     ```
     SELECT
         MAX(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -831,8 +831,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -954,10 +954,10 @@ spec:
     ```
     SELECT
         MAX(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -970,7 +970,7 @@ spec:
             LENGTH("target_column")
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1091,12 +1091,12 @@ spec:
     ```
     SELECT
         MAX(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1111,7 +1111,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1233,10 +1233,10 @@ spec:
     ```
     SELECT
         MAX(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1248,8 +1248,8 @@ spec:
         MAX(
             LENGTH("target_column")
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1370,12 +1370,12 @@ spec:
     ```
     SELECT
         MAX(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1389,8 +1389,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1519,10 +1519,10 @@ spec:
     ```
     SELECT
         MIN(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1535,7 +1535,7 @@ spec:
             LENGTH("target_column")
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1655,12 +1655,12 @@ spec:
     ```
     SELECT
         MIN(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1675,7 +1675,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1797,10 +1797,10 @@ spec:
     ```
     SELECT
         MIN(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1813,7 +1813,7 @@ spec:
             LENGTH("target_column")
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1934,12 +1934,12 @@ spec:
     ```
     SELECT
         MIN(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1954,7 +1954,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2076,10 +2076,10 @@ spec:
     ```
     SELECT
         MIN(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2091,8 +2091,8 @@ spec:
         MIN(
             LENGTH("target_column")
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2213,12 +2213,12 @@ spec:
     ```
     SELECT
         MIN(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2232,8 +2232,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2355,10 +2355,10 @@ spec:
     ```
     SELECT
         MIN(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2371,7 +2371,7 @@ spec:
             LENGTH("target_column")
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2492,12 +2492,12 @@ spec:
     ```
     SELECT
         MIN(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2512,7 +2512,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2634,10 +2634,10 @@ spec:
     ```
     SELECT
         MIN(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2649,8 +2649,8 @@ spec:
         MIN(
             LENGTH("target_column")
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2771,12 +2771,12 @@ spec:
     ```
     SELECT
         MIN(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2790,8 +2790,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2923,10 +2923,10 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2939,7 +2939,7 @@ spec:
             LENGTH("target_column")
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3062,12 +3062,12 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3082,7 +3082,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3207,10 +3207,10 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3223,7 +3223,7 @@ spec:
             LENGTH("target_column")
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3347,12 +3347,12 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3367,7 +3367,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3492,10 +3492,10 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3507,8 +3507,8 @@ spec:
         AVG(
             LENGTH("target_column")
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3632,12 +3632,12 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3651,8 +3651,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3777,10 +3777,10 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3793,7 +3793,7 @@ spec:
             LENGTH("target_column")
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3917,12 +3917,12 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3937,7 +3937,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -4062,10 +4062,10 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -4077,8 +4077,8 @@ spec:
         AVG(
             LENGTH("target_column")
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -4202,12 +4202,12 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING))
+            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -4221,8 +4221,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -4378,7 +4378,7 @@ spec:
             END
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -4395,7 +4395,7 @@ spec:
             END
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -4544,7 +4544,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -4563,7 +4563,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -4712,7 +4712,7 @@ spec:
             END
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -4729,7 +4729,7 @@ spec:
             END
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -4879,7 +4879,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -4898,7 +4898,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -5047,7 +5047,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -5063,8 +5063,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -5214,7 +5214,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -5232,8 +5232,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -5382,7 +5382,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -5399,7 +5399,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -5549,7 +5549,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -5568,7 +5568,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -5717,7 +5717,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -5733,8 +5733,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -5884,7 +5884,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -5902,8 +5902,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -6074,7 +6074,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -6094,7 +6094,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -6258,7 +6258,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -6280,7 +6280,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -6444,7 +6444,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -6464,7 +6464,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -6629,7 +6629,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -6651,7 +6651,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -6815,7 +6815,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -6834,8 +6834,8 @@ spec:
                 END
             )/ COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -7000,7 +7000,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -7021,8 +7021,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -7186,7 +7186,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -7206,7 +7206,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -7371,7 +7371,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -7393,7 +7393,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -7557,7 +7557,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -7576,8 +7576,8 @@ spec:
                 END
             )/ COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -7742,7 +7742,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -7763,8 +7763,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -7920,7 +7920,7 @@ spec:
             END
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -7937,7 +7937,7 @@ spec:
             END
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -8086,7 +8086,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -8105,7 +8105,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -8254,7 +8254,7 @@ spec:
             END
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -8271,7 +8271,7 @@ spec:
             END
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -8421,7 +8421,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -8440,7 +8440,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -8589,7 +8589,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -8605,8 +8605,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -8756,7 +8756,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -8774,8 +8774,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -8924,7 +8924,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -8941,7 +8941,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -9091,7 +9091,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -9110,7 +9110,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -9259,7 +9259,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -9275,8 +9275,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -9426,7 +9426,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -9444,8 +9444,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -9616,7 +9616,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -9636,7 +9636,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -9800,7 +9800,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -9822,7 +9822,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -9986,7 +9986,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -10006,7 +10006,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -10171,7 +10171,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -10193,7 +10193,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -10357,7 +10357,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -10376,8 +10376,8 @@ spec:
                 END
             )/ COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -10542,7 +10542,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -10563,8 +10563,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -10728,7 +10728,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -10748,7 +10748,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -10913,7 +10913,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -10935,7 +10935,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -11099,7 +11099,7 @@ spec:
             )/ COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -11118,8 +11118,8 @@ spec:
                 END
             )/ COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -11284,7 +11284,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -11305,8 +11305,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -11428,7 +11428,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -11470,13 +11470,13 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST(analyzed_table."target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( TRY_CAST(analyzed_table."target_column" AS VARCHAR) ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT(analyzed_table."target_column")
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -11490,13 +11490,13 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST("target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( "target_column" ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT("target_column")
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -11607,7 +11607,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -11651,7 +11651,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST(analyzed_table."target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( TRY_CAST(analyzed_table."target_column" AS VARCHAR) ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT(analyzed_table."target_column")
@@ -11659,7 +11659,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -11673,7 +11673,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST("target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( "target_column" ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT("target_column")
@@ -11681,7 +11681,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -11796,7 +11796,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -11838,13 +11838,13 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST(analyzed_table."target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( TRY_CAST(analyzed_table."target_column" AS VARCHAR) ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT(analyzed_table."target_column")
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -11858,13 +11858,13 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST("target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( "target_column" ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT("target_column")
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -11976,7 +11976,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -12020,7 +12020,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST(analyzed_table."target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( TRY_CAST(analyzed_table."target_column" AS VARCHAR) ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT(analyzed_table."target_column")
@@ -12028,7 +12028,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -12042,7 +12042,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST("target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( "target_column" ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT("target_column")
@@ -12050,7 +12050,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -12165,7 +12165,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -12207,13 +12207,13 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST(analyzed_table."target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( TRY_CAST(analyzed_table."target_column" AS VARCHAR) ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT(analyzed_table."target_column")
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -12227,13 +12227,13 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST("target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( "target_column" ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT("target_column")
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -12345,7 +12345,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -12389,7 +12389,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST(analyzed_table."target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( TRY_CAST(analyzed_table."target_column" AS VARCHAR) ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT(analyzed_table."target_column")
@@ -12397,7 +12397,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -12411,15 +12411,15 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST("target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( "target_column" ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT("target_column")
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -12534,7 +12534,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -12576,13 +12576,13 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST(analyzed_table."target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( TRY_CAST(analyzed_table."target_column" AS VARCHAR) ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT(analyzed_table."target_column")
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -12596,13 +12596,13 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST("target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( "target_column" ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT("target_column")
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -12714,7 +12714,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -12758,7 +12758,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST(analyzed_table."target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( TRY_CAST(analyzed_table."target_column" AS VARCHAR) ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT(analyzed_table."target_column")
@@ -12766,7 +12766,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -12780,7 +12780,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST("target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( "target_column" ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT("target_column")
@@ -12788,7 +12788,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -12903,7 +12903,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -12945,13 +12945,13 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST(analyzed_table."target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( TRY_CAST(analyzed_table."target_column" AS VARCHAR) ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT(analyzed_table."target_column")
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -12965,13 +12965,13 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST("target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( "target_column" ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT("target_column")
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -13083,7 +13083,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -13127,7 +13127,7 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST(analyzed_table."target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( TRY_CAST(analyzed_table."target_column" AS VARCHAR) ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT(analyzed_table."target_column")
@@ -13135,7 +13135,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -13149,15 +13149,15 @@ spec:
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( SAFE_CAST("target_column" AS STRING) ) BETWEEN 5 AND 10 THEN 1
+                        WHEN LENGTH( "target_column" ) BETWEEN 5 AND 10 THEN 1
                         ELSE 0
                     END
             ) / COUNT("target_column")
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -13308,13 +13308,13 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -13332,7 +13332,7 @@ spec:
             END
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -13474,7 +13474,7 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                     THEN 1
                 ELSE 0
             END
@@ -13482,7 +13482,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -13502,7 +13502,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -13646,13 +13646,13 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -13670,7 +13670,7 @@ spec:
             END
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -13813,7 +13813,7 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                     THEN 1
                 ELSE 0
             END
@@ -13821,7 +13821,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -13841,7 +13841,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -13985,13 +13985,13 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -14008,8 +14008,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -14152,7 +14152,7 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                     THEN 1
                 ELSE 0
             END
@@ -14160,7 +14160,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -14179,8 +14179,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -14324,13 +14324,13 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -14348,7 +14348,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -14491,7 +14491,7 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                     THEN 1
                 ELSE 0
             END
@@ -14499,7 +14499,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -14519,7 +14519,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -14663,13 +14663,13 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -14686,8 +14686,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -14830,7 +14830,7 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                     THEN 1
                 ELSE 0
             END
@@ -14838,7 +14838,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -14857,8 +14857,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -15023,14 +15023,14 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -15051,7 +15051,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -15207,7 +15207,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -15216,7 +15216,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -15239,7 +15239,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -15397,14 +15397,14 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -15425,7 +15425,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -15582,7 +15582,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -15591,7 +15591,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -15614,7 +15614,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -15772,14 +15772,14 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -15799,8 +15799,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -15957,7 +15957,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -15966,7 +15966,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -15988,8 +15988,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -16147,14 +16147,14 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -16175,7 +16175,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -16332,7 +16332,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -16341,7 +16341,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -16364,7 +16364,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -16522,14 +16522,14 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -16549,8 +16549,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -16707,7 +16707,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -16716,7 +16716,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -16738,8 +16738,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -16894,14 +16894,14 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -16920,7 +16920,7 @@ spec:
             END
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -17066,8 +17066,8 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                     THEN 1
                 ELSE 0
             END
@@ -17075,7 +17075,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -17096,7 +17096,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -17244,14 +17244,14 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -17270,7 +17270,7 @@ spec:
             END
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -17417,8 +17417,8 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                     THEN 1
                 ELSE 0
             END
@@ -17426,7 +17426,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -17447,7 +17447,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -17595,14 +17595,14 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -17620,8 +17620,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -17768,8 +17768,8 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                     THEN 1
                 ELSE 0
             END
@@ -17777,7 +17777,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -17797,8 +17797,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -17946,14 +17946,14 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -17972,7 +17972,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -18119,8 +18119,8 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                     THEN 1
                 ELSE 0
             END
@@ -18128,7 +18128,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -18149,7 +18149,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -18297,14 +18297,14 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -18322,8 +18322,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -18470,8 +18470,8 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                     THEN 1
                 ELSE 0
             END
@@ -18479,7 +18479,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -18499,8 +18499,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -18669,15 +18669,15 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -18699,7 +18699,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -18859,8 +18859,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -18869,7 +18869,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -18893,7 +18893,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -19055,15 +19055,15 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -19085,7 +19085,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -19246,8 +19246,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -19256,7 +19256,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -19280,7 +19280,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -19442,15 +19442,15 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -19471,8 +19471,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -19633,8 +19633,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -19643,7 +19643,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -19666,8 +19666,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -19829,15 +19829,15 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -19859,7 +19859,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -20020,8 +20020,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -20030,7 +20030,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -20054,7 +20054,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -20216,15 +20216,15 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -20245,8 +20245,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -20407,8 +20407,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND SAFE_CAST(analyzed_table."target_column" AS STRING) <> ''
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) = ''
+                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -20417,7 +20417,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -20440,8 +20440,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -20596,14 +20596,14 @@ spec:
         SUM(
             CASE
                 WHEN (analyzed_table."target_column") IS NOT NULL
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -20622,7 +20622,7 @@ spec:
             END
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -20768,8 +20768,8 @@ spec:
         SUM(
             CASE
                 WHEN (analyzed_table."target_column") IS NOT NULL
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                     THEN 1
                 ELSE 0
             END
@@ -20777,7 +20777,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -20798,7 +20798,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -20946,14 +20946,14 @@ spec:
         SUM(
             CASE
                 WHEN (analyzed_table."target_column") IS NOT NULL
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -20972,7 +20972,7 @@ spec:
             END
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -21119,8 +21119,8 @@ spec:
         SUM(
             CASE
                 WHEN (analyzed_table."target_column") IS NOT NULL
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                     THEN 1
                 ELSE 0
             END
@@ -21128,7 +21128,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -21149,7 +21149,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -21297,14 +21297,14 @@ spec:
         SUM(
             CASE
                 WHEN (analyzed_table."target_column") IS NOT NULL
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -21322,8 +21322,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -21470,8 +21470,8 @@ spec:
         SUM(
             CASE
                 WHEN (analyzed_table."target_column") IS NOT NULL
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                     THEN 1
                 ELSE 0
             END
@@ -21479,7 +21479,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -21499,8 +21499,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -21648,14 +21648,14 @@ spec:
         SUM(
             CASE
                 WHEN (analyzed_table."target_column") IS NOT NULL
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -21674,7 +21674,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -21821,8 +21821,8 @@ spec:
         SUM(
             CASE
                 WHEN (analyzed_table."target_column") IS NOT NULL
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                     THEN 1
                 ELSE 0
             END
@@ -21830,7 +21830,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -21851,7 +21851,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -21999,14 +21999,14 @@ spec:
         SUM(
             CASE
                 WHEN (analyzed_table."target_column") IS NOT NULL
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -22024,8 +22024,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -22172,8 +22172,8 @@ spec:
         SUM(
             CASE
                 WHEN (analyzed_table."target_column") IS NOT NULL
-                AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                     THEN 1
                 ELSE 0
             END
@@ -22181,7 +22181,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -22201,8 +22201,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -22371,15 +22371,15 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN (analyzed_table."target_column") IS NOT NULL
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                    AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                    AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -22401,7 +22401,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -22561,8 +22561,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN (analyzed_table."target_column") IS NOT NULL
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                    AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                    AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                         THEN 1
                     ELSE 0
                 END
@@ -22571,7 +22571,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -22595,7 +22595,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -22757,15 +22757,15 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN (analyzed_table."target_column") IS NOT NULL
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                    AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                    AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -22787,7 +22787,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -22948,8 +22948,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN (analyzed_table."target_column") IS NOT NULL
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                    AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                    AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                         THEN 1
                     ELSE 0
                 END
@@ -22958,7 +22958,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -22982,7 +22982,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -23144,15 +23144,15 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN (analyzed_table."target_column") IS NOT NULL
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                    AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                    AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -23173,8 +23173,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -23335,8 +23335,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN (analyzed_table."target_column") IS NOT NULL
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                    AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                    AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                         THEN 1
                     ELSE 0
                 END
@@ -23345,7 +23345,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -23368,8 +23368,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -23531,15 +23531,15 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN (analyzed_table."target_column") IS NOT NULL
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                    AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                    AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -23561,7 +23561,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -23722,8 +23722,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN (analyzed_table."target_column") IS NOT NULL
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                    AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                    AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                         THEN 1
                     ELSE 0
                 END
@@ -23732,7 +23732,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -23756,7 +23756,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -23918,15 +23918,15 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN (analyzed_table."target_column") IS NOT NULL
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                    AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                    AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -23947,8 +23947,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -24109,8 +24109,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN (analyzed_table."target_column") IS NOT NULL
-                    AND TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING)) <> ''
-                    AND (SAFE_CAST(analyzed_table."target_column" AS STRING)) <> TRIM(SAFE_CAST(analyzed_table."target_column" AS STRING))
+                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> ''
+                    AND (TRY_CAST(analyzed_table."target_column" AS VARCHAR)) <> TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
                         THEN 1
                     ELSE 0
                 END
@@ -24119,7 +24119,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -24142,8 +24142,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -24289,13 +24289,13 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -24312,7 +24312,7 @@ spec:
             END
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -24449,7 +24449,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
@@ -24457,7 +24457,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -24476,7 +24476,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -24615,13 +24615,13 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -24638,7 +24638,7 @@ spec:
             END
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -24776,7 +24776,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
@@ -24784,7 +24784,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -24803,7 +24803,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -24942,13 +24942,13 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -24964,8 +24964,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -25103,7 +25103,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
@@ -25111,7 +25111,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -25129,8 +25129,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -25269,13 +25269,13 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -25292,7 +25292,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -25430,7 +25430,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
@@ -25438,7 +25438,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -25457,7 +25457,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -25596,13 +25596,13 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -25618,8 +25618,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -25757,7 +25757,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
@@ -25765,7 +25765,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -25783,8 +25783,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -25944,14 +25944,14 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -25971,7 +25971,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -26122,7 +26122,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
@@ -26131,7 +26131,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -26153,7 +26153,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -26306,14 +26306,14 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -26333,7 +26333,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -26485,7 +26485,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
@@ -26494,7 +26494,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -26516,7 +26516,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -26669,14 +26669,14 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -26695,8 +26695,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -26848,7 +26848,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
@@ -26857,7 +26857,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -26878,8 +26878,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -27032,14 +27032,14 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -27059,7 +27059,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -27211,7 +27211,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
@@ -27220,7 +27220,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -27242,7 +27242,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -27395,14 +27395,14 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -27421,8 +27421,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -27574,7 +27574,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
@@ -27583,7 +27583,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -27604,8 +27604,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -27772,7 +27772,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -27792,7 +27792,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -27952,7 +27952,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -27974,7 +27974,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -28134,7 +28134,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -28154,7 +28154,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -28315,7 +28315,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -28337,7 +28337,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -28497,7 +28497,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -28516,8 +28516,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -28678,7 +28678,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -28699,8 +28699,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -28860,7 +28860,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -28880,7 +28880,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -29041,7 +29041,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -29063,7 +29063,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -29223,7 +29223,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -29242,8 +29242,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -29404,7 +29404,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -29425,8 +29425,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -29575,7 +29575,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -29591,7 +29591,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -29733,7 +29733,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -29751,7 +29751,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -29893,7 +29893,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -29909,7 +29909,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -30052,7 +30052,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -30070,7 +30070,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -30212,7 +30212,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -30227,8 +30227,8 @@ spec:
                 "target_column" ~ '^[0-9]'
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -30371,7 +30371,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -30388,8 +30388,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -30531,7 +30531,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -30547,7 +30547,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -30690,7 +30690,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -30708,7 +30708,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -30850,7 +30850,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -30865,8 +30865,8 @@ spec:
                 "target_column" ~ '^[0-9]'
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -31009,7 +31009,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -31026,8 +31026,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -31176,7 +31176,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -31192,7 +31192,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -31334,7 +31334,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -31352,7 +31352,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -31494,7 +31494,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -31510,7 +31510,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -31653,7 +31653,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -31671,7 +31671,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -31813,7 +31813,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -31828,8 +31828,8 @@ spec:
                 "target_column" ~ '^([0-9]+\.?[0-9]*|\.[0-9]+)$'
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -31972,7 +31972,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -31989,8 +31989,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -32132,7 +32132,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -32148,7 +32148,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -32291,7 +32291,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -32309,7 +32309,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -32451,7 +32451,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -32466,8 +32466,8 @@ spec:
                 "target_column" ~ '^([0-9]+\.?[0-9]*|\.[0-9]+)$'
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -32610,7 +32610,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -32627,8 +32627,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -32851,7 +32851,7 @@ spec:
         )
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -32871,7 +32871,7 @@ spec:
         )
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -33087,7 +33087,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -33109,7 +33109,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -33325,7 +33325,7 @@ spec:
         )
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -33345,7 +33345,7 @@ spec:
         )
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -33562,7 +33562,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -33584,7 +33584,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -33800,7 +33800,7 @@ spec:
         )
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -33819,8 +33819,8 @@ spec:
             END
         )
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -34037,7 +34037,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -34058,8 +34058,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -34275,7 +34275,7 @@ spec:
         )
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -34295,7 +34295,7 @@ spec:
         )
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -34512,7 +34512,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -34534,7 +34534,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -34750,7 +34750,7 @@ spec:
         )
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -34769,8 +34769,8 @@ spec:
             END
         )
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -34987,7 +34987,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -35008,8 +35008,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -35238,7 +35238,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -35258,7 +35258,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -35480,7 +35480,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -35502,7 +35502,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -35724,7 +35724,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -35744,7 +35744,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -35967,7 +35967,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -35989,7 +35989,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -36211,7 +36211,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -36230,8 +36230,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -36454,7 +36454,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -36475,8 +36475,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -36698,7 +36698,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -36718,7 +36718,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -36941,7 +36941,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -36963,7 +36963,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -37185,7 +37185,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -37204,8 +37204,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -37428,7 +37428,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -37449,8 +37449,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -37610,14 +37610,14 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(SAFE_CAST(analyzed_table."target_column" AS STRING) AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -37637,7 +37637,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -37788,7 +37788,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(SAFE_CAST(analyzed_table."target_column" AS STRING) AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -37797,7 +37797,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -37819,7 +37819,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -37972,14 +37972,14 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(SAFE_CAST(analyzed_table."target_column" AS STRING) AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -37999,7 +37999,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -38151,7 +38151,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(SAFE_CAST(analyzed_table."target_column" AS STRING) AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -38160,7 +38160,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -38182,7 +38182,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -38335,14 +38335,14 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(SAFE_CAST(analyzed_table."target_column" AS STRING) AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -38361,8 +38361,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -38514,7 +38514,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(SAFE_CAST(analyzed_table."target_column" AS STRING) AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -38523,7 +38523,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -38544,8 +38544,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -38698,14 +38698,14 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(SAFE_CAST(analyzed_table."target_column" AS STRING) AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -38725,7 +38725,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -38877,7 +38877,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(SAFE_CAST(analyzed_table."target_column" AS STRING) AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -38886,7 +38886,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -38908,7 +38908,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -39061,14 +39061,14 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(SAFE_CAST(analyzed_table."target_column" AS STRING) AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -39087,8 +39087,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -39240,7 +39240,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(SAFE_CAST(analyzed_table."target_column" AS STRING) AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -39249,7 +39249,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -39270,8 +39270,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -39438,7 +39438,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -39458,7 +39458,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -39618,7 +39618,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -39640,7 +39640,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -39800,7 +39800,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -39820,7 +39820,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -39981,7 +39981,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -40003,7 +40003,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -40163,7 +40163,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -40182,8 +40182,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -40344,7 +40344,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -40365,8 +40365,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -40526,7 +40526,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -40546,7 +40546,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -40707,7 +40707,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -40729,7 +40729,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -40889,7 +40889,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -40908,8 +40908,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -41070,7 +41070,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -41091,8 +41091,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -41253,7 +41253,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -41261,7 +41261,7 @@ spec:
         END AS actual_value
       AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -41281,7 +41281,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -41433,7 +41433,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -41443,7 +41443,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -41465,7 +41465,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -41619,7 +41619,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -41627,7 +41627,7 @@ spec:
         END AS actual_value
       AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -41647,7 +41647,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -41800,7 +41800,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -41810,7 +41810,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -41832,7 +41832,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -41986,7 +41986,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -41994,7 +41994,7 @@ spec:
         END AS actual_value
       AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -42013,8 +42013,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -42167,7 +42167,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -42177,7 +42177,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -42198,8 +42198,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -42353,7 +42353,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -42361,7 +42361,7 @@ spec:
         END AS actual_value
       AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -42381,7 +42381,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -42534,7 +42534,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -42544,7 +42544,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -42566,7 +42566,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -42720,7 +42720,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -42728,7 +42728,7 @@ spec:
         END AS actual_value
       AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -42747,8 +42747,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -42901,7 +42901,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER(SAFE_CAST(analyzed_table."target_column" AS STRING)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -42911,7 +42911,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -42932,8 +42932,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -43085,7 +43085,7 @@ spec:
             END
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -43102,7 +43102,7 @@ spec:
             END
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -43247,7 +43247,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -43266,7 +43266,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -43411,7 +43411,7 @@ spec:
             END
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -43428,7 +43428,7 @@ spec:
             END
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -43574,7 +43574,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -43593,7 +43593,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -43738,7 +43738,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -43754,8 +43754,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -43901,7 +43901,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -43919,8 +43919,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -44065,7 +44065,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -44082,7 +44082,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -44228,7 +44228,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -44247,7 +44247,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -44392,7 +44392,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -44408,8 +44408,8 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -44555,7 +44555,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -44573,8 +44573,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -44726,7 +44726,7 @@ spec:
             END
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -44743,7 +44743,7 @@ spec:
             END
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -44888,7 +44888,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -44907,7 +44907,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -45052,7 +45052,7 @@ spec:
             END
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -45069,7 +45069,7 @@ spec:
             END
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -45215,7 +45215,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -45234,7 +45234,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -45379,7 +45379,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -45395,8 +45395,8 @@ spec:
                 ELSE 1
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -45542,7 +45542,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -45560,8 +45560,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -45706,7 +45706,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -45723,7 +45723,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -45869,7 +45869,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -45888,7 +45888,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -46033,7 +46033,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -46049,8 +46049,8 @@ spec:
                 ELSE 1
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -46196,7 +46196,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -46214,8 +46214,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -46382,7 +46382,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -46402,7 +46402,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -46562,7 +46562,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -46584,7 +46584,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -46744,7 +46744,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -46764,7 +46764,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -46925,7 +46925,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -46947,7 +46947,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -47107,7 +47107,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -47126,8 +47126,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -47288,7 +47288,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -47309,8 +47309,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -47470,7 +47470,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -47490,7 +47490,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -47651,7 +47651,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -47673,7 +47673,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -47833,7 +47833,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -47852,8 +47852,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -48014,7 +48014,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -48035,8 +48035,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -48188,7 +48188,7 @@ spec:
             END
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -48205,7 +48205,7 @@ spec:
             END
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -48350,7 +48350,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -48369,7 +48369,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -48514,7 +48514,7 @@ spec:
             END
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -48531,7 +48531,7 @@ spec:
             END
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -48677,7 +48677,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -48696,7 +48696,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -48841,7 +48841,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -48857,8 +48857,8 @@ spec:
                 ELSE 1
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -49004,7 +49004,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -49022,8 +49022,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -49168,7 +49168,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -49185,7 +49185,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -49331,7 +49331,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -49350,7 +49350,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -49495,7 +49495,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -49511,8 +49511,8 @@ spec:
                 ELSE 1
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -49658,7 +49658,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -49676,8 +49676,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -49829,7 +49829,7 @@ spec:
             END
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -49846,7 +49846,7 @@ spec:
             END
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -49991,7 +49991,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -50010,7 +50010,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -50155,7 +50155,7 @@ spec:
             END
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -50172,7 +50172,7 @@ spec:
             END
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -50318,7 +50318,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -50337,7 +50337,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -50482,7 +50482,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -50498,8 +50498,8 @@ spec:
                 ELSE 1
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -50645,7 +50645,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -50663,8 +50663,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -50809,7 +50809,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -50826,7 +50826,7 @@ spec:
             END
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -50972,7 +50972,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -50991,7 +50991,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -51136,7 +51136,7 @@ spec:
             END
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -51152,8 +51152,8 @@ spec:
                 ELSE 1
             END
         ) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -51299,7 +51299,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -51317,8 +51317,8 @@ spec:
         ) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -51514,7 +51514,7 @@ spec:
             )
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -51534,7 +51534,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -51723,7 +51723,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -51745,7 +51745,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -51934,7 +51934,7 @@ spec:
             )
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -51954,7 +51954,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -52144,7 +52144,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -52166,7 +52166,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -52355,7 +52355,7 @@ spec:
             )
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -52374,8 +52374,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -52565,7 +52565,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -52586,8 +52586,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -52776,7 +52776,7 @@ spec:
             )
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -52796,7 +52796,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -52986,7 +52986,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -53008,7 +53008,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -53197,7 +53197,7 @@ spec:
             )
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -53216,8 +53216,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -53407,7 +53407,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -53428,8 +53428,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -53625,7 +53625,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -53645,7 +53645,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -53834,7 +53834,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -53856,7 +53856,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -54045,7 +54045,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -54065,7 +54065,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -54255,7 +54255,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -54277,7 +54277,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -54466,7 +54466,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -54485,8 +54485,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -54676,7 +54676,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -54697,8 +54697,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -54887,7 +54887,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -54907,7 +54907,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -55097,7 +55097,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -55119,7 +55119,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -55308,7 +55308,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -55327,8 +55327,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -55518,7 +55518,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -55539,8 +55539,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -55753,7 +55753,7 @@ spec:
             )
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -55773,7 +55773,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -55979,7 +55979,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -56001,7 +56001,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -56207,7 +56207,7 @@ spec:
             )
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -56227,7 +56227,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -56434,7 +56434,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -56456,7 +56456,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -56662,7 +56662,7 @@ spec:
             )
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -56681,8 +56681,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -56889,7 +56889,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -56910,8 +56910,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -57117,7 +57117,7 @@ spec:
             )
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -57137,7 +57137,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -57344,7 +57344,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -57366,7 +57366,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -57572,7 +57572,7 @@ spec:
             )
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -57591,8 +57591,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -57799,7 +57799,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -57820,8 +57820,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -58036,7 +58036,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -58056,7 +58056,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -58264,7 +58264,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -58286,7 +58286,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -58494,7 +58494,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -58514,7 +58514,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -58723,7 +58723,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -58745,7 +58745,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -58953,7 +58953,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -58972,8 +58972,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -59182,7 +59182,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -59203,8 +59203,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -59412,7 +59412,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -59432,7 +59432,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -59641,7 +59641,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -59663,7 +59663,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -59871,7 +59871,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -59890,8 +59890,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -60100,7 +60100,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -60121,8 +60121,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -60289,7 +60289,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -60309,7 +60309,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -60469,7 +60469,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -60491,7 +60491,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -60651,7 +60651,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -60671,7 +60671,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -60832,7 +60832,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -60854,7 +60854,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -61014,7 +61014,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -61033,8 +61033,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -61195,7 +61195,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -61216,8 +61216,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -61377,7 +61377,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -61397,7 +61397,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -61558,7 +61558,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -61580,7 +61580,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -61740,7 +61740,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -61759,8 +61759,8 @@ spec:
                 END
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -61921,7 +61921,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -61942,8 +61942,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -62302,7 +62302,7 @@ spec:
                 analyzed_table."target_column" AS top_values,
                 COUNT(*) AS total_values,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -62334,7 +62334,7 @@ spec:
                 "target_column" AS top_values,
                 COUNT(*) AS total_values,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -62691,7 +62691,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -62725,7 +62725,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -63082,7 +63082,7 @@ spec:
                 analyzed_table."target_column" AS top_values,
                 COUNT(*) AS total_values,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -63114,7 +63114,7 @@ spec:
                 "target_column" AS top_values,
                 COUNT(*) AS total_values,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -63472,7 +63472,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -63506,7 +63506,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -63863,7 +63863,7 @@ spec:
                 analyzed_table."target_column" AS top_values,
                 COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -63894,8 +63894,8 @@ spec:
                SELECT
                 "target_column" AS top_values,
                 COUNT(*) AS total_values,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -64253,7 +64253,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -64286,8 +64286,8 @@ spec:
                 COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -64644,7 +64644,7 @@ spec:
                 analyzed_table."target_column" AS top_values,
                 COUNT(*) AS total_values,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -64676,7 +64676,7 @@ spec:
                 "target_column" AS top_values,
                 COUNT(*) AS total_values,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -65034,7 +65034,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -65068,7 +65068,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -65425,7 +65425,7 @@ spec:
                 analyzed_table."target_column" AS top_values,
                 COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -65456,8 +65456,8 @@ spec:
                SELECT
                 "target_column" AS top_values,
                 COUNT(*) AS total_values,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
@@ -65815,7 +65815,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
@@ -65848,8 +65848,8 @@ spec:
                 COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values

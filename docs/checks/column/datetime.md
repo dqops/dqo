@@ -199,7 +199,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -215,7 +215,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -418,7 +418,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -436,7 +436,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -639,7 +639,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -655,7 +655,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -859,7 +859,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -877,7 +877,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1080,7 +1080,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1095,8 +1095,8 @@ spec:
                 
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1300,7 +1300,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1317,8 +1317,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1521,7 +1521,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1537,7 +1537,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1741,7 +1741,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1759,7 +1759,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1962,7 +1962,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1977,8 +1977,8 @@ spec:
                 
             ) / COUNT(*)
         END AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2182,7 +2182,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2199,8 +2199,8 @@ spec:
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2273,7 +2273,7 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -2281,9 +2281,9 @@ spec:
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -2293,7 +2293,7 @@ spec:
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -2396,11 +2396,6 @@ spec:
 === "bigquery"
       
     ```
-    
-    
-    
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -2429,7 +2424,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2449,7 +2444,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2511,7 +2506,7 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -2519,9 +2514,9 @@ spec:
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -2531,7 +2526,7 @@ spec:
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -2634,11 +2629,6 @@ spec:
 === "bigquery"
       
     ```
-    
-    
-    
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -2671,7 +2661,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
-        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2693,7 +2683,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        TIMESTAMP(LOCALTIMESTAMP) AS time_period_utc
+        LOCALTIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2759,7 +2749,7 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -2767,9 +2757,9 @@ spec:
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -2779,7 +2769,7 @@ spec:
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -2882,11 +2872,6 @@ spec:
 === "bigquery"
       
     ```
-    
-    
-    
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -2915,7 +2900,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2935,7 +2920,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2998,7 +2983,7 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -3006,9 +2991,9 @@ spec:
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -3018,7 +3003,7 @@ spec:
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -3121,11 +3106,6 @@ spec:
 === "bigquery"
       
     ```
-    
-    
-    
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -3158,7 +3138,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
-        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3180,7 +3160,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        TIMESTAMP(CAST(LOCALTIMESTAMP AS date)) AS time_period_utc
+        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3246,7 +3226,7 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -3254,9 +3234,9 @@ spec:
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -3266,7 +3246,7 @@ spec:
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -3369,11 +3349,6 @@ spec:
 === "bigquery"
       
     ```
-    
-    
-    
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -3402,7 +3377,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3421,8 +3396,8 @@ spec:
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3485,7 +3460,7 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -3493,9 +3468,9 @@ spec:
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -3505,7 +3480,7 @@ spec:
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -3608,11 +3583,6 @@ spec:
 === "bigquery"
       
     ```
-    
-    
-    
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -3645,7 +3615,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3666,8 +3636,8 @@ spec:
         ) / COUNT(*) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3733,7 +3703,7 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -3741,9 +3711,9 @@ spec:
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -3753,7 +3723,7 @@ spec:
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -3856,11 +3826,6 @@ spec:
 === "bigquery"
       
     ```
-    
-    
-    
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -3889,7 +3854,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3909,7 +3874,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3972,7 +3937,7 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -3980,9 +3945,9 @@ spec:
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -3992,7 +3957,7 @@ spec:
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -4095,11 +4060,6 @@ spec:
 === "bigquery"
       
     ```
-    
-    
-    
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -4132,7 +4092,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -4154,7 +4114,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -4220,7 +4180,7 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -4228,9 +4188,9 @@ spec:
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -4240,7 +4200,7 @@ spec:
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -4343,11 +4303,6 @@ spec:
 === "bigquery"
       
     ```
-    
-    
-    
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -4376,7 +4331,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -4395,8 +4350,8 @@ spec:
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -4459,7 +4414,7 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
@@ -4467,9 +4422,9 @@ spec:
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
@@ -4479,7 +4434,7 @@ spec:
         {%- else -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     
     SELECT
@@ -4582,11 +4537,6 @@ spec:
 === "bigquery"
       
     ```
-    
-    
-    
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -4619,7 +4569,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -4640,8 +4590,8 @@ spec:
         ) / COUNT(*) AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
-        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        TIMESTAMP(DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc

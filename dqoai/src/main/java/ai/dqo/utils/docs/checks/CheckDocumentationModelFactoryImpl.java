@@ -24,6 +24,7 @@ import ai.dqo.connectors.bigquery.BigQueryConnectionProvider;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
+import ai.dqo.connectors.redshift.RedshiftConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -314,11 +315,11 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         HierarchyNode checkCategoryContainer = checkRootContainer.getChild(similarCheckModel.getCategory());
         if (checkCategoryContainer == null) {
-            System.err.println("Sorry but check container: " + checkRootContainer.getClass().getName() + " has no category " + similarCheckModel.getCategory());
+            System.err.println("Sorry but check root container: " + checkRootContainer.getClass().getName() + " has no category " + similarCheckModel.getCategory());
         }
         AbstractCheckSpec<?, ?, ?, ?> checkSpec = (AbstractCheckSpec<?, ?, ?, ?>) checkCategoryContainer.getChild(checkModel.getCheckName());
         if (checkSpec == null) {
-            System.err.println("Sorry but check container: " + checkRootContainer.getClass().getName() + " has no check named " + checkModel.getCheckName());
+            System.err.println("Sorry but check category container: " + checkCategoryContainer.getClass().getName() + " has no check named " + checkModel.getCheckName());
         }
 
         TableYaml tableYaml = new TableYaml(trimmedTableSpec);
@@ -463,6 +464,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return SnowflakeConnectionProvider.DIALECT_SETTINGS;
             case postgresql:
                 return PostgresqlConnectionProvider.DIALECT_SETTINGS;
+            case redshift:
+                return RedshiftConnectionProvider.DIALECT_SETTINGS;
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }
