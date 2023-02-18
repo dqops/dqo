@@ -36,30 +36,51 @@ import java.util.Objects;
 public class ColumnIntegrityMonthlyPartitionedChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnIntegrityMonthlyPartitionedChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("monthly_partition_foreign_key_not_match_count", o -> o.monthlyPartitionForeignKeyNotMatchCount);
-
+            put("monthly_partition_value_not_match_count", o -> o.monthlyPartitionForeignKeyNotMatchCount);
+            put("monthly_partition_value_match_percent", o -> o.monthlyPartitionForeignKeyMatchPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyPartitionForeignKeyNotMatchCount;
 
+    @JsonPropertyDescription("Verifies that the percentage of values in a column that matches values in another table column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyPartitionForeignKeyMatchPercent;
+
     /**
-     * Returns an integrity value match count check.
-     * @return Integrity value match count check.
+     * Returns an integrity value not match count check.
+     * @return Integrity value not match count check.
      */
     public ColumnIntegrityForeignKeyNotMatchCountCheckSpec getMonthlyPartitionForeignKeyNotMatchCount() {
         return monthlyPartitionForeignKeyNotMatchCount;
     }
 
     /**
-     * Sets a new definition of an integrity value match count check.
-     * @param monthlyPartitionForeignKeyNotMatchCount Integrity value match count check.
+     * Sets a new definition of an integrity value not match count check.
+     * @param monthlyPartitionForeignKeyNotMatchCount Integrity value not match count check.
      */
     public void setMonthlyPartitionForeignKeyNotMatchCount(ColumnIntegrityForeignKeyNotMatchCountCheckSpec monthlyPartitionForeignKeyNotMatchCount) {
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionForeignKeyNotMatchCount, monthlyPartitionForeignKeyNotMatchCount));
         this.monthlyPartitionForeignKeyNotMatchCount = monthlyPartitionForeignKeyNotMatchCount;
-        propagateHierarchyIdToField(monthlyPartitionForeignKeyNotMatchCount, "monthly_partition_foreign_key_not_match_count");
+        propagateHierarchyIdToField(monthlyPartitionForeignKeyNotMatchCount, "monthly_partition_value_not_match_count");
+    }
+
+    /**
+     * Returns an integrity value match percent check.
+     * @return Integrity value match percent check.
+     */
+    public ColumnIntegrityForeignKeyMatchPercentCheckSpec getMonthlyPartitionForeignKeyMatchPercent() {
+        return monthlyPartitionForeignKeyMatchPercent;
+    }
+
+    /**
+     * Sets a new definition of an integrity value match percent check.
+     * @param monthlyPartitionForeignKeyMatchPercent Integrity value match percent check.
+     */
+    public void setMonthlyPartitionForeignKeyMatchPercent(ColumnIntegrityForeignKeyMatchPercentCheckSpec monthlyPartitionForeignKeyMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionForeignKeyMatchPercent, monthlyPartitionForeignKeyMatchPercent));
+        this.monthlyPartitionForeignKeyMatchPercent = monthlyPartitionForeignKeyMatchPercent;
+        propagateHierarchyIdToField(monthlyPartitionForeignKeyMatchPercent, "monthly_partition_value_match_percent");
     }
 
     /**

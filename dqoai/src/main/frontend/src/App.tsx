@@ -29,7 +29,7 @@ const App = () => {
   return (
     <Router>
       <AppProvider>
-        <ThemeProvider value={{}}>
+        <ThemeProvider>
           <Routes />
           <ToastContainer />
         </ThemeProvider>

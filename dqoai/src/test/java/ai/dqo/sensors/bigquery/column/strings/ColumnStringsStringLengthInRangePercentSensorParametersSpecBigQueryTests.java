@@ -1,11 +1,11 @@
 /*
- * Copyright © 2021 DQO.ai (support@dqo.ai)
+ * Copyright © 2022 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -15,129 +15,451 @@
  */
 package ai.dqo.sensors.bigquery.column.strings;
 
-//import ai.dqo.BaseTest;
-//import ai.dqo.checks.column.checkspecs.strings.ColumnStringStringLengthInRangePercentCheckSpec;
-//import ai.dqo.connectors.ProviderType;
-//import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-//import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
-//import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
-//import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionWrapper;
-//import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
-//import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
-//import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-//import ai.dqo.sampledata.SampleCsvFileNames;
-//import ai.dqo.sampledata.SampleTableMetadata;
-//import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-//import ai.dqo.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
-//import org.junit.jupiter.api.Assertions;
-//import org.junit.jupiter.api.BeforeEach;
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-//
-//@SpringBootTest
-//public class ColumnStringsStringLengthInRangePercentSensorParametersSpecBigQueryTests extends BaseTest {
-//    private ColumnStringsStringLengthInRangePercentSensorParametersSpec sut;
-//    private UserHomeContext userHomeContext;
-//    private SensorExecutionRunParameters runParameters;
-//    private ColumnStringStringLengthInRangePercentCheckSpec checkSpec;
-//    private SampleTableMetadata sampleTableMetadata;
-//
-//    /**
-//     * Called before each test.
-//     * This method should be overridden in derived super classes (test classes), but remember to add {@link BeforeEach} annotation in a derived test class. JUnit5 demands it.
-//     *
-//     * @throws Throwable
-//     */
-//    @Override
-//    @BeforeEach
-//    protected void setUp() throws Throwable {
-//        super.setUp();
-//        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_regex_sensor, ProviderType.bigquery);
-//        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-//        this.sut = new ColumnStringsStringLengthInRangePercentSensorParametersSpec();
-//        this.checkSpec = new ColumnStringStringLengthInRangePercentCheckSpec();
-//        this.checkSpec.setParameters(this.sut);
-//        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "id", this.checkSpec);
-//        this.sut = (ColumnStringsStringLengthInRangePercentSensorParametersSpec) runParameters.getSensorParameters();
-//    }
-//
-//    @Test
-//    void getSensorDefinitionName_whenSensorDefinitionForBigQueryRetrieved_thenDefinitionFoundInDocumatiHome() {
-//        ProviderSensorDefinitionWrapper providerSensorDefinitionWrapper =
-//                SensorDefinitionWrapperObjectMother.findProviderDqoHomeSensorDefinition(this.sut.getSensorDefinitionName(), ProviderType.bigquery);
-//        Assertions.assertNotNull(providerSensorDefinitionWrapper.getSpec());
-//        Assertions.assertNotNull(providerSensorDefinitionWrapper);
-//    }
-//
-//    @Test
-//    void renderSensor_whenLowerBoundIs8AndUpperBoundIs8_thenRendersCorrectSql() {
-//        this.sut.setMinLength(8);
-//        this.sut.setMaxLength(8);
-//        runParameters.setTimeSeries(null);
-//        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-//
-//        Assertions.assertEquals(String.format("""
-//                        SELECT
-//                            CASE
-//                                WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-//                                ELSE
-//                                    100.0 * SUM(
-//                                                CASE WHEN LENGTH( SAFE_CAST(analyzed_table.`id` AS STRING) ) BETWEEN 8 AND 8 THEN 1
-//                                                        ELSE 0
-//                                                    END
-//                            ) / COUNT(analyzed_table.`id`) END AS actual_value
-//                        FROM %s AS analyzed_table""",
-//                JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-//                renderedTemplate);
-//
-//    }
-//
-//    @Test
-//    void renderSensor_whenLowerBoundIs3AndUpperBoundIs5_thenRendersCorrectSql() {
-//        this.sut.setMinLength(3);
-//        this.sut.setMaxLength(5);
-//        runParameters.setTimeSeries(null);
-//        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-//
-//        Assertions.assertEquals(String.format("""
-//                        SELECT
-//                            CASE
-//                                WHEN COUNT(analyzed_table.`id`) = 0 THEN NULL
-//                                ELSE
-//                                    100.0 * SUM(
-//                                                CASE WHEN LENGTH( SAFE_CAST(analyzed_table.`id` AS STRING) ) BETWEEN 3 AND 5 THEN 1
-//                                                        ELSE 0
-//                                                    END
-//                            ) / COUNT(analyzed_table.`id`) END AS actual_value
-//                        FROM %s AS analyzed_table""",
-//                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-//                renderedTemplate);
-//
-//    }
-//
-//    @Test
-//    void renderSensor_whenLowerBoundIs3AndUpperBoundIs5AndColumnWithIntValues_thenRendersCorrectSql() {
-//        this.runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnAndLegacyCheck(sampleTableMetadata, "length_string_int", this.checkSpec);
-//        this.sut = (ColumnStringsStringLengthInRangePercentSensorParametersSpec) runParameters.getSensorParameters();
-//        this.sut.setMinLength(3);
-//        this.sut.setMaxLength(5);
-//        runParameters.setTimeSeries(null);
-//
-//        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
-//
-//        Assertions.assertEquals(String.format("""
-//                        SELECT
-//                            CASE
-//                                WHEN COUNT(analyzed_table.`length_string_int`) = 0 THEN NULL
-//                                ELSE
-//                                    100.0 * SUM(
-//                                                CASE WHEN LENGTH( SAFE_CAST(analyzed_table.`length_string_int` AS STRING) ) BETWEEN 3 AND 5 THEN 1
-//                                                        ELSE 0
-//                                                    END
-//                            ) / COUNT(analyzed_table.`length_string_int`) END AS actual_value
-//                        FROM %s AS analyzed_table""",
-//                        JinjaTemplateRenderServiceObjectMother.makeExpectedTableName(runParameters)),
-//                renderedTemplate);
-//
-//    }
-//}
+import ai.dqo.BaseTest;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthInRangePercentCheckSpec;
+import ai.dqo.connectors.ProviderType;
+import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
+import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
+import ai.dqo.metadata.groupings.*;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.sampledata.SampleCsvFileNames;
+import ai.dqo.sampledata.SampleTableMetadata;
+import ai.dqo.sampledata.SampleTableMetadataObjectMother;
+import ai.dqo.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+public class ColumnStringsStringLengthInRangePercentSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnStringsStringLengthInRangePercentSensorParametersSpec sut;
+    private UserHomeContext userHomeContext;
+    private ColumnStringLengthInRangePercentCheckSpec checkSpec;
+    private SampleTableMetadata sampleTableMetadata;
+
+    @BeforeEach
+    void setUp() {
+        this.sut = new ColumnStringsStringLengthInRangePercentSensorParametersSpec();
+        this.sut.setFilter("{table}.`correct` = 1");
+
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.checkSpec = new ColumnStringLengthInRangePercentCheckSpec();
+        this.checkSpec.setParameters(this.sut);
+    }
+
+    private SensorExecutionRunParameters getRunParametersAdHoc() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "length_string", this.checkSpec);
+    }
+
+    private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "length_string", this.checkSpec, timeScale);
+    }
+
+    private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(this.sampleTableMetadata, "length_string", this.checkSpec, timeScale, timeSeriesColumn);
+    }
+
+    private String getTableColumnName(SensorExecutionRunParameters runParameters) {
+        return String.format("analyzed_table.`%s`", runParameters.getColumn().getColumnName());
+    }
+
+    private String getSubstitutedFilter(String tableName) {
+        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
+        return this.checkSpec.getParameters().getFilter();
+    }
+
+    @Test
+    void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenDefinitionFoundInDqoHome() {
+        SensorDefinitionWrapper sensorDefinitionWrapper =
+                SensorDefinitionWrapperObjectMother.findDqoHomeSensorDefinition(this.sut.getSensorDefinitionName());
+        Assertions.assertNotNull(sensorDefinitionWrapper.getSpec());
+        Assertions.assertNotNull(sensorDefinitionWrapper);
+    }
+
+    @Test
+    void getSensorDefinitionName_whenSensorDefinitionRetrieved_thenEqualsExpectedName() {
+        Assertions.assertEquals("column/strings/string_length_in_range_percent", this.sut.getSensorDefinitionName());
+    }
+
+    @Test
+    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        runParameters.setTimeSeries(null);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(%1$s)
+                END AS actual_value
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+
+    @Test
+    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
+            setMode(TimeSeriesMode.timestamp_column);
+            setTimeGradient(TimeSeriesGradient.day);
+            setTimestampColumn("date");
+        }});
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenPartitionedDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+
+    @Test
+    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        runParameters.setTimeSeries(null);
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
+                analyzed_table.`length_int` AS stream_level_1
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
+            GROUP BY stream_level_1
+            ORDER BY stream_level_1""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
+                analyzed_table.`length_int` AS stream_level_1,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
+            GROUP BY stream_level_1, time_period, time_period_utc
+            ORDER BY stream_level_1, time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
+                analyzed_table.`length_int` AS stream_level_1,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
+            GROUP BY stream_level_1, time_period, time_period_utc
+            ORDER BY stream_level_1, time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+
+    @Test
+    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
+            setMode(TimeSeriesMode.timestamp_column);
+            setTimeGradient(TimeSeriesGradient.day);
+            setTimestampColumn("date");
+        }});
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
+                analyzed_table.`strings_with_numbers` AS stream_level_1,
+                analyzed_table.`mix_of_values` AS stream_level_2,
+                analyzed_table.`length_int` AS stream_level_3,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
+            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenCheckpointDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
+                analyzed_table.`strings_with_numbers` AS stream_level_1,
+                analyzed_table.`mix_of_values` AS stream_level_2,
+                analyzed_table.`length_int` AS stream_level_3,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
+            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+
+    @Test
+    void renderSensor_whenPartitionedDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("mix_of_values"),
+                        DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                CASE
+                    WHEN COUNT(%1$s) = 0 THEN NULL
+                    ELSE
+                        100.0 * SUM(
+                            CASE
+                                WHEN LENGTH( %1$s ) BETWEEN 0 AND 0 THEN 1
+                                ELSE 0
+                            END
+                    ) / COUNT(%1$s)
+                END AS actual_value,
+                analyzed_table.`strings_with_numbers` AS stream_level_1,
+                analyzed_table.`mix_of_values` AS stream_level_2,
+                analyzed_table.`length_int` AS stream_level_3,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
+            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                this.getTableColumnName(runParameters),
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
+}

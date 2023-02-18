@@ -18,15 +18,22 @@ package ai.dqo.utils.docs;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
+import ai.dqo.core.filesystem.localfiles.LocalFileSystemFactory;
+import ai.dqo.core.filesystem.localfiles.LocalFileSystemFactoryImpl;
+import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceImpl;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryImpl;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.services.check.matching.SimilarCheckMatchingServiceImpl;
 import ai.dqo.utils.docs.checks.CheckDocumentationGenerator;
 import ai.dqo.utils.docs.checks.CheckDocumentationGeneratorImpl;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
+import ai.dqo.services.timezone.DefaultTimeZoneProviderImpl;
 import ai.dqo.utils.docs.checks.CheckDocumentationModelFactory;
 import ai.dqo.utils.docs.checks.CheckDocumentationModelFactoryImpl;
 import ai.dqo.utils.docs.cli.CliCommandDocumentationGenerator;
@@ -45,6 +52,7 @@ import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
 import ai.dqo.utils.python.PythonCallerServiceImpl;
 import ai.dqo.utils.python.PythonVirtualEnvServiceImpl;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
+import ai.dqo.utils.serialization.JsonSerializer;
 import ai.dqo.utils.serialization.JsonSerializerImpl;
 import ai.dqo.utils.serialization.YamlSerializerImpl;
 
@@ -112,7 +120,7 @@ public class GenerateDocumentationPostProcessor {
      * @return Sensor documentation model factory.
      */
     private static SensorDocumentationModelFactory createSensorDocumentationModelFactory(DqoHomeContext dqoHomeContext) {
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(
+        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         SensorDocumentationModelFactoryImpl sensorDocumentationModelFactory = new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService);
         return sensorDocumentationModelFactory;
@@ -145,7 +153,7 @@ public class GenerateDocumentationPostProcessor {
      * @return Rule documentation model factory.
      */
     private static RuleDocumentationModelFactory createRuleDocumentationModelFactory(Path projectRoot, DqoHomeContext dqoHomeContext) {
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(
+        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
                 new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
         RuleDocumentationModelFactoryImpl ruleDocumentationModelFactory = new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService);
         return ruleDocumentationModelFactory;
@@ -195,7 +203,7 @@ public class GenerateDocumentationPostProcessor {
      */
     public static CheckDocumentationModelFactory createCheckDocumentationModelFactory(Path projectRoot, DqoHomeContext dqoHomeContext){
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
-        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = new SpecToUiCheckMappingServiceImpl(
+        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
                 reflectionService, new SensorDefinitionFindServiceImpl());
         DqoConfigurationProperties configurationProperties = new DqoConfigurationProperties();
         configurationProperties.setHome(projectRoot.resolve("../home").toAbsolutePath().normalize().toString());

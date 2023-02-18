@@ -159,8 +159,6 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
             sensorReadoutsDetailedDataModel.getSingleSensorReadouts().add(singleModel);
         }
 
-        readoutMap.values().forEach(SensorReadoutsDetailedDataModel::reverseLists);
-
         return readoutMap.values().toArray(SensorReadoutsDetailedDataModel[]::new);
     }
 

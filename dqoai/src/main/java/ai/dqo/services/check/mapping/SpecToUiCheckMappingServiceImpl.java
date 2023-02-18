@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
+import ai.dqo.core.scheduler.quartz.SchedulesUtilityService;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
@@ -26,46 +27,67 @@ import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
+import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
+import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
+import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
-import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
-import ai.dqo.services.check.mapping.basicmodels.UIQualityCategoryBasicModel;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.utils.reflection.ClassInfo;
 import ai.dqo.utils.reflection.FieldInfo;
 import ai.dqo.utils.reflection.ReflectionService;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDate;
-import java.util.*;
+import java.time.ZonedDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
  * Service that creates the UI model from the data quality check specifications,
  * enabling transformation between the storage model (YAML compliant) with a UI friendly UI model.
  */
-@Component
+@Service
 public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingService {
-    private ReflectionService reflectionService;
-    private SensorDefinitionFindService sensorDefinitionFindService;
+    private final ReflectionService reflectionService;
+    private final SensorDefinitionFindService sensorDefinitionFindService;
+    private final SchedulesUtilityService schedulesUtilityService;
 
     /**
      * Creates a check mapping service that exchanges the data for data quality checks between UI models and the data quality check specifications.
      * @param reflectionService Reflection service used to read the list of checks.
      * @param sensorDefinitionFindService Service that finds the definition of sensors, to verify their capabilities.
+     * @param schedulesUtilityService Schedule specs utility service to get detailed info about CRON expressions.
      */
     @Autowired
-    public SpecToUiCheckMappingServiceImpl(
-            ReflectionService reflectionService,
-            SensorDefinitionFindService sensorDefinitionFindService) {
+    public SpecToUiCheckMappingServiceImpl(ReflectionService reflectionService,
+                                           SensorDefinitionFindService sensorDefinitionFindService,
+                                           SchedulesUtilityService schedulesUtilityService) {
         this.reflectionService = reflectionService;
         this.sensorDefinitionFindService = sensorDefinitionFindService;
+        this.schedulesUtilityService = schedulesUtilityService;
+    }
+
+    /**
+     * Creates a check mapping service that exchanges the data for data quality checks between UI models and the data quality check specifications.
+     * WARNING: It doesn't set the {@link SchedulesUtilityService}, therefore it's not able to resolve schedules (i.e. CRON expressions).
+     * @param reflectionService Reflection service used to read the list of checks.
+     * @param sensorDefinitionFindService Service that finds the definition of sensors, to verify their capabilities.
+     */
+    public static SpecToUiCheckMappingServiceImpl createInstanceUnsafe(ReflectionService reflectionService,
+                                                                       SensorDefinitionFindService sensorDefinitionFindService) {
+        return new SpecToUiCheckMappingServiceImpl(reflectionService, sensorDefinitionFindService, null);
     }
 
     /**
@@ -73,6 +95,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations. Also determines which checks will be included in the ui model.
+     * @param connectionSpec Connection specification for the connection to which the table belongs to.
      * @param tableSpec Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
@@ -81,6 +104,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     @Override
     public UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
                                           CheckSearchFilters runChecksTemplate,
+                                          ConnectionSpec connectionSpec,
                                           TableSpec tableSpec,
                                           ExecutionContext executionContext,
                                           ProviderType providerType) {
@@ -89,6 +113,37 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         uiAllChecksModel.setDataCleanJobTemplate(
                 DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
                         uiAllChecksModel.getRunChecksJobTemplate()));
+
+        UIEffectiveScheduleModel effectiveScheduleModel = getEffectiveScheduleModel(
+                tableSpec.getSchedulesOverride(),
+                checkCategoriesSpec.getSchedulingGroup(),
+                UIEffectiveScheduleLevel.table_override
+        );
+        UIScheduleEnabledStatus scheduleEnabledStatus = getScheduleEnabledStatus(
+                tableSpec.getSchedulesOverride() != null ?
+                    tableSpec.getSchedulesOverride()
+                        .getScheduleForCheckSchedulingGroup(
+                                checkCategoriesSpec.getSchedulingGroup()
+                        )
+                    : null
+        );
+        if (effectiveScheduleModel == null && connectionSpec != null) {
+            effectiveScheduleModel = getEffectiveScheduleModel(
+                    connectionSpec.getSchedules(),
+                    checkCategoriesSpec.getSchedulingGroup(),
+                    UIEffectiveScheduleLevel.connection
+            );
+            scheduleEnabledStatus = getScheduleEnabledStatus(
+                    connectionSpec.getSchedules() != null ?
+                        connectionSpec.getSchedules()
+                            .getScheduleForCheckSchedulingGroup(
+                                    checkCategoriesSpec.getSchedulingGroup()
+                            )
+                        : null
+            );
+        }
+        uiAllChecksModel.setEffectiveSchedule(effectiveScheduleModel);
+        uiAllChecksModel.setEffectiveScheduleEnabledStatus(scheduleEnabledStatus);
 
         String defaultDataStreamName = tableSpec.getDataStreams().getFirstDataStreamMappingName();
 
@@ -99,10 +154,30 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         for (FieldInfo categoryFieldInfo : categoryFields) {
             Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
             UIQualityCategoryModel categoryModel = createCategoryModel(categoryFieldInfo,
-                    categoryFieldValue, runChecksTemplate, tableSpec, executionContext, providerType, defaultDataStreamName);
+                    categoryFieldValue,
+                    checkCategoriesSpec.getSchedulingGroup(),
+                    runChecksTemplate,
+                    tableSpec,
+                    executionContext,
+                    providerType,
+                    defaultDataStreamName);
             if (categoryModel != null && categoryModel.getChecks().size() > 0) {
                 uiAllChecksModel.getCategories().add(categoryModel);
             }
+        }
+
+        // All checks override schedule especially in cases when CheckSearchFilters are very specific.
+        List<UICheckModel> allChecksFlattened = uiAllChecksModel.getCategories().stream()
+                .flatMap(checkCategory -> checkCategory.getChecks().stream())
+                .collect(Collectors.toList());
+
+        if (allChecksFlattened.stream().findAny().isPresent()
+                && allChecksFlattened.stream().allMatch(
+                        check -> check.getEffectiveSchedule() != null
+        )) {
+             // Info about schedule for the whole model is irrelevant.
+            uiAllChecksModel.setEffectiveSchedule(null);
+            uiAllChecksModel.setEffectiveScheduleEnabledStatus(UIScheduleEnabledStatus.overridden_by_checks);
         }
 
         return uiAllChecksModel;
@@ -121,11 +196,22 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, Optional.empty());
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
-            Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
-            UIQualityCategoryBasicModel categoryModel = createCategoryBasicModel(categoryFieldInfo, categoryFieldValue);
-            uiAllChecksBasicModel.getCategories().add(categoryModel);
+            Object checkCategoryParentNode = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+
+            ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
+            List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, Optional.empty());
+
+            for (FieldInfo checkFieldInfo : checksFields) {
+                boolean checkIsConfigured = checkFieldInfo.getFieldValue(checkCategoryParentNode) != null;
+
+                UICheckBasicModel checkModel = createCheckBasicModel(checkFieldInfo);
+                checkModel.setConfigured(checkIsConfigured);
+                checkModel.setCheckCategory(categoryFieldInfo.getYamlFieldName());
+                uiAllChecksBasicModel.getChecks().add(checkModel);
+            }
         }
 
+        uiAllChecksBasicModel.getChecks().sort(UICheckBasicModel::compareTo);
         return uiAllChecksBasicModel;
     }
 
@@ -133,6 +219,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * Creates a UI model for all data quality checks for one category.
      * @param categoryFieldInfo       Field info for the category field.
      * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
+     * @param scheduleGroup Scheduling group relevant to this check.
      * @param runChecksTemplate       Run check job template, acting as a filtering template.
      * @param tableSpec               Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
@@ -142,6 +229,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      */
     protected UIQualityCategoryModel createCategoryModel(FieldInfo categoryFieldInfo,
                                                          Object checkCategoryParentNode,
+                                                         CheckRunRecurringScheduleGroup scheduleGroup,
                                                          CheckSearchFilters runChecksTemplate,
                                                          TableSpec tableSpec,
                                                          ExecutionContext executionContext,
@@ -159,7 +247,6 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 )
         );
 
-
         ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
         Optional<String> checkNameFilter = Optional.ofNullable(categoryModel.getRunChecksJobTemplate().getCheckName());
         List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, checkNameFilter);
@@ -169,7 +256,13 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             AbstractSpec checkSpecObject = checkSpecObjectNullable != null ? checkSpecObjectNullable :
                     (AbstractSpec)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
             AbstractCheckSpec<?,?,?,?> checkFieldValue = (AbstractCheckSpec<?,?,?,?>) checkSpecObject;
-            UICheckModel checkModel = createCheckModel(checkFieldInfo, checkFieldValue, runChecksCategoryTemplate, tableSpec, executionContext, providerType);
+            UICheckModel checkModel = createCheckModel(checkFieldInfo,
+                    checkFieldValue,
+                    scheduleGroup,
+                    runChecksCategoryTemplate,
+                    tableSpec,
+                    executionContext,
+                    providerType);
             if (checkModel == null) {
                 continue;
             }
@@ -186,35 +279,10 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     }
 
     /**
-     * Creates a UI model for all data quality checks for one category.
-     * @param categoryFieldInfo      Field info for the category field.
-     * @param checkCategoryParentNode The current category specification object instance (an object that has fields for all data quality checks in the category).
-     * @return UI model for a category with all quality checks.
-     */
-    protected UIQualityCategoryBasicModel createCategoryBasicModel(FieldInfo categoryFieldInfo,
-                                                                   Object checkCategoryParentNode) {
-        UIQualityCategoryBasicModel categoryModel = new UIQualityCategoryBasicModel();
-        categoryModel.setCategory(categoryFieldInfo.getYamlFieldName());
-        categoryModel.setHelpText(categoryFieldInfo.getHelpText());
-
-        ClassInfo checkListClassInfo = reflectionService.getClassInfoForClass(checkCategoryParentNode.getClass());
-        List<FieldInfo> checksFields = this.getFilteredFieldInfo(checkListClassInfo, Optional.empty());
-
-        for (FieldInfo checkFieldInfo : checksFields) {
-            boolean checkIsConfigured = checkFieldInfo.getFieldValue(checkCategoryParentNode) != null;
-
-            UICheckBasicModel checkModel = createCheckBasicModel(checkFieldInfo);
-            checkModel.setConfigured(checkIsConfigured);
-            categoryModel.getChecks().add(checkModel);
-        }
-
-        return categoryModel;
-    }
-
-    /**
      * Creates a UI model for a single data quality check.
      * @param checkFieldInfo Reflection info of the field in the parent object that stores the check specification field value.
      * @param checkSpec Check specification instance retrieved from the object.
+     * @param scheduleGroup Scheduling group relevant to this check.
      * @param runChecksCategoryTemplate "run check" job configuration for the parent category, used to create templates for each check.
      * @param tableSpec Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
@@ -223,6 +291,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      */
     protected UICheckModel createCheckModel(FieldInfo checkFieldInfo,
                                             AbstractCheckSpec<?,?,?,?> checkSpec,
+                                            CheckRunRecurringScheduleGroup scheduleGroup,
                                             CheckSearchFilters runChecksCategoryTemplate,
                                             TableSpec tableSpec,
                                             ExecutionContext executionContext,
@@ -272,7 +341,20 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         dataCleanJobTemplate.setDataStreamName(checkSpec.getDataStream());
         checkModel.setDataCleanJobTemplate(dataCleanJobTemplate);
 
-        checkModel.setScheduleOverride(checkSpec.getScheduleOverride());
+        RecurringScheduleSpec scheduleOverride = checkSpec.getScheduleOverride();
+        checkModel.setScheduleOverride(scheduleOverride);
+        if (scheduleOverride != null && !scheduleOverride.isDisabled()) {
+                checkModel.setEffectiveSchedule(
+                        UIEffectiveScheduleModel.fromRecurringScheduleSpec(
+                                scheduleOverride,
+                                scheduleGroup,
+                                UIEffectiveScheduleLevel.check_override,
+                                this::safeGetTimeOfNextExecution
+                        )
+                );
+        }
+        checkModel.setScheduleEnabledStatus(getScheduleEnabledStatus(scheduleOverride));
+
         checkModel.setComments(checkSpec.getComments());
         checkModel.setDisabled(checkSpec.isDisabled());
         checkModel.setExcludeFromKpi(checkSpec.isExcludeFromKpi());
@@ -487,5 +569,61 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         }
 
         return fields;
+    }
+
+    /**
+     * Gets the time of the next execution of <code>scheduleSpec</code>, if the {@link SchedulesUtilityService} is initialized.
+     * @param scheduleSpec Schedule configuration containing a CRON expression with execution timetable.
+     * @return Time of next execution of <code>scheduleSpec</code> if it's not disabled and the service is able to get it. Else null.
+     */
+    protected ZonedDateTime safeGetTimeOfNextExecution(RecurringScheduleSpec scheduleSpec) {
+        if (this.schedulesUtilityService == null || scheduleSpec == null || scheduleSpec.isDisabled()) {
+            return null;
+        }
+        return this.schedulesUtilityService.getTimeOfNextExecution(scheduleSpec);
+    }
+
+    /**
+     * Gets the {@link UIEffectiveScheduleModel} out of <code>schedulesSpec</code>, if the schedule is enabled, provided some other arguments.
+     * @param schedulesSpec Schedule spec.
+     * @param scheduleGroup Schedule group.
+     * @param scheduleLevel Schedule level.
+     * @return Effective model of the schedule configuration. If <code>scheduleSpec</code> is null or disabled, returns null.
+     */
+    protected UIEffectiveScheduleModel getEffectiveScheduleModel(RecurringSchedulesSpec schedulesSpec,
+                                                                 CheckRunRecurringScheduleGroup scheduleGroup,
+                                                                 UIEffectiveScheduleLevel scheduleLevel) {
+        RecurringScheduleSpec scheduleSpec = schedulesSpec != null
+                ? schedulesSpec.getScheduleForCheckSchedulingGroup(scheduleGroup)
+                : null;
+
+        if (scheduleSpec != null && !scheduleSpec.isDisabled()) {
+            return UIEffectiveScheduleModel.fromRecurringScheduleSpec(
+                    scheduleSpec,
+                    scheduleGroup,
+                    scheduleLevel,
+                    this::safeGetTimeOfNextExecution
+            );
+        }
+        return null;
+    }
+
+    /**
+     * Gets the relevant {@link UIScheduleEnabledStatus} from <code>scheduleSpec</code>
+     * @param scheduleSpec Schedule configuration for which to get activation status.
+     * @return {@link UIScheduleEnabledStatus} indicating the activation status of <code>scheduleSpec</code>.
+     */
+    protected UIScheduleEnabledStatus getScheduleEnabledStatus(RecurringScheduleSpec scheduleSpec) {
+        if (scheduleSpec != null) {
+            if (scheduleSpec.isDisabled()) {
+                return UIScheduleEnabledStatus.disabled;
+            }
+            else {
+                return UIScheduleEnabledStatus.enabled;
+            }
+        }
+        else {
+            return UIScheduleEnabledStatus.not_configured;
+        }
     }
 }

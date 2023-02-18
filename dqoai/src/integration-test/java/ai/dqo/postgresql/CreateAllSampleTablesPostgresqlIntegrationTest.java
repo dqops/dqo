@@ -17,10 +17,7 @@ package ai.dqo.postgresql;
 
 import ai.dqo.BaseIntegrationTest;
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
-import ai.dqo.sampledata.SampleCsvFileNames;
-import ai.dqo.sampledata.SampleTableMetadata;
-import ai.dqo.sampledata.SampleTableMetadataObjectMother;
+import ai.dqo.sampledata.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -89,4 +86,12 @@ public class CreateAllSampleTablesPostgresqlIntegrationTest extends BasePostgres
         SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.postgresql);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
     }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_value_match_left_table_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadataForeign sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.postgresql);
+        IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
+    }
+
 }

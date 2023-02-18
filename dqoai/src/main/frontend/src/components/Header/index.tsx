@@ -4,6 +4,7 @@ import Logo from '../Logo';
 import clsx from 'clsx';
 import { useHistory, useLocation } from 'react-router-dom';
 import { CheckTypes } from "../../shared/routes";
+import HelpMenu from "../HelpMenu";
 
 const Header = () => {
   const history = useHistory();
@@ -54,7 +55,10 @@ const Header = () => {
           </div>
         </div>
       </div>
-      <NotificationMenu />
+      <div>
+        <HelpMenu />
+        <NotificationMenu />
+      </div>
     </div>
   );
 };
