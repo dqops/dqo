@@ -8,7 +8,7 @@ interface Column {
   label?: string;
   value: string;
   className?: string;
-  render: any;
+  render?: any;
   header?: any;
 }
 
@@ -40,7 +40,7 @@ export const Table: React.FC<TableProps> = ({
                 className={`text-left px-2 pt-2 pb-2 text-black-200 text-base font-semibold min-w-20 pr-4 ${column.className}`}
               >
                 {column.header ? (
-                  <>{column.header()}</>
+                  <>{column.header(column.label)}</>
                 ) : (
                   <div>{column.label}</div>
                 )}
@@ -91,7 +91,7 @@ export const Table: React.FC<TableProps> = ({
                             column.className
                           )}
                         >
-                          {column.render(item[column.value], item, index)}
+                          {column.render ? column.render(item[column.value], item, index) : item[column.value]}
                         </td>
                       ))}
                     </tr>

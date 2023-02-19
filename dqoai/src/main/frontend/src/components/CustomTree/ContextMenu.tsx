@@ -66,7 +66,7 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
         </div>
       </PopoverHandler>
       <PopoverContent className="z-50 min-w-50 max-w-50 border-gray-500 p-2">
-        <div>
+        <div onClick={(e) => e.stopPropagation()}>
           {node.level !== TREE_LEVEL.COLUMNS && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"

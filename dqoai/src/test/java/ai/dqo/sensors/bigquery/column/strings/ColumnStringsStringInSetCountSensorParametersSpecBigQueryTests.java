@@ -173,11 +173,13 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, analyzed_table.`date` AS time_period
+                ) AS actual_value,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -202,11 +204,13 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                ) AS actual_value,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -231,11 +235,13 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, analyzed_table.`date` AS time_period
+                ) AS actual_value,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -265,7 +271,8 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, analyzed_table.`length_int` AS stream_level_1
+                ) AS actual_value,
+                analyzed_table.`length_int` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
@@ -297,11 +304,14 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, analyzed_table.`length_int` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                ) AS actual_value,
+                analyzed_table.`length_int` AS stream_level_1,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, time_period
-            ORDER BY stream_level_1, time_period""";
+            GROUP BY stream_level_1, time_period, time_period_utc
+            ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -329,11 +339,14 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, analyzed_table.`length_int` AS stream_level_1, analyzed_table.`date` AS time_period
+                ) AS actual_value,
+                analyzed_table.`length_int` AS stream_level_1,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, time_period
-            ORDER BY stream_level_1, time_period""";
+            GROUP BY stream_level_1, time_period, time_period_utc
+            ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -369,11 +382,16 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_int` AS stream_level_3, analyzed_table.`date` AS time_period
+                ) AS actual_value,
+                analyzed_table.`strings_with_numbers` AS stream_level_1,
+                analyzed_table.`mix_of_values` AS stream_level_2,
+                analyzed_table.`length_int` AS stream_level_3,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
+            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -403,11 +421,16 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_int` AS stream_level_3, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                ) AS actual_value,
+                analyzed_table.`strings_with_numbers` AS stream_level_1,
+                analyzed_table.`mix_of_values` AS stream_level_2,
+                analyzed_table.`length_int` AS stream_level_3,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
+            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -437,11 +460,16 @@ public class ColumnStringsStringInSetCountSensorParametersSpecBigQueryTests exte
                             THEN 1
                         ELSE 0
                     END
-                ) AS actual_value, analyzed_table.`strings_with_numbers` AS stream_level_1, analyzed_table.`mix_of_values` AS stream_level_2, analyzed_table.`length_int` AS stream_level_3, analyzed_table.`date` AS time_period
+                ) AS actual_value,
+                analyzed_table.`strings_with_numbers` AS stream_level_1,
+                analyzed_table.`mix_of_values` AS stream_level_2,
+                analyzed_table.`length_int` AS stream_level_3,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
+            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

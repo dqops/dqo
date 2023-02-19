@@ -269,13 +269,30 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         return resultPartitions;
     }
 
+    /**
+     * Get the month, furthest in the past, for which partition is stored, given the connection and table names, provided storage settings.
+     * @param connectionName  Connection name.
+     * @param tableName       Table name.
+     * @param storageSettings File storage settings.
+     * @return Optional with the oldest month as local date, if it exists. If not, <code>Optional.empty()</code>.
+     */
     protected Optional<LocalDate> getOldestStoredPartitionMonth(String connectionName,
                                                       PhysicalTableName tableName,
                                                       FileStorageSettings storageSettings) {
         List<LocalDate> storedPartitionMonths = getStoredPartitionMonths(connectionName, tableName, storageSettings);
+        if (storedPartitionMonths == null) {
+            return Optional.empty();
+        }
         return storedPartitionMonths.stream().min(LocalDate::compareTo);
     }
 
+    /**
+     * Gets months for which partitions are currently stored for a given connection and table names, provided storage settings to know where to look.
+     * @param connectionName  Connection name.
+     * @param tableName       Table name.
+     * @param storageSettings File storage settings.
+     * @return List of months given as local dates. Null if parameters are invalid (e.g. target directory doesn't exist).
+     */
     protected List<LocalDate> getStoredPartitionMonths(String connectionName,
                                                        PhysicalTableName tableName,
                                                        FileStorageSettings storageSettings) {
@@ -289,6 +306,9 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             List<HomeFolderPath> tableStoredFolders = this.localUserHomeFileStorageService.listFolders(
                     HomeFolderPathUtility.createFromFilesystemPath(tablePartitionsPath));
+            if (tableStoredFolders == null) {
+                return null;
+            }
 
             return tableStoredFolders.stream()
                     .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())

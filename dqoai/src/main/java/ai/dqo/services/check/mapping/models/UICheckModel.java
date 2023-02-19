@@ -86,6 +86,11 @@ public class UICheckModel implements Cloneable {
     @JsonPropertyDescription("Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.")
     private RecurringScheduleSpec scheduleOverride;
 
+    @JsonPropertyDescription("Model of configured schedule enabled on the check level.")
+    private UIEffectiveScheduleModel effectiveSchedule;
+    @JsonPropertyDescription("State of the scheduling override for this check.")
+    private UIScheduleEnabledStatus scheduleEnabledStatus;
+
     @JsonPropertyDescription("Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).")
     private CommentsListSpec comments;
 

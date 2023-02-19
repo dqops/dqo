@@ -24,7 +24,7 @@ const TableColumns = ({
   const fetchColumns = async () => {
     try {
       const res: AxiosResponse<ColumnStatisticsModel[]> =
-        await ColumnApiClient.getColumnsWithStatistics(connectionName, schemaName, tableName);
+        await ColumnApiClient.getColumnsStatistics(connectionName, schemaName, tableName);
       setColumns(res.data);
     } catch (err) {
       console.error(err);

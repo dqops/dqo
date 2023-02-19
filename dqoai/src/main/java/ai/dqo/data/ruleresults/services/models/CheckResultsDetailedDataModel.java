@@ -55,11 +55,4 @@ public class CheckResultsDetailedDataModel {
 
     @JsonPropertyDescription("Single check results")
     private List<CheckResultDetailedSingleModel> singleCheckResults;
-
-    /**
-     * Reverses the lists because we are appending the most recent (newest) statuses first, but we want to return the results ordered in chronological order (the most recent is the last in the list).
-     */
-    public void reverseLists() {
-        this.singleCheckResults = Lists.reverse(this.singleCheckResults);
-    }
 }

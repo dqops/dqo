@@ -50,11 +50,4 @@ public class ErrorsDetailedDataModel {
 
     @JsonPropertyDescription("Single error statuses")
     private List<ErrorDetailedSingleModel> singleErrors;
-
-    /**
-     * Reverses the lists because we are appending the most recent (newest) errors first, but we want to return the errors ordered in chronological order (the most recent is the last in the list).
-     */
-    public void reverseLists() {
-        this.singleErrors = Lists.reverse(this.singleErrors);
-    }
 }

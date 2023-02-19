@@ -17,6 +17,7 @@ import { IRootState } from '../../redux/reducers';
 import { isEqual } from 'lodash';
 import { Tooltip } from '@material-tailwind/react';
 import moment from "moment";
+import CheckDetails from "./CheckDetails/CheckDetails";
 
 interface ICheckListItemProps {
   check: UICheckModel;
@@ -39,6 +40,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   const [activeTab, setActiveTab] = useState('data-streams');
   const [tabs, setTabs] = useState<ITab[]>([]);
   const { jobs } = useSelector((state: IRootState) => state.job);
+  const [showDetails, setShowDetails] = useState(false);
 
   const job = jobs?.jobs?.find((item) =>
     isEqual(
@@ -48,6 +50,9 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   );
 
   const openCheckSettings = () => {
+    if (showDetails) {
+      setShowDetails(false);
+    }
     if (check?.configured) {
       setExpanded(!expanded);
       const initTabs = [
@@ -153,6 +158,17 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
     return status;
   };
 
+  const closeCheckDetails = () => {
+    setShowDetails(false);
+  };
+
+  const toggleCheckDetails = () => {
+    if (expanded && !showDetails) {
+      setExpanded(false);
+    }
+    setShowDetails(!showDetails);
+  };
+
   return (
     <>
       <tr
@@ -224,6 +240,11 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                 className="text-gray-700 h-5 cursor-pointer"
               />
             )}
+            <SvgIcon
+              name="rectangle-list"
+              className="text-gray-700 h-5 cursor-pointer"
+              onClick={toggleCheckDetails}
+            />
             <Tooltip
               content={check.help_text}
               className="max-w-80 py-4 px-4 bg-gray-800"
@@ -329,6 +350,16 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
               onClose={() => setExpanded(false)}
               onChange={onChange}
               check={check}
+            />
+          </td>
+        </tr>
+      )}
+      {showDetails && (
+        <tr>
+          <td colSpan={6}>
+            <CheckDetails
+              check={check}
+              onClose={closeCheckDetails}
             />
           </td>
         </tr>

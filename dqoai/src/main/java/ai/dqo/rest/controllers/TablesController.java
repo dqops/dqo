@@ -651,8 +651,9 @@ public class TablesController {
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
+                connectionWrapper.getSpec(),
                 tableSpec,
-                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
         return new ResponseEntity<>(Mono.just(checksUiModel), HttpStatus.OK); // 200
     }
@@ -710,6 +711,7 @@ public class TablesController {
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
+                connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
@@ -769,6 +771,7 @@ public class TablesController {
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
+                connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
@@ -973,6 +976,7 @@ public class TablesController {
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
+                connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
@@ -1039,6 +1043,7 @@ public class TablesController {
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
+                connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
@@ -1105,6 +1110,7 @@ public class TablesController {
         UIAllChecksModel checksUiModel = this.specToUiCheckMappingService.createUiModel(
                 checks,
                 checkSearchFilters,
+                connectionWrapper.getSpec(),
                 tableSpec,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
