@@ -13,18 +13,32 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.core.remotestorage.gcp;
+package ai.dqo.utils.http;
 
 import reactor.netty.http.client.HttpClient;
 
 /**
- * Provides a shared HTTP client instance used to download and upload files to a Google storage bucket.
+ * Provides a shared HTTP client instance for a requested protocol.
  */
-public interface GcpHttpClientProvider {
+public interface SharedHttpClientProvider {
     /**
      * Returns a shared HTTP client used to download and upload files from/to a GCP storage bucket.
      *
      * @return Http client.
      */
-    HttpClient getHttpClient();
+    HttpClient getHttpClientGcpStorage();
+
+    /**
+     * Returns a shared HTTP client for HTTP/2 protocol.
+     *
+     * @return Http client for HTTP/2.
+     */
+    HttpClient getHttp2SharedClient();
+
+    /**
+     * Returns a shared HTTP client for HTTP/1.1 protocol.
+     *
+     * @return Http client for HTTP/1.1.
+     */
+    HttpClient getHttp11SharedClient();
 }

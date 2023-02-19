@@ -21,6 +21,7 @@ import ai.dqo.core.filesystem.filesystemservice.contract.*;
 import ai.dqo.core.filesystem.metadata.FileMetadata;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
 import ai.dqo.utils.exceptions.CloseableHelper;
+import ai.dqo.utils.http.SharedHttpClientProvider;
 import ai.dqo.utils.streams.ErrorInjectionInputStream;
 import com.google.api.gax.paging.Page;
 import com.google.cloud.WriteChannel;
@@ -28,11 +29,12 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
-import io.netty.buffer.Unpooled;
 import io.netty.handler.codec.http.HttpHeaderNames;
+import io.netty.handler.codec.http.HttpHeaders;
 import org.apache.commons.codec.binary.Hex;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.ByteBufFlux;
 import reactor.netty.http.client.HttpClientResponse;
@@ -56,21 +58,21 @@ import java.util.concurrent.CompletableFuture;
 public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService {
     public static final String HEADER_FILE_HASH = "Hash";
     private final DqoStorageGcpConfigurationProperties gcpConfigurationProperties;
-    private final GcpHttpClientProvider gcpHttpClientProvider;
+    private final SharedHttpClientProvider sharedHttpClientProvider;
     private final DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
 
     /**
      * Default injection constructor.
      * @param gcpConfigurationProperties Google Storage configuration properties.
-     * @param gcpHttpClientProvider HTTP client provider that creates HTTP clients to be used to read and write files in a GCP storage bucket.
+     * @param sharedHttpClientProvider HTTP client provider that creates HTTP clients to be used to read and write files in a GCP storage bucket.
      * @param dqoCloudAccessTokenCache DQO Cloud access key cache. Returns the most current access token to access the google storage.
      */
     @Autowired
     public GSRemoteFileSystemServiceImpl(DqoStorageGcpConfigurationProperties gcpConfigurationProperties,
-                                         GcpHttpClientProvider gcpHttpClientProvider,
+                                         SharedHttpClientProvider sharedHttpClientProvider,
                                          DqoCloudAccessTokenCache dqoCloudAccessTokenCache) {
         this.gcpConfigurationProperties = gcpConfigurationProperties;
-        this.gcpHttpClientProvider = gcpHttpClientProvider;
+        this.sharedHttpClientProvider = sharedHttpClientProvider;
         this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
     }
 
@@ -119,6 +121,51 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
         catch (Exception ex) {
             throw new FileMetadataReadException(relativeFilePath, ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * Read the metadata of a single file asynchronously.
+     *
+     * @param fileSystemRoot        File system root information. May contain credentials to access a remote file system.
+     * @param relativeFilePath      Relative file path in the file system.
+     * @param lastKnownFileMetadata Optional last known file metadata.
+     *                              If the last known file metadata is not null and the last file modification
+     *                              has not changed then the hash could be copied (and not calculated).
+     * @return File metadata.
+     */
+    @Override
+    public Mono<FileMetadata> readFileMetadataAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, FileMetadata lastKnownFileMetadata) {
+        GSFileSystemRoot gsFileSystemRoot = (GSFileSystemRoot) fileSystemRoot;
+        Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
+                (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
+                relativeFilePath;
+        String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+
+        Mono<FileMetadata> fileMetadataMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
+                .headers(httpHeaders -> httpHeaders
+                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()))
+                        .add(HttpHeaderNames.CONTENT_LENGTH, 0)
+                )
+                .head()
+                .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
+                .responseSingle((httpClientResponse, byteBufMono) -> {
+                    try {
+                        HttpHeaders headers = httpClientResponse.responseHeaders();
+                        Integer fileLength = headers.getInt(HttpHeaderNames.CONTENT_LENGTH);
+                        Long lastModified = headers.getTimeMillis(HttpHeaderNames.LAST_MODIFIED);
+                        String fileHashHex = headers.getAsString("x-goog-meta-" + HEADER_FILE_HASH);
+                        byte[] hashBytes = Hex.decodeHex(fileHashHex);
+
+                        long statusCheckedAt = Instant.now().toEpochMilli();
+                        FileMetadata fileMetadata = new FileMetadata(relativeFilePath, lastModified, hashBytes, statusCheckedAt, fileLength);
+                        return Mono.just(fileMetadata);
+                    }
+                    catch (Exception ex) {
+                        return Mono.error(ex);
+                    }
+                });
+
+        return fileMetadataMono;
     }
 
     /**
@@ -323,6 +370,34 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
     }
 
     /**
+     * Deletes a file asynchronously.
+     *
+     * @param fileSystemRoot   File system root (with credentials).
+     * @param relativeFilePath Relative file path inside the remote root.
+     */
+    @Override
+    public Mono<Void> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+        GSFileSystemRoot gsFileSystemRoot = (GSFileSystemRoot) fileSystemRoot;
+        Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
+                (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
+                relativeFilePath;
+        String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+
+        Mono<Void> deleteFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
+                .headers(httpHeaders -> httpHeaders
+                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()))
+                        .add(HttpHeaderNames.CONTENT_LENGTH, 0)
+                )
+                .delete()
+                .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
+                .responseSingle((httpClientResponse, byteBufMono) -> {
+                    return Mono.empty();
+                });
+
+        return deleteFileMono;
+    }
+
+    /**
      * Deletes a folder.
      *
      * @param fileSystemRoot       File system root.
@@ -352,10 +427,27 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
      * @return File download response with the flux of file content and the metadata.
      */
     @Override
-    public DownloadFileResponse downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot,
-                                                         Path relativeFilePath,
-                                                         FileMetadata lastKnownFileMetadata) {
-        return null;
+    public Mono<DownloadFileResponse> downloadFileAsync(AbstractFileSystemRoot fileSystemRoot,
+                                                        Path relativeFilePath,
+                                                        FileMetadata lastKnownFileMetadata) {
+        GSFileSystemRoot gsFileSystemRoot = (GSFileSystemRoot) fileSystemRoot;
+        Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
+                (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
+                relativeFilePath;
+        String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+
+        Mono<DownloadFileResponse> downloadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
+                .headers(httpHeaders -> httpHeaders
+                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()))
+                )
+                .get()
+                .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
+                .response((httpClientResponse, byteBufFlux) -> {
+                    return Flux.just(new DownloadFileResponse(lastKnownFileMetadata, byteBufFlux.retain()));
+                })
+                .last();
+
+        return downloadFileMono;
     }
 
     /**
@@ -368,10 +460,10 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
      * @return Mono returned when the file was fully uploaded.
      */
     @Override
-    public Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot,
-                                             Path relativeFilePath,
-                                             ByteBufFlux bytesFlux,
-                                             FileMetadata fileMetadata) {
+    public Mono<Path> uploadFileAsync(AbstractFileSystemRoot fileSystemRoot,
+                                      Path relativeFilePath,
+                                      ByteBufFlux bytesFlux,
+                                      FileMetadata fileMetadata) {
         try {
             GSFileSystemRoot gsFileSystemRoot = (GSFileSystemRoot) fileSystemRoot;
             Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
@@ -385,7 +477,7 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
                             "application/octet-stream";
             String fileHashHex = Hex.encodeHexString(fileMetadata.getFileHash());
 
-            Mono<HttpClientResponse> uploadFileMono = this.gcpHttpClientProvider.getHttpClient()
+            Mono<HttpClientResponse> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                     .headers(httpHeaders -> httpHeaders
                             .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()))
                             .add(HttpHeaderNames.CONTENT_TYPE, contentType)

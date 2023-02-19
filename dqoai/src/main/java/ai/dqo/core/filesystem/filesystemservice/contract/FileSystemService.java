@@ -47,6 +47,17 @@ public interface FileSystemService {
     FileMetadata readFileMetadata(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, FileMetadata lastKnownFileMetadata);
 
     /**
+     * Read the metadata of a single file asynchronously.
+     * @param fileSystemRoot File system root information. May contain credentials to access a remote file system.
+     * @param relativeFilePath Relative file path in the file system.
+     * @param lastKnownFileMetadata Optional last known file metadata.
+     *                              If the last known file metadata is not null and the last file modification
+     *                              has not changed then the hash could be copied (and not calculated).
+     * @return File metadata.
+     */
+    Mono<FileMetadata> readFileMetadataAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, FileMetadata lastKnownFileMetadata);
+
+    /**
      * List files in a folder.
      * @param fileSystemRoot File system root information. May contain credentials to access a remote file system.
      * @param relativeFilePath Relative path inside the root folder that is listed.
@@ -62,6 +73,13 @@ public interface FileSystemService {
      * @param relativeFilePath Relative file path inside the remote root.
      */
     void deleteFile(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath);
+
+    /**
+     * Deletes a file asynchronously.
+     * @param fileSystemRoot File system root (with credentials).
+     * @param relativeFilePath Relative file path inside the remote root.
+     */
+    Mono<Void> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath);
 
     /**
      * Deletes a folder.
@@ -96,7 +114,7 @@ public interface FileSystemService {
      * @param lastKnownFileMetadata Last known file metadata. Could be used for verification or skipping an extra hashing.
      * @return File download response with the flux of file content and the metadata.
      */
-    DownloadFileResponse downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, FileMetadata lastKnownFileMetadata);
+    Mono<DownloadFileResponse> downloadFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, FileMetadata lastKnownFileMetadata);
 
     /**
      * Uploads a file to the file system as an asynchronous operation using Flux.
@@ -106,6 +124,6 @@ public interface FileSystemService {
      * @param fileMetadata File metadata with the file length and file content hash.
      * @return Mono returned when the file was fully uploaded.
      */
-    Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux,
-                                      FileMetadata fileMetadata);
+    Mono<Path> uploadFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux,
+                               FileMetadata fileMetadata);
 }

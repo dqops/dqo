@@ -73,6 +73,7 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
 
             case RULES:
                 return accessTokenIssueApi.issueBucketRulesRWAccessToken();
+
             default:
                 throw new RuntimeException("Unknown root: " + rootType);
         }

@@ -103,6 +103,21 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
     }
 
     /**
+     * Read the metadata of a single file asynchronously.
+     *
+     * @param fileSystemRoot        File system root information. May contain credentials to access a remote file system.
+     * @param relativeFilePath      Relative file path in the file system.
+     * @param lastKnownFileMetadata Optional last known file metadata.
+     *                              If the last known file metadata is not null and the last file modification
+     *                              has not changed then the hash could be copied (and not calculated).
+     * @return File metadata.
+     */
+    @Override
+    public Mono<FileMetadata> readFileMetadataAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, FileMetadata lastKnownFileMetadata) {
+        return Mono.fromCallable(() -> readFileMetadata(fileSystemRoot, relativeFilePath, lastKnownFileMetadata));
+    }
+
+    /**
      * List files in a folder.
      *
      * @param fileSystemRoot          File system root information. May contain credentials to access a remote file system.
@@ -178,6 +193,27 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
     }
 
     /**
+     * Deletes a file asynchronously.
+     *
+     * @param fileSystemRoot   File system root (with credentials).
+     * @param relativeFilePath Relative file path inside the remote root.
+     */
+    @Override
+    public Mono<Void> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+        Mono<Void> deleteFileMono = Mono.fromRunnable(() -> {
+            Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
+            File file = fullPathToFile.toFile();
+            if (!file.exists()) {
+                return;
+            }
+
+            file.delete();
+        }).then();
+
+        return deleteFileMono;
+    }
+
+    /**
      * Deletes a folder.
      *
      * @param fileSystemRoot       File system root.
@@ -233,11 +269,18 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
      * @return File download response with the flux of file content and the metadata.
      */
     @Override
-    public DownloadFileResponse downloadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath,
-                                                         FileMetadata lastKnownFileMetadata) {
-        Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
-        ByteBufFlux byteBufFlux = ByteBufFlux.fromPath(fullPathToFile);
-        return new DownloadFileResponse(lastKnownFileMetadata, byteBufFlux);
+    public Mono<DownloadFileResponse> downloadFileAsync(AbstractFileSystemRoot fileSystemRoot,
+                                                        Path relativeFilePath,
+                                                        FileMetadata lastKnownFileMetadata) {
+        Mono<ByteBufFlux> byteBufFluxMono = Mono.fromCallable(() -> {
+            Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
+            ByteBufFlux byteBufFlux = ByteBufFlux.fromPath(fullPathToFile);
+            return byteBufFlux;
+        });
+
+        Mono<DownloadFileResponse> resultMono = byteBufFluxMono
+                .map(byteBufFlux -> new DownloadFileResponse(lastKnownFileMetadata, byteBufFlux));
+        return resultMono;
     }
 
     /**
@@ -291,7 +334,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
      * @return Mono returned when the file was fully uploaded.
      */
     @Override
-    public Mono<Path> uploadFileContentAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux, FileMetadata fileMetadata) {
+    public Mono<Path> uploadFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux, FileMetadata fileMetadata) {
         Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
 
         try {

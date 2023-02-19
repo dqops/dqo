@@ -13,10 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.core.remotestorage.gcp;
+package ai.dqo.utils.http;
 
 import ai.dqo.core.configuration.DqoStorageGcpConfigurationProperties;
-import ai.dqo.utils.http.SharedHttpConnectionProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -26,44 +25,80 @@ import reactor.netty.http.client.HttpClient;
 import reactor.netty.resources.ConnectionProvider;
 
 /**
- * Provides a shared HTTP client instance used to download and upload files to a Google storage bucket.
+ * Provides a shared HTTP client instance for a requested protocol.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
-public class GcpHttpClientProviderImpl implements GcpHttpClientProvider {
+public class SharedHttpClientProviderImpl implements SharedHttpClientProvider {
     private SharedHttpConnectionProvider sharedHttpConnectionProvider;
     private DqoStorageGcpConfigurationProperties dqoStorageGcpConfigurationProperties;
-    private HttpClient httpClient;
+    private HttpClient httpClientGcpStorage;
+    private HttpClient httpClient11;
+    private HttpClient httpClient2;
 
     @Autowired
-    public GcpHttpClientProviderImpl(SharedHttpConnectionProvider sharedHttpConnectionProvider,
-                                     DqoStorageGcpConfigurationProperties dqoStorageGcpConfigurationProperties) {
+    public SharedHttpClientProviderImpl(SharedHttpConnectionProvider sharedHttpConnectionProvider,
+                                        DqoStorageGcpConfigurationProperties dqoStorageGcpConfigurationProperties) {
         this.sharedHttpConnectionProvider = sharedHttpConnectionProvider;
         this.dqoStorageGcpConfigurationProperties = dqoStorageGcpConfigurationProperties;
 
         ConnectionProvider connectionProvider = this.sharedHttpConnectionProvider.getConnectionProvider();
 
-        HttpClient httpClientBuilder = HttpClient.create(connectionProvider)
+        HttpClient httpClientBuilderGcpStorage = HttpClient.create(connectionProvider)
                 .keepAlive(true)
                 .protocol(dqoStorageGcpConfigurationProperties.isHttp2() ? HttpProtocol.H2 : HttpProtocol.HTTP11)
                 .secure();
 
         if (dqoStorageGcpConfigurationProperties.isHttp2() &&
                 dqoStorageGcpConfigurationProperties.getHttp2MaxConcurrentStreams() != null) {
-            httpClientBuilder = httpClientBuilder.http2Settings(http2 -> {
+            httpClientBuilderGcpStorage = httpClientBuilderGcpStorage.http2Settings(http2 -> {
                 http2.maxConcurrentStreams(dqoStorageGcpConfigurationProperties.getHttp2MaxConcurrentStreams());
             });
         }
 
-        this.httpClient = httpClientBuilder;
+        this.httpClientGcpStorage = httpClientBuilderGcpStorage;
+
+        this.httpClient11 = HttpClient.create(connectionProvider)
+                .keepAlive(true)
+                .protocol(HttpProtocol.HTTP11)
+                .secure();
+
+        this.httpClient2 = HttpClient.create(connectionProvider)
+                .keepAlive(true)
+                .protocol(HttpProtocol.H2)
+                .http2Settings(http2 -> {
+                    http2.maxConcurrentStreams(1000); // TODO: support configuration
+                })
+                .secure();
     }
 
     /**
      * Returns a shared HTTP client used to download and upload files from/to a GCP storage bucket.
+     *
      * @return Http client.
      */
     @Override
-    public HttpClient getHttpClient() {
-        return this.httpClient;
+    public HttpClient getHttpClientGcpStorage() {
+        return this.httpClientGcpStorage;
+    }
+
+    /**
+     * Returns a shared HTTP client for HTTP/2 protocol.
+     *
+     * @return Http client for HTTP/2.
+     */
+    @Override
+    public HttpClient getHttp2SharedClient() {
+        return this.httpClient2;
+    }
+
+    /**
+     * Returns a shared HTTP client for HTTP/1.1 protocol.
+     *
+     * @return Http client for HTTP/1.1.
+     */
+    @Override
+    public HttpClient getHttp11SharedClient() {
+        return this.httpClient11;
     }
 }
