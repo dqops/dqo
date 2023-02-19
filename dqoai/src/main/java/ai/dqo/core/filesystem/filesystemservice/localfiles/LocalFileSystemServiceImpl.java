@@ -201,13 +201,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
     @Override
     public Mono<Void> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
         Mono<Void> deleteFileMono = Mono.fromRunnable(() -> {
-            Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
-            File file = fullPathToFile.toFile();
-            if (!file.exists()) {
-                return;
-            }
-
-            file.delete();
+            deleteFile(fileSystemRoot, relativeFilePath);
         }).then();
 
         return deleteFileMono;
@@ -238,6 +232,23 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
         catch (IOException ex) {
             throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * Deletes a folder asynchronously.
+     *
+     * @param fileSystemRoot       File system root.
+     * @param relativeFolderPath   Relative path to the folder that should be deleted.
+     * @param deleteNonEmptyFolder When true, non-empty folders are also deleted including all nested files and sub folders.
+     * @return true when the folder was deleted, false when the folder was not empty and cannot be deleted.
+     */
+    @Override
+    public Mono<Boolean> deleteFolderAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFolderPath, boolean deleteNonEmptyFolder) {
+        Mono<Boolean> deleteFolderMono = Mono.fromCallable(() -> {
+            return deleteFolder(fileSystemRoot, relativeFolderPath, deleteNonEmptyFolder);
+        });
+
+        return deleteFolderMono;
     }
 
     /**

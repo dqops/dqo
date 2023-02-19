@@ -91,6 +91,15 @@ public interface FileSystemService {
     boolean deleteFolder(AbstractFileSystemRoot fileSystemRoot, Path relativeFolderPath, boolean deleteNonEmptyFolder);
 
     /**
+     * Deletes a folder asynchronously.
+     * @param fileSystemRoot File system root.
+     * @param relativeFolderPath Relative path to the folder that should be deleted.
+     * @param deleteNonEmptyFolder When true, non-empty folders are also deleted including all nested files and sub folders.
+     * @return true when the folder was deleted, false when the folder was not empty and cannot be deleted.
+     */
+    Mono<Boolean> deleteFolderAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFolderPath, boolean deleteNonEmptyFolder);
+
+    /**
      * Downloads a file and opens an input stream to the file.
      * @param fileSystemRoot File system root (with credentials).
      * @param relativeFilePath Relative file path inside the remote root.

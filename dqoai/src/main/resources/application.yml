@@ -69,6 +69,7 @@ dqo:
       upload-buffer-size: 5000000
       http2: true
       http2-max-concurrent-streams: 5000
+      parallel-delete-operations: 2000
   yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
   cloud:
     ui-base-url: https://cloud.dqo.ai

@@ -30,6 +30,7 @@ public class DqoStorageGcpConfigurationProperties implements Cloneable {
     private int uploadBufferSize = 15000000;
     private boolean http2;
     private Integer http2MaxConcurrentStreams;
+    private int parallelDeleteOperations = 1000;
 
     /**
      * Upload buffer size. This is the block size (batch) used to upload files to GCP.
@@ -77,6 +78,22 @@ public class DqoStorageGcpConfigurationProperties implements Cloneable {
      */
     public void setHttp2MaxConcurrentStreams(Integer http2MaxConcurrentStreams) {
         this.http2MaxConcurrentStreams = http2MaxConcurrentStreams;
+    }
+
+    /**
+     * Returns a number of parallel file delete operations that are executed when a whole folder is deleted.
+     * @return Number of parallel file delete operations in fight.
+     */
+    public int getParallelDeleteOperations() {
+        return parallelDeleteOperations;
+    }
+
+    /**
+     * Sets the number of parallel file delete operations in fight.
+     * @param parallelDeleteOperations Parallel delete calls.
+     */
+    public void setParallelDeleteOperations(int parallelDeleteOperations) {
+        this.parallelDeleteOperations = parallelDeleteOperations;
     }
 
     /**
