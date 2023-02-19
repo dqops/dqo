@@ -1,7 +1,7 @@
 {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
 
 {% macro render_value_in_future() -%}
-    {%- if table.columns[column_name].type_snapshot.column_type | lower == 'TIMESTAMP' -%}
+    {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
                     THEN 1
@@ -13,7 +13,7 @@
                     THEN 1
                 ELSE 0
             END
-    {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'TIMESTAMPTZ' -%}
+    {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
                     THEN 1

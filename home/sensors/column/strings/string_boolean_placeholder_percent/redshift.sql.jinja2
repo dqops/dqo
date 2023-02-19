@@ -1,4 +1,5 @@
 {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+SELECT
     CASE
         WHEN COUNT(*) = 0 THEN 100.0
         ELSE 100.0 * SUM(

@@ -14,7 +14,7 @@
 {% macro render_date_format_cast()%}
     {%- if lib.target_column_data_type == 'date' -%}
 {{ render_target_column('analyzed_table') }}
-    {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'varchar'-%}
+    {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
 CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
     {%- else -%}
 <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
