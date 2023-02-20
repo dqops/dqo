@@ -15,7 +15,6 @@
  */
 package ai.dqo.snowflake.table.standard;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
@@ -31,6 +30,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class TableStandardRowCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class TableStandardRowCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private TableStandardRowCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableRowCountCheckSpec checkSpec;
