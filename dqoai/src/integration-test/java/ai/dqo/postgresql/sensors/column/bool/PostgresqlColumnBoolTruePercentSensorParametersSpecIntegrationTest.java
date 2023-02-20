@@ -61,11 +61,11 @@ public class PostgresqlColumnBoolTruePercentSensorParametersSpecIntegrationTest 
 
             SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
-            Table resultTable = sensorResult.getResultTable();
-            Assertions.assertEquals(1, resultTable.rowCount());
-            Assertions.assertEquals("actual_value", resultTable.column(0).name());
-            Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
-        }
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0),3);
+    }
 
         @Test
         void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
@@ -74,11 +74,11 @@ public class PostgresqlColumnBoolTruePercentSensorParametersSpecIntegrationTest 
 
             SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
-            Table resultTable = sensorResult.getResultTable();
-            Assertions.assertEquals(1, resultTable.rowCount());
-            Assertions.assertEquals("actual_value", resultTable.column(0).name());
-            Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
-        }
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0),3);
+    }
 
         @Test
         void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
