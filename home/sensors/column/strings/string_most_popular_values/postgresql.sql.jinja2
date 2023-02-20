@@ -39,7 +39,20 @@
             ELSE 0
         END
     ) AS actual_value,
-    time_period
+        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+            {%- for attribute in data_streams -%}
+                {%- if not loop.first -%}
+                    {{ ', ' }}
+                {%- endif -%}
+                    stream_{{ attribute }}
+            {%- endfor -%}
+        {%- endif -%}
+        {%- if time_series is not none -%}
+            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+                {{ ', ' }}
+            {%- endif -%}
+                {{ 'time_period' }}, {{ 'time_period_utc' }}
+        {%- endif -%}
 {{ top_values_column() }}
     {%- endif -%}
 {% endmacro -%}
@@ -49,10 +62,24 @@ FROM(
     SELECT
         top_col_values.top_values as top_values,
         top_col_values.time_period as time_period,
+        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+            {%- for attribute in data_streams -%}
+                {%- if not loop.first -%}
+                    {{ ', ' }}
+                {%- endif -%}
+                    stream_{{ attribute }}
+            {%- endfor -%}
+        {%- endif -%}
+        {%- if time_series is not none -%}
+            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+                {{ ', ' }}
+            {%- endif -%}
+                {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
+        {%- endif -%}
         RANK() OVER(partition by top_col_values.time_period
         {{- render_data_stream('top_col_values') }}
         ORDER BY top_col_values.total_values) as top_values_rank
-        {{- render_data_stream('top_col_values') }}
+        {{- render_data_stream('top_col_values') }} {{'\n'}}
     FROM (
            SELECT
             {{ lib.render_target_column('analyzed_table') }} AS top_values,
