@@ -39,84 +39,82 @@ import tech.tablesaw.api.Table;
 @SpringBootTest
 public class PostgresqlColumnBoolTruePercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
 
-        private ColumnBoolTruePercentSensorParametersSpec sut;
-        private UserHomeContext userHomeContext;
-        private ColumnTruePercentCheckSpec checkSpec;
-        private SampleTableMetadata sampleTableMetadata;
+    private ColumnBoolTruePercentSensorParametersSpec sut;
+    private UserHomeContext userHomeContext;
+    private ColumnTruePercentCheckSpec checkSpec;
+    private SampleTableMetadata sampleTableMetadata;
+    @BeforeEach
+    void setUp() {
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.postgresql);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnBoolTruePercentSensorParametersSpec();
+        this.checkSpec = new ColumnTruePercentCheckSpec();
+        this.checkSpec.setParameters(this.sut);
+    }
 
-        @BeforeEach
-        void setUp() {
-            this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.postgresql);
-            IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-            this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-            this.sut = new ColumnBoolTruePercentSensorParametersSpec();
-            this.checkSpec = new ColumnTruePercentCheckSpec();
-            this.checkSpec.setParameters(this.sut);
-        }
+    @Test
+    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec);
 
-        @Test
-        void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-            SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                    sampleTableMetadata, "boolean_type_placeholder", this.checkSpec);
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
-            SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
+    }
 
-            Table resultTable = sensorResult.getResultTable();
-            Assertions.assertEquals(1, resultTable.rowCount());
-            Assertions.assertEquals("actual_value", resultTable.column(0).name());
-            Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
-        }
+    @Test
+    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.daily);
 
-        @Test
-        void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-            SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                    sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.daily);
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
-            SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
+    }
 
-            Table resultTable = sensorResult.getResultTable();
-            Assertions.assertEquals(1, resultTable.rowCount());
-            Assertions.assertEquals("actual_value", resultTable.column(0).name());
-            Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
-        }
+    @Test
+    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.monthly);
 
-        @Test
-        void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-            SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                    sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.monthly);
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
-            SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
+    }
 
-            Table resultTable = sensorResult.getResultTable();
-            Assertions.assertEquals(1, resultTable.rowCount());
-            Assertions.assertEquals("actual_value", resultTable.column(0).name());
-            Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
-        }
+    @Test
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
+                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.daily,"date");
 
-        @Test
-        void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-            SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                    sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.daily,"date");
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
-            SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(25, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(16.666, (double) resultTable.column(0).get(0), 0.001);
+    }
 
-            Table resultTable = sensorResult.getResultTable();
-            Assertions.assertEquals(25, resultTable.rowCount());
-            Assertions.assertEquals("actual_value", resultTable.column(0).name());
-            Assertions.assertEquals(16.666666666666668, resultTable.column(0).get(0));
-        }
+    @Test
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
+                sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.monthly,"date");
 
-        @Test
-        void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-            SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                    sampleTableMetadata, "boolean_type_placeholder", this.checkSpec, CheckTimeScale.monthly,"date");
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
-            SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-            Table resultTable = sensorResult.getResultTable();
-            Assertions.assertEquals(1, resultTable.rowCount());
-            Assertions.assertEquals("actual_value", resultTable.column(0).name());
-            Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
-        }
-
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(1, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(13.333, (double) resultTable.column(0).get(0), 0.001);
+    }
 }
