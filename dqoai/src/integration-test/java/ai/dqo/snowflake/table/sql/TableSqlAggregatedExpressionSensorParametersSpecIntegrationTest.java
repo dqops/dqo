@@ -15,11 +15,8 @@
  */
 package ai.dqo.snowflake.table.sql;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec
-
-;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -32,6 +29,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.table.sql.TableSqlAggregatedExpressionSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,17 +38,15 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private TableSqlAggregatedExpressionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableSqlAggregateExprCheckSpec
-
- checkSpec;
+    private TableSqlAggregateExprCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableSqlAggregatedExpressionSensorParametersSpec();
