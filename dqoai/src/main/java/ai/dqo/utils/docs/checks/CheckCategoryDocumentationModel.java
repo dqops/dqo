@@ -26,6 +26,11 @@ import java.util.List;
 @Data
 public class CheckCategoryDocumentationModel {
     /**
+     * Check target ('table' or 'column')
+     */
+    private String target;
+
+    /**
      * Category name.
      */
     private String categoryName;
