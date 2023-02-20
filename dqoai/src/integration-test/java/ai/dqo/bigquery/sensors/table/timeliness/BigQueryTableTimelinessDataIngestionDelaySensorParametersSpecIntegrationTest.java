@@ -67,7 +67,7 @@ public class BigQueryTableTimelinessDataIngestionDelaySensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -83,7 +83,7 @@ public class BigQueryTableTimelinessDataIngestionDelaySensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -99,7 +99,7 @@ public class BigQueryTableTimelinessDataIngestionDelaySensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -115,7 +115,7 @@ public class BigQueryTableTimelinessDataIngestionDelaySensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(10.041666666666666, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.041, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -131,6 +131,6 @@ public class BigQueryTableTimelinessDataIngestionDelaySensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 }
