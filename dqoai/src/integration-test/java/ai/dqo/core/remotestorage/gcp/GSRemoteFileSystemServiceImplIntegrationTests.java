@@ -160,7 +160,9 @@ public class GSRemoteFileSystemServiceImplIntegrationTests extends BaseIntegrati
         Assertions.assertEquals(1, folderMetadata.getFolders().get("src2").getFiles().size());
 
         Mono<ByteBuf> fileResult = this.sut.downloadFileAsync(remoteFileSystem.getFileSystemRoot(), relativeFilePath, localFileMetadata)
-                .flatMap(downloadFileResponse -> downloadFileResponse.getByteBufFlux().aggregate());
+                .flatMap(downloadFileResponse -> {
+                    return downloadFileResponse.getByteBufFlux().aggregate();
+                });
 
         ByteBuf downloadedContent = fileResult.block();
         Assertions.assertEquals(localFileMetadata.getFileLength(), (long)downloadedContent.capacity());

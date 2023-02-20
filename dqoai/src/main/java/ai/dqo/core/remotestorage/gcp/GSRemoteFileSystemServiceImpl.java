@@ -165,10 +165,10 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
 
                         long statusCheckedAt = Instant.now().toEpochMilli();
                         FileMetadata fileMetadata = new FileMetadata(relativeFilePath, lastModified, hashBytes, statusCheckedAt, fileLength);
-                        return Mono.just(fileMetadata);
+                        return byteBufMono.then(Mono.just(fileMetadata));
                     }
                     catch (Exception ex) {
-                        return Mono.error(ex);
+                        return byteBufMono.then(Mono.error(new FileSystemChangeException(relativeFilePath, "Failed to read the metadata, error: " + ex.getMessage(), ex)));
                     }
                 });
 
@@ -400,9 +400,8 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
                 )
                 .delete()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
-                .responseSingle((httpClientResponse, byteBufMono) -> {
-                    return byteBufMono.then();
-                });
+                .response()
+                .then();
 
         return deleteFileMono;
     }
