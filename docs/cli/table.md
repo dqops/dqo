@@ -7,13 +7,13 @@ ___
 
 Import tables from a specified database
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+dqo.ai> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
               [-s=<schema>] [-t=<table>]
 
 ```
-
 
 **Options**  
   
@@ -29,6 +29,7 @@ dqo.ai>  table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 
 
+
 ___
 ### **dqo table edit**
 
@@ -36,12 +37,12 @@ ___
 
 Edit table which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
+dqo.ai> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
 
 ```
-
 
 **Options**  
   
@@ -56,6 +57,7 @@ dqo.ai>  table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=
 
 
 
+
 ___
 ### **dqo table add**
 
@@ -63,13 +65,13 @@ ___
 
 Add table with specified name
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+dqo.ai> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
            [-t=<fullTableName>]
 
 ```
-
 
 **Options**  
   
@@ -84,6 +86,7 @@ dqo.ai>  table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 
 
 
+
 ___
 ### **dqo table remove**
 
@@ -91,13 +94,13 @@ ___
 
 Remove tables which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+dqo.ai> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
               [-t=<fullTableName>]
 
 ```
-
 
 **Options**  
   
@@ -112,6 +115,7 @@ dqo.ai>  table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>
 
 
 
+
 ___
 ### **dqo table update**
 
@@ -119,13 +123,13 @@ ___
 
 Update tables which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
+dqo.ai> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
               [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-
 
 **Options**  
   
@@ -141,6 +145,7 @@ dqo.ai>  table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
 
 
 
+
 ___
 ### **dqo table list**
 
@@ -148,13 +153,13 @@ ___
 
 List tables which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+dqo.ai> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
             [-t=<tableName>] [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-
 
 **Options**  
   
@@ -168,5 +173,6 @@ dqo.ai>  table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 |`-l`<br/>`--label`<br/>|Label filter| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-t`<br/>`--table`<br/>|Table name filter| ||
+
 
 

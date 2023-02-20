@@ -24,6 +24,15 @@ ___
 ```
 {{else}}
 {{/if}}
+{{#if definition.spec.parameters}}
+**Additional rule parameters**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+| Parameters name | Value |
+|-----------------|-------|
+{{#each definition.spec.parameters}}|{{@key}}|{{this}}|
+{{/each}}
+{{else}}
+{{/if}}
 **Rule implementation (Python)**
 ```python
 {{{replace definition.rulePythonModuleContent.textContent '#

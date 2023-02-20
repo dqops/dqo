@@ -125,6 +125,48 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -204,6 +246,22 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                
+            ) / COUNT(*)
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -215,7 +273,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -340,6 +398,48 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -423,6 +523,24 @@ spec:
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -436,7 +554,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -565,6 +683,48 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -644,6 +804,22 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -655,7 +831,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -781,6 +957,48 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -864,6 +1082,24 @@ spec:
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -877,7 +1113,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1006,6 +1242,48 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -1085,6 +1363,22 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -1096,7 +1390,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1222,6 +1516,48 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -1305,6 +1641,24 @@ spec:
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -1318,7 +1672,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1447,6 +1801,48 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -1526,6 +1922,22 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -1537,7 +1949,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1663,6 +2075,48 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -1746,6 +2200,24 @@ spec:
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -1759,7 +2231,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1888,6 +2360,48 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -1967,6 +2481,22 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -1978,7 +2508,7 @@ spec:
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2104,6 +2634,48 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -2187,6 +2759,24 @@ spec:
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -2200,7 +2790,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2351,6 +2941,46 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -2429,6 +3059,26 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    
+    
+    
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -2444,7 +3094,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2584,6 +3234,46 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -2666,6 +3356,28 @@ spec:
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    
+    
+    
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -2683,7 +3395,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2827,6 +3539,46 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -2905,6 +3657,26 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    
+    
+    
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -2920,7 +3692,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3061,6 +3833,46 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -3143,6 +3955,28 @@ spec:
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    
+    
+    
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -3160,7 +3994,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3304,6 +4138,46 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -3382,6 +4256,26 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    
+    
+    
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -3397,7 +4291,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -3538,6 +4432,46 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -3620,6 +4554,28 @@ spec:
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    
+    
+    
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -3637,7 +4593,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -3781,6 +4737,46 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -3859,6 +4855,26 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    
+    
+    
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -3874,7 +4890,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -4015,6 +5031,46 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -4097,6 +5153,28 @@ spec:
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    
+    
+    
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -4114,7 +5192,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -4258,6 +5336,46 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -4336,6 +5454,26 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    
+    
+    
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -4351,7 +5489,7 @@ spec:
             END
         ) / COUNT(*) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -4492,6 +5630,46 @@ spec:
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -4574,6 +5752,28 @@ spec:
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
     ```
+=== "redshift"
+      
+    ```
+    
+    
+    
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
 === "postgresql"
       
     ```
@@ -4591,7 +5791,7 @@ spec:
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc

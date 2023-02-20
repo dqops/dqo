@@ -7,9 +7,10 @@ ___
 
 Delete stored data data matching specified filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  data clean [-h] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin> -c=<connection>
+dqo.ai> data clean [-h] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin> -c=<connection>
             [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
             [-ct=<checkType>] [-ds=<dataStream>] -e=<end> [-of=<outputFormat>]
             [-qd=<qualityDimension>] [-s=<sensor>] [-sc=<statisticsCollector>]
@@ -17,7 +18,6 @@ dqo.ai>  data clean [-h] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin> -c=<conn
             [-tg=<timeGradient>]
 
 ```
-
 
 **Options**  
   
@@ -46,5 +46,6 @@ dqo.ai>  data clean [-h] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin> -c=<conn
 |`-stt`<br/>`--statistics-target`<br/>|Data quality statistics target (table, column)| |table<br/>column<br/>|
 |`-t`<br/>`--table`<br/>|Full table name (schema.table)|Yes||
 |`-tg`<br/>`--time-gradient`<br/>|Time gradient of the sensor| ||
+
 
 
