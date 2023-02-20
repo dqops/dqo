@@ -12,6 +12,8 @@ column/pii/valid_email_percent
 Column level sensor that calculates the percentage of rows with a valid email value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -35,6 +37,28 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -44,7 +68,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*'
+                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '^[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$'
                         THEN 1
                     ELSE 0
                 END
@@ -90,6 +114,8 @@ column/pii/valid_ip6_address_percent
 Column level sensor that calculates the percentage of rows with a valid IP6 address value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -101,6 +127,28 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$'
                         THEN 1
                     ELSE 0
                 END
@@ -168,6 +216,8 @@ column/pii/valid_ip4_address_percent
 Column level sensor that calculates the percentage of rows with a valid IP4 address value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -179,6 +229,28 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                         THEN 1
                     ELSE 0
                 END
@@ -246,6 +318,8 @@ column/pii/valid_usa_phone_percent
 Column level sensor that calculates the percent of values that fit to a USA phone regex in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -260,6 +334,28 @@ Column level sensor that calculates the percent of values that fit to a USA phon
                         SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN replace(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '+', ''), '(', ''), ')', ''), '-', '')  ~ '^\\d{10}\\d?$'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -328,6 +424,8 @@ column/pii/contains_usa_zipcode_percent
 Column level sensor that calculates the percent of values that contain a USA zip code number in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -342,6 +440,28 @@ Column level sensor that calculates the percent of values that contain a USA zip
                         SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ '[0-9]{5}(/.D/:-[0-9]{4})?'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -410,6 +530,8 @@ column/pii/contains_email_percent
 Column level sensor that calculates the percentage of rows with a valid email value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -433,6 +555,28 @@ Column level sensor that calculates the percentage of rows with a valid email va
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{lib.render_target_column('analyzed_table')}} ~ '[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(/.D/:\.[a-zA-Z0-9-]+)*'
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -442,7 +586,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$') IS NOT NULL
+                    WHEN SUBSTRING({{lib.render_target_column('analyzed_table')}} from '[a-zA-Z0-9.!#$%&''*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*') IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -488,6 +632,8 @@ column/pii/valid_usa_zipcode_percent
 Column level sensor that calculates the percent of values that fit to a USA ZIP code regex in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -502,6 +648,28 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
                         SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]{5}(/.D/:-[0-9]{4})?$'
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -570,6 +738,8 @@ column/pii/contains_usa_phone_percent
 Column level sensor that calculates the percent of values that contains a USA phone number in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -584,6 +754,28 @@ Column level sensor that calculates the percent of values that contains a USA ph
                         SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN regexp_substr(replace(replace(replace({{ lib.render_target_column('analyzed_table') }}, '(', ''), ')', ''), '-', ''), '^\\d{10}\\d?$') IS NOT NULL
+                        THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -663,6 +855,8 @@ Column level sensor that calculates the count of values that does not matche val
 |foreign_column|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -686,6 +880,36 @@ Column level sensor that calculates the count of values that does not matche val
     FROM {{ lib.render_target_table() }} AS analyzed_table
     LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
     ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_target_column(table_alias_prefix = '') -%}
+        {{ table_alias_prefix }}.{{ lib.quote_identifier(column_name) }}
+    {%- endmacro %}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+        {{ lib.quote_identifier(lib.macro_database_name) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {%- endmacro %}
+    
+    SELECT
+        SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
@@ -765,6 +989,8 @@ Column level sensor that calculates the percentage of values that matches values
 |foreign_column|This field can be used to define the name of the column to be compared to. In order to define the name of the column, user should write correct name as a String.|string| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -773,6 +999,32 @@ Column level sensor that calculates the percentage of values that matches values
     
     {%- macro render_foreign_table(foreign_table) -%}
         {{ lib.quote_identifier(connection.snowflake.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
+    {%- endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }} IS NULL AND {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    LEFT OUTER JOIN {{ render_foreign_table(parameters.foreign_table) }} AS foreign_table
+    ON {{ lib.render_target_column('analyzed_table')}} = foreign_table.{{ lib.quote_identifier(parameters.foreign_column) }}
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_foreign_table(foreign_table) -%}
+        {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(foreign_table) }}
     {%- endmacro %}
     
     SELECT
@@ -859,6 +1111,8 @@ column/datetime/date_values_in_future_percent
 Column level sensor that calculates the percentage of rows with a date value in the future, compared with the current date.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -873,6 +1127,48 @@ Column level sensor that calculates the percentage of rows with a date value in 
                         THEN 1
                     ELSE 0
                 END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
+                        THEN 1
+                    ELSE 0
+                END
+        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -993,6 +1289,8 @@ Column level sensor that calculates the percent of non-negative values in a colu
 |include_max_value|The variable deciding whether to include the upper limit of the range. It does not include it by default.|boolean| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -1018,6 +1316,46 @@ Column level sensor that calculates the percent of non-negative values in a colu
     CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
     <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
+        {%- if include_lower_bound and include_upper_bound -%}
+     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif not include_lower_bound and include_upper_bound -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+        {%- elif include_lower_bound and not include_upper_bound -%}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- else -%}
+    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {% macro render_date_format_cast()%}
+        {%- if lib.target_column_data_type == 'date' -%}
+    {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
         {%- endif -%}
     {% endmacro %}
     
@@ -1133,11 +1471,35 @@ column/bool/true_percent
 Column level sensor that calculates the percentage of rows with a true value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}}
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1209,6 +1571,8 @@ column/bool/false_percent
 ```
 **Description**  
 Column level sensor that calculates the percentage of rows with a false value in a column.
+
+
 
 
 **SQL Template (Jinja2)**  
@@ -1315,6 +1679,8 @@ column/strings/string_parsable_to_integer_percent
 Column level sensor that calculates the number of rows with parsable to integer string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -1335,6 +1701,24 @@ Column level sensor that calculates the number of rows with parsable to integer 
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * COUNT(
+                {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 === "postgresql"
       
     ```
@@ -1343,7 +1727,7 @@ Column level sensor that calculates the number of rows with parsable to integer 
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]'
+                {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9]$'
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1390,11 +1774,35 @@ Column level sensor that calculates the percent of non-negative values in a colu
 |max_length|Sets a maximal string length.|integer| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE
+                100.0 * SUM(
+                    CASE
+                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        ELSE 0
+                    END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
@@ -1474,6 +1882,8 @@ Column level sensor that calculates the percentage of values that are longer tha
 |max_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -1486,6 +1896,28 @@ Column level sensor that calculates the percentage of values that are longer tha
             ELSE 100.0 * SUM(
                 CASE
                     WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                        THEN 1
+                    ELSE 0
+                END
+            )/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -1560,6 +1992,8 @@ Column level sensor that calculates the count of values that are shorter than a 
 |min_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -1570,6 +2004,25 @@ Column level sensor that calculates the count of values that are shorter than a 
         SUM(
             CASE
                 WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -1631,6 +2084,8 @@ column/strings/string_whitespace_count
 Column level sensor that calculates the number of rows with an whitespace string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -1642,6 +2097,27 @@ Column level sensor that calculates the number of rows with an whitespace string
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
                 AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
                 AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
             END
@@ -1706,11 +2182,35 @@ column/strings/string_boolean_placeholder_percent
 Column level sensor that calculates the number of rows with a boolean placeholder string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('true', 'false', 't', 'f', 'y', 'n', 'yes', 'no', '1', '0')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1784,11 +2284,35 @@ column/strings/string_valid_country_code_percent
 Column level sensor that calculates the number of rows with a valid country code string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN UPPER({{ lib.render_target_column('analyzed_table')}}) IN ('AF',	'AL',	'DZ',	'AS',	'AD',	'AO',	'AI',	'AQ',	'AG',	'AR',	'AM',	'AW',	'AU',	'AT',	'AZ',	'BS',	'BH',	'BD',	'BB',	'BY',	'BE',	'BZ',	'BJ',	'BM',	'BT',	'BO',	'BA',	'BW',	'BR',	'IO',	'VG',	'BN',	'BG',	'BF',	'BI',	'KH',	'CM',	'CA',	'CV',	'KY',	'CF',	'TD',	'CL',	'CN',	'CX',	'CC',	'CO',	'KM',	'CK',	'CR',	'HR',	'CU',	'CW',	'CY',	'CZ',	'CD',	'DK',	'DJ',	'DM',	'DO',	'TL',	'EC',	'EG',	'SV',	'GQ',	'ER',	'EE',	'ET',	'FK',	'FO',	'FJ',	'FI',	'FR',	'PF',	'GA',	'GM',	'GE',	'DE',	'GH',	'GI',	'GR',	'GL',	'GD',	'GU',	'GT',	'GG',	'GN',	'GW',	'GY',	'HT',	'HN',	'HK',	'HU',	'IS',	'IN',	'ID',	'IR',	'IQ',	'IE',	'IM',	'IL',	'IT',	'CI',	'JM',	'JP',	'JE',	'JO',	'KZ',	'KE',	'KI',	'XK',	'KW',	'KG',	'LA',	'LV',	'LB',	'LS',	'LR',	'LY',	'LI',	'LT',	'LU',	'MO',	'MK',	'MG',	'MW',	'MY',	'MV',	'ML',	'MT',	'MH',	'MR',	'MU',	'YT',	'MX',	'FM',	'MD',	'MC',	'MN',	'ME',	'MS',	'MA',	'MZ',	'MM',	'NA',	'NR',	'NP',	'NL',	'AN',	'NC',	'NZ',	'NI',	'NE',	'NG',	'NU',	'KP',	'MP',	'NO',	'OM',	'PK',	'PW',	'PS',	'PA',	'PG',	'PY',	'PE',	'PH', 'PN', 'PL',	'PT',	'PR',	'QA',	'CG',	'RE',	'RO',	'RU',	'RW',	'BL',	'SH',	'KN',	'LC',	'MF',	'PM',	'VC',	'WS',	'SM',	'ST',	'SA',	'SN',	'RS',	'SC',	'SL',	'SG',	'SX',	'SK',	'SI',	'SB',	'SO',	'ZA',	'KR',	'SS',	'ES',	'LK',	'SD',	'SR',	'SJ',	'SZ',	'SE',	'CH',	'SY',	'TW',	'TJ',	'TZ',	'TH',	'TG',	'TK',	'TO',	'TT',	'TN',	'TR',	'TM',	'TC',	'TV',	'VI',	'UG',	'UA',	'AE',	'GB',	'US',	'UY',	'UZ',	'VU',	'VA',	'VE',	'VN',	'WF',	'EH',	'YE',	'ZM',	'ZW')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1862,6 +2386,8 @@ column/strings/string_min_length
 Column level sensor that calculates the number of rows with a null column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -1870,6 +2396,21 @@ Column level sensor that calculates the number of rows with a null column value.
     SELECT
         MIN(
             LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN(
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1919,6 +2460,8 @@ column/strings/string_max_length
 Column level sensor that calculates the number of rows with a null column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -1927,6 +2470,21 @@ Column level sensor that calculates the number of rows with a null column value.
     SELECT
         MAX(
             LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX(
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1976,6 +2534,8 @@ column/strings/string_invalid_ip6_address_count
 Column level sensor that calculates the number of rows with an invalid IP6 address value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -1985,6 +2545,25 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
         SUM(
             CASE
                 WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$'
                     THEN 0
                 ELSE 1
             END
@@ -2045,6 +2624,8 @@ column/strings/string_invalid_ip4_address_count
 Column level sensor that calculates the number of rows with an invalid IP4 address value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -2054,6 +2635,25 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
         SUM(
             CASE
                 WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                     THEN 0
                 ELSE 1
             END
@@ -2120,6 +2720,8 @@ Column level sensor that calculates the percent of values that fit to a regex in
 |regex|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -2140,6 +2742,37 @@ Column level sensor that calculates the percent of values that fit to a regex in
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro make_text_constant(string) -%}
+        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+    {%- endmacro %}
+    
+    {%- macro render_regex(regex) -%}
+         {{ make_text_constant(regex) }}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -2231,6 +2864,8 @@ Column level sensor that calculates the percentage of values that are shorter th
 |min_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -2243,6 +2878,28 @@ Column level sensor that calculates the percentage of values that are shorter th
             ELSE 100.0 * SUM(
                 CASE
                     WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                        THEN 1
+                    ELSE 0
+                END
+            )/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -2317,12 +2974,54 @@ Column level sensor that calculates the number of rows with a null column value.
 |values|Provided list of values to match the data.|string_list| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro render_else() -%}
+        {%- if parameters['values']|length == 0 -%}
+            NULL
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE {{render_else()}}
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
             {%- if not loop.last -%}
@@ -2449,6 +3148,8 @@ column/strings/string_valid_currency_code_percent
 Column level sensor that calculates the number of rows with a valid currency code string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -2466,6 +3167,28 @@ Column level sensor that calculates the number of rows with a valid currency cod
             ) / COUNT(*)
         END AS actual_value
       AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN UPPER({{ lib.render_target_column('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2534,6 +3257,8 @@ Column level sensor that calculates the number of values that does not fit to a 
 |regex|This field can be used to define custom regex. In order to define custom regex, user should write correct regex as a string. If regex is not defined by user then default regex is null|string| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -2558,6 +3283,37 @@ Column level sensor that calculates the number of values that does not fit to a 
                     ELSE 1
                 END
             )
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {% macro make_text_constant(string) -%}
+        {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+    {%- endmacro %}
+    
+    {%- macro render_regex(regex) -%}
+         {{ make_text_constant(regex) }}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ {{ render_regex(parameters.regex) }}
+                        THEN 0
+                    ELSE 1
+                END
+            ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2639,6 +3395,8 @@ column/strings/string_whitespace_percent
 Column level sensor that calculates the number of rows with a whitespace string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -2652,6 +3410,30 @@ Column level sensor that calculates the number of rows with a whitespace string 
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
                     AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
                     AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                    AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -2723,6 +3505,8 @@ column/strings/string_mean_length
 Column level sensor that calculates the number of rows with a null column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -2731,6 +3515,21 @@ Column level sensor that calculates the number of rows with a null column value.
     SELECT
         AVG(
             LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        AVG(
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2780,6 +3579,8 @@ column/strings/string_valid_uuid_percent
 Column level sensor that calculates the percentage of rows with a valid UUID value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -2791,6 +3592,28 @@ Column level sensor that calculates the percentage of rows with a valid UUID val
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
                         THEN 1
                     ELSE 0
                 END
@@ -2858,6 +3681,8 @@ column/strings/string_surrounded_by_whitespace_percent
 Column level sensor that calculates the number of rows with string surrounded by whitespace column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -2871,6 +3696,30 @@ Column level sensor that calculates the number of rows with string surrounded by
                     WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                     AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
                     AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
+                    AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
+                    AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
                         THEN 1
                     ELSE 0
                 END
@@ -2948,6 +3797,8 @@ Column level sensor that calculates the count of values that are longer than a g
 |max_length|This field can be used to define custom length. In order to define custom length, user should write correct length as a integer. If length is not defined by user then default length is 0|integer| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -2958,6 +3809,25 @@ Column level sensor that calculates the count of values that are longer than a g
         SUM(
             CASE
                 WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN LENGTH({{ lib.render_target_column('analyzed_table')}}) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -3025,6 +3895,8 @@ Column level sensor that calculates the number of rows with a null column value.
 |values|Provided list of values to match the data.|string_list| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -3060,6 +3932,47 @@ Column level sensor that calculates the number of rows with a null column value.
     SELECT
         {{render_else()}}
         END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {%- macro actual_value() -%}
+        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+        0.0
+        {%- else -%}
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3160,6 +4073,8 @@ column/strings/string_null_placeholder_count
 Column level sensor that calculates the number of rows with a null placeholder string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -3169,6 +4084,25 @@ Column level sensor that calculates the number of rows with a null placeholder s
         SUM(
             CASE
                 WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '-', '')
                     THEN 1
                 ELSE 0
             END
@@ -3235,6 +4169,8 @@ Column level sensor that calculates the percentage of values that does fit a giv
 |date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>Month D, YYYY<br/>YYYY/MM/DD<br/>MM/DD/YYYY<br/>|
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -3263,6 +4199,42 @@ Column level sensor that calculates the percentage of values that does fit a giv
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'YYYY-MM-DD'-%}
+            '%YYYY-%MM-%DD'
+        {%- elif date_formats == 'MM/DD/YYYY' -%}
+            '%MM/%DD/%YYYY'
+        {%- elif date_formats == 'DD/MM/YYYY' -%}
+            '%DD/%MM/%YYYY'
+        {%- elif date_formats == 'YYYY/MM/DD'-%}
+            '%YYYY/%MM/%DD'
+        {%- elif date_formats == 'Month D, YYYY'-%}
+            '%Month %DD,%YYYY'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -3359,6 +4331,8 @@ column/strings/string_valid_date_percent
 Column level sensor that calculates the number of rows with a null column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -3370,6 +4344,30 @@ Column level sensor that calculates the number of rows with a null column value.
             ELSE 100.0 * SUM(
                 CASE
                     WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{lib.render_column_cast_to_string('analyzed_table')}} SIMILAR TO '\\d{4}-\\d{2}-\\d{2}'
+                        OR {{lib.render_column_cast_to_string('analyzed_table')}} SIMILAR TO '\\d{2}-\\d{2}-\\d{4}'
+                        OR {{lib.render_column_cast_to_string('analyzed_table')}} SIMILAR TO '\\d{2}/\\d{2}/\\d{4}'
                         THEN 1
                     ELSE 0
                 END
@@ -3442,6 +4440,8 @@ Column level sensor that calculates the number of rows with a null column value.
 |------------|-------------|-------------------|-----------------|----------------|
 |expected_values|Provided list of values to match the data.|string_list| ||
 |top_values|Provided limit of top popular values.|long| ||
+
+
 
 
 **SQL Template (Jinja2)**  
@@ -3523,10 +4523,10 @@ Column level sensor that calculates the number of rows with a null column value.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
-=== "postgresql"
+=== "redshift"
       
     ```
-    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
@@ -3581,6 +4581,111 @@ Column level sensor that calculates the number of rows with a null column value.
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
+        FROM (
+               SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_values,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+               FROM {{ lib.render_target_table() }} AS analyzed_table
+               {{- lib.render_where_clause() }}
+               {{- lib.render_group_by() }}, top_values
+               {{- lib.render_order_by() }}, total_values
+             ) AS top_col_values
+        ) AS  top_values
+    WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {% endmacro -%}
+    
+    {% macro render_data_stream(table_alias_prefix = '') %}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {% endmacro %}
+    
+    {%- macro top_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        NULL AS actual_value,
+        {{parameters.expected_values|length}}
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+                {%- for attribute in data_streams -%}
+                    {%- if not loop.first -%}
+                        {{ ', ' }}
+                    {%- endif -%}
+                        stream_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+            {%- if time_series is not none -%}
+                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+                    {{ ', ' }}
+                {%- endif -%}
+                    {{ 'time_period' }}, {{ 'time_period_utc' }}
+            {%- endif -%}
+    {{ top_values_column() }}
+        {%- endif -%}
+    {% endmacro -%}
+    
+    {%- macro top_values_column() -%}
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period,
+            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+                {%- for attribute in data_streams -%}
+                    {%- if not loop.first -%}
+                        {{ ', ' }}
+                    {%- endif -%}
+                        stream_{{ attribute }}
+                {%- endfor -%}
+            {%- endif -%}
+            {%- if time_series is not none -%}
+                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+                    {{ ', ' }}
+                {%- endif -%}
+                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
+            {%- endif -%}
+            RANK() OVER(partition by top_col_values.time_period
+            {{- render_data_stream('top_col_values') }}
+            ORDER BY top_col_values.total_values) as top_values_rank
+            {{- render_data_stream('top_col_values') }} {{'\n'}}
         FROM (
                SELECT
                 {{ lib.render_target_column('analyzed_table') }} AS top_values,
@@ -3690,6 +4795,8 @@ column/strings/string_invalid_email_count
 Column level sensor that calculates the number of rows with an invalid emails value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -3701,6 +4808,25 @@ Column level sensor that calculates the number of rows with an invalid emails va
                 WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{lib.render_target_column('analyzed_table')}}  !~ '^([a-z0-9_\.-]+)@([\da-z\.-]+)\.([a-z]{2,6})$'
+                    THEN 1
+                ELSE 0
             END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -3759,6 +4885,8 @@ column/strings/string_match_name_regex_percent
 Column level sensor that calculates the percentage of values that does fit a given name regex in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -3770,6 +4898,28 @@ Column level sensor that calculates the percentage of values that does fit a giv
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'])|([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{1})([.])(\s?))([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})([\s-'.]?([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([\s-'.]?)(([a-zA-ZżźćńółęąśäöüåáéěíôúůýčďťĺňŕřšžçâêîôûàèìòùëïãõŻŹĆŃÓŁĘĄŚÄÖÜÅÁÉĚÍÔÚŮÝČĎŤĹŇŔŘŠŽÇÂÊÎÔÛÀÈÌÒÙËÏÃÕ]{2,})?([.])?))?$")
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} ~ '^[[:alpha:] .''-]+$'
                         THEN 1
                     ELSE 0
                 END
@@ -3837,6 +4987,8 @@ column/strings/string_empty_count
 Column level sensor that calculates the number of rows with an empty string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -3847,6 +4999,26 @@ Column level sensor that calculates the number of rows with an empty string colu
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
                 AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND {{ lib.render_target_column('analyzed_table')}} = ''
                     THEN 1
                 ELSE 0
             END
@@ -3909,6 +5081,8 @@ column/strings/string_invalid_uuid_count
 Column level sensor that calculates the number of rows with an invalid uuid value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -3918,6 +5092,25 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
         SUM(
             CASE
                 WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                    THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} ~ '^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$'
                     THEN 0
                 ELSE 1
             END
@@ -3984,6 +5177,8 @@ Column level sensor that calculates the number of values that does not fit to a 
 |date_formats|Desired date format. Sensor will try to parse the column records and cast the data using this format.|enum| |YYYY-MM-DD<br/>DD/MM/YYYY<br/>Month D, YYYY<br/>YYYY/MM/DD<br/>MM/DD/YYYY<br/>|
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -4014,6 +5209,42 @@ Column level sensor that calculates the number of values that does not fit to a 
                     ELSE 0
                 END
             )
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    {% macro render_date_formats(date_formats) %}
+        {%- if date_formats == 'YYYY-MM-DD'-%}
+            '%YYYY-%MM-%DD'
+        {%- elif date_formats == 'MM/DD/YYYY' -%}
+            '%MM/%DD/%YYYY'
+        {%- elif date_formats == 'DD/MM/YYYY' -%}
+            '%DD/%MM/%YYYY'
+        {%- elif date_formats == 'YYYY/MM/DD'-%}
+            '%YYYY/%MM/%DD'
+        {%- elif date_formats == 'Month D, YYYY'-%}
+            '%MM %DD,%YYYY'
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN TO_DATE({{ lib.render_target_column('analyzed_table') }}::VARCHAR, {{render_date_formats(parameters.date_formats)}}) IS NULL
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4106,6 +5337,8 @@ column/strings/string_parsable_to_float_percent
 Column level sensor that calculates the number of rows with parsable to float string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -4117,6 +5350,24 @@ Column level sensor that calculates the number of rows with parsable to float st
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
                 TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * COUNT(
+                {{ lib.render_target_column('analyzed_table') }} ~ '^([0-9]+\.?[0-9]*|\.[0-9]+)$'
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -4174,6 +5425,8 @@ column/strings/string_surrounded_by_whitespace_count
 Column level sensor that calculates the number of rows with string surrounded by whitespace column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -4185,6 +5438,27 @@ Column level sensor that calculates the number of rows with string surrounded by
                 WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                 AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
                 AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
+                AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
+                AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
                     THEN 1
                 ELSE 0
             END
@@ -4249,11 +5523,36 @@ column/strings/string_empty_percent
 Column level sensor that calculates the percentage of rows with an empty string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -4330,6 +5629,8 @@ column/strings/string_null_placeholder_percent
 Column level sensor that calculates the number of rows with a null placeholder string column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -4341,6 +5642,29 @@ Column level sensor that calculates the number of rows with a null placeholder s
             ELSE 100.0 * SUM(
                 CASE
                     WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '-', '')
                         THEN 1
                     ELSE 0
                 END
@@ -4412,11 +5736,30 @@ column/uniqueness/unique_percent
 Column level sensor that calculates the percentage of unique values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table')}}) = 0
+                THEN 100.0
+            ELSE 100.0 * COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }}) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table')}}) = 0
@@ -4475,6 +5818,8 @@ column/uniqueness/duplicate_count
 Column level sensor that calculates the number of rows with a null column value.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -4485,6 +5830,20 @@ Column level sensor that calculates the number of rows with a null column value.
             WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
             ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
         END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4531,11 +5890,31 @@ column/uniqueness/duplicate_percent
 Column level sensor that calculates the percentage of rows that are duplicates.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * (
+                COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT {{ lib.render_target_column('analyzed_table') }})
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
@@ -4597,6 +5976,8 @@ column/uniqueness/unique_count
 Column level sensor that calculates the number of unique non-null values.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -4605,6 +5986,21 @@ Column level sensor that calculates the number of unique non-null values.
     SELECT
         COUNT(
             DISTINCT({{ lib.render_target_column('analyzed_table') }})
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(
+            DISTINCT({{ lib.render_target_column('analyzed_table')}})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4658,6 +6054,8 @@ column/nulls/null_percent
 Column-level sensor that calculates the percentage of rows with null values.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -4672,6 +6070,27 @@ Column-level sensor that calculates the percentage of rows with null values.
                     ELSE 0
                 END
                 )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4733,6 +6152,8 @@ column/nulls/not_null_count
 Column-level sensor that calculates the number of rows with not null values.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -4741,6 +6162,19 @@ Column-level sensor that calculates the number of rows with not null values.
     SELECT
         COUNT({{ lib.render_target_column('analyzed_table') }})
         AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4786,6 +6220,8 @@ column/nulls/not_null_percent
 Column level sensor that calculates the count of not null values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -4795,6 +6231,22 @@ Column level sensor that calculates the count of not null values in a column.
         CASE
             WHEN COUNT(*) = 0 THEN NULL
             ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -4846,11 +6298,31 @@ column/nulls/null_count
 Column-level sensor that calculates the number of rows with null values.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -4916,11 +6388,31 @@ column/numeric/non_negative_percent
 Column level sensor that calculates the percent of non-negative values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} < 0 THEN 0
+                ELSE 1
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
             CASE
@@ -4982,11 +6474,31 @@ column/numeric/non_negative_count
 Column level sensor that counts non negative values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -5056,6 +6568,8 @@ Column level sensor that finds the maximum value. It works on any data type that
 |max_value|Maximal value range variable.|double| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -5067,6 +6581,25 @@ Column level sensor that finds the maximum value. It works on any data type that
                 WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
                 ELSE 0
             END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+      100.0 * SUM(
+        CASE
+          WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+        ELSE
+        0
+      END
         ) / COUNT(*) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -5129,11 +6662,32 @@ Column level sensor that calculates the percentage of values that are above than
 |max_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
+                    THEN 1
+                ELSE 0
+            END
+        )/ COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         100.0 * SUM(
             CASE
@@ -5198,11 +6752,26 @@ column/numeric/sample_variance
 Column level sensor that counts negative values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         VAR_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -5249,11 +6818,26 @@ column/numeric/mean
 Column level sensor that counts the average (mean) of values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         AVG({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -5306,12 +6890,48 @@ Column level sensor that calculates the percentage of values that are members of
 |values|Provided list of values to match the data.|integer_list| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {{values_list|join(', ')}}
+    {% endmacro %}
+    
+    {%- macro render_else() -%}
+        {%- if parameters['values']|length == 0 -%}
+            0.0
+        {%- else -%}
+              100.0 * SUM(
+                CASE
+                  WHEN ({{lib.render_target_column('analyzed_table')}} IN ({{extract_in_list(parameters['values'])}}))
+                    THEN 1
+                  ELSE 0
+                END
+              )/COUNT(*)
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+      CASE
+        WHEN COUNT(*) = 0 THEN NULL
+        ELSE {{render_else()}}
+      END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     {%- macro extract_in_list(values_list) -%}
         {{values_list|join(', ')}}
     {% endmacro %}
@@ -5424,11 +7044,31 @@ column/numeric/negative_count
 Column level sensor that counts negative values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -5490,11 +7130,34 @@ column/numeric/negative_percent
 Column level sensor that counts percentage of negative values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -5571,6 +7234,8 @@ Column level sensor that calculates the count of values that are below than a gi
 |min_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -5580,6 +7245,25 @@ Column level sensor that calculates the count of values that are below than a gi
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}}
+                    THEN 1
                 ELSE 0
             END
         ) AS actual_value
@@ -5644,6 +7328,8 @@ Column level sensor that calculates the count of values that are above than a gi
 |max_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -5653,6 +7339,25 @@ Column level sensor that calculates the count of values that are above than a gi
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}} THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} > {{(parameters.max_value)}}
+                    THEN 1
                 ELSE 0
             END
         ) AS actual_value
@@ -5717,6 +7422,8 @@ Column level sensor that calculates the percentage of values that are below than
 |min_value|This field can be used to define custom value. In order to define custom value, user should write correct value as an integer. If value is not defined by user then default value is 0|integer| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -5729,6 +7436,25 @@ Column level sensor that calculates the percentage of values that are below than
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} < {{(parameters.min_value)}}
+                    THEN 1
+                ELSE 0
+            END
+        )/ COUNT(*) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5790,11 +7516,50 @@ Column level sensor that counts values that are members of a given set.
 |values|Provided list of values to match the data.|integer_list| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {{values_list|join(', ')}}
+    {% endmacro %}
+    
+    {%- macro render_else() -%}
+        {%- if parameters['values']|length == 0 -%}
+            0
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} IN ({{ extract_in_list(parameters['values']) }})
+                    THEN 1
+                ELSE 0
+            END
+        )
+        {%- endif -%}
+    {% endmacro -%}
+    
+    SELECT
+      CASE
+        WHEN COUNT(*) = 0 THEN NULL
+        ELSE
+        {{render_else()}}
+      END
+      AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
         {{values_list|join(', ')}}
@@ -5908,11 +7673,26 @@ column/numeric/population_variance
 Column level sensor that counts negative values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         VAR_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -5959,11 +7739,26 @@ column/numeric/sum
 Column level sensor that counts the sum of values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -6010,11 +7805,26 @@ column/numeric/sample_stddev
 Column level sensor that counts negative values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_SAMP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -6069,11 +7879,32 @@ Column level sensor that finds the maximum value. It works on any data type that
 |max_value|Maximal value range variable.|long| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+      100.0 * SUM(
+        CASE
+          WHEN {{ lib.render_target_column('analyzed_table') }} >= {{ parameters.min_value }} AND {{ lib.render_target_column('analyzed_table') }} <= {{ parameters.max_value }} THEN 1
+        ELSE
+        0
+      END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
       100.0 * SUM(
         CASE
@@ -6137,6 +7968,8 @@ column/numeric/population_stddev
 Column level sensor that counts negative values in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
@@ -6144,6 +7977,19 @@ Column level sensor that counts negative values in a column.
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        STDDEV_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6192,11 +8038,26 @@ column/range/min_value
 Column level sensor that counts minimum value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -6243,11 +8104,26 @@ column/range/max_value
 Column level sensor that counts maximum value in a column.
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -6295,11 +8171,26 @@ Column level sensor that finds the minimum value. It works on any data type that
  The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -6347,11 +8238,26 @@ Column level sensor that finds the maximum value. It works on any data type that
  The returned data type matches the data type of the column (it could return date, integer, string, datetime, etc.).
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -6408,11 +8314,33 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 |sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -6486,11 +8414,26 @@ Column level sensor that executes a given SQL expression on a column.
 |sql_expression|SQL aggregate expression that returns a numeric value calculated from rows. The expression is evaluated on a whole table or withing a GROUP BY clause for daily partitions and/or data streams. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -6543,11 +8486,36 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 |sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table')}})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT ({{ lib.render_target_column('analyzed_table')}}) = 0 THEN 100.0
@@ -6630,11 +8598,33 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 |sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         SUM(
             CASE
@@ -6708,11 +8698,36 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
 |sql_condition|SQL condition (expression) that returns true or false. The condition is evaluated for each row. The expression can use {table} and {column} placeholder that are replaced with a full table name and the analyzed column name.|string| ||
 
 
+
+
 **SQL Template (Jinja2)**  
 === "snowflake"
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        THEN 1
+                    ELSE 0
+                END
+            ) / COUNT({{ lib.render_target_column('analyzed_table') }})
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN 100.0
