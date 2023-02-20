@@ -28,7 +28,9 @@ public class ReflectionServiceSingleton {
      * @return Reflection service.
      */
     public static ReflectionService getInstance() {
-        if (reflectionService == null) {
+        if (reflectionService == null && StaticBeanFactory.getBeanFactory() == null) {
+            reflectionService = new ReflectionServiceImpl();
+        } else if (reflectionService == null) {
             reflectionService = StaticBeanFactory.getBeanFactory().getBean(ReflectionService.class);
         }
         return reflectionService;
