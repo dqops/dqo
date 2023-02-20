@@ -119,6 +119,9 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   };
 
   const onRunCheck = async () => {
+    if (!check.configured || check?.disabled) {
+      return;
+    }
     await onUpdate();
     JobApiClient.runChecks(check?.run_checks_job_template);
   };
@@ -163,6 +166,10 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   };
 
   const toggleCheckDetails = () => {
+    if (!check.configured || check?.disabled) {
+      return;
+    }
+
     if (expanded && !showDetails) {
       setExpanded(false);
     }

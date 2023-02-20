@@ -9,12 +9,12 @@ Delete stored data data matching specified filters
 
 **Summary (Shell)**
 ```
-dqo.ai>  data clean [-h] [-day] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin>
-            -c=<connection> [-cat=<checkCategory>] [-ch=<check>]
-            [-col=<column>] [-ct=<checkType>] [-ds=<dataStream>] -e=<end>
-            [-of=<outputFormat>] [-qd=<qualityDimension>] [-s=<sensor>]
-            [-sc=<statisticsCollector>] [-stc=<statisticsCategory>]
-            [-stt=<statisticsTarget>] -t=<table> [-tg=<timeGradient>]
+dqo.ai>  data clean [-h] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin> -c=<connection>
+            [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
+            [-ct=<checkType>] [-ds=<dataStream>] -e=<end> [-of=<outputFormat>]
+            [-qd=<qualityDimension>] [-s=<sensor>] [-sc=<statisticsCollector>]
+            [-stc=<statisticsCategory>] [-stt=<statisticsTarget>] -t=<table>
+            [-tg=<timeGradient>]
 
 ```
 
@@ -29,7 +29,6 @@ dqo.ai>  data clean [-h] [-day] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin>
 |`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |ADHOC<br/>CHECKPOINT<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name|Yes||
-|`-day`<br/>`--daily-detailed`<br/>|Should the period consider days of the time period [begin, end]| ||
 |`-ds`<br/>`--data-stream`<br/>|Data stream hierarchy level filter (tag)| ||
 |`-e`<br/>`--end`<br/>|End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD|Yes||
 |`-er`<br/>`--errors`<br/>|Delete the errors| ||

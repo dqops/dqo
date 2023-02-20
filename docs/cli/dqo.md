@@ -14,8 +14,9 @@ dqo  [-h] [--dqo.core.print-stack-trace] [--dqo.logging.enable-user-home-logging
  enable-gcp-secret-manager] [--dqo.secrets.gcp-project-id] [--dqo.user.
  initialize-user-home] [-fw] [-hl] [--dqo.cloud.api-key=<dqoCloudApiKey>]
  [--dqo.core.lock-wait-timeout-seconds=<dqoLockWaitTimeoutSeconds>] [--dqo.
- logging.max-history=<maxHistory>] [--dqo.logging.pattern=<pattern>] [--dqo.
- logging.total-size-cap=<totalSizeCap>] [--dqo.python.
+ default-time-zone=<defaultTimeZone>] [--dqo.home=<dqoHome>] [--dqo.logging.
+ max-history=<maxHistory>] [--dqo.logging.pattern=<pattern>] [--dqo.logging.
+ total-size-cap=<totalSizeCap>] [--dqo.python.
  interpreter=<dqoPythonInterpreter>] [--dqo.python.
  python-script-timeout-seconds=<dqoPythonPythonScriptTimeoutSeconds>] [--dqo.
  queue.threads=<dqoQueueThreads>] [--dqo.scheduler.
@@ -36,6 +37,8 @@ dqo  [-h] [--dqo.core.print-stack-trace] [--dqo.logging.enable-user-home-logging
 |`--dqo.cloud.api-key`<br/>|DQO cloud api key. Log in to https://cloud.dqo.ai/ to get the key. This parameter is effective only in CLI mode.| ||
 |`--dqo.core.lock-wait-timeout-seconds`<br/>|Sets the maximum wait timeout in seconds to obtain a lock to read or write files. This parameter is effective only in CLI mode.| ||
 |`--dqo.core.print-stack-trace`<br/>|Prints a full stack trace for errors on the console. This parameter is effective only in CLI mode.| ||
+|`--dqo.default-time-zone`<br/>|Default time zone name used to convert the server&#x27;s local dates to a local time in a time zone that is relevant for the user. Use official IANA time zone names. When the parameter is not configured, DQO uses the local time zone of the host running the application. The time zone could be reconfigured at a user settings level.| ||
+|`--dqo.home`<br/>|Overrides the path to the DQO system home (DQO_HOME). The default DQO_HOME contains the definition of built-in data quality sensors, rules and libraries.| ||
 |`--dqo.logging.enable-user-home-logging`<br/>|Enables file logging inside the DQO User Home&#x27;s .logs folder.| ||
 |`--dqo.logging.max-history`<br/>|Sets the maximum number of log files that could be stored (archived) in the .logs folder.| ||
 |`--dqo.logging.pattern`<br/>|Log entry pattern for logback used for writing log entries.| ||
