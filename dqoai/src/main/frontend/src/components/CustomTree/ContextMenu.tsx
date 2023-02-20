@@ -145,9 +145,9 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
               <DeleteOnlyDataDialog
                 open={deleteDataDialogOpened}
                 onClose={() => setDeleteDataDialogOpened(false)}
-                onDelete={(startDate, endDate) => {
+                onDelete={(params) => {
                   setDeleteDataDialogOpened(false);
-                  deleteStoredData(node, startDate, endDate);
+                  deleteStoredData(node, params);
                   setOpen(false);
                 }}
               />

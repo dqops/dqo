@@ -170,12 +170,11 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
         <DeleteOnlyDataDialog
           open={deleteDataDialogOpened}
           onClose={() => setDeleteDataDialogOpened(false)}
-          onDelete={(dateStart, dateEnd) => {
+          onDelete={(params) => {
             setDeleteDataDialogOpened(false);
             JobApiClient.deleteStoredData({
               ...check.data_clean_job_template,
-              dateStart,
-              dateEnd
+              ...params,
             });
           }}
         />
