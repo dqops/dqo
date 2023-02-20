@@ -30,6 +30,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
 import io.netty.buffer.ByteBuf;
+import net.bytebuddy.implementation.auxiliary.MethodCallProxy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -39,6 +40,7 @@ import reactor.core.publisher.Mono;
 
 import java.io.InputStream;
 import java.nio.file.Path;
+import java.util.Arrays;
 
 @SpringBootTest
 public class GSRemoteFileSystemServiceImplIntegrationTests extends BaseIntegrationTest {
@@ -118,6 +120,13 @@ public class GSRemoteFileSystemServiceImplIntegrationTests extends BaseIntegrati
                     relativeFilePath, localFileDownloadResponse.getByteBufFlux(), localFileDownloadResponse.getMetadata());
         }).then();
         uploadMono.block();
+
+        FileMetadata currentFileMetadata = this.sut.readFileMetadataAsync(remoteFileSystem.getFileSystemRoot(), relativeFilePath, null)
+                .block();
+        Assertions.assertEquals(localFileMetadata.getFileLength(), currentFileMetadata.getFileLength());
+        Assertions.assertEquals(localFileMetadata.getFileName(), currentFileMetadata.getFileName());
+        Assertions.assertEquals(localFileMetadata.getRelativePath(), currentFileMetadata.getRelativePath());
+        Assertions.assertTrue(Arrays.equals(localFileMetadata.getFileHash(), currentFileMetadata.getFileHash()));
 
         FolderMetadata folderMetadata = this.sut.listFilesInFolder(remoteFileSystem.getFileSystemRoot(), null, null);
         Assertions.assertNotNull(folderMetadata);
