@@ -19,10 +19,11 @@ const MainLayout = ({ children }: LayoutProps) => {
       <div className="flex flex-1">
         <Header />
         <div
-          className="mt-16 p-5 flex-1 overflow-auto"
+          className="mt-16 p-5 overflow-auto relative flex-1"
           style={{
             marginLeft: sidebarWidth,
-            maxWidth: `calc(100vw - ${sidebarWidth}px)`
+            maxWidth: `calc(100vw - ${sidebarWidth}px)`,
+            maxHeight: "calc(100vh - 64px)"
           }}
         >
           {children}
