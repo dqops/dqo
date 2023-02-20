@@ -7,12 +7,12 @@ ___
 
 Edit rule that match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
+dqo.ai> rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
 
 ```
-
 
 **Options**  
   
@@ -24,5 +24,6 @@ dqo.ai>  rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-r`<br/>`--rule`<br/>|Rule name| ||
+
 
 
