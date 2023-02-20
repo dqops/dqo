@@ -51,6 +51,7 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_max_in_range", o -> o.dailyCheckpointMaxInRange);
             put("daily_checkpoint_min_in_range", o -> o.dailyCheckpointMinInRange);
             put("daily_checkpoint_mean_in_range", o -> o.dailyCheckpointMeanInRange);
+            put("daily_checkpoint_percentile", o -> o.dailyCheckpointPercentile);
             put("daily_checkpoint_sample_stddev_in_range", o -> o.dailyCheckpointSampleStddevInRange);
             put("daily_checkpoint_population_stddev_in_range", o -> o.dailyCheckpointPopulationStddevInRange);
             put("daily_checkpoint_sample_variance_in_range", o -> o.dailyCheckpointSampleVarianceInRange);
@@ -103,6 +104,9 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec dailyCheckpointMeanInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnPercentileCheckSpec dailyCheckpointPercentile;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnSampleStddevInRangeCheckSpec dailyCheckpointSampleStddevInRange;
@@ -387,6 +391,24 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointMeanInRange, dailyCheckpointMeanInRange));
         this.dailyCheckpointMeanInRange = dailyCheckpointMeanInRange;
         propagateHierarchyIdToField(dailyCheckpointMeanInRange, "daily_checkpoint_mean_in_range");
+    }
+
+    /**
+     * Returns a percentile check specification.
+     * @return Percentile check specification.
+     */
+    public ColumnPercentileCheckSpec getDailyCheckpointPercentile() {
+        return dailyCheckpointPercentile;
+    }
+
+    /**
+     * Sets a new specification of a percentile check.
+     * @param dailyCheckpointPercentile Percentile check specification.
+     */
+    public void setDailyCheckpointPercentile(ColumnPercentileCheckSpec dailyCheckpointPercentile) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile, dailyCheckpointPercentile));
+        this.dailyCheckpointPercentile = dailyCheckpointPercentile;
+        propagateHierarchyIdToField(dailyCheckpointPercentile, "daily_checkpoint_percentile");
     }
 
     /**
