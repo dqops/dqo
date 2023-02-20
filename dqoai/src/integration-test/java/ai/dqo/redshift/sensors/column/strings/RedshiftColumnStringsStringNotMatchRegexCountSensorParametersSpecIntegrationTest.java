@@ -56,6 +56,8 @@ public class RedshiftColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+        this.sut.setRegex("^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
                 sampleTableMetadata, "email", this.checkSpec);
 
@@ -64,7 +66,7 @@ public class RedshiftColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(63.333, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -79,7 +81,7 @@ public class RedshiftColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(63.333, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -94,11 +96,13 @@ public class RedshiftColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(63.333, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        this.sut.setRegex("^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "email", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -107,7 +111,7 @@ public class RedshiftColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(66.666, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -120,6 +124,6 @@ public class RedshiftColumnStringsStringNotMatchRegexCountSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 }
