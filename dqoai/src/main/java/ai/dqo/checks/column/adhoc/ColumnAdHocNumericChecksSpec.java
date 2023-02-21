@@ -51,6 +51,7 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("max_in_range", o -> o.maxInRange);
             put("min_in_range", o -> o.minInRange);
             put("mean_in_range", o -> o.meanInRange);
+            put("percentile_in_range", o -> o.percentileInRange);
             put("sample_stddev_in_range", o -> o.sampleStddevInRange);
             put("population_stddev_in_range", o -> o.populationStddevInRange);
             put("sample_variance_in_range", o -> o.sampleVarianceInRange);
@@ -103,6 +104,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range.")
     private ColumnMeanInRangeCheckSpec meanInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range.")
+    private ColumnPercentileInRangeCheckSpec percentileInRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range.")
     private ColumnSampleStddevInRangeCheckSpec sampleStddevInRange;
@@ -387,6 +391,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.meanInRange, meanInRange));
         this.meanInRange = meanInRange;
         propagateHierarchyIdToField(meanInRange, "mean_in_range");
+    }
+
+    /**
+     * Returns a percentile in range check specification.
+     * @return Percentile in range check specification.
+     */
+    public ColumnPercentileInRangeCheckSpec getPercentileInRange() {
+        return percentileInRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile in range check.
+     * @param percentileInRange Percentile in range check specification.
+     */
+    public void setPercentileInRange(ColumnPercentileInRangeCheckSpec percentileInRange) {
+        this.setDirtyIf(!Objects.equals(this.percentileInRange, percentileInRange));
+        this.percentileInRange = percentileInRange;
+        propagateHierarchyIdToField(percentileInRange, "percentile_in_range");
     }
 
     /**
