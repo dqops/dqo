@@ -11,7 +11,7 @@ interface ConnectionLayoutProps {
 }
 
 const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
-  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode } =
+  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode, sidebarWidth } =
     useTree();
 
   const { connection, schema, table, column, category, timePartitioned, checkName } = useParams() as any;
@@ -207,7 +207,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
 
   return (
     <MainLayout>
-      <div className="flex-1 h-full flex flex-col overflow-hidden" style={{ maxHeight: "calc(100vh - 104px)" }}>
+      <div className="flex-1 h-full flex flex-col">
         <PageTabs
           tabs={tabs}
           activeTab={activeTab}
@@ -215,7 +215,10 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
           onRemoveTab={closeTab}
           onAddTab={onAddTab}
         />
-        <div className="flex-1 bg-white border border-gray-300 flex-auto min-h-0">
+        <div
+          className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
+          style={{ maxHeight: "calc(100vh - 80px)" }}
+        >
           {children}
         </div>
       </div>

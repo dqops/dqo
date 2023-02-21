@@ -15,6 +15,7 @@ import { useTree } from "../../../contexts/treeContext";
 import SensorReadoutsTab from "./SensorReadoutsTab";
 import CheckErrorsTab from "./CheckErrorsTab";
 import DeleteOnlyDataDialog from "../../CustomTree/DeleteOnlyDataDialog";
+import moment from "moment/moment";
 
 const tabs = [
   {
@@ -60,132 +61,200 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
           "errorUpperBound": 0,
           "fatalLowerBound": 0,
           "fatalUpperBound": 0,
-          "severity": 0,
+          "severity": 1,
           "columnName": "string",
           "dataStream": "string",
           "durationMs": 0,
           "executedAt": 0,
           "timeGradient": "string",
-          "timePeriod": "2023-02-16T17:32:54.990Z",
+          "timePeriod": "2023-02-21T17:08:00.338Z",
           "includeInKpi": true,
           "includeInSla": true,
           "provider": "string",
           "qualityDimension": "string",
           "sensorName": "string"
-        }
-      ]
-    }
-  ]);
-  const [sensorReadouts, setSensorReadouts] = useState<SensorReadoutsDetailedDataModel[]>([
-    {
-      "checkHash": 0,
-      "checkCategory": "string",
-      "sensorName": "string",
-      "dataStreamNames": [
-        "string"
-      ],
-      "dataStream": "string",
-      "singleSensorReadouts": [
+        },
         {
-          "checkName": "string",
-          "checkDisplayName": "string",
-          "checkType": "string",
           "actualValue": 0,
           "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 1,
           "columnName": "string",
           "dataStream": "string",
           "durationMs": 0,
           "executedAt": 0,
           "timeGradient": "string",
-          "timePeriod": "2023-02-16T18:23:26.450Z",
+          "timePeriod": "2023-02-21T17:08:00.338Z",
+          "includeInKpi": true,
+          "includeInSla": true,
           "provider": "string",
-          "qualityDimension": "string"
-        }
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
+        {
+          "actualValue": 0,
+          "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 3,
+          "columnName": "string",
+          "dataStream": "string",
+          "durationMs": 0,
+          "executedAt": 0,
+          "timeGradient": "string",
+          "timePeriod": "2023-02-21T17:08:00.338Z",
+          "includeInKpi": true,
+          "includeInSla": true,
+          "provider": "string",
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
+        {
+          "actualValue": 0,
+          "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 1,
+          "columnName": "string",
+          "dataStream": "string",
+          "durationMs": 0,
+          "executedAt": 0,
+          "timeGradient": "string",
+          "timePeriod": "2023-02-21T17:08:00.338Z",
+          "includeInKpi": true,
+          "includeInSla": true,
+          "provider": "string",
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
+        {
+          "actualValue": 0,
+          "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 2,
+          "columnName": "string",
+          "dataStream": "string",
+          "durationMs": 0,
+          "executedAt": 0,
+          "timeGradient": "string",
+          "timePeriod": "2023-02-21T17:08:00.338Z",
+          "includeInKpi": true,
+          "includeInSla": true,
+          "provider": "string",
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
       ]
     }
   ]);
+  const [sensorReadouts, setSensorReadouts] = useState<SensorReadoutsDetailedDataModel[]>([]);
   const [errors, setErrors] = useState<ErrorsDetailedDataModel[]>([]);
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
+  const [dataStreamName, setDataStreamName] = useState<string>();
+  const [month, setMonth] = useState(moment().format('MMMM YYYY'));
 
   const { sidebarWidth } = useTree();
 
   useEffect(() => {
-    const dataStreamName: any = undefined;
+    const startDate = month ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD') : '';
+    const endDate = month ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD') : '';
 
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.adhoc) {
       if (column) {
-        CheckResultApi.getColumnAdHocChecksResults(connection, schema, table, column, dataStreamName).then((res) => {
-          setCheckResults(res.data);
+        CheckResultApi.getColumnAdHocChecksResults(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
+          // setCheckResults(res.data);
         });
-        SensorReadoutsApi.getColumnAdHocSensorReadouts(connection, schema, table, column, dataStreamName).then((res) => {
+        SensorReadoutsApi.getColumnAdHocSensorReadouts(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getColumnAdHocErrors(connection, schema, table, column, dataStreamName).then((res) => {
+        ErrorsApi.getColumnAdHocErrors(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       } else {
-        CheckResultApi.getTableAdHocChecksResults(connection, schema, table, dataStreamName).then((res) => {
-          setCheckResults(res.data);
+        CheckResultApi.getTableAdHocChecksResults(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
+          // setCheckResults(res.data);
         });
-        SensorReadoutsApi.getTableAdHocSensorReadouts(connection, schema, table, dataStreamName).then((res) => {
+        SensorReadoutsApi.getTableAdHocSensorReadouts(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getTableAdHocErrors(connection, schema, table, dataStreamName).then((res) => {
+        ErrorsApi.getTableAdHocErrors(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       }
     }
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.checkpoint) {
       if (column) {
-        CheckResultApi.getColumnCheckpointsResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
-          setCheckResults(res.data);
+        CheckResultApi.getColumnCheckpointsResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+          // setCheckResults(res.data);
         });
-        SensorReadoutsApi.getColumnCheckpointsSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        SensorReadoutsApi.getColumnCheckpointsSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getColumnCheckpointsErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        ErrorsApi.getColumnCheckpointsErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       } else {
-        CheckResultApi.getTableCheckpointsResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        CheckResultApi.getTableCheckpointsResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(res.data);
         });
-        SensorReadoutsApi.getTableCheckpointsSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        SensorReadoutsApi.getTableCheckpointsSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getTableCheckpointsErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        ErrorsApi.getTableCheckpointsErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       }
     }
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       if (column) {
-        CheckResultApi.getColumnPartitionedChecksResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
-          setCheckResults(res.data);
+        CheckResultApi.getColumnPartitionedChecksResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+          // setCheckResults(res.data);
         });
-        SensorReadoutsApi.getColumnPartitionedSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        SensorReadoutsApi.getColumnPartitionedSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getColumnPartitionedErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        ErrorsApi.getColumnPartitionedErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       } else {
-        CheckResultApi.getTablePartitionedChecksResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        CheckResultApi.getTablePartitionedChecksResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(res.data);
         });
-        SensorReadoutsApi.getTablePartitionedSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        SensorReadoutsApi.getTablePartitionedSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getTablePartitionedErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        ErrorsApi.getTablePartitionedErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       }
     }
-  }, [check]);
+  }, [check, dataStreamName, connection, schema, table, column, month]);
 
   const openDeleteDialog = () => {
     setDeleteDataDialogOpened(true);
   };
+
+  const onChangeDataStream = (name: string) => {
+    setDataStreamName(name);
+  }
 
   return (
     <div className="my-4" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 80}px` }}>
@@ -206,24 +275,41 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
 
         <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
         {activeTab === 'check_results' && (
-          <CheckResultsTab results={checkResults} />
+          <CheckResultsTab
+            results={checkResults}
+            dataStreamName={dataStreamName}
+            month={month}
+            onChangeMonth={setMonth}
+            onChangeDataStream={onChangeDataStream}
+          />
         )}
         {activeTab === 'sensor_readouts' && (
-          <SensorReadoutsTab sensorReadouts={sensorReadouts} />
+          <SensorReadoutsTab
+            sensorReadouts={sensorReadouts}
+            dataStreamName={dataStreamName}
+            month={month}
+            onChangeMonth={setMonth}
+            onChangeDataStream={onChangeDataStream}
+          />
         )}
         {activeTab === 'execution_errors' && (
-          <CheckErrorsTab errors={errors} />
+          <CheckErrorsTab
+            errors={errors}
+            dataStreamName={dataStreamName}
+            month={month}
+            onChangeMonth={setMonth}
+            onChangeDataStream={onChangeDataStream}
+          />
         )}
 
         <DeleteOnlyDataDialog
           open={deleteDataDialogOpened}
           onClose={() => setDeleteDataDialogOpened(false)}
-          onDelete={(dateStart, dateEnd) => {
+          onDelete={(params) => {
             setDeleteDataDialogOpened(false);
             JobApiClient.deleteStoredData({
               ...check.data_clean_job_template,
-              dateStart,
-              dateEnd
+              ...params,
             });
           }}
         />

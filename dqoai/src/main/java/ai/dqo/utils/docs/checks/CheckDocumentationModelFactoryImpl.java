@@ -24,6 +24,7 @@ import ai.dqo.connectors.bigquery.BigQueryConnectionProvider;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
+import ai.dqo.connectors.redshift.RedshiftConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -211,6 +212,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         for (Map.Entry<String, Collection<SimilarChecksGroup>> similarChecksInGroup : checksPerGroup.entrySet()) {
             CheckCategoryDocumentationModel categoryDocumentationModel = new CheckCategoryDocumentationModel();
             String categoryName = similarChecksInGroup.getKey();
+            categoryDocumentationModel.setTarget(target.name());
             categoryDocumentationModel.setCategoryName(categoryName);
             categoryDocumentationModel.setCategoryHelp(categoryHelpMap.get(categoryName));
 
@@ -312,7 +314,13 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         this.uiToSpecCheckMappingService.updateAllChecksSpecs(allChecksModel, checkRootContainer);
 
         HierarchyNode checkCategoryContainer = checkRootContainer.getChild(similarCheckModel.getCategory());
-        AbstractCheckSpec<?,?,?,?> checkSpec = (AbstractCheckSpec<?,?,?,?>) checkCategoryContainer.getChild(checkModel.getCheckName());
+        if (checkCategoryContainer == null) {
+            System.err.println("Sorry but check root container: " + checkRootContainer.getClass().getName() + " has no category " + similarCheckModel.getCategory());
+        }
+        AbstractCheckSpec<?, ?, ?, ?> checkSpec = (AbstractCheckSpec<?, ?, ?, ?>) checkCategoryContainer.getChild(checkModel.getCheckName());
+        if (checkSpec == null) {
+            System.err.println("Sorry but check category container: " + checkCategoryContainer.getClass().getName() + " has no check named " + checkModel.getCheckName());
+        }
 
         TableYaml tableYaml = new TableYaml(trimmedTableSpec);
         String yamlSample = this.yamlSerializer.serialize(tableYaml);
@@ -330,6 +338,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         TableYaml tableYamlWithDataStreams = new TableYaml(trimmedTableSpec);
         String yamlSampleWithDataStreams = this.yamlSerializer.serialize(tableYamlWithDataStreams);
         checkDocumentationModel.setSampleYamlWithDataStreams(yamlSampleWithDataStreams);
+        createMarksForDataStreams(checkDocumentationModel, yamlSampleWithDataStreams);
 
         checkDocumentationModel.setProviderTemplatesDataStreams(generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation));
 
@@ -338,6 +347,35 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         // TODO: in the future, we can also show the generated JSON for the "run sensors" rest rest api job and cli command to enable this sensor
 
         return checkDocumentationModel;
+    }
+
+    /**
+     * Divides string to list of string, looks for phrase and assign position of element.
+     * It's necessary for highlight data stream in yaml sample in documentation.
+     * @param checkDocumentationModel Check documentation model.
+     * @param yamlSampleWithDataStreams Yaml template.
+     */
+    private void createMarksForDataStreams(CheckDocumentationModel checkDocumentationModel, String yamlSampleWithDataStreams) {
+
+        List<String> splitYaml = List.of(yamlSampleWithDataStreams.split("\\r?\\n|\\r"));
+
+        for (int i = 0; i <= splitYaml.size(); i++) {
+            if (splitYaml.get(i).contains("data_streams")) {
+                int firstSectionBeginMarker = i + 1; // +1 because line in documentation is numerating from 1
+                int firstSectionEndMarker = firstSectionBeginMarker + 7; // +7 because first data stream section includes 7 lines
+
+                checkDocumentationModel.setFirstSectionBeginMarker(firstSectionBeginMarker);
+                checkDocumentationModel.setFirstSectionEndMarker(firstSectionEndMarker);
+            } else if (splitYaml.get(i).contains("country:")) {
+                int secondSectionBeginMarker = i + 1; // +1 because line in documentation is numerating from 1
+                int secondSectionEndMarker = secondSectionBeginMarker + 5; // +5 because first data stream section includes 5 lines
+
+                checkDocumentationModel.setSecondSectionBeginMarker(secondSectionBeginMarker);
+                checkDocumentationModel.setSecondSectionEndMarker(secondSectionEndMarker);
+
+                break;
+            }
+        }
     }
 
     /**
@@ -360,6 +398,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             providerDocModel.setProviderType(providerType);
             String sqlTemplate = providerSensorDefinitionWrapper.getSqlTemplate();
             providerDocModel.setJinjaTemplate(sqlTemplate);
+            providerDocModel.setListOfJinjaTemplate(splitSqlTemplates(sqlTemplate));
 
             if (sqlTemplate != null) {
                 SensorDefinitionFindResult sensorDefinitionFindResult = new SensorDefinitionFindResult(sensorDefinitionWrapper.getSpec(),
@@ -399,9 +438,10 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 try {
                     String renderedTemplate = this.jinjaTemplateRenderService.renderTemplate(sqlTemplate, templateRenderParameters);
                     providerDocModel.setRenderedTemplate(renderedTemplate);
+                    providerDocModel.setListOfRenderedTemplate(splitSqlTemplates(renderedTemplate));
                 }
                 catch (Exception ex) {
-                    throw new DqoRuntimeException("Failed to render a sample SQL for check " + checkSpec.getCheckName() + ", exception: " + ex.getMessage(), ex);
+                    System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName());
                 }
             }
             results.add(providerDocModel);
@@ -424,8 +464,19 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return SnowflakeConnectionProvider.DIALECT_SETTINGS;
             case postgresql:
                 return PostgresqlConnectionProvider.DIALECT_SETTINGS;
+            case redshift:
+                return RedshiftConnectionProvider.DIALECT_SETTINGS;
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }
+    }
+
+    /**
+     * Create list of split sql templates by end of line.
+     * @param sqlTemplate Sql template.
+     * @return List of split sql templates by end of line.
+     */
+    private List<String> splitSqlTemplates(String sqlTemplate) {
+        return List.of(sqlTemplate.split("\\r?\\n|\\r"));
     }
 }

@@ -18,20 +18,15 @@ package ai.dqo.utils.docs;
 import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
-import ai.dqo.core.filesystem.localfiles.LocalFileSystemFactory;
-import ai.dqo.core.filesystem.localfiles.LocalFileSystemFactoryImpl;
-import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceImpl;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryImpl;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
 import ai.dqo.services.check.mapping.UiToSpecCheckMappingServiceImpl;
 import ai.dqo.services.check.matching.SimilarCheckMatchingServiceImpl;
-import ai.dqo.services.timezone.DefaultTimeZoneProvider;
-import ai.dqo.services.timezone.DefaultTimeZoneProviderImpl;
+import ai.dqo.utils.docs.checks.CheckDocumentationGenerator;
+import ai.dqo.utils.docs.checks.CheckDocumentationGeneratorImpl;
 import ai.dqo.utils.docs.checks.CheckDocumentationModelFactory;
 import ai.dqo.utils.docs.checks.CheckDocumentationModelFactoryImpl;
 import ai.dqo.utils.docs.cli.CliCommandDocumentationGenerator;
@@ -50,7 +45,6 @@ import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
 import ai.dqo.utils.python.PythonCallerServiceImpl;
 import ai.dqo.utils.python.PythonVirtualEnvServiceImpl;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
-import ai.dqo.utils.serialization.JsonSerializer;
 import ai.dqo.utils.serialization.JsonSerializerImpl;
 import ai.dqo.utils.serialization.YamlSerializerImpl;
 
@@ -84,6 +78,7 @@ public class GenerateDocumentationPostProcessor {
             generateDocumentationForSensors(projectDir, dqoHomeContext);
             generateDocumentationForRules(projectDir, dqoHomeContext);
             generateDocumentationForCliCommands(projectDir);
+            generateDocumentationForChecks(projectDir, dqoHomeContext);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -175,6 +170,23 @@ public class GenerateDocumentationPostProcessor {
                 "########## END INCLUDE CLI COMMANDS");
     }
 
+
+    public static void generateDocumentationForChecks(Path projectRoot, DqoHomeContext dqoHomeContext) {
+        Path checksDocPath = projectRoot.resolve("../docs/checks").toAbsolutePath().normalize();
+        DocumentationFolder currentCheckDocFiles = DocumentationFolderFactory.loadCurrentFiles(checksDocPath);
+        CheckDocumentationModelFactory checkDocumentationModelFactory = createCheckDocumentationModelFactory(projectRoot, dqoHomeContext);
+        CheckDocumentationGenerator checkDocumentationGenerator = new CheckDocumentationGeneratorImpl(checkDocumentationModelFactory);
+
+        DocumentationFolder renderedDocumentation = checkDocumentationGenerator.renderCheckDocumentation(projectRoot);
+        renderedDocumentation.writeModifiedFiles(currentCheckDocFiles);
+
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
+        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+                renderedIndexYaml,
+                "########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY",
+                "########## END INCLUDE CHECK REFERENCE");
+    }
+
     /**
      * Creates a check documentation model factory.
      * @param projectRoot Project root path.
@@ -187,10 +199,12 @@ public class GenerateDocumentationPostProcessor {
                 reflectionService, new SensorDefinitionFindServiceImpl());
         DqoConfigurationProperties configurationProperties = new DqoConfigurationProperties();
         configurationProperties.setHome(projectRoot.resolve("../home").toAbsolutePath().normalize().toString());
+        DqoUserConfigurationProperties dqoUserConfigurationProperties = new DqoUserConfigurationProperties();
+        dqoUserConfigurationProperties.setHome(projectRoot.resolve("../userhome").toAbsolutePath().normalize().toString());
         DqoPythonConfigurationProperties pythonConfigurationProperties = new DqoPythonConfigurationProperties();
 
         PythonVirtualEnvServiceImpl pythonVirtualEnvService = new PythonVirtualEnvServiceImpl(
-                configurationProperties, new DqoPythonConfigurationProperties(), new DqoUserConfigurationProperties());
+                configurationProperties, new DqoPythonConfigurationProperties(), dqoUserConfigurationProperties);
         PythonCallerServiceImpl pythonCallerService = new PythonCallerServiceImpl(
                 configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
 

@@ -98,7 +98,7 @@ public class ColumnStringsStringInvalidUuidCountSensorParametersSpecBigQueryTest
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -131,7 +131,7 @@ public class ColumnStringsStringInvalidUuidCountSensorParametersSpecBigQueryTest
                 SELECT
                     SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 0
                             ELSE 1
                         END
@@ -162,7 +162,7 @@ public class ColumnStringsStringInvalidUuidCountSensorParametersSpecBigQueryTest
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -193,7 +193,7 @@ public class ColumnStringsStringInvalidUuidCountSensorParametersSpecBigQueryTest
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -229,7 +229,7 @@ public class ColumnStringsStringInvalidUuidCountSensorParametersSpecBigQueryTest
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -262,7 +262,7 @@ public class ColumnStringsStringInvalidUuidCountSensorParametersSpecBigQueryTest
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -297,7 +297,7 @@ public class ColumnStringsStringInvalidUuidCountSensorParametersSpecBigQueryTest
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -340,7 +340,7 @@ public class ColumnStringsStringInvalidUuidCountSensorParametersSpecBigQueryTest
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -379,7 +379,7 @@ public class ColumnStringsStringInvalidUuidCountSensorParametersSpecBigQueryTest
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -418,7 +418,7 @@ public class ColumnStringsStringInvalidUuidCountSensorParametersSpecBigQueryTest
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END

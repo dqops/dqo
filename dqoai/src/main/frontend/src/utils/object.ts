@@ -5,4 +5,10 @@ export const convertArrayToObject = (arr: [string, string][]) => {
 
 export const convertObjectToArray = (obj: any): any => {
   return Object.entries(obj || {});
-}
+};
+
+export const chunkString = (str: string, length: number) => {
+  const results = str.match(new RegExp('.{1,' + length + '}', 'g'));
+
+  return results || [];
+};

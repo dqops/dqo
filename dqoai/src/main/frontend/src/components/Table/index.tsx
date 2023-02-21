@@ -19,6 +19,7 @@ export interface TableProps {
   emptyMessage?: string;
   onClickRow?: (item: any) => void;
   loading?: boolean;
+  getRowClass?: (item: any) => string;
 }
 
 export const Table: React.FC<TableProps> = ({
@@ -27,7 +28,8 @@ export const Table: React.FC<TableProps> = ({
   className,
   emptyMessage = 'No Data',
   onClickRow,
-  loading
+  loading,
+  getRowClass
 }) => {
   return (
     <div className="w-full">
@@ -40,7 +42,7 @@ export const Table: React.FC<TableProps> = ({
                 className={`text-left px-2 pt-2 pb-2 text-black-200 text-base font-semibold min-w-20 pr-4 ${column.className}`}
               >
                 {column.header ? (
-                  <>{column.header()}</>
+                  <>{column.header(column.label)}</>
                 ) : (
                   <div>{column.label}</div>
                 )}
@@ -88,7 +90,8 @@ export const Table: React.FC<TableProps> = ({
                           key={column.value}
                           className={clsx(
                             'text-left px-2 py-4',
-                            column.className
+                            column.className,
+                            getRowClass ? getRowClass(item) : ''
                           )}
                         >
                           {column.render ? column.render(item[column.value], item, index) : item[column.value]}

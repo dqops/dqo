@@ -44,7 +44,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             {renderStatus()}
           </div>
           <div>
-            {moment(job.jobId?.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+            {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
           </div>
         </div>
       </AccordionHeader>

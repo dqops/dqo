@@ -11,13 +11,30 @@ ___
 {{else}}
 For this command description is not added yet.
 {{/each}}
+{{#if (eq rootCommandName "dqo")}}
+**Summary (CLI)**
+```
+bash prompt> dqo [root_level_parameter] [command]
+```
+**Example**
+```
+bash prompt> dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
+```
+{{#if options}}
+**Parameters**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+| Command | Description | Is it required? | Accepted values |
+|---------|-------------|-----------------|-----------------|
+{{#each options}}|{{#each names}}`{{this}}`<br/>{{/each}}|{{#each description}}{{this}}<br/>This parameter could be also configured by setting {{#each names}}{{upper (replace (replace (replace this "--" "") "." "_") "-" "_")}}{{/each}}  environment variable.{{/each}}|{{#if required}}Yes{{else}} {{/if}}|{{#each acceptedValues}}{{this}}<br/>{{/each}}|
+{{else}}
+{{/each}}
+{{else}}
+{{/if}}
+{{else}}
 **Summary (Shell)**
 ```
-{{#if (eq rootCommandName "dqo")}}dqo {{else}}dqo.ai> {{/if}}{{{synopsis}}}
+dqo.ai>{{{synopsis}}}
 ```
-{{#each customSynopsis}}
-{{this}}
-{{/each}}
 {{#if options}}
 **Options**{{#with "  "}}{{.}}{{/with}}
 {{#with "  "}}{{.}}{{/with}}
@@ -27,5 +44,6 @@ For this command description is not added yet.
 {{else}}
 {{/each}}
 {{else}}
+{{/if}}
 {{/if}}
 {{/each}}

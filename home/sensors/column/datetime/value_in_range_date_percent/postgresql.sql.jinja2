@@ -14,11 +14,11 @@
 
 {% macro render_date_format_cast()%}
     {%- if lib.target_column_data_type == 'date' -%}
-{{ render_target_column('analyzed_table') }}
+    {{ render_target_column('analyzed_table') }}
     {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
     {%- else -%}
-<INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
     {%- endif -%}
 {% endmacro %}
 

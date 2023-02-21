@@ -99,7 +99,7 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 1
                             ELSE 0
                         END
@@ -134,16 +134,18 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
-                END AS actual_value, analyzed_table.`date` AS time_period
+                END AS actual_value,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -165,16 +167,18 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
-                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                END AS actual_value,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -196,16 +200,18 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
-                END AS actual_value, analyzed_table.`date` AS time_period
+                END AS actual_value,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+            GROUP BY time_period, time_period_utc
+            ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -232,12 +238,13 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1
+                END AS actual_value,
+                analyzed_table.`result` AS stream_level_1
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
             GROUP BY stream_level_1
@@ -266,16 +273,19 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                END AS actual_value,
+                analyzed_table.`result` AS stream_level_1,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, time_period
-            ORDER BY stream_level_1, time_period""";
+            GROUP BY stream_level_1, time_period, time_period_utc
+            ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -300,16 +310,19 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1, analyzed_table.`date` AS time_period
+                END AS actual_value,
+                analyzed_table.`result` AS stream_level_1,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, time_period
-            ORDER BY stream_level_1, time_period""";
+            GROUP BY stream_level_1, time_period, time_period_utc
+            ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -342,16 +355,21 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1, analyzed_table.`result` AS stream_level_2, analyzed_table.`result` AS stream_level_3, analyzed_table.`date` AS time_period
+                END AS actual_value,
+                analyzed_table.`result` AS stream_level_1,
+                analyzed_table.`result` AS stream_level_2,
+                analyzed_table.`result` AS stream_level_3,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
+            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -378,16 +396,21 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1, analyzed_table.`result` AS stream_level_2, analyzed_table.`result` AS stream_level_3, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
+                END AS actual_value,
+                analyzed_table.`result` AS stream_level_1,
+                analyzed_table.`result` AS stream_level_2,
+                analyzed_table.`result` AS stream_level_3,
+                DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
+            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -414,16 +437,21 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1, analyzed_table.`result` AS stream_level_2, analyzed_table.`result` AS stream_level_3, analyzed_table.`date` AS time_period
+                END AS actual_value,
+                analyzed_table.`result` AS stream_level_1,
+                analyzed_table.`result` AS stream_level_2,
+                analyzed_table.`result` AS stream_level_3,
+                analyzed_table.`date` AS time_period,
+                TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
+            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),

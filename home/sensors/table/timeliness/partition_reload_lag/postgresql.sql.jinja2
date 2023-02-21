@@ -21,7 +21,12 @@
             {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
         ))
     ) / 24.0 / 3600.0
-    <INVALID OR NOT MATCHING DATA TYPE>
+    {%- else -%}
+    MAX(
+        EXTRACT(EPOCH FROM (
+            ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+        ))
+    ) / 24.0 / 3600.0
     {%- endif -%}
 {%- endmacro -%}
 

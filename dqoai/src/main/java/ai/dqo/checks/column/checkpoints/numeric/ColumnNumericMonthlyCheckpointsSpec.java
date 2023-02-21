@@ -51,6 +51,7 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_max_in_range", o -> o.monthlyCheckpointMaxInRange);
             put("monthly_checkpoint_min_in_range", o -> o.monthlyCheckpointMinInRange);
             put("monthly_checkpoint_mean_in_range", o -> o.monthlyCheckpointMeanInRange);
+            put("monthly_checkpoint_percentile_in_range", o -> o.monthlyCheckpointPercentileInRange);
             put("monthly_checkpoint_sample_stddev_in_range", o -> o.monthlyCheckpointSampleStddevInRange);
             put("monthly_checkpoint_population_stddev_in_range", o -> o.monthlyCheckpointPopulationStddevInRange);
             put("monthly_checkpoint_sample_variance_in_range", o -> o.monthlyCheckpointSampleVarianceInRange);
@@ -103,6 +104,9 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec monthlyCheckpointMeanInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnPercentileInRangeCheckSpec monthlyCheckpointPercentileInRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnSampleStddevInRangeCheckSpec monthlyCheckpointSampleStddevInRange;
@@ -389,6 +393,24 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMeanInRange, monthlyCheckpointMeanInRange));
         this.monthlyCheckpointMeanInRange = monthlyCheckpointMeanInRange;
         propagateHierarchyIdToField(monthlyCheckpointMeanInRange, "monthly_checkpoint_mean_in_range");
+    }
+
+    /**
+     * Returns a percentile in range check specification.
+     * @return Percentile in range check specification.
+     */
+    public ColumnPercentileInRangeCheckSpec getMonthlyCheckpointPercentileInRange() {
+        return monthlyCheckpointPercentileInRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile in range check.
+     * @param monthlyCheckpointPercentileInRange Percentile in range check specification.
+     */
+    public void setMonthlyCheckpointPercentileInRange(ColumnPercentileInRangeCheckSpec monthlyCheckpointPercentileInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointPercentileInRange, monthlyCheckpointPercentileInRange));
+        this.monthlyCheckpointPercentileInRange = monthlyCheckpointPercentileInRange;
+        propagateHierarchyIdToField(monthlyCheckpointPercentileInRange, "monthly_checkpoint_percentile_in_range");
     }
 
     /**

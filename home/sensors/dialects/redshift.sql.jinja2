@@ -35,11 +35,7 @@
 {%- endmacro %}
 
 {% macro render_column_cast_to_string(analyzed_table_to_render) %}
-    {%- if (target_column_data_type == 'STRING') -%}
-        {{ render_target_column(analyzed_table_to_render) }}
-    {%- else -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- endif -%}
+    {{ render_target_column(analyzed_table_to_render) }}
 {% endmacro %}
 
 {% macro date_trunc(value, part='day', datatype=none) %}
@@ -101,7 +97,7 @@
     {%- if time_series is not none -%}
         {{ ',' -}}{{- eol() -}}
         {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
-        {{ indentation }}TIMESTAMP({{ render_time_dimension_expression(table_alias_prefix) }}) AS time_period_utc
+        {{ indentation }}CAST(({{ render_time_dimension_expression(table_alias_prefix) }}) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     {%- endif -%}
 {% endmacro %}
 

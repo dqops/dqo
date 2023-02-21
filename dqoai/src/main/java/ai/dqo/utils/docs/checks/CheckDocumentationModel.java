@@ -77,6 +77,26 @@ public class CheckDocumentationModel {
     private String sampleYamlWithDataStreams;
 
     /**
+     * Begin marker to highlight start first section data stream sample.
+     */
+    private int firstSectionBeginMarker;
+
+    /**
+     * End marker to highlight end first section data stream sample.
+     */
+    private int firstSectionEndMarker;
+
+    /**
+     * Begin marker to highlight start second section data stream sample.
+     */
+    private int secondSectionBeginMarker;
+
+    /**
+     * End marker to highlight end second section data stream sample.
+     */
+    private int secondSectionEndMarker;
+
+    /**
      * Examples how the SQL for the sensor would be rendered for each template, when the sample yaml is used and data streams are enabled.
      */
     private List<CheckProviderRenderedSqlDocumentationModel> providerTemplatesDataStreams = new ArrayList<>();

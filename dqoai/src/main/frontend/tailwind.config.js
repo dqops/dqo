@@ -80,7 +80,7 @@ module.exports = withMT({
         'container': 'calc(100vh - 64px)',
         'table': 'calc(100vh - 265px)',
         'checks': 'calc(100vh - 325px)',
-        'checks-1': 'calc(100vh - 230px)'
+        'checks-1': 'calc(100vh - 211px)'
       },
       backgroundOpacity: {
         4: '0.04',
@@ -103,6 +103,8 @@ module.exports = withMT({
       }
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/line-clamp'),
+  ],
   content: ["./src/**/*.{js,jsx,ts,tsx,html}", "./public/index.html"],
 });

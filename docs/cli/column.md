@@ -7,13 +7,13 @@ ___
 
 Add a column with specified details
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo.ai> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
             [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-
 
 **Options**  
   
@@ -27,6 +27,7 @@ dqo.ai>  column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-t`<br/>`--table`<br/>|Table name| ||
+
 
 
 
@@ -37,13 +38,13 @@ ___
 
 Remove column or columns which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo.ai> column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-
 
 **Options**  
   
@@ -59,6 +60,7 @@ dqo.ai>  column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 
 
+
 ___
 ### **dqo column update**
 
@@ -66,13 +68,13 @@ ___
 
 Update column or columns which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo.ai> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-
 
 **Options**  
   
@@ -89,6 +91,7 @@ dqo.ai>  column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 
 
+
 ___
 ### **dqo column list**
 
@@ -96,14 +99,14 @@ ___
 
 List columns which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo.ai> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
              [-of=<outputFormat>] [-t=<fullTableName>] [-l=<labels>]...
              [-tg=<tags>]...
 
 ```
-
 
 **Options**  
   
@@ -121,6 +124,7 @@ dqo.ai>  column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 
 
+
 ___
 ### **dqo column enable**
 
@@ -128,13 +132,13 @@ ___
 
 Enable column or columns which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo.ai> column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-
 
 **Options**  
   
@@ -147,6 +151,7 @@ dqo.ai>  column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-t`<br/>`--table`<br/>|Table name| ||
+
 
 
 
@@ -157,13 +162,13 @@ ___
 
 Disable column or columns which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo.ai> column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                 [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-
 
 **Options**  
   
@@ -179,6 +184,7 @@ dqo.ai>  column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 
 
+
 ___
 ### **dqo column rename**
 
@@ -186,13 +192,13 @@ ___
 
 Rename column which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+dqo.ai> column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-n=<newColumnName>] [-of=<outputFormat>] [-t=<fullTableName>]
 
 ```
-
 
 **Options**  
   
@@ -206,5 +212,6 @@ dqo.ai>  column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 |`-n`<br/>`--newColumn`<br/>|New column name| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-t`<br/>`--table`<br/>|Table name| ||
+
 
 

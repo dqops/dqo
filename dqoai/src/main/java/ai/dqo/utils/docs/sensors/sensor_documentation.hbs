@@ -19,16 +19,23 @@ ___
 {{/each}}
 {{else}}
 {{/if}}
+{{#if definition.spec.parameters}}
+**Additional sensor definition parameters**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+| Parameters name | Value |
+|-----------------|-------|
+{{#each definition.spec.parameters}}|{{@key}}|{{this}}|
+{{/each}}
+{{else}}
+{{/if}}
 **SQL Template (Jinja2)**{{#with "  "}}{{.}}{{/with}}
 {{#each sqlTemplates~}}
 === "{{@key}}"
     {{#with "  "}}{{.}}{{/with}}
     ```
-    {% raw %}
     {{#each this~}}
     {{{.}}}
     {{/each~}}
-    {% endraw %}
     ```
 {{/each~}}
 ___
