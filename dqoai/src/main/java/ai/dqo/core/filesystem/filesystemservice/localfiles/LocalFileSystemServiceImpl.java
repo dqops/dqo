@@ -370,7 +370,14 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
                     case ON_NEXT: {
                         try {
                             ByteBuf byteBuf = byteBufSignal.get();
-                            byte[] byteArray = byteBuf.array();
+                            byte[] byteArray = null;
+                            if (byteBuf.hasArray()) {
+                                byteArray= byteBuf.array();
+                            }
+                            else {
+                                byteArray = new byte[byteBuf.readableBytes()];
+                                byteBuf.readBytes(byteArray);
+                            }
                             fileOutputStream.write(byteArray);
                         }
                         catch (Exception ex) {
