@@ -18,82 +18,30 @@ const CheckErrorsTab = ({ errors, dataStreamName, onChangeDataStream, month, onC
 
   const columns = [
     {
-      label: 'Actual Value',
-      value: 'actualValue',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
-    },
-    {
-      label: 'Expected Value',
-      value: 'expectedValue',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
-    },
-    {
-      label: 'Column Name',
-      value: 'columnName',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Data Stream',
-      value: 'dataStream',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Duration Ms',
-      value: 'durationMs',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      label: 'Check Name',
+      value: 'checkName',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-80',
     },
     {
       label: 'Executed At',
       value: 'executedAt',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Time Gradient',
-      value: 'timeGradient',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Time Period',
-      value: 'timePeriod',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Provider',
-      value: 'provider',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Quality Dimension',
-      value: 'qualityDimension',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Sensor Name',
-      value: 'sensorName',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Readout Id',
-      value: 'readoutId',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Error Message',
-      value: 'errorMessage',
-      className: 'text-sm !py-2 text-gray-700',
-      render: (text: string) => <div className="line-clamp-3">{text}</div>
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-60',
     },
     {
       label: 'Error Source',
       value: 'errorSource',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-50',
     },
     {
-      label: 'Error Timestamp',
-      value: 'errorTimestamp',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
+      label: 'Error Message',
+      value: 'errorMessage',
+      className: 'text-sm !py-2 text-gray-700 w-120',
+      render: (text: string) => <div className="w-120 line-clamp-3">{text}</div>
+    },
+    {
+      label: 'Readout Id',
+      value: 'readoutId',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-80',
     },
   ];
 
@@ -132,7 +80,7 @@ const CheckErrorsTab = ({ errors, dataStreamName, onChangeDataStream, month, onC
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={result.singleErrors || []}
+            data={(result.singleErrors || []).map((item) => ({ ...item, checkName: result.checkName }))}
             emptyMessage="No Data"
           />
         </div>
