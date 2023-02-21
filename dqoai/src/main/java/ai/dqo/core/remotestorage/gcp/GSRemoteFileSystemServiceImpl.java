@@ -476,6 +476,17 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
                 )
                 .get()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
+//                .responseSingle(((httpClientResponse, byteBufMono) -> {
+//                    if (httpClientResponse.status() == HttpResponseStatus.OK) {
+//                        return byteBufMono.flatMap(byteBuf ->
+//                                Mono.just(new DownloadFileResponse(lastKnownFileMetadata, ByteBufFlux.fromInbound(Mono.just(byteBuf)))));
+//                    }
+//                    else {
+//                        return byteBufMono.then(Mono.error(new FileSystemChangeException(relativeFilePath,
+//                                "Cannot download file " + linuxStyleFullFileInBucket + ", error: " + httpClientResponse.status().code())));
+//                    }
+//                }));
+
                 .responseConnection(((httpClientResponse, connection) -> {
                     if (httpClientResponse.status() == HttpResponseStatus.OK) {
                         return Mono.just(new DownloadFileResponse(lastKnownFileMetadata, connection.inbound().receive()));

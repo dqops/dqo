@@ -29,7 +29,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoStorageGcpConfigurationProperties implements Cloneable {
     private int uploadBufferSize = 15000000;
     private boolean http2;
-    private Integer http2MaxConcurrentStreams;
+    private Integer http2MaxConcurrentStreams = 5000;
     private int parallelDeleteOperations = 1000;
 
     /**

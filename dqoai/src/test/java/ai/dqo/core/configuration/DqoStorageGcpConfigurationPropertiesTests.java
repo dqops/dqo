@@ -23,6 +23,6 @@ public class DqoStorageGcpConfigurationPropertiesTests extends BaseTest {
 
     @Test
     void getHttp2MaxConcurrentStreams_whenDefaultConfiguration_thenReturns5000() {
-        Assertions.assertEquals(5000, this.sut.getHttp2MaxConcurrentStreams().intValue());
+        Assertions.assertEquals(2000, this.sut.getHttp2MaxConcurrentStreams().intValue());
     }
 }

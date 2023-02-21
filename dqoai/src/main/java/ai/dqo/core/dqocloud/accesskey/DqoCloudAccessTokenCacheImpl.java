@@ -19,6 +19,7 @@ import ai.dqo.cloud.rest.model.TenantAccessTokenModel;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import com.google.auth.oauth2.AccessToken;
 import com.google.common.base.Supplier;
+import com.google.common.base.Suppliers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -57,11 +58,11 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
         synchronized (this.lock) {
             credentialsSupplier = this.rootCredentialSuppliers.get(dqoRoot);
             if (credentialsSupplier == null) {
-                credentialsSupplier = () -> {
+                credentialsSupplier = Suppliers.memoize(() -> {
                     TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
                     AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
                     return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
-                };
+                });
 
                 this.rootCredentialSuppliers.put(dqoRoot, credentialsSupplier);
             }
@@ -78,11 +79,11 @@ public class DqoCloudAccessTokenCacheImpl implements DqoCloudAccessTokenCache {
         synchronized (this.lock) {
             Supplier<DqoCloudCredentials> currentCredentialsSupplier = this.rootCredentialSuppliers.get(dqoRoot);
             if (credentialsSupplier == currentCredentialsSupplier) {
-                credentialsSupplier = () -> {
+                credentialsSupplier = Suppliers.memoize(() -> {
                     TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(dqoRoot);
                     AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
                     return new DqoCloudCredentials(tenantAccessTokenModel, accessToken);
-                };
+                });
 
                 this.rootCredentialSuppliers.put(dqoRoot, credentialsSupplier);
             } else {
