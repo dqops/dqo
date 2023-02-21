@@ -194,30 +194,35 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
 
   return (
     <div className="py-3 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
+      <div className="flex space-x-8 items-center">
+        <div className="flex space-x-4 items-center">
+          <div className="text-sm">Data stream</div>
+          <Select
+            value={dataStreamName}
+            options={(results[0]?.dataStreamNames || []).map((item) => ({ label: item, value: item })) || []}
+            onChange={onChangeDataStream}
+          />
+        </div>
+        <div className="flex space-x-4 items-center">
+          <div className="text-sm">Month</div>
+          <Select
+            value={month}
+            options={monthOptions}
+            onChange={onChangeMonth}
+          />
+        </div>
+      </div>
+      {results.length === 0 && (
+        <div className="text-gray-700 mt-5">No Data</div>
+      )}
+
       {results.map((result, index) => (
         <div key={index}>
-          <div className="flex space-x-8 items-center">
-            <div className="flex space-x-4 items-center">
-              <div className="text-sm">Data stream</div>
-              <Select
-                value={dataStreamName}
-                options={result.dataStreamNames?.map((item) => ({ label: item, value: item })) || []}
-                onChange={onChangeDataStream}
-              />
-            </div>
-            <div className="flex space-x-4 items-center">
-              <div className="text-sm">Month</div>
-              <Select
-                value={month}
-                options={monthOptions}
-                onChange={onChangeMonth}
-              />
-            </div>
-          </div>
           <Table
             className="mt-4 w-full"
             columns={columns}
             data={result.singleCheckResults || []}
+            emptyMessage="No Data"
           />
         </div>
       ))}
