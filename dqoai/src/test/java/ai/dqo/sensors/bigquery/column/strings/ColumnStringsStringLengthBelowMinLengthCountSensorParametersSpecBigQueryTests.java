@@ -98,7 +98,7 @@ public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecBig
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(SAFE_CAST(%s AS STRING)) <= 0
+                        WHEN LENGTH(CAST(%s AS STRING)) <= 0
                             THEN 1
                         ELSE 0
                     END
@@ -130,7 +130,7 @@ public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecBig
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(SAFE_CAST(%s AS STRING)) <= 0
+                        WHEN LENGTH(CAST(%s AS STRING)) <= 0
                             THEN 1
                         ELSE 0
                     END
@@ -160,7 +160,7 @@ public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecBig
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(SAFE_CAST(%s AS STRING)) <= 0
+                        WHEN LENGTH(CAST(%s AS STRING)) <= 0
                             THEN 1
                         ELSE 0
                     END
@@ -190,7 +190,7 @@ public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecBig
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(SAFE_CAST(%s AS STRING)) <= 0
+                        WHEN LENGTH(CAST(%s AS STRING)) <= 0
                             THEN 1
                         ELSE 0
                     END
@@ -225,7 +225,7 @@ public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecBig
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(SAFE_CAST(%s AS STRING)) <= 0
+                        WHEN LENGTH(CAST(%s AS STRING)) <= 0
                             THEN 1
                         ELSE 0
                     END
@@ -257,7 +257,7 @@ public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecBig
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(SAFE_CAST(%s AS STRING)) <= 0
+                        WHEN LENGTH(CAST(%s AS STRING)) <= 0
                             THEN 1
                         ELSE 0
                     END
@@ -291,7 +291,7 @@ public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecBig
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(SAFE_CAST(%s AS STRING)) <= 0
+                        WHEN LENGTH(CAST(%s AS STRING)) <= 0
                             THEN 1
                         ELSE 0
                     END
@@ -333,7 +333,7 @@ public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecBig
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(SAFE_CAST(%s AS STRING)) <= 0
+                        WHEN LENGTH(CAST(%s AS STRING)) <= 0
                             THEN 1
                         ELSE 0
                     END
@@ -371,7 +371,7 @@ public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecBig
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(SAFE_CAST(%s AS STRING)) <= 0
+                        WHEN LENGTH(CAST(%s AS STRING)) <= 0
                             THEN 1
                         ELSE 0
                     END
@@ -409,7 +409,7 @@ public class ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecBig
             SELECT
                 SUM(
                     CASE
-                        WHEN LENGTH(SAFE_CAST(%s AS STRING)) <= 0
+                        WHEN LENGTH(CAST(%s AS STRING)) <= 0
                             THEN 1
                         ELSE 0
                     END
