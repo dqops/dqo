@@ -50,7 +50,7 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
       render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
     },
     {
-      label: 'Time Gradient',
+      label: 'Time Scale',
       value: 'timeGradient',
       className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
       header: (text: string) => <div className="py-2 px-4">{text}</div>,

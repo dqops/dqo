@@ -50,7 +50,7 @@ const CheckErrorsTab = ({ errors, dataStreamName, onChangeDataStream, month, onC
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
     },
     {
-      label: 'Time Gradient',
+      label: 'Time Scale',
       value: 'timeGradient',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
     },

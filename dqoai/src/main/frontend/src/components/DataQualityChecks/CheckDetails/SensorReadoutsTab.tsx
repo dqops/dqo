@@ -65,7 +65,7 @@ const SensorReadoutsTab = ({ sensorReadouts, dataStreamName, onChangeDataStream,
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
     },
     {
-      label: 'Time Gradient',
+      label: 'Time Scale',
       value: 'timeGradient',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
     },
