@@ -20,12 +20,12 @@ import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionSpecObjectMother;
+import ai.dqo.connectors.redshift.RedshiftConnectionSpecObjectMother;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionSpecObjectMother;
 import ai.dqo.connectors.sqlserver.SqlServerConnectionSpecObjectMother;
 import ai.dqo.core.secrets.SecretValueProviderObjectMother;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.sources.*;
-import ai.dqo.sampledata.files.*;
 import ai.dqo.sampledata.files.CsvSampleFilesObjectMother;
 import ai.dqo.sampledata.files.SampleTableFromCsv;
 import org.junit.jupiter.api.Assertions;
@@ -52,6 +52,9 @@ public class SampleTableMetadataForeignObjectMother {
             case postgresql:
                 return PostgresqlConnectionSpecObjectMother.create();
 
+            case redshift:
+                return RedshiftConnectionSpecObjectMother.create();
+
             case sqlserver:
                 return SqlServerConnectionSpecObjectMother.create();
         }
@@ -75,6 +78,9 @@ public class SampleTableMetadataForeignObjectMother {
 
             case postgresql:
                 return PostgresqlConnectionSpecObjectMother.getSchemaName();
+
+            case redshift:
+                return RedshiftConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

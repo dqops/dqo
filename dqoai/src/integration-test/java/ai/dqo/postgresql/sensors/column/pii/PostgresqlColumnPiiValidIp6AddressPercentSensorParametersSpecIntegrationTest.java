@@ -57,7 +57,7 @@ public class PostgresqlColumnPiiValidIp6AddressPercentSensorParametersSpecIntegr
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "IP6", this.checkSpec);
+                sampleTableMetadata, "ip6", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -70,7 +70,7 @@ public class PostgresqlColumnPiiValidIp6AddressPercentSensorParametersSpecIntegr
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "IP6", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -83,7 +83,7 @@ public class PostgresqlColumnPiiValidIp6AddressPercentSensorParametersSpecIntegr
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "IP6", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -96,7 +96,7 @@ public class PostgresqlColumnPiiValidIp6AddressPercentSensorParametersSpecIntegr
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "IP6", this.checkSpec, CheckTimeScale.daily,"DATE");
+                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -109,7 +109,7 @@ public class PostgresqlColumnPiiValidIp6AddressPercentSensorParametersSpecIntegr
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "IP6", this.checkSpec, CheckTimeScale.monthly,"DATE");
+                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

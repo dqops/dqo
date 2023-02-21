@@ -120,10 +120,12 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 UIEffectiveScheduleLevel.table_override
         );
         UIScheduleEnabledStatus scheduleEnabledStatus = getScheduleEnabledStatus(
-                tableSpec.getSchedulesOverride()
+                tableSpec.getSchedulesOverride() != null ?
+                    tableSpec.getSchedulesOverride()
                         .getScheduleForCheckSchedulingGroup(
                                 checkCategoriesSpec.getSchedulingGroup()
                         )
+                    : null
         );
         if (effectiveScheduleModel == null && connectionSpec != null) {
             effectiveScheduleModel = getEffectiveScheduleModel(
@@ -132,10 +134,12 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                     UIEffectiveScheduleLevel.connection
             );
             scheduleEnabledStatus = getScheduleEnabledStatus(
-                    connectionSpec.getSchedules()
+                    connectionSpec.getSchedules() != null ?
+                        connectionSpec.getSchedules()
                             .getScheduleForCheckSchedulingGroup(
                                     checkCategoriesSpec.getSchedulingGroup()
                             )
+                        : null
             );
         }
         uiAllChecksModel.setEffectiveSchedule(effectiveScheduleModel);

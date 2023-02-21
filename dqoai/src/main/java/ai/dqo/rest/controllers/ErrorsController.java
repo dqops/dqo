@@ -84,9 +84,9 @@ public class ErrorsController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Data stream name") @RequestParam Optional<String> dataStreamName,
-            @ApiParam("Month start boundary") @RequestParam Optional<LocalDate> monthStart,
-            @ApiParam("Month end boundary") @RequestParam Optional<LocalDate> monthEnd) {
+            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -144,9 +144,9 @@ public class ErrorsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam("Data stream name") @RequestParam Optional<String> dataStreamName,
-            @ApiParam("Month start boundary") @RequestParam Optional<LocalDate> monthStart,
-            @ApiParam("Month end boundary") @RequestParam Optional<LocalDate> monthEnd) {
+            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -203,9 +203,9 @@ public class ErrorsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam("Data stream name") @RequestParam Optional<String> dataStreamName,
-            @ApiParam("Month start boundary") @RequestParam Optional<LocalDate> monthStart,
-            @ApiParam("Month end boundary") @RequestParam Optional<LocalDate> monthEnd) {
+            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -237,7 +237,6 @@ public class ErrorsController {
         return new ResponseEntity<>(Flux.fromArray(errorsDetailedDataModels), HttpStatus.OK); // 200
     }
 
-
     /**
      * Retrieves the errors related to check executions on a column given a connection name, table name and column name.
      * @param connectionName Connection name.
@@ -264,9 +263,9 @@ public class ErrorsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Data stream name") @RequestParam Optional<String> dataStreamName,
-            @ApiParam("Month start boundary") @RequestParam Optional<LocalDate> monthStart,
-            @ApiParam("Month end boundary") @RequestParam Optional<LocalDate> monthEnd) {
+            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -331,9 +330,9 @@ public class ErrorsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam("Data stream name") @RequestParam Optional<String> dataStreamName,
-            @ApiParam("Month start boundary") @RequestParam Optional<LocalDate> monthStart,
-            @ApiParam("Month end boundary") @RequestParam Optional<LocalDate> monthEnd) {
+            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -398,9 +397,9 @@ public class ErrorsController {
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
             @ApiParam("Time scale") @PathVariable CheckTimeScale timeScale,
-            @ApiParam("Data stream name") @RequestParam Optional<String> dataStreamName,
-            @ApiParam("Month start boundary") @RequestParam Optional<LocalDate> monthStart,
-            @ApiParam("Month end boundary") @RequestParam Optional<LocalDate> monthEnd) {
+            @ApiParam(value = "Data stream name", required = false) @RequestParam(required = false) Optional<String> dataStreamName,
+            @ApiParam(value = "Month start boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthStart,
+            @ApiParam(value = "Month end boundary", required = false) @RequestParam(required = false) Optional<LocalDate> monthEnd) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 

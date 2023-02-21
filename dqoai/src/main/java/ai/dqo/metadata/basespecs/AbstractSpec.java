@@ -132,9 +132,11 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
     @Override
     public HierarchyNode getChild(Object childName) {
         ChildHierarchyNodeFieldMap childFieldMap = this.getChildMap();
-        assert (childName.toString() != null) : "child name is null";
-        assert (childFieldMap.getFieldGetter(childName.toString()) != null) : "child name " + childName + " missing on class " + this.getClass().getCanonicalName() + ", verify that the field name in the field name is correct";
-        return childFieldMap.getFieldGetter(childName.toString()).apply(this);
+        GetHierarchyChildNodeFunc<HierarchyNode> child = childFieldMap.getFieldGetter(childName.toString());
+        if (child != null) {
+            return child.apply(this);
+        }
+        return null;
     }
 
     /**

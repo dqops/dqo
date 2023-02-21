@@ -1,18 +1,6 @@
 site_name: DQO AI
 site_url: https://docs.dqo.ai/latest/
 
-# Plugins
-plugins:
-  - search
-  - include-markdown:
-      opening_tag: "{%"
-      closing_tag: "%}"
-      preserve_includer_indent: false
-  - macros:
-      #      include_dir: home/sensors/dialects/
-      include_dir: docs/dialects/
-      module_name: docs/render_macros
-
 # Docs navigation
 nav:
   - Home: 'index.md'
@@ -30,6 +18,9 @@ nav:
     - Rules: 'dqo_concept/rules/rules.md'
     - Dimensions: 'dqo_concept/dimensions.md'
     - Time series: 'dqo_concept/time_series/time_series.md'
+#TODO: tbd:
+#  - Folder structures:
+#    - DQO_USER_HOME: 'dqo_concept/how_data_is_stored/how_data_is_stored.md'
   - Working with DQO:
     - Adding connections: 'working_with_dqo/add_connection.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
@@ -48,13 +39,6 @@ nav:
     - run: 'cli/run.md'
     - rule: 'cli/rule.md'
 ########## END INCLUDE CLI COMMANDS
-  - Commands:
-    - check: 'commands/check/check.md'
-    - column: 'commands/column/column.md'
-    - table: 'commands/table/table.md'
-    - connection: 'commands/connection/connection.md'
-      #TODO: tbd:
-    - cloud: 'commands/cloud/cloud.md'
   - Scheduler:
     - Introduction to the scheduler: 'scheduler/introduction_to_the_scheduler.md'
     - Cron formatting: 'scheduler/cron_formatting.md'
@@ -62,26 +46,24 @@ nav:
     - Cloud logging: 'scheduler/cloud_logging.md'
     - Console logging modes: 'scheduler/console_logging_modes.md'
     - Timezone configuration: 'scheduler/timezone_configuration.md'
+########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
   - Check reference:
-    - List of checks: 'check_reference/list_of_checks/list_of_checks.md'
-    - Timeliness:
-      - average_delay: 'check_reference/timeliness/average_delay/average_delay.md'
-      - current_delay: 'check_reference/timeliness/current_delay/current_delay.md'
-      - column_datetime_difference_percent: 'check_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
-    - Uniqueness:
-      - distinct_count: 'check_reference/uniqueness/distinct_count/distinct_count.md'
-      - distinct_count_percent: 'check_reference/uniqueness/distinct_count_percent/distinct_count_percent.md'
-    - Validity:
-      - date_type_percent: 'check_reference/validity/date_type_percent/date_type_percent.md'
-      - regex_match_percent: 'check_reference/validity/regex_match_percent/regex_match_percent.md'
-      - values_in_set_percent: 'check_reference/validity/values_in_set_percent/values_in_set_percent.md'
-      - non_negative_percent: 'check_reference/validity/non_negative_percent/non_negative_percent.md'
-      - value_in_range_numerical_percent: 'check_reference/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
-      - value_in_range_date_percent: 'check_reference/validity/value_in_range_date_percent/value_in_range_date_percent.md'
-      - string_length_in_range_percent: 'check_reference/validity/string_length_in_range_percent/string_length_in_range_percent.md'
-      - not_null_count: 'check_reference/validity/not_null_count/not_null_count.md'
-      - non_negative_count: 'check_reference/validity/non_negative_count/non_negative_count.md'
-      - numerical_type_percent: 'check_reference/validity/numerical_type_percent/numerical_type_percent.md'
+    - table:
+      - standard: 'checks/table/standard.md'
+      - timeliness: 'checks/table/timeliness.md'
+      - sql: 'checks/table/sql.md'
+      - availability: 'checks/table/availability.md'
+    - column:
+      - nulls: 'checks/column/nulls.md'
+      - numeric: 'checks/column/numeric.md'
+      - strings: 'checks/column/strings.md'
+      - uniqueness: 'checks/column/uniqueness.md'
+      - datetime: 'checks/column/datetime.md'
+      - pii: 'checks/column/pii.md'
+      - sql: 'checks/column/sql.md'
+      - bool: 'checks/column/bool.md'
+      - integrity: 'checks/column/integrity.md'
+########## END INCLUDE CHECK REFERENCE
   - Examples:
     - Running examples: 'examples/running_examples.md'
     - Timeliness:
@@ -107,43 +89,12 @@ nav:
     - column: 'sensors/column.md'
     - table: 'sensors/table.md'
 ########## END INCLUDE SENSOR REFERENCE
-  - Sensor reference (old):
-      - What is a sensor: 'sensor_reference/what_is_a_sensor.md'
-      - Timeliness:
-          - Average delay: 'sensor_reference/timeliness/average_delay/average_delay.md'
-          - Current delay: 'sensor_reference/timeliness/current_delay/current_delay.md'
-          - Column datetime difference percent: 'sensor_reference/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
-      - Uniqueness:
-          - Distinct count: 'sensor_reference/uniqueness/distinct_count/distinct_count.md'
-          - Distinct count percent: 'sensor_reference/uniqueness/distinct_count_percent/distinct_count_percent.md'
-      - Validity:
-        - Date type percent: 'sensor_reference/validity/date_type_percent/date_type_percent.md'
-        - Regex match percent: 'sensor_reference/validity/regex_match_percent/regex_match_percent.md'
-        - Values in set percent: 'sensor_reference/validity/values_in_set_percent/values_in_set_percent.md'
-        - Non negative percent: 'sensor_reference/validity/non_negative_percent/non_negative_percent.md'
-        - Value in range numerical percent: 'sensor_reference/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
-        - Value in range date percent: 'sensor_reference/validity/value_in_range_date_percent/value_in_range_date_percent.md'
-        - String length in range percent: 'sensor_reference/validity/string_length_in_range_percent/string_length_in_range_percent.md'
-        - Not null count: 'sensor_reference/validity/not_null_count/not_null_count.md'
-        - Non negative count: 'sensor_reference/validity/non_negative_count/non_negative_count.md'
-        - Numerical type percent: 'sensor_reference/validity/numerical_type_percent/numerical_type_percent.md'
 ########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY
   - Rule reference:
     - comparison: 'rules/comparison.md'
     - averages: 'rules/averages.md'
     - stdev: 'rules/stdev.md'
 ########## END INCLUDE RULE REFERENCE
-  - Rule reference (old):
-    - What are rules: 'rule_reference/what_are_rules.md'
-    - How to configure a rule: 'rule_reference/how_to_configure_rules.md'
-    - Standard deviation:
-      - Moving stdev: 'rule_reference/stdev/moving_stdev.md'
-    - Averages:
-      - Moving average: 'rule_reference/averages/moving_average.md'
-    - Comparison:
-      - Min count: 'rule_reference/comparison/min_count.md'
-      - Max count: 'rule_reference/comparison/max_count.md'
-      - Count equals: 'rule_reference/comparison/count_equals.md'
 
 # Visual settings
 theme:
@@ -164,6 +115,7 @@ theme:
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
+  font: false
 
 # Markdown extensions
 markdown_extensions:

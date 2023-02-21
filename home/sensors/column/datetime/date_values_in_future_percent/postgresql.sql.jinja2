@@ -19,6 +19,7 @@
                     THEN 1
                 ELSE 0
             END
+    {%- else -%}
     <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
     {%- endif -%}
 {%- endmacro -%}

@@ -119,6 +119,9 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   };
 
   const onRunCheck = async () => {
+    if (!check.configured || check?.disabled) {
+      return;
+    }
     await onUpdate();
     JobApiClient.runChecks(check?.run_checks_job_template);
   };
@@ -162,11 +165,15 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
     setShowDetails(false);
   };
 
-  const openCheckDetails = () => {
-    if (expanded) {
+  const toggleCheckDetails = () => {
+    if (!check.configured || check?.disabled) {
+      return;
+    }
+
+    if (expanded && !showDetails) {
       setExpanded(false);
     }
-    setShowDetails(true);
+    setShowDetails(!showDetails);
   };
 
   return (
@@ -243,7 +250,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             <SvgIcon
               name="rectangle-list"
               className="text-gray-700 h-5 cursor-pointer"
-              onClick={openCheckDetails}
+              onClick={toggleCheckDetails}
             />
             <Tooltip
               content={check.help_text}

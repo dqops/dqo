@@ -3,6 +3,8 @@ package ai.dqo.utils.docs.checks;
 import ai.dqo.connectors.ProviderType;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * Documentation model that shows how a particular provider would render the check (sensor) SQL, using the parameters given.
  */
@@ -22,4 +24,14 @@ public class CheckProviderRenderedSqlDocumentationModel {
      * The SQL that would be executed on the target database.
      */
     private String renderedTemplate;
+
+    /**
+     * Jinja2 template content.
+     */
+    private List<String> listOfJinjaTemplate;
+
+    /**
+     * The SQL that would be executed on the target database.
+     */
+    private List<String> listOfRenderedTemplate;
 }

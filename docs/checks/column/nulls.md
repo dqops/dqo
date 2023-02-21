@@ -1,0 +1,7448 @@
+# nulls
+
+
+___
+
+## **nulls count** checks  
+
+**Description**  
+Column-level check that ensures that there are no more than a set number of null values in the monitored column.
+
+___
+
+### **nulls count**  
+  
+**Check description**  
+Verifies that the number of null values in a column does not exceed the maximum accepted count.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|nulls_count|adhoc| |[null_count](../../../sensors/column/#null-count)|[max_count](../../../rules/comparison/#max-count)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checks:
+        nulls:
+          nulls_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CURRENT_TIMESTAMP() AS time_period,
+        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table."target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CURRENT_TIMESTAMP() AS time_period,
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 39-44"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checks:
+        nulls:
+          nulls_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CURRENT_TIMESTAMP() AS time_period,
+        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table."target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CURRENT_TIMESTAMP() AS time_period,
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **daily checkpoint nulls count**  
+  
+**Check description**  
+Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|daily_checkpoint_nulls_count|checkpoint|daily|[null_count](../../../sensors/column/#null-count)|[max_count](../../../rules/comparison/#max-count)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checkpoints:
+        daily:
+          nulls:
+            daily_checkpoint_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table."target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checkpoints:
+        daily:
+          nulls:
+            daily_checkpoint_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table."target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **monthly checkpoint nulls count**  
+  
+**Check description**  
+Verifies that the number of null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|monthly_checkpoint_nulls_count|checkpoint|monthly|[null_count](../../../sensors/column/#null-count)|[max_count](../../../rules/comparison/#max-count)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checkpoints:
+        monthly:
+          nulls:
+            monthly_checkpoint_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table."target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checkpoints:
+        monthly:
+          nulls:
+            monthly_checkpoint_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table."target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **daily partition nulls count**  
+  
+**Check description**  
+Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|daily_partition_nulls_count|partitioned|daily|[null_count](../../../sensors/column/#null-count)|[max_count](../../../rules/comparison/#max-count)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      partitioned_checks:
+        daily:
+          nulls:
+            daily_partition_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table."target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      partitioned_checks:
+        daily:
+          nulls:
+            daily_partition_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table."target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **monthly partition nulls count**  
+  
+**Check description**  
+Verifies that the number of null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|monthly_partition_nulls_count|partitioned|monthly|[null_count](../../../sensors/column/#null-count)|[max_count](../../../rules/comparison/#max-count)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      partitioned_checks:
+        monthly:
+          nulls:
+            monthly_partition_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table."target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      partitioned_checks:
+        monthly:
+          nulls:
+            monthly_partition_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table.`target_column` IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN analyzed_table."target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN "target_column" IS NULL THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+
+## **nulls percent** checks  
+
+**Description**  
+Column-level check that ensures that there are no more than a set percentage of null values in the monitored column.
+
+___
+
+### **nulls percent**  
+  
+**Check description**  
+Verifies that the percent of null values in a column does not exceed the maximum accepted percentage.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|nulls_percent|adhoc| |[null_percent](../../../sensors/column/#null-percent)|[max_percent](../../../rules/comparison/#max-percent)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checks:
+        nulls:
+          nulls_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CURRENT_TIMESTAMP() AS time_period,
+        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table."target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value,
+        CURRENT_TIMESTAMP() AS time_period,
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 39-44"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checks:
+        nulls:
+          nulls_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CURRENT_TIMESTAMP() AS time_period,
+        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table."target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CURRENT_TIMESTAMP() AS time_period,
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **daily checkpoint nulls percent**  
+  
+**Check description**  
+Verifies that the percentage of nulls in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|daily_checkpoint_nulls_percent|checkpoint|daily|[null_percent](../../../sensors/column/#null-percent)|[max_percent](../../../rules/comparison/#max-percent)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checkpoints:
+        daily:
+          nulls:
+            daily_checkpoint_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table."target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value,
+        CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checkpoints:
+        daily:
+          nulls:
+            daily_checkpoint_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table."target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **monthly checkpoint nulls percent**  
+  
+**Check description**  
+Verifies that the percentage of null values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|monthly_checkpoint_nulls_percent|checkpoint|monthly|[null_percent](../../../sensors/column/#null-percent)|[max_percent](../../../rules/comparison/#max-percent)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checkpoints:
+        monthly:
+          nulls:
+            monthly_checkpoint_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table."target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checkpoints:
+        monthly:
+          nulls:
+            monthly_checkpoint_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table."target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **daily partition nulls percent**  
+  
+**Check description**  
+Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|daily_partition_nulls_percent|partitioned|daily|[null_percent](../../../sensors/column/#null-percent)|[max_percent](../../../rules/comparison/#max-percent)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      partitioned_checks:
+        daily:
+          nulls:
+            daily_partition_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table."target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      partitioned_checks:
+        daily:
+          nulls:
+            daily_partition_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table."target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **monthly partition nulls percent**  
+  
+**Check description**  
+Verifies that the percentage of null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|monthly_partition_nulls_percent|partitioned|monthly|[null_percent](../../../sensors/column/#null-percent)|[max_percent](../../../rules/comparison/#max-percent)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      partitioned_checks:
+        monthly:
+          nulls:
+            monthly_partition_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table."target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      partitioned_checks:
+        monthly:
+          nulls:
+            monthly_partition_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table')}} IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table.`target_column` IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN analyzed_table."target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+                )/COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                CASE
+                    WHEN "target_column" IS NULL THEN 1
+                    ELSE 0
+                END
+            ) / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+
+## **not nulls count** checks  
+
+**Description**  
+Column-level check that ensures that there are no more than a set number of null values in the monitored column.
+
+___
+
+### **not nulls count**  
+  
+**Check description**  
+Verifies that the number of not null values in a column does not exceed the maximum accepted count.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|not_nulls_count|adhoc| |[not_null_count](../../../sensors/column/#not-null-count)|[max_count](../../../rules/comparison/#max-count)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checks:
+        nulls:
+          not_nulls_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table.`target_column`)
+        AS actual_value,
+        CURRENT_TIMESTAMP() AS time_period,
+        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table."target_column")
+        AS actual_value,
+        CURRENT_TIMESTAMP() AS time_period,
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 39-44"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checks:
+        nulls:
+          not_nulls_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table.`target_column`)
+        AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CURRENT_TIMESTAMP() AS time_period,
+        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table."target_column")
+        AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CURRENT_TIMESTAMP() AS time_period,
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **daily checkpoint not nulls count**  
+  
+**Check description**  
+Verifies that the number of not null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|daily_checkpoint_not_nulls_count|checkpoint|daily|[not_null_count](../../../sensors/column/#not-null-count)|[max_count](../../../rules/comparison/#max-count)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checkpoints:
+        daily:
+          nulls:
+            daily_checkpoint_not_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table.`target_column`)
+        AS actual_value,
+        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table."target_column")
+        AS actual_value,
+        CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checkpoints:
+        daily:
+          nulls:
+            daily_checkpoint_not_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table.`target_column`)
+        AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table."target_column")
+        AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **monthly checkpoint not nulls count**  
+  
+**Check description**  
+Verifies that the number of not null values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|monthly_checkpoint_not_nulls_count|checkpoint|monthly|[not_null_count](../../../sensors/column/#not-null-count)|[max_count](../../../rules/comparison/#max-count)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checkpoints:
+        monthly:
+          nulls:
+            monthly_checkpoint_not_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table.`target_column`)
+        AS actual_value,
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table."target_column")
+        AS actual_value,
+        DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checkpoints:
+        monthly:
+          nulls:
+            monthly_checkpoint_not_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table.`target_column`)
+        AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table."target_column")
+        AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **daily partition not nulls count**  
+  
+**Check description**  
+Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each daily partition.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|daily_partition_not_nulls_count|partitioned|daily|[not_null_count](../../../sensors/column/#not-null-count)|[max_count](../../../rules/comparison/#max-count)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      partitioned_checks:
+        daily:
+          nulls:
+            daily_partition_not_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table.`target_column`)
+        AS actual_value,
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table."target_column")
+        AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      partitioned_checks:
+        daily:
+          nulls:
+            daily_partition_not_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table.`target_column`)
+        AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table."target_column")
+        AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **monthly partition not nulls count**  
+  
+**Check description**  
+Verifies that the number of not null values in a column does not exceed the set count. Creates a separate data quality check (and an alert) for each monthly partition.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|monthly_partition_not_nulls_count|partitioned|monthly|[not_null_count](../../../sensors/column/#not-null-count)|[max_count](../../../rules/comparison/#max-count)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      partitioned_checks:
+        monthly:
+          nulls:
+            monthly_partition_not_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table.`target_column`)
+        AS actual_value,
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table."target_column")
+        AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      partitioned_checks:
+        monthly:
+          nulls:
+            monthly_partition_not_nulls_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }})
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT({{ lib.render_target_column('analyzed_table') }}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table.`target_column`)
+        AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        COUNT(analyzed_table."target_column")
+        AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        COUNT("target_column") AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+
+## **not nulls percent** checks  
+
+**Description**  
+Column-level check that ensures that there are no more than a set percentage of not null values in the monitored column.
+
+___
+
+### **not nulls percent**  
+  
+**Check description**  
+Verifies that the percent of not null values in a column does not exceed the maximum accepted percentage.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|not_nulls_percent|adhoc| |[not_null_percent](../../../sensors/column/#not-null-percent)|[max_percent](../../../rules/comparison/#max-percent)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checks:
+        nulls:
+          not_nulls_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        CURRENT_TIMESTAMP() AS time_period,
+        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table."target_column")/ COUNT(*)
+        END AS actual_value,
+        CURRENT_TIMESTAMP() AS time_period,
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 39-44"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checks:
+        nulls:
+          not_nulls_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CURRENT_TIMESTAMP() AS time_period,
+        TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table."target_column")/ COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CURRENT_TIMESTAMP() AS time_period,
+        TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **daily checkpoint not nulls percent**  
+  
+**Check description**  
+Verifies that the percentage of not nulls in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|daily_checkpoint_not_nulls_percent|checkpoint|daily|[not_null_percent](../../../sensors/column/#not-null-percent)|[max_percent](../../../rules/comparison/#max-percent)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checkpoints:
+        daily:
+          nulls:
+            daily_checkpoint_not_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table."target_column")/ COUNT(*)
+        END AS actual_value,
+        CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checkpoints:
+        daily:
+          nulls:
+            daily_checkpoint_not_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
+        TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table."target_column")/ COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
+        TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **monthly checkpoint not nulls percent**  
+  
+**Check description**  
+Verifies that the percentage of not nulls in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|monthly_checkpoint_not_nulls_percent|checkpoint|monthly|[not_null_percent](../../../sensors/column/#not-null-percent)|[max_percent](../../../rules/comparison/#max-percent)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      checkpoints:
+        monthly:
+          nulls:
+            monthly_checkpoint_not_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table."target_column")/ COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      checkpoints:
+        monthly:
+          nulls:
+            monthly_checkpoint_not_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table."target_column")/ COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **daily partition not nulls percent**  
+  
+**Check description**  
+Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each daily partition.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../sensors/column/#not-null-percent)|[max_percent](../../../rules/comparison/#max-percent)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      partitioned_checks:
+        daily:
+          nulls:
+            daily_partition_not_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table."target_column")/ COUNT(*)
+        END AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      partitioned_checks:
+        daily:
+          nulls:
+            daily_partition_not_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
+        TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table."target_column")/ COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
+### **monthly partition not nulls percent**  
+  
+**Check description**  
+Verifies that the percentage of not null values in a column does not exceed the set percentage. Creates a separate data quality check (and an alert) for each monthly partition.  
+  
+|Check name|Check type|Time scale|Sensor definition|Quality rule|
+|----------|----------|----------|-----------|-------------|
+|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../sensors/column/#not-null-percent)|[max_percent](../../../rules/comparison/#max-percent)|
+  
+**Sample configuration (Yaml)**  
+```yaml
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    target_column:
+      partitioned_checks:
+        monthly:
+          nulls:
+            monthly_partition_not_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+
+```
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table."target_column")/ COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY time_period, time_period_utc
+    ORDER BY time_period, time_period_utc
+    ```
+**Sample configuration with a data stream (Yaml)**  
+```yaml hl_lines="12-19 40-45"
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: target_schema
+    table_name: target_table
+  timestamp_columns:
+    event_timestamp_column: col_event_timestamp
+    ingestion_timestamp_column: col_inserted_at
+    partitioned_checks_timestamp_source: event_timestamp
+  data_streams:
+    default:
+      level_1:
+        source: column_value
+        column: country
+      level_2:
+        source: column_value
+        column: state
+  columns:
+    target_column:
+      partitioned_checks:
+        monthly:
+          nulls:
+            monthly_partition_not_nulls_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+      labels:
+      - This is the column that is analyzed for data quality issues
+    col_event_timestamp:
+      labels:
+      - optional column that stores the timestamp when the event/transaction happened
+    col_inserted_at:
+      labels:
+      - optional column that stores the timestamp when row was ingested
+    country:
+      labels:
+      - column used as the first grouping key
+    state:
+      labels:
+      - column used as the second grouping key
+
+```
+**SQL Template with a data stream (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }})/ COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT({{ lib.render_target_column('analyzed_table') }}) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+**Rendered SQL with a data stream**  
+=== "bigquery"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table.`target_column`) / COUNT(*)
+        END AS actual_value,
+        analyzed_table.`country` AS stream_level_1,
+        analyzed_table.`state` AS stream_level_2,
+        DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
+        TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
+    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "snowflake"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT(analyzed_table."target_column")/ COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
+    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM ""."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+=== "postgresql"
+      
+    ```
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN NULL
+            ELSE 100.0 * COUNT("target_column") / COUNT(*)
+        END AS actual_value,
+        analyzed_table."country" AS stream_level_1,
+        analyzed_table."state" AS stream_level_2,
+        DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+    GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+    ```
+
+
+
+
+
+
+___
+
