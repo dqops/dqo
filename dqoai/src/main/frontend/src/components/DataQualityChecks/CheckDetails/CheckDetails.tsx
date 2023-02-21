@@ -40,7 +40,131 @@ interface CheckDetailsProps {
 const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
   const { connection, schema, table, column }: { connection: string, schema: string, table: string, column: string } = useParams();
-  const [checkResults, setCheckResults] = useState<CheckResultsDetailedDataModel[]>([]);
+  const [checkResults, setCheckResults] = useState<CheckResultsDetailedDataModel[]>([
+    {
+      "checkHash": 0,
+      "checkCategory": "string",
+      "checkName": "string",
+      "checkDisplayName": "string",
+      "checkType": "string",
+      "dataStreamNames": [
+        "string"
+      ],
+      "dataStream": "string",
+      "singleCheckResults": [
+        {
+          "actualValue": 0,
+          "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 1,
+          "columnName": "string",
+          "dataStream": "string",
+          "durationMs": 0,
+          "executedAt": 0,
+          "timeGradient": "string",
+          "timePeriod": "2023-02-21T17:08:00.338Z",
+          "includeInKpi": true,
+          "includeInSla": true,
+          "provider": "string",
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
+        {
+          "actualValue": 0,
+          "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 1,
+          "columnName": "string",
+          "dataStream": "string",
+          "durationMs": 0,
+          "executedAt": 0,
+          "timeGradient": "string",
+          "timePeriod": "2023-02-21T17:08:00.338Z",
+          "includeInKpi": true,
+          "includeInSla": true,
+          "provider": "string",
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
+        {
+          "actualValue": 0,
+          "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 3,
+          "columnName": "string",
+          "dataStream": "string",
+          "durationMs": 0,
+          "executedAt": 0,
+          "timeGradient": "string",
+          "timePeriod": "2023-02-21T17:08:00.338Z",
+          "includeInKpi": true,
+          "includeInSla": true,
+          "provider": "string",
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
+        {
+          "actualValue": 0,
+          "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 1,
+          "columnName": "string",
+          "dataStream": "string",
+          "durationMs": 0,
+          "executedAt": 0,
+          "timeGradient": "string",
+          "timePeriod": "2023-02-21T17:08:00.338Z",
+          "includeInKpi": true,
+          "includeInSla": true,
+          "provider": "string",
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
+        {
+          "actualValue": 0,
+          "expectedValue": 0,
+          "warningLowerBound": 0,
+          "warningUpperBound": 0,
+          "errorLowerBound": 0,
+          "errorUpperBound": 0,
+          "fatalLowerBound": 0,
+          "fatalUpperBound": 0,
+          "severity": 2,
+          "columnName": "string",
+          "dataStream": "string",
+          "durationMs": 0,
+          "executedAt": 0,
+          "timeGradient": "string",
+          "timePeriod": "2023-02-21T17:08:00.338Z",
+          "includeInKpi": true,
+          "includeInSla": true,
+          "provider": "string",
+          "qualityDimension": "string",
+          "sensorName": "string"
+        },
+      ]
+    }
+  ]);
   const [sensorReadouts, setSensorReadouts] = useState<SensorReadoutsDetailedDataModel[]>([]);
   const [errors, setErrors] = useState<ErrorsDetailedDataModel[]>([]);
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
@@ -56,7 +180,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.adhoc) {
       if (column) {
         CheckResultApi.getColumnAdHocChecksResults(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
-          setCheckResults(res.data);
+          // setCheckResults(res.data);
         });
         SensorReadoutsApi.getColumnAdHocSensorReadouts(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
@@ -66,7 +190,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
         });
       } else {
         CheckResultApi.getTableAdHocChecksResults(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
-          setCheckResults(res.data);
+          // setCheckResults(res.data);
         });
         SensorReadoutsApi.getTableAdHocSensorReadouts(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
@@ -79,7 +203,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.checkpoint) {
       if (column) {
         CheckResultApi.getColumnCheckpointsResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setCheckResults(res.data);
+          // setCheckResults(res.data);
         });
         SensorReadoutsApi.getColumnCheckpointsSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
@@ -102,7 +226,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       if (column) {
         CheckResultApi.getColumnPartitionedChecksResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setCheckResults(res.data);
+          // setCheckResults(res.data);
         });
         SensorReadoutsApi.getColumnPartitionedSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
