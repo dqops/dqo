@@ -1,17 +1,20 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CheckResultDetailedSingleModel, CheckResultsDetailedDataModel } from "../../../api";
 import Select from "../../Select";
 import { Table } from "../../Table";
 import { useTree } from "../../../contexts/treeContext";
 import clsx from "clsx";
+import moment from "moment";
 
 interface CheckResultsTabProps {
   results: CheckResultsDetailedDataModel[];
   dataStreamName?: string;
+  month?: string;
+  onChangeMonth: (month: string) => void;
   onChangeDataStream: (name: string) => void;
 }
 
-const CheckResultsTab = ({ results, dataStreamName, onChangeDataStream }: CheckResultsTabProps) => {
+const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChangeDataStream }: CheckResultsTabProps) => {
   const { sidebarWidth } = useTree();
 
   const getSeverityClass = (severity?: number) => {
@@ -182,17 +185,34 @@ const CheckResultsTab = ({ results, dataStreamName, onChangeDataStream }: CheckR
     },
   ];
 
+  const monthOptions = useMemo(() => {
+    return Array(24).fill('').map((item, index) => ({
+      label: moment().subtract(index, 'months').format('MMMM YYYY'),
+      value: moment().subtract(index, 'months').format('MMMM YYYY')
+    }))
+  }, []);
+
   return (
     <div className="py-3 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
       {results.map((result, index) => (
         <div key={index}>
-          <div className="flex space-x-4 items-center">
-            <div className="text-sm">Data stream</div>
-            <Select
-              value={dataStreamName}
-              options={result.dataStreamNames?.map((item) => ({ label: item, value: item })) || []}
-              onChange={onChangeDataStream}
-            />
+          <div className="flex space-x-8 items-center">
+            <div className="flex space-x-4 items-center">
+              <div className="text-sm">Data stream</div>
+              <Select
+                value={dataStreamName}
+                options={result.dataStreamNames?.map((item) => ({ label: item, value: item })) || []}
+                onChange={onChangeDataStream}
+              />
+            </div>
+            <div className="flex space-x-4 items-center">
+              <div className="text-sm">Month</div>
+              <Select
+                value={month}
+                options={monthOptions}
+                onChange={onChangeMonth}
+              />
+            </div>
           </div>
           <Table
             className="mt-4 w-full"

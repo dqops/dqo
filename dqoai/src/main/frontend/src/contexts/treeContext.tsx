@@ -762,7 +762,7 @@ function TreeProvider(props: any) {
     }
   };
 
-  const deleteStoredData = async (node: CustomTreeNode, dateStart: string, dateEnd: string) => {
+  const deleteStoredData = async (node: CustomTreeNode, params: { [key: string]: string | boolean }) => {
     if (node.data_clean_job_template) {
       let checkType;
       switch (sourceRoute) {
@@ -782,8 +782,7 @@ function TreeProvider(props: any) {
       JobApiClient.deleteStoredData({
         ...node.data_clean_job_template,
         checkType,
-        dateStart,
-        dateEnd
+        ...params,
       });
       return;
     }

@@ -7,15 +7,15 @@ ___
 
 Run data quality checks matching specified filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  check run [-deh] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+dqo.ai> check run [-deh] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
            [-ch=<check>] [-col=<column>] [-ct=<checkType>] [-f=<failAt>]
            [-m=<mode>] [-of=<outputFormat>] [-s=<sensor>] [-t=<table>]
            [-ts=<timeScale>] [-l=<labels>]... [-tag=<tags>]...
 
 ```
-
 
 **Options**  
   
@@ -39,5 +39,6 @@ dqo.ai>  check run [-deh] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 |`-s`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
 |`-t`<br/>`--table`<br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
 |`-ts`<br/>`--time-scale`<br/>|Time scale for checkpoint and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
+
 
 

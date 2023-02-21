@@ -7,13 +7,13 @@ ___
 
 List connections which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
+dqo.ai> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                  [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-
 
 **Options**  
   
@@ -29,6 +29,7 @@ dqo.ai>  connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 
 
+
 ___
 ### **dqo connection add**
 
@@ -36,9 +37,10 @@ ___
 
 Add connection with specified details
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+dqo.ai> connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
@@ -61,7 +63,6 @@ dqo.ai>  connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
                 [--snowflake-properties=<String=String>]...
 
 ```
-
 
 **Options**  
   
@@ -105,6 +106,7 @@ dqo.ai>  connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
 
 
 
+
 ___
 ### **dqo connection remove**
 
@@ -112,12 +114,12 @@ ___
 
 Remove connection or connections which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
+dqo.ai> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -131,6 +133,7 @@ dqo.ai>  connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 
 
+
 ___
 ### **dqo connection update**
 
@@ -138,9 +141,10 @@ ___
 
 Update connection or connections which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+dqo.ai> connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
@@ -164,7 +168,6 @@ dqo.ai>  connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
                    [--snowflake-properties=<String=String>]...
 
 ```
-
 
 **Options**  
   
@@ -207,6 +210,7 @@ dqo.ai>  connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
 
 
 
+
 ___
 ### **dqo connection schema list**
 
@@ -214,13 +218,13 @@ ___
 
 List schemas in source connection
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
+dqo.ai> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                         [-d=<dimensions>]... [-l=<labels>]...
 
 ```
-
 
 **Options**  
   
@@ -236,6 +240,7 @@ dqo.ai>  connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>
 
 
 
+
 ___
 ### **dqo connection table list**
 
@@ -243,14 +248,14 @@ ___
 
 List tables for connection
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+dqo.ai> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
                        [-l=<labels>]...
 
 ```
-
 
 **Options**  
   
@@ -268,6 +273,7 @@ dqo.ai>  connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFo
 
 
 
+
 ___
 ### **dqo connection table show**
 
@@ -275,13 +281,13 @@ ___
 
 Show table for connection
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+dqo.ai> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-t=<table>]
 
 ```
-
 
 **Options**  
   
@@ -296,6 +302,7 @@ dqo.ai>  connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFo
 
 
 
+
 ___
 ### **dqo connection edit**
 
@@ -303,12 +310,12 @@ ___
 
 Edit connection which match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  connection edit [-h] [-fw] [-hl] [-n=<connection>] [-of=<outputFormat>]
+dqo.ai> connection edit [-h] [-fw] [-hl] [-n=<connection>] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -319,5 +326,6 @@ dqo.ai>  connection edit [-h] [-fw] [-hl] [-n=<connection>] [-of=<outputFormat>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 
