@@ -80,7 +80,7 @@ const CheckErrorsTab = ({ errors, dataStreamName, onChangeDataStream, month, onC
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={result.singleErrors || []}
+            data={(result.singleErrors || []).map((item) => ({ ...item, checkName: result.checkName }))}
             emptyMessage="No Data"
           />
         </div>
