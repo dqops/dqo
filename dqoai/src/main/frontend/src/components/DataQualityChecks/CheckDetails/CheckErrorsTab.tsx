@@ -4,6 +4,7 @@ import Select from "../../Select";
 import { Table } from "../../Table";
 import { useTree } from "../../../contexts/treeContext";
 import moment from "moment/moment";
+import ErrorText from "./ErrorText";
 
 interface CheckErrorsTabProps {
   errors: ErrorsDetailedDataModel[];
@@ -36,7 +37,7 @@ const CheckErrorsTab = ({ errors, dataStreamName, onChangeDataStream, month, onC
       label: 'Error Message',
       value: 'errorMessage',
       className: 'text-sm !py-2 text-gray-700 w-120',
-      render: (text: string) => <div className="w-120 line-clamp-3">{text}</div>
+      render: (text: string) => <ErrorText text={text} />
     },
     {
       label: 'Readout Id',
