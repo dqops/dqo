@@ -28,10 +28,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.lang.reflect.Method;
+import java.util.*;
 
 /**
  * Base class for all spec classes in the tree. Provides basic dirty checking.
@@ -343,6 +341,12 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
                     HierarchyNode clonedChild = hierarchyNode.deepClone();
                     fieldInfo.setRawFieldValue(clonedChild, cloned);
                 }
+
+                if (currentValue instanceof Map){
+                    Map<Object,Object> clonedChild = deepCloneMap((Map<Object, Object>)currentValue);
+                    fieldInfo.setRawFieldValue(clonedChild, cloned);
+                }
+
                 else {
                     throw new UnsupportedOperationException("Cannot clone object of type " + currentValue.getClass().getCanonicalName() +
                             " on field: " + fieldInfo.getClassFieldName() + ", class: " + this.getClass().getCanonicalName());
@@ -355,5 +359,29 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
         catch (CloneNotSupportedException ex) {
             throw new UnsupportedOperationException("Cannot clone the object ", ex);
         }
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of Map object.
+     * Objects in the map are also cloned for full deep clone.
+     */
+    public <K, V> Map<K, V> deepCloneMap(Map<K, V> originalMap) {
+        Map<K, V> result = new HashMap<>();
+        for (Map.Entry<K, V> entry : originalMap.entrySet()) {
+            if (entry.getValue() instanceof Map) {
+                Map<?, ?> subMap = (Map<?, ?>) entry.getValue();
+                result.put(entry.getKey(), (V) deepCloneMap((Map<?, ?>) subMap));
+            } else if (entry.getValue() instanceof Cloneable) {
+                try {
+                    Method cloneMethod = entry.getValue().getClass().getMethod("clone", null);
+                    result.put(entry.getKey(), (V) cloneMethod.invoke(entry.getValue(), null));
+                } catch (Exception e) {
+                    throw new UnsupportedOperationException("Cannot clone the object. ", e);
+                }
+            } else {
+                result.put(entry.getKey(), entry.getValue());
+            }
+        }
+        return result;
     }
 }
