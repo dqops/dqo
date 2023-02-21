@@ -20,7 +20,7 @@ import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.BetweenFloatsRuleParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericPercentileSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericPercentileInRangeSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -37,9 +37,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnPercentileCheckSpec
-        extends AbstractCheckSpec<ColumnNumericPercentileSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnPercentileCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnPercentileInRangeCheckSpec
+        extends AbstractCheckSpec<ColumnNumericPercentileInRangeSensorParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec, BetweenFloatsRuleParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnPercentileInRangeCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -47,7 +47,7 @@ public class ColumnPercentileCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericPercentileSensorParametersSpec parameters = new ColumnNumericPercentileSensorParametersSpec();
+    private ColumnNumericPercentileInRangeSensorParametersSpec parameters = new ColumnNumericPercentileInRangeSensorParametersSpec();
 
     @JsonPropertyDescription("Default alerting threshold for a percentile in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -69,7 +69,7 @@ public class ColumnPercentileCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericPercentileSensorParametersSpec getParameters() {
+    public ColumnNumericPercentileInRangeSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -77,7 +77,7 @@ public class ColumnPercentileCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericPercentileSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericPercentileInRangeSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

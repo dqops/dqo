@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.snowflake.sensors.column.numeric;
+package ai.dqo.redshift.sensors.column.numeric;
 
-import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
+import ai.dqo.redshift.BaseRedshiftIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnPercentileCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnPercentileInRangeCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericPercentileSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericPercentileInRangeSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,19 +38,19 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class SnowflakeColumnNumericPercentileSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
-    private ColumnNumericPercentileSensorParametersSpec sut;
+public class RedshiftColumnNumericPercentileInRangeSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
+    private ColumnNumericPercentileInRangeSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnPercentileCheckSpec checkSpec;
+    private ColumnPercentileInRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.snowflake);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNumericPercentileSensorParametersSpec();
-        this.checkSpec = new ColumnPercentileCheckSpec();
+        this.sut = new ColumnNumericPercentileInRangeSensorParametersSpec();
+        this.checkSpec = new ColumnPercentileInRangeCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -66,7 +66,7 @@ public class SnowflakeColumnNumericPercentileSensorParametersSpecIntegrationTest
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(10.5F, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.5f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class SnowflakeColumnNumericPercentileSensorParametersSpecIntegrationTest
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(10.5F, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.5f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -96,7 +96,7 @@ public class SnowflakeColumnNumericPercentileSensorParametersSpecIntegrationTest
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(10.5F, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.5f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -111,7 +111,7 @@ public class SnowflakeColumnNumericPercentileSensorParametersSpecIntegrationTest
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(8.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(8.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -126,6 +126,6 @@ public class SnowflakeColumnNumericPercentileSensorParametersSpecIntegrationTest
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(8.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(8.0f, resultTable.column(0).get(0));
     }
 }

@@ -32,8 +32,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNumericPercentileSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericPercentileSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnNumericPercentileInRangeSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericPercentileInRangeSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };

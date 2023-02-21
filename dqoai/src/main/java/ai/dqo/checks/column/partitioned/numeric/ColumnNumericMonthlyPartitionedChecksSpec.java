@@ -51,7 +51,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_max_in_range", o -> o.monthlyPartitionMaxInRange);
             put("monthly_partition_min_in_range", o -> o.monthlyPartitionMinInRange);
             put("monthly_partition_mean_in_range", o -> o.monthlyPartitionMeanInRange);
-            put("monthly_partition_percentile", o -> o.monthlyPartitionPercentile);
+            put("monthly_partition_percentile_in_range", o -> o.monthlyPartitionPercentileInRange);
             put("monthly_partition_sample_stddev_in_range", o -> o.monthlyPartitionSampleStddevInRange);
             put("monthly_partition_population_stddev_in_range", o -> o.monthlyPartitionPopulationStddevInRange);
             put("monthly_partition_sample_variance_in_range", o -> o.monthlyPartitionSampleVarianceInRange);
@@ -106,7 +106,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     private ColumnMeanInRangeCheckSpec monthlyPartitionMeanInRange;
 
     @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnPercentileCheckSpec monthlyPartitionPercentile;
+    private ColumnPercentileInRangeCheckSpec monthlyPartitionPercentileInRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnSampleStddevInRangeCheckSpec monthlyPartitionSampleStddevInRange;
@@ -395,21 +395,21 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a percentile check specification.
-     * @return Percentile check specification.
+     * Returns a percentile in range check specification.
+     * @return Percentile in range check specification.
      */
-    public ColumnPercentileCheckSpec getMonthlyPartitionPercentile() {
-        return monthlyPartitionPercentile;
+    public ColumnPercentileInRangeCheckSpec getMonthlyPartitionPercentileInRange() {
+        return monthlyPartitionPercentileInRange;
     }
 
     /**
-     * Sets a new specification of a percentile check.
-     * @param monthlyPartitionPercentile percentile check specification.
+     * Sets a new specification of a percentile in range check.
+     * @param monthlyPartitionPercentileInRange percentile in range check specification.
      */
-    public void setMonthlyPartitionPercentile(ColumnPercentileCheckSpec monthlyPartitionPercentile) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentile, monthlyPartitionPercentile));
-        this.monthlyPartitionPercentile = monthlyPartitionPercentile;
-        propagateHierarchyIdToField(monthlyPartitionPercentile, "monthly_partition_percentile");
+    public void setMonthlyPartitionPercentileInRange(ColumnPercentileInRangeCheckSpec monthlyPartitionPercentileInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentileInRange, monthlyPartitionPercentileInRange));
+        this.monthlyPartitionPercentileInRange = monthlyPartitionPercentileInRange;
+        propagateHierarchyIdToField(monthlyPartitionPercentileInRange, "monthly_partition_percentile_in_range");
     }
 
     /**

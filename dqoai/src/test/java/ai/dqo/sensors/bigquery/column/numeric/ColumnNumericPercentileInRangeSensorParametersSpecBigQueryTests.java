@@ -17,7 +17,7 @@ package ai.dqo.sensors.bigquery.column.numeric;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnPercentileCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnPercentileInRangeCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
@@ -30,27 +30,27 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericPercentileSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericPercentileInRangeSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class ColumnNumericPercentileSensorParametersSpecBigQueryTests extends BaseTest {
-    private ColumnNumericPercentileSensorParametersSpec sut;
+public class ColumnNumericPercentileInRangeSensorParametersSpecBigQueryTests extends BaseTest {
+    private ColumnNumericPercentileInRangeSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnPercentileCheckSpec checkSpec;
+    private ColumnPercentileInRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sut = new ColumnNumericPercentileSensorParametersSpec();
+        this.sut = new ColumnNumericPercentileInRangeSensorParametersSpec();
         this.sut.setFilter("{table}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.checkSpec = new ColumnPercentileCheckSpec();
+        this.checkSpec = new ColumnPercentileInRangeCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
