@@ -20,6 +20,8 @@ import ai.dqo.connectors.testcontainers.TestContainersObjectMother;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import org.testcontainers.containers.MSSQLServerContainer;
 
+import java.util.HashMap;
+
 public class SqlServerConnectionSpecObjectMother {
     private static MSSQLServerContainer<?> sharedContainer;
     private static final int PORT = 1433;
@@ -34,6 +36,7 @@ public class SqlServerConnectionSpecObjectMother {
             sharedContainer = new MSSQLServerContainer<>(MSSQLServerContainer.IMAGE)
                     .withExposedPorts(PORT)
                     .withPassword("Te$t_sqlserver1")
+                    .withUrlParam("trustServerCertificate", "true")
                     .acceptLicense()
                     .withReuse(TestContainersObjectMother.shouldUseReusableTestContainers());
             sharedContainer.start();
@@ -63,7 +66,6 @@ public class SqlServerConnectionSpecObjectMother {
                 setPort(testContainer.getMappedPort(PORT).toString());
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
-                setSsl(false);
             }});
         }};
         return connectionSpec;

@@ -19,6 +19,8 @@ import PostgreSQLConnection from "./PostgreSQLConnection";
 import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
 import RedshiftConnection from "./RedshiftConnection";
 import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
+import SqlServerConnection from "./SqlServerConnection";
+import SqlServerLogo from '../../SvgIcon/svg/sql-server.svg';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;
@@ -107,6 +109,8 @@ const DatabaseConnection = ({
         return 'PostgreSQL Connection Settings';
       case ConnectionBasicModelProviderTypeEnum.redshift:
         return 'Redshift Connection Settings';
+      case ConnectionBasicModelProviderTypeEnum.sqlserver:
+        return 'SQL Server Connection Settings';
       default:
         return 'Database Connection Settings'
     }
@@ -136,6 +140,12 @@ const DatabaseConnection = ({
       redshift={database.redshift}
       onChange={(redshift) => onChange({ ...database, redshift })}
     />
+    ),
+    [ConnectionBasicModelProviderTypeEnum.sqlserver]: (
+    <SqlServerConnection
+      sqlserver={database.sqlserver}
+      onChange={(sqlserver) => onChange({ ...database, sqlserver })}
+    />
     )
   };
 
@@ -149,6 +159,8 @@ const DatabaseConnection = ({
         return PostgreSQLLogo;
       case ConnectionBasicModelProviderTypeEnum.redshift:
         return RedshiftLogo;
+      case ConnectionBasicModelProviderTypeEnum.sqlserver:
+        return SqlServerLogo;
       default:
         return '';
     }

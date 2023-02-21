@@ -18,7 +18,6 @@ package ai.dqo.connectors.sqlserver;
 import ai.dqo.connectors.ConnectorOperationFailedException;
 import ai.dqo.connectors.jdbc.AbstractJdbcSourceConnection;
 import ai.dqo.connectors.jdbc.JdbcConnectionPool;
-import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.zaxxer.hikari.HikariConfig;
@@ -61,21 +60,21 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
 
         String host = this.getSecretValueProvider().expandValue(sqlserverSpec.getHost());
         StringBuilder jdbcConnectionBuilder = new StringBuilder();
-        jdbcConnectionBuilder.append("jdbc:sqlserver://");
+        jdbcConnectionBuilder.append("jdbc:sqlserver://;serverName=");
         jdbcConnectionBuilder.append(host);
 
         String port = this.getSecretValueProvider().expandValue(sqlserverSpec.getPort());
         if (!Strings.isNullOrEmpty(port)) {
             try {
                 int portNumber = Integer.parseInt(port);
-                jdbcConnectionBuilder.append(':');
+                jdbcConnectionBuilder.append(";port=");
                 jdbcConnectionBuilder.append(portNumber);
+                jdbcConnectionBuilder.append(';');
             }
             catch (NumberFormatException nfe) {
-                throw new ConnectorOperationFailedException("Cannot create a connection to PostgreSQL, the port number is invalid: " + port, nfe);
+                throw new ConnectorOperationFailedException("Cannot create a connection to SQLSERVER, the port number is invalid: " + port, nfe);
             }
         }
-        jdbcConnectionBuilder.append(";databaseName=");
         String database = this.getSecretValueProvider().expandValue(sqlserverSpec.getDatabase());
         if (!Strings.isNullOrEmpty(database)) {
             jdbcConnectionBuilder.append(database);

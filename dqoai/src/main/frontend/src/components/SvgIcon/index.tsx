@@ -62,6 +62,7 @@ import { ReactComponent as PostgreSQLSvg } from './svg/postgresql.svg';
 import { ReactComponent as RedshiftSvg } from './svg/redshift.svg';
 import { ReactComponent as RectangleListSvg } from './svg/rectangle-list.svg';
 import { ReactComponent as HelpCircleSvg } from './svg/help-circle.svg';
+import { ReactComponent as SqlServerSvg } from './svg/sql-server.svg';
 
 const iconsMap: any = {
   bell: BellSvg,
@@ -126,6 +127,7 @@ const iconsMap: any = {
   redshift: RedshiftSvg,
   'rectangle-list': RectangleListSvg,
   'help-circle': HelpCircleSvg,
+  sqlserver: SqlServerSvg
 };
 
 interface SvgIconProps {

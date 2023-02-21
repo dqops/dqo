@@ -20,7 +20,6 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.AbstractSqlConnectionProvider;
 import ai.dqo.connectors.ProviderDialectSettings;
-import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.metadata.sources.ColumnTypeSnapshotSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import org.apache.parquet.Strings;
@@ -103,39 +102,39 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
                 throw new CliRequiredParameterMissingException("--sqlserver-host");
             }
 
-            sqlserverSpec.setHost(terminalReader.prompt("PostgreSQL host name (--sqlserver-host)", "${POSTGRESQL_HOST}", false));
+            sqlserverSpec.setHost(terminalReader.prompt("SQL Server host name (--sqlserver-host)", "${SQLSERVER_HOST}", false));
         }
 
         if (sqlserverSpec.getSsl() == null) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--postgresql-ssl");
+                throw new CliRequiredParameterMissingException("--sqlserver-ssl");
             }
 
-            sqlserverSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (--postgresql-ssl)", true));
+            sqlserverSpec.setSsl(terminalReader.promptBoolean("Require SSL connection (--sqlserver-ssl)", true));
         }
 
         if (Strings.isNullOrEmpty(sqlserverSpec.getDatabase())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--postgresql-database");
+                throw new CliRequiredParameterMissingException("--sqlserver-database");
             }
 
-            sqlserverSpec.setDatabase(terminalReader.prompt("PostgreSQL database name (--postgresql-database)", "${POSTGRESQL_DATABASE}", false));
+            sqlserverSpec.setDatabase(terminalReader.prompt("SQL Server database name (--sqlserver-database)", "${SQLSERVER_DATABASE}", false));
         }
 
         if (Strings.isNullOrEmpty(sqlserverSpec.getUser())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--postgresql-user");
+                throw new CliRequiredParameterMissingException("--sqlserver-user");
             }
 
-            sqlserverSpec.setUser(terminalReader.prompt("PostgreSQL user name (--postgresql-user)", "${POSTGRESQL_USER}", false));
+            sqlserverSpec.setUser(terminalReader.prompt("SQL Server user name (--sqlserver-user)", "${SQLSERVER_USER}", false));
         }
 
         if (Strings.isNullOrEmpty(sqlserverSpec.getPassword())) {
             if (isHeadless) {
-                throw new CliRequiredParameterMissingException("--postgresql-password");
+                throw new CliRequiredParameterMissingException("--sqlserver-password");
             }
 
-            sqlserverSpec.setPassword(terminalReader.prompt("PostgreSQL user password (--postgresql-password)", "${POSTGRESQL_PASSWORD}", false));
+            sqlserverSpec.setPassword(terminalReader.prompt("SQL Server user password (--sqlserver-password)", "${SQLSERVER_PASSWORD}", false));
         }
     }
 
@@ -161,7 +160,7 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("smallint");
         }
         else if (columnType == ColumnType.INTEGER) {
-            return new ColumnTypeSnapshotSpec("integer");
+            return new ColumnTypeSnapshotSpec("int");
         }
         else if (columnType == ColumnType.LONG) {
             return new ColumnTypeSnapshotSpec("bigint");
@@ -170,25 +169,25 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("real");
         }
         else if (columnType == ColumnType.BOOLEAN) {
-            return new ColumnTypeSnapshotSpec("BIT");
+            return new ColumnTypeSnapshotSpec("bit");
         }
         else if (columnType == ColumnType.STRING) {
-            return new ColumnTypeSnapshotSpec("VARCHAR(255)");
+            return new ColumnTypeSnapshotSpec("varchar", 255);
         }
         else if (columnType == ColumnType.DOUBLE) {
-            return new ColumnTypeSnapshotSpec("double precision");
+            return new ColumnTypeSnapshotSpec("real");
         }
         else if (columnType == ColumnType.LOCAL_DATE) {
             return new ColumnTypeSnapshotSpec("date");
         }
         else if (columnType == ColumnType.LOCAL_TIME) {
-            return new ColumnTypeSnapshotSpec("time without time zone");
+            return new ColumnTypeSnapshotSpec("time");
         }
         else if (columnType == ColumnType.LOCAL_DATE_TIME) {
-            return new ColumnTypeSnapshotSpec("timestamp without time zone");
+            return new ColumnTypeSnapshotSpec("datetime");
         }
         else if (columnType == ColumnType.INSTANT) {
-            return new ColumnTypeSnapshotSpec("timestamp with time zone");
+            return new ColumnTypeSnapshotSpec("datetimeoffset ");
         }
         else if (columnType == ColumnType.TEXT) {
             return new ColumnTypeSnapshotSpec("text");

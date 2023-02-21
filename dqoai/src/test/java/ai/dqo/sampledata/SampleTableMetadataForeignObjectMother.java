@@ -81,6 +81,9 @@ public class SampleTableMetadataForeignObjectMother {
 
             case redshift:
                 return RedshiftConnectionSpecObjectMother.getSchemaName();
+
+            case sqlserver:
+                return SqlServerConnectionSpecObjectMother.getSchemaName();
         }
 
         Assertions.fail("Add a case statement for a target provider " + providerType.name());

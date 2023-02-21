@@ -82,11 +82,11 @@ public class ConnectionSpec extends AbstractSpec {
     private PostgresqlParametersSpec postgresql;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
-    @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Snowflake JDBC url).")
+    @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).")
     private RedshiftParametersSpec redshift;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
-    @JsonPropertyDescription("SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the Snowflake JDBC url).")
+    @JsonPropertyDescription("SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).")
     private SqlServerParametersSpec sqlserver;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")

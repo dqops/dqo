@@ -107,6 +107,7 @@ public class AbstractSpecTests extends BaseTest {
         @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
         private TestableAbstractSpec child;
 
+
         public TestableAbstractSpec getChild() {
             return child;
         }
