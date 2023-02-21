@@ -100,7 +100,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -136,7 +136,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -170,7 +170,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -204,7 +204,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -243,7 +243,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -279,7 +279,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -317,7 +317,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -363,7 +363,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -405,7 +405,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 1
                             ELSE 0
                         END
@@ -447,7 +447,7 @@ public class ColumnPiiContainsEmailPercentSensorParametersSpecBigQueryTests exte
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST(%s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 1
                             ELSE 0
                         END
