@@ -12,15 +12,15 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_date_format_cast()%}
+{% macro render_date_format_cast() -%}
     {%- if lib.target_column_data_type == 'DATE' -%}
-{{ render_target_column('analyzed_table') }}
-    {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+    {{ render_target_column('analyzed_table') }}
+    {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
     {%- else -%}
-<INVALID DATA TYPE: {{lib.target_column_data_type}}>
+    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
     {%- endif -%}
-{% endmacro %}
+{%- endmacro -%}
 
 SELECT
     100.0 * SUM(

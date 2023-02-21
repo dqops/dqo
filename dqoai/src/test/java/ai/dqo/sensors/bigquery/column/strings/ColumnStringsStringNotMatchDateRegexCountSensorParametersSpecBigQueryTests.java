@@ -119,7 +119,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -151,7 +151,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -183,7 +183,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -215,7 +215,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -247,7 +247,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -283,7 +283,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -318,7 +318,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -353,7 +353,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -393,7 +393,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -430,7 +430,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -469,7 +469,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -516,7 +516,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -559,7 +559,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -602,7 +602,7 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NULL
                                 THEN 1
                             ELSE 0
                         END
