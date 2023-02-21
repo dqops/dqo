@@ -7,13 +7,13 @@ ___
 
 Set editor settings
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
+dqo.ai> settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
                      [-p=<editorPath>]
 
 ```
-
 
 **Options**  
   
@@ -28,6 +28,7 @@ dqo.ai>  settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputForm
 
 
 
+
 ___
 ### **dqo settings editor remove**
 
@@ -35,12 +36,12 @@ ___
 
 Remove editor settings
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo.ai> settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -50,6 +51,7 @@ dqo.ai>  settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 
 
@@ -60,12 +62,12 @@ ___
 
 Show editor settings
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo.ai> settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -75,6 +77,7 @@ dqo.ai>  settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 
 
@@ -85,12 +88,12 @@ ___
 
 Init settings file in user home
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo.ai> settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -100,6 +103,7 @@ dqo.ai>  settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 
 
@@ -110,12 +114,12 @@ ___
 
 Remove settings file from user home
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo.ai> settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -125,6 +129,7 @@ dqo.ai>  settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 
 
@@ -135,12 +140,12 @@ ___
 
 Set api key
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
+dqo.ai> settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 
 ```
-
 
 **Options**  
   
@@ -150,6 +155,7 @@ dqo.ai>  settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 
 
@@ -160,12 +166,12 @@ ___
 
 Remove api key
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo.ai> settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -175,6 +181,7 @@ dqo.ai>  settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 
 
@@ -185,12 +192,12 @@ ___
 
 Show api key
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo.ai> settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -200,6 +207,7 @@ dqo.ai>  settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 
 
@@ -210,12 +218,12 @@ ___
 
 Set the default time zone
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
+dqo.ai> settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 
 ```
-
 
 **Options**  
   
@@ -225,6 +233,7 @@ dqo.ai>  settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 
 
@@ -235,12 +244,12 @@ ___
 
 Remove time zone
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo.ai> settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -250,6 +259,7 @@ dqo.ai>  settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 
 
@@ -260,12 +270,12 @@ ___
 
 Show the default time zone
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo.ai> settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -275,5 +285,6 @@ dqo.ai>  settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 

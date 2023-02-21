@@ -29,6 +29,8 @@ spec:
     min_periods_with_readouts: 10
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -131,6 +133,8 @@ spec:
     min_periods_with_readouts: 3
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -228,6 +232,8 @@ spec:
     prediction_time_window: 30
     min_periods_with_readouts: 10
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -333,6 +339,8 @@ spec:
     min_periods_with_readouts: 3
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -437,6 +445,8 @@ spec:
     min_periods_with_readouts: 20
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -539,6 +549,8 @@ spec:
     prediction_time_window: 60
     min_periods_with_readouts: 20
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -643,6 +655,8 @@ spec:
     min_periods_with_readouts: 5
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -741,6 +755,8 @@ spec:
     min_periods_with_readouts: 3
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -837,6 +853,8 @@ spec:
     prediction_time_window: 60
     min_periods_with_readouts: 20
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -940,6 +958,8 @@ spec:
     prediction_time_window: 7
     min_periods_with_readouts: 3
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -1045,6 +1065,8 @@ spec:
     min_periods_with_readouts: 20
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1149,6 +1171,8 @@ spec:
     min_periods_with_readouts: 3
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1252,6 +1276,8 @@ spec:
     min_periods_with_readouts: 3
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1349,6 +1375,8 @@ spec:
     prediction_time_window: 30
     min_periods_with_readouts: 10
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -1453,6 +1481,8 @@ spec:
     min_periods_with_readouts: 10
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1555,6 +1585,8 @@ spec:
     prediction_time_window: 60
     min_periods_with_readouts: 20
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -1659,6 +1691,8 @@ spec:
     min_periods_with_readouts: 20
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1760,6 +1794,8 @@ spec:
     prediction_time_window: 30
     min_periods_with_readouts: 10
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -1863,6 +1899,8 @@ spec:
     prediction_time_window: 30
     min_periods_with_readouts: 10
 ```
+
+
 
 **Rule implementation (Python)**
 ```python

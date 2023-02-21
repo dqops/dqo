@@ -7,13 +7,13 @@ ___
 
 Edit sensor that match filters
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  sensor edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-p=<provider>]
+dqo.ai> sensor edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-p=<provider>]
              [-s=<name>]
 
 ```
-
 
 **Options**  
   
@@ -26,5 +26,6 @@ dqo.ai>  sensor edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-p=<provi
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-p`<br/>`--provider`<br/>|Provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>|
 |`-s`<br/>`--sensor`<br/>|Sensor name| ||
+
 
 

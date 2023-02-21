@@ -26,6 +26,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -113,6 +115,8 @@ spec:
     prediction_time_window: 30
     min_periods_with_readouts: 0
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -216,6 +220,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -307,6 +313,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -391,6 +399,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -477,6 +487,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -562,6 +574,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -646,6 +660,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -735,6 +751,8 @@ spec:
     min_periods_with_readouts: 0
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -836,6 +854,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -920,6 +940,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -1006,6 +1028,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1090,6 +1114,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -1176,6 +1202,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1261,6 +1289,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1345,6 +1375,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -1431,6 +1463,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1515,6 +1549,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -1601,6 +1637,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1685,6 +1723,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -1774,6 +1814,8 @@ spec:
     min_periods_with_readouts: 0
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1875,6 +1917,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -1959,6 +2003,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -2045,6 +2091,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2130,6 +2178,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2215,6 +2265,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2299,6 +2351,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -2385,6 +2439,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -2476,6 +2532,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2561,6 +2619,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2645,6 +2705,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python
@@ -2732,6 +2794,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2818,6 +2882,8 @@ spec:
   mode: current_value
 ```
 
+
+
 **Rule implementation (Python)**
 ```python
 from datetime import datetime
@@ -2902,6 +2968,8 @@ spec:
   type: python
   mode: current_value
 ```
+
+
 
 **Rule implementation (Python)**
 ```python

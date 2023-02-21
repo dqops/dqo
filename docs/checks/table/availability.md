@@ -95,6 +95,28 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -164,6 +186,29 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM
+        (
+            SELECT
+                *,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM ""."target_schema"."target_table" AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -173,13 +218,13 @@ spec:
            ELSE 1.0
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
         (
             SELECT
                 *,
         LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
             
             LIMIT 1
@@ -277,6 +322,28 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -346,6 +413,29 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM
+        (
+            SELECT
+                *,
+        LOCALTIMESTAMP AS time_period,
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM ""."target_schema"."target_table" AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -355,13 +445,13 @@ spec:
            ELSE 1.0
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
         (
             SELECT
                 *,
         LOCALTIMESTAMP AS time_period,
-        LOCALTIMESTAMP AS time_period_utc
+        CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
             
             LIMIT 1
@@ -463,6 +553,28 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -532,6 +644,29 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM
+        (
+            SELECT
+                *,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM ""."target_schema"."target_table" AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -541,13 +676,13 @@ spec:
            ELSE 1.0
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
         (
             SELECT
                 *,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
             
             LIMIT 1
@@ -646,6 +781,28 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -715,6 +872,29 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM
+        (
+            SELECT
+                *,
+        CAST(LOCALTIMESTAMP AS date) AS time_period,
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM ""."target_schema"."target_table" AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -724,13 +904,13 @@ spec:
            ELSE 1.0
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
         (
             SELECT
                 *,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
-        (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
             
             LIMIT 1
@@ -832,6 +1012,28 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -901,6 +1103,29 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM
+        (
+            SELECT
+                *,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM ""."target_schema"."target_table" AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -910,13 +1135,13 @@ spec:
            ELSE 1.0
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
         (
             SELECT
                 *,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
             
             LIMIT 1
@@ -1015,6 +1240,28 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -1084,6 +1331,29 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM
+        (
+            SELECT
+                *,
+        DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM ""."target_schema"."target_table" AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -1093,13 +1363,13 @@ spec:
            ELSE 1.0
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
         (
             SELECT
                 *,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(LOCALTIMESTAMP AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
             
             LIMIT 1
@@ -1201,6 +1471,28 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -1270,6 +1562,29 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value,
+        CAST(tab_scan."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(tab_scan."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM
+        (
+            SELECT
+                *,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM ""."target_schema"."target_table" AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -1279,13 +1594,13 @@ spec:
            ELSE 1.0
         END AS actual_value,
         CAST(tab_scan."col_event_timestamp" AS date) AS time_period,
-        (CAST(tab_scan."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(tab_scan."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
         (
             SELECT
                 *,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
             
             LIMIT 1
@@ -1384,6 +1699,28 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -1453,6 +1790,29 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value,
+        CAST(tab_scan."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(tab_scan."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM
+        (
+            SELECT
+                *,
+        CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM ""."target_schema"."target_table" AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -1462,13 +1822,13 @@ spec:
            ELSE 1.0
         END AS actual_value,
         CAST(tab_scan."col_event_timestamp" AS date) AS time_period,
-        (CAST(tab_scan."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(tab_scan."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
         (
             SELECT
                 *,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
-        (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP AS time_period_utc
+        CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
             
             LIMIT 1
@@ -1570,6 +1930,28 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -1639,6 +2021,29 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value,
+        DATE_TRUNC('month', CAST(tab_scan."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(tab_scan."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM
+        (
+            SELECT
+                *,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM ""."target_schema"."target_table" AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -1648,13 +2053,13 @@ spec:
            ELSE 1.0
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(tab_scan."col_event_timestamp" AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(tab_scan."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(tab_scan."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
         (
             SELECT
                 *,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
             
             LIMIT 1
@@ -1753,6 +2158,28 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value
+        {{- lib.render_time_dimension_projection('tab_scan') }}
+    FROM
+        (
+            SELECT
+                *
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{ lib.render_where_clause() }}
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -1822,6 +2249,29 @@ spec:
     GROUP BY time_period
     ORDER BY time_period
     ```
+=== "redshift"
+      
+    ```
+    SELECT
+        CASE
+           WHEN COUNT(*) > 0 THEN COUNT(*)
+           ELSE 1.0
+        END AS actual_value,
+        DATE_TRUNC('month', CAST(tab_scan."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(tab_scan."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    FROM
+        (
+            SELECT
+                *,
+        DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
+        CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+            FROM ""."target_schema"."target_table" AS analyzed_table
+            
+            LIMIT 1
+        ) AS tab_scan
+    GROUP BY time_period
+    ORDER BY time_period
+    ```
 === "postgresql"
       
     ```
@@ -1831,13 +2281,13 @@ spec:
            ELSE 1.0
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(tab_scan."col_event_timestamp" AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(tab_scan."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(tab_scan."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM
         (
             SELECT
                 *,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
-        DATE_TRUNC('month', (CAST(analyzed_table."col_event_timestamp" AS date) || ' 00:00:00'):: TIMESTAMP) AS time_period_utc
+        CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
             FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
             
             LIMIT 1

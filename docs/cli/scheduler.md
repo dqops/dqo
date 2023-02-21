@@ -7,13 +7,13 @@ ___
 
 Starts a background job scheduler. This operation should be called only from the shell mode. When the dqo is started as &#x27;dqo scheduler start&#x27; from the operating system, it will stop immediately.
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
+dqo.ai> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
                  [-sm=<synchronizationMode>]
 
 ```
-
 
 **Options**  
   
@@ -28,6 +28,7 @@ dqo.ai>  scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputForm
 
 
 
+
 ___
 ### **dqo scheduler stop**
 
@@ -35,12 +36,12 @@ ___
 
 Stops a background job scheduler. This operation should be called only from the shell mode after the scheduler was started.
 
+
 **Summary (Shell)**
 ```
-dqo.ai>  scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
+dqo.ai> scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 
 ```
-
 
 **Options**  
   
@@ -50,5 +51,6 @@ dqo.ai>  scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
 
 

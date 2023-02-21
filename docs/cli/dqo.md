@@ -7,30 +7,17 @@ ___
 
 Root command that permit control on CLI mode.
 
-**Summary (Shell)**
-```
-dqo  [-h] [--dqo.core.print-stack-trace] [--dqo.logging.enable-user-home-logging]
- [--dqo.scheduler.enable-cloud-sync] [--dqo.scheduler.start] [--dqo.secrets.
- enable-gcp-secret-manager] [--dqo.secrets.gcp-project-id] [--dqo.user.
- initialize-user-home] [-fw] [-hl] [--dqo.cloud.api-key=<dqoCloudApiKey>]
- [--dqo.core.lock-wait-timeout-seconds=<dqoLockWaitTimeoutSeconds>] [--dqo.
- default-time-zone=<defaultTimeZone>] [--dqo.home=<dqoHome>] [--dqo.logging.
- max-history=<maxHistory>] [--dqo.logging.pattern=<pattern>] [--dqo.logging.
- total-size-cap=<totalSizeCap>] [--dqo.python.
- interpreter=<dqoPythonInterpreter>] [--dqo.python.
- python-script-timeout-seconds=<dqoPythonPythonScriptTimeoutSeconds>] [--dqo.
- queue.threads=<dqoQueueThreads>] [--dqo.scheduler.
- check-run-mode=<dqoSchedulerCheckRunMode>] [--dqo.scheduler.
- scan-metadata-cron-schedule=<dqoSchedulerScanMetadataCronSchedule>] [--dqo.
- scheduler.synchronization-mode=<dqoSchedulerSynchronizationMode>] [--dqo.user.
- home=<dqoUserHome>] [--logging.level.ai.dqo=<loggingLevelAiDqo>] [--logging.
- level.root=<loggingLevelRoot>] [-of=<outputFormat>] [--server.
- port=<serverPort>] [--spring.config.location=<springConfigLocation>] [COMMAND]
 
+**Summary (CLI)**
+```
+bash prompt> dqo [root_level_parameter] [command]
+```
+**Example**
+```
+bash prompt> dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 ```
 
-
-**Options**  
+**Parameters**  
   
 | Command | Description | Is it required? | Accepted values |
 |---------|-------------|-----------------|-----------------|
@@ -63,5 +50,6 @@ dqo  [-h] [--dqo.core.print-stack-trace] [--dqo.logging.enable-user-home-logging
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`--server.port`<br/>|Sets the web server port to host the DQO local web UI. This parameter is effective only in CLI mode.| ||
 |`--spring.config.location`<br/>|Sets a path to the folder that has the spring configuration files (application.properties or application.yml) or directly to an application.properties or application.yml file. The format of this value is: --spring.config.location&#x3D;file:./foldername/,file:./alternativeapplication.yml| ||
+
 
 

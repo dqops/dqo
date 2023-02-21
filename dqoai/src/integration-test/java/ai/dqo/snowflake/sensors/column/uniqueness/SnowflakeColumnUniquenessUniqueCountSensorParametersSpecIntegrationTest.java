@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.postgresql.sensors.column.strings;
+package ai.dqo.snowflake.sensors.column.uniqueness;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringBooleanPlaceholderPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.uniqueness.ColumnUniqueCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -24,99 +24,97 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.postgresql.BasePostgresqlIntegrationTest;
 import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringBooleanPlaceholderPercentSensorParametersSpec;
-import org.apache.commons.math3.util.Precision;
+import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueCountSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-
 @SpringBootTest
-public class PostgresqlColumnStringsStringBooleanPlaceholderPercentSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
-    private ColumnStringsStringBooleanPlaceholderPercentSensorParametersSpec sut;
+public class SnowflakeColumnUniquenessUniqueCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private ColumnUniquenessUniqueCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringBooleanPlaceholderPercentCheckSpec checkSpec;
+    private ColumnUniqueCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.postgresql);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-		this.sut = new ColumnStringsStringBooleanPlaceholderPercentSensorParametersSpec();
-		this.checkSpec = new ColumnStringBooleanPlaceholderPercentCheckSpec();
+		this.sut = new ColumnUniquenessUniqueCountSensorParametersSpec();
+		this.checkSpec = new ColumnUniqueCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "boolean_placeholder", this.checkSpec);
+                sampleTableMetadata, "correct", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "boolean_placeholder", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "correct", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "boolean_placeholder", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "correct", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "boolean_placeholder", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "correct", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(83.333, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "boolean_placeholder", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "correct", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 }

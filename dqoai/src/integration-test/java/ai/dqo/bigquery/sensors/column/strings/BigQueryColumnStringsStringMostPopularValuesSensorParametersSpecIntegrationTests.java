@@ -61,6 +61,13 @@ public class BigQueryColumnStringsStringMostPopularValuesSensorParametersSpecInt
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTopValues(2L);
+        this.sut.setFilter("id < 5");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
 
@@ -69,7 +76,34 @@ public class BigQueryColumnStringsStringMostPopularValuesSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(null, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
+    }
+
+    @Test
+    void runSensor_whenSensorExecutedAdHocOneDataStream_thenReturnsValues() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTopValues(2L);
+        this.sut.setFilter("id < 5");
+
+        DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
+        dataStreamMapping.setLevel1(new DataStreamLevelSpec() {{
+            setSource(DataStreamLevelSource.column_value);
+            setColumn("mix_string_int");
+        }});
+        this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
+
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+                sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+
+        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
+
+        Table resultTable = sensorResult.getResultTable();
+        Assertions.assertEquals(4, resultTable.rowCount());
+        Assertions.assertEquals("actual_value", resultTable.column(0).name());
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -80,12 +114,6 @@ public class BigQueryColumnStringsStringMostPopularValuesSensorParametersSpecInt
         this.sut.setExpectedValues(values);
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
-        DataStreamMappingSpec dataStreamMapping = this.sampleTableMetadata.getTableSpec().getDataStreams().getFirstDataStreamMapping();
-        dataStreamMapping.setLevel1(new DataStreamLevelSpec() {{
-            setSource(DataStreamLevelSource.column_value);
-            setColumn("id");
-        }});
-        this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
@@ -93,9 +121,9 @@ public class BigQueryColumnStringsStringMostPopularValuesSensorParametersSpecInt
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(4, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1L, resultTable.column(0).get(0));
+        Assertions.assertEquals(2L, resultTable.column(0).get(0));
     }
 
     @Test
