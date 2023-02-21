@@ -1,7 +1,54 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
+{% macro render_time_dimension_projection(table_alias_prefix = '', indentation = '    ') %}
+    {%- if lib.time_series is not none -%}
+        {{- lib.eol() -}}
+        {{ indentation }}TIMESTAMP({{ render_time_dimension_expression(table_alias_prefix) }})
+    {%- endif -%}
+{% endmacro %}
+
+{% macro date_trunc(value, part='day', datatype=none) %}
+    {%- if part == 'year' -%}
+        MAX(DATE_TRUNC(CAST({{value}} AS DATE), YEAR))
+    {%- elif part == 'quarter' -%}
+        MAX(DATE_TRUNC(CAST({{value}} AS DATE), QUARTER))
+    {%- elif part == 'month' -%}
+        MAX(DATE_TRUNC(CAST({{value}} AS DATE), MONTH))
+    {%- elif part == 'week' -%}
+        MAX(DATE_TRUNC(CAST({{value}} AS DATE), WEEK))
+    {%- elif part == 'day' -%}
+        {%- if datatype == 'DATE' -%}
+            {{value}}
+        {%- else -%}
+            CAST({{value}} AS DATE)
+        {%- endif -%}
+    {%- elif part == 'hour' -%}
+        MAX(DATETIME_TRUNC(CAST({{value}} AS DATETIME), HOUR))
+    {%- elif part == 'millisecond' -%}
+        CAST({{value}} AS DATETIME)
+    {%- else -%}
+        CAST({{value}} AS DATE)
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_time_dimension_expression(table_alias_prefix = '') %}
+    {%- if lib.time_series is not none-%}
+        {%- if lib.time_series.mode == 'current_time' -%}
+            {%- if lib.time_series.time_gradient is defined and lib.time_series.time_gradient != 'millisecond' -%}
+                {{ date_trunc('CURRENT_TIMESTAMP()', lib.time_series.time_gradient, 'DATETIME') }}
+            {%- else -%}
+                CURRENT_TIMESTAMP()
+            {%- endif -%}
+        {%- elif lib.time_series.mode == 'timestamp_column' -%}
+            {{ date_trunc(table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column), lib.time_series.time_gradient, lib.timestamp_column_data_type) }}
+        {%- else -%}
+            <INVALID TIME SERIES MODE: {{lib.time_series.mode}}>
+        {%- endif -%}
+    {%- endif -%}
+{% endmacro %}
+
 SELECT
-    PERCENTILE_CONT(AVG({{ lib.render_target_column('analyzed_table')}}), {{ parameters.percentile_value }}) OVER (PARTITION BY TIMESTAMP(analyzed_table{{lib.render_time_dimension_expression(table_alias_prefix) }})) AS actual_value
+    PERCENTILE_CONT.(AVG({{ lib.render_target_column('analyzed_table')}}), {{ parameters.percentile_value }}) OVER (PARTITION BY {{render_time_dimension_projection('analyzed_table') }}) AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
 FROM {{ lib.render_target_table() }} AS analyzed_table
