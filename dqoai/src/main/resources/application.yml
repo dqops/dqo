@@ -79,6 +79,9 @@ dqo:
     api-key-request-url: ${dqo.cloud.ui-base-url}/requestapikey/
     api-key-pickup-timeout-seconds: 600
     api-key-pickup-retry-delay-millis: 1000
+    parallel-file-uploads: 500
+    parallel-file-downloads: 500
+    file-synchronization-time-limit-seconds: 1200
   secrets:
     enable-gcp-secret-manager: true
     gcp-project-id: ${GOOGLE_CLOUD_PROJECT}

@@ -199,10 +199,10 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
      * @param relativeFilePath Relative file path inside the remote root.
      */
     @Override
-    public Mono<Void> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
-        Mono<Void> deleteFileMono = Mono.fromRunnable(() -> {
+    public Mono<Path> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+        Mono<Path> deleteFileMono = Mono.fromRunnable(() -> {
             deleteFile(fileSystemRoot, relativeFilePath);
-        }).then();
+        }).thenReturn(relativeFilePath);
 
         return deleteFileMono;
     }
@@ -309,7 +309,12 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
         try {
             Path parentFolderPath = fullPathToFile.getParent();
             if (!Files.exists(parentFolderPath)) {
-                Files.createDirectories(parentFolderPath);
+                try {
+                    Files.createDirectories(parentFolderPath);
+                }
+                catch (Exception ex) {
+                    // ignore, probably a race condition
+                }
             }
 
             try (OutputStream fileOutputStream = Files.newOutputStream(fullPathToFile)) {

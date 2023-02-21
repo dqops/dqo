@@ -386,14 +386,14 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
      * @param relativeFilePath Relative file path inside the remote root.
      */
     @Override
-    public Mono<Void> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+    public Mono<Path> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
         GSFileSystemRoot gsFileSystemRoot = (GSFileSystemRoot) fileSystemRoot;
         Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                 (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                 relativeFilePath;
         String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
 
-        Mono<Void> deleteFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
+        Mono<Path> deleteFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
                         .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
                         .add(HttpHeaderNames.CONTENT_LENGTH, 0)
@@ -401,7 +401,7 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
                 .delete()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
                 .response()
-                .then();
+                .thenReturn(relativeFilePath);
 
         return deleteFileMono;
     }
@@ -476,17 +476,16 @@ public class GSRemoteFileSystemServiceImpl implements GSRemoteFileSystemService 
                 )
                 .get()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
-                .responseSingle((httpClientResponse, byteBufMono) -> {
+                .responseConnection(((httpClientResponse, connection) -> {
                     if (httpClientResponse.status() == HttpResponseStatus.OK) {
-                        return byteBufMono.flatMap(byteBuf -> {
-                            return Mono.just(new DownloadFileResponse(lastKnownFileMetadata, ByteBufFlux.fromInbound(Mono.just(byteBuf))));
-                        });
+                        return Mono.just(new DownloadFileResponse(lastKnownFileMetadata, connection.inbound().receive()));
                     }
                     else {
-                        return byteBufMono.then(Mono.error(new FileSystemChangeException(relativeFilePath,
+                        return connection.inbound().receive().then(Mono.error(new FileSystemChangeException(relativeFilePath,
                                 "Cannot download file " + linuxStyleFullFileInBucket + ", error: " + httpClientResponse.status().code())));
                     }
-                });
+                }))
+                .single();
 
         return downloadFileMono;
     }

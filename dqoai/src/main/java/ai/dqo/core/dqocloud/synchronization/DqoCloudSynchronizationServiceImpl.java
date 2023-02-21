@@ -19,6 +19,7 @@ import ai.dqo.core.dqocloud.filesystem.DqoCloudRemoteFileSystemServiceFactory;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoFileSystem;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.filesystemservice.localfiles.DqoUserHomeFileSystemFactory;
+import ai.dqo.core.filesystem.synchronization.FileSynchronizationDirection;
 import ai.dqo.core.filesystem.synchronization.FileSystemChangeSet;
 import ai.dqo.core.filesystem.synchronization.FileSystemSynchronizationService;
 import ai.dqo.core.filesystem.synchronization.SynchronizationResult;
@@ -32,6 +33,7 @@ import ai.dqo.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -65,9 +67,10 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
     /**
      * Performs synchronization of a given user home folder to the DQO Cloud.
      * @param dqoRoot User Home folder type to synchronize.
+     * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    public void synchronizeFolder(DqoRoot dqoRoot, FileSystemSynchronizationListener synchronizationListener) {
+    public void synchronizeFolder(DqoRoot dqoRoot, FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -98,35 +101,45 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                 Optional.empty()); // empty means that the file system should be scanned to find new files
 
         SynchronizationResult synchronizationResult = this.fileSystemSynchronizationService.synchronize(
-                sourceChangeSet, remoteChangeSet, dqoRoot, synchronizationListener);
+                sourceChangeSet, remoteChangeSet, dqoRoot, synchronizationDirection, synchronizationListener);
 
-        localFileIndexWrapper.getSpec().setFolder(synchronizationResult.getSourceFileIndex());
-        remoteFileIndexWrapper.getSpec().setFolder(synchronizationResult.getTargetFileIndex());
+        if (localFileIndexWrapper.getSpec().getFolder() == null ||
+                !Objects.equals(localFileIndexWrapper.getSpec().getFolder().getHash(), synchronizationResult.getSourceFileIndex().getHash())) {
+            localFileIndexWrapper.getSpec().setFolder(synchronizationResult.getSourceFileIndex());
+        }
+
+        if (remoteFileIndexWrapper.getSpec().getFolder() == null ||
+                !Objects.equals(remoteFileIndexWrapper.getSpec().getFolder().getHash(), synchronizationResult.getTargetFileIndex().getHash())) {
+            remoteFileIndexWrapper.getSpec().setFolder(synchronizationResult.getTargetFileIndex());
+        }
+
         userHomeContext.flush(); // commit the indexes
     }
 
     /**
      * Synchronizes all roots (sources, check definitions, data).
      *
+     * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     @Override
-    public void synchronizeAll(FileSystemSynchronizationListener synchronizationListener) {
-        synchronizeFolder(DqoRoot.SOURCES, synchronizationListener);
-        synchronizeFolder(DqoRoot.SENSORS, synchronizationListener);
-        synchronizeFolder(DqoRoot.RULES, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_SENSOR_READOUTS, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_RULE_RESULTS, synchronizationListener);
+    public void synchronizeAll(FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener) {
+        synchronizeFolder(DqoRoot.SOURCES, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.SENSORS, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.RULES, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.DATA_SENSOR_READOUTS, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.DATA_RULE_RESULTS, synchronizationDirection, synchronizationListener);
     }
 
     /**
      * Synchronizes only the data roots (sensor readouts, rule results).
      *
+     * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
     @Override
-    public void synchronizeData(FileSystemSynchronizationListener synchronizationListener) {
-        synchronizeFolder(DqoRoot.DATA_SENSOR_READOUTS, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_RULE_RESULTS, synchronizationListener);
+    public void synchronizeData(FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener) {
+        synchronizeFolder(DqoRoot.DATA_SENSOR_READOUTS, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.DATA_RULE_RESULTS, synchronizationDirection, synchronizationListener);
     }
 }

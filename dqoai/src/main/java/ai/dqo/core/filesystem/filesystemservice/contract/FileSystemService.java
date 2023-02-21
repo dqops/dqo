@@ -79,7 +79,7 @@ public interface FileSystemService {
      * @param fileSystemRoot File system root (with credentials).
      * @param relativeFilePath Relative file path inside the remote root.
      */
-    Mono<Void> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath);
+    Mono<Path> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath);
 
     /**
      * Deletes a folder.
