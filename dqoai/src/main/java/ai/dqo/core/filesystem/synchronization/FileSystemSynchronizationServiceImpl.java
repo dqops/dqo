@@ -27,6 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
 import java.nio.file.Path;
 import java.time.Duration;
@@ -107,6 +108,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                     // upload source (local) changes to the remote file system
                     synchronizedSourceChanges = uploadLocalToRemoteAsync(dqoRoot, synchronizationListener, sourceFileSystem, targetFileSystem, targetFileSystemService,
                             targetFileSystemRoot, newTargetFolderIndex, sourceFileSystemService, sourceFileSystemRoot, localChanges)
+                            .subscribeOn(Schedulers.parallel())
                             .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
                 }
             }
@@ -126,6 +128,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                 if (unsyncedTargetChanges != null && (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.download)) {
                     downloadRemoteToLocalAsync(dqoRoot, synchronizationListener, sourceFileSystem, targetFileSystem, targetFileSystemService, targetFileSystemRoot,
                             sourceFileSystemService, sourceFileSystemRoot, unsyncedTargetChanges, synchronizedSourceChanges, newSourceFolderIndex)
+                            .subscribeOn(Schedulers.parallel())
                             .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
                 }
 
@@ -152,6 +155,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                 if (emptySourceFolders != null) {
                     for (FolderMetadata emptySourceFolder : emptySourceFolders) {
                         sourceFileSystemService.deleteFolderAsync(sourceFileSystemRoot, emptySourceFolder.getRelativePath(), false)
+                                .subscribeOn(Schedulers.parallel())
                                 .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
                     }
                 }
@@ -160,6 +164,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                 if (emptyTargetFolders != null) {
                     for (FolderMetadata emptyTargetFolder : emptyTargetFolders) {
                         targetFileSystemService.deleteFolderAsync(targetFileSystemRoot, emptyTargetFolder.getRelativePath(), false)
+                                .subscribeOn(Schedulers.parallel())
                                 .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
                     }
                 }
