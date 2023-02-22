@@ -3,23 +3,24 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableAdHockChecksUIFilter,
+  getTableAdHockChecksUIFilter, setTableUpdatedCheckUiFilter,
 } from '../../redux/actions/table.actions';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
-import { CheckResultOverviewApi } from "../../services/apiClient";
+import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
+import Button from "../../components/Button";
 
 const TableAdHockChecksUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, category, checkName }: { connection: string, schema: string, table: string, category: string, checkName: string } = useParams();
-  const { checksUIFilter } = useSelector(
+  const { checksUIFilter, isUpdatedChecksUIFilter } = useSelector(
     (state: IRootState) => state.table
   );
   const dispatch = useActionDispatch();
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getTableAdHocChecksOverview(connectionName, schemaName, tableName).then((res) => {
@@ -28,15 +29,29 @@ const TableAdHockChecksUIFilterView = () => {
   };
 
   useEffect(() => {
-    setUpdatedChecksUI(checksUIFilter);
-  }, [checksUIFilter]);
-  
-  useEffect(() => {
     dispatch(
       getTableAdHockChecksUIFilter(connectionName, schemaName, tableName, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
-  
+
+  const onUpdate = async () => {
+    setIsUpdating(true);
+    await TableApiClient.updateTableAdHocChecksUI(
+      connectionName,
+      schemaName,
+      tableName,
+      checksUIFilter
+    );
+    dispatch(
+      getTableAdHockChecksUIFilter(connectionName, schemaName, tableName, category, checkName)
+    );
+    setIsUpdating(false);
+  };
+
+  const onChange = (data: UIAllChecksModel) => {
+    dispatch(setTableUpdatedCheckUiFilter(data));
+  };
+
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -44,13 +59,21 @@ const TableAdHockChecksUIFilterView = () => {
           <SvgIcon name="database" className="w-5 h-5" />
           <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}.checks.${category} - ${checkName}`}</div>
         </div>
+        <Button
+          color={isUpdatedChecksUIFilter ? 'primary' : 'secondary'}
+          variant="contained"
+          label="Save"
+          className="w-40"
+          onClick={onUpdate}
+          loading={isUpdating}
+        />
       </div>
       <div>
         <DataQualityChecks
           onUpdate={() => {}}
           className="max-h-checks-1"
-          checksUI={updatedChecksUI}
-          onChange={setUpdatedChecksUI}
+          checksUI={checksUIFilter}
+          onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
         />

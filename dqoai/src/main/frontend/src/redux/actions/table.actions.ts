@@ -932,3 +932,17 @@ export const getTablePartitionedChecksUIFilter =
         dispatch(getTablePartitionedChecksUIFilterFailed(err));
       }
     };
+
+export const setTableUpdatedCheckUiFilter = (ui: UIAllChecksModel) => ({
+  type: TABLE_ACTION.SET_UPDATED_CHECKS_UI_FILTER,
+  data: ui
+});
+
+export const setTableUpdatedCheckpointsUIFilter = (ui: UIAllChecksModel) => ({
+  type: TABLE_ACTION.SET_UPDATED_CHECKPOINTS_UI_FILTER,
+  data: ui
+});
+export const setTableUpdatedPartitionedChecksUiFilter = (ui: UIAllChecksModel) => ({
+  type: TABLE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
+  data: ui
+});
