@@ -57,6 +57,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_sample_variance_in_range", o -> o.dailyPartitionSampleVarianceInRange);
             put("daily_partition_population_variance_in_range", o -> o.dailyPartitionPopulationVarianceInRange);
             put("daily_partition_sum_in_range", o -> o.dailyPartitionSumInRange);
+            put("daily_partition_invalid_latitude_count", o -> o.dailyPartitionInvalidLatitudeCount);
         }
     };
 
@@ -122,6 +123,9 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnSumInRangeCheckSpec dailyPartitionSumInRange;
+
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnInvalidLatitudeCountCheckSpec dailyPartitionInvalidLatitudeCount;
 
 
 
@@ -502,6 +506,24 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionSumInRange, dailyPartitionSumInRange));
         this.dailyPartitionSumInRange = dailyPartitionSumInRange;
         propagateHierarchyIdToField(dailyPartitionSumInRange, "daily_partition_sum_in_range");
+    }
+
+    /**
+     * Returns an invalid latitude count check specification.
+     * @return invalid latitude count check specification.
+     */
+    public ColumnInvalidLatitudeCountCheckSpec getDailyPartitionInvalidLatitudeCount() {
+        return dailyPartitionInvalidLatitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid latitude count check.
+     * @param dailyPartitionInvalidLatitudeCount invalid latitude count check specification.
+     */
+    public void setDailyPartitionInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec dailyPartitionInvalidLatitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidLatitudeCount, dailyPartitionInvalidLatitudeCount));
+        this.dailyPartitionInvalidLatitudeCount = dailyPartitionInvalidLatitudeCount;
+        propagateHierarchyIdToField(dailyPartitionInvalidLatitudeCount, "daily_partition_invalid_latitude_count");
     }
 
     /**

@@ -57,6 +57,8 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_sample_variance_in_range", o -> o.monthlyCheckpointSampleVarianceInRange);
             put("monthly_checkpoint_population_variance_in_range", o -> o.monthlyCheckpointPopulationVarianceInRange);
             put("monthly_checkpoint_sum_in_range", o -> o.monthlyCheckpointSumInRange);
+            put("monthly_checkpoint_invalid_latitude_count", o -> o.monthlyCheckpointInvalidLatitudeCount);
+
         }
     };
 
@@ -69,7 +71,7 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the number of non-negative values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnNonNegativeCountCheckSpec monthlyCheckpointNonNegativeCount;
 
-    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentage of non-negative values in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnNonNegativePercentCheckSpec monthlyCheckpointNonNegativePercent;
 
     @JsonPropertyDescription("Verifies that the number of Numbers from set in a column does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
@@ -105,7 +107,7 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec monthlyCheckpointMeanInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnPercentileInRangeCheckSpec monthlyCheckpointPercentileInRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
@@ -122,6 +124,9 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column does not exceed the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnSumInRangeCheckSpec monthlyCheckpointSumInRange;
+
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnInvalidLatitudeCountCheckSpec monthlyCheckpointInvalidLatitudeCount;
 
 
     /**
@@ -501,6 +506,24 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointSumInRange, monthlyCheckpointSumInRange));
         this.monthlyCheckpointSumInRange = monthlyCheckpointSumInRange;
         propagateHierarchyIdToField(monthlyCheckpointSumInRange, "monthly_checkpoint_sum_in_range");
+    }
+
+    /**
+     * Returns an invalid latitude count check specification.
+     * @return Invalid latitude count check specification.
+     */
+    public ColumnInvalidLatitudeCountCheckSpec getMonthlyCheckpointInvalidLatitudeCount() {
+        return monthlyCheckpointInvalidLatitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid latitude count check.
+     * @param monthlyCheckpointInvalidLatitudeCount Invalid latitude count check specification.
+     */
+    public void setMonthlyCheckpointInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec monthlyCheckpointInvalidLatitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointInvalidLatitudeCount, monthlyCheckpointInvalidLatitudeCount));
+        this.monthlyCheckpointInvalidLatitudeCount = monthlyCheckpointInvalidLatitudeCount;
+        propagateHierarchyIdToField(monthlyCheckpointInvalidLatitudeCount, "monthly_checkpoint_invalid_latitude_count");
     }
 
     /**

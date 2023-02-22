@@ -57,6 +57,7 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_sample_variance_in_range", o -> o.dailyCheckpointSampleVarianceInRange);
             put("daily_checkpoint_population_variance_in_range", o -> o.dailyCheckpointPopulationVarianceInRange);
             put("daily_checkpoint_sum_in_range", o -> o.dailyCheckpointSumInRange);
+            put("daily_checkpoint_invalid_latitude_count", o -> o.dailyCheckpointInvalidLatitudeCount);
         }
     };
 
@@ -122,6 +123,9 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnSumInRangeCheckSpec dailyCheckpointSumInRange;
+
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnInvalidLatitudeCountCheckSpec dailyCheckpointInvalidLatitudeCount;
 
     /**
      * Returns a negative values count check specification.
@@ -499,6 +503,24 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointSumInRange, dailyCheckpointSumInRange));
         this.dailyCheckpointSumInRange = dailyCheckpointSumInRange;
         propagateHierarchyIdToField(dailyCheckpointSumInRange, "daily_checkpoint_sum_in_range");
+    }
+
+    /**
+     * Returns an invalid latitude count check specification.
+     * @return Invalid latitude count check specification.
+     */
+    public ColumnInvalidLatitudeCountCheckSpec getDailyCheckpointInvalidLatitudeCount() {
+        return dailyCheckpointInvalidLatitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid latitude count check.
+     * @param dailyCheckpointInvalidLatitudeCount Invalid latitude count check specification.
+     */
+    public void setDailyCheckpointInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec dailyCheckpointInvalidLatitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointInvalidLatitudeCount, dailyCheckpointInvalidLatitudeCount));
+        this.dailyCheckpointInvalidLatitudeCount = dailyCheckpointInvalidLatitudeCount;
+        propagateHierarchyIdToField(dailyCheckpointInvalidLatitudeCount, "daily_checkpoint_invalid_latitude_count");
     }
 
     /**

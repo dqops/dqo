@@ -57,6 +57,8 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("sample_variance_in_range", o -> o.sampleVarianceInRange);
             put("population_variance_in_range", o -> o.populationVarianceInRange);
             put("sum_in_range", o -> o.sumInRange);
+            put("invalid_latitude_count", o -> o.invalidLatitudeCount);
+
         }
     };
 
@@ -122,6 +124,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range.")
     private ColumnSumInRangeCheckSpec sumInRange;
+
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count.")
+    private ColumnInvalidLatitudeCountCheckSpec invalidLatitudeCount;
 
     /**
      * Returns a negative count check specification.
@@ -499,6 +504,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.sumInRange, sumInRange));
         this.sumInRange = sumInRange;
         propagateHierarchyIdToField(sumInRange, "sum_in_range");
+    }
+
+    /**
+     * Returns an invalid latitude count check specification.
+     * @return Invalid latitude count check specification.
+     */
+    public ColumnInvalidLatitudeCountCheckSpec getInvalidLatitudeCount() {
+        return invalidLatitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid latitude count check.
+     * @param invalidLatitudeCount Invalid latitude count check specification.
+     */
+    public void setInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec invalidLatitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.invalidLatitudeCount, invalidLatitudeCount));
+        this.invalidLatitudeCount = invalidLatitudeCount;
+        propagateHierarchyIdToField(invalidLatitudeCount, "invalid_latitude_count");
     }
 
     /**
