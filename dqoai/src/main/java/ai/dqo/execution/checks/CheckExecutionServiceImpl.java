@@ -155,7 +155,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         Collection<TableWrapper> targetTables = listTargetTables(userHome, checkSearchFilters);
         CheckExecutionSummary checkExecutionSummary = new CheckExecutionSummary();
 
-        for (TableWrapper targetTable :  targetTables) {
+        for (TableWrapper targetTable : targetTables) {
             // TODO: we can increase DOP here by turning each call (running sensors on a single table) into a multi step pipeline, we will start up to DOP pipelines, we will start new when a pipeline has finished...
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
 			executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, userTimeWindowFilters, progressListener,

@@ -295,6 +295,9 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
+        // TODO: Delete? Check if it really should be deleted, ie. contradicts the assumptions.
+        //       Write tests and confirm with Piotr.
+        //       Then, this visitor could be used for enabling checks.
         if (!checkEnabled) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }

@@ -29,7 +29,7 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.services.check.run.CheckService;
+import ai.dqo.services.check.CheckService;
 import ai.dqo.utils.serialization.JsonSerializer;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +39,6 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * "check enable" 2nd level CLI command that executes data quality checks.
@@ -305,6 +304,16 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
             this.check = this.terminalReader.prompt("Data quality check name (--check)", null, false);
         }
 
+        private String datatypeFilter;
+        private Boolean nullable = null;
+
+        private Boolean warningLevelEnabled = false;
+        private Map<String, Boolean> warningLevelOptions;
+        private Boolean errorLevelEnabled = false;
+        private Map<String, Boolean> errorLevelOptions;
+        private Boolean fatalLevelEnabled = false;
+        private Map<String, Boolean> fatalLevelOptions;
+
         CheckSearchFilters filters = new CheckSearchFilters();
         filters.setConnectionName(this.connection);
         filters.setSchemaTableName(this.table);
@@ -316,14 +325,24 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
         filters.setCheckCategory(this.checkCategory);
 
         if (warningLevelOptions != null) {
-            warningLevelOptions.forEach((key, value) -> terminalWriter.writeLine(key + value));
+            warningLevelEnabled = true;
         }
         if (errorLevelOptions != null) {
-            errorLevelOptions.forEach((key, value) -> terminalWriter.writeLine(key + value));
+            errorLevelEnabled = true;
         }
         if (fatalLevelOptions != null) {
-            fatalLevelOptions.forEach((key, value) -> terminalWriter.writeLine(key + value));
+            fatalLevelEnabled = true;
         }
+
+        if (!warningLevelEnabled && !errorLevelEnabled && !fatalLevelEnabled) {
+            // By default, enable on every alert level
+            warningLevelEnabled = true;
+            errorLevelEnabled = true;
+            fatalLevelEnabled = true;
+        }
+
+
+
         return 0;
     }
 }
