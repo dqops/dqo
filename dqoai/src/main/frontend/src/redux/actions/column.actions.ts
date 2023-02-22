@@ -803,3 +803,17 @@ export const getColumnPartitionedChecksUIFilter =
         dispatch(getColumnPartitionedChecksUIFilterFailed(err));
       }
     };
+
+export const setColumnUpdatedCheckUiFilter = (ui: UIAllChecksModel) => ({
+  type: COLUMN_ACTION.SET_UPDATED_CHECKS_UI_FILTER,
+  data: ui
+});
+
+export const setColumnUpdatedCheckpointsUIFilter = (ui: UIAllChecksModel) => ({
+  type: COLUMN_ACTION.SET_UPDATED_CHECKPOINTS_UI_FILTER,
+  data: ui
+});
+export const setColumnUpdatedPartitionedChecksUiFilter = (ui: UIAllChecksModel) => ({
+  type: COLUMN_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
+  data: ui
+});

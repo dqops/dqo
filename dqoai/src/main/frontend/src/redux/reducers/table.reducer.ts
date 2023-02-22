@@ -70,8 +70,11 @@ export interface ITableState {
   monthlyPartitionedChecks?: UIAllChecksModel;
   isUpdatedMonthlyPartitionedChecks?: boolean;
   checksUIFilter?: UIAllChecksModel;
+  isUpdatedChecksUIFilter?: boolean;
   checkpointsUIFilter?: UIAllChecksModel;
+  isUpdatedCheckpointsUIFilter?: boolean;
   partitionedChecksUIFilter?: UIAllChecksModel;
+  isUpdatedPartitionedChecksUIFilter?: boolean;
 }
 
 const initialState: ITableState = {
@@ -486,6 +489,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         checksUIFilter: action.data,
+        isUpdatedChecksUIFilter: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_ERROR:
@@ -504,6 +508,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         checkpointsUIFilter: action.data,
+        isUpdatedCheckpointsUIFilter: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER_ERROR:
@@ -522,6 +527,7 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         partitionedChecksUIFilter: action.data,
+        isUpdatedPartitionedChecksUIFilter: false,
         error: null
       };
     case TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_ERROR:
@@ -623,6 +629,24 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdatedDataStreamsMapping: true,
         dataStreamsMapping: action.dataStreamsMapping
       };
+    case TABLE_ACTION.SET_UPDATED_CHECKS_UI_FILTER:
+      return {
+        ...state,
+        isUpdatedChecksUIFilter: true,
+        checksUIFilter: action.data
+      }
+    case TABLE_ACTION.SET_UPDATED_CHECKPOINTS_UI_FILTER:
+      return {
+        ...state,
+        isUpdatedCheckpointsUIFilter: true,
+        checkpointsUIFilter: action.data
+      }
+    case TABLE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER:
+      return {
+        ...state,
+        isUpdatedPartitionedChecksUIFilter: true,
+        partitionedChecksUIFilter: action.data
+      }
     default:
       return state;
   }
