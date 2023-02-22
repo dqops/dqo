@@ -98,12 +98,12 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`gcs` >= -90.0 AND analyzed_table.`gcs` <= 90.0 THEN 0
+                        WHEN %1$s >= -90.0 AND %1$s <= 90.0 THEN 0
                         ELSE 1
                     END
                 ) AS actual_value
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s""";
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -129,14 +129,14 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`gcs` >= -90.0 AND analyzed_table.`gcs` <= 90.0 THEN 0
+                        WHEN %1$s >= -90.0 AND %1$s <= 90.0 THEN 0
                         ELSE 1
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -158,14 +158,14 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`gcs` >= -90.0 AND analyzed_table.`gcs` <= 90.0 THEN 0
+                        WHEN %1$s >= -90.0 AND %1$s <= 90.0 THEN 0
                         ELSE 1
                     END
                 ) AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -187,14 +187,14 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`gcs` >= -90.0 AND analyzed_table.`gcs` <= 90.0 THEN 0
+                        WHEN %1$s >= -90.0 AND %1$s <= 90.0 THEN 0
                         ELSE 1
                     END
                 ) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -221,13 +221,13 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`gcs` >= -90.0 AND analyzed_table.`gcs` <= 90.0 THEN 0
+                        WHEN %1$s >= -90.0 AND %1$s <= 90.0 THEN 0
                         ELSE 1
                     END
                 ) AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY stream_level_1
             ORDER BY stream_level_1""";
 
@@ -252,15 +252,15 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`gcs` >= -90.0 AND analyzed_table.`gcs` <= 90.0 THEN 0
+                        WHEN %1$s >= -90.0 AND %1$s <= 90.0 THEN 0
                         ELSE 1
                     END
                 ) AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
@@ -285,15 +285,15 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`gcs` >= -90.0 AND analyzed_table.`gcs` <= 90.0 THEN 0
+                        WHEN %1$s >= -90.0 AND %1$s <= 90.0 THEN 0
                         ELSE 1
                     END
                 ) AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
@@ -326,7 +326,7 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`gcs` >= -90.0 AND analyzed_table.`gcs` <= 90.0 THEN 0
+                        WHEN %1$s >= -90.0 AND %1$s <= 90.0 THEN 0
                         ELSE 1
                     END
                 ) AS actual_value,
@@ -335,8 +335,8 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
                 analyzed_table.`length_string` AS stream_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
@@ -363,7 +363,7 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`gcs` >= -90.0 AND analyzed_table.`gcs` <= 90.0 THEN 0
+                        WHEN %1$s >= -90.0 AND %1$s <= 90.0 THEN 0
                         ELSE 1
                     END
                 ) AS actual_value,
@@ -372,8 +372,8 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
                 analyzed_table.`length_string` AS stream_level_3,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
@@ -400,7 +400,7 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
             SELECT
                 SUM(
                     CASE
-                        WHEN analyzed_table.`gcs` >= -90.0 AND analyzed_table.`gcs` <= 90.0 THEN 0
+                        WHEN %1$s >= -90.0 AND %1$s <= 90.0 THEN 0
                         ELSE 1
                     END
                 ) AS actual_value,
@@ -409,8 +409,8 @@ public class ColumnNumericInvalidLatitudeCountSensorParametersSpecBigQueryTests 
                 analyzed_table.`length_string` AS stream_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
+            FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+            WHERE %5$s
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
