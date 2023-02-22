@@ -49,6 +49,10 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
 
   const { sidebarWidth } = useTree();
 
+  const getCheckResult = (data: CheckResultsDetailedDataModel[]): CheckResultsDetailedDataModel[] => {
+    return data.filter((item) => item.checkName === check.check_name);
+  };
+
   useEffect(() => {
     const startDate = month ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD') : '';
     const endDate = month ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD') : '';
@@ -56,7 +60,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.adhoc) {
       if (column) {
         CheckResultApi.getColumnAdHocChecksResults(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
-          setCheckResults(res.data);
+          setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getColumnAdHocSensorReadouts(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
@@ -66,7 +70,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
         });
       } else {
         CheckResultApi.getTableAdHocChecksResults(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
-          setCheckResults(res.data);
+          setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getTableAdHocSensorReadouts(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
@@ -79,7 +83,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.checkpoint) {
       if (column) {
         CheckResultApi.getColumnCheckpointsResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setCheckResults(res.data);
+          setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getColumnCheckpointsSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
@@ -89,7 +93,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
         });
       } else {
         CheckResultApi.getTableCheckpointsResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setCheckResults(res.data);
+          setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getTableCheckpointsSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
@@ -102,7 +106,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       if (column) {
         CheckResultApi.getColumnPartitionedChecksResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setCheckResults(res.data);
+          setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getColumnPartitionedSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
@@ -112,7 +116,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
         });
       } else {
         CheckResultApi.getTablePartitionedChecksResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setCheckResults(res.data);
+          setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getTablePartitionedSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
