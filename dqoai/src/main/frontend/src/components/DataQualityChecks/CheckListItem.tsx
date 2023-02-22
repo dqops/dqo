@@ -166,7 +166,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   };
 
   const toggleCheckDetails = () => {
-    if (!check.configured || check?.disabled) {
+    if ((!check.configured || check?.disabled) && !showDetails) {
       return;
     }
 
