@@ -3,7 +3,6 @@ import { CheckResultDetailedSingleModel, CheckResultsDetailedDataModel } from ".
 import Select from "../../Select";
 import { Table } from "../../Table";
 import { useTree } from "../../../contexts/treeContext";
-import clsx from "clsx";
 import moment from "moment";
 
 interface CheckResultsTabProps {
@@ -29,47 +28,40 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
     {
       label: 'Check Name',
       value: 'checkName',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Executed At',
       value: 'executedAt',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
     },
     {
       label: 'Time Scale',
       value: 'timeGradient',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
     },
     {
       label: 'Time Period',
       value: 'timePeriod',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
     },
     {
       label: 'Actual Value',
       value: 'actualValue',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Expected Value',
       value: 'expectedValue',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
-      label: 'Severity',
+      label: 'Issue Severity Level',
       value: 'severity',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
       render: (value: number) => {
         let name = '';
         switch (value) {
@@ -90,75 +82,65 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
         }
 
         return (
-          <div className={clsx('px-4 !py-2')}>{name}</div>
+          <div>{name}</div>
         )
       },
     },
     {
       label: 'Warning - Lower Threshold',
       value: 'warningLowerBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Warning - Upper Threshold',
       value: 'warningUpperBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Error - Lower Threshold',
       value: 'errorLowerBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Error - Upper Threshold',
       value: 'errorUpperBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Fatal - Lower Threshold',
       value: 'fatalLowerBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Fatal - Upper Threshold',
       value: 'fatalUpperBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Include In Kpi',
       value: 'includeInKpi',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
     },
     {
       label: 'Include In Sla',
       value: 'includeInSla',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
     },
     {
       label: 'Duration Ms',
       value: 'durationMs',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
     },
     {
       label: 'Data Stream',
       value: 'dataStream',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="!py-2 px-4">{text}</div>,
+      className: 'text-sm px-4 whitespace-nowrap text-gray-700',
     },
   ];
 
