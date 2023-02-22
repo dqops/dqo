@@ -57,6 +57,8 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_sample_variance_in_range", o -> o.monthlyPartitionSampleVarianceInRange);
             put("monthly_partition_population_variance_in_range", o -> o.monthlyPartitionPopulationVarianceInRange);
             put("monthly_partition_sum_in_range", o -> o.monthlyPartitionSumInRange);
+            put("monthly_partition_invalid_latitude_count", o -> o.monthlyPartitionInvalidLatitudeCount);
+
         }
     };
 
@@ -123,6 +125,9 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnSumInRangeCheckSpec monthlyPartitionSumInRange;
 
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnInvalidLatitudeCountCheckSpec monthlyPartitionInvalidLatitudeCount;
+
     /**
      * Returns a negative values count check specification.
      * @return Negative values count check specification.
@@ -132,7 +137,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Sets a new specification of a megative values count check.
+     * Sets a new specification of a negative values count check.
      * @param monthlyPartitionNegativeCount Negative values count check specification.
      */
     public void setMonthlyPartitionNegativeCount(ColumnNegativeCountCheckSpec monthlyPartitionNegativeCount) {
@@ -500,6 +505,24 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionSumInRange, monthlyPartitionSumInRange));
         this.monthlyPartitionSumInRange = monthlyPartitionSumInRange;
         propagateHierarchyIdToField(monthlyPartitionSumInRange, "monthly_partition_sum_in_range");
+    }
+
+    /**
+     * Returns an invalid latitude count check specification.
+     * @return invalid latitude count check specification.
+     */
+    public ColumnInvalidLatitudeCountCheckSpec getMonthlyPartitionInvalidLatitudeCount() {
+        return monthlyPartitionInvalidLatitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid latitude count check.
+     * @param monthlyPartitionInvalidLatitudeCount invalid latitude count check specification.
+     */
+    public void setMonthlyPartitionInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec monthlyPartitionInvalidLatitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidLatitudeCount, monthlyPartitionInvalidLatitudeCount));
+        this.monthlyPartitionInvalidLatitudeCount = monthlyPartitionInvalidLatitudeCount;
+        propagateHierarchyIdToField(monthlyPartitionInvalidLatitudeCount, "monthly_partition_invalid_latitude_count");
     }
 
     /**

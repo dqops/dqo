@@ -77,3 +77,6 @@ curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.co
 
 REM Spreadsheet: https://docs.google.com/spreadsheets/d/1viQXuM9cSpzOhKl_js3UuRajo-84nWUrcy98qKn9U9g
 curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1viQXuM9cSpzOhKl_js3UuRajo-84nWUrcy98qKn9U9g/export?exportFormat=csv" > value_match_right_table.csv
+
+REM Spreadsheet: https://docs.google.com/spreadsheets/d/1xTnP5V9xDEz2BQ2odSnu2bY1lvz_yaLXMblrBX-S260
+curl -L --header "Authorization: Bearer %access_token%"  "https://docs.google.com/spreadsheets/d/1xTnP5V9xDEz2BQ2odSnu2bY1lvz_yaLXMblrBX-S260/export?exportFormat=csv" > geographic_coordinate_system_test.csv
