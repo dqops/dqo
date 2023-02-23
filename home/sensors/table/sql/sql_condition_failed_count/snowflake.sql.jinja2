@@ -1,9 +1,11 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+
+
 SELECT
     SUM(
         CASE
             WHEN NOT ({{ parameters.sql_condition |
-                        replace('{table}', 'analyzed_table') }})
+                        replace('{table}', lib.render_target_table()) }})
                  THEN 1
             ELSE 0
         END

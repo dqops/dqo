@@ -56,7 +56,9 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("(SELECT MAX("
+                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
+                +") IS NULL FROM {table})");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -71,7 +73,9 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("(SELECT MAX("
+                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
+                +") IS NULL FROM {table})");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -86,7 +90,9 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("(SELECT MAX("
+                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
+                +") IS NULL FROM {table})");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
@@ -101,7 +107,9 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("(SELECT MAX("
+                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
+                +") IS NULL FROM {table})");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
@@ -116,7 +124,9 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("(SELECT MAX("
+                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
+                +") IS NULL FROM {table})");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
