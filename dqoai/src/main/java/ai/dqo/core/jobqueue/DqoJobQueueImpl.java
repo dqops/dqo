@@ -16,6 +16,7 @@
 package ai.dqo.core.jobqueue;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
+import ai.dqo.core.filesystem.synchronization.FileSynchronizationChangeDetectionService;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;
@@ -45,6 +46,7 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
     private final DqoJobConcurrencyLimiter jobConcurrencyLimiter;
     private DqoJobIdGenerator dqoJobIdGenerator;
     private final DqoJobQueueMonitoringService queueMonitoringService;
+    private final FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService;
     private final AtomicInteger startedThreadsCount = new AtomicInteger();
     private final AtomicInteger runningJobsCount = new AtomicInteger();
     private LinkedBlockingQueue<DqoJobQueueEntry> jobsBlockingQueue;
@@ -61,16 +63,19 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
      * @param jobConcurrencyLimiter Job concurrency limiter.
      * @param dqoJobIdGenerator Job ID generator.
      * @param queueMonitoringService Queue monitoring service.
+     * @param fileSynchronizationChangeDetectionService File synchronization change detector, scans local files and detects if there are any unsynchronized changes.
      */
     @Autowired
     public DqoJobQueueImpl(DqoQueueConfigurationProperties queueConfigurationProperties,
                            DqoJobConcurrencyLimiter jobConcurrencyLimiter,
                            DqoJobIdGenerator dqoJobIdGenerator,
-                           DqoJobQueueMonitoringService queueMonitoringService) {
+                           DqoJobQueueMonitoringService queueMonitoringService,
+                           FileSynchronizationChangeDetectionService fileSynchronizationChangeDetectionService) {
         this.queueConfigurationProperties = queueConfigurationProperties;
         this.jobConcurrencyLimiter = jobConcurrencyLimiter;
         this.dqoJobIdGenerator = dqoJobIdGenerator;
         this.queueMonitoringService = queueMonitoringService;
+        this.fileSynchronizationChangeDetectionService = fileSynchronizationChangeDetectionService;
     }
 
     /**
@@ -83,6 +88,7 @@ public class DqoJobQueueImpl implements DqoJobQueue, InitializingBean, Disposabl
         }
 
         this.queueMonitoringService.start();
+        this.fileSynchronizationChangeDetectionService.detectUnsynchronizedChangesInBackground();
         this.jobsBlockingQueue = new LinkedBlockingQueue<>(queueConfigurationProperties.getMaxNonBlockingCapacity() != null ?
                 queueConfigurationProperties.getMaxNonBlockingCapacity() : Integer.MAX_VALUE);
 

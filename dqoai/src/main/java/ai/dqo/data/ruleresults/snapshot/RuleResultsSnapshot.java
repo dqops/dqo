@@ -68,7 +68,7 @@ public class RuleResultsSnapshot extends TableDataSnapshot {
      * @return Storage settings.
      */
     public static FileStorageSettings createRuleResultsStorageSettings() {
-        return new FileStorageSettings(DqoRoot.DATA_RULE_RESULTS,
+        return new FileStorageSettings(DqoRoot.data_rule_results,
                 BuiltInFolderNames.RULE_RESULTS,
                 PARQUET_FILE_NAME,
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME,

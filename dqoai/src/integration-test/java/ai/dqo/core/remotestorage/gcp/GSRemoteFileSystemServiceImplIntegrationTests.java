@@ -30,7 +30,6 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;
 import io.netty.buffer.ByteBuf;
-import net.bytebuddy.implementation.auxiliary.MethodCallProxy;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -60,7 +59,7 @@ public class GSRemoteFileSystemServiceImplIntegrationTests extends BaseIntegrati
 
     @Test
     void listFilesInFolder_whenEmptySourceFolder_thenNoFilesReturned() {
-        DqoFileSystem remoteFileSystem = this.gcpFileSystemFactory.createRemoteDqoCloudFSRW(DqoRoot.SOURCES);
+        DqoFileSystem remoteFileSystem = this.gcpFileSystemFactory.createRemoteDqoCloudFSRW(DqoRoot.sources);
         FolderMetadata folderMetadata = this.sut.listFilesInFolder(remoteFileSystem.getFileSystemRoot(), null, null);
 
         Assertions.assertNotNull(folderMetadata);
@@ -69,7 +68,7 @@ public class GSRemoteFileSystemServiceImplIntegrationTests extends BaseIntegrati
 
     @Test
     void uploadFile_whenLocalFileUploaded_thenFileCreatedInBucket() {
-        DqoFileSystem remoteFileSystem = this.gcpFileSystemFactory.createRemoteDqoCloudFSRW(DqoRoot.SOURCES);
+        DqoFileSystem remoteFileSystem = this.gcpFileSystemFactory.createRemoteDqoCloudFSRW(DqoRoot.sources);
 
         ConnectionWrapper initialConnWrapper = this.emptyUserHomeContext.getUserHome().getConnections().createAndAddNew("src1");
         PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
@@ -77,7 +76,7 @@ public class GSRemoteFileSystemServiceImplIntegrationTests extends BaseIntegrati
         postgresql.setDatabase("DB1");
         emptyUserHomeContext.flush();
 
-        DqoFileSystem localFileSystem = this.userHomeFileSystemFactory.createUserHomeFolderFileSystem(DqoRoot.SOURCES);
+        DqoFileSystem localFileSystem = this.userHomeFileSystemFactory.createUserHomeFolderFileSystem(DqoRoot.sources);
         Path relativeFilePath = Path.of("src1", "connection.dqoconnection.yaml");
         FileSystemService localFileSystemFileSystemService = localFileSystem.getFileSystemService();
         FileMetadata localFileMetadata = localFileSystemFileSystemService.readFileMetadata(localFileSystem.getFileSystemRoot(), relativeFilePath, null);
@@ -100,7 +99,7 @@ public class GSRemoteFileSystemServiceImplIntegrationTests extends BaseIntegrati
 
     @Test
     void uploadFileAsync_whenLocalFileUploaded_thenFileCreatedInBucket() {
-        DqoFileSystem remoteFileSystem = this.gcpFileSystemFactory.createRemoteDqoCloudFSRW(DqoRoot.SOURCES);
+        DqoFileSystem remoteFileSystem = this.gcpFileSystemFactory.createRemoteDqoCloudFSRW(DqoRoot.sources);
 
         ConnectionWrapper initialConnWrapper = this.emptyUserHomeContext.getUserHome().getConnections().createAndAddNew("src1");
         PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
@@ -108,7 +107,7 @@ public class GSRemoteFileSystemServiceImplIntegrationTests extends BaseIntegrati
         postgresql.setDatabase("DB1");
         emptyUserHomeContext.flush();
 
-        DqoFileSystem localFileSystem = this.userHomeFileSystemFactory.createUserHomeFolderFileSystem(DqoRoot.SOURCES);
+        DqoFileSystem localFileSystem = this.userHomeFileSystemFactory.createUserHomeFolderFileSystem(DqoRoot.sources);
         Path relativeFilePath = Path.of("src1", "connection.dqoconnection.yaml");
         FileSystemService localFileSystemFileSystemService = localFileSystem.getFileSystemService();
         FileMetadata localFileMetadata = localFileSystemFileSystemService.readFileMetadata(localFileSystem.getFileSystemRoot(), relativeFilePath, null);
@@ -142,7 +141,7 @@ public class GSRemoteFileSystemServiceImplIntegrationTests extends BaseIntegrati
 
     @Test
     void downloadFileAsync_whenLocalFileUploaded_thenFileCouldBeDownloaded() {
-        DqoFileSystem remoteFileSystem = this.gcpFileSystemFactory.createRemoteDqoCloudFSRW(DqoRoot.SOURCES);
+        DqoFileSystem remoteFileSystem = this.gcpFileSystemFactory.createRemoteDqoCloudFSRW(DqoRoot.sources);
 
         ConnectionWrapper initialConnWrapper = this.emptyUserHomeContext.getUserHome().getConnections().createAndAddNew("src2");
         PostgresqlParametersSpec postgresql = new PostgresqlParametersSpec();
@@ -150,7 +149,7 @@ public class GSRemoteFileSystemServiceImplIntegrationTests extends BaseIntegrati
         postgresql.setDatabase("DB1");
         emptyUserHomeContext.flush();
 
-        DqoFileSystem localFileSystem = this.userHomeFileSystemFactory.createUserHomeFolderFileSystem(DqoRoot.SOURCES);
+        DqoFileSystem localFileSystem = this.userHomeFileSystemFactory.createUserHomeFolderFileSystem(DqoRoot.sources);
         Path relativeFilePath = Path.of("src2", "connection.dqoconnection.yaml");
         FileSystemService localFileSystemFileSystemService = localFileSystem.getFileSystemService();
         FileMetadata localFileMetadata = localFileSystemFileSystemService.readFileMetadata(localFileSystem.getFileSystemRoot(), relativeFilePath, null);

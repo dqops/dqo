@@ -99,7 +99,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
             DeleteStoredDataQueueJobParameters clone = (DeleteStoredDataQueueJobParameters) super.clone();
             return clone;
         } catch (CloneNotSupportedException e) {
-            throw new AssertionError();
+            throw new RuntimeException(e);
         }
     }
 }

@@ -52,7 +52,7 @@ public class ErrorsSnapshot extends TableDataSnapshot {
      * @return Storage settings.
      */
     public static FileStorageSettings createErrorsStorageSettings() {
-        return new FileStorageSettings(DqoRoot.DATA_ERRORS,
+        return new FileStorageSettings(DqoRoot.data_errors,
                 BuiltInFolderNames.ERRORS,
                 PARQUET_FILE_NAME,
                 ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME,

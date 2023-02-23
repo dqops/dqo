@@ -16,6 +16,12 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
+import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJobParameters;
+import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderParameters;
+import ai.dqo.core.filesystem.synchronization.listeners.SilentFileSystemSynchronizationListener;
+import ai.dqo.core.filesystem.synchronization.status.CloudSynchronizationFoldersStatusModel;
+import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
@@ -69,6 +75,7 @@ public class JobsController {
     private StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider;
     private final DqoJobQueueMonitoringService jobQueueMonitoringService;
     private final DqoQueueConfigurationProperties queueConfigurationProperties;
+    private SynchronizationStatusTracker synchronizationStatusTracker;
 
     /**
      * Creates a new controller, injecting dependencies.
@@ -78,6 +85,7 @@ public class JobsController {
      * @param statisticsCollectorExecutionProgressListenerProvider Profiler execution progress listener provider used to create a valid progress listener when starting a "runprofilers" job.
      * @param jobQueueMonitoringService Job queue monitoring service.
      * @param queueConfigurationProperties Queue configuration parameters.
+     * @param synchronizationStatusTracker Synchronization change tracker.
      */
     @Autowired
     public JobsController(DqoQueueJobFactory dqoQueueJobFactory,
@@ -85,13 +93,15 @@ public class JobsController {
                           CheckExecutionProgressListenerProvider checkExecutionProgressListenerProvider,
                           StatisticsCollectorExecutionProgressListenerProvider statisticsCollectorExecutionProgressListenerProvider,
                           DqoJobQueueMonitoringService jobQueueMonitoringService,
-                          DqoQueueConfigurationProperties queueConfigurationProperties) {
+                          DqoQueueConfigurationProperties queueConfigurationProperties,
+                          SynchronizationStatusTracker synchronizationStatusTracker) {
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
         this.checkExecutionProgressListenerProvider = checkExecutionProgressListenerProvider;
         this.statisticsCollectorExecutionProgressListenerProvider = statisticsCollectorExecutionProgressListenerProvider;
         this.jobQueueMonitoringService = jobQueueMonitoringService;
         this.queueConfigurationProperties = queueConfigurationProperties;
+        this.synchronizationStatusTracker = synchronizationStatusTracker;
     }
 
     /**
@@ -217,11 +227,13 @@ public class JobsController {
             Mono<DqoJobQueueIncrementalSnapshotModel> incrementalJobChanges = this.jobQueueMonitoringService.getIncrementalJobChanges(
                     sequenceNumber, this.queueConfigurationProperties.getGetJobChangesSinceWaitSeconds(), TimeUnit.SECONDS);
             Mono<DqoJobQueueIncrementalSnapshotModel> returnEmptyWhenError = incrementalJobChanges.doOnError(
-                    error -> Mono.just(new DqoJobQueueIncrementalSnapshotModel(new ArrayList<>(), sequenceNumber)));
+                    error -> Mono.just(new DqoJobQueueIncrementalSnapshotModel(
+                            new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(), sequenceNumber)));
             return new ResponseEntity<>(returnEmptyWhenError, HttpStatus.OK); // 200
         }
         catch (Exception ex) {
-            return new ResponseEntity<>(Mono.just(new DqoJobQueueIncrementalSnapshotModel(new ArrayList<>(), sequenceNumber)), HttpStatus.OK);
+            return new ResponseEntity<>(Mono.just(new DqoJobQueueIncrementalSnapshotModel(
+                    new ArrayList<>(), this.synchronizationStatusTracker.getCurrentSynchronizationStatus(), sequenceNumber)), HttpStatus.OK);
         }
     }
 
@@ -265,6 +277,30 @@ public class JobsController {
         DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
         deleteStoredDataJob.setDeletionParameters(deleteStoredDataParameters);
         PushJobResult<DeleteStoredDataQueueJobResult> pushJobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
+        return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
+    }
+
+    /**
+     * Starts a file synchronization job that will synchronize files to DQO Cloud.
+     * @param synchronizeFolderParameter Delete stored data job parameters.
+     * @return Job summary response with the identity of the started job.
+     */
+    @PostMapping("/synchronize")
+    @ApiOperation(value = "synchronizeFolder", notes = "Starts a file synchronization job that will synchronize files from a selected DQO User home folder to the DQO Cloud. " +
+            "The the default synchronization mode is a full synchronization (upload local files, download new files from the cloud).", response = DqoQueueJobId.class)
+    @ResponseStatus(HttpStatus.CREATED)
+    @ApiResponses(value = {
+            @ApiResponse(code = 201, message = "New job that will synchronize a folder was added to the queue", response = DqoQueueJobId.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<DqoQueueJobId>> synchronizeFolder(
+            @ApiParam("Synchronize folder job parameters")
+            @RequestBody SynchronizeRootFolderParameters synchronizeFolderParameter) {
+        SynchronizeRootFolderDqoQueueJob synchronizeFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
+        SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(synchronizeFolderParameter,
+                new SilentFileSystemSynchronizationListener());
+        synchronizeFolderJob.setParameters(jobParameters);
+        PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeFolderJob);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
     }
 }

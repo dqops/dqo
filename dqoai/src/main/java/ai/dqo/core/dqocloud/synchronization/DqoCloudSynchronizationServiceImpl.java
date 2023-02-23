@@ -124,13 +124,13 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      */
     @Override
     public void synchronizeAll(FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener) {
-        synchronizeFolder(DqoRoot.SOURCES, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.SENSORS, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.RULES, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_SENSOR_READOUTS, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_RULE_RESULTS, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_ERRORS, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_STATISTICS, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.sources, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.sensors, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.rules, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_rule_results, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_statistics, synchronizationDirection, synchronizationListener);
     }
 
     /**
@@ -141,9 +141,9 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      */
     @Override
     public void synchronizeData(FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener) {
-        synchronizeFolder(DqoRoot.DATA_SENSOR_READOUTS, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_RULE_RESULTS, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_ERRORS, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.DATA_STATISTICS, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_rule_results, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_statistics, synchronizationDirection, synchronizationListener);
     }
 }

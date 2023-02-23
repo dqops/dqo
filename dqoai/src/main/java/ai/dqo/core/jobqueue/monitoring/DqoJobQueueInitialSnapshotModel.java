@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.jobqueue.monitoring;
 
+import ai.dqo.core.filesystem.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 import java.util.List;
@@ -25,15 +26,20 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DqoJobQueueInitialSnapshotModel {
     private List<DqoJobHistoryEntryModel> jobs;
+    private CloudSynchronizationFoldersStatusModel folderSynchronizationStatus;
     private long lastSequenceNumber;
 
     /**
      * Creates a new job snapshot.
      * @param jobs List of jobs.
+     * @param folderSynchronizationStatus Current folder synchronization status.
      * @param lastSequenceNumber Last change id (sequence number).
      */
-    public DqoJobQueueInitialSnapshotModel(List<DqoJobHistoryEntryModel> jobs, long lastSequenceNumber) {
+    public DqoJobQueueInitialSnapshotModel(List<DqoJobHistoryEntryModel> jobs,
+                                           CloudSynchronizationFoldersStatusModel folderSynchronizationStatus,
+                                           long lastSequenceNumber) {
         this.jobs = jobs;
+        this.folderSynchronizationStatus = folderSynchronizationStatus;
         this.lastSequenceNumber = lastSequenceNumber;
     }
 
@@ -43,6 +49,14 @@ public class DqoJobQueueInitialSnapshotModel {
      */
     public List<DqoJobHistoryEntryModel> getJobs() {
         return jobs;
+    }
+
+    /**
+     * Returns the current DQO Cloud folder synchronization status.
+     * @return Folder synchronization status.
+     */
+    public CloudSynchronizationFoldersStatusModel getFolderSynchronizationStatus() {
+        return folderSynchronizationStatus;
     }
 
     /**

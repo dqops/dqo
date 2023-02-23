@@ -68,7 +68,7 @@ public class StatisticsSnapshot extends TableDataSnapshot {
      * @return Storage settings.
      */
     public static FileStorageSettings createProfilingResultsStorageSettings() {
-        return new FileStorageSettings(DqoRoot.DATA_STATISTICS,
+        return new FileStorageSettings(DqoRoot.data_statistics,
                 BuiltInFolderNames.STATISTICS,
                 PARQUET_FILE_NAME,
                 StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME,

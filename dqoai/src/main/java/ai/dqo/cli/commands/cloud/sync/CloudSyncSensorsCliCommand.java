@@ -90,6 +90,6 @@ public class CloudSyncSensorsCliCommand extends BaseCommand implements ICommand 
      */
     @Override
     public Integer call() throws Exception {
-        return this.cloudSynchronizationService.synchronizeRoot(DqoRoot.SENSORS, this.mode, this.direction, this.isHeadless(), true);
+        return this.cloudSynchronizationService.synchronizeRoot(DqoRoot.sensors, this.mode, this.direction, this.isHeadless(), true);
     }
 }

@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.filesystem.localfiles;
 
+import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
@@ -33,7 +34,8 @@ public final class LocalHomeStorageServiceObjectMother {
         try {
             HomeLocationFindServiceImpl homeLocationFindService = HomeLocationFindServiceObjectMother.getWithTestUserHome(recreateHomeDirectory);
             UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
-            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager);
+            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(
+                    homeLocationFindService, newLockManager, new SynchronizationStatusTrackerStub());
             LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomePath());
 
             return localHomeStorageService;
@@ -53,7 +55,8 @@ public final class LocalHomeStorageServiceObjectMother {
         try {
             HomeLocationFindService homeLocationFindService = HomeLocationFindServiceObjectMother.getDefaultHomeFinder(recreateHomeDirectory);
             UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
-            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager);
+            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(
+                    homeLocationFindService, newLockManager, new SynchronizationStatusTrackerStub());
             LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomePath());
 
             return localHomeStorageService;

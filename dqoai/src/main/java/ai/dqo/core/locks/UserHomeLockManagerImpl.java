@@ -43,13 +43,14 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
         this.coreConfigurationProperties = coreConfigurationProperties;
         long lockWaitTimeoutSeconds = coreConfigurationProperties.getLockWaitTimeoutSeconds();
         this.locks = new LinkedHashMap<>() {{
-            put(DqoRoot.SOURCES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.SENSORS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.RULES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.DATA_SENSOR_READOUTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.DATA_RULE_RESULTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.DATA_STATISTICS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.DATA_ERRORS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.sources, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.sensors, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.rules, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.data_sensor_readouts, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.data_rule_results, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.data_statistics, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.data_errors, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot._indexes, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
         }};
     }
 

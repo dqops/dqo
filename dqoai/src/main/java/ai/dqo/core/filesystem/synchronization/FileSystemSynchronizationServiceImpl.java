@@ -20,6 +20,8 @@ import ai.dqo.core.filesystem.filesystemservice.contract.*;
 import ai.dqo.core.filesystem.metadata.FileDifference;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
+import ai.dqo.core.filesystem.synchronization.status.FolderSynchronizationStatus;
+import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.core.locks.UserHomeLockManager;
@@ -40,17 +42,21 @@ import java.util.*;
 @Component
 public class FileSystemSynchronizationServiceImpl implements FileSystemSynchronizationService {
     private final UserHomeLockManager userHomeLockManager;
+    private final SynchronizationStatusTracker synchronizationStatusTracker;
     private final DqoCloudConfigurationProperties dqoCloudConfigurationProperties;
 
     /**
      * Creates a new file system synchronization service.
      * @param userHomeLockManager User home lock manager.
+     * @param synchronizationStatusTracker Folder synchronization status tracker, notified when the synchronization starts and when it finishes.
      * @param dqoCloudConfigurationProperties dqo.cloud configuration parameters.
      */
     @Autowired
     public FileSystemSynchronizationServiceImpl(UserHomeLockManager userHomeLockManager,
+                                                SynchronizationStatusTracker synchronizationStatusTracker,
                                                 DqoCloudConfigurationProperties dqoCloudConfigurationProperties) {
         this.userHomeLockManager = userHomeLockManager;
+        this.synchronizationStatusTracker = synchronizationStatusTracker;
         this.dqoCloudConfigurationProperties = dqoCloudConfigurationProperties;
     }
 
@@ -94,6 +100,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         Set<Path> synchronizedSourceChanges = new HashSet<>();
         FolderMetadata newSourceFolderIndex = null;
 
+        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.synchronizing);
         try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot)) {
             currentSourceFolderIndex = local.getCurrentFileIndex()
                     .orElseGet(() -> sourceFileSystemService.listFilesInFolder(
@@ -113,6 +120,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                 }
             }
         }
+        this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.unchanged);
 
         Collection<FolderMetadata> emptySourceFolders =
                 (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.download)

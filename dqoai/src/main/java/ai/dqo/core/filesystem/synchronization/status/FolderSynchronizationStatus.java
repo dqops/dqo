@@ -13,29 +13,29 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.core.filesystem.synchronization;
+package ai.dqo.core.filesystem.synchronization.status;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Data synchronization direction between a local DQO Home and DQO Cloud data quality data warehouse.
+ * Enumeration of statuses that identify the synchronization status for each folder that could be synchronized to DQO Cloud.
  */
-public enum FileSynchronizationDirection {
+public enum FolderSynchronizationStatus {
     /**
-     * Full synchronization that both uploads local changes to the DQO Cloud and downloads changes from DQO Cloud.
+     * The folder has no changes that should be synchronized to the cloud.
      */
-    @JsonProperty("full")
-    full,
+    @JsonProperty("unchanged")
+    unchanged,
 
     /**
-     * Only download new changes from DQO Cloud.
+     * The folder has local changes that should be synchronized to the cloud.
      */
-    @JsonProperty("download")
-    download,
+    @JsonProperty("changed")
+    changed,
 
     /**
-     * Only upload new local changes to DQO Cloud.
+     * A synchronization job is running on the folder right now.
      */
-    @JsonProperty("upload")
-    upload
+    @JsonProperty("synchronizing")
+    synchronizing
 }

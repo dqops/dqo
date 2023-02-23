@@ -73,7 +73,7 @@ public class SensorReadoutsSnapshot extends TableDataSnapshot {
      * @return Storage settings.
      */
     public static FileStorageSettings createSensorReadoutsStorageSettings() {
-        return new FileStorageSettings(DqoRoot.DATA_SENSOR_READOUTS,
+        return new FileStorageSettings(DqoRoot.data_sensor_readouts,
                 BuiltInFolderNames.SENSOR_READOUTS,
                 PARQUET_FILE_NAME,
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME,

@@ -53,25 +53,25 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
         ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
         AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(authenticatedClient);
         switch (rootType) {
-            case DATA_SENSOR_READOUTS:
+            case data_sensor_readouts:
                 return accessTokenIssueApi.issueBucketSensorReadoutsRWAccessToken();
 
-            case DATA_RULE_RESULTS:
+            case data_rule_results:
                 return accessTokenIssueApi.issueBucketRuleResultsRWAccessToken();
 
-            case DATA_ERRORS:
+            case data_errors:
                 return accessTokenIssueApi.issueBucketErrorsRWAccessToken();
 
-            case DATA_STATISTICS:
+            case data_statistics:
                 return accessTokenIssueApi.issueBucketStatisticsRWAccessToken();
 
-            case SOURCES:
+            case sources:
                 return accessTokenIssueApi.issueBucketSourcesRWAccessToken();
 
-            case SENSORS:
+            case sensors:
                 return accessTokenIssueApi.issueBucketSensorsRWAccessToken();
 
-            case RULES:
+            case rules:
                 return accessTokenIssueApi.issueBucketRulesRWAccessToken();
 
             default:
