@@ -326,6 +326,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         String yamlSample = this.yamlSerializer.serialize(tableYaml);
         checkDocumentationModel.setSampleYaml(yamlSample);
 
+        checkDocumentationModel.setCheckSample(createCheckSample(yamlSample, similarCheckModel, checkDocumentationModel));
+
         checkDocumentationModel.setProviderTemplates(generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation));
 
         trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key"));
@@ -347,6 +349,45 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         // TODO: in the future, we can also show the generated JSON for the "run sensors" rest rest api job and cli command to enable this sensor
 
         return checkDocumentationModel;
+    }
+
+    /**
+     * Divides string to list of string, looks for phrase, assign position of markers and extract
+     * data quality check to separate list.
+     * It's necessary for show in docs structure of data quality check and to highlight data quality
+     * check in yaml sample in documentation.
+     * @param yamlSample Yaml template.
+     * @param similarCheckModel Similar check model.
+     * @param checkDocumentationModel Check documentation model.
+     * @return Data quality check sample.
+     */
+    private List<String> createCheckSample(String yamlSample, SimilarCheckModel similarCheckModel, CheckDocumentationModel checkDocumentationModel) {
+        List<String> checkSample = new ArrayList<>();
+        boolean isCheckSection = false;
+        String checkBeginMarker = "checks:";
+        String checkEndMarker = "";
+        if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
+            checkEndMarker = "  columns:";
+        } else if (similarCheckModel.getCheckTarget() == CheckTarget.column) {
+            checkEndMarker = "      labels:";
+        }
+
+        List<String> splitYaml = List.of(yamlSample.split("\\r?\\n|\\r"));
+        for (int i = 0; i <= splitYaml.size(); i++) {
+            if (splitYaml.get(i).contains(checkBeginMarker)) {
+                isCheckSection = true;
+                checkDocumentationModel.setCheckSampleBeginLine(i + 1);
+            }
+            if (splitYaml.get(i).contains(checkEndMarker)) {
+                isCheckSection = false;
+                checkDocumentationModel.setCheckSampleEndLine(i);
+                break;
+            }
+            if (isCheckSection) {
+                checkSample.add(splitYaml.get(i));
+            }
+        }
+        return checkSample;
     }
 
     /**

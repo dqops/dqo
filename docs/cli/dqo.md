@@ -17,10 +17,10 @@ bash prompt> dqo [root_level_parameter] [command]
 bash prompt> dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 ```
 
-**Parameters**  
+**Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`--dqo.cloud.api-key`<br/>|DQO cloud api key. Log in to https://cloud.dqo.ai/ to get the key. This parameter is effective only in CLI mode.<br/>This parameter could be also configured by setting DQO_CLOUD_API_KEY  environment variable.| ||
 |`--dqo.core.lock-wait-timeout-seconds`<br/>|Sets the maximum wait timeout in seconds to obtain a lock to read or write files. This parameter is effective only in CLI mode.<br/>This parameter could be also configured by setting DQO_CORE_LOCK_WAIT_TIMEOUT_SECONDS  environment variable.| ||
 |`--dqo.core.print-stack-trace`<br/>|Prints a full stack trace for errors on the console. This parameter is effective only in CLI mode.<br/>This parameter could be also configured by setting DQO_CORE_PRINT_STACK_TRACE  environment variable.| ||

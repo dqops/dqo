@@ -19,8 +19,51 @@ Verifies that the percentage of valid USA phone in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |valid_usa_phone_percent|adhoc| |[valid_usa_phone_percent](../../../sensors/column/#valid-usa-phone-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=valid_usa_phone_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        pii:
+          valid_usa_phone_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -64,7 +107,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -88,7 +131,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -156,7 +199,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -178,7 +221,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -290,7 +333,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -314,7 +357,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -382,7 +425,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -406,7 +449,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -482,8 +525,42 @@ Verifies that the percentage of valid USA phone in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_valid_usa_phone_percent|checkpoint|daily|[valid_usa_phone_percent](../../../sensors/column/#valid-usa-phone-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_valid_usa_phone_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -528,7 +605,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -552,7 +629,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -620,7 +697,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -642,7 +719,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -755,7 +832,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -779,7 +856,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -847,7 +924,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -871,7 +948,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -947,8 +1024,42 @@ Verifies that the percentage of valid USA phone in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_valid_usa_phone_percent|checkpoint|monthly|[valid_usa_phone_percent](../../../sensors/column/#valid-usa-phone-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_valid_usa_phone_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -993,7 +1104,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1017,7 +1128,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1085,7 +1196,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1107,7 +1218,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1220,7 +1331,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1244,7 +1355,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1312,7 +1423,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1336,7 +1447,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1412,8 +1523,52 @@ Verifies that the percentage of valid USA phone in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_valid_usa_phone_percent|partitioned|daily|[valid_usa_phone_percent](../../../sensors/column/#valid-usa-phone-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_valid_usa_phone_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          pii:
+            daily_partition_valid_usa_phone_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1458,7 +1613,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1482,7 +1637,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1550,7 +1705,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1572,7 +1727,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1685,7 +1840,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1709,7 +1864,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1777,7 +1932,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1801,7 +1956,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1877,8 +2032,52 @@ Verifies that the percentage of valid USA phone in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_valid_usa_phone_percent|partitioned|monthly|[valid_usa_phone_percent](../../../sensors/column/#valid-usa-phone-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_valid_usa_phone_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          pii:
+            monthly_partition_valid_usa_phone_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1923,7 +2122,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -1947,7 +2146,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -2015,7 +2214,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -2037,7 +2236,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -2150,7 +2349,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -2174,7 +2373,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -2242,7 +2441,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -2266,7 +2465,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -2350,8 +2549,51 @@ Verifies that the percentage of rows that contains USA phone number in a column 
 |----------|----------|----------|-----------|-------------|
 |contains_usa_phone_percent|adhoc| |[contains_usa_phone_percent](../../../sensors/column/#contains-usa-phone-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=contains_usa_phone_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        pii:
+          contains_usa_phone_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2395,7 +2637,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2419,7 +2661,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2487,7 +2729,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2509,7 +2751,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2621,7 +2863,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2645,7 +2887,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2713,7 +2955,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2737,7 +2979,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2813,8 +3055,42 @@ Verifies that the percentage of rows that contains a USA phone number in a colum
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_contains_usa_phone_percent|checkpoint|daily|[contains_usa_phone_percent](../../../sensors/column/#contains-usa-phone-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_contains_usa_phone_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2859,7 +3135,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2883,7 +3159,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2951,7 +3227,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -2973,7 +3249,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3086,7 +3362,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3110,7 +3386,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3178,7 +3454,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3202,7 +3478,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3278,8 +3554,42 @@ Verifies that the percentage of rows that contains a USA phone number in a colum
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_contains_usa_phone_percent|checkpoint|monthly|[contains_usa_phone_percent](../../../sensors/column/#contains-usa-phone-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_contains_usa_phone_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3324,7 +3634,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3348,7 +3658,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3416,7 +3726,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3438,7 +3748,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3551,7 +3861,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3575,7 +3885,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3643,7 +3953,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3667,7 +3977,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3743,8 +4053,52 @@ Verifies that the percentage of rows that contains USA phone number in a column 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_contains_usa_phone_percent|partitioned|daily|[contains_usa_phone_percent](../../../sensors/column/#contains-usa-phone-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_contains_usa_phone_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          pii:
+            daily_partition_contains_usa_phone_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3789,7 +4143,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3813,7 +4167,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3881,7 +4235,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -3903,7 +4257,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4016,7 +4370,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4040,7 +4394,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4108,7 +4462,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4132,7 +4486,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4208,8 +4562,52 @@ Verifies that the percentage of rows that contains USA phone number in a column 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_contains_usa_phone_percent|partitioned|monthly|[contains_usa_phone_percent](../../../sensors/column/#contains-usa-phone-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_contains_usa_phone_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          pii:
+            monthly_partition_contains_usa_phone_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4254,7 +4652,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4278,7 +4676,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4346,7 +4744,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4368,7 +4766,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4481,7 +4879,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4505,7 +4903,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4573,7 +4971,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4597,7 +4995,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -4681,8 +5079,51 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |valid_usa_zipcode_percent|adhoc| |[valid_usa_zipcode_percent](../../../sensors/column/#valid-usa-zipcode-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=valid_usa_zipcode_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        pii:
+          valid_usa_zipcode_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4726,7 +5167,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -4750,7 +5191,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -4818,7 +5259,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -4840,7 +5281,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -4952,7 +5393,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -4976,7 +5417,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5044,7 +5485,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5068,7 +5509,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5144,8 +5585,42 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_valid_usa_zipcode_percent|checkpoint|daily|[valid_usa_zipcode_percent](../../../sensors/column/#valid-usa-zipcode-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_valid_usa_zipcode_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5190,7 +5665,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5214,7 +5689,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5282,7 +5757,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5304,7 +5779,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5417,7 +5892,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5441,7 +5916,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5509,7 +5984,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5533,7 +6008,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5609,8 +6084,42 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_valid_usa_zipcode_percent|checkpoint|monthly|[valid_usa_zipcode_percent](../../../sensors/column/#valid-usa-zipcode-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_valid_usa_zipcode_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5655,7 +6164,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5679,7 +6188,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5747,7 +6256,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5769,7 +6278,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5882,7 +6391,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5906,7 +6415,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5974,7 +6483,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -5998,7 +6507,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6074,8 +6583,52 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |daily_partition_valid_usa_zipcode_percent|partitioned|daily|[valid_usa_zipcode_percent](../../../sensors/column/#valid-usa-zipcode-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_valid_usa_zipcode_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          pii:
+            daily_partition_valid_usa_zipcode_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -6120,7 +6673,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6144,7 +6697,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6212,7 +6765,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6234,7 +6787,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6347,7 +6900,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6371,7 +6924,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6439,7 +6992,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6463,7 +7016,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6539,8 +7092,52 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_valid_usa_zipcode_percent|partitioned|monthly|[valid_usa_zipcode_percent](../../../sensors/column/#valid-usa-zipcode-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_valid_usa_zipcode_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          pii:
+            monthly_partition_valid_usa_zipcode_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -6585,7 +7182,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6609,7 +7206,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6677,7 +7274,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6699,7 +7296,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6812,7 +7409,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6836,7 +7433,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6904,7 +7501,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -6928,7 +7525,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -7012,8 +7609,51 @@ Verifies that the percentage of rows that contains USA zip code in a column does
 |----------|----------|----------|-----------|-------------|
 |contains_usa_zipcode_percent|adhoc| |[contains_usa_zipcode_percent](../../../sensors/column/#contains-usa-zipcode-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=contains_usa_zipcode_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        pii:
+          contains_usa_zipcode_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -7057,7 +7697,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7081,7 +7721,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7149,7 +7789,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7171,7 +7811,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7283,7 +7923,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7307,7 +7947,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7375,7 +8015,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7399,7 +8039,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7475,8 +8115,42 @@ Verifies that the percentage of rows that contains a USA zip code in a column do
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_contains_usa_zipcode_percent|checkpoint|daily|[contains_usa_zipcode_percent](../../../sensors/column/#contains-usa-zipcode-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_contains_usa_zipcode_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -7521,7 +8195,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7545,7 +8219,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7613,7 +8287,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7635,7 +8309,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7748,7 +8422,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7772,7 +8446,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7840,7 +8514,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7864,7 +8538,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -7940,8 +8614,42 @@ Verifies that the percentage of rows that contains a USA zip code in a column do
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_contains_usa_zipcode_percent|checkpoint|monthly|[contains_usa_zipcode_percent](../../../sensors/column/#contains-usa-zipcode-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_contains_usa_zipcode_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -7986,7 +8694,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8010,7 +8718,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8078,7 +8786,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8100,7 +8808,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8213,7 +8921,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8237,7 +8945,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8305,7 +9013,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8329,7 +9037,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8405,8 +9113,52 @@ Verifies that the percentage of rows that contains USA zip code in a column does
 |----------|----------|----------|-----------|-------------|
 |daily_partition_contains_usa_zipcode_percent|partitioned|daily|[contains_usa_zipcode_percent](../../../sensors/column/#contains-usa-zipcode-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_contains_usa_zipcode_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          pii:
+            daily_partition_contains_usa_zipcode_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -8451,7 +9203,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8475,7 +9227,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8543,7 +9295,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8565,7 +9317,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8678,7 +9430,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8702,7 +9454,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8770,7 +9522,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8794,7 +9546,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8870,8 +9622,52 @@ Verifies that the percentage of rows that contains USA zip code in a column does
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_contains_usa_zipcode_percent|partitioned|monthly|[contains_usa_zipcode_percent](../../../sensors/column/#contains-usa-zipcode-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_contains_usa_zipcode_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          pii:
+            monthly_partition_contains_usa_zipcode_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -8916,7 +9712,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -8940,7 +9736,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -9008,7 +9804,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -9030,7 +9826,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -9143,7 +9939,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -9167,7 +9963,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -9235,7 +10031,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table.`target_column` AS STRING),
+                        CAST(analyzed_table.`target_column` AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -9259,7 +10055,7 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST(analyzed_table."target_column" AS STRING),
+                        CAST(analyzed_table."target_column" AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -9343,8 +10139,51 @@ Verifies that the percentage of valid emails in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |valid_email_percent|adhoc| |[valid_email_percent](../../../sensors/column/#valid-email-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=valid_email_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        pii:
+          valid_email_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -9387,7 +10226,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9409,7 +10248,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9475,7 +10314,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9495,7 +10334,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9605,7 +10444,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9627,7 +10466,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9693,7 +10532,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9715,7 +10554,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9790,8 +10629,42 @@ Verifies that the percentage of valid emails in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_valid_email_percent|checkpoint|daily|[valid_email_percent](../../../sensors/column/#valid-email-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_valid_email_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -9835,7 +10708,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9857,7 +10730,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9923,7 +10796,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -9943,7 +10816,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10054,7 +10927,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10076,7 +10949,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10142,7 +11015,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10164,7 +11037,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10239,8 +11112,42 @@ Verifies that the percentage of valid emails in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_valid_email_percent|checkpoint|monthly|[valid_email_percent](../../../sensors/column/#valid-email-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_valid_email_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -10284,7 +11191,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10306,7 +11213,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10372,7 +11279,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10392,7 +11299,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10503,7 +11410,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10525,7 +11432,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10591,7 +11498,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10613,7 +11520,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10688,8 +11595,52 @@ Verifies that the percentage of valid emails in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |daily_partition_valid_email_percent|partitioned|daily|[valid_email_percent](../../../sensors/column/#valid-email-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_valid_email_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          pii:
+            daily_partition_valid_email_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -10733,7 +11684,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10755,7 +11706,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10821,7 +11772,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10841,7 +11792,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10952,7 +11903,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -10974,7 +11925,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11040,7 +11991,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11062,7 +12013,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11137,8 +12088,52 @@ Verifies that the percentage of valid emails in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_valid_email_percent|partitioned|monthly|[valid_email_percent](../../../sensors/column/#valid-email-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_valid_email_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          pii:
+            monthly_partition_valid_email_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -11182,7 +12177,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11204,7 +12199,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11270,7 +12265,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11290,7 +12285,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11401,7 +12396,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11423,7 +12418,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11489,7 +12484,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11511,7 +12506,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -11594,8 +12589,51 @@ Verifies that the percentage of rows that contains valid emails in a column does
 |----------|----------|----------|-----------|-------------|
 |contains_email_percent|adhoc| |[contains_email_percent](../../../sensors/column/#contains-email-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=contains_email_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        pii:
+          contains_email_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -11638,7 +12676,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -11660,7 +12698,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -11726,7 +12764,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -11746,7 +12784,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -11856,7 +12894,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -11878,7 +12916,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -11944,7 +12982,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -11966,7 +13004,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12041,8 +13079,42 @@ Verifies that the percentage of rows that contains emails in a column does not e
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_contains_email_percent|checkpoint|daily|[contains_email_percent](../../../sensors/column/#contains-email-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_contains_email_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -12086,7 +13158,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12108,7 +13180,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12174,7 +13246,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12194,7 +13266,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12305,7 +13377,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12327,7 +13399,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12393,7 +13465,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12415,7 +13487,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12490,8 +13562,42 @@ Verifies that the percentage of rows that contains emails in a column does not e
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_contains_email_percent|checkpoint|monthly|[contains_email_percent](../../../sensors/column/#contains-email-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_contains_email_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -12535,7 +13641,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12557,7 +13663,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12623,7 +13729,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12643,7 +13749,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12754,7 +13860,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12776,7 +13882,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12842,7 +13948,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12864,7 +13970,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -12939,8 +14045,52 @@ Verifies that the percentage of rows that contains emails in a column does not e
 |----------|----------|----------|-----------|-------------|
 |daily_partition_contains_email_percent|partitioned|daily|[contains_email_percent](../../../sensors/column/#contains-email-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_contains_email_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          pii:
+            daily_partition_contains_email_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -12984,7 +14134,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13006,7 +14156,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13072,7 +14222,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13092,7 +14242,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13203,7 +14353,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13225,7 +14375,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13291,7 +14441,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13313,7 +14463,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13388,8 +14538,52 @@ Verifies that the percentage of rows that contains emails in a column does not e
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_contains_email_percent|partitioned|monthly|[contains_email_percent](../../../sensors/column/#contains-email-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_contains_email_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          pii:
+            monthly_partition_contains_email_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -13433,7 +14627,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13455,7 +14649,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13521,7 +14715,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13541,7 +14735,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13652,7 +14846,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13674,7 +14868,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13740,7 +14934,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13762,7 +14956,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -13845,8 +15039,51 @@ Verifies that the percentage of valid IP4 address in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |valid_ip4_address_percent|adhoc| |[valid_ip4_address_percent](../../../sensors/column/#valid-ip4-address-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=valid_ip4_address_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        pii:
+          valid_ip4_address_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -13889,7 +15126,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -13911,7 +15148,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -13977,7 +15214,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -13997,7 +15234,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14107,7 +15344,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14129,7 +15366,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14195,7 +15432,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14217,7 +15454,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14292,8 +15529,42 @@ Verifies that the percentage of valid IP4 address in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_valid_ip4_address_percent|checkpoint|daily|[valid_ip4_address_percent](../../../sensors/column/#valid-ip4-address-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_valid_ip4_address_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -14337,7 +15608,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14359,7 +15630,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14425,7 +15696,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14445,7 +15716,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14556,7 +15827,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14578,7 +15849,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14644,7 +15915,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14666,7 +15937,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14741,8 +16012,42 @@ Verifies that the percentage of valid IP4 address in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_valid_ip4_address_percent|checkpoint|monthly|[valid_ip4_address_percent](../../../sensors/column/#valid-ip4-address-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_valid_ip4_address_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -14786,7 +16091,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14808,7 +16113,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14874,7 +16179,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -14894,7 +16199,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15005,7 +16310,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15027,7 +16332,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15093,7 +16398,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15115,7 +16420,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15190,8 +16495,52 @@ Verifies that the percentage of valid IP4 address in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_partition_valid_ip4_address_percent|partitioned|daily|[valid_ip4_address_percent](../../../sensors/column/#valid-ip4-address-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_valid_ip4_address_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          pii:
+            daily_partition_valid_ip4_address_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -15235,7 +16584,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15257,7 +16606,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15323,7 +16672,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15343,7 +16692,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15454,7 +16803,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15476,7 +16825,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15542,7 +16891,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15564,7 +16913,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15639,8 +16988,52 @@ Verifies that the percentage of valid IP4 address in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_valid_ip4_address_percent|partitioned|monthly|[valid_ip4_address_percent](../../../sensors/column/#valid-ip4-address-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_valid_ip4_address_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          pii:
+            monthly_partition_valid_ip4_address_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -15684,7 +17077,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15706,7 +17099,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15772,7 +17165,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15792,7 +17185,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15903,7 +17296,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15925,7 +17318,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -15991,7 +17384,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -16013,7 +17406,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -16096,8 +17489,51 @@ Verifies that the percentage of valid IP6 address in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |valid_ip6_address_percent|adhoc| |[valid_ip6_address_percent](../../../sensors/column/#valid-ip6-address-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=valid_ip6_address_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        pii:
+          valid_ip6_address_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -16140,7 +17576,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16162,7 +17598,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16228,7 +17664,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16248,7 +17684,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16358,7 +17794,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16380,7 +17816,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16446,7 +17882,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16468,7 +17904,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16543,8 +17979,42 @@ Verifies that the percentage of valid IP6 address in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_valid_ip6_address_percent|checkpoint|daily|[valid_ip6_address_percent](../../../sensors/column/#valid-ip6-address-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_valid_ip6_address_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -16588,7 +18058,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16610,7 +18080,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16676,7 +18146,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16696,7 +18166,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16807,7 +18277,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16829,7 +18299,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16895,7 +18365,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16917,7 +18387,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -16992,8 +18462,42 @@ Verifies that the percentage of valid IP6 address in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_valid_ip6_address_percent|checkpoint|monthly|[valid_ip6_address_percent](../../../sensors/column/#valid-ip6-address-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_valid_ip6_address_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -17037,7 +18541,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17059,7 +18563,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17125,7 +18629,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17145,7 +18649,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17256,7 +18760,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17278,7 +18782,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17344,7 +18848,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17366,7 +18870,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17441,8 +18945,52 @@ Verifies that the percentage of valid IP6 address in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_partition_valid_ip6_address_percent|partitioned|daily|[valid_ip6_address_percent](../../../sensors/column/#valid-ip6-address-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_valid_ip6_address_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          pii:
+            daily_partition_valid_ip6_address_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -17486,7 +19034,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17508,7 +19056,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17574,7 +19122,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17594,7 +19142,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17705,7 +19253,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17727,7 +19275,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17793,7 +19341,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17815,7 +19363,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17890,8 +19438,52 @@ Verifies that the percentage of valid IP6 address in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_valid_ip6_address_percent|partitioned|monthly|[valid_ip6_address_percent](../../../sensors/column/#valid-ip6-address-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_valid_ip6_address_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          pii:
+            monthly_partition_valid_ip6_address_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -17935,7 +19527,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -17957,7 +19549,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -18023,7 +19615,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -18043,7 +19635,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -18154,7 +19746,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -18176,7 +19768,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -18242,7 +19834,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -18264,7 +19856,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END

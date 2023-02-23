@@ -19,8 +19,51 @@ Verifies that the percentage of date values in future in a column does not excee
 |----------|----------|----------|-----------|-------------|
 |date_values_in_future_percent|adhoc| |[date_values_in_future_percent](../../../sensors/column/#date-values-in-future-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=date_values_in_future_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        datetime:
+          date_values_in_future_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -78,14 +121,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -107,15 +148,39 @@ spec:
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -149,7 +214,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -191,7 +261,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -217,7 +292,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
@@ -234,7 +313,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" > CURRENT_DATE()
+                    WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
@@ -253,7 +332,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
@@ -269,7 +352,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         LOCALTIMESTAMP AS time_period,
@@ -351,14 +438,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -380,15 +465,39 @@ spec:
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -422,7 +531,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -464,7 +578,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -490,7 +609,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table.`country` AS stream_level_1,
@@ -509,7 +632,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" > CURRENT_DATE()
+                    WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
@@ -530,7 +653,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
@@ -548,7 +675,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
@@ -576,8 +707,42 @@ Verifies that the percentage of date values in future in a column does not excee
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_date_values_in_future_percent|checkpoint|daily|[date_values_in_future_percent](../../../sensors/column/#date-values-in-future-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_date_values_in_future_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -636,14 +801,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -665,15 +828,39 @@ spec:
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -707,7 +894,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -749,7 +941,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -775,7 +972,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
@@ -792,7 +993,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" > CURRENT_DATE()
+                    WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
@@ -811,7 +1012,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -827,7 +1032,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -910,14 +1119,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -939,15 +1146,39 @@ spec:
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -981,7 +1212,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1023,7 +1259,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1049,7 +1290,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table.`country` AS stream_level_1,
@@ -1068,7 +1313,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" > CURRENT_DATE()
+                    WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
@@ -1089,7 +1334,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
@@ -1107,7 +1356,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
@@ -1135,8 +1388,42 @@ Verifies that the percentage of date values in future in a column does not excee
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_date_values_in_future_percent|checkpoint|monthly|[date_values_in_future_percent](../../../sensors/column/#date-values-in-future-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_date_values_in_future_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1195,14 +1482,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1224,15 +1509,39 @@ spec:
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1266,7 +1575,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1308,7 +1622,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1334,7 +1653,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
@@ -1351,7 +1674,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" > CURRENT_DATE()
+                    WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
@@ -1370,7 +1693,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -1386,7 +1713,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -1469,14 +1800,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1498,15 +1827,39 @@ spec:
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1540,7 +1893,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1582,7 +1940,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1608,7 +1971,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table.`country` AS stream_level_1,
@@ -1627,7 +1994,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" > CURRENT_DATE()
+                    WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
@@ -1648,7 +2015,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
@@ -1666,7 +2037,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
@@ -1694,8 +2069,52 @@ Verifies that the percentage of date values in future in a column does not excee
 |----------|----------|----------|-----------|-------------|
 |daily_partition_date_values_in_future_percent|partitioned|daily|[date_values_in_future_percent](../../../sensors/column/#date-values-in-future-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_date_values_in_future_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          datetime:
+            daily_partition_date_values_in_future_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1754,14 +2173,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1783,15 +2200,39 @@ spec:
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1825,7 +2266,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1867,7 +2313,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1893,7 +2344,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
@@ -1910,7 +2365,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" > CURRENT_DATE()
+                    WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
@@ -1929,7 +2384,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -1945,7 +2404,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -2028,14 +2491,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2057,15 +2518,39 @@ spec:
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -2099,7 +2584,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2141,7 +2631,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2167,7 +2662,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table.`country` AS stream_level_1,
@@ -2186,7 +2685,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" > CURRENT_DATE()
+                    WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
@@ -2207,7 +2706,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
@@ -2225,7 +2728,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
@@ -2253,8 +2760,52 @@ Verifies that the percentage of date values in future in a column does not excee
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_date_values_in_future_percent|partitioned|monthly|[date_values_in_future_percent](../../../sensors/column/#date-values-in-future-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_date_values_in_future_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          datetime:
+            monthly_partition_date_values_in_future_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2313,14 +2864,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2342,15 +2891,39 @@ spec:
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -2384,7 +2957,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2426,7 +3004,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2452,7 +3035,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
@@ -2469,7 +3056,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" > CURRENT_DATE()
+                    WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
@@ -2488,7 +3075,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -2504,7 +3095,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -2587,14 +3182,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2616,15 +3209,39 @@ spec:
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -2658,7 +3275,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2700,7 +3322,12 @@ spec:
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2726,7 +3353,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+                CASE
+                    WHEN SAFE_CAST(analyzed_table.`target_column` AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table.`country` AS stream_level_1,
@@ -2745,7 +3376,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN analyzed_table."target_column" > CURRENT_DATE()
+                    WHEN SAFE_CAST(analyzed_table."target_column" AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
@@ -2766,7 +3397,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
@@ -2784,7 +3419,11 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                
+                CASE
+                    WHEN ("target_column")::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
             ) / COUNT(*)
         END AS actual_value,
         analyzed_table."country" AS stream_level_1,
@@ -2820,8 +3459,54 @@ Verifies that the percentage of date values in the range defined by the user in 
 |----------|----------|----------|-----------|-------------|
 |datetime_value_in_range_date_percent|adhoc| |[value_in_range_date_percent](../../../sensors/column/#value-in-range-date-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=datetime_value_in_range_date_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        datetime:
+          datetime_value_in_range_date_percent:
+            parameters:
+              include_min_value: true
+              include_max_value: true
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2863,19 +3548,9 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -2885,6 +3560,15 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -2917,15 +3601,15 @@ spec:
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -2945,6 +3629,7 @@ spec:
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -2959,11 +3644,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -3000,11 +3685,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -3029,7 +3714,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3044,12 +3729,10 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None> >= '' AND <INVALID DATA TYPE: None> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3069,7 +3752,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3089,7 +3772,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3156,19 +3839,9 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -3178,6 +3851,15 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -3210,15 +3892,15 @@ spec:
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -3238,6 +3920,7 @@ spec:
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -3252,11 +3935,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -3293,11 +3976,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -3322,7 +4005,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3339,12 +4022,10 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None> >= '' AND <INVALID DATA TYPE: None> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3366,7 +4047,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3388,7 +4069,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3417,8 +4098,42 @@ Verifies that the percentage of date values in the range defined by the user in 
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_datetime_value_in_range_date_percent|checkpoint|daily|[value_in_range_date_percent](../../../sensors/column/#value-in-range-date-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_datetime_value_in_range_date_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3461,19 +4176,9 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -3483,6 +4188,15 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -3515,15 +4229,15 @@ spec:
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -3543,6 +4257,7 @@ spec:
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -3557,11 +4272,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -3598,11 +4313,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -3627,7 +4342,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3642,12 +4357,10 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None> >= '' AND <INVALID DATA TYPE: None> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3667,7 +4380,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3687,7 +4400,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3755,19 +4468,9 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -3777,6 +4480,15 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -3809,15 +4521,15 @@ spec:
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -3837,6 +4549,7 @@ spec:
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -3851,11 +4564,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -3892,11 +4605,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -3921,7 +4634,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3938,12 +4651,10 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None> >= '' AND <INVALID DATA TYPE: None> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3965,7 +4676,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -3987,7 +4698,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4016,8 +4727,42 @@ Verifies that the percentage of date values in the range defined by the user in 
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_datetime_value_in_range_date_percent|checkpoint|monthly|[value_in_range_date_percent](../../../sensors/column/#value-in-range-date-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_datetime_value_in_range_date_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4060,19 +4805,9 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -4082,6 +4817,15 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -4114,15 +4858,15 @@ spec:
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -4142,6 +4886,7 @@ spec:
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -4156,11 +4901,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -4197,11 +4942,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -4226,7 +4971,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4241,12 +4986,10 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None> >= '' AND <INVALID DATA TYPE: None> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4266,7 +5009,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4286,7 +5029,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4354,19 +5097,9 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -4376,6 +5109,15 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -4408,15 +5150,15 @@ spec:
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -4436,6 +5178,7 @@ spec:
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -4450,11 +5193,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -4491,11 +5234,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -4520,7 +5263,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4537,12 +5280,10 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None> >= '' AND <INVALID DATA TYPE: None> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4564,7 +5305,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4586,7 +5327,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4615,8 +5356,55 @@ Verifies that the percentage of date values in the range defined by the user in 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_datetime_value_in_range_date_percent|partitioned|daily|[value_in_range_date_percent](../../../sensors/column/#value-in-range-date-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_datetime_value_in_range_date_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          datetime:
+            daily_partition_datetime_value_in_range_date_percent:
+              parameters:
+                include_min_value: true
+                include_max_value: true
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4659,19 +5447,9 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -4681,6 +5459,15 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -4713,15 +5500,15 @@ spec:
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -4741,6 +5528,7 @@ spec:
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -4755,11 +5543,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -4796,11 +5584,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -4825,7 +5613,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4840,12 +5628,10 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None> >= '' AND <INVALID DATA TYPE: None> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4865,7 +5651,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4885,7 +5671,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -4953,19 +5739,9 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -4975,6 +5751,15 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -5007,15 +5792,15 @@ spec:
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -5035,6 +5820,7 @@ spec:
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -5049,11 +5835,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -5090,11 +5876,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -5119,7 +5905,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5136,12 +5922,10 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None> >= '' AND <INVALID DATA TYPE: None> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5163,7 +5947,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5185,7 +5969,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5214,8 +5998,55 @@ Verifies that the percentage of date values in the range defined by the user in 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_datetime_value_in_range_date_percent|partitioned|monthly|[value_in_range_date_percent](../../../sensors/column/#value-in-range-date-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_datetime_value_in_range_date_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          datetime:
+            monthly_partition_datetime_value_in_range_date_percent:
+              parameters:
+                include_min_value: true
+                include_max_value: true
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5258,19 +6089,9 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -5280,6 +6101,15 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -5312,15 +6142,15 @@ spec:
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -5340,6 +6170,7 @@ spec:
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -5354,11 +6185,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -5395,11 +6226,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -5424,7 +6255,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5439,12 +6270,10 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None> >= '' AND <INVALID DATA TYPE: None> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5464,7 +6293,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5484,7 +6313,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5552,19 +6381,9 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -5574,6 +6393,15 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -5606,15 +6434,15 @@ spec:
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -5634,6 +6462,7 @@ spec:
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -5648,11 +6477,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -5689,11 +6518,11 @@ spec:
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -5718,7 +6547,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table.`target_column` AS DATE) >= '' AND SAFE_CAST(analyzed_table.`target_column` AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5735,12 +6564,10 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None> >= '' AND <INVALID DATA TYPE: None> <= '' THEN 1
+                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5762,7 +6589,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -5784,7 +6611,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN <INVALID DATA TYPE: None/> >= '' AND <INVALID DATA TYPE: None/> <= '' THEN 1
+                WHEN CAST("target_column" AS DATE) >= '' AND CAST("target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,

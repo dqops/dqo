@@ -17,8 +17,8 @@ dqo.ai> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 **Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`-C`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-d`<br/>`--dataType`<br/>|Data type| ||
@@ -48,8 +48,8 @@ dqo.ai> column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 **Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`-C`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
@@ -78,8 +78,8 @@ dqo.ai> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 **Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`-C`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-d`<br/>`--dataType`<br/>|Data type| ||
@@ -110,8 +110,8 @@ dqo.ai> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 **Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`-C`<br/>`--column`<br/>|Connection name filter| ||
 |`-c`<br/>`--connection`<br/>|Connection name filter| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
@@ -142,8 +142,8 @@ dqo.ai> column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 **Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`-C`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
@@ -172,8 +172,8 @@ dqo.ai> column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 **Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`-C`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
@@ -202,8 +202,8 @@ dqo.ai> column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 
 **Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`-C`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
