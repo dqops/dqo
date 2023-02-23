@@ -58,6 +58,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_population_variance_in_range", o -> o.monthlyPartitionPopulationVarianceInRange);
             put("monthly_partition_sum_in_range", o -> o.monthlyPartitionSumInRange);
             put("monthly_partition_invalid_latitude_count", o -> o.monthlyPartitionInvalidLatitudeCount);
+            put("monthly_partition_valid_latitude_percent", o -> o.monthlyPartitionValidLatitudePercent);
 
         }
     };
@@ -127,6 +128,9 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnInvalidLatitudeCountCheckSpec monthlyPartitionInvalidLatitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnValidLatitudePercentCheckSpec monthlyPartitionValidLatitudePercent;
 
     /**
      * Returns a negative values count check specification.
@@ -523,6 +527,24 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidLatitudeCount, monthlyPartitionInvalidLatitudeCount));
         this.monthlyPartitionInvalidLatitudeCount = monthlyPartitionInvalidLatitudeCount;
         propagateHierarchyIdToField(monthlyPartitionInvalidLatitudeCount, "monthly_partition_invalid_latitude_count");
+    }
+
+    /**
+     * Returns a valid latitude percent check specification.
+     * @return Valid latitude percent check specification.
+     */
+    public ColumnValidLatitudePercentCheckSpec getMonthlyPartitionValidLatitudePercent() {
+        return monthlyPartitionValidLatitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid latitude percent check.
+     * @param monthlyPartitionValidLatitudePercent Valid latitude percent check specification.
+     */
+    public void setMonthlyPartitionValidLatitudePercent(ColumnValidLatitudePercentCheckSpec monthlyPartitionValidLatitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidLatitudePercent, monthlyPartitionValidLatitudePercent));
+        this.monthlyPartitionValidLatitudePercent = monthlyPartitionValidLatitudePercent;
+        propagateHierarchyIdToField(monthlyPartitionValidLatitudePercent, "monthly_partition_valid_latitude_percent");
     }
 
     /**
