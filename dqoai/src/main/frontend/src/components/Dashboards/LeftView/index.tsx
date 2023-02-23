@@ -15,10 +15,10 @@ const FolderLevel = ({ folder, defaultOpen = false, parents }: FolderLevelProps)
   const [isOpened, setIsOpened] = useState(defaultOpen);
   const { changeActiveTab } = useDashboard();
   return (
-    <div className="mb-3">
-      <div className="flex space-x-1.5 items-center mb-1 cursor-pointer" onClick={() => setIsOpened(prev => !prev)}>
+    <div>
+      <div className="flex space-x-1.5 items-center mb-1 h-5 cursor-pointer" onClick={() => setIsOpened(prev => !prev)}>
         <SvgIcon name={isOpened ? "folder" : "closed-folder"} className="w-4 h-4 min-w-4" />
-        <div className="text-[13px] leading-1.5">{folder.folder_name}</div>
+        <div className="text-[13px] leading-1.5 truncate">{folder.folder_name}</div>
       </div>
       {isOpened && (
         <div className="pl-5">
@@ -28,7 +28,7 @@ const FolderLevel = ({ folder, defaultOpen = false, parents }: FolderLevelProps)
           {folder.dashboards?.map((dashboard, jIndex) => (
             <div
               key={jIndex}
-              className="cursor-pointer flex space-x-1.5 items-center"
+              className="cursor-pointer flex space-x-1.5 items-center mb-1 h-5"
               onClick={() => changeActiveTab(dashboard, folder.folder_name, parents)}
             >
               <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
