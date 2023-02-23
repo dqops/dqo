@@ -19,8 +19,51 @@ Verifies that the number of unique values in a column does not exceed the minimu
 |----------|----------|----------|-----------|-------------|
 |unique_count|adhoc| |[unique_count](../../../sensors/column/#unique-count)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=unique_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        uniqueness:
+          unique_count:
+            error:
+              min_count: 5
+            warning:
+              min_count: 5
+            fatal:
+              min_count: 5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -354,8 +397,42 @@ Verifies that the number of unique values in a column does not exceed the minimu
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_unique_count|checkpoint|daily|[unique_count](../../../sensors/column/#unique-count)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_unique_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -691,8 +768,42 @@ Verifies that the number of unique values in a column does not exceed the minimu
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_unique_count|checkpoint|monthly|[unique_count](../../../sensors/column/#unique-count)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_unique_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1028,8 +1139,52 @@ Verifies that the number of unique values in a column does not exceed the minimu
 |----------|----------|----------|-----------|-------------|
 |daily_partition_unique_count|partitioned|daily|[unique_count](../../../sensors/column/#unique-count)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_unique_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          uniqueness:
+            daily_partition_unique_count:
+              error:
+                min_count: 5
+              warning:
+                min_count: 5
+              fatal:
+                min_count: 5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1365,8 +1520,52 @@ Verifies that the number of unique values in a column does not exceed the minimu
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_unique_count|partitioned|monthly|[unique_count](../../../sensors/column/#unique-count)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_unique_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          uniqueness:
+            monthly_partition_unique_count:
+              error:
+                min_count: 5
+              warning:
+                min_count: 5
+              fatal:
+                min_count: 5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1710,8 +1909,51 @@ Verifies that the percentage of unique values in a column does not exceed the mi
 |----------|----------|----------|-----------|-------------|
 |unique_percent|adhoc| |[unique_percent](../../../sensors/column/#unique-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=unique_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        uniqueness:
+          unique_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2077,8 +2319,42 @@ Verifies that the percentage of unique values in a column does not exceed the mi
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_unique_percent|checkpoint|daily|[unique_percent](../../../sensors/column/#unique-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_unique_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2446,8 +2722,42 @@ Verifies that the percentage of unique values in a column does not exceed the mi
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_unique_percent|checkpoint|monthly|[unique_percent](../../../sensors/column/#unique-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_unique_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2815,8 +3125,52 @@ Verifies that the percentage of unique values in a column does not exceed the mi
 |----------|----------|----------|-----------|-------------|
 |daily_partition_unique_percent|partitioned|daily|[unique_percent](../../../sensors/column/#unique-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_unique_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          uniqueness:
+            daily_partition_unique_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3184,8 +3538,52 @@ Verifies that the percentage of unique values in a column does not exceed the mi
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_unique_percent|partitioned|monthly|[unique_percent](../../../sensors/column/#unique-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_unique_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          uniqueness:
+            monthly_partition_unique_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3561,8 +3959,51 @@ Verifies that the number of duplicate values in a column does not exceed the max
 |----------|----------|----------|-----------|-------------|
 |duplicate_count|adhoc| |[duplicate_count](../../../sensors/column/#duplicate-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=duplicate_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        uniqueness:
+          duplicate_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3615,10 +4056,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3671,10 +4110,8 @@ spec:
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT(analyzed_table."target_column")) = 1 THEN COUNT(analyzed_table."target_column") AS actual_value
-            ELSE (COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))) AS actual_value
-        END AS actual_value,
+        COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
+        AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
         TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
@@ -3773,10 +4210,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3831,10 +4266,8 @@ spec:
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT(analyzed_table."target_column")) = 1 THEN COUNT(analyzed_table."target_column") AS actual_value
-            ELSE (COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))) AS actual_value
-        END AS actual_value,
+        COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
+        AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
@@ -3888,8 +4321,42 @@ Verifies that the number of duplicate values in a column does not exceed the max
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_duplicate_count|checkpoint|daily|[duplicate_count](../../../sensors/column/#duplicate-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_duplicate_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3943,10 +4410,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3999,10 +4464,8 @@ spec:
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT(analyzed_table."target_column")) = 1 THEN COUNT(analyzed_table."target_column") AS actual_value
-            ELSE (COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))) AS actual_value
-        END AS actual_value,
+        COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
+        AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
         TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
@@ -4102,10 +4565,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4160,10 +4621,8 @@ spec:
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT(analyzed_table."target_column")) = 1 THEN COUNT(analyzed_table."target_column") AS actual_value
-            ELSE (COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))) AS actual_value
-        END AS actual_value,
+        COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
+        AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
@@ -4217,8 +4676,42 @@ Verifies that the number of duplicate values in a column does not exceed the max
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_duplicate_count|checkpoint|monthly|[duplicate_count](../../../sensors/column/#duplicate-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_duplicate_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4272,10 +4765,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4328,10 +4819,8 @@ spec:
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT(analyzed_table."target_column")) = 1 THEN COUNT(analyzed_table."target_column") AS actual_value
-            ELSE (COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))) AS actual_value
-        END AS actual_value,
+        COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
+        AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
@@ -4431,10 +4920,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4489,10 +4976,8 @@ spec:
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT(analyzed_table."target_column")) = 1 THEN COUNT(analyzed_table."target_column") AS actual_value
-            ELSE (COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))) AS actual_value
-        END AS actual_value,
+        COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
+        AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
@@ -4546,8 +5031,52 @@ Verifies that the number of duplicate values in a column does not exceed the max
 |----------|----------|----------|-----------|-------------|
 |daily_partition_duplicate_count|partitioned|daily|[duplicate_count](../../../sensors/column/#duplicate-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_duplicate_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          uniqueness:
+            daily_partition_duplicate_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4601,10 +5130,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4657,10 +5184,8 @@ spec:
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT(analyzed_table."target_column")) = 1 THEN COUNT(analyzed_table."target_column") AS actual_value
-            ELSE (COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))) AS actual_value
-        END AS actual_value,
+        COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
+        AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
@@ -4760,10 +5285,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4818,10 +5341,8 @@ spec:
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT(analyzed_table."target_column")) = 1 THEN COUNT(analyzed_table."target_column") AS actual_value
-            ELSE (COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))) AS actual_value
-        END AS actual_value,
+        COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
+        AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -4875,8 +5396,52 @@ Verifies that the number of duplicate values in a column does not exceed the max
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_duplicate_count|partitioned|monthly|[duplicate_count](../../../sensors/column/#duplicate-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_duplicate_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          uniqueness:
+            monthly_partition_duplicate_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4930,10 +5495,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4986,10 +5549,8 @@ spec:
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT(analyzed_table."target_column")) = 1 THEN COUNT(analyzed_table."target_column") AS actual_value
-            ELSE (COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))) AS actual_value
-        END AS actual_value,
+        COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
+        AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
@@ -5089,10 +5650,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5147,10 +5706,8 @@ spec:
       
     ```
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT(analyzed_table."target_column")) = 1 THEN COUNT(analyzed_table."target_column") AS actual_value
-            ELSE (COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))) AS actual_value
-        END AS actual_value,
+        COUNT(analyzed_table."target_column") - COUNT(DISTINCT(analyzed_table."target_column"))
+        AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -5212,8 +5769,51 @@ Verifies that the percentage of duplicate values in a column does not exceed the
 |----------|----------|----------|-----------|-------------|
 |duplicate_percent|adhoc| |[duplicate_percent](../../../sensors/column/#duplicate-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=duplicate_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        uniqueness:
+          duplicate_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5595,8 +6195,42 @@ Verifies that the percentage of duplicate values in a column does not exceed the
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_duplicate_percent|checkpoint|daily|[duplicate_percent](../../../sensors/column/#duplicate-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_duplicate_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5980,8 +6614,42 @@ Verifies that the percentage of duplicate values in a column does not exceed the
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_duplicate_percent|checkpoint|monthly|[duplicate_percent](../../../sensors/column/#duplicate-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_duplicate_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -6365,8 +7033,52 @@ Verifies that the percent of duplicate values in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |daily_partition_duplicate_percent|partitioned|daily|[duplicate_percent](../../../sensors/column/#duplicate-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_duplicate_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          uniqueness:
+            daily_partition_duplicate_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -6750,8 +7462,52 @@ Verifies that the percent of duplicate values in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_duplicate_percent|partitioned|monthly|[duplicate_percent](../../../sensors/column/#duplicate-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_duplicate_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          uniqueness:
+            monthly_partition_duplicate_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table

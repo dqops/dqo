@@ -100,8 +100,10 @@ nav:
 theme:
   name: material
   features:
-    - navigation.sections
+    - navigation.indexes
+#    - navigation.sections
     - content.tabs.link
+    - content.code.copy
     - content.code.annotate
   logo: assets/logo.svg
   palette:

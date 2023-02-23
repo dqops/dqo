@@ -19,8 +19,53 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 |----------|----------|----------|-----------|-------------|
 |sql_condition_passed_percent_on_table|adhoc| |[sql_condition_passed_percent](../../../sensors/table/#sql-condition-passed-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=sql_condition_passed_percent_on_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  checks:
+    sql:
+      sql_condition_passed_percent_on_table:
+        parameters:
+          sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
+        error:
+          min_percent: 99.0
+        warning:
+          min_percent: 100.0
+        fatal:
+          min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -372,8 +417,42 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_sql_condition_passed_percent_on_table|checkpoint|daily|[sql_condition_passed_percent](../../../sensors/table/#sql-condition-passed-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_sql_condition_passed_percent_on_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-32"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -745,8 +824,42 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_sql_condition_passed_percent_on_table|checkpoint|monthly|[sql_condition_passed_percent](../../../sensors/table/#sql-condition-passed-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_sql_condition_passed_percent_on_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-32"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1118,8 +1231,63 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 |----------|----------|----------|-----------|-------------|
 |daily_partition_sql_condition_passed_percent_on_table|partitioned|daily|[sql_condition_passed_percent](../../../sensors/table/#sql-condition-passed-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_condition_passed_percent_on_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    daily:
+      sql:
+        daily_partition_sql_condition_passed_percent_on_table:
+          parameters:
+            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
+          error:
+            min_percent: 99.0
+          warning:
+            min_percent: 100.0
+          fatal:
+            min_percent: 95.0
+        min_sql_condition_passed_percent_on_table:
+          parameters:
+            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
+          error:
+            min_percent: 99.0
+          warning:
+            min_percent: 100.0
+          fatal:
+            min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-32"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1491,8 +1659,63 @@ Verifies that a set percentage of rows passed a custom SQL condition (expression
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_sql_condition_passed_percent_on_table|partitioned|monthly|[sql_condition_passed_percent](../../../sensors/table/#sql-condition-passed-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_condition_passed_percent_on_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    monthly:
+      sql:
+        monthly_partition_sql_condition_passed_percent_on_table:
+          parameters:
+            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
+          error:
+            min_percent: 99.0
+          warning:
+            min_percent: 100.0
+          fatal:
+            min_percent: 95.0
+        min_sql_condition_passed_percent_on_table:
+          parameters:
+            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
+          error:
+            min_percent: 99.0
+          warning:
+            min_percent: 100.0
+          fatal:
+            min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-32"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1872,8 +2095,53 @@ Verifies that a set number of rows failed a custom SQL condition (expression).
 |----------|----------|----------|-----------|-------------|
 |sql_condition_failed_count_on_table|adhoc| |[sql_condition_failed_count](../../../sensors/table/#sql-condition-failed-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=sql_condition_failed_count_on_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  checks:
+    sql:
+      sql_condition_failed_count_on_table:
+        parameters:
+          sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
+        error:
+          max_count: 0
+        warning:
+          max_count: 10
+        fatal:
+          max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2201,8 +2469,42 @@ Verifies that a set number of rows failed a custom SQL condition (expression).
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_sql_condition_failed_count_on_table|checkpoint|daily|[sql_condition_failed_count](../../../sensors/table/#sql-condition-failed-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_sql_condition_failed_count_on_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2532,8 +2834,42 @@ Verifies that a set number of rows failed a custom SQL condition (expression).
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_sql_condition_failed_count_on_table|checkpoint|monthly|[sql_condition_failed_count](../../../sensors/table/#sql-condition-failed-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_sql_condition_failed_count_on_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2863,8 +3199,54 @@ Verifies that a set number of rows failed a custom SQL condition (expression).
 |----------|----------|----------|-----------|-------------|
 |daily_partition_sql_condition_failed_count_on_table|partitioned|daily|[sql_condition_failed_count](../../../sensors/table/#sql-condition-failed-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_condition_failed_count_on_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    daily:
+      sql:
+        daily_partition_sql_condition_failed_count_on_table:
+          parameters:
+            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
+          error:
+            max_count: 0
+          warning:
+            max_count: 10
+          fatal:
+            max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3194,8 +3576,54 @@ Verifies that a set number of rows failed a custom SQL condition (expression).
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_sql_condition_failed_count_on_table|partitioned|monthly|[sql_condition_failed_count](../../../sensors/table/#sql-condition-failed-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_condition_failed_count_on_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    monthly:
+      sql:
+        monthly_partition_sql_condition_failed_count_on_table:
+          parameters:
+            sql_condition: SUM(col_total_impressions) > SUM(col_total_clicks)
+          error:
+            max_count: 0
+          warning:
+            max_count: 10
+          fatal:
+            max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3533,8 +3961,53 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |----------|----------|----------|-----------|-------------|
 |sql_aggregate_expr_table|adhoc| |[sql_aggregated_expression](../../../sensors/table/#sql-aggregated-expression)|[max_value](../../../rules/comparison/#max-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=sql_aggregate_expr_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  checks:
+    sql:
+      sql_aggregate_expr_table:
+        parameters:
+          sql_expression: SUM(col_net_price) + SUM(col_tax)
+        error:
+          max_value: 1.5
+        warning:
+          max_value: 1.5
+        fatal:
+          max_value: 1.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3790,8 +4263,42 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_sql_aggregate_expr_table|checkpoint|daily|[sql_aggregated_expression](../../../sensors/table/#sql-aggregated-expression)|[max_value](../../../rules/comparison/#max-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_sql_aggregate_expr_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4049,8 +4556,42 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a give
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_sql_aggregate_expr_table|checkpoint|monthly|[sql_aggregated_expression](../../../sensors/table/#sql-aggregated-expression)|[max_value](../../../rules/comparison/#max-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_sql_aggregate_expr_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4308,8 +4849,54 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |----------|----------|----------|-----------|-------------|
 |daily_partition_sql_aggregate_expr_table|partitioned|daily|[sql_aggregated_expression](../../../sensors/table/#sql-aggregated-expression)|[max_value](../../../rules/comparison/#max-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_aggregate_expr_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    daily:
+      sql:
+        daily_partition_sql_aggregate_expr_table:
+          parameters:
+            sql_expression: SUM(col_net_price) + SUM(col_tax)
+          error:
+            max_value: 1.5
+          warning:
+            max_value: 1.5
+          fatal:
+            max_value: 1.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4567,8 +5154,54 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_sql_aggregate_expr_table|partitioned|monthly|[sql_aggregated_expression](../../../sensors/table/#sql-aggregated-expression)|[max_value](../../../rules/comparison/#max-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_aggregate_expr_table
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    monthly:
+      sql:
+        monthly_partition_sql_aggregate_expr_table:
+          parameters:
+            sql_expression: SUM(col_net_price) + SUM(col_tax)
+          error:
+            max_value: 1.5
+          warning:
+            max_value: 1.5
+          fatal:
+            max_value: 1.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table

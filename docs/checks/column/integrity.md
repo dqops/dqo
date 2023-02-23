@@ -19,8 +19,54 @@ Verifies that the number of values in a column that does not match values in ano
 |----------|----------|----------|-----------|-------------|
 |foreign_key_not_match_count|adhoc| |[foreign_key_not_match_count](../../../sensors/column/#foreign-key-not-match-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=foreign_key_not_match_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        integrity:
+          foreign_key_not_match_count:
+            parameters:
+              foreign_table: dim_customer
+              foreign_column: customer_id
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -532,8 +578,42 @@ Verifies that the number of values in a column that does not match values in ano
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_foreign_key_not_match_count|checkpoint|daily|[foreign_key_not_match_count](../../../sensors/column/#foreign-key-not-match-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_foreign_key_not_match_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1047,8 +1127,42 @@ Verifies that the number of values in a column that does not match values in ano
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_foreign_key_not_match_count|checkpoint|monthly|[foreign_key_not_match_count](../../../sensors/column/#foreign-key-not-match-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_foreign_key_not_match_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1562,8 +1676,55 @@ Verifies that the number of values in a column that does not match values in ano
 |----------|----------|----------|-----------|-------------|
 |daily_partition_foreign_key_not_match_count|partitioned|daily|[foreign_key_not_match_count](../../../sensors/column/#foreign-key-not-match-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_foreign_key_not_match_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          integrity:
+            daily_partition_foreign_key_not_match_count:
+              parameters:
+                foreign_table: dim_customer
+                foreign_column: customer_id
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2077,8 +2238,55 @@ Verifies that the number of values in a column that does not match values in ano
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_foreign_key_not_match_count|partitioned|monthly|[foreign_key_not_match_count](../../../sensors/column/#foreign-key-not-match-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_foreign_key_not_match_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          integrity:
+            monthly_partition_foreign_key_not_match_count:
+              parameters:
+                foreign_table: dim_customer
+                foreign_column: customer_id
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2600,8 +2808,54 @@ Verifies that the percentage of values in a column that matches values in anothe
 |----------|----------|----------|-----------|-------------|
 |foreign_key_match_percent|adhoc| |[foreign_key_match_percent](../../../sensors/column/#foreign-key-match-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=foreign_key_match_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        integrity:
+          foreign_key_match_percent:
+            parameters:
+              foreign_table: dim_customer
+              foreign_column: customer_id
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3093,8 +3347,42 @@ Verifies that the percentage of values in a column that matches values in anothe
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_foreign_key_match_percent|checkpoint|daily|[foreign_key_match_percent](../../../sensors/column/#foreign-key-match-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_foreign_key_match_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3588,8 +3876,42 @@ Verifies that the percentage of values in a column that matches values in anothe
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_foreign_key_match_percent|checkpoint|monthly|[foreign_key_match_percent](../../../sensors/column/#foreign-key-match-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_foreign_key_match_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4083,8 +4405,55 @@ Verifies that the percentage of values in a column that matches values in anothe
 |----------|----------|----------|-----------|-------------|
 |daily_partition_foreign_key_match_percent|partitioned|daily|[foreign_key_match_percent](../../../sensors/column/#foreign-key-match-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_foreign_key_match_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          integrity:
+            daily_partition_foreign_key_match_percent:
+              parameters:
+                foreign_table: dim_customer
+                foreign_column: customer_id
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4578,8 +4947,55 @@ Verifies that the percentage of values in a column that matches values in anothe
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_foreign_key_match_percent|partitioned|monthly|[foreign_key_match_percent](../../../sensors/column/#foreign-key-match-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_foreign_key_match_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          integrity:
+            monthly_partition_foreign_key_match_percent:
+              parameters:
+                foreign_table: dim_customer
+                foreign_column: customer_id
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
