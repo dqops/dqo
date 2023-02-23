@@ -70,6 +70,12 @@ public class DqoUserHomeFileSystemFactoryImpl implements DqoUserHomeFileSystemFa
             case DATA_RULE_RESULTS:
                 return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.RULE_RESULTS);
 
+            case DATA_ERRORS:
+                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.ERRORS);
+
+            case DATA_STATISTICS:
+                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.STATISTICS);
+
             case SOURCES:
                 return localUserHomePath.resolve(BuiltInFolderNames.SOURCES);
 
