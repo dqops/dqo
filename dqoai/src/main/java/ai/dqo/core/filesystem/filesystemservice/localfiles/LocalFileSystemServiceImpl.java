@@ -331,7 +331,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
             assert fullPathToFile.toFile().length() > 0;
 
             Path fileName = relativeFilePath.getFileName();
-            if (fileName.endsWith(".parquet")) {
+            if (fileName.getFileName().toString().endsWith(".parquet")) {
                 Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
                 Files.write(crcFilePath, fileHash);
             }
@@ -375,12 +375,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
                     case ON_NEXT: {
                         try {
                             ByteBuf byteBuf = byteBufSignal.get();
-//                            if (byteBuf.hasArray()) {
-//                                outputByteChannel.write(ByteBuffer.wrap(byteBuf.array()));
-//                            }
-//                            else {
-                                outputByteChannel.write(byteBuf.nioBuffer());
-//                            }
+                            outputByteChannel.write(byteBuf.nioBuffer());
                         }
                         catch (Exception ex) {
                             throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
@@ -395,7 +390,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
                             Files.delete(fullPathToFile);
 
                             Path fileName = relativeFilePath.getFileName();
-                            if (fileName.endsWith(".parquet")) {
+                            if (fileName.getFileName().toString().endsWith(".parquet")) {
                                 Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
                                 if (Files.exists(crcFilePath)) {
                                     Files.delete(crcFilePath);
@@ -415,7 +410,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
                             fileOutputStream.close();
 
                             Path fileName = relativeFilePath.getFileName();
-                            if (fileName.endsWith(".parquet")) {
+                            if (fileName.getFileName().toString().endsWith(".parquet")) {
                                 Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
                                 Files.write(crcFilePath, fileMetadata.getFileHash());
                             }
