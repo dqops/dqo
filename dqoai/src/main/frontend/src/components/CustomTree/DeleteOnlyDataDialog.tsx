@@ -44,9 +44,9 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
   const isDisabled = mode === 'all';
 
   return (
-    <Dialog open={open} handler={onClose}>
+    <Dialog open={open} handler={onClose} className="min-w-160">
       <DialogHeader className="font-bold text-center justify-center">Delete all collected results for the time range:</DialogHeader>
-      <DialogBody className="min-w-160">
+      <DialogBody>
         <Radio
           id="all"
           name="mode"
