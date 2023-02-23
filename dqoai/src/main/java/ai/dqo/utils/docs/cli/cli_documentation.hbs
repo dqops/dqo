@@ -21,10 +21,10 @@ bash prompt> dqo [root_level_parameter] [command]
 bash prompt> dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 ```
 {{#if options}}
-**Parameters**{{#with "  "}}{{.}}{{/with}}
+**Options**{{#with "  "}}{{.}}{{/with}}
 {{#with "  "}}{{.}}{{/with}}
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 {{#each options}}|{{#each names}}`{{this}}`<br/>{{/each}}|{{#each description}}{{this}}<br/>This parameter could be also configured by setting {{#each names}}{{upper (replace (replace (replace this "--" "") "." "_") "-" "_")}}{{/each}}  environment variable.{{/each}}|{{#if required}}Yes{{else}} {{/if}}|{{#each acceptedValues}}{{this}}<br/>{{/each}}|
 {{else}}
 {{/each}}
@@ -38,8 +38,8 @@ dqo.ai>{{{synopsis}}}
 {{#if options}}
 **Options**{{#with "  "}}{{.}}{{/with}}
 {{#with "  "}}{{.}}{{/with}}
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 {{#each options}}|{{#each names}}`{{this}}`<br/>{{/each}}|{{#each description}}{{this}}{{/each}}|{{#if required}}Yes{{else}} {{/if}}|{{#each acceptedValues}}{{this}}<br/>{{/each}}|
 {{else}}
 {{/each}}
