@@ -15,7 +15,7 @@ import tech.tablesaw.api.Table;
  * for a single table and selected time ranges.
  */
 public class ErrorsSnapshot extends TableDataSnapshot {
-    public static final String PARQUET_FILE_NAME = "errors.0.parquet.snappy";
+    public static final String PARQUET_FILE_NAME = "errors.0.snappy.parquet";
 
     /**
      * Default constructor that creates an error's snapshot.

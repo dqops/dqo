@@ -25,6 +25,7 @@ import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.dqocloud.synchronization.DqoCloudSynchronizationService;
 import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
 import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJobParameters;
+import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderParameters;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import ai.dqo.core.filesystem.synchronization.FileSynchronizationDirection;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
@@ -114,7 +115,10 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
 
         if (runOnBackgroundQueue) {
             SynchronizeRootFolderDqoQueueJob synchronizeRootFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
-            SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(rootType, synchronizationListener);
+            SynchronizeRootFolderParameters synchronizationParameter = new SynchronizeRootFolderParameters(
+                    rootType, FileSynchronizationDirection.full);
+            SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(
+                    synchronizationParameter, synchronizationListener);
             synchronizeRootFolderJob.setParameters(jobParameters);
 
             this.dqoJobQueue.pushJob(synchronizeRootFolderJob);

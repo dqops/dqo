@@ -15,7 +15,6 @@
  */
 package ai.dqo.core.dqocloud.synchronization;
 
-import ai.dqo.core.filesystem.synchronization.FileSynchronizationDirection;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,8 +66,8 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
     @Override
     public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.cloudSynchronizationService.synchronizeFolder(
-                this.parameters.getRootType(),
-                FileSynchronizationDirection.full,
+                this.parameters.getSynchronizationParameter().getFolder(),
+                this.parameters.getSynchronizationParameter().getDirection(),
                 this.parameters.getFileSystemSynchronizationListener());
         return null;
     }
@@ -91,7 +90,8 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
      */
     @Override
     public JobConcurrencyConstraint getConcurrencyConstraint() {
-        JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.SYNCHRONIZE_FOLDER, this.parameters.getRootType());
+        JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.SYNCHRONIZE_FOLDER,
+                this.parameters.getSynchronizationParameter().getFolder());
         return new JobConcurrencyConstraint(concurrencyTarget, 1);
     }
 

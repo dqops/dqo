@@ -16,6 +16,7 @@
 package ai.dqo.core.dqocloud.synchronization;
 
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.filesystem.synchronization.FileSynchronizationDirection;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -25,27 +26,27 @@ import com.fasterxml.jackson.annotation.JsonInclude;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class SynchronizeRootFolderDqoQueueJobParameters {
-    private DqoRoot rootType;
+    private SynchronizeRootFolderParameters synchronizationParameter;
     @JsonIgnore
     private FileSystemSynchronizationListener fileSystemSynchronizationListener;
 
     /**
      * Creates a new parameters object for a synchronize folder job.
-     * @param rootType User home's root folder type to synchronize.
+     * @param synchronizationParameter Synchronization parameter that is a serializable object with the folder (DQO Root) and direction to be synchronized.
      * @param fileSystemSynchronizationListener File synchronization progress listener. Must be thread save because will be called from another thread (but ony one thread, no concurrent modifications).
      */
-    public SynchronizeRootFolderDqoQueueJobParameters(DqoRoot rootType,
+    public SynchronizeRootFolderDqoQueueJobParameters(SynchronizeRootFolderParameters synchronizationParameter,
                                                       FileSystemSynchronizationListener fileSystemSynchronizationListener) {
-        this.rootType = rootType;
+        this.synchronizationParameter = synchronizationParameter;
         this.fileSystemSynchronizationListener = fileSystemSynchronizationListener;
     }
 
     /**
-     * Returns the user home folder type to synchronize.
-     * @return User home folder type.
+     * Returns the synchronization parameter with the folder to be synchronized and the synchronization direction.
+     * @return Synchronization parameter.
      */
-    public DqoRoot getRootType() {
-        return rootType;
+    public SynchronizeRootFolderParameters getSynchronizationParameter() {
+        return synchronizationParameter;
     }
 
     /**
