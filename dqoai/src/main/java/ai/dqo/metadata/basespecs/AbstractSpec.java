@@ -342,14 +342,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
                 }
 
                 if (currentValue instanceof Map){
-
-                    Map<String,String> currentValueMap = (Map<String, String>) currentValue;
-                    Map<String, String> clonedChild = new HashMap<String, String>();
-
-                    for (Map.Entry<String, String> entry :  currentValueMap.entrySet()) {
-                        clonedChild.put(entry.getKey(), entry.getValue());
-                    }
-
+                    Map<?,?> clonedChild = cloneMap((Map<?,?>) currentValue);
                     fieldInfo.setRawFieldValue(clonedChild, cloned);
                 }
 
@@ -365,5 +358,25 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
         catch (CloneNotSupportedException ex) {
             throw new UnsupportedOperationException("Cannot clone the object ", ex);
         }
+    }
+
+    /**
+     * Creates and returns a clone (copy) of Map object.
+     */
+    public  Map<?,?> cloneMap(Map<?,?> originalMap) {
+
+        if (originalMap instanceof HashMap) {
+            HashMap<?, ?> sourceHashMap = (HashMap<?, ?>) originalMap;
+            return (HashMap<?, ?>) sourceHashMap.clone();
+        }
+        HashMap<?,?> sourceMap = new LinkedHashMap<>();
+
+        for (Map.Entry<?,?> keyValuePair : originalMap.entrySet()) {
+            Object key = keyValuePair.getKey();
+            Object value = keyValuePair.getValue();
+            Map<Object, Object> objectMap = (Map<Object, Object>) sourceMap;
+            objectMap.put(key, value);
+        }
+        return sourceMap;
     }
 }
