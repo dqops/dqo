@@ -44,7 +44,7 @@ public class StatisticsResultsTableFactoryImplTests extends BaseTest {
         Assertions.assertEquals(42, table.columnCount());
     }
 
-    // This is a special test, it produces an empty sensor readouts parquet file in the target/parquet-samples/errors-empty.parquet file
+    // This is a special test, it produces an empty statistics parquet file in the target/parquet-samples/statistics-empty.snappy.parquet file
     @Test
     void createEmptyStatisticsTable_whenEmptyTableWrittenAsParquet_thenWritesParquetFile() throws IOException {
         Table table = this.sut.createEmptyStatisticsTable("empty");

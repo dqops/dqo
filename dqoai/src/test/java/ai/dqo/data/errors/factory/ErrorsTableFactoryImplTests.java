@@ -45,7 +45,7 @@ public class ErrorsTableFactoryImplTests extends BaseTest {
         Assertions.assertEquals(40, table.columnCount());
     }
 
-    // This is a special test, it produces an empty sensor readouts parquet file in the target/parquet-samples/errors-empty.parquet file
+    // This is a special test, it produces an empty error parquet file in the target/parquet-samples/errors-empty.snappy.parquet file
     @Test
     void createEmptyErrorsTable_whenEmptyTableWrittenAsParquet_thenWritesParquetFile() throws IOException {
         Table table = this.sut.createEmptyErrorsTable("empty");
