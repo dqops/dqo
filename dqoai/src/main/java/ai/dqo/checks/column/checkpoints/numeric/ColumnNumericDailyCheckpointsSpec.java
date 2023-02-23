@@ -59,6 +59,7 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_sum_in_range", o -> o.dailyCheckpointSumInRange);
             put("daily_checkpoint_invalid_latitude_count", o -> o.dailyCheckpointInvalidLatitudeCount);
             put("daily_checkpoint_valid_latitude_percent", o -> o.dailyCheckpointValidLatitudePercent);
+            put("daily_checkpoint_invalid_longitude_count", o -> o.dailyCheckpointInvalidLongitudeCount);
         }
     };
 
@@ -130,6 +131,9 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnValidLatitudePercentCheckSpec dailyCheckpointValidLatitudePercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnInvalidLongitudeCountCheckSpec dailyCheckpointInvalidLongitudeCount;
 
     /**
      * Returns a negative values count check specification.
@@ -543,6 +547,24 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointValidLatitudePercent, dailyCheckpointValidLatitudePercent));
         this.dailyCheckpointValidLatitudePercent = dailyCheckpointValidLatitudePercent;
         propagateHierarchyIdToField(dailyCheckpointValidLatitudePercent, "daily_checkpoint_valid_latitude_percent");
+    }
+
+    /**
+     * Returns an invalid longitude count check specification.
+     * @return Invalid longitude count check specification.
+     */
+    public ColumnInvalidLongitudeCountCheckSpec getDailyCheckpointInvalidLongitudeCount() {
+        return dailyCheckpointInvalidLongitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid longitude count check.
+     * @param dailyCheckpointInvalidLongitudeCount Invalid longitude count check specification.
+     */
+    public void setDailyCheckpointInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec dailyCheckpointInvalidLongitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointInvalidLongitudeCount, dailyCheckpointInvalidLongitudeCount));
+        this.dailyCheckpointInvalidLongitudeCount = dailyCheckpointInvalidLongitudeCount;
+        propagateHierarchyIdToField(dailyCheckpointInvalidLongitudeCount, "daily_checkpoint_invalid_longitude_count");
     }
 
     /**

@@ -59,6 +59,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_sum_in_range", o -> o.monthlyPartitionSumInRange);
             put("monthly_partition_invalid_latitude_count", o -> o.monthlyPartitionInvalidLatitudeCount);
             put("monthly_partition_valid_latitude_percent", o -> o.monthlyPartitionValidLatitudePercent);
+            put("monthly_partition_invalid_longitude_count", o -> o.monthlyPartitionInvalidLongitudeCount);
 
         }
     };
@@ -131,6 +132,9 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnValidLatitudePercentCheckSpec monthlyPartitionValidLatitudePercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnInvalidLongitudeCountCheckSpec monthlyPartitionInvalidLongitudeCount;
 
     /**
      * Returns a negative values count check specification.
@@ -545,6 +549,24 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidLatitudePercent, monthlyPartitionValidLatitudePercent));
         this.monthlyPartitionValidLatitudePercent = monthlyPartitionValidLatitudePercent;
         propagateHierarchyIdToField(monthlyPartitionValidLatitudePercent, "monthly_partition_valid_latitude_percent");
+    }
+
+    /**
+     * Returns an invalid longitude count check specification.
+     * @return invalid longitude count check specification.
+     */
+    public ColumnInvalidLongitudeCountCheckSpec getMonthlyPartitionInvalidLongitudeCount() {
+        return monthlyPartitionInvalidLongitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid longitude count check.
+     * @param monthlyPartitionInvalidLongitudeCount invalid longitude count check specification.
+     */
+    public void setMonthlyPartitionInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec monthlyPartitionInvalidLongitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidLongitudeCount, monthlyPartitionInvalidLongitudeCount));
+        this.monthlyPartitionInvalidLongitudeCount = monthlyPartitionInvalidLongitudeCount;
+        propagateHierarchyIdToField(monthlyPartitionInvalidLongitudeCount, "monthly_partition_invalid_longitude_count");
     }
 
     /**

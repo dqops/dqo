@@ -59,6 +59,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_sum_in_range", o -> o.dailyPartitionSumInRange);
             put("daily_partition_invalid_latitude_count", o -> o.dailyPartitionInvalidLatitudeCount);
             put("daily_partition_valid_latitude_percent", o -> o.dailyPartitionValidLatitudePercent);
+            put("daily_partition_invalid_longitude_count", o -> o.dailyPartitionInvalidLongitudeCount);
 
         }
     };
@@ -132,6 +133,8 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnValidLatitudePercentCheckSpec dailyPartitionValidLatitudePercent;
 
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnInvalidLongitudeCountCheckSpec dailyPartitionInvalidLongitudeCount;
 
 
     /**
@@ -547,6 +550,24 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionValidLatitudePercent, dailyPartitionValidLatitudePercent));
         this.dailyPartitionValidLatitudePercent = dailyPartitionValidLatitudePercent;
         propagateHierarchyIdToField(dailyPartitionValidLatitudePercent, "daily_partition_valid_latitude_percent");
+    }
+
+    /**
+     * Returns an invalid longitude count check specification.
+     * @return invalid longitude count check specification.
+     */
+    public ColumnInvalidLongitudeCountCheckSpec getDailyPartitionInvalidLongitudeCount() {
+        return dailyPartitionInvalidLongitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid longitude count check.
+     * @param dailyPartitionInvalidLongitudeCount invalid longitude count check specification.
+     */
+    public void setDailyPartitionInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec dailyPartitionInvalidLongitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidLongitudeCount, dailyPartitionInvalidLongitudeCount));
+        this.dailyPartitionInvalidLongitudeCount = dailyPartitionInvalidLongitudeCount;
+        propagateHierarchyIdToField(dailyPartitionInvalidLongitudeCount, "daily_partition_invalid_longitude_count");
     }
 
     /**
