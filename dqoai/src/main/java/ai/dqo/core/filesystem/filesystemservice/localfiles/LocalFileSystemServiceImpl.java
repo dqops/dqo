@@ -29,8 +29,12 @@ import reactor.core.publisher.Mono;
 import reactor.netty.ByteBufFlux;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.ByteChannel;
+import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -364,21 +368,19 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
                 }
             }
 
-            final OutputStream fileOutputStream = Files.newOutputStream(fullPathToFile);
+            final FileOutputStream fileOutputStream = new FileOutputStream(fullPathToFile.toFile());
+            final ByteChannel outputByteChannel = fileOutputStream.getChannel();
             return bytesFlux.doOnEach(byteBufSignal -> {
                 switch (byteBufSignal.getType()) {
                     case ON_NEXT: {
                         try {
                             ByteBuf byteBuf = byteBufSignal.get();
-                            byte[] byteArray = null;
-                            if (byteBuf.hasArray()) {
-                                byteArray= byteBuf.array();
-                            }
-                            else {
-                                byteArray = new byte[byteBuf.readableBytes()];
-                                byteBuf.readBytes(byteArray);
-                            }
-                            fileOutputStream.write(byteArray);
+//                            if (byteBuf.hasArray()) {
+//                                outputByteChannel.write(ByteBuffer.wrap(byteBuf.array()));
+//                            }
+//                            else {
+                                outputByteChannel.write(byteBuf.nioBuffer());
+//                            }
                         }
                         catch (Exception ex) {
                             throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
@@ -388,6 +390,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
 
                     case ON_ERROR: {
                         try {
+                            outputByteChannel.close();
                             fileOutputStream.close();
                             Files.delete(fullPathToFile);
 
@@ -408,6 +411,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
 
                     case ON_COMPLETE: {
                         try {
+                            outputByteChannel.close();
                             fileOutputStream.close();
 
                             Path fileName = relativeFilePath.getFileName();
