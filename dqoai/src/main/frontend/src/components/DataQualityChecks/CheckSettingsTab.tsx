@@ -45,14 +45,7 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
   }, [dataStreams]);
 
   const onAddDataStream = () => {
-    if (activeNode?.level !== TREE_LEVEL.TABLE) {
-      let node = activeNode;
-      while (node?.level !== TREE_LEVEL.TABLE) {
-        node = findTreeNode(treeData, node?.parentId ?? '');
-      }
-      changeActiveTab(node, true);
-    }
-    history.push(ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'data-streams'));
+    window.location.href = ROUTES.TABLE_LEVEL_PAGE(CheckTypes.SOURCES, connection, schema, table, 'data-streams');
   };
 
   return (
