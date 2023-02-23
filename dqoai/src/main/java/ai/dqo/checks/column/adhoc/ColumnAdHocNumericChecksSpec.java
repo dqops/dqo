@@ -59,8 +59,7 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("sum_in_range", o -> o.sumInRange);
             put("invalid_latitude_count", o -> o.invalidLatitudeCount);
             put("valid_latitude_percent", o -> o.validLatitudePercent);
-
-
+            put("invalid_longitude_count", o -> o.invalidLongitudeCount);
         }
     };
 
@@ -132,6 +131,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage.")
     private ColumnValidLatitudePercentCheckSpec validLatitudePercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.")
+    private ColumnInvalidLongitudeCountCheckSpec invalidLongitudeCount;
 
     /**
      * Returns a negative count check specification.
@@ -545,6 +547,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.validLatitudePercent, validLatitudePercent));
         this.validLatitudePercent = validLatitudePercent;
         propagateHierarchyIdToField(validLatitudePercent, "valid_latitude_percent");
+    }
+
+    /**
+     * Returns an invalid longitude count check specification.
+     * @return Invalid longitude count check specification.
+     */
+    public ColumnInvalidLongitudeCountCheckSpec getInvalidLongitudeCount() {
+        return invalidLongitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid longitude count check.
+     * @param invalidLongitudeCount Invalid longitude count check specification.
+     */
+    public void setInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec invalidLongitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.invalidLongitudeCount, invalidLongitudeCount));
+        this.invalidLongitudeCount = invalidLongitudeCount;
+        propagateHierarchyIdToField(invalidLongitudeCount, "invalid_longitude_count");
     }
 
     /**
