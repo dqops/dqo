@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useTree } from '../../contexts/treeContext';
 import { groupBy } from 'lodash';
 import { TREE_LEVEL } from '../../shared/enums';
@@ -121,13 +121,33 @@ const Tree = () => {
     );
   };
 
+  const message = useMemo(() => {
+    if (selectedNode?.level === TREE_LEVEL.DATABASE) {
+      return `Are you sure want to remove connection ${selectedNode?.label}?`;
+    }
+
+    if (selectedNode?.level === TREE_LEVEL.SCHEMA) {
+      return `Are you sure want to remove schema ${selectedNode?.label}?`;
+    }
+
+    if (selectedNode?.level === TREE_LEVEL.TABLE) {
+      return `Are you sure want to remove table ${selectedNode?.label}?`;
+    }
+
+    if (selectedNode?.level === TREE_LEVEL.COLUMN) {
+      return `Are you sure want to remove column ${selectedNode?.label}?`;
+    }
+
+    return '';
+  }, [selectedNode]);
+
   return (
     <div className="pl-2 mt-4">
       <div>{renderTree('null', 0)}</div>
       <ConfirmDialog
         open={isOpen}
         onClose={() => setIsOpen(false)}
-        message="Are you sure want to remove this?"
+        message={message}
         onConfirm={() => removeNode(selectedNode)}
       />
     </div>
