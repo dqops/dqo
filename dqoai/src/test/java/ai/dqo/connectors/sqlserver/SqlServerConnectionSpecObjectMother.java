@@ -21,6 +21,7 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import org.testcontainers.containers.MSSQLServerContainer;
 
 import java.util.HashMap;
+import java.util.Map;
 
 public class SqlServerConnectionSpecObjectMother {
     private static MSSQLServerContainer<?> sharedContainer;
@@ -56,6 +57,8 @@ public class SqlServerConnectionSpecObjectMother {
      */
     public static ConnectionSpec create() {
         MSSQLServerContainer<?> testContainer = getSharedContainer();
+        HashMap<String,String> properitesTest = new HashMap<String, String>();
+        properitesTest.put("trustServerCertificate", "true");
 
         ConnectionSpec connectionSpec = new ConnectionSpec()
         {{
@@ -66,6 +69,7 @@ public class SqlServerConnectionSpecObjectMother {
                 setPort(testContainer.getMappedPort(PORT).toString());
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
+                setProperties(properitesTest);
             }});
         }};
         return connectionSpec;

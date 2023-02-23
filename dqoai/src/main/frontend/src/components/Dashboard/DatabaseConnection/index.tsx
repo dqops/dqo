@@ -20,7 +20,7 @@ import PostgreSQLLogo from '../../SvgIcon/svg/postgresql.svg';
 import RedshiftConnection from "./RedshiftConnection";
 import RedshiftLogo from '../../SvgIcon/svg/redshift.svg';
 import SqlServerConnection from "./SqlServerConnection";
-import SqlServerLogo from '../../SvgIcon/svg/sql-server.svg';
+import SqlServerLogo from '../../SvgIcon/svg/mssql-server.svg';
 
 interface IDatabaseConnectionProps {
   onNext: () => void;

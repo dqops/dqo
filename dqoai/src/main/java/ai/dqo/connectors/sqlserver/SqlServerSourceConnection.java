@@ -35,8 +35,9 @@ import java.util.Properties;
 @Component("sqlserver-connection")
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
+
     /**
-     * Injection constructor for the snowflake connection.
+     * Injection constructor for the MS SQL Server connection.
      * @param jdbcConnectionPool Jdbc connection pool.
      * @param secretValueProvider Secret value provider for the environment variable expansion.
      */

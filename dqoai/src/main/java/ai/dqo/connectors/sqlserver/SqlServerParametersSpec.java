@@ -48,7 +48,7 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.")
     private String host;
 
-    @CommandLine.Option(names = {"--sqlserver-port"}, description = "SQL Server port number", defaultValue = "5432")
+    @CommandLine.Option(names = {"--sqlserver-port"}, description = "SQL Server port number", defaultValue = "1433")
     @JsonPropertyDescription("SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.")
     private String port;
 
@@ -94,7 +94,7 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     }
 
     /**
-     * Returns the port name. The value should store an environment variable expression or a numeric postgresql port name.
+     * Returns the port name. The value should store an environment variable expression or a numeric MS SQL Server port name.
      * @return Port name or an expression to be extracted.
      */
     public String getPort() {
