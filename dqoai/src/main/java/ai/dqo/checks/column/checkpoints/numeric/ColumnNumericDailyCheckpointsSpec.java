@@ -58,6 +58,7 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_population_variance_in_range", o -> o.dailyCheckpointPopulationVarianceInRange);
             put("daily_checkpoint_sum_in_range", o -> o.dailyCheckpointSumInRange);
             put("daily_checkpoint_invalid_latitude_count", o -> o.dailyCheckpointInvalidLatitudeCount);
+            put("daily_checkpoint_valid_latitude_percent", o -> o.dailyCheckpointValidLatitudePercent);
         }
     };
 
@@ -126,6 +127,9 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnInvalidLatitudeCountCheckSpec dailyCheckpointInvalidLatitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnValidLatitudePercentCheckSpec dailyCheckpointValidLatitudePercent;
 
     /**
      * Returns a negative values count check specification.
@@ -521,6 +525,24 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointInvalidLatitudeCount, dailyCheckpointInvalidLatitudeCount));
         this.dailyCheckpointInvalidLatitudeCount = dailyCheckpointInvalidLatitudeCount;
         propagateHierarchyIdToField(dailyCheckpointInvalidLatitudeCount, "daily_checkpoint_invalid_latitude_count");
+    }
+
+    /**
+     * Returns a valid latitude percent check specification.
+     * @return Valid latitude percent check specification.
+     */
+    public ColumnValidLatitudePercentCheckSpec getDailyCheckpointValidLatitudePercent() {
+        return dailyCheckpointValidLatitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid latitude percent check.
+     * @param dailyCheckpointValidLatitudePercent Valid latitude percent check specification.
+     */
+    public void setDailyCheckpointValidLatitudePercent(ColumnValidLatitudePercentCheckSpec dailyCheckpointValidLatitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointValidLatitudePercent, dailyCheckpointValidLatitudePercent));
+        this.dailyCheckpointValidLatitudePercent = dailyCheckpointValidLatitudePercent;
+        propagateHierarchyIdToField(dailyCheckpointValidLatitudePercent, "daily_checkpoint_valid_latitude_percent");
     }
 
     /**

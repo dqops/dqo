@@ -58,6 +58,8 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("population_variance_in_range", o -> o.populationVarianceInRange);
             put("sum_in_range", o -> o.sumInRange);
             put("invalid_latitude_count", o -> o.invalidLatitudeCount);
+            put("valid_latitude_percent", o -> o.validLatitudePercent);
+
 
         }
     };
@@ -127,6 +129,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count.")
     private ColumnInvalidLatitudeCountCheckSpec invalidLatitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage.")
+    private ColumnValidLatitudePercentCheckSpec validLatitudePercent;
 
     /**
      * Returns a negative count check specification.
@@ -522,6 +527,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.invalidLatitudeCount, invalidLatitudeCount));
         this.invalidLatitudeCount = invalidLatitudeCount;
         propagateHierarchyIdToField(invalidLatitudeCount, "invalid_latitude_count");
+    }
+
+    /**
+     * Returns a valid latitude percent check specification.
+     * @return Valid latitude percent check specification.
+     */
+    public ColumnValidLatitudePercentCheckSpec getValidLatitudePercent() {
+        return validLatitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid latitude percent check.
+     * @param validLatitudePercent Valid latitude count percent specification.
+     */
+    public void setValidLatitudePercent(ColumnValidLatitudePercentCheckSpec validLatitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.validLatitudePercent, validLatitudePercent));
+        this.validLatitudePercent = validLatitudePercent;
+        propagateHierarchyIdToField(validLatitudePercent, "valid_latitude_percent");
     }
 
     /**
