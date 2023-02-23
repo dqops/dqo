@@ -58,6 +58,8 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_population_variance_in_range", o -> o.monthlyCheckpointPopulationVarianceInRange);
             put("monthly_checkpoint_sum_in_range", o -> o.monthlyCheckpointSumInRange);
             put("monthly_checkpoint_invalid_latitude_count", o -> o.monthlyCheckpointInvalidLatitudeCount);
+            put("monthly_checkpoint_valid_latitude_percent", o -> o.monthlyCheckpointValidLatitudePercent);
+            put("monthly_checkpoint_invalid_longitude_count", o -> o.monthlyCheckpointInvalidLongitudeCount);
 
         }
     };
@@ -128,6 +130,11 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnInvalidLatitudeCountCheckSpec monthlyCheckpointInvalidLatitudeCount;
 
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnValidLatitudePercentCheckSpec monthlyCheckpointValidLatitudePercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnInvalidLongitudeCountCheckSpec monthlyCheckpointInvalidLongitudeCount;
 
     /**
      * Returns a negative values count check specification.
@@ -524,6 +531,42 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.monthlyCheckpointInvalidLatitudeCount, monthlyCheckpointInvalidLatitudeCount));
         this.monthlyCheckpointInvalidLatitudeCount = monthlyCheckpointInvalidLatitudeCount;
         propagateHierarchyIdToField(monthlyCheckpointInvalidLatitudeCount, "monthly_checkpoint_invalid_latitude_count");
+    }
+
+    /**
+     * Returns a valid latitude percent check specification.
+     * @return Valid latitude percent check specification.
+     */
+    public ColumnValidLatitudePercentCheckSpec getMonthlyCheckpointValidLatitudePercent() {
+        return monthlyCheckpointValidLatitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid latitude percent check.
+     * @param monthlyCheckpointValidLatitudePercent Valid latitude percent check specification.
+     */
+    public void setMonthlyCheckpointValidLatitudePercent(ColumnValidLatitudePercentCheckSpec monthlyCheckpointValidLatitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointValidLatitudePercent, monthlyCheckpointValidLatitudePercent));
+        this.monthlyCheckpointValidLatitudePercent = monthlyCheckpointValidLatitudePercent;
+        propagateHierarchyIdToField(monthlyCheckpointValidLatitudePercent, "monthly_checkpoint_valid_latitude_percent");
+    }
+
+    /**
+     * Returns an invalid longitude count check specification.
+     * @return Invalid longitude count check specification.
+     */
+    public ColumnInvalidLongitudeCountCheckSpec getMonthlyCheckpointInvalidLongitudeCount() {
+        return monthlyCheckpointInvalidLongitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid longitude count check.
+     * @param monthlyCheckpointInvalidLongitudeCount Invalid longitude count check specification.
+     */
+    public void setMonthlyCheckpointInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec monthlyCheckpointInvalidLongitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointInvalidLongitudeCount, monthlyCheckpointInvalidLongitudeCount));
+        this.monthlyCheckpointInvalidLongitudeCount = monthlyCheckpointInvalidLongitudeCount;
+        propagateHierarchyIdToField(monthlyCheckpointInvalidLongitudeCount, "monthly_checkpoint_invalid_longitude_count");
     }
 
     /**

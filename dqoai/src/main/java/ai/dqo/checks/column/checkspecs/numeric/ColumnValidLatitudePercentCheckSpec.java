@@ -19,9 +19,10 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericInvalidLatitudeCountSensorParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule95ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule98ParametersSpec;
+import ai.dqo.rules.comparison.MaxPercentRule99ParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericValidLatitudePercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a set number of invalid latitude values in a monitored column.
+ * Column level check that ensures that there are no more than a set percentage of valid latitude values in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnInvalidLatitudeCountCheckSpec
-        extends AbstractCheckSpec<ColumnNumericInvalidLatitudeCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnInvalidLatitudeCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnValidLatitudePercentCheckSpec
+        extends AbstractCheckSpec<ColumnNumericValidLatitudePercentSensorParametersSpec, MaxPercentRule98ParametersSpec, MaxPercentRule99ParametersSpec, MaxPercentRule95ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnValidLatitudePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -48,22 +49,22 @@ public class ColumnInvalidLatitudeCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericInvalidLatitudeCountSensorParametersSpec parameters = new ColumnNumericInvalidLatitudeCountSensorParametersSpec();
+    private ColumnNumericValidLatitudePercentSensorParametersSpec parameters = new ColumnNumericValidLatitudePercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a set number of rows with invalid latitude value in a column that raises a data quality alert")
+    @JsonPropertyDescription("Default alerting threshold for a set percentage of rows with valid latitude value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec error;
+    private MaxPercentRule98ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule10ParametersSpec warning;
+    private MaxPercentRule99ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec fatal;
+    private MaxPercentRule95ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -71,7 +72,7 @@ public class ColumnInvalidLatitudeCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericInvalidLatitudeCountSensorParametersSpec getParameters() {
+    public ColumnNumericValidLatitudePercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +81,7 @@ public class ColumnInvalidLatitudeCountCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericInvalidLatitudeCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericValidLatitudePercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -92,7 +93,7 @@ public class ColumnInvalidLatitudeCountCheckSpec
      * @return Default "error" alerting thresholds.
      */
     @Override
-    public MaxCountRule0ParametersSpec getError() {
+    public MaxPercentRule98ParametersSpec getError() {
         return this.error;
     }
 
@@ -101,7 +102,7 @@ public class ColumnInvalidLatitudeCountCheckSpec
      *
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRule0ParametersSpec error) {
+    public void setError(MaxPercentRule98ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -113,7 +114,7 @@ public class ColumnInvalidLatitudeCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule10ParametersSpec getWarning() {
+    public MaxPercentRule99ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -122,7 +123,7 @@ public class ColumnInvalidLatitudeCountCheckSpec
      *
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule10ParametersSpec warning) {
+    public void setWarning(MaxPercentRule99ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -134,7 +135,7 @@ public class ColumnInvalidLatitudeCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRule0ParametersSpec getFatal() {
+    public MaxPercentRule95ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -143,7 +144,7 @@ public class ColumnInvalidLatitudeCountCheckSpec
      *
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRule0ParametersSpec fatal) {
+    public void setFatal(MaxPercentRule95ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

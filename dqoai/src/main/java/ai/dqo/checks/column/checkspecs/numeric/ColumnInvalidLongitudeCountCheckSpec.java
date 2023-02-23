@@ -21,7 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.sensors.column.numeric.ColumnNumericInvalidLatitudeCountSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericInvalidLongitudeCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -33,14 +33,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a set number of invalid latitude values in a monitored column.
+ * Column level check that ensures that there are no more than a set number of invalid longitude values in a monitored column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnInvalidLatitudeCountCheckSpec
-        extends AbstractCheckSpec<ColumnNumericInvalidLatitudeCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnInvalidLatitudeCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnInvalidLongitudeCountCheckSpec
+        extends AbstractCheckSpec<ColumnNumericInvalidLongitudeCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnInvalidLongitudeCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -48,9 +48,9 @@ public class ColumnInvalidLatitudeCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNumericInvalidLatitudeCountSensorParametersSpec parameters = new ColumnNumericInvalidLatitudeCountSensorParametersSpec();
+    private ColumnNumericInvalidLongitudeCountSensorParametersSpec parameters = new ColumnNumericInvalidLongitudeCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a set number of rows with invalid latitude value in a column that raises a data quality alert")
+    @JsonPropertyDescription("Default alerting threshold for a set number of rows with invalid longitude value in a column that raises a data quality alert")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxCountRule0ParametersSpec error;
@@ -71,7 +71,7 @@ public class ColumnInvalidLatitudeCountCheckSpec
      * @return Sensor parameters.
      */
     @Override
-    public ColumnNumericInvalidLatitudeCountSensorParametersSpec getParameters() {
+    public ColumnNumericInvalidLongitudeCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -80,7 +80,7 @@ public class ColumnInvalidLatitudeCountCheckSpec
      *
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnNumericInvalidLatitudeCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNumericInvalidLongitudeCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

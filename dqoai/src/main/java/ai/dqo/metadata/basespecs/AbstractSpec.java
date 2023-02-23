@@ -28,10 +28,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * Base class for all spec classes in the tree. Provides basic dirty checking.
@@ -343,6 +340,12 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
                     HierarchyNode clonedChild = hierarchyNode.deepClone();
                     fieldInfo.setRawFieldValue(clonedChild, cloned);
                 }
+
+                if (currentValue instanceof Map){
+                    Map<?,?> clonedChild = cloneMap((Map<?,?>) currentValue);
+                    fieldInfo.setRawFieldValue(clonedChild, cloned);
+                }
+
                 else {
                     throw new UnsupportedOperationException("Cannot clone object of type " + currentValue.getClass().getCanonicalName() +
                             " on field: " + fieldInfo.getClassFieldName() + ", class: " + this.getClass().getCanonicalName());
@@ -355,5 +358,25 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
         catch (CloneNotSupportedException ex) {
             throw new UnsupportedOperationException("Cannot clone the object ", ex);
         }
+    }
+
+    /**
+     * Creates and returns a clone (copy) of Map object.
+     */
+    public  Map<?,?> cloneMap(Map<?,?> originalMap) {
+
+        if (originalMap instanceof HashMap) {
+            HashMap<?, ?> sourceHashMap = (HashMap<?, ?>) originalMap;
+            return (HashMap<?, ?>) sourceHashMap.clone();
+        }
+        HashMap<?,?> sourceMap = new LinkedHashMap<>();
+
+        for (Map.Entry<?,?> keyValuePair : originalMap.entrySet()) {
+            Object key = keyValuePair.getKey();
+            Object value = keyValuePair.getValue();
+            Map<Object, Object> objectMap = (Map<Object, Object>) sourceMap;
+            objectMap.put(key, value);
+        }
+        return sourceMap;
     }
 }
