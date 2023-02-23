@@ -54,6 +54,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
           label="All"
           checked={mode === 'all'}
           onChange={(e) => setMode(e.target.value)}
+          className="outline-none"
         />
         <div>
           <div className="flex mt-4 items-center">
