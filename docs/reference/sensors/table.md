@@ -109,7 +109,7 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -117,16 +117,6 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -156,7 +146,9 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -186,7 +178,9 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -223,7 +217,7 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -231,16 +225,6 @@ Tabular sensor that runs a query calculating maximum days since the most recent 
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -300,8 +284,7 @@ Tabular sensor that runs a query calculating maximum difference in days between 
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         MAX(
             TIMESTAMP_DIFF(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
@@ -309,17 +292,6 @@ Tabular sensor that runs a query calculating maximum difference in days between 
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        MAX(
-            TIMESTAMP_DIFF(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                MILLISECOND
-            )
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -357,7 +329,12 @@ Tabular sensor that runs a query calculating maximum difference in days between 
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
             ))
         ) / 24.0 / 3600.0
-        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -396,7 +373,12 @@ Tabular sensor that runs a query calculating maximum difference in days between 
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
             ))
         ) / 24.0 / 3600.0
-        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -442,8 +424,7 @@ Tabular sensor that runs a query calculating maximum difference in days between 
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         MAX(
             TIMESTAMP_DIFF(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
@@ -451,17 +432,6 @@ Tabular sensor that runs a query calculating maximum difference in days between 
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        MAX(
-            TIMESTAMP_DIFF(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                MILLISECOND
-            )
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -512,7 +482,7 @@ Tabular sensor that runs a query calculating the time difference in days between
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -520,16 +490,6 @@ Tabular sensor that runs a query calculating the time difference in days between
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -559,7 +519,9 @@ Tabular sensor that runs a query calculating the time difference in days between
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -589,7 +551,9 @@ Tabular sensor that runs a query calculating the time difference in days between
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -626,7 +590,7 @@ Tabular sensor that runs a query calculating the time difference in days between
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -634,16 +598,6 @@ Tabular sensor that runs a query calculating the time difference in days between
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -682,8 +636,7 @@ Tabular sensor that runs a query calculating the time difference in days between
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -697,10 +650,8 @@ Tabular sensor that runs a query calculating the time difference in days between
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -709,28 +660,12 @@ Tabular sensor that runs a query calculating the time difference in days between
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -758,7 +693,9 @@ Tabular sensor that runs a query calculating the time difference in days between
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -791,7 +728,9 @@ Tabular sensor that runs a query calculating the time difference in days between
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -831,8 +770,7 @@ Tabular sensor that runs a query calculating the time difference in days between
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -842,19 +780,6 @@ Tabular sensor that runs a query calculating the time difference in days between
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     

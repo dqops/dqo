@@ -24,7 +24,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -90,7 +90,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                         THEN 1
                     ELSE 0
                 END
@@ -126,7 +126,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -192,7 +192,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                         THEN 1
                     ELSE 0
                 END
@@ -228,7 +228,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -294,7 +294,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                         THEN 1
                     ELSE 0
                 END
@@ -331,7 +331,7 @@ Column level sensor that calculates the percent of values that fit to a USA phon
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -399,7 +399,7 @@ Column level sensor that calculates the percent of values that fit to a USA phon
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
                     ) THEN 1
                     ELSE 0
@@ -437,7 +437,7 @@ Column level sensor that calculates the percent of values that contain a USA zip
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -505,7 +505,7 @@ Column level sensor that calculates the percent of values that contain a USA zip
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"[0-9]{5}(?:-[0-9]{4})?"
                     ) THEN 1
                     ELSE 0
@@ -542,7 +542,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -608,7 +608,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
                         THEN 1
                     ELSE 0
                 END
@@ -645,7 +645,7 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -713,7 +713,7 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"^[0-9]{5}(?:-[0-9]{4})?$"
                     ) THEN 1
                     ELSE 0
@@ -751,7 +751,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -819,7 +819,7 @@ Column level sensor that calculates the percent of values that contains a USA ph
             ELSE 100.0 * SUM(
                 CASE
                     WHEN REGEXP_CONTAINS(
-                        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
+                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
                         r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
                     ) THEN 1
                     ELSE 0
@@ -1118,15 +1118,39 @@ Column level sensor that calculates the percentage of rows with a date value in 
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    SELECT
-        CASE
-            WHEN COUNT(*) = 0 THEN 100.0
-            ELSE 100.0 * SUM(
+    {% macro render_value_in_future() -%}
+        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
+        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1160,7 +1184,12 @@ Column level sensor that calculates the percentage of rows with a date value in 
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1202,7 +1231,12 @@ Column level sensor that calculates the percentage of rows with a date value in 
                         THEN 1
                     ELSE 0
                 END
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
+        {%- else -%}
+                CASE
+                    WHEN ({{ lib.render_target_column('analyzed_table') }})::TIMESTAMP > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1244,14 +1278,12 @@ Column level sensor that calculates the percentage of rows with a date value in 
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
                 CASE
                     WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- else -%}
-        <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1309,15 +1341,15 @@ Column level sensor that calculates the percent of non-negative values in a colu
         {%- endif -%}
     {% endmacro %}
     
-    {% macro render_date_format_cast()%}
+    {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}>
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
-    {% endmacro %}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -1337,6 +1369,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
         {%- if include_lower_bound and include_upper_bound -%}
      {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
@@ -1351,11 +1384,11 @@ Column level sensor that calculates the percent of non-negative values in a colu
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -1392,11 +1425,11 @@ Column level sensor that calculates the percent of non-negative values in a colu
     
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
-    {{ render_target_column('analyzed_table') }}
+        {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
-    CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {% endmacro %}
     
@@ -1419,19 +1452,9 @@ Column level sensor that calculates the percent of non-negative values in a colu
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-    {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'STRING'-%}
-    SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
-        {%- else -%}
-    <INVALID DATA TYPE: {{lib.target_column_data_type}}/>
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
         {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
+    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif not include_lower_bound and include_upper_bound -%}
     {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
         {%- elif include_lower_bound and not include_upper_bound -%}
@@ -1441,6 +1464,15 @@ Column level sensor that calculates the percent of non-negative values in a colu
         {%- endif -%}
     {%- endmacro -%}
     
+    {% macro render_date_format_cast() -%}
+        {%- if lib.target_column_data_type == 'DATE' -%}
+        {{ render_target_column('analyzed_table') }}
+        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
@@ -1895,7 +1927,7 @@ Column level sensor that calculates the percentage of values that are longer tha
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -1962,7 +1994,7 @@ Column level sensor that calculates the percentage of values that are longer tha
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -2003,7 +2035,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -2061,7 +2093,7 @@ Column level sensor that calculates the count of values that are shorter than a 
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -2544,7 +2576,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -2601,7 +2633,7 @@ Column level sensor that calculates the number of rows with an invalid IP6 addre
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -2634,7 +2666,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -2691,7 +2723,7 @@ Column level sensor that calculates the number of rows with an invalid IP4 addre
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -2877,7 +2909,7 @@ Column level sensor that calculates the percentage of values that are shorter th
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -2944,7 +2976,7 @@ Column level sensor that calculates the percentage of values that are shorter th
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -3808,7 +3840,7 @@ Column level sensor that calculates the count of values that are longer than a g
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -3866,7 +3898,7 @@ Column level sensor that calculates the count of values that are longer than a g
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -4198,7 +4230,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -4307,7 +4339,7 @@ Column level sensor that calculates the percentage of values that does fit a giv
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -4450,31 +4482,6 @@ Column level sensor that calculates the number of rows with a null column value.
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -4494,28 +4501,53 @@ Column level sensor that calculates the number of rows with a null column value.
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -4606,31 +4638,6 @@ Column level sensor that calculates the number of rows with a null column value.
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -4645,71 +4652,10 @@ Column level sensor that calculates the number of rows with a null column value.
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
-    
-    {%- macro top_values_column() -%}
-    FROM(
-        SELECT
-            top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
-            RANK() OVER(partition by top_col_values.time_period
-            {{- render_data_stream('top_col_values') }}
-            ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
-        FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
-    WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
-    
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "bigquery"
-      
-    ```
-    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro extract_in_list(values_list) -%}
         {%- for i in values_list -%}
@@ -4719,6 +4665,30 @@ Column level sensor that calculates the number of rows with a null column value.
                 {{lib.make_text_constant(i)}}
             {%- endif -%}
         {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro top_values_column() -%}
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            {{- render_data_stream('top_col_values') }}
+            ORDER BY top_col_values.total_values) as top_values_rank
+            {{- render_data_stream('top_col_values') }}
+        FROM (
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
+    WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
     {%- macro render_data_stream(table_alias_prefix = '') -%}
@@ -4735,6 +4705,16 @@ Column level sensor that calculates the number of rows with a null column value.
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -4755,11 +4735,21 @@ Column level sensor that calculates the number of rows with a null column value.
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -4777,6 +4767,21 @@ Column level sensor that calculates the number of rows with a null column value.
         ) top_col_values
     )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -4805,7 +4810,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -4862,7 +4867,7 @@ Column level sensor that calculates the number of rows with an invalid emails va
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -5091,7 +5096,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -5148,7 +5153,7 @@ Column level sensor that calculates the number of rows with an invalid uuid valu
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -5204,7 +5209,7 @@ Column level sensor that calculates the number of values that does not fit to a 
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -5313,7 +5318,7 @@ Column level sensor that calculates the number of values that does not fit to a 
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -5826,10 +5831,8 @@ Column level sensor that calculates the number of rows with a null column value.
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        CASE
-            WHEN COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}})) = 1 THEN COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
-            ELSE (COUNT({{ lib.render_target_column('analyzed_table')}}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table')}}))) AS actual_value
-        END AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table') }}) - COUNT(DISTINCT({{ lib.render_target_column('analyzed_table') }}))
+        AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -6647,6 +6650,93 @@ Column level sensor that finds the maximum value. It works on any data type that
     ```
 ___
 
+### **percentile**
+**Full sensor name**
+```
+column/numeric/percentile
+```
+**Description**  
+Column level sensor that finds the percentile in a given column. The percentile value is defined by the user. It works only on numeric, big numeric and float data types.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percentile_value|Must be a literal in the range [0, 1].|double| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_time_dimension_projection(table_alias_prefix = '', indentation = '            ') -%}
+        {%- if lib.time_series is not none -%}
+            {{- lib.eol() -}}
+            {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE_CONT(({{ lib.render_target_column('analyzed_table')}}), {{ parameters.percentile_value }}) OVER (PARTITION BY{{render_time_dimension_projection('analyzed_table') }}
+            )
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table)
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
 ### **value above max value percent**
 **Full sensor name**
 ```
@@ -7035,6 +7125,92 @@ Column level sensor that calculates the percentage of values that are members of
     ```
 ___
 
+### **valid longitude percent**
+**Full sensor name**
+```
+column/numeric/valid_longitude_percent
+```
+**Description**  
+Column level sensor that counts percentage of valid longitude in a column.
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
 ### **negative count**
 **Full sensor name**
 ```
@@ -7110,6 +7286,92 @@ Column level sensor that counts negative values in a column.
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} < 0 THEN 1
                 ELSE 0
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+### **invalid latitude count**
+**Full sensor name**
+```
+column/numeric/invalid_latitude_count
+```
+**Description**  
+Column level sensor that counts invalid latitude in a column.
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 0
+                ELSE 1
             END
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -7730,6 +7992,92 @@ Column level sensor that counts negative values in a column.
     ```
 ___
 
+### **valid latitude percent**
+**Full sensor name**
+```
+column/numeric/valid_latitude_percent
+```
+**Description**  
+Column level sensor that counts percentage of valid latitude in a column.
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -90.0 AND {{ lib.render_target_column('analyzed_table') }} <= 90.0 THEN 1
+                ELSE 0
+            END
+        )/COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
 ### **sum**
 **Full sensor name**
 ```
@@ -8016,6 +8364,92 @@ Column level sensor that counts negative values in a column.
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         STDDEV_POP({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+### **invalid longitude count**
+**Full sensor name**
+```
+column/numeric/invalid_longitude_count
+```
+**Description**  
+Column level sensor that counts invalid longitude in a column.
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        SUM(
+            CASE
+                WHEN {{ lib.render_target_column('analyzed_table') }} >= -180.0 AND {{ lib.render_target_column('analyzed_table') }} <= 180.0 THEN 0
+                ELSE 1
+            END
+        ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table

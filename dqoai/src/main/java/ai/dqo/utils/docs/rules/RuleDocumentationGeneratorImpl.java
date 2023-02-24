@@ -47,9 +47,9 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
     @Override
     public DocumentationFolder renderRuleDocumentation(Path projectRootPath, DqoHome dqoHome) {
         DocumentationFolder rulesFolder = new DocumentationFolder();
-        rulesFolder.setFolderName("rules");
-        rulesFolder.setLinkName("Rule reference");
-        rulesFolder.setDirectPath(projectRootPath.resolve("../docs/rules").toAbsolutePath().normalize());
+        rulesFolder.setFolderName("reference/rules");
+        rulesFolder.setLinkName("Rules");
+        rulesFolder.setDirectPath(projectRootPath.resolve("../docs/reference/rules").toAbsolutePath().normalize());
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("rules/rule_documentation");
 

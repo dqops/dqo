@@ -48,9 +48,9 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
     @Override
     public DocumentationFolder renderSensorDocumentation(Path projectRootPath, DqoHome dqoHome) {
         DocumentationFolder sensorsFolder = new DocumentationFolder();
-        sensorsFolder.setFolderName("sensors");
-        sensorsFolder.setLinkName("Sensor reference");
-        sensorsFolder.setDirectPath(projectRootPath.resolve("../docs/sensors").toAbsolutePath().normalize());
+        sensorsFolder.setFolderName("reference/sensors");
+        sensorsFolder.setLinkName("Sensors");
+        sensorsFolder.setDirectPath(projectRootPath.resolve("../docs/reference/sensors").toAbsolutePath().normalize());
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("sensors/sensor_documentation");
 

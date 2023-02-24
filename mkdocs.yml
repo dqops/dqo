@@ -23,22 +23,6 @@ nav:
 #    - DQO_USER_HOME: 'dqo_concept/how_data_is_stored/how_data_is_stored.md'
   - Working with DQO:
     - Adding connections: 'working_with_dqo/add_connection.md'
-########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
-  - CLI Command:
-    - dqo: 'cli/dqo.md'
-    - cls: 'cli/cls.md'
-    - connection: 'cli/connection.md'
-    - table: 'cli/table.md'
-    - check: 'cli/check.md'
-    - column: 'cli/column.md'
-    - settings: 'cli/settings.md'
-    - cloud: 'cli/cloud.md'
-    - sensor: 'cli/sensor.md'
-    - scheduler: 'cli/scheduler.md'
-    - data: 'cli/data.md'
-    - run: 'cli/run.md'
-    - rule: 'cli/rule.md'
-########## END INCLUDE CLI COMMANDS
   - Scheduler:
     - Introduction to the scheduler: 'scheduler/introduction_to_the_scheduler.md'
     - Cron formatting: 'scheduler/cron_formatting.md'
@@ -46,24 +30,6 @@ nav:
     - Cloud logging: 'scheduler/cloud_logging.md'
     - Console logging modes: 'scheduler/console_logging_modes.md'
     - Timezone configuration: 'scheduler/timezone_configuration.md'
-########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
-  - Check reference:
-    - table:
-      - standard: 'checks/table/standard.md'
-      - timeliness: 'checks/table/timeliness.md'
-      - sql: 'checks/table/sql.md'
-      - availability: 'checks/table/availability.md'
-    - column:
-      - nulls: 'checks/column/nulls.md'
-      - numeric: 'checks/column/numeric.md'
-      - strings: 'checks/column/strings.md'
-      - uniqueness: 'checks/column/uniqueness.md'
-      - datetime: 'checks/column/datetime.md'
-      - pii: 'checks/column/pii.md'
-      - sql: 'checks/column/sql.md'
-      - bool: 'checks/column/bool.md'
-      - integrity: 'checks/column/integrity.md'
-########## END INCLUDE CHECK REFERENCE
   - Examples:
     - Running examples: 'examples/running_examples.md'
     - Timeliness:
@@ -84,16 +50,51 @@ nav:
       - not_null_count: 'examples/validity/not_null_count/not_null_count.md'
       - non_negative_count: 'examples/validity/non_negative_count/non_negative_count.md'
       - numerical_type_percent: 'examples/validity/numerical_type_percent/numerical_type_percent.md'
+  - Reference:
+########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
+    - Command-line interface:
+      - dqo: 'reference/command_line_interface/dqo.md'
+      - cls: 'reference/command_line_interface/cls.md'
+      - connection: 'reference/command_line_interface/connection.md'
+      - table: 'reference/command_line_interface/table.md'
+      - check: 'reference/command_line_interface/check.md'
+      - column: 'reference/command_line_interface/column.md'
+      - settings: 'reference/command_line_interface/settings.md'
+      - cloud: 'reference/command_line_interface/cloud.md'
+      - sensor: 'reference/command_line_interface/sensor.md'
+      - scheduler: 'reference/command_line_interface/scheduler.md'
+      - data: 'reference/command_line_interface/data.md'
+      - run: 'reference/command_line_interface/run.md'
+      - rule: 'reference/command_line_interface/rule.md'
+########## END INCLUDE CLI COMMANDS
+########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
+    - Checks:
+      - table:
+        - standard: 'reference/checks/table/standard.md'
+        - timeliness: 'reference/checks/table/timeliness.md'
+        - sql: 'reference/checks/table/sql.md'
+        - availability: 'reference/checks/table/availability.md'
+      - column:
+        - nulls: 'reference/checks/column/nulls.md'
+        - numeric: 'reference/checks/column/numeric.md'
+        - strings: 'reference/checks/column/strings.md'
+        - uniqueness: 'reference/checks/column/uniqueness.md'
+        - datetime: 'reference/checks/column/datetime.md'
+        - pii: 'reference/checks/column/pii.md'
+        - sql: 'reference/checks/column/sql.md'
+        - bool: 'reference/checks/column/bool.md'
+        - integrity: 'reference/checks/column/integrity.md'
+########## END INCLUDE CHECK REFERENCE
 ########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY
-  - Sensor reference:
-    - column: 'sensors/column.md'
-    - table: 'sensors/table.md'
+    - Sensors:
+      - column: 'reference/sensors/column.md'
+      - table: 'reference/sensors/table.md'
 ########## END INCLUDE SENSOR REFERENCE
 ########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY
-  - Rule reference:
-    - comparison: 'rules/comparison.md'
-    - averages: 'rules/averages.md'
-    - stdev: 'rules/stdev.md'
+    - Rules:
+      - comparison: 'reference/rules/comparison.md'
+      - averages: 'reference/rules/averages.md'
+      - stdev: 'reference/rules/stdev.md'
 ########## END INCLUDE RULE REFERENCE
 
 # Visual settings

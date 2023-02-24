@@ -34,9 +34,9 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
     @Override
     public DocumentationFolder generateDocumentationForCliCommands(Path projectRootPath) {
         DocumentationFolder cliFolder = new DocumentationFolder();
-        cliFolder.setFolderName("cli");
-        cliFolder.setLinkName("CLI Command");
-        cliFolder.setDirectPath(projectRootPath.resolve("../docs/cli").toAbsolutePath().normalize());
+        cliFolder.setFolderName("reference/command_line_interface");
+        cliFolder.setLinkName("Command-line interface");
+        cliFolder.setDirectPath(projectRootPath.resolve("../docs/reference/command_line_interface").toAbsolutePath().normalize());
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("cli/cli_documentation");
 
