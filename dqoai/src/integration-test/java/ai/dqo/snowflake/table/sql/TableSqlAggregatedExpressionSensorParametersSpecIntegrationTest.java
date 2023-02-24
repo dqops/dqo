@@ -54,9 +54,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setSqlExpression("(SELECT MAX("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") FROM {table})");
+        this.sut.setSqlExpression("COUNT(*)");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -71,9 +69,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setSqlExpression("(SELECT MAX("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") FROM {table})");
+        this.sut.setSqlExpression("COUNT(*)");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -88,9 +84,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setSqlExpression("(SELECT MAX("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") FROM {table})");
+        this.sut.setSqlExpression("COUNT(*)");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
 
@@ -104,9 +98,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sut.setSqlExpression("(SELECT MAX("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") FROM {table})");
+        this.sut.setSqlExpression("COUNT(*)");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
 
@@ -115,14 +107,12 @@ public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest ext
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13L, resultTable.column(0).get(0));
+        Assertions.assertEquals(3L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sut.setSqlExpression("(SELECT MAX("
-                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
-                +") FROM {table})");
+        this.sut.setSqlExpression("COUNT(*)");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
 
