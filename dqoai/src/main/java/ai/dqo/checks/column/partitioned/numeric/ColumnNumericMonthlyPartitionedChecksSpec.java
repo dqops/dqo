@@ -60,6 +60,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_invalid_latitude_count", o -> o.monthlyPartitionInvalidLatitudeCount);
             put("monthly_partition_valid_latitude_percent", o -> o.monthlyPartitionValidLatitudePercent);
             put("monthly_partition_invalid_longitude_count", o -> o.monthlyPartitionInvalidLongitudeCount);
+            put("monthly_partition_valid_longitude_percent", o -> o.monthlyPartitionValidLongitudePercent);
 
         }
     };
@@ -135,6 +136,9 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnInvalidLongitudeCountCheckSpec monthlyPartitionInvalidLongitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnValidLongitudePercentCheckSpec monthlyPartitionValidLongitudePercent;
 
     /**
      * Returns a negative values count check specification.
@@ -567,6 +571,24 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionInvalidLongitudeCount, monthlyPartitionInvalidLongitudeCount));
         this.monthlyPartitionInvalidLongitudeCount = monthlyPartitionInvalidLongitudeCount;
         propagateHierarchyIdToField(monthlyPartitionInvalidLongitudeCount, "monthly_partition_invalid_longitude_count");
+    }
+
+    /**
+     * Returns a valid longitude percent check specification.
+     * @return Valid longitude percent check specification.
+     */
+    public ColumnValidLongitudePercentCheckSpec getMonthlyPartitionValidLongitudePercent() {
+        return monthlyPartitionValidLongitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid longitude percent check.
+     * @param monthlyPartitionValidLongitudePercent Valid longitude percent check specification.
+     */
+    public void setMonthlyPartitionValidLongitudePercent(ColumnValidLongitudePercentCheckSpec monthlyPartitionValidLongitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidLongitudePercent, monthlyPartitionValidLongitudePercent));
+        this.monthlyPartitionValidLongitudePercent = monthlyPartitionValidLongitudePercent;
+        propagateHierarchyIdToField(monthlyPartitionValidLongitudePercent, "monthly_partition_valid_longitude_percent");
     }
 
     /**
