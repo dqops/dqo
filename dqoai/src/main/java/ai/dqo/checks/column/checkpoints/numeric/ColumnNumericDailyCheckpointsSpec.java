@@ -60,6 +60,8 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_invalid_latitude_count", o -> o.dailyCheckpointInvalidLatitudeCount);
             put("daily_checkpoint_valid_latitude_percent", o -> o.dailyCheckpointValidLatitudePercent);
             put("daily_checkpoint_invalid_longitude_count", o -> o.dailyCheckpointInvalidLongitudeCount);
+            put("daily_checkpoint_valid_longitude_percent", o -> o.dailyCheckpointValidLongitudePercent);
+
         }
     };
 
@@ -134,6 +136,9 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnInvalidLongitudeCountCheckSpec dailyCheckpointInvalidLongitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnValidLongitudePercentCheckSpec dailyCheckpointValidLongitudePercent;
 
     /**
      * Returns a negative values count check specification.
@@ -565,6 +570,24 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointInvalidLongitudeCount, dailyCheckpointInvalidLongitudeCount));
         this.dailyCheckpointInvalidLongitudeCount = dailyCheckpointInvalidLongitudeCount;
         propagateHierarchyIdToField(dailyCheckpointInvalidLongitudeCount, "daily_checkpoint_invalid_longitude_count");
+    }
+
+    /**
+     * Returns a valid longitude percent check specification.
+     * @return Valid longitude percent check specification.
+     */
+    public ColumnValidLongitudePercentCheckSpec getDailyCheckpointValidLongitudePercent() {
+        return dailyCheckpointValidLongitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid longitude percent check.
+     * @param dailyCheckpointValidLongitudePercent Valid longitude percent check specification.
+     */
+    public void setDailyCheckpointValidLongitudePercent(ColumnValidLongitudePercentCheckSpec dailyCheckpointValidLongitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointValidLongitudePercent, dailyCheckpointValidLongitudePercent));
+        this.dailyCheckpointValidLongitudePercent = dailyCheckpointValidLongitudePercent;
+        propagateHierarchyIdToField(dailyCheckpointValidLongitudePercent, "daily_checkpoint_valid_longitude_percent");
     }
 
     /**
