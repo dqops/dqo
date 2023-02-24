@@ -52,6 +52,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_min_in_range", o -> o.monthlyPartitionMinInRange);
             put("monthly_partition_mean_in_range", o -> o.monthlyPartitionMeanInRange);
             put("monthly_partition_percentile_in_range", o -> o.monthlyPartitionPercentileInRange);
+            put("monthly_partition_percentile_50_in_range", o -> o.monthlyPartitionPercentile50InRange);
             put("monthly_partition_sample_stddev_in_range", o -> o.monthlyPartitionSampleStddevInRange);
             put("monthly_partition_population_stddev_in_range", o -> o.monthlyPartitionPopulationStddevInRange);
             put("monthly_partition_sample_variance_in_range", o -> o.monthlyPartitionSampleVarianceInRange);
@@ -112,6 +113,9 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPercentileInRangeCheckSpec monthlyPartitionPercentileInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPercentile50InRangeCheckSpec monthlyPartitionPercentile50InRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnSampleStddevInRangeCheckSpec monthlyPartitionSampleStddevInRange;
@@ -427,6 +431,24 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentileInRange, monthlyPartitionPercentileInRange));
         this.monthlyPartitionPercentileInRange = monthlyPartitionPercentileInRange;
         propagateHierarchyIdToField(monthlyPartitionPercentileInRange, "monthly_partition_percentile_in_range");
+    }
+
+    /**
+     * Returns a percentile 50 in range check specification.
+     * @return Percentile 50 in range check specification.
+     */
+    public ColumnPercentile50InRangeCheckSpec getMonthlyPartitionPercentile50InRange() {
+        return monthlyPartitionPercentile50InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 50 in range check.
+     * @param monthlyPartitionPercentile50InRange percentile 50 in range check specification.
+     */
+    public void setMonthlyPartitionPercentile50InRange(ColumnPercentile50InRangeCheckSpec monthlyPartitionPercentile50InRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentile50InRange, monthlyPartitionPercentile50InRange));
+        this.monthlyPartitionPercentile50InRange = monthlyPartitionPercentile50InRange;
+        propagateHierarchyIdToField(monthlyPartitionPercentile50InRange, "monthly_partition_percentile_50_in_range");
     }
 
     /**
