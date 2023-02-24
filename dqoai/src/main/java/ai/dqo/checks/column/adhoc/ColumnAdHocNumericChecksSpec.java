@@ -60,6 +60,8 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("invalid_latitude_count", o -> o.invalidLatitudeCount);
             put("valid_latitude_percent", o -> o.validLatitudePercent);
             put("invalid_longitude_count", o -> o.invalidLongitudeCount);
+            put("valid_longitude_percent", o -> o.validLongitudePercent);
+
         }
     };
 
@@ -134,6 +136,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.")
     private ColumnInvalidLongitudeCountCheckSpec invalidLongitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage.")
+    private ColumnValidLongitudePercentCheckSpec validLongitudePercent;
 
     /**
      * Returns a negative count check specification.
@@ -565,6 +570,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.invalidLongitudeCount, invalidLongitudeCount));
         this.invalidLongitudeCount = invalidLongitudeCount;
         propagateHierarchyIdToField(invalidLongitudeCount, "invalid_longitude_count");
+    }
+
+    /**
+     * Returns a valid longitude percent check specification.
+     * @return Valid longitude percent check specification.
+     */
+    public ColumnValidLongitudePercentCheckSpec getValidLongitudePercent() {
+        return validLongitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid longitude percent check.
+     * @param validLongitudePercent Valid longitude count percent specification.
+     */
+    public void setValidLongitudePercent(ColumnValidLongitudePercentCheckSpec validLongitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.validLongitudePercent, validLongitudePercent));
+        this.validLongitudePercent = validLongitudePercent;
+        propagateHierarchyIdToField(validLongitudePercent, "valid_longitude_percent");
     }
 
     /**

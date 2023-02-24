@@ -60,6 +60,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_invalid_latitude_count", o -> o.dailyPartitionInvalidLatitudeCount);
             put("daily_partition_valid_latitude_percent", o -> o.dailyPartitionValidLatitudePercent);
             put("daily_partition_invalid_longitude_count", o -> o.dailyPartitionInvalidLongitudeCount);
+            put("daily_partition_valid_longitude_percent", o -> o.dailyPartitionValidLongitudePercent);
 
         }
     };
@@ -135,6 +136,9 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnInvalidLongitudeCountCheckSpec dailyPartitionInvalidLongitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnValidLongitudePercentCheckSpec dailyPartitionValidLongitudePercent;
 
 
     /**
@@ -569,6 +573,25 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.dailyPartitionInvalidLongitudeCount = dailyPartitionInvalidLongitudeCount;
         propagateHierarchyIdToField(dailyPartitionInvalidLongitudeCount, "daily_partition_invalid_longitude_count");
     }
+
+    /**
+     * Returns a valid longitude percent check specification.
+     * @return Valid longitude percent check specification.
+     */
+    public ColumnValidLongitudePercentCheckSpec getDailyPartitionValidLongitudePercent() {
+        return dailyPartitionValidLongitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid longitude percent check.
+     * @param dailyPartitionValidLongitudePercent Valid longitude percent check specification.
+     */
+    public void setDailyPartitionValidLongitudePercent(ColumnValidLongitudePercentCheckSpec dailyPartitionValidLongitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidLongitudePercent, dailyPartitionValidLongitudePercent));
+        this.dailyPartitionValidLongitudePercent = dailyPartitionValidLongitudePercent;
+        propagateHierarchyIdToField(dailyPartitionValidLongitudePercent, "daily_partition_valid_longitude_percent");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

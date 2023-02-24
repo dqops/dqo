@@ -19,8 +19,8 @@ dqo.ai> check run [-deh] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
 
 **Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
 |`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |ADHOC<br/>CHECKPOINT<br/>PARTITIONED<br/>|

@@ -45,16 +45,14 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
-    private SampleTableMetadata sampleTableMetadata;
-    private UserHomeContext userHomeContext;
 
     @BeforeEach
     void setUp() {
         this.sut = new MaxFailuresRule1ParametersSpec();
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
-        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
+        UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
-        this.readoutTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
+        this.readoutTimestamp = LocalDateTime.of(2022, 2, 15, 0, 0);
     }
 
     @Test
@@ -71,7 +69,6 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
     void executeRuleMaxFailures_whenCurrentResultPassAndPreviousAreFailuresAndMaxFailures5_thenReturnsPassed() {
         this.sut.setMaxFailures(5L);
 
-
         Double[] previousReadouts = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         this.sensorReadouts = previousReadouts;
 
@@ -81,16 +78,15 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(5.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRuleMaxFailures_whenCurrentResultPassAndPreviousAreFailuresAndMaxFailures0_thenReturnsPassed() {
         this.sut.setMaxFailures(0L);
 
-
         Double[] previousReadouts = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         this.sensorReadouts = previousReadouts;
 
@@ -100,15 +96,14 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(0.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(0.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRuleMaxFailures_whenCurrentResultFailAndPreviousArePassAndMaxFailures1_thenReturnsPassed() {
         this.sut.setMaxFailures(1L);
-
 
         Double[] previousReadouts = {1.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
         this.sensorReadouts = previousReadouts;
@@ -119,15 +114,14 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(1.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRuleMaxFailures_whenCurrentResultFailAndPreviousArePassButRecentValueAreNullAndMaxFailures1_thenReturnsPassed() {
         this.sut.setMaxFailures(1L);
-
 
         Double[] previousReadouts = {1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, null, null, null};
         this.sensorReadouts = previousReadouts;
@@ -138,15 +132,14 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(1.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRuleMaxFailures_whenCurrentResultFailAndPreviousArePassButRecentValueAreNullAndMaxFailures5_thenReturnsPassed() {
         this.sut.setMaxFailures(5L);
-
 
         Double[] previousReadouts = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 0.0, null, 0.0, 0.0, null, null, null};
         this.sensorReadouts = previousReadouts;
@@ -157,15 +150,14 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(5.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRuleMaxFailures_whenCurrentResultFailAndPreviousArePassAndMaxFailures0_thenReturnsFailed() {
         this.sut.setMaxFailures(0L);
-
 
         Double[] previousReadouts = {1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0};
         this.sensorReadouts = previousReadouts;
@@ -176,15 +168,14 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(0.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(0.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(0.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRuleMaxFailures_whenCurrentResultFailAndPreviousAreAllFailuresAndMaxFailures1_thenReturnsFailed() {
         this.sut.setMaxFailures(1L);
-
 
         Double[] previousReadouts = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
         this.sensorReadouts = previousReadouts;
@@ -195,15 +186,14 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(1.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(1.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRuleMaxFailures_whenCurrentResultFailAndPreviousAreAllFailuresAndMaxFailures5_thenReturnsFailed() {
         this.sut.setMaxFailures(5L);
-
 
         Double[] previousReadouts = {0.0, 1.0, 0.0, 0.0, 0.0, null, 0.0, 0.0, null, 0.0, 0.0, 0.0};
         this.sensorReadouts = previousReadouts;
@@ -214,15 +204,14 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(5.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRuleMaxFailures_whenCurrentResultFailAndPreviousAreAllFailuresButOnly3AndMaxFailures5_thenReturnsPassed() {
         this.sut.setMaxFailures(5L);
-
 
         Double[] previousReadouts = {0.0, null, null, null, null, null, 0.0, null, 0.0, null};
         this.sensorReadouts = previousReadouts;
@@ -233,17 +222,17 @@ public class MaxFailuresRuleParametersSpecTests extends BaseTest {
                 this.sut, this.readoutTimestamp, historicDataPoints, this.timeWindowSettings);
 
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(5.0, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(5.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(5.0, ruleExecutionResult.getUpperBound());
     }
 
     @Test
     void executeRuleMaxFailures_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 }

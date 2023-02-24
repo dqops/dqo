@@ -195,7 +195,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             <SvgIcon
               name={!check?.disabled ? 'stop' : 'disable'}
               className={clsx(
-                'w-5 h-5',
+                'w-5 h-5 cursor-pointer',
                 !check?.disabled ? 'text-blue-700' : 'text-red-700'
               )}
               onClick={() =>

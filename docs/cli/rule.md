@@ -16,8 +16,8 @@ dqo.ai> rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
 
 **Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`-f`<br/>`--ext`<br/>|File type| |PYTHON<br/>YAML<br/>|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||

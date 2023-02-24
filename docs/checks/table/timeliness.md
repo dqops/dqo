@@ -19,8 +19,51 @@ Calculates the number of days since the most recent event timestamp (freshness)
 |----------|----------|----------|-----------|-------------|
 |days_since_most_recent_event|adhoc| |[days_since_most_recent_event](../../../sensors/table/#days-since-most-recent-event)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=days_since_most_recent_event
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  checks:
+    timeliness:
+      days_since_most_recent_event:
+        error:
+          max_days: 2.0
+        warning:
+          max_days: 1.0
+        fatal:
+          max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-20"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -75,7 +118,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -83,16 +126,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -129,7 +162,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -137,16 +170,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -176,7 +199,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -206,7 +231,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -227,7 +254,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -244,7 +271,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -258,7 +285,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -269,7 +298,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -346,7 +377,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -354,16 +385,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -400,7 +421,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -408,16 +429,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -447,7 +458,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -477,7 +490,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -498,7 +513,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -517,7 +532,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -533,7 +548,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
@@ -546,7 +563,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
@@ -572,8 +591,42 @@ Daily checkpoint calculating the number of days since the most recent event time
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_days_since_most_recent_event|checkpoint|daily|[days_since_most_recent_event](../../../sensors/table/#days-since-most-recent-event)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_days_since_most_recent_event
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -629,7 +682,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -637,16 +690,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -683,7 +726,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -691,16 +734,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -730,7 +763,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -760,7 +795,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -781,7 +818,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -798,7 +835,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -812,7 +849,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -823,7 +862,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -901,7 +942,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -909,16 +950,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -955,7 +986,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -963,16 +994,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1002,7 +1023,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1032,7 +1055,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1053,7 +1078,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1072,7 +1097,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1088,7 +1113,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -1101,7 +1128,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -1127,8 +1156,42 @@ Monthly checkpoint calculating the number of days since the most recent event ti
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_days_since_most_recent_event|checkpoint|monthly|[days_since_most_recent_event](../../../sensors/table/#days-since-most-recent-event)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_days_since_most_recent_event
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1184,7 +1247,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -1192,16 +1255,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1238,7 +1291,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -1246,16 +1299,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1285,7 +1328,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1315,7 +1360,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1336,7 +1383,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1353,7 +1400,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1367,7 +1414,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -1378,7 +1427,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -1456,7 +1507,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -1464,16 +1515,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1510,7 +1551,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -1518,16 +1559,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1557,7 +1588,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1587,7 +1620,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1608,7 +1643,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1627,7 +1662,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1643,7 +1678,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -1656,7 +1693,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -1682,8 +1721,52 @@ Daily partition checkpoint calculating the number of days since the most recent 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_days_since_most_recent_event|partitioned|daily|[days_since_most_recent_event](../../../sensors/table/#days-since-most-recent-event)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_days_since_most_recent_event
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    daily:
+      timeliness:
+        daily_partition_days_since_most_recent_event:
+          error:
+            max_days: 2.0
+          warning:
+            max_days: 1.0
+          fatal:
+            max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1739,7 +1822,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -1747,16 +1830,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1793,7 +1866,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -1801,16 +1874,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1840,7 +1903,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1870,7 +1935,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -1891,7 +1958,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1908,7 +1975,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -1922,7 +1989,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -1933,7 +2002,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -2011,7 +2082,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -2019,16 +2090,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2065,7 +2126,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -2073,16 +2134,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2112,7 +2163,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2142,7 +2195,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2163,7 +2218,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -2182,7 +2237,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -2198,7 +2253,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -2211,7 +2268,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -2237,8 +2296,52 @@ Monthly partition checkpoint calculating the number of days since the most recen
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_days_since_most_recent_event|partitioned|monthly|[days_since_most_recent_event](../../../sensors/table/#days-since-most-recent-event)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_days_since_most_recent_event
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    monthly:
+      timeliness:
+        monthly_partition_days_since_most_recent_event:
+          error:
+            max_days: 2.0
+          warning:
+            max_days: 1.0
+          fatal:
+            max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2294,7 +2397,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -2302,16 +2405,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2348,7 +2441,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -2356,16 +2449,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2395,7 +2478,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2425,7 +2510,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2446,7 +2533,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -2463,7 +2550,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -2477,7 +2564,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -2488,7 +2577,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -2566,7 +2657,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -2574,16 +2665,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2620,7 +2701,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -2628,16 +2709,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2667,7 +2738,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2697,7 +2770,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2718,7 +2793,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -2737,7 +2812,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -2753,7 +2828,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -2766,7 +2843,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -2800,8 +2879,51 @@ Calculates the time difference in days between the most recent event timestamp a
 |----------|----------|----------|-----------|-------------|
 |data_ingestion_delay|adhoc| |[data_ingestion_delay](../../../sensors/table/#data-ingestion-delay)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=data_ingestion_delay
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  checks:
+    timeliness:
+      data_ingestion_delay:
+        error:
+          max_days: 2.0
+        warning:
+          max_days: 1.0
+        fatal:
+          max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-20"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2859,8 +2981,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -2870,19 +2991,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -2907,8 +3015,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -2922,10 +3029,8 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -2934,28 +3039,12 @@ spec:
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2983,7 +3072,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3016,7 +3107,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3036,10 +3129,10 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -3055,15 +3148,13 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        AS actual_value,
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
         TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
@@ -3074,7 +3165,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -3085,7 +3178,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -3165,8 +3260,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -3176,19 +3270,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3213,8 +3294,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -3228,10 +3308,8 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -3240,28 +3318,12 @@ spec:
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3289,7 +3351,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3322,7 +3386,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3342,10 +3408,10 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -3363,15 +3429,13 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        AS actual_value,
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
@@ -3384,7 +3448,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
@@ -3397,7 +3463,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
@@ -3423,8 +3491,42 @@ Daily checkpoint calculating the time difference in days between the most recent
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_data_ingestion_delay|checkpoint|daily|[data_ingestion_delay](../../../sensors/table/#data-ingestion-delay)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_data_ingestion_delay
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3483,8 +3585,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -3494,19 +3595,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3531,8 +3619,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -3546,10 +3633,8 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -3558,28 +3643,12 @@ spec:
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3607,7 +3676,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3640,7 +3711,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3660,10 +3733,10 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -3679,15 +3752,13 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        AS actual_value,
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
         TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
@@ -3698,7 +3769,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -3709,7 +3782,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -3790,8 +3865,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -3801,19 +3875,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3838,8 +3899,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -3853,10 +3913,8 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -3865,28 +3923,12 @@ spec:
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -3914,7 +3956,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3947,7 +3991,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -3967,10 +4013,10 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -3988,15 +4034,13 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        AS actual_value,
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
@@ -4009,7 +4053,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -4022,7 +4068,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -4048,8 +4096,42 @@ Monthly checkpoint calculating the time difference in days between the most rece
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_data_ingestion_delay|checkpoint|monthly|[data_ingestion_delay](../../../sensors/table/#data-ingestion-delay)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_data_ingestion_delay
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4108,8 +4190,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -4119,19 +4200,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -4156,8 +4224,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -4171,10 +4238,8 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -4183,28 +4248,12 @@ spec:
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4232,7 +4281,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -4265,7 +4316,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -4285,10 +4338,10 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -4304,15 +4357,13 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        AS actual_value,
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
@@ -4323,7 +4374,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -4334,7 +4387,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -4415,8 +4470,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -4426,19 +4480,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -4463,8 +4504,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -4478,10 +4518,8 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -4490,28 +4528,12 @@ spec:
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4539,7 +4561,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -4572,7 +4596,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -4592,10 +4618,10 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -4613,15 +4639,13 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        AS actual_value,
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
@@ -4634,7 +4658,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -4647,7 +4673,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -4673,8 +4701,52 @@ Daily partition checkpoint calculating the time difference in days between the m
 |----------|----------|----------|-----------|-------------|
 |daily_partition_data_ingestion_delay|partitioned|daily|[data_ingestion_delay](../../../sensors/table/#data-ingestion-delay)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_data_ingestion_delay
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    daily:
+      timeliness:
+        daily_partition_data_ingestion_delay:
+          error:
+            max_days: 2.0
+          warning:
+            max_days: 1.0
+          fatal:
+            max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4733,8 +4805,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -4744,19 +4815,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -4781,8 +4839,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -4796,10 +4853,8 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -4808,28 +4863,12 @@ spec:
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -4857,7 +4896,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -4890,7 +4931,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -4910,10 +4953,10 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -4929,15 +4972,13 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        AS actual_value,
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
@@ -4948,7 +4989,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -4959,7 +5002,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -5040,8 +5085,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -5051,19 +5095,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -5088,8 +5119,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -5103,10 +5133,8 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -5115,28 +5143,12 @@ spec:
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5164,7 +5176,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -5197,7 +5211,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -5217,10 +5233,10 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -5238,15 +5254,13 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        AS actual_value,
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -5259,7 +5273,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -5272,7 +5288,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -5298,8 +5316,52 @@ Monthly partition checkpoint calculating the time difference in days between the
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_data_ingestion_delay|partitioned|monthly|[data_ingestion_delay](../../../sensors/table/#data-ingestion-delay)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_data_ingestion_delay
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    monthly:
+      timeliness:
+        monthly_partition_data_ingestion_delay:
+          error:
+            max_days: 2.0
+          warning:
+            max_days: 1.0
+          fatal:
+            max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5358,8 +5420,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -5369,19 +5430,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -5406,8 +5454,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -5421,10 +5468,8 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -5433,28 +5478,12 @@ spec:
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5482,7 +5511,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -5515,7 +5546,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -5535,10 +5568,10 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -5554,15 +5587,13 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        AS actual_value,
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
     FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
@@ -5573,7 +5604,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -5584,7 +5617,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -5665,8 +5700,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -5676,19 +5710,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -5713,8 +5734,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
+        ) / 24.0 / 3600.0 / 1000.0
         {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' and
         table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
         DATE_DIFF(
@@ -5728,10 +5748,8 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        ) / 24.0 / 3600.0 / 1000.0
+        {%- else -%}
         TIMESTAMP_DIFF(
             MAX(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
@@ -5740,28 +5758,12 @@ spec:
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        ) / 24.0 / 3600.0 / 1000.0
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
-        {{ render_ingestion_event_max_diff() }}
-        AS actual_value
+        {{ render_ingestion_event_max_diff() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -5789,7 +5791,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -5822,7 +5826,9 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}) - MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP) - MAX(({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -5842,10 +5848,10 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -5863,15 +5869,13 @@ spec:
     SELECT
         TIMESTAMP_DIFF(
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MAX(
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP)
             ),
             MILLISECOND
-        )
-        / 24.0 / 3600.0 / 1000.0
-        AS actual_value,
+        ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -5884,7 +5888,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -5897,7 +5903,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            MAX((analyzed_table."col_inserted_at")::TIMESTAMP) - MAX((analyzed_table."col_event_timestamp")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -5931,8 +5939,51 @@ Calculates the time difference in days between the current date and the most rec
 |----------|----------|----------|-----------|-------------|
 |days_since_most_recent_ingestion|adhoc| |[days_since_most_recent_ingestion](../../../sensors/table/#days-since-most-recent-ingestion)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=days_since_most_recent_ingestion
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  checks:
+    timeliness:
+      days_since_most_recent_ingestion:
+        error:
+          max_days: 2.0
+        warning:
+          max_days: 1.0
+        fatal:
+          max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-20"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5987,7 +6038,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -5995,16 +6046,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6041,7 +6082,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -6049,16 +6090,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6088,7 +6119,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6118,7 +6151,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6139,7 +6174,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -6156,7 +6191,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -6170,7 +6205,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -6181,7 +6218,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -6258,7 +6297,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -6266,16 +6305,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6312,7 +6341,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -6320,16 +6349,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6359,7 +6378,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6389,7 +6410,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6410,7 +6433,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -6429,7 +6452,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -6445,7 +6468,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
@@ -6458,7 +6483,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
@@ -6484,8 +6511,42 @@ Daily checkpoint calculating the time difference in days between the current dat
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_days_since_most_recent_ingestion|checkpoint|daily|[days_since_most_recent_ingestion](../../../sensors/table/#days-since-most-recent-ingestion)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_days_since_most_recent_ingestion
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -6541,7 +6602,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -6549,16 +6610,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6595,7 +6646,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -6603,16 +6654,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6642,7 +6683,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6672,7 +6715,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6693,7 +6738,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -6710,7 +6755,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -6724,7 +6769,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -6735,7 +6782,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -6813,7 +6862,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -6821,16 +6870,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6867,7 +6906,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -6875,16 +6914,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6914,7 +6943,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6944,7 +6975,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -6965,7 +6998,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -6984,7 +7017,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -7000,7 +7033,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -7013,7 +7048,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
@@ -7039,8 +7076,42 @@ Monthly checkpoint calculating the time difference in days between the current d
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_days_since_most_recent_ingestion|checkpoint|monthly|[days_since_most_recent_ingestion](../../../sensors/table/#days-since-most-recent-ingestion)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_days_since_most_recent_ingestion
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -7096,7 +7167,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -7104,16 +7175,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7150,7 +7211,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -7158,16 +7219,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7197,7 +7248,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7227,7 +7280,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7248,7 +7303,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -7265,7 +7320,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -7279,7 +7334,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -7290,7 +7347,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -7368,7 +7427,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -7376,16 +7435,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7422,7 +7471,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -7430,16 +7479,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7469,7 +7508,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7499,7 +7540,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7520,7 +7563,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -7539,7 +7582,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -7555,7 +7598,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('month', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -7568,7 +7613,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
@@ -7594,8 +7641,52 @@ Daily partition checkpoint calculating the time difference in days between the c
 |----------|----------|----------|-----------|-------------|
 |daily_partition_days_since_most_recent_ingestion|partitioned|daily|[days_since_most_recent_ingestion](../../../sensors/table/#days-since-most-recent-ingestion)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_days_since_most_recent_ingestion
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    daily:
+      timeliness:
+        daily_partition_days_since_most_recent_ingestion:
+          error:
+            max_days: 2.0
+          warning:
+            max_days: 1.0
+          fatal:
+            max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -7651,7 +7742,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -7659,16 +7750,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7705,7 +7786,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -7713,16 +7794,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7752,7 +7823,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7782,7 +7855,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7803,7 +7878,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -7820,7 +7895,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -7834,7 +7909,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -7845,7 +7922,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -7923,7 +8002,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -7931,16 +8010,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -7977,7 +8046,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -7985,16 +8054,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8024,7 +8083,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8054,7 +8115,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8075,7 +8138,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -8094,7 +8157,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -8110,7 +8173,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -8123,7 +8188,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -8149,8 +8216,52 @@ Monthly partition checkpoint calculating the time difference in days between the
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_days_since_most_recent_ingestion|partitioned|monthly|[days_since_most_recent_ingestion](../../../sensors/table/#days-since-most-recent-ingestion)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_days_since_most_recent_ingestion
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    monthly:
+      timeliness:
+        monthly_partition_days_since_most_recent_ingestion:
+          error:
+            max_days: 2.0
+          warning:
+            max_days: 1.0
+          fatal:
+            max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -8206,7 +8317,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -8214,16 +8325,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8260,7 +8361,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -8268,16 +8369,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8307,7 +8398,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8337,7 +8430,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8358,7 +8453,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -8375,7 +8470,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -8389,7 +8484,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -8400,7 +8497,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -8478,7 +8577,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -8486,16 +8585,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8532,7 +8621,7 @@ spec:
             MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
@@ -8540,16 +8629,6 @@ spec:
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined -%}
-        TIMESTAMP_DIFF(
-            CURRENT_TIMESTAMP(),
-            MAX(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
-            ),
-            MILLISECOND
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8579,7 +8658,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8609,7 +8690,9 @@ spec:
             CURRENT_TIMESTAMP - MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         )) / 24.0 / 3600.0
         {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX(({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP)
+        )) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8630,7 +8713,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -8649,7 +8732,7 @@ spec:
         TIMESTAMP_DIFF(
             CURRENT_TIMESTAMP(),
             MAX(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP)
             ),
             MILLISECOND
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -8665,7 +8748,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -8678,7 +8763,9 @@ spec:
       
     ```
     SELECT
-        <INVALID OR NOT MATCHING DATA TYPE> AS actual_value,
+        EXTRACT(EPOCH FROM (
+            CURRENT_TIMESTAMP - MAX((analyzed_table."col_inserted_at")::TIMESTAMP)
+        )) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -8712,8 +8799,52 @@ Daily partition checkpoint calculating the longest time a row waited to be load
 |----------|----------|----------|-----------|-------------|
 |daily_partition_reload_lag|partitioned|daily|[partition_reload_lag](../../../sensors/table/#partition-reload-lag)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_reload_lag
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    daily:
+      timeliness:
+        daily_partition_reload_lag:
+          error:
+            max_days: 2.0
+          warning:
+            max_days: 1.0
+          fatal:
+            max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -8778,8 +8909,7 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         MAX(
             TIMESTAMP_DIFF(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
@@ -8787,17 +8917,6 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        MAX(
-            TIMESTAMP_DIFF(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                MILLISECOND
-            )
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8843,8 +8962,7 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         MAX(
             TIMESTAMP_DIFF(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
@@ -8852,17 +8970,6 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        MAX(
-            TIMESTAMP_DIFF(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                MILLISECOND
-            )
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8900,7 +9007,12 @@ spec:
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
             ))
         ) / 24.0 / 3600.0
-        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8939,7 +9051,12 @@ spec:
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
             ))
         ) / 24.0 / 3600.0
-        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -8959,8 +9076,8 @@ spec:
     SELECT
         MAX(
             TIMESTAMP_DIFF(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP),
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP),
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -8976,8 +9093,8 @@ spec:
     SELECT
         MAX(
             TIMESTAMP_DIFF(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP),
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP),
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP),
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP),
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -8991,7 +9108,11 @@ spec:
       
     ```
     SELECT
-         AS actual_value,
+        MAX(
+            EXTRACT(EPOCH FROM (
+                (analyzed_table."col_inserted_at")::TIMESTAMP - (analyzed_table."col_event_timestamp")::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0 AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -9002,7 +9123,11 @@ spec:
       
     ```
     SELECT
-         AS actual_value,
+        MAX(
+            EXTRACT(EPOCH FROM (
+                (analyzed_table."col_inserted_at")::TIMESTAMP - (analyzed_table."col_event_timestamp")::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0 AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -9089,8 +9214,7 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         MAX(
             TIMESTAMP_DIFF(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
@@ -9098,17 +9222,6 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        MAX(
-            TIMESTAMP_DIFF(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                MILLISECOND
-            )
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9154,8 +9267,7 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         MAX(
             TIMESTAMP_DIFF(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
@@ -9163,17 +9275,6 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        MAX(
-            TIMESTAMP_DIFF(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                MILLISECOND
-            )
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9211,7 +9312,12 @@ spec:
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
             ))
         ) / 24.0 / 3600.0
-        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9250,7 +9356,12 @@ spec:
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
             ))
         ) / 24.0 / 3600.0
-        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9270,8 +9381,8 @@ spec:
     SELECT
         MAX(
             TIMESTAMP_DIFF(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP),
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP),
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -9289,8 +9400,8 @@ spec:
     SELECT
         MAX(
             TIMESTAMP_DIFF(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP),
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP),
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP),
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP),
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -9306,7 +9417,11 @@ spec:
       
     ```
     SELECT
-         AS actual_value,
+        MAX(
+            EXTRACT(EPOCH FROM (
+                (analyzed_table."col_inserted_at")::TIMESTAMP - (analyzed_table."col_event_timestamp")::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -9319,7 +9434,11 @@ spec:
       
     ```
     SELECT
-         AS actual_value,
+        MAX(
+            EXTRACT(EPOCH FROM (
+                (analyzed_table."col_inserted_at")::TIMESTAMP - (analyzed_table."col_event_timestamp")::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -9345,8 +9464,52 @@ Monthly partition checkpoint calculating the longest time a row waited to be loa
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_reload_lag|partitioned|monthly|[partition_reload_lag](../../../sensors/table/#partition-reload-lag)|[max_days](../../../rules/comparison/#max-days)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_reload_lag
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+  partitioned_checks:
+    monthly:
+      timeliness:
+        monthly_partition_reload_lag:
+          error:
+            max_days: 2.0
+          warning:
+            max_days: 1.0
+          fatal:
+            max_days: 1.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="12-21"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -9411,8 +9574,7 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         MAX(
             TIMESTAMP_DIFF(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
@@ -9420,17 +9582,6 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        MAX(
-            TIMESTAMP_DIFF(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                MILLISECOND
-            )
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9476,8 +9627,7 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         MAX(
             TIMESTAMP_DIFF(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
@@ -9485,17 +9635,6 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        MAX(
-            TIMESTAMP_DIFF(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                MILLISECOND
-            )
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9533,7 +9672,12 @@ spec:
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
             ))
         ) / 24.0 / 3600.0
-        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9572,7 +9716,12 @@ spec:
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
             ))
         ) / 24.0 / 3600.0
-        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9592,8 +9741,8 @@ spec:
     SELECT
         MAX(
             TIMESTAMP_DIFF(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP),
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP),
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -9609,8 +9758,8 @@ spec:
     SELECT
         MAX(
             TIMESTAMP_DIFF(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP),
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP),
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP),
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP),
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -9624,7 +9773,11 @@ spec:
       
     ```
     SELECT
-         AS actual_value,
+        MAX(
+            EXTRACT(EPOCH FROM (
+                (analyzed_table."col_inserted_at")::TIMESTAMP - (analyzed_table."col_event_timestamp")::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM ""."target_schema"."target_table" AS analyzed_table
@@ -9635,7 +9788,11 @@ spec:
       
     ```
     SELECT
-         AS actual_value,
+        MAX(
+            EXTRACT(EPOCH FROM (
+                (analyzed_table."col_inserted_at")::TIMESTAMP - (analyzed_table."col_event_timestamp")::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0 AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
     FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
@@ -9722,8 +9879,7 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         MAX(
             TIMESTAMP_DIFF(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
@@ -9731,17 +9887,6 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        MAX(
-            TIMESTAMP_DIFF(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                MILLISECOND
-            )
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9787,8 +9932,7 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'STRING' and
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'STRING' -%}
+        {%- else -%}
         MAX(
             TIMESTAMP_DIFF(
                 SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
@@ -9796,17 +9940,6 @@ spec:
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0
-        {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type is not defined or
-        table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type is not defined -%}
-        MAX(
-            TIMESTAMP_DIFF(
-                CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                CAST({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }} AS TIMESTAMP),
-                MILLISECOND
-            )
-        ) / 24.0 / 3600.0 / 1000.0
-        {%- else -%}
-        <INVALID OR NOT MATCHING DATA TYPE>
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9844,7 +9977,12 @@ spec:
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
             ))
         ) / 24.0 / 3600.0
-        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9883,7 +10021,12 @@ spec:
                 {{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} - {{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}
             ))
         ) / 24.0 / 3600.0
-        <INVALID OR NOT MATCHING DATA TYPE>
+        {%- else -%}
+        MAX(
+            EXTRACT(EPOCH FROM (
+                ({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})::TIMESTAMP - ({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }})::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0
         {%- endif -%}
     {%- endmacro -%}
     
@@ -9903,8 +10046,8 @@ spec:
     SELECT
         MAX(
             TIMESTAMP_DIFF(
-                CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP),
-                CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
+                SAFE_CAST(analyzed_table.`col_inserted_at` AS TIMESTAMP),
+                SAFE_CAST(analyzed_table.`col_event_timestamp` AS TIMESTAMP),
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -9922,8 +10065,8 @@ spec:
     SELECT
         MAX(
             TIMESTAMP_DIFF(
-                CAST(analyzed_table."col_inserted_at" AS TIMESTAMP),
-                CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP),
+                SAFE_CAST(analyzed_table."col_inserted_at" AS TIMESTAMP),
+                SAFE_CAST(analyzed_table."col_event_timestamp" AS TIMESTAMP),
                 MILLISECOND
             )
         ) / 24.0 / 3600.0 / 1000.0 AS actual_value,
@@ -9939,7 +10082,11 @@ spec:
       
     ```
     SELECT
-         AS actual_value,
+        MAX(
+            EXTRACT(EPOCH FROM (
+                (analyzed_table."col_inserted_at")::TIMESTAMP - (analyzed_table."col_event_timestamp")::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('month', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -9952,7 +10099,11 @@ spec:
       
     ```
     SELECT
-         AS actual_value,
+        MAX(
+            EXTRACT(EPOCH FROM (
+                (analyzed_table."col_inserted_at")::TIMESTAMP - (analyzed_table."col_event_timestamp")::TIMESTAMP
+            ))
+        ) / 24.0 / 3600.0 AS actual_value,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
