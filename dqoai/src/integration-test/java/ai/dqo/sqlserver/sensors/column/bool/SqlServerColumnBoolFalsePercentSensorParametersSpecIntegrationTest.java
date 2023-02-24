@@ -12,7 +12,8 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
- */package ai.dqo.sqlserver.sensors.column.bool;
+ */
+package ai.dqo.sqlserver.sensors.column.bool;
 
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.column.checkspecs.bool.ColumnFalsePercentCheckSpec;
