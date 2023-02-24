@@ -38,7 +38,6 @@ public class ColumnNumericPercentile50InRangeSensorParametersSpec extends Abstra
         }
     };
 
-    @JsonPropertyDescription("50th percentile")
     private Double percentileValue = 0.5;
 
     /**
@@ -53,9 +52,9 @@ public class ColumnNumericPercentile50InRangeSensorParametersSpec extends Abstra
      * Sets the percentile 50 value of the range.
      * @param percentileValue Percentile 50 value of the range.
      */
-    public final void setPercentileValue(Double percentileValue) {
+    public void setPercentileValue(Double percentileValue) {
         this.setDirtyIf(!Objects.equals(this.percentileValue, percentileValue));
-        this.percentileValue = 0.5;
+        this.percentileValue = percentileValue;
     }
 
     /**
