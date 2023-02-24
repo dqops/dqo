@@ -187,7 +187,7 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("datetime");
         }
         else if (columnType == ColumnType.INSTANT) {
-            return new ColumnTypeSnapshotSpec("datetimeoffset ");
+            return new ColumnTypeSnapshotSpec("datetimeoffset");
         }
         else if (columnType == ColumnType.TEXT) {
             return new ColumnTypeSnapshotSpec("text");
