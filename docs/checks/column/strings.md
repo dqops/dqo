@@ -19,8 +19,51 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |----------|----------|----------|-----------|-------------|
 |string_max_length|adhoc| |[string_max_length](../../../sensors/column/#string-max-length)|[max_value](../../../rules/comparison/#max-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_max_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_max_length:
+            error:
+              max_value: 1.5
+            warning:
+              max_value: 1.5
+            fatal:
+              max_value: 1.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -354,8 +397,42 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_max_length|checkpoint|daily|[string_max_length](../../../sensors/column/#string-max-length)|[max_value](../../../rules/comparison/#max-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_max_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -691,8 +768,42 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_max_length|checkpoint|monthly|[string_max_length](../../../sensors/column/#string-max-length)|[max_value](../../../rules/comparison/#max-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_max_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1028,8 +1139,52 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_max_length|partitioned|daily|[string_max_length](../../../sensors/column/#string-max-length)|[max_value](../../../rules/comparison/#max-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_max_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_max_length:
+              error:
+                max_value: 1.5
+              warning:
+                max_value: 1.5
+              fatal:
+                max_value: 1.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1365,8 +1520,52 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_max_length|partitioned|monthly|[string_max_length](../../../sensors/column/#string-max-length)|[max_value](../../../rules/comparison/#max-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_max_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_max_length:
+              error:
+                max_value: 1.5
+              warning:
+                max_value: 1.5
+              fatal:
+                max_value: 1.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1710,8 +1909,51 @@ Verifies that the length of string in a column does not exceed the minimum accep
 |----------|----------|----------|-----------|-------------|
 |string_min_length|adhoc| |[string_min_length](../../../sensors/column/#string-min-length)|[min_value](../../../rules/comparison/#min-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_min_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_min_length:
+            error:
+              min_value: 1.5
+            warning:
+              min_value: 1.5
+            fatal:
+              min_value: 1.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2045,8 +2287,42 @@ Verifies that the length of string in a column does not exceed the minimum accep
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_min_length|checkpoint|daily|[string_min_length](../../../sensors/column/#string-min-length)|[min_value](../../../rules/comparison/#min-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_min_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2382,8 +2658,42 @@ Verifies that the length of string in a column does not exceed the minimum accep
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_min_length|checkpoint|monthly|[string_min_length](../../../sensors/column/#string-min-length)|[min_value](../../../rules/comparison/#min-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_min_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2719,8 +3029,52 @@ Verifies that the length of string in a column does not exceed the minimum accep
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_min_length|partitioned|daily|[string_min_length](../../../sensors/column/#string-min-length)|[min_value](../../../rules/comparison/#min-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_min_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_min_length:
+              error:
+                min_value: 1.5
+              warning:
+                min_value: 1.5
+              fatal:
+                min_value: 1.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3056,8 +3410,52 @@ Verifies that the length of string in a column does not exceed the minimum accep
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_min_length|partitioned|monthly|[string_min_length](../../../sensors/column/#string-min-length)|[min_value](../../../rules/comparison/#min-value)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_min_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_min_length:
+              error:
+                min_value: 1.5
+              warning:
+                min_value: 1.5
+              fatal:
+                min_value: 1.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3401,8 +3799,54 @@ Verifies that the length of string in a column does not exceed the mean accepted
 |----------|----------|----------|-----------|-------------|
 |string_mean_length|adhoc| |[string_mean_length](../../../sensors/column/#string-mean-length)|[between_floats](../../../rules/comparison/#between-floats)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_mean_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_mean_length:
+            error:
+              from: 10.0
+              to: 20.5
+            warning:
+              from: 10.0
+              to: 20.5
+            fatal:
+              from: 10.0
+              to: 20.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -3742,8 +4186,42 @@ Verifies that the length of string in a column does not exceed the mean accepted
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_mean_length|checkpoint|daily|[string_mean_length](../../../sensors/column/#string-mean-length)|[between_floats](../../../rules/comparison/#between-floats)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_mean_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4085,8 +4563,42 @@ Verifies that the length of string in a column does not exceed the mean accepted
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_mean_length|checkpoint|monthly|[string_mean_length](../../../sensors/column/#string-mean-length)|[between_floats](../../../rules/comparison/#between-floats)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_mean_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4428,8 +4940,55 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_mean_length|partitioned|daily|[string_mean_length](../../../sensors/column/#string-mean-length)|[between_floats](../../../rules/comparison/#between-floats)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_mean_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_mean_length:
+              error:
+                from: 10.0
+                to: 20.5
+              warning:
+                from: 10.0
+                to: 20.5
+              fatal:
+                from: 10.0
+                to: 20.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -4771,8 +5330,55 @@ Verifies that the length of string in a column does not exceed the mean accepted
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_mean_length|partitioned|monthly|[string_mean_length](../../../sensors/column/#string-mean-length)|[between_floats](../../../rules/comparison/#between-floats)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_mean_length
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_mean_length:
+              error:
+                from: 10.0
+                to: 20.5
+              warning:
+                from: 10.0
+                to: 20.5
+              fatal:
+                from: 10.0
+                to: 20.5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5122,8 +5728,53 @@ The check counts those strings with length below the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |string_length_below_min_length_count|adhoc| |[string_length_below_min_length_count](../../../sensors/column/#string-length-below-min-length-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_length_below_min_length_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_length_below_min_length_count:
+            parameters:
+              min_length: 5
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-24"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5167,7 +5818,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -5187,7 +5838,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -5244,7 +5895,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -5261,7 +5912,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -5365,7 +6016,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -5385,7 +6036,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -5442,7 +6093,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -5461,7 +6112,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -5529,8 +6180,42 @@ The check counts those strings with length below the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_length_below_min_length_count|checkpoint|daily|[string_length_below_min_length_count](../../../sensors/column/#string-length-below-min-length-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_length_below_min_length_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5575,7 +6260,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -5595,7 +6280,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -5652,7 +6337,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -5669,7 +6354,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -5774,7 +6459,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -5794,7 +6479,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -5851,7 +6536,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -5870,7 +6555,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -5938,8 +6623,42 @@ The check counts those strings with length below the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_length_below_min_length_count|checkpoint|monthly|[string_length_below_min_length_count](../../../sensors/column/#string-length-below-min-length-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_length_below_min_length_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -5984,7 +6703,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -6004,7 +6723,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -6061,7 +6780,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -6078,7 +6797,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -6183,7 +6902,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -6203,7 +6922,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -6260,7 +6979,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -6279,7 +6998,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -6347,8 +7066,54 @@ The check counts those strings with length below the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_length_below_min_length_count|partitioned|daily|[string_length_below_min_length_count](../../../sensors/column/#string-length-below-min-length-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_length_below_min_length_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_length_below_min_length_count:
+              parameters:
+                min_length: 5
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -6393,7 +7158,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -6413,7 +7178,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -6470,7 +7235,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -6487,7 +7252,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -6592,7 +7357,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -6612,7 +7377,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -6669,7 +7434,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -6688,7 +7453,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -6756,8 +7521,54 @@ The check counts those strings with length below the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_length_below_min_length_count|partitioned|monthly|[string_length_below_min_length_count](../../../sensors/column/#string-length-below-min-length-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_length_below_min_length_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_length_below_min_length_count:
+              parameters:
+                min_length: 5
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -6802,7 +7613,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -6822,7 +7633,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -6879,7 +7690,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -6896,7 +7707,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -7001,7 +7812,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -7021,7 +7832,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -7078,7 +7889,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -7097,7 +7908,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                     THEN 1
                 ELSE 0
             END
@@ -7173,8 +7984,53 @@ The check counts percentage of those strings with length below the one provided 
 |----------|----------|----------|-----------|-------------|
 |string_length_below_min_length_percent|adhoc| |[string_length_below_min_length_percent](../../../sensors/column/#string-length-below-min-length-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_length_below_min_length_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_length_below_min_length_percent:
+            parameters:
+              min_length: 5
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-24"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -7220,7 +8076,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -7243,7 +8099,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -7309,7 +8165,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -7329,7 +8185,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -7442,7 +8298,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -7465,7 +8321,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -7531,7 +8387,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -7553,7 +8409,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -7628,8 +8484,42 @@ The check counts percentage of those strings with length below the one provided 
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_length_below_min_length_percent|checkpoint|daily|[string_length_below_min_length_percent](../../../sensors/column/#string-length-below-min-length-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_length_below_min_length_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -7676,7 +8566,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -7699,7 +8589,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -7765,7 +8655,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -7785,7 +8675,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -7899,7 +8789,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -7922,7 +8812,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -7988,7 +8878,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -8010,7 +8900,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -8085,8 +8975,42 @@ The check counts percentage of those strings with length below the one provided 
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_length_below_min_length_percent|checkpoint|monthly|[string_length_below_min_length_percent](../../../sensors/column/#string-length-below-min-length-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_length_below_min_length_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -8133,7 +9057,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -8156,7 +9080,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -8222,7 +9146,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -8242,7 +9166,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -8356,7 +9280,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -8379,7 +9303,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -8445,7 +9369,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -8467,7 +9391,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -8542,8 +9466,54 @@ The check counts percentage of those strings with length below the one provided 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_length_below_min_length_percent|partitioned|daily|[string_length_below_min_length_percent](../../../sensors/column/#string-length-below-min-length-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_length_below_min_length_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_length_below_min_length_percent:
+              parameters:
+                min_length: 5
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -8590,7 +9560,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -8613,7 +9583,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -8679,7 +9649,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -8699,7 +9669,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -8813,7 +9783,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -8836,7 +9806,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -8902,7 +9872,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -8924,7 +9894,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -8999,8 +9969,54 @@ The check counts percentage of those strings with length below the one provided 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_length_below_min_length_percent|partitioned|monthly|[string_length_below_min_length_percent](../../../sensors/column/#string-length-below-min-length-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_length_below_min_length_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_length_below_min_length_percent:
+              parameters:
+                min_length: 5
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -9047,7 +10063,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -9070,7 +10086,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -9136,7 +10152,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -9156,7 +10172,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -9270,7 +10286,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -9293,7 +10309,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -9359,7 +10375,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -9381,7 +10397,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) <= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) <= 5
                         THEN 1
                     ELSE 0
                 END
@@ -9464,8 +10480,53 @@ The check counts those strings with length above the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |string_length_above_max_length_count|adhoc| |[string_length_above_max_length_count](../../../sensors/column/#string-length-above-max-length-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_length_above_max_length_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_length_above_max_length_count:
+            parameters:
+              max_length: 5
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-24"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -9509,7 +10570,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -9529,7 +10590,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -9586,7 +10647,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -9603,7 +10664,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -9707,7 +10768,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -9727,7 +10788,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -9784,7 +10845,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -9803,7 +10864,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -9871,8 +10932,42 @@ The check counts those strings with length above the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_length_above_max_length_count|checkpoint|daily|[string_length_above_max_length_count](../../../sensors/column/#string-length-above-max-length-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_length_above_max_length_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -9917,7 +11012,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -9937,7 +11032,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -9994,7 +11089,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -10011,7 +11106,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -10116,7 +11211,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -10136,7 +11231,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -10193,7 +11288,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -10212,7 +11307,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -10280,8 +11375,42 @@ The check counts those strings with length above the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_length_above_max_length_count|checkpoint|monthly|[string_length_above_max_length_count](../../../sensors/column/#string-length-above-max-length-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_length_above_max_length_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -10326,7 +11455,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -10346,7 +11475,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -10403,7 +11532,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -10420,7 +11549,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -10525,7 +11654,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -10545,7 +11674,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -10602,7 +11731,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -10621,7 +11750,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -10689,8 +11818,54 @@ The check counts those strings with length above the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_length_above_max_length_count|partitioned|daily|[string_length_above_max_length_count](../../../sensors/column/#string-length-above-max-length-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_length_above_max_length_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_length_above_max_length_count:
+              parameters:
+                max_length: 5
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -10735,7 +11910,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -10755,7 +11930,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -10812,7 +11987,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -10829,7 +12004,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -10934,7 +12109,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -10954,7 +12129,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -11011,7 +12186,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -11030,7 +12205,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -11098,8 +12273,54 @@ The check counts those strings with length above the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_length_above_max_length_count|partitioned|monthly|[string_length_above_max_length_count](../../../sensors/column/#string-length-above-max-length-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_length_above_max_length_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_length_above_max_length_count:
+              parameters:
+                max_length: 5
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -11144,7 +12365,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -11164,7 +12385,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -11221,7 +12442,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -11238,7 +12459,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -11343,7 +12564,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -11363,7 +12584,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -11420,7 +12641,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -11439,7 +12660,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                     THEN 1
                 ELSE 0
             END
@@ -11515,8 +12736,53 @@ The check counts percentage of those strings with length above the one provided 
 |----------|----------|----------|-----------|-------------|
 |string_length_above_max_length_percent|adhoc| |[string_length_above_max_length_percent](../../../sensors/column/#string-length-above-max-length-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_length_above_max_length_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_length_above_max_length_percent:
+            parameters:
+              max_length: 5
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-24"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -11562,7 +12828,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -11585,7 +12851,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -11651,7 +12917,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -11671,7 +12937,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -11784,7 +13050,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -11807,7 +13073,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -11873,7 +13139,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -11895,7 +13161,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -11970,8 +13236,42 @@ The check counts percentage of those strings with length above the one provided 
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_length_above_max_length_percent|checkpoint|daily|[string_length_above_max_length_percent](../../../sensors/column/#string-length-above-max-length-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_length_above_max_length_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -12018,7 +13318,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -12041,7 +13341,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -12107,7 +13407,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -12127,7 +13427,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -12241,7 +13541,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -12264,7 +13564,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -12330,7 +13630,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -12352,7 +13652,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -12427,8 +13727,42 @@ The check counts percentage of those strings with length above the one provided 
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_length_above_max_length_percent|checkpoint|monthly|[string_length_above_max_length_percent](../../../sensors/column/#string-length-above-max-length-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_length_above_max_length_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -12475,7 +13809,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -12498,7 +13832,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -12564,7 +13898,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -12584,7 +13918,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -12698,7 +14032,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -12721,7 +14055,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -12787,7 +14121,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -12809,7 +14143,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -12884,8 +14218,54 @@ The check counts percentage of those strings with length above the one provided 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_length_above_max_length_percent|partitioned|daily|[string_length_above_max_length_percent](../../../sensors/column/#string-length-above-max-length-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_length_above_max_length_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_length_above_max_length_percent:
+              parameters:
+                max_length: 5
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -12932,7 +14312,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -12955,7 +14335,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -13021,7 +14401,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -13041,7 +14421,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -13155,7 +14535,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -13178,7 +14558,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -13244,7 +14624,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -13266,7 +14646,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -13341,8 +14721,54 @@ The check counts percentage of those strings with length above the one provided 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_length_above_max_length_percent|partitioned|monthly|[string_length_above_max_length_percent](../../../sensors/column/#string-length-above-max-length-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_length_above_max_length_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_length_above_max_length_percent:
+              parameters:
+                max_length: 5
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -13389,7 +14815,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -13412,7 +14838,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -13478,7 +14904,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -13498,7 +14924,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -13612,7 +15038,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -13635,7 +15061,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -13701,7 +15127,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table.`target_column` AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table.`target_column` AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -13723,7 +15149,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(SAFE_CAST(analyzed_table."target_column" AS STRING)) >= 5
+                    WHEN LENGTH(CAST(analyzed_table."target_column" AS STRING)) >= 5
                         THEN 1
                     ELSE 0
                 END
@@ -13806,8 +15232,54 @@ The check counts percentage of those strings with length in the range provided b
 |----------|----------|----------|-----------|-------------|
 |string_length_in_range_percent|adhoc| |[string_length_in_range_percent](../../../sensors/column/#string-length-in-range-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_length_in_range_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_length_in_range_percent:
+            parameters:
+              min_length: 5
+              max_length: 10
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -14263,8 +15735,42 @@ The check counts percentage of those strings with length in the range provided b
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_length_in_range_percent|checkpoint|daily|[string_length_in_range_percent](../../../sensors/column/#string-length-in-range-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_length_in_range_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -14722,8 +16228,42 @@ The check counts percentage of those strings with length in the range provided b
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_length_in_range_percent|checkpoint|monthly|[string_length_in_range_percent](../../../sensors/column/#string-length-in-range-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_length_in_range_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -15181,8 +16721,55 @@ The check counts percentage of those strings with length in the range provided b
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_length_in_range_percent|partitioned|daily|[string_length_in_range_percent](../../../sensors/column/#string-length-in-range-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_length_in_range_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_length_in_range_percent:
+              parameters:
+                min_length: 5
+                max_length: 10
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -15640,8 +17227,55 @@ The check counts percentage of those strings with length in the range provided b
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_length_in_range_percent|partitioned|monthly|[string_length_in_range_percent](../../../sensors/column/#string-length-in-range-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_length_in_range_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_length_in_range_percent:
+              parameters:
+                min_length: 5
+                max_length: 10
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -16107,8 +17741,51 @@ Verifies that empty strings in a column does not exceed the maximum accepted cou
 |----------|----------|----------|-----------|-------------|
 |string_empty_count|adhoc| |[string_empty_count](../../../sensors/column/#string-empty-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_empty_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_empty_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -16522,8 +18199,42 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_empty_count|checkpoint|daily|[string_empty_count](../../../sensors/column/#string-empty-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_empty_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -16939,8 +18650,42 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_empty_count|checkpoint|monthly|[string_empty_count](../../../sensors/column/#string-empty-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_empty_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -17356,8 +19101,52 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_empty_count|partitioned|daily|[string_empty_count](../../../sensors/column/#string-empty-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_empty_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_empty_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -17773,8 +19562,52 @@ Verifies that the number of empty strings in a column does not exceed the maximu
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_empty_count|partitioned|monthly|[string_empty_count](../../../sensors/column/#string-empty-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_empty_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_empty_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -18198,8 +20031,51 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |string_empty_percent|adhoc| |[string_empty_percent](../../../sensors/column/#string-empty-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_empty_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_empty_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -18669,8 +20545,42 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_empty_percent|checkpoint|daily|[string_empty_percent](../../../sensors/column/#string-empty-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_empty_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -19142,8 +21052,42 @@ Verifies that the percentage of empty strings in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_empty_percent|checkpoint|monthly|[string_empty_percent](../../../sensors/column/#string-empty-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_empty_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -19615,8 +21559,52 @@ Verifies that the percentage of string in a column does not exceed the maximum a
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_empty_percent|partitioned|daily|[string_empty_percent](../../../sensors/column/#string-empty-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_empty_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_empty_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -20088,8 +22076,52 @@ Verifies that the percentage of string in a column does not exceed the maximum a
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_empty_percent|partitioned|monthly|[string_empty_percent](../../../sensors/column/#string-empty-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_empty_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_empty_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -20569,8 +22601,51 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |string_whitespace_count|adhoc| |[string_whitespace_count](../../../sensors/column/#string-whitespace-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_whitespace_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_whitespace_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -21000,8 +23075,42 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_whitespace_count|checkpoint|daily|[string_whitespace_count](../../../sensors/column/#string-whitespace-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_whitespace_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -21433,8 +23542,42 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_whitespace_count|checkpoint|monthly|[string_whitespace_count](../../../sensors/column/#string-whitespace-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_whitespace_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -21866,8 +24009,52 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_whitespace_count|partitioned|daily|[string_whitespace_count](../../../sensors/column/#string-whitespace-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_whitespace_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_whitespace_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -22299,8 +24486,52 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_whitespace_count|partitioned|monthly|[string_whitespace_count](../../../sensors/column/#string-whitespace-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_whitespace_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_whitespace_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -22740,8 +24971,51 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |string_whitespace_percent|adhoc| |[string_whitespace_percent](../../../sensors/column/#string-whitespace-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_whitespace_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_whitespace_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -23219,8 +25493,42 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_whitespace_percent|checkpoint|daily|[string_whitespace_percent](../../../sensors/column/#string-whitespace-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_whitespace_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -23700,8 +26008,42 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_whitespace_percent|checkpoint|monthly|[string_whitespace_percent](../../../sensors/column/#string-whitespace-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_whitespace_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -24181,8 +26523,52 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_whitespace_percent|partitioned|daily|[string_whitespace_percent](../../../sensors/column/#string-whitespace-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_whitespace_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_whitespace_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -24662,8 +27048,52 @@ Verifies that the percentage of whitespace strings in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_whitespace_percent|partitioned|monthly|[string_whitespace_percent](../../../sensors/column/#string-whitespace-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_whitespace_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_whitespace_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -25151,8 +27581,51 @@ Verifies that the number of strings surrounded by whitespace in a column does no
 |----------|----------|----------|-----------|-------------|
 |string_surrounded_by_whitespace_count|adhoc| |[string_surrounded_by_whitespace_count](../../../sensors/column/#string-surrounded-by-whitespace-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_surrounded_by_whitespace_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_surrounded_by_whitespace_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -25582,8 +28055,42 @@ Verifies that the number of strings surrounded by whitespace in a column does no
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_surrounded_by_whitespace_count|checkpoint|daily|[string_surrounded_by_whitespace_count](../../../sensors/column/#string-surrounded-by-whitespace-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_surrounded_by_whitespace_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -26015,8 +28522,42 @@ Verifies that the number of strings surrounded by whitespace in a column does no
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_surrounded_by_whitespace_count|checkpoint|monthly|[string_surrounded_by_whitespace_count](../../../sensors/column/#string-surrounded-by-whitespace-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_surrounded_by_whitespace_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -26448,8 +28989,52 @@ Verifies that the number of strings surrounded by whitespace in a column does no
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_surrounded_by_whitespace_count|partitioned|daily|[string_surrounded_by_whitespace_count](../../../sensors/column/#string-surrounded-by-whitespace-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_surrounded_by_whitespace_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_surrounded_by_whitespace_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -26881,8 +29466,52 @@ Verifies that the number of strings surrounded by whitespace in a column does no
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_surrounded_by_whitespace_count|partitioned|monthly|[string_surrounded_by_whitespace_count](../../../sensors/column/#string-surrounded-by-whitespace-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_surrounded_by_whitespace_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_surrounded_by_whitespace_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -27322,8 +29951,51 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 |----------|----------|----------|-----------|-------------|
 |string_surrounded_by_whitespace_percent|adhoc| |[string_surrounded_by_whitespace_percent](../../../sensors/column/#string-surrounded-by-whitespace-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_surrounded_by_whitespace_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_surrounded_by_whitespace_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -27801,8 +30473,42 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_surrounded_by_whitespace_percent|checkpoint|daily|[string_surrounded_by_whitespace_percent](../../../sensors/column/#string-surrounded-by-whitespace-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_surrounded_by_whitespace_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -28282,8 +30988,42 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_surrounded_by_whitespace_percent|checkpoint|monthly|[string_surrounded_by_whitespace_percent](../../../sensors/column/#string-surrounded-by-whitespace-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_surrounded_by_whitespace_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -28763,8 +31503,52 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_surrounded_by_whitespace_percent|partitioned|daily|[string_surrounded_by_whitespace_percent](../../../sensors/column/#string-surrounded-by-whitespace-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_surrounded_by_whitespace_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_surrounded_by_whitespace_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -29244,8 +32028,52 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_surrounded_by_whitespace_percent|partitioned|monthly|[string_surrounded_by_whitespace_percent](../../../sensors/column/#string-surrounded-by-whitespace-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_surrounded_by_whitespace_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_surrounded_by_whitespace_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -29733,8 +32561,51 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |string_null_placeholder_count|adhoc| |[string_null_placeholder_count](../../../sensors/column/#string-null-placeholder-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_null_placeholder_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_null_placeholder_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -30140,8 +33011,42 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_null_placeholder_count|checkpoint|daily|[string_null_placeholder_count](../../../sensors/column/#string-null-placeholder-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_null_placeholder_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -30549,8 +33454,42 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_null_placeholder_count|checkpoint|monthly|[string_null_placeholder_count](../../../sensors/column/#string-null-placeholder-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_null_placeholder_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -30958,8 +33897,52 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_null_placeholder_count|partitioned|daily|[string_null_placeholder_count](../../../sensors/column/#string-null-placeholder-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_null_placeholder_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_null_placeholder_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -31367,8 +34350,52 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_null_placeholder_count|partitioned|monthly|[string_null_placeholder_count](../../../sensors/column/#string-null-placeholder-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_null_placeholder_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_null_placeholder_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -31784,8 +34811,51 @@ Verifies that the percentage of null placeholders in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |string_null_placeholder_percent|adhoc| |[string_null_placeholder_percent](../../../sensors/column/#string-null-placeholder-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_null_placeholder_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_null_placeholder_percent:
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -32241,8 +35311,42 @@ Verifies that the percentage of null placeholders in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_null_placeholder_percent|checkpoint|daily|[string_null_placeholder_percent](../../../sensors/column/#string-null-placeholder-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_null_placeholder_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -32700,8 +35804,42 @@ Verifies that the percentage of null placeholders in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_null_placeholder_percent|checkpoint|monthly|[string_null_placeholder_percent](../../../sensors/column/#string-null-placeholder-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_null_placeholder_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -33159,8 +36297,52 @@ Verifies that the percentage of null placeholders in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_null_placeholder_percent|partitioned|daily|[string_null_placeholder_percent](../../../sensors/column/#string-null-placeholder-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_null_placeholder_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_null_placeholder_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -33618,8 +36800,52 @@ Verifies that the percentage of null placeholders in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_null_placeholder_percent|partitioned|monthly|[string_null_placeholder_percent](../../../sensors/column/#string-null-placeholder-percent)|[max_percent](../../../rules/comparison/#max-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_null_placeholder_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_null_placeholder_percent:
+              error:
+                max_percent: 2.0
+              warning:
+                max_percent: 1.0
+              fatal:
+                max_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -34085,8 +37311,51 @@ Verifies that the percentage of boolean placeholder for strings in a column does
 |----------|----------|----------|-----------|-------------|
 |string_boolean_placeholder_percent|adhoc| |[string_boolean_placeholder_percent](../../../sensors/column/#string-boolean-placeholder-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_boolean_placeholder_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_boolean_placeholder_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -34532,8 +37801,42 @@ Verifies that the percentage of boolean placeholder for strings in a column does
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_boolean_placeholder_percent|checkpoint|daily|[string_boolean_placeholder_percent](../../../sensors/column/#string-boolean-placeholder-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_boolean_placeholder_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -34981,8 +38284,42 @@ Verifies that the percentage of boolean placeholder for strings in a column does
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_boolean_placeholder_percent|checkpoint|monthly|[string_boolean_placeholder_percent](../../../sensors/column/#string-boolean-placeholder-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_boolean_placeholder_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -35430,8 +38767,52 @@ Verifies that the percentage of boolean placeholder for strings in a column does
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_boolean_placeholder_percent|partitioned|daily|[string_boolean_placeholder_percent](../../../sensors/column/#string-boolean-placeholder-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_boolean_placeholder_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_boolean_placeholder_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -35879,8 +39260,52 @@ Verifies that the percentage of boolean placeholder for strings in a column does
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_boolean_placeholder_percent|partitioned|monthly|[string_boolean_placeholder_percent](../../../sensors/column/#string-boolean-placeholder-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_boolean_placeholder_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_boolean_placeholder_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -36336,8 +39761,51 @@ Verifies that the percentage of parsable to integer string in a column does not 
 |----------|----------|----------|-----------|-------------|
 |string_parsable_to_integer_percent|adhoc| |[string_parsable_to_integer_percent](../../../sensors/column/#string-parsable-to-integer-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_parsable_to_integer_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_parsable_to_integer_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -36723,8 +40191,42 @@ Verifies that the percentage of parsable to integer string in a column does not 
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_parsable_to_integer_percent|checkpoint|daily|[string_parsable_to_integer_percent](../../../sensors/column/#string-parsable-to-integer-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_parsable_to_integer_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -37112,8 +40614,42 @@ Verifies that the percentage of parsable to integer string in a column does not 
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_parsable_to_integer_percent|checkpoint|monthly|[string_parsable_to_integer_percent](../../../sensors/column/#string-parsable-to-integer-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_parsable_to_integer_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -37501,8 +41037,52 @@ Verifies that the percentage of parsable to integer string in a column does not 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_parsable_to_integer_percent|partitioned|daily|[string_parsable_to_integer_percent](../../../sensors/column/#string-parsable-to-integer-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_parsable_to_integer_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_parsable_to_integer_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -37890,8 +41470,52 @@ Verifies that the percentage of parsable to integer string in a column does not 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_parsable_to_integer_percent|partitioned|monthly|[string_parsable_to_integer_percent](../../../sensors/column/#string-parsable-to-integer-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_parsable_to_integer_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_parsable_to_integer_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -38287,8 +41911,51 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |----------|----------|----------|-----------|-------------|
 |string_parsable_to_float_percent|adhoc| |[string_parsable_to_float_percent](../../../sensors/column/#string-parsable-to-float-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_parsable_to_float_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_parsable_to_float_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -38674,8 +42341,42 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_parsable_to_float_percent|checkpoint|daily|[string_parsable_to_float_percent](../../../sensors/column/#string-parsable-to-float-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_parsable_to_float_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -39063,8 +42764,42 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_parsable_to_float_percent|checkpoint|monthly|[string_parsable_to_float_percent](../../../sensors/column/#string-parsable-to-float-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_parsable_to_float_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -39452,8 +43187,52 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_parsable_to_float_percent|partitioned|daily|[string_parsable_to_float_percent](../../../sensors/column/#string-parsable-to-float-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_parsable_to_float_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_parsable_to_float_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -39841,8 +43620,52 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_parsable_to_float_percent|partitioned|monthly|[string_parsable_to_float_percent](../../../sensors/column/#string-parsable-to-float-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_parsable_to_float_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_parsable_to_float_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -40238,8 +44061,56 @@ Verifies that the number of strings from a set in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |string_in_set_count|adhoc| |[string_in_set_count](../../../sensors/column/#string-in-set-count)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_in_set_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_in_set_count:
+            parameters:
+              values:
+              - USD
+              - GBP
+              - EUR
+            error:
+              min_count: 5
+            warning:
+              min_count: 5
+            fatal:
+              min_count: 5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-27"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -40833,8 +44704,42 @@ Verifies that the number of strings from set in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_in_set_count|checkpoint|daily|[string_in_set_count](../../../sensors/column/#string-in-set-count)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_in_set_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -41430,8 +45335,42 @@ Verifies that the number of strings from set in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_in_set_count|checkpoint|monthly|[string_in_set_count](../../../sensors/column/#string-in-set-count)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_in_set_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -42027,8 +45966,57 @@ Verifies that the number of strings from set in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_in_set_count|partitioned|daily|[string_in_set_count](../../../sensors/column/#string-in-set-count)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_in_set_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_in_set_count:
+              parameters:
+                values:
+                - USD
+                - GBP
+                - EUR
+              error:
+                min_count: 5
+              warning:
+                min_count: 5
+              fatal:
+                min_count: 5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -42624,8 +46612,57 @@ Verifies that the number of strings from set in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_in_set_count|partitioned|monthly|[string_in_set_count](../../../sensors/column/#string-in-set-count)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_in_set_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_in_set_count:
+              parameters:
+                values:
+                - USD
+                - GBP
+                - EUR
+              error:
+                min_count: 5
+              warning:
+                min_count: 5
+              fatal:
+                min_count: 5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -43229,8 +47266,56 @@ Verifies that the percentage of strings from a set in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |string_in_set_percent|adhoc| |[string_in_set_percent](../../../sensors/column/#string-in-set-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_in_set_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_in_set_percent:
+            parameters:
+              values:
+              - USD
+              - GBP
+              - EUR
+            error:
+              min_percent: 2.0
+            warning:
+              min_percent: 1.0
+            fatal:
+              min_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-27"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -43838,8 +47923,42 @@ Verifies that the percentage of strings from a set in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_in_set_percent|checkpoint|daily|[string_in_set_percent](../../../sensors/column/#string-in-set-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_in_set_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -44449,8 +48568,42 @@ Verifies that the percentage of strings from set in a column does not exceed the
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_in_set_percent|checkpoint|monthly|[string_in_set_percent](../../../sensors/column/#string-in-set-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_in_set_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -45060,8 +49213,57 @@ Verifies that the percentage of strings from set in a column does not exceed the
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_in_set_percent|partitioned|daily|[string_in_set_percent](../../../sensors/column/#string-in-set-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_in_set_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_in_set_percent:
+              parameters:
+                values:
+                - USD
+                - GBP
+                - EUR
+              error:
+                min_percent: 2.0
+              warning:
+                min_percent: 1.0
+              fatal:
+                min_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -45671,8 +49873,57 @@ Verifies that the percentage of strings from set in a column does not exceed the
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_in_set_percent|partitioned|monthly|[string_in_set_percent](../../../sensors/column/#string-in-set-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_in_set_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_in_set_percent:
+              parameters:
+                values:
+                - USD
+                - GBP
+                - EUR
+              error:
+                min_percent: 2.0
+              warning:
+                min_percent: 1.0
+              fatal:
+                min_percent: 5.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -46290,8 +50541,51 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |----------|----------|----------|-----------|-------------|
 |string_valid_dates_percent|adhoc| |[string_valid_date_percent](../../../sensors/column/#string-valid-date-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_valid_dates_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_valid_dates_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -46757,8 +51051,42 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_valid_dates_percent|checkpoint|daily|[string_valid_date_percent](../../../sensors/column/#string-valid-date-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_valid_dates_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -47226,8 +51554,42 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_valid_dates_percent|checkpoint|monthly|[string_valid_date_percent](../../../sensors/column/#string-valid-date-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_valid_dates_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -47695,8 +52057,52 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_valid_dates_percent|partitioned|daily|[string_valid_date_percent](../../../sensors/column/#string-valid-date-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_valid_dates_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_valid_dates_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -48164,8 +52570,52 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_valid_dates_percent|partitioned|monthly|[string_valid_date_percent](../../../sensors/column/#string-valid-date-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_valid_dates_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_valid_dates_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -48641,8 +53091,51 @@ Verifies that the percentage of valid country code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |string_valid_country_code_percent|adhoc| |[string_valid_country_code_percent](../../../sensors/column/#string-valid-country-code-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_valid_country_code_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_valid_country_code_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -49088,8 +53581,42 @@ Verifies that the percentage of valid country code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_valid_country_code_percent|checkpoint|daily|[string_valid_country_code_percent](../../../sensors/column/#string-valid-country-code-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_valid_country_code_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -49537,8 +54064,42 @@ Verifies that the percentage of valid country code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_valid_country_code_percent|checkpoint|monthly|[string_valid_country_code_percent](../../../sensors/column/#string-valid-country-code-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_valid_country_code_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -49986,8 +54547,52 @@ Verifies that the percentage of valid country code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_valid_country_code_percent|partitioned|daily|[string_valid_country_code_percent](../../../sensors/column/#string-valid-country-code-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_valid_country_code_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_valid_country_code_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -50435,8 +55040,52 @@ Verifies that the percentage of valid country code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_valid_country_code_percent|partitioned|monthly|[string_valid_country_code_percent](../../../sensors/column/#string-valid-country-code-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_valid_country_code_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_valid_country_code_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -50892,8 +55541,51 @@ Verifies that the percentage of valid currency code in a column does not exceed 
 |----------|----------|----------|-----------|-------------|
 |string_valid_currency_code_percent|adhoc| |[string_valid_currency_code_percent](../../../sensors/column/#string-valid-currency-code-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_valid_currency_code_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_valid_currency_code_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -51343,8 +56035,42 @@ Verifies that the percentage of valid currency code in a column does not exceed 
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_valid_currency_code_percent|checkpoint|daily|[string_valid_currency_code_percent](../../../sensors/column/#string-valid-currency-code-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_valid_currency_code_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -51796,8 +56522,42 @@ Verifies that the percentage of valid currency code in a column does not exceed 
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_valid_currency_code_percent|checkpoint|monthly|[string_valid_currency_code_percent](../../../sensors/column/#string-valid-currency-code-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_valid_currency_code_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -52249,8 +57009,52 @@ Verifies that the percentage of valid currency code in a column does not exceed 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_valid_currency_code_percent|partitioned|daily|[string_valid_currency_code_percent](../../../sensors/column/#string-valid-currency-code-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_valid_currency_code_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_valid_currency_code_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -52702,8 +57506,52 @@ Verifies that the percentage of valid currency code in a column does not exceed 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_valid_currency_code_percent|partitioned|monthly|[string_valid_currency_code_percent](../../../sensors/column/#string-valid-currency-code-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_valid_currency_code_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_valid_currency_code_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -53163,8 +58011,51 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
 |----------|----------|----------|-----------|-------------|
 |string_invalid_email_count|adhoc| |[string_invalid_email_count](../../../sensors/column/#string-invalid-email-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_invalid_email_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_invalid_email_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -53205,7 +58096,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53224,7 +58115,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53281,7 +58172,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53298,7 +58189,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53399,7 +58290,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53418,7 +58309,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53475,7 +58366,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53494,7 +58385,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53562,8 +58453,42 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_invalid_email_count|checkpoint|daily|[string_invalid_email_count](../../../sensors/column/#string-invalid-email-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_invalid_email_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -53605,7 +58530,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53624,7 +58549,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53681,7 +58606,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53698,7 +58623,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53800,7 +58725,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53819,7 +58744,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53876,7 +58801,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53895,7 +58820,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -53963,8 +58888,42 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_invalid_email_count|checkpoint|monthly|[string_invalid_email_count](../../../sensors/column/#string-invalid-email-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_invalid_email_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -54006,7 +58965,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54025,7 +58984,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54082,7 +59041,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54099,7 +59058,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54201,7 +59160,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54220,7 +59179,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54277,7 +59236,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54296,7 +59255,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54364,8 +59323,52 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_invalid_email_count|partitioned|daily|[string_invalid_email_count](../../../sensors/column/#string-invalid-email-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_invalid_email_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_invalid_email_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -54407,7 +59410,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54426,7 +59429,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54483,7 +59486,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54500,7 +59503,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54602,7 +59605,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54621,7 +59624,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54678,7 +59681,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54697,7 +59700,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54765,8 +59768,52 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_invalid_email_count|partitioned|monthly|[string_invalid_email_count](../../../sensors/column/#string-invalid-email-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_invalid_email_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_invalid_email_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -54808,7 +59855,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54827,7 +59874,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54884,7 +59931,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -54901,7 +59948,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -55003,7 +60050,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -55022,7 +60069,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -55079,7 +60126,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -55098,7 +60145,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
                     THEN 0
                 ELSE 1
             END
@@ -55174,8 +60221,51 @@ Verifies that the number of invalid UUID in a column does not exceed the maximum
 |----------|----------|----------|-----------|-------------|
 |string_invalid_uuid_count|adhoc| |[string_invalid_uuid_count](../../../sensors/column/#string-invalid-uuid-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_invalid_uuid_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_invalid_uuid_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -55216,7 +60306,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55235,7 +60325,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55292,7 +60382,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55309,7 +60399,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55410,7 +60500,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55429,7 +60519,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55486,7 +60576,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55505,7 +60595,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55573,8 +60663,42 @@ Verifies that the number of invalid UUID in a column does not exceed the maximum
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_invalid_uuid_count|checkpoint|daily|[string_invalid_uuid_count](../../../sensors/column/#string-invalid-uuid-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_invalid_uuid_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -55616,7 +60740,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55635,7 +60759,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55692,7 +60816,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55709,7 +60833,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55811,7 +60935,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55830,7 +60954,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55887,7 +61011,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55906,7 +61030,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -55974,8 +61098,42 @@ Verifies that the number of invalid UUID in a column does not exceed the maximum
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_invalid_uuid_count|checkpoint|monthly|[string_invalid_uuid_count](../../../sensors/column/#string-invalid-uuid-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_invalid_uuid_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -56017,7 +61175,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56036,7 +61194,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56093,7 +61251,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56110,7 +61268,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56212,7 +61370,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56231,7 +61389,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56288,7 +61446,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56307,7 +61465,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56375,8 +61533,52 @@ Verifies that the number of invalid UUID in a column does not exceed the maximum
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_invalid_uuid_count|partitioned|daily|[string_invalid_uuid_count](../../../sensors/column/#string-invalid-uuid-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_invalid_uuid_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_invalid_uuid_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -56418,7 +61620,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56437,7 +61639,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56494,7 +61696,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56511,7 +61713,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56613,7 +61815,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56632,7 +61834,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56689,7 +61891,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56708,7 +61910,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56776,8 +61978,52 @@ Verifies that the number of invalid UUID in a column does not exceed the maximum
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_invalid_uuid_count|partitioned|monthly|[string_invalid_uuid_count](../../../sensors/column/#string-invalid-uuid-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_invalid_uuid_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_invalid_uuid_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -56819,7 +62065,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56838,7 +62084,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56895,7 +62141,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -56912,7 +62158,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -57014,7 +62260,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -57033,7 +62279,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -57090,7 +62336,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -57109,7 +62355,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^[0-9a-fA-F]{8}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{4}[\s-]?[0-9a-fA-F]{12}$")
                     THEN 0
                 ELSE 1
             END
@@ -57185,8 +62431,51 @@ Verifies that the percentage of valid UUID in a column does not exceed the minim
 |----------|----------|----------|-----------|-------------|
 |string_valid_uuid_percent|adhoc| |[string_valid_uuid_percent](../../../sensors/column/#string-valid-uuid-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_valid_uuid_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_valid_uuid_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -57632,8 +62921,42 @@ Verifies that the percentage of valid UUID in a column does not exceed the minim
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_valid_uuid_percent|checkpoint|daily|[string_valid_uuid_percent](../../../sensors/column/#string-valid-uuid-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_valid_uuid_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -58081,8 +63404,42 @@ Verifies that the percentage of valid UUID in a column does not exceed the minim
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_valid_uuid_percent|checkpoint|monthly|[string_valid_uuid_percent](../../../sensors/column/#string-valid-uuid-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_valid_uuid_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -58530,8 +63887,52 @@ Verifies that the percentage of valid UUID in a column does not exceed the minim
 |----------|----------|----------|-----------|-------------|
 |daily_partition_valid_uuid_percent|partitioned|daily|[string_valid_uuid_percent](../../../sensors/column/#string-valid-uuid-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_valid_uuid_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_valid_uuid_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -58979,8 +64380,52 @@ Verifies that the percentage of valid UUID in a column does not exceed the minim
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_valid_uuid_percent|partitioned|monthly|[string_valid_uuid_percent](../../../sensors/column/#string-valid-uuid-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_valid_uuid_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_valid_uuid_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -59436,8 +64881,51 @@ Verifies that the number of invalid IP4 address in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |string_invalid_ip4_address_count|adhoc| |[string_invalid_ip4_address_count](../../../sensors/column/#string-invalid-ip4-address-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_invalid_ip4_address_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_invalid_ip4_address_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -59478,7 +64966,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59497,7 +64985,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59554,7 +65042,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59571,7 +65059,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59672,7 +65160,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59691,7 +65179,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59748,7 +65236,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59767,7 +65255,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59835,8 +65323,42 @@ Verifies that the number of invalid IP4 address in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_invalid_ip4_address_count|checkpoint|daily|[string_invalid_ip4_address_count](../../../sensors/column/#string-invalid-ip4-address-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_invalid_ip4_address_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -59878,7 +65400,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59897,7 +65419,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59954,7 +65476,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -59971,7 +65493,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60073,7 +65595,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60092,7 +65614,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60149,7 +65671,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60168,7 +65690,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60236,8 +65758,42 @@ Verifies that the number of invalid IP4 address in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_invalid_ip4_address_count|checkpoint|monthly|[string_invalid_ip4_address_count](../../../sensors/column/#string-invalid-ip4-address-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_invalid_ip4_address_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -60279,7 +65835,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60298,7 +65854,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60355,7 +65911,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60372,7 +65928,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60474,7 +66030,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60493,7 +66049,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60550,7 +66106,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60569,7 +66125,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60637,8 +66193,52 @@ Verifies that the number of invalid IP4 address in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_invalid_ip4_address_count|partitioned|daily|[string_invalid_ip4_address_count](../../../sensors/column/#string-invalid-ip4-address-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_invalid_ip4_address_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_invalid_ip4_address_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -60680,7 +66280,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60699,7 +66299,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60756,7 +66356,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60773,7 +66373,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60875,7 +66475,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60894,7 +66494,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60951,7 +66551,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -60970,7 +66570,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -61038,8 +66638,52 @@ Verifies that the number of invalid IP4 address in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_invalid_ip4_address_count|partitioned|monthly|[string_invalid_ip4_address_count](../../../sensors/column/#string-invalid-ip4-address-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_invalid_ip4_address_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_invalid_ip4_address_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -61081,7 +66725,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -61100,7 +66744,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -61157,7 +66801,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -61174,7 +66818,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -61276,7 +66920,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -61295,7 +66939,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -61352,7 +66996,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -61371,7 +67015,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                     THEN 0
                 ELSE 1
             END
@@ -61447,8 +67091,51 @@ Verifies that the number of invalid IP6 address in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |string_invalid_ip6_address_count|adhoc| |[string_invalid_ip6_address_count](../../../sensors/column/#string-invalid-ip6-address-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_invalid_ip6_address_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_invalid_ip6_address_count:
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -61489,7 +67176,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61508,7 +67195,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61565,7 +67252,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61582,7 +67269,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61683,7 +67370,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61702,7 +67389,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61759,7 +67446,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61778,7 +67465,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61846,8 +67533,42 @@ Verifies that the number of invalid IP6 address in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_invalid_ip6_address_count|checkpoint|daily|[string_invalid_ip6_address_count](../../../sensors/column/#string-invalid-ip6-address-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_invalid_ip6_address_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -61889,7 +67610,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61908,7 +67629,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61965,7 +67686,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -61982,7 +67703,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62084,7 +67805,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62103,7 +67824,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62160,7 +67881,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62179,7 +67900,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62247,8 +67968,42 @@ Verifies that the number of invalid IP6 address in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_invalid_ip6_address_count|checkpoint|monthly|[string_invalid_ip6_address_count](../../../sensors/column/#string-invalid-ip6-address-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_invalid_ip6_address_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -62290,7 +68045,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62309,7 +68064,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62366,7 +68121,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62383,7 +68138,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62485,7 +68240,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62504,7 +68259,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62561,7 +68316,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62580,7 +68335,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62648,8 +68403,52 @@ Verifies that the number of invalid IP6 address in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_invalid_ip6_address_count|partitioned|daily|[string_invalid_ip6_address_count](../../../sensors/column/#string-invalid-ip6-address-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_invalid_ip6_address_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_invalid_ip6_address_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -62691,7 +68490,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62710,7 +68509,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62767,7 +68566,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62784,7 +68583,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62886,7 +68685,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62905,7 +68704,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62962,7 +68761,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -62981,7 +68780,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -63049,8 +68848,52 @@ Verifies that the number of invalid IP6 address in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_invalid_ip6_address_count|partitioned|monthly|[string_invalid_ip6_address_count](../../../sensors/column/#string-invalid-ip6-address-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_invalid_ip6_address_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_invalid_ip6_address_count:
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -63092,7 +68935,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -63111,7 +68954,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -63168,7 +69011,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -63185,7 +69028,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -63287,7 +69130,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -63306,7 +69149,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -63363,7 +69206,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table.`target_column` AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -63382,7 +69225,7 @@ spec:
     SELECT
         SUM(
             CASE
-                WHEN REGEXP_CONTAINS(SAFE_CAST( analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                WHEN REGEXP_CONTAINS(CAST(analyzed_table."target_column" AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
                     THEN 0
                 ELSE 1
             END
@@ -63458,8 +69301,53 @@ Verifies that the number of strings not matching the custom regex in a column do
 |----------|----------|----------|-----------|-------------|
 |string_not_match_regex_count|adhoc| |[string_not_match_regex_count](../../../sensors/column/#string-not-match-regex-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_not_match_regex_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_not_match_regex_count:
+            parameters:
+              regex: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$"
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-24"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -63981,8 +69869,42 @@ Verifies that the number of strings not matching the custom regex in a column do
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_not_match_regex_count|checkpoint|daily|[string_not_match_regex_count](../../../sensors/column/#string-not-match-regex-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_not_match_regex_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -64506,8 +70428,42 @@ Verifies that the number of strings not matching the custom regex in a column do
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_not_match_regex_count|checkpoint|monthly|[string_not_match_regex_count](../../../sensors/column/#string-not-match-regex-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_not_match_regex_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -65031,8 +70987,54 @@ Verifies that the number of strings not matching the custom regex in a column do
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_not_match_regex_count|partitioned|daily|[string_not_match_regex_count](../../../sensors/column/#string-not-match-regex-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_not_match_regex_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_not_match_regex_count:
+              parameters:
+                regex: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$"
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -65556,8 +71558,54 @@ Verifies that the number of strings not matching the custom regex in a column do
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_not_match_regex_count|partitioned|monthly|[string_not_match_regex_count](../../../sensors/column/#string-not-match-regex-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_not_match_regex_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_not_match_regex_count:
+              parameters:
+                regex: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$"
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -66089,8 +72137,53 @@ Verifies that the percentage of strings matching the custom regex in a column do
 |----------|----------|----------|-----------|-------------|
 |string_match_regex_percent|adhoc| |[string_match_regex_percent](../../../sensors/column/#string-match-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_match_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_match_regex_percent:
+            parameters:
+              regex: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$"
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-24"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -66612,8 +72705,42 @@ Verifies that the percentage of strings matching the custom regex in a column do
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_match_regex_percent|checkpoint|daily|[string_match_regex_percent](../../../sensors/column/#string-match-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_match_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -67137,8 +73264,42 @@ Verifies that the percentage of strings matching the custom regex in a column do
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_match_regex_percent|checkpoint|monthly|[string_match_regex_percent](../../../sensors/column/#string-match-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_match_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -67662,8 +73823,54 @@ Verifies that the percentage of strings matching the custom regex in a column do
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_match_regex_percent|partitioned|daily|[string_match_regex_percent](../../../sensors/column/#string-match-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_match_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_match_regex_percent:
+              parameters:
+                regex: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$"
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -68187,8 +74394,54 @@ Verifies that the percentage of strings matching the custom regex in a column do
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_match_regex_percent|partitioned|monthly|[string_match_regex_percent](../../../sensors/column/#string-match-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_match_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_match_regex_percent:
+              parameters:
+                regex: "^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$"
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -68720,8 +74973,53 @@ Verifies that the number of strings not matching the date format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |string_not_match_date_regex_count|adhoc| |[string_not_match_date_regex_count](../../../sensors/column/#string-not-match-date-regex-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_not_match_date_regex_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_not_match_date_regex_count:
+            parameters:
+              date_formats: YYYY-MM-DD
+            error:
+              max_count: 0
+            warning:
+              max_count: 10
+            fatal:
+              max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-24"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -68781,7 +75079,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -68818,7 +75116,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -68912,7 +75210,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -68932,7 +75230,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69059,7 +75357,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69096,7 +75394,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69190,7 +75488,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69212,7 +75510,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69287,8 +75585,42 @@ Verifies that the number of strings not matching the date format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_not_match_date_regex_count|checkpoint|daily|[string_not_match_date_regex_count](../../../sensors/column/#string-not-match-date-regex-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_not_match_date_regex_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -69349,7 +75681,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69386,7 +75718,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69480,7 +75812,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69500,7 +75832,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69628,7 +75960,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69665,7 +75997,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69759,7 +76091,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69781,7 +76113,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69856,8 +76188,42 @@ Verifies that the number of strings not matching the date format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_not_match_date_regex_count|checkpoint|monthly|[string_not_match_date_regex_count](../../../sensors/column/#string-not-match-date-regex-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_not_match_date_regex_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -69918,7 +76284,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -69955,7 +76321,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70049,7 +76415,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70069,7 +76435,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70197,7 +76563,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70234,7 +76600,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70328,7 +76694,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70350,7 +76716,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70425,8 +76791,54 @@ Verifies that the number of strings not matching the date format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_not_match_date_regex_count|partitioned|daily|[string_not_match_date_regex_count](../../../sensors/column/#string-not-match-date-regex-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_not_match_date_regex_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_not_match_date_regex_count:
+              parameters:
+                date_formats: YYYY-MM-DD
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -70487,7 +76899,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70524,7 +76936,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70618,7 +77030,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70638,7 +77050,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70766,7 +77178,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70803,7 +77215,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70897,7 +77309,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70919,7 +77331,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -70994,8 +77406,54 @@ Verifies that the number of strings not matching the date format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_not_match_date_regex_count|partitioned|monthly|[string_not_match_date_regex_count](../../../sensors/column/#string-not-match-date-regex-count)|[max_count](../../../rules/comparison/#max-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_not_match_date_regex_count
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_not_match_date_regex_count:
+              parameters:
+                date_formats: YYYY-MM-DD
+              error:
+                max_count: 0
+              warning:
+                max_count: 10
+              fatal:
+                max_count: 0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -71056,7 +77514,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71093,7 +77551,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71187,7 +77645,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71207,7 +77665,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71335,7 +77793,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71372,7 +77830,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71466,7 +77924,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71488,7 +77946,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71571,8 +78029,53 @@ Verifies that the percentage of strings matching the date format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |string_match_date_regex_percent|adhoc| |[string_match_date_regex_percent](../../../sensors/column/#string-match-date-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_match_date_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_match_date_regex_percent:
+            parameters:
+              date_formats: YYYY-MM-DD
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-24"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -71632,7 +78135,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71671,7 +78174,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71765,7 +78268,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71785,7 +78288,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71912,7 +78415,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -71951,7 +78454,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72045,7 +78548,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72067,7 +78570,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72142,8 +78645,42 @@ Verifies that the percentage of strings matching the date format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_match_date_regex_percent|checkpoint|daily|[string_match_date_regex_percent](../../../sensors/column/#string-match-date-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_match_date_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -72204,7 +78741,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72243,7 +78780,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72337,7 +78874,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72357,7 +78894,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72485,7 +79022,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72524,7 +79061,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72618,7 +79155,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72640,7 +79177,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72715,8 +79252,42 @@ Verifies that the percentage of strings matching the date format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_match_date_regex_percent|checkpoint|monthly|[string_match_date_regex_percent](../../../sensors/column/#string-match-date-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_match_date_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -72777,7 +79348,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72816,7 +79387,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72910,7 +79481,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -72930,7 +79501,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73058,7 +79629,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73097,7 +79668,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73191,7 +79762,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73213,7 +79784,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73288,8 +79859,54 @@ Verifies that the percentage of strings matching the date format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_match_date_regex_percent|partitioned|daily|[string_match_date_regex_percent](../../../sensors/column/#string-match-date-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_match_date_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_match_date_regex_percent:
+              parameters:
+                date_formats: YYYY-MM-DD
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -73350,7 +79967,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73389,7 +80006,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73483,7 +80100,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73503,7 +80120,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73631,7 +80248,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73670,7 +80287,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73764,7 +80381,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73786,7 +80403,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73861,8 +80478,54 @@ Verifies that the percentage of strings matching the date format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_match_date_regex_percent|partitioned|monthly|[string_match_date_regex_percent](../../../sensors/column/#string-match-date-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_match_date_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_match_date_regex_percent:
+              parameters:
+                date_formats: YYYY-MM-DD
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -73923,7 +80586,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -73962,7 +80625,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -74056,7 +80719,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -74076,7 +80739,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -74204,7 +80867,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -74243,7 +80906,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, CAST({{ lib.render_target_column('analyzed_table') }} AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -74337,7 +81000,7 @@ spec:
             WHEN COUNT(analyzed_table.`target_column`) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table.`target_column` AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table.`target_column`) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -74359,7 +81022,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', CAST(analyzed_table."target_column" AS STRING)) IS NOT NULL
+                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -74442,8 +81105,51 @@ Verifies that the percentage of strings matching the name regex in a column does
 |----------|----------|----------|-----------|-------------|
 |string_match_name_regex_percent|adhoc| |[string_match_name_regex_percent](../../../sensors/column/#string-match-name-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_match_name_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_match_name_regex_percent:
+            error:
+              min_percent: 98.0
+            warning:
+              min_percent: 99.0
+            fatal:
+              min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -74889,8 +81595,42 @@ Verifies that the percentage of strings matching the name format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_match_name_regex_percent|checkpoint|daily|[string_match_name_regex_percent](../../../sensors/column/#string-match-name-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_match_name_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -75338,8 +82078,42 @@ Verifies that the percentage of strings matching the name regex in a column does
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_match_name_regex_percent|checkpoint|monthly|[string_match_name_regex_percent](../../../sensors/column/#string-match-name-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_match_name_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -75787,8 +82561,52 @@ Verifies that the percentage of strings matching the name format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_match_name_regex_percent|partitioned|daily|[string_match_name_regex_percent](../../../sensors/column/#string-match-name-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_match_name_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_match_name_regex_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -76236,8 +83054,52 @@ Verifies that the percentage of strings matching the name format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_match_name_regex_percent|partitioned|monthly|[string_match_name_regex_percent](../../../sensors/column/#string-match-name-regex-percent)|[min_percent](../../../rules/comparison/#min-percent)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_match_name_regex_percent
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_match_name_regex_percent:
+              error:
+                min_percent: 98.0
+              warning:
+                min_percent: 99.0
+              fatal:
+                min_percent: 95.0
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -76693,8 +83555,56 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |string_most_popular_values|adhoc| |[string_most_popular_values](../../../sensors/column/#string-most-popular-values)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_most_popular_values
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      checks:
+        strings:
+          string_most_popular_values:
+            parameters:
+              expected_values:
+              - USD
+              - GBP
+              - EUR
+            error:
+              min_count: 5
+            warning:
+              min_count: 5
+            fatal:
+              min_count: 5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-27"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -76738,31 +83648,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -76782,11 +83667,21 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -76806,26 +83701,6 @@ spec:
     WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
     {%- macro render_data_stream(table_alias_prefix = '') -%}
         {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
             {%- for attribute in lib.data_streams -%}
@@ -76840,6 +83715,16 @@ spec:
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -76860,28 +83745,53 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -76972,31 +83882,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -77011,60 +83896,58 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
     
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
+            {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -77087,7 +83970,7 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
@@ -77119,20 +84002,20 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
-               SELECT
-                analyzed_table."target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            analyzed_table."target_column" AS top_values,
+            COUNT(*) AS total_values,
         CURRENT_TIMESTAMP() AS time_period,
         TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-               FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
-             ) top_col_values
-        )
+        ) top_col_values
+    )
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -77178,24 +84061,25 @@ spec:
                 WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
                 ELSE 0
             END
-        ) AS actual_value,time_period, time_period_utcFROM(
+        ) AS actual_value,
+        time_period
+    FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,top_col_values.time_period_utc as time_period_utc 
-    RANK() OVER(partition by top_col_values.time_period
-            ORDER BY top_col_values.total_values) as top_values_rank 
-    
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
-               SELECT
-                "target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            "target_column" AS top_values,
+            COUNT(*) AS total_values,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
-             ) AS top_col_values
-        ) AS  top_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -77259,31 +84143,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -77303,11 +84162,21 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -77327,26 +84196,6 @@ spec:
     WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
     {%- macro render_data_stream(table_alias_prefix = '') -%}
         {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
             {%- for attribute in lib.data_streams -%}
@@ -77361,6 +84210,16 @@ spec:
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -77381,28 +84240,53 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -77493,31 +84377,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -77532,60 +84391,58 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
     
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
+            {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -77608,7 +84465,7 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
             ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
@@ -77642,22 +84499,22 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
             ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
-               SELECT
-                analyzed_table."target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            analyzed_table."target_column" AS top_values,
+            COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CURRENT_TIMESTAMP() AS time_period,
         TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-               FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-             ) top_col_values
-        )
+        ) top_col_values
+    )
     WHERE top_values_rank <= 
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -77705,26 +84562,27 @@ spec:
                 WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
                 ELSE 0
             END
-        ) AS actual_value,time_period, time_period_utcFROM(
+        ) AS actual_value,
+        time_period
+    FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,top_col_values.time_period_utc as time_period_utc 
-    RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
-            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2 
-    
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
-               SELECT
-                "target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            "target_column" AS top_values,
+            COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-             ) AS top_col_values
-        ) AS  top_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= 
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -77746,8 +84604,42 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_checkpoint_string_most_popular_values|checkpoint|daily|[string_most_popular_values](../../../sensors/column/#string-most-popular-values)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_most_popular_values
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -77792,31 +84684,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -77836,11 +84703,21 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -77860,26 +84737,6 @@ spec:
     WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
     {%- macro render_data_stream(table_alias_prefix = '') -%}
         {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
             {%- for attribute in lib.data_streams -%}
@@ -77894,6 +84751,16 @@ spec:
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -77914,28 +84781,53 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -78026,31 +84918,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -78065,60 +84932,58 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
     
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
+            {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -78141,7 +85006,7 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
@@ -78173,20 +85038,20 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
-               SELECT
-                analyzed_table."target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            analyzed_table."target_column" AS top_values,
+            COUNT(*) AS total_values,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
         TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
-               FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
-             ) top_col_values
-        )
+        ) top_col_values
+    )
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -78232,24 +85097,25 @@ spec:
                 WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
                 ELSE 0
             END
-        ) AS actual_value,time_period, time_period_utcFROM(
+        ) AS actual_value,
+        time_period
+    FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,top_col_values.time_period_utc as time_period_utc 
-    RANK() OVER(partition by top_col_values.time_period
-            ORDER BY top_col_values.total_values) as top_values_rank 
-    
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
-               SELECT
-                "target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            "target_column" AS top_values,
+            COUNT(*) AS total_values,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
-             ) AS top_col_values
-        ) AS  top_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -78314,31 +85180,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -78358,11 +85199,21 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -78382,26 +85233,6 @@ spec:
     WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
     {%- macro render_data_stream(table_alias_prefix = '') -%}
         {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
             {%- for attribute in lib.data_streams -%}
@@ -78416,6 +85247,16 @@ spec:
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -78436,28 +85277,53 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -78548,31 +85414,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -78587,60 +85428,58 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
     
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
+            {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -78663,7 +85502,7 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
             ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
@@ -78697,22 +85536,22 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
             ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
-               SELECT
-                analyzed_table."target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            analyzed_table."target_column" AS top_values,
+            COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
         TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
-               FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-             ) top_col_values
-        )
+        ) top_col_values
+    )
     WHERE top_values_rank <= 
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -78760,26 +85599,27 @@ spec:
                 WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
                 ELSE 0
             END
-        ) AS actual_value,time_period, time_period_utcFROM(
+        ) AS actual_value,
+        time_period
+    FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,top_col_values.time_period_utc as time_period_utc 
-    RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
-            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2 
-    
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
-               SELECT
-                "target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            "target_column" AS top_values,
+            COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-             ) AS top_col_values
-        ) AS  top_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= 
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -78801,8 +85641,42 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_checkpoint_string_most_popular_values|checkpoint|monthly|[string_most_popular_values](../../../sensors/column/#string-most-popular-values)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_most_popular_values
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="0-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -78847,31 +85721,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -78891,11 +85740,21 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -78915,26 +85774,6 @@ spec:
     WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
     {%- macro render_data_stream(table_alias_prefix = '') -%}
         {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
             {%- for attribute in lib.data_streams -%}
@@ -78949,6 +85788,16 @@ spec:
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -78969,28 +85818,53 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -79081,31 +85955,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -79120,60 +85969,58 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
     
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
+            {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -79196,7 +86043,7 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
@@ -79228,20 +86075,20 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
-               SELECT
-                analyzed_table."target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            analyzed_table."target_column" AS top_values,
+            COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
-               FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
-             ) top_col_values
-        )
+        ) top_col_values
+    )
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -79287,24 +86134,25 @@ spec:
                 WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
                 ELSE 0
             END
-        ) AS actual_value,time_period, time_period_utcFROM(
+        ) AS actual_value,
+        time_period
+    FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,top_col_values.time_period_utc as time_period_utc 
-    RANK() OVER(partition by top_col_values.time_period
-            ORDER BY top_col_values.total_values) as top_values_rank 
-    
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
-               SELECT
-                "target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            "target_column" AS top_values,
+            COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
-             ) AS top_col_values
-        ) AS  top_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -79369,31 +86217,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -79413,11 +86236,21 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -79437,26 +86270,6 @@ spec:
     WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
     {%- macro render_data_stream(table_alias_prefix = '') -%}
         {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
             {%- for attribute in lib.data_streams -%}
@@ -79471,6 +86284,16 @@ spec:
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -79491,28 +86314,53 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -79603,31 +86451,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -79642,60 +86465,58 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
     
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
+            {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -79718,7 +86539,7 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
             ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
@@ -79752,22 +86573,22 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
             ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
-               SELECT
-                analyzed_table."target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            analyzed_table."target_column" AS top_values,
+            COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
-               FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-             ) top_col_values
-        )
+        ) top_col_values
+    )
     WHERE top_values_rank <= 
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -79815,26 +86636,27 @@ spec:
                 WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
                 ELSE 0
             END
-        ) AS actual_value,time_period, time_period_utcFROM(
+        ) AS actual_value,
+        time_period
+    FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,top_col_values.time_period_utc as time_period_utc 
-    RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
-            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2 
-    
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
-               SELECT
-                "target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            "target_column" AS top_values,
+            COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-             ) AS top_col_values
-        ) AS  top_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= 
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -79856,8 +86678,57 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_most_popular_values|partitioned|daily|[string_most_popular_values](../../../sensors/column/#string-most-popular-values)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_most_popular_values
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        daily:
+          strings:
+            daily_partition_string_most_popular_values:
+              parameters:
+                expected_values:
+                - USD
+                - GBP
+                - EUR
+              error:
+                min_count: 5
+              warning:
+                min_count: 5
+              fatal:
+                min_count: 5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -79902,31 +86773,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -79946,11 +86792,21 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -79970,26 +86826,6 @@ spec:
     WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
     {%- macro render_data_stream(table_alias_prefix = '') -%}
         {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
             {%- for attribute in lib.data_streams -%}
@@ -80004,6 +86840,16 @@ spec:
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -80024,28 +86870,53 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -80136,31 +87007,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -80175,60 +87021,58 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
     
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
+            {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -80251,7 +87095,7 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
@@ -80283,20 +87127,20 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
-               SELECT
-                analyzed_table."target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            analyzed_table."target_column" AS top_values,
+            COUNT(*) AS total_values,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
-               FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
-             ) top_col_values
-        )
+        ) top_col_values
+    )
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -80342,24 +87186,25 @@ spec:
                 WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
                 ELSE 0
             END
-        ) AS actual_value,time_period, time_period_utcFROM(
+        ) AS actual_value,
+        time_period
+    FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,top_col_values.time_period_utc as time_period_utc 
-    RANK() OVER(partition by top_col_values.time_period
-            ORDER BY top_col_values.total_values) as top_values_rank 
-    
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
-               SELECT
-                "target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            "target_column" AS top_values,
+            COUNT(*) AS total_values,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
-             ) AS top_col_values
-        ) AS  top_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -80424,31 +87269,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -80468,11 +87288,21 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -80492,26 +87322,6 @@ spec:
     WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
     {%- macro render_data_stream(table_alias_prefix = '') -%}
         {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
             {%- for attribute in lib.data_streams -%}
@@ -80526,6 +87336,16 @@ spec:
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -80546,28 +87366,53 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -80658,31 +87503,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -80697,60 +87517,58 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
     
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
+            {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -80773,7 +87591,7 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
             ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
@@ -80807,22 +87625,22 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
             ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
-               SELECT
-                analyzed_table."target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            analyzed_table."target_column" AS top_values,
+            COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
-               FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-             ) top_col_values
-        )
+        ) top_col_values
+    )
     WHERE top_values_rank <= 
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -80870,26 +87688,27 @@ spec:
                 WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
                 ELSE 0
             END
-        ) AS actual_value,time_period, time_period_utcFROM(
+        ) AS actual_value,
+        time_period
+    FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,top_col_values.time_period_utc as time_period_utc 
-    RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
-            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2 
-    
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
-               SELECT
-                "target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            "target_column" AS top_values,
+            COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-             ) AS top_col_values
-        ) AS  top_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= 
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -80911,8 +87730,57 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_most_popular_values|partitioned|monthly|[string_most_popular_values](../../../sensors/column/#string-most-popular-values)|[min_count](../../../rules/comparison/#min-count)|
   
-**Sample configuration (Yaml)**  
+**Set up a check (Shell)**  
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.  
+  
+**Run check (Shell)**  
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_most_popular_values
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+      partitioned_checks:
+        monthly:
+          strings:
+            monthly_partition_string_most_popular_values:
+              parameters:
+                expected_values:
+                - USD
+                - GBP
+                - EUR
+              error:
+                min_count: 5
+              warning:
+                min_count: 5
+              fatal:
+                min_count: 5
+```
+**Sample configuration (Yaml)**  
+```yaml hl_lines="14-28"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -80957,31 +87825,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -81001,11 +87844,21 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -81025,26 +87878,6 @@ spec:
     WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
     {%- macro render_data_stream(table_alias_prefix = '') -%}
         {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
             {%- for attribute in lib.data_streams -%}
@@ -81059,6 +87892,16 @@ spec:
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -81079,28 +87922,53 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -81191,31 +88059,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -81230,60 +88073,58 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
     
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
+            {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -81306,7 +88147,7 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
@@ -81338,20 +88179,20 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
-               SELECT
-                analyzed_table."target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            analyzed_table."target_column" AS top_values,
+            COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
-               FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
-             ) top_col_values
-        )
+        ) top_col_values
+    )
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -81397,24 +88238,25 @@ spec:
                 WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
                 ELSE 0
             END
-        ) AS actual_value,time_period, time_period_utcFROM(
+        ) AS actual_value,
+        time_period
+    FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,top_col_values.time_period_utc as time_period_utc 
-    RANK() OVER(partition by top_col_values.time_period
-            ORDER BY top_col_values.total_values) as top_values_rank 
-    
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            ORDER BY top_col_values.total_values) as top_values_rank
         FROM (
-               SELECT
-                "target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            "target_column" AS top_values,
+            COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
-             ) AS top_col_values
-        ) AS  top_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= 
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -81479,31 +88321,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
-    {%- macro render_data_stream(table_alias_prefix = '') -%}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -81523,11 +88340,21 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
@@ -81547,26 +88374,6 @@ spec:
     WHERE top_values_rank <= {{ parameters.top_values }}
     {%- endmacro -%}
     
-    SELECT
-        {{ top_value() -}}
-    {{- lib.render_group_by() -}}
-    {{- lib.render_order_by() -}}
-    ```
-=== "snowflake"
-      
-    ```
-    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
-    
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {%- endmacro -%}
-    
     {%- macro render_data_stream(table_alias_prefix = '') -%}
         {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
             {%- for attribute in lib.data_streams -%}
@@ -81581,6 +88388,16 @@ spec:
             {%- endfor -%}
         {%- endif -%}
     {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
@@ -81601,28 +88418,53 @@ spec:
         {%- endif -%}
     {%- endmacro -%}
     
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
             {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) top_col_values
-        )
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -81713,31 +88555,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {%- macro extract_in_list(values_list) -%}
-        {%- for i in values_list -%}
-            {%- if not loop.last -%}
-                {{lib.make_text_constant(i)}}{{", "}}
-            {%- else -%}
-                {{lib.make_text_constant(i)}}
-            {%- endif -%}
-        {%- endfor -%}
-    {% endmacro -%}
-    
-    {% macro render_data_stream(table_alias_prefix = '') %}
-        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
-            {%- for attribute in lib.data_streams -%}
-                {{ ', ' }}
-                {%- with data_stream_level = lib.data_streams[attribute] -%}
-                    {%- if data_stream_level.source == 'tag' -%}
-                        {{ make_text_constant(data_stream_level.tag) }}
-                    {%- elif data_stream_level.source == 'column_value' -%}
-                        {{ table_alias_prefix }}.stream_{{ attribute }}
-                    {%- endif -%}
-                {%- endwith %}
-            {%- endfor -%}
-        {%- endif -%}
-    {% endmacro %}
-    
     {%- macro top_value() -%}
         {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
         NULL AS actual_value,
@@ -81752,60 +88569,58 @@ spec:
                 ELSE 0
             END
         ) AS actual_value,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'time_period' }}, {{ 'time_period_utc' }}
-            {%- endif -%}
+        time_period
     {{ top_values_column() }}
         {%- endif -%}
-    {% endmacro -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
     
     {%- macro top_values_column() -%}
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
-            {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                {%- for attribute in data_streams -%}
-                    {%- if not loop.first -%}
-                        {{ ', ' }}
-                    {%- endif -%}
-                        stream_{{ attribute }}
-                {%- endfor -%}
-            {%- endif -%}
-            {%- if time_series is not none -%}
-                {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-                    {{ ', ' }}
-                {%- endif -%}
-                    {{ 'top_col_values.time_period_utc as time_period_utc \n' }}
-            {%- endif -%}
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period
             {{- render_data_stream('top_col_values') }}
             ORDER BY top_col_values.total_values) as top_values_rank
-            {{- render_data_stream('top_col_values') }} {{'\n'}}
+            {{- render_data_stream('top_col_values') }}
         FROM (
-               SELECT
-                {{ lib.render_target_column('analyzed_table') }} AS top_values,
-                COUNT(*) AS total_values
-                {{- lib.render_data_stream_projections('analyzed_table') }}
-                {{- lib.render_time_dimension_projection('analyzed_table') }}
-               FROM {{ lib.render_target_table() }} AS analyzed_table
-               {{- lib.render_where_clause() }}
-               {{- lib.render_group_by() }}, top_values
-               {{- lib.render_order_by() }}, total_values
-             ) AS top_col_values
-        ) AS  top_values
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
     {%- endmacro -%}
     
     SELECT
@@ -81828,7 +88643,7 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
             ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
@@ -81862,22 +88677,22 @@ spec:
     FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,
+            top_col_values.time_period as time_period, time_period_utc,
             RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
             ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
-               SELECT
-                analyzed_table."target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            analyzed_table."target_column" AS top_values,
+            COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
-               FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-             ) top_col_values
-        )
+        ) top_col_values
+    )
     WHERE top_values_rank <= 
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -81925,26 +88740,27 @@ spec:
                 WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
                 ELSE 0
             END
-        ) AS actual_value,time_period, time_period_utcFROM(
+        ) AS actual_value,
+        time_period
+    FROM(
         SELECT
             top_col_values.top_values as top_values,
-            top_col_values.time_period as time_period,top_col_values.time_period_utc as time_period_utc 
-    RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
-            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2 
-    
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+            ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
         FROM (
-               SELECT
-                "target_column" AS top_values,
-                COUNT(*) AS total_values,
+            SELECT
+            "target_column" AS top_values,
+            COUNT(*) AS total_values,
         analyzed_table."country" AS stream_level_1,
         analyzed_table."state" AS stream_level_2,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
-             ) AS top_col_values
-        ) AS  top_values
+        ) AS top_col_values
+    ) AS  top_values
     WHERE top_values_rank <= 
     GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
     ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc

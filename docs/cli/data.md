@@ -21,8 +21,8 @@ dqo.ai> data clean [-h] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin> -c=<conne
 
 **Options**  
   
-| Command | Description | Is it required? | Accepted values |
-|---------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
 |`-b`<br/>`--begin`<br/>|Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD|Yes||
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name| ||

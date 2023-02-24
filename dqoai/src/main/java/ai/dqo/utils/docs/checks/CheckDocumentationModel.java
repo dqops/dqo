@@ -62,6 +62,21 @@ public class CheckDocumentationModel {
     private UICheckModel checkModel;
 
     /**
+     * Data quality check sample (for show structure of check)
+     */
+    public List<String> checkSample;
+
+    /**
+     * Begin marker to highlight data quality check sample.
+     */
+    public int checkSampleBeginLine;
+
+    /**
+     * Begin marker to highlight data quality check sample.
+     */
+    public int checkSampleEndLine;
+
+    /**
      * Sample yaml.
      */
     private String sampleYaml;

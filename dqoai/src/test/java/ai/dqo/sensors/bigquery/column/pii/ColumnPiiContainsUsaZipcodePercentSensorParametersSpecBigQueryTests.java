@@ -102,7 +102,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
-                                SAFE_CAST(%s AS STRING),
+                                CAST(%s AS STRING),
                                 %s
                             ) THEN 1
                             ELSE 0
@@ -140,7 +140,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
-                                SAFE_CAST(%s AS STRING),
+                                CAST(%s AS STRING),
                                 %s
                             ) THEN 1
                             ELSE 0
@@ -176,7 +176,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
-                                SAFE_CAST(%s AS STRING),
+                                CAST(%s AS STRING),
                                 %s
                             ) THEN 1
                             ELSE 0
@@ -212,7 +212,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
-                                SAFE_CAST(%s AS STRING),
+                                CAST(%s AS STRING),
                                 %s
                             ) THEN 1
                             ELSE 0
@@ -253,7 +253,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
-                                SAFE_CAST(%s AS STRING),
+                                CAST(%s AS STRING),
                                 %s
                             ) THEN 1
                             ELSE 0
@@ -291,7 +291,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
-                                SAFE_CAST(%s AS STRING),
+                                CAST(%s AS STRING),
                                 %s
                             ) THEN 1
                             ELSE 0
@@ -331,7 +331,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
-                                SAFE_CAST(%s AS STRING),
+                                CAST(%s AS STRING),
                                 %s
                             ) THEN 1
                             ELSE 0
@@ -379,7 +379,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
-                                SAFE_CAST(%s AS STRING),
+                                CAST(%s AS STRING),
                                 %s
                             ) THEN 1
                             ELSE 0
@@ -423,7 +423,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
-                                SAFE_CAST(%s AS STRING),
+                                CAST(%s AS STRING),
                                 %s
                             ) THEN 1
                             ELSE 0
@@ -467,7 +467,7 @@ public class ColumnPiiContainsUsaZipcodePercentSensorParametersSpecBigQueryTests
                     ELSE 100.0 * SUM(
                         CASE
                             WHEN REGEXP_CONTAINS(
-                                SAFE_CAST(%s AS STRING),
+                                CAST(%s AS STRING),
                                 %s
                             ) THEN 1
                             ELSE 0

@@ -51,11 +51,15 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("max_in_range", o -> o.maxInRange);
             put("min_in_range", o -> o.minInRange);
             put("mean_in_range", o -> o.meanInRange);
+            put("percentile_in_range", o -> o.percentileInRange);
             put("sample_stddev_in_range", o -> o.sampleStddevInRange);
             put("population_stddev_in_range", o -> o.populationStddevInRange);
             put("sample_variance_in_range", o -> o.sampleVarianceInRange);
             put("population_variance_in_range", o -> o.populationVarianceInRange);
             put("sum_in_range", o -> o.sumInRange);
+            put("invalid_latitude_count", o -> o.invalidLatitudeCount);
+            put("valid_latitude_percent", o -> o.validLatitudePercent);
+            put("invalid_longitude_count", o -> o.invalidLongitudeCount);
         }
     };
 
@@ -104,6 +108,9 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range.")
     private ColumnMeanInRangeCheckSpec meanInRange;
 
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range.")
+    private ColumnPercentileInRangeCheckSpec percentileInRange;
+
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range.")
     private ColumnSampleStddevInRangeCheckSpec sampleStddevInRange;
 
@@ -118,6 +125,15 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range.")
     private ColumnSumInRangeCheckSpec sumInRange;
+
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count.")
+    private ColumnInvalidLatitudeCountCheckSpec invalidLatitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage.")
+    private ColumnValidLatitudePercentCheckSpec validLatitudePercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.")
+    private ColumnInvalidLongitudeCountCheckSpec invalidLongitudeCount;
 
     /**
      * Returns a negative count check specification.
@@ -390,6 +406,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
+     * Returns a percentile in range check specification.
+     * @return Percentile in range check specification.
+     */
+    public ColumnPercentileInRangeCheckSpec getPercentileInRange() {
+        return percentileInRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile in range check.
+     * @param percentileInRange Percentile in range check specification.
+     */
+    public void setPercentileInRange(ColumnPercentileInRangeCheckSpec percentileInRange) {
+        this.setDirtyIf(!Objects.equals(this.percentileInRange, percentileInRange));
+        this.percentileInRange = percentileInRange;
+        propagateHierarchyIdToField(percentileInRange, "percentile_in_range");
+    }
+
+    /**
      * Returns a sample standard deviation in range check specification.
      * @return Sample standard deviation in range check specification.
      */
@@ -477,6 +511,60 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.sumInRange, sumInRange));
         this.sumInRange = sumInRange;
         propagateHierarchyIdToField(sumInRange, "sum_in_range");
+    }
+
+    /**
+     * Returns an invalid latitude count check specification.
+     * @return Invalid latitude count check specification.
+     */
+    public ColumnInvalidLatitudeCountCheckSpec getInvalidLatitudeCount() {
+        return invalidLatitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid latitude count check.
+     * @param invalidLatitudeCount Invalid latitude count check specification.
+     */
+    public void setInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec invalidLatitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.invalidLatitudeCount, invalidLatitudeCount));
+        this.invalidLatitudeCount = invalidLatitudeCount;
+        propagateHierarchyIdToField(invalidLatitudeCount, "invalid_latitude_count");
+    }
+
+    /**
+     * Returns a valid latitude percent check specification.
+     * @return Valid latitude percent check specification.
+     */
+    public ColumnValidLatitudePercentCheckSpec getValidLatitudePercent() {
+        return validLatitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid latitude percent check.
+     * @param validLatitudePercent Valid latitude count percent specification.
+     */
+    public void setValidLatitudePercent(ColumnValidLatitudePercentCheckSpec validLatitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.validLatitudePercent, validLatitudePercent));
+        this.validLatitudePercent = validLatitudePercent;
+        propagateHierarchyIdToField(validLatitudePercent, "valid_latitude_percent");
+    }
+
+    /**
+     * Returns an invalid longitude count check specification.
+     * @return Invalid longitude count check specification.
+     */
+    public ColumnInvalidLongitudeCountCheckSpec getInvalidLongitudeCount() {
+        return invalidLongitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid longitude count check.
+     * @param invalidLongitudeCount Invalid longitude count check specification.
+     */
+    public void setInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec invalidLongitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.invalidLongitudeCount, invalidLongitudeCount));
+        this.invalidLongitudeCount = invalidLongitudeCount;
+        propagateHierarchyIdToField(invalidLongitudeCount, "invalid_longitude_count");
     }
 
     /**

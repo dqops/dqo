@@ -94,4 +94,11 @@ public class CreateAllSampleTablesPostgresqlIntegrationTest extends BasePostgres
         IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
     }
 
+    @Test
+    void runTest_whenTestDataFileNamedTest_geographic_coordinate_system_test_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadataForeign sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.geographic_coordinate_system_test, ProviderType.postgresql);
+        IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
+    }
+
 }

@@ -23,8 +23,45 @@ ___
 |----------|----------|----------|-----------|-------------|
 |{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|[{{sensor.sensorName}}](../../../sensors/{{target}}/#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../rules/{{rule.category}}/#{{replace rule.ruleName "_" "-"}})|
 {{#with "  "}}{{.}}{{/with}}
-**Sample configuration (Yaml)**{{#with "  "}}{{.}}{{/with}}
+**Set up a check (Shell)**{{#with "  "}}{{.}}{{/with}}
+To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
+```
+dqo.ai> table edit -c=connection_name -t=table_name
+```
+Following message appears
+``` hl_lines="2-2"
+dqo.ai> table edit -c=connection_name -t=table_name
+Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
+```
+and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+**Run check (Shell)**{{#with "  "}}{{.}}{{/with}}
+To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
+```
+dqo.ai> check run -c=connection_name -t=table_name
+```
+It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+```
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch={{checkName}}
+```
+The example result
+```
+dqo.ai> check run -c=connection_name -t=table_name
+Check evaluation summary per table:
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
++---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
+```
+**Check structure (Yaml)**
 ```yaml
+{{#each checkSample~}}
+{{{this}}}
+{{/each~}}
+```
+**Sample configuration (Yaml)**{{#with "  "}}{{.}}{{/with}}
+```yaml hl_lines="{{checkSampleBeginLine}}-{{checkSampleEndLine}}"
 {{{sampleYaml}}}
 ```
 **SQL Template (Jinja2)**{{#with "  "}}{{.}}{{/with}}

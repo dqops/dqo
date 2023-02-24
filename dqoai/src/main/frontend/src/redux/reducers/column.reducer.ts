@@ -45,8 +45,11 @@ export interface IColumnState {
   monthlyPartitionedChecks?: UIAllChecksModel;
   isUpdatedMonthlyPartitionedChecks?: boolean;
   checksUIFilter?: UIAllChecksModel;
+  isUpdatedChecksUIFilter?: boolean;
   checkpointsUIFilter?: UIAllChecksModel;
+  isUpdatedCheckpointsUIFilter?: boolean;
   partitionedChecksUIFilter?: UIAllChecksModel;
+  isUpdatedPartitionedChecksUIFilter?: boolean;
 }
 
 const initialState: IColumnState = {
@@ -414,6 +417,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         checksUIFilter: action.data,
+        isUpdatedChecksUIFilter: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_ADHOCS_CHECKS_UI_FILTER_ERROR:
@@ -432,6 +436,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         checkpointsUIFilter: action.data,
+        isUpdatedCheckpointsUIFilter: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_CHECKPOINTS_UI_FILTER_ERROR:
@@ -450,6 +455,7 @@ const columnReducer = (state = initialState, action: any) => {
         ...state,
         loading: false,
         partitionedChecksUIFilter: action.data,
+        isUpdatedPartitionedChecksUIFilter: false,
         error: null
       };
     case COLUMN_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_ERROR:
@@ -458,7 +464,24 @@ const columnReducer = (state = initialState, action: any) => {
         loading: false,
         error: action.error
       };
-  
+    case COLUMN_ACTION.SET_UPDATED_CHECKS_UI_FILTER:
+      return {
+        ...state,
+        isUpdatedChecksUIFilter: true,
+        checksUIFilter: action.data,
+      };
+    case COLUMN_ACTION.SET_UPDATED_CHECKPOINTS_UI_FILTER:
+      return {
+        ...state,
+        isUpdatedCheckpointsUIFilter: true,
+        checkpointsUIFilter: action.data,
+      };
+    case COLUMN_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER:
+      return {
+        ...state,
+        isUpdatedPartitionedChecksUIFilter: true,
+        partitionedChecksUIFilter: action.data,
+      };
     default:
       return state;
   }
