@@ -49,14 +49,14 @@ public class ColumnNumericPercentile50InRangeSensorParametersSpec extends Abstra
         return percentileValue;
     }
 
-    /**
-     * Sets the percentile 50 value of the range.
-     * @param percentileValue Percentile 50 value of the range.
-     */
-    public void setPercentileValue(Double percentileValue) {
-        this.setDirtyIf(!Objects.equals(this.percentileValue, percentileValue));
-        this.percentileValue = percentileValue;
-    }
+//    /**
+//     * Sets the percentile 50 value of the range.
+//     * @param percentileValue Percentile 50 value of the range.
+//     */
+//    public void setPercentileValue(Double percentileValue) {
+//        this.setDirtyIf(!Objects.equals(this.percentileValue, percentileValue));
+//        this.percentileValue = percentileValue;
+//    }
 
     /**
      * Returns the child map on the spec class with all fields.
