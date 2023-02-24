@@ -15,7 +15,6 @@
  */
 package ai.dqo.core.dqocloud.accesskey;
 
-import ai.dqo.cloud.rest.model.TenantAccessTokenModel;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
 import com.google.auth.oauth2.AccessToken;
 import com.google.auth.oauth2.OAuth2CredentialsWithRefresh;
@@ -27,16 +26,16 @@ import java.io.IOException;
  */
 public class DqoCloudOAuth2BucketRWRefreshHandler implements OAuth2CredentialsWithRefresh.OAuth2RefreshHandler {
     private DqoRoot rootType;
-    private DqoCloudCredentialsProvider dqoCloudCredentialsProvider;
+    private DqoCloudAccessTokenCache accessTokenCache;
 
     /**
      * Creates an OAuth2 DQO Cloud access token refresh handler.
      * @param rootType Root type to identify the token to use.
-     * @param dqoCloudCredentialsProvider DQO Cloud parent credentials provider - to get the access token.
+     * @param accessTokenCache DQO Cloud parent credentials provider - to get the access token.
      */
-    public DqoCloudOAuth2BucketRWRefreshHandler(DqoRoot rootType, DqoCloudCredentialsProvider dqoCloudCredentialsProvider) {
+    public DqoCloudOAuth2BucketRWRefreshHandler(DqoRoot rootType, DqoCloudAccessTokenCache accessTokenCache) {
         this.rootType = rootType;
-        this.dqoCloudCredentialsProvider = dqoCloudCredentialsProvider;
+        this.accessTokenCache = accessTokenCache;
     }
 
     /**
@@ -55,8 +54,8 @@ public class DqoCloudOAuth2BucketRWRefreshHandler implements OAuth2CredentialsWi
     @Override
     public AccessToken refreshAccessToken() throws IOException {
         try {
-            TenantAccessTokenModel tenantAccessTokenModel = this.dqoCloudCredentialsProvider.issueTenantAccessToken(this.rootType);
-            AccessToken accessToken = this.dqoCloudCredentialsProvider.createAccessToken(tenantAccessTokenModel);
+            DqoCloudCredentials credentials = this.accessTokenCache.getCredentials(this.rootType);
+            AccessToken accessToken = credentials.getAccessToken();
             return accessToken;
         }
         catch (Exception ex) {

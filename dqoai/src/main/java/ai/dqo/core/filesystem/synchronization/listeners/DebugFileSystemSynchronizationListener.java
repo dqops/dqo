@@ -65,7 +65,9 @@ public class DebugFileSystemSynchronizationListener extends SummaryFileSystemSyn
 
         sb.append(fileDifference.getRelativePath().toString().replace('\\', '/'));
 
-        terminalWriter.writeLine(sb.toString());
+        synchronized (this) {
+            terminalWriter.writeLine(sb.toString());
+        }
     }
 
     /**
@@ -94,6 +96,8 @@ public class DebugFileSystemSynchronizationListener extends SummaryFileSystemSyn
 
         sb.append(fileDifference.getRelativePath().toString().replace('\\', '/'));
 
-        terminalWriter.writeLine(sb.toString());
+        synchronized (this) {
+            terminalWriter.writeLine(sb.toString());
+        }
     }
 }

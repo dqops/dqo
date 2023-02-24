@@ -53,20 +53,27 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
         ApiClient authenticatedClient = this.dqoCloudApiClientFactory.createAuthenticatedClient();
         AccessTokenIssueApi accessTokenIssueApi = new AccessTokenIssueApi(authenticatedClient);
         switch (rootType) {
-            case DATA_SENSOR_READOUTS:
-                return accessTokenIssueApi.issueBucketSensorReadoutsRWAccessKey();
+            case data_sensor_readouts:
+                return accessTokenIssueApi.issueBucketSensorReadoutsRWAccessToken();
 
-            case DATA_RULE_RESULTS:
-                return accessTokenIssueApi.issueBucketRuleResultsRWAccessKey();
+            case data_rule_results:
+                return accessTokenIssueApi.issueBucketRuleResultsRWAccessToken();
 
-            case SOURCES:
-                return accessTokenIssueApi.issueBucketSourcesRWAccessKey();
+            case data_errors:
+                return accessTokenIssueApi.issueBucketErrorsRWAccessToken();
 
-            case SENSORS:
-                return accessTokenIssueApi.issueBucketSensorsRWAccessKey();
+            case data_statistics:
+                return accessTokenIssueApi.issueBucketStatisticsRWAccessToken();
 
-            case RULES:
-                return accessTokenIssueApi.issueBucketRulesRWAccessKey();
+            case sources:
+                return accessTokenIssueApi.issueBucketSourcesRWAccessToken();
+
+            case sensors:
+                return accessTokenIssueApi.issueBucketSensorsRWAccessToken();
+
+            case rules:
+                return accessTokenIssueApi.issueBucketRulesRWAccessToken();
+
             default:
                 throw new RuntimeException("Unknown root: " + rootType);
         }

@@ -17,6 +17,8 @@ package ai.dqo.data.storage;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.filesystem.synchronization.status.FolderSynchronizationStatus;
+import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.core.filesystem.virtual.FolderName;
 import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;
@@ -68,6 +70,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     private final UserHomeLockManager userHomeLockManager;
     private HadoopConfigurationProvider hadoopConfigurationProvider;
     private LocalUserHomeFileStorageService localUserHomeFileStorageService;
+    private SynchronizationStatusTracker synchronizationStatusTracker;
 
     /**
      * Dependency injection constructor.
@@ -75,17 +78,20 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param userHomeLockManager User home lock manager.
      * @param hadoopConfigurationProvider Hadoop configuration provider.
      * @param localUserHomeFileStorageService Local DQO_USER_HOME file storage service.
+     * @param synchronizationStatusTracker File synchronization status tracker.
      */
     @Autowired
     public ParquetPartitionStorageServiceImpl(
             LocalDqoUserHomePathProvider localDqoUserHomePathProvider,
             UserHomeLockManager userHomeLockManager,
             HadoopConfigurationProvider hadoopConfigurationProvider,
-            LocalUserHomeFileStorageService localUserHomeFileStorageService) {
+            LocalUserHomeFileStorageService localUserHomeFileStorageService,
+            SynchronizationStatusTracker synchronizationStatusTracker) {
         this.localDqoUserHomePathProvider = localDqoUserHomePathProvider;
         this.userHomeLockManager = userHomeLockManager;
         this.hadoopConfigurationProvider = hadoopConfigurationProvider;
         this.localUserHomeFileStorageService = localUserHomeFileStorageService;
+        this.synchronizationStatusTracker = synchronizationStatusTracker;
     }
 
     /**
@@ -331,6 +337,25 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     public void savePartition(LoadedMonthlyPartition loadedPartition,
                               TableDataChanges tableDataChanges,
                               FileStorageSettings storageSettings) {
+        boolean hasChanges = this.savePartitionInternal(loadedPartition, tableDataChanges, storageSettings);
+        if (hasChanges) {
+            this.synchronizationStatusTracker.changeFolderSynchronizationStatus(storageSettings.getTableType(), FolderSynchronizationStatus.changed);
+        }
+    }
+
+
+    /**
+     * Saves the data for a single monthly partition. Finds the range of data for that month in the <code>tableDataChanges</code>.
+     * Also deletes rows that should be deleted. In case that the file was modified since it was loaded into the loaded partition
+     * snapshot (parameter: <code>loadedPartition</code>), the partition is reloaded using an exclusive write lock and the changes
+     * are applied to the most recent data.
+     * @param loadedPartition Loaded partition, identifies the partition id. The loaded partition may contain no data.
+     * @param tableDataChanges Table data changes to be applied.
+     * @param storageSettings Storage settings to identify the target folder, file names and column names used for matching.
+     */
+    private boolean savePartitionInternal(LoadedMonthlyPartition loadedPartition,
+                              TableDataChanges tableDataChanges,
+                              FileStorageSettings storageSettings) {
         try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(storageSettings.getTableType())) {
             Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
@@ -357,7 +382,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             if (newOrChangedDataPartitionMonth == null &&
                     (tableDataChanges.getDeletedIds() == null || tableDataChanges.getDeletedIds().size() == 0)) {
-                return; // nothing to change in this partition
+                return false; // nothing to change in this partition
             }
 
             Table partitionDataOld;
@@ -391,7 +416,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                     dataToSave = dataToSave.dropWhere(rowsToDeleteSelection);
                 } else if (newOrChangedDataPartitionMonth == null) {
                     // no matching deletes and no new/updated changes in this monthly partition, skipping save
-                    return;
+                    return false;
                 }
             }
 
@@ -400,13 +425,13 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
                 if (targetParquetFile.exists()) {
                     boolean success = this.deleteParquetPartitionFile(targetParquetFilePath, storageSettings.getTableType());
                     if (success) {
-                        return;
+                        return true;
                     }
                     // If unsuccessful, then proceed with the regular deleting method.
                 }
                 else {
                     // there is no file, therefore no data to delete
-                    return;
+                    return false;
                 }
             }
 
@@ -418,6 +443,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();
             new DqoTablesawParquetWriter(hadoopConfiguration).write(dataToSave, writeOptions);
+
+            return true;
         }
         catch (Exception ex) {
             throw new DataStorageIOException(ex.getMessage(), ex);

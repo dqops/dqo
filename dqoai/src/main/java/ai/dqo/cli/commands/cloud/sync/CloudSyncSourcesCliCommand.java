@@ -19,6 +19,7 @@ import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.cloud.sync.impl.CloudSynchronizationService;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.filesystem.synchronization.FileSynchronizationDirection;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -46,6 +47,9 @@ public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand 
     @CommandLine.Option(names = {"-m", "--mode"}, description = "Reporting mode (silent, summary, debug)", defaultValue = "summary")
     private FileSystemSynchronizationReportingMode mode = FileSystemSynchronizationReportingMode.summary;
 
+    @CommandLine.Option(names = {"-d", "--direction"}, description = "File synchronization direction", defaultValue = "full")
+    private FileSynchronizationDirection direction = FileSynchronizationDirection.full;
+
     /**
      * Returns the synchronization logging mode.
      * @return Logging mode.
@@ -63,6 +67,22 @@ public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand 
     }
 
     /**
+     * Returns the file synchronization direction.
+     * @return File synchronization direction.
+     */
+    public FileSynchronizationDirection getDirection() {
+        return direction;
+    }
+
+    /**
+     * Sets the file synchronization direction.
+     * @param direction File synchronization direction.
+     */
+    public void setDirection(FileSynchronizationDirection direction) {
+        this.direction = direction;
+    }
+
+    /**
      * Computes a result, or throws an exception if unable to do so.
      *
      * @return computed result
@@ -70,6 +90,6 @@ public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand 
      */
     @Override
     public Integer call() throws Exception {
-        return this.cloudSynchronizationService.synchronizeRoot(DqoRoot.SOURCES, this.mode, this.isHeadless(), true);
+        return this.cloudSynchronizationService.synchronizeRoot(DqoRoot.sources, this.mode, this.direction, this.isHeadless(), true);
     }
 }

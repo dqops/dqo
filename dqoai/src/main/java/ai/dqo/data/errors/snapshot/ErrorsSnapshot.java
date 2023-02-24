@@ -15,7 +15,7 @@ import tech.tablesaw.api.Table;
  * for a single table and selected time ranges.
  */
 public class ErrorsSnapshot extends TableDataSnapshot {
-    public static final String PARQUET_FILE_NAME = "errors.0.parquet.snappy";
+    public static final String PARQUET_FILE_NAME = "errors.0.snappy.parquet";
 
     /**
      * Default constructor that creates an error's snapshot.
@@ -52,7 +52,7 @@ public class ErrorsSnapshot extends TableDataSnapshot {
      * @return Storage settings.
      */
     public static FileStorageSettings createErrorsStorageSettings() {
-        return new FileStorageSettings(DqoRoot.DATA_ERRORS,
+        return new FileStorageSettings(DqoRoot.data_errors,
                 BuiltInFolderNames.ERRORS,
                 PARQUET_FILE_NAME,
                 ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME,

@@ -17,6 +17,7 @@ package ai.dqo.core.filesystem.filesystemservice.contract;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;
+import ai.dqo.metadata.storage.localfiles.SpecFileNames;
 
 import java.util.Objects;
 
@@ -28,37 +29,47 @@ public enum DqoRoot {
     /**
      * Parquet files with the sensor readouts.
      */
-    DATA_SENSOR_READOUTS,
+    data_sensor_readouts,
 
     /**
      * Parquet files with the rule evaluation results (alerts and passed data quality checks).
      */
-    DATA_RULE_RESULTS,
+    data_rule_results,
 
     /**
      * Parquet files with the statistics results (basic profiler results).
      */
-    DATA_STATISTICS,
+    data_statistics,
 
     /**
      * Parquet files with the errors.
      */
-    DATA_ERRORS,
+    data_errors,
 
     /**
      * Source metadata files (connections, tables).
      */
-    SOURCES,
+    sources,
 
     /**
      * User custom sensor definitions (yaml SQL templates).
      */
-    SENSORS,
+    sensors,
 
     /**
      * User custom rules files (python).
      */
-    RULES;
+    rules,
+
+    /**
+     * Local file indexes.
+     */
+    _indexes,
+
+    /**
+     * Local settings file.
+     */
+    _settings;
 
     /**
      * Creates a dqo user home root from the folder path.
@@ -72,30 +83,38 @@ public enum DqoRoot {
 
         String folder1 = folderPath.get(0).getObjectName();
         if (Objects.equals(folder1, BuiltInFolderNames.SOURCES)) {
-            return SOURCES;
+            return sources;
         }
 
         if (Objects.equals(folder1, BuiltInFolderNames.SENSORS)) {
-            return SENSORS;
+            return sensors;
         }
 
         if (Objects.equals(folder1, BuiltInFolderNames.RULES)) {
-            return RULES;
+            return rules;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.INDEX)) {
+            return _indexes;
+        }
+
+        if (Objects.equals(folder1, SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML)) {
+            return _settings;
         }
 
         if (Objects.equals(folder1, BuiltInFolderNames.DATA) && folderPath.size() > 1) {
             String folder2 = folderPath.get(1).getObjectName();
             if (Objects.equals(folder2, BuiltInFolderNames.SENSOR_READOUTS)) {
-                return DATA_SENSOR_READOUTS;
+                return data_sensor_readouts;
             }
             else if (Objects.equals(folder2, BuiltInFolderNames.RULE_RESULTS)) {
-                return DATA_RULE_RESULTS;
+                return data_rule_results;
             }
             else if (Objects.equals(folder2, BuiltInFolderNames.STATISTICS)) {
-                return DATA_STATISTICS;
+                return data_statistics;
             }
             else if (Objects.equals(folder2, BuiltInFolderNames.ERRORS)) {
-                return DATA_ERRORS;
+                return data_errors;
             }
         }
 

@@ -20,6 +20,7 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
+import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
@@ -60,7 +61,7 @@ public class SensorReadoutsSnapshotTests extends BaseTest {
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
         // TODO: Add stub / virtual filesystem for localUserHomeFileStorageService
         parquetStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), null);
+                HadoopConfigurationProviderObjectMother.getDefault(), null, new SynchronizationStatusTrackerStub());
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
 		this.sut = new SensorReadoutsSnapshot("conn", tableName, this.parquetStorageService, newRows);

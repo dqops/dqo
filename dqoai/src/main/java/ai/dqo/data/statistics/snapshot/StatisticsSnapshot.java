@@ -31,7 +31,7 @@ import tech.tablesaw.api.Table;
  * for a single table and selected time ranges.
  */
 public class StatisticsSnapshot extends TableDataSnapshot {
-    public static final String PARQUET_FILE_NAME = "statistics.0.parquet.snappy";
+    public static final String PARQUET_FILE_NAME = "statistics.0.snappy.parquet";
 
     /**
      * Default constructor that creates a snapshot.
@@ -68,7 +68,7 @@ public class StatisticsSnapshot extends TableDataSnapshot {
      * @return Storage settings.
      */
     public static FileStorageSettings createProfilingResultsStorageSettings() {
-        return new FileStorageSettings(DqoRoot.DATA_STATISTICS,
+        return new FileStorageSettings(DqoRoot.data_statistics,
                 BuiltInFolderNames.STATISTICS,
                 PARQUET_FILE_NAME,
                 StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME,

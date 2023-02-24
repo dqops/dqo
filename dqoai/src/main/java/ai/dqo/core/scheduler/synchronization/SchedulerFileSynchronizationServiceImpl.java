@@ -19,6 +19,7 @@ import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.dqocloud.synchronization.DqoCloudSynchronizationService;
+import ai.dqo.core.filesystem.synchronization.FileSynchronizationDirection;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListenerProvider;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
@@ -76,7 +77,7 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
 
         try {
             FileSystemSynchronizationListener synchronizationListener = this.fileSystemSynchronizationListenerProvider.getSynchronizationListener(synchronizationReportingMode);
-            this.dqoCloudSynchronizationService.synchronizeAll(synchronizationListener);
+            this.dqoCloudSynchronizationService.synchronizeAll(FileSynchronizationDirection.full, synchronizationListener);
         }
         catch (Exception ex) {
             LOG.error("Cannot synchronize the metadata when refreshing the user home during a metadata refresh in the job scheduler.", ex);
@@ -105,7 +106,7 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
 
         try {
             FileSystemSynchronizationListener synchronizationListener = this.fileSystemSynchronizationListenerProvider.getSynchronizationListener(synchronizationReportingMode);
-            this.dqoCloudSynchronizationService.synchronizeData(synchronizationListener);
+            this.dqoCloudSynchronizationService.synchronizeData(FileSynchronizationDirection.full, synchronizationListener);
         }
         catch (Exception ex) {
             LOG.error("Cannot synchronize the data files when running schedule data quality checks.", ex);

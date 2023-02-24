@@ -67,6 +67,9 @@ dqo:
   storage:
     gcp:
       upload-buffer-size: 5000000
+      http2: true
+      http2-max-concurrent-streams: 2000
+      parallel-delete-operations: 2000
   yaml-schema-server: https://cloud.dqo.ai/dqo-yaml-schema/
   cloud:
     ui-base-url: https://cloud.dqo.ai
@@ -76,6 +79,9 @@ dqo:
     api-key-request-url: ${dqo.cloud.ui-base-url}/requestapikey/
     api-key-pickup-timeout-seconds: 600
     api-key-pickup-retry-delay-millis: 1000
+    parallel-file-uploads: 500
+    parallel-file-downloads: 500
+    file-synchronization-time-limit-seconds: 1200
   secrets:
     enable-gcp-secret-manager: true
     gcp-project-id: ${GOOGLE_CLOUD_PROJECT}

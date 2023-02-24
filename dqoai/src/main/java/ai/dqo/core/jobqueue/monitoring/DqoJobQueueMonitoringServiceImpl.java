@@ -16,6 +16,7 @@
 package ai.dqo.core.jobqueue.monitoring;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
+import ai.dqo.core.filesystem.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import ai.dqo.core.jobqueue.DqoJobIdGenerator;
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
 import ai.dqo.core.jobqueue.DqoQueueJobExecutionException;
@@ -53,8 +54,10 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
     private final TreeMap<Long, DqoJobChangeModel> jobChanges = new TreeMap<>();
     private final DqoJobIdGenerator dqoJobIdGenerator;
     private DqoQueueConfigurationProperties queueConfigurationProperties;
-    private Sinks.Many<DqoJobChange> jobUpdateSink;
+    private Sinks.Many<DqoChangeNotificationEntry> jobUpdateSink;
     private Map<Long, CompletableFuture<Long>> waitingClients = new ConcurrentHashMap<>();
+    private volatile CloudSynchronizationFoldersStatusModel currentSynchronizationStatus = new CloudSynchronizationFoldersStatusModel(); // defaults
+    private long currentSynchronizationStatusChangeId = 0;
 
 
     /**
@@ -78,10 +81,10 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             return;
         }
         this.jobUpdateSink = Sinks.many().unicast().onBackpressureBuffer();
-        Flux<DqoJobChange> dqoJobChangeModelFlux = this.jobUpdateSink.asFlux();
-        dqoJobChangeModelFlux.subscribeOn(Schedulers.parallel())
+        Flux<DqoChangeNotificationEntry> dqoNotificationModelFlux = this.jobUpdateSink.asFlux();
+        dqoNotificationModelFlux.subscribeOn(Schedulers.parallel())
                 .doOnComplete(() -> releaseAwaitingClients())
-                .subscribe(jobModel -> onJobChange(jobModel));
+                .subscribe(changeNotificationEntry -> onJobChange(changeNotificationEntry));
 
         this.started = true;
     }
@@ -112,7 +115,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         }
 
         try {
-            Sinks.Many<DqoJobChange> currentSink = this.jobUpdateSink;
+            Sinks.Many<DqoChangeNotificationEntry> currentSink = this.jobUpdateSink;
             this.jobUpdateSink = null;
             currentSink.emitComplete(Sinks.EmitFailureHandler.FAIL_FAST);
         }
@@ -132,7 +135,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             DqoJobChange dqoJobChange = new DqoJobChange(dqoJobHistoryEntryModel.getStatus(), dqoJobHistoryEntryModel);
 
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
-            this.jobUpdateSink.emitNext(dqoJobChange, emitFailureHandler);
+            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishJobAddedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
@@ -148,7 +151,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.RUNNING, jobQueueEntry.getJobId());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
-            this.jobUpdateSink.emitNext(dqoJobChange, emitFailureHandler);
+            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishJobRunningEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
@@ -164,7 +167,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.WAITING, jobQueueEntry.getJobId());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
-            this.jobUpdateSink.emitNext(dqoJobChange, emitFailureHandler);
+            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishJobParkedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
@@ -180,7 +183,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(DqoJobStatus.SUCCEEDED, jobQueueEntry.getJobId());
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
-            this.jobUpdateSink.emitNext(dqoJobChange, emitFailureHandler);
+            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishJobSucceededEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
@@ -197,10 +200,31 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         try {
             DqoJobChange dqoJobChange = new DqoJobChange(jobQueueEntry.getJobId(), errorMessage);
             Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
-            this.jobUpdateSink.emitNext(dqoJobChange, emitFailureHandler);
+            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(dqoJobChange), emitFailureHandler);
         }
         catch (Exception ex) {
             log.error("publishJobFailedEvent failed for job:" + jobQueueEntry.getJobId() + ", error: " + ex.getMessage());
+        }
+    }
+
+    /**
+     * Publishes the current folder synchronization status.
+     *
+     * @param synchronizationStatus Folder synchronization status.
+     */
+    @Override
+    public void publishFolderSynchronizationStatus(CloudSynchronizationFoldersStatusModel synchronizationStatus) {
+        synchronized (this.lock) {
+            this.currentSynchronizationStatus = synchronizationStatus;
+            this.currentSynchronizationStatusChangeId = this.dqoJobIdGenerator.generateNextIncrementalId();
+        }
+
+        try {
+            Sinks.EmitFailureHandler emitFailureHandler = Sinks.EmitFailureHandler.FAIL_FAST; // needs reactor 3.5.0:  Sinks.EmitFailureHandler.busyLooping(this.publishBusyLoopingDuration);
+            this.jobUpdateSink.emitNext(new DqoChangeNotificationEntry(synchronizationStatus), emitFailureHandler);
+        }
+        catch (Exception ex) {
+            log.error("publishFolderSynchronizationStatus failed, error: " + ex.getMessage());
         }
     }
 
@@ -220,7 +244,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                 jobs = new ArrayList<>(this.allJobs.values());
             }
 
-            return Mono.just(new DqoJobQueueInitialSnapshotModel(jobs, changeSequence));
+            return Mono.just(new DqoJobQueueInitialSnapshotModel(jobs, this.currentSynchronizationStatus, changeSequence));
         });
 
         return jobsMono;
@@ -248,7 +272,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             changesList = new ArrayList<>(this.jobChanges
                     .tailMap(lastChangeId, false)
                     .values());
-            if (changesList.size() == 0) {
+            if (changesList.size() == 0 && lastChangeId >= this.currentSynchronizationStatusChangeId) {
                 CompletableFuture<Long> completableFuture = new CompletableFuture<>();
                 completableFuture.completeOnTimeout(null, timeout, timeUnit);
                 this.waitingClients.put(changeSequence, completableFuture);
@@ -257,7 +281,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                         this.waitingClients.remove(changeSequence);
                     }
                     if (result == null) {
-                        return new DqoJobQueueIncrementalSnapshotModel(null, changeSequence);
+                        return new DqoJobQueueIncrementalSnapshotModel(null, this.currentSynchronizationStatus, changeSequence);
                     }
                     else {
                         synchronized (this.lock) {
@@ -266,7 +290,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
                                     .tailMap(lastChangeId, false)
                                     .values());
 
-                            return new DqoJobQueueIncrementalSnapshotModel(newChangesList, nextChangeId);
+                            return new DqoJobQueueIncrementalSnapshotModel(newChangesList, this.currentSynchronizationStatus, nextChangeId);
                         }
                     }
                 });
@@ -274,7 +298,7 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
         }
 
         if (changesList.size() > 0) {
-            return Mono.just(new DqoJobQueueIncrementalSnapshotModel(changesList, changeSequence));
+            return Mono.just(new DqoJobQueueIncrementalSnapshotModel(changesList, this.currentSynchronizationStatus, changeSequence));
         }
 
         return Mono.fromFuture(waitForChangeFuture);
@@ -282,44 +306,47 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
 
     /**
      * Called for each new or updated job.
-     * @param jobChange Job change notification.
+     * @param changeNotificationEntry Notification entry that should be published.
      */
-    public void onJobChange(DqoJobChange jobChange) {
+    public void onJobChange(DqoChangeNotificationEntry changeNotificationEntry) {
         long changeSequence;
         List<CompletableFuture<Long>> awaitersToNotify = null;
 
         try {
             synchronized (this.lock) {
                 changeSequence = this.dqoJobIdGenerator.generateNextIncrementalId(); // serialized change number
+                DqoJobChange jobChange = changeNotificationEntry.getJobChange();
 
-                if (jobChange.getStatus() == DqoJobStatus.QUEUED) {
-                    // new job
-                    this.allJobs.put(jobChange.getJobId(), jobChange.getUpdatedModel());
-                    DqoJobChangeModel dqoNewJobChangeModel = new DqoJobChangeModel(jobChange, changeSequence);
-                    this.jobChanges.put(changeSequence, dqoNewJobChangeModel);
-                } else {
-                    // updated job
-                    DqoJobChangeModel dqoUpdatedJobChangeModel = new DqoJobChangeModel(jobChange, changeSequence);
-                    this.jobChanges.put(changeSequence, dqoUpdatedJobChangeModel);
-                    if (jobChange.getUpdatedModel() != null) {
-                        assert Objects.equals(jobChange.getJobId(), jobChange.getUpdatedModel().getJobId());
-                        this.allJobs.put(jobChange.getJobId(), jobChange.getUpdatedModel()); // replaces the current model
+                if (jobChange != null) { // the job change is null when we are just publishing a change to the file synchronization status
+                    if (jobChange.getStatus() == DqoJobStatus.QUEUED) {
+                        // new job
+                        this.allJobs.put(jobChange.getJobId(), jobChange.getUpdatedModel());
+                        DqoJobChangeModel dqoNewJobChangeModel = new DqoJobChangeModel(jobChange, changeSequence);
+                        this.jobChanges.put(changeSequence, dqoNewJobChangeModel);
                     } else {
-                        // update in the job
-                        DqoJobHistoryEntryModel currentJobEntryModel = this.allJobs.get(jobChange.getJobId());
-                        DqoJobHistoryEntryModel clonedJobEntryModel = currentJobEntryModel.clone();
-                        clonedJobEntryModel.setStatus(jobChange.getStatus());
-                        clonedJobEntryModel.setStatusChangedAt(dqoUpdatedJobChangeModel.getStatusChangedAt());
-                        if (jobChange.getErrorMessage() != null) {
-                            clonedJobEntryModel.setErrorMessage(jobChange.getErrorMessage());
-                            dqoUpdatedJobChangeModel.setUpdatedModel(clonedJobEntryModel);
+                        // updated job
+                        DqoJobChangeModel dqoUpdatedJobChangeModel = new DqoJobChangeModel(jobChange, changeSequence);
+                        this.jobChanges.put(changeSequence, dqoUpdatedJobChangeModel);
+                        if (jobChange.getUpdatedModel() != null) {
+                            assert Objects.equals(jobChange.getJobId(), jobChange.getUpdatedModel().getJobId());
+                            this.allJobs.put(jobChange.getJobId(), jobChange.getUpdatedModel()); // replaces the current model
+                        } else {
+                            // update in the job
+                            DqoJobHistoryEntryModel currentJobEntryModel = this.allJobs.get(jobChange.getJobId());
+                            DqoJobHistoryEntryModel clonedJobEntryModel = currentJobEntryModel.clone();
+                            clonedJobEntryModel.setStatus(jobChange.getStatus());
+                            clonedJobEntryModel.setStatusChangedAt(dqoUpdatedJobChangeModel.getStatusChangedAt());
+                            if (jobChange.getErrorMessage() != null) {
+                                clonedJobEntryModel.setErrorMessage(jobChange.getErrorMessage());
+                                dqoUpdatedJobChangeModel.setUpdatedModel(clonedJobEntryModel);
+                            }
+                            this.allJobs.put(jobChange.getJobId(), clonedJobEntryModel);
                         }
-                        this.allJobs.put(jobChange.getJobId(), clonedJobEntryModel);
                     }
-
-                    removeOldFinishedJobs();
-                    removeOldJobChanges();
                 }
+
+                removeOldFinishedJobs();
+                removeOldJobChanges();
 
                 if (this.waitingClients.size() > 0) {
                     awaitersToNotify = new ArrayList<>(this.waitingClients.values());
@@ -334,7 +361,8 @@ public class DqoJobQueueMonitoringServiceImpl implements DqoJobQueueMonitoringSe
             }
         }
         catch (Exception ex) {
-            log.error("onJobChange failed for job:" + jobChange.getJobId() + ", error: " + ex.getMessage());
+            log.error("onJobChange failed" + ((changeNotificationEntry.getJobChange() != null) ?
+                    "for job:" + changeNotificationEntry.getJobChange().getJobId() : "") + ", error: " + ex.getMessage());
         }
     }
 

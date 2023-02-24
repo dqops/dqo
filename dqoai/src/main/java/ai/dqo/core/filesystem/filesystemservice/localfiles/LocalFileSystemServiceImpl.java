@@ -15,21 +15,27 @@
  */
 package ai.dqo.core.filesystem.filesystemservice.localfiles;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.AbstractFileSystemRoot;
-import ai.dqo.core.filesystem.filesystemservice.contract.FileMetadataReadException;
-import ai.dqo.core.filesystem.filesystemservice.contract.FileSystemChangeException;
-import ai.dqo.core.filesystem.filesystemservice.contract.FileSystemReadException;
+import ai.dqo.core.filesystem.filesystemservice.contract.*;
 import ai.dqo.core.filesystem.metadata.FileMetadata;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
 import ai.dqo.utils.exceptions.CloseableHelper;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
+import io.netty.buffer.ByteBuf;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.netty.ByteBufFlux;
 
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.ByteChannel;
+import java.nio.channels.SeekableByteChannel;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.stream.Stream;
@@ -38,6 +44,7 @@ import java.util.stream.Stream;
  * Local file system implementation.
  */
 @Component
+@Slf4j
 public class LocalFileSystemServiceImpl implements LocalFileSystemService {
     /**
      * Returns true if the file system represents a local file system.
@@ -93,11 +100,26 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
             }
 
             long now = Instant.now().toEpochMilli();
-            return new FileMetadata(relativeFilePath, lastModifiedMillis, fileHash, now);
+            return new FileMetadata(relativeFilePath, lastModifiedMillis, fileHash, now, file.length());
         }
         catch (IOException ex) {
             throw new FileMetadataReadException(fullPathToFile, ex.getMessage(), ex);
         }
+    }
+
+    /**
+     * Read the metadata of a single file asynchronously.
+     *
+     * @param fileSystemRoot        File system root information. May contain credentials to access a remote file system.
+     * @param relativeFilePath      Relative file path in the file system.
+     * @param lastKnownFileMetadata Optional last known file metadata.
+     *                              If the last known file metadata is not null and the last file modification
+     *                              has not changed then the hash could be copied (and not calculated).
+     * @return File metadata.
+     */
+    @Override
+    public Mono<FileMetadata> readFileMetadataAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, FileMetadata lastKnownFileMetadata) {
+        return Mono.fromCallable(() -> readFileMetadata(fileSystemRoot, relativeFilePath, lastKnownFileMetadata));
     }
 
     /**
@@ -122,6 +144,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
                 Stream<Path> fileListStream = Files.list(fullPathToFolder);
                 try {
                     fileListStream
+                            .parallel()
                             .forEach(childPath -> {
                                 Path childRelativePath = rootFileSystemPath.relativize(childPath);
                                 String fileName = childPath.getFileName().toString();
@@ -176,6 +199,21 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
     }
 
     /**
+     * Deletes a file asynchronously.
+     *
+     * @param fileSystemRoot   File system root (with credentials).
+     * @param relativeFilePath Relative file path inside the remote root.
+     */
+    @Override
+    public Mono<Path> deleteFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath) {
+        Mono<Path> deleteFileMono = Mono.fromRunnable(() -> {
+            deleteFile(fileSystemRoot, relativeFilePath);
+        }).thenReturn(relativeFilePath);
+
+        return deleteFileMono;
+    }
+
+    /**
      * Deletes a folder.
      *
      * @param fileSystemRoot       File system root.
@@ -203,6 +241,23 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
     }
 
     /**
+     * Deletes a folder asynchronously.
+     *
+     * @param fileSystemRoot       File system root.
+     * @param relativeFolderPath   Relative path to the folder that should be deleted.
+     * @param deleteNonEmptyFolder When true, non-empty folders are also deleted including all nested files and sub folders.
+     * @return true when the folder was deleted, false when the folder was not empty and cannot be deleted.
+     */
+    @Override
+    public Mono<Boolean> deleteFolderAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFolderPath, boolean deleteNonEmptyFolder) {
+        Mono<Boolean> deleteFolderMono = Mono.fromCallable(() -> {
+            return deleteFolder(fileSystemRoot, relativeFolderPath, deleteNonEmptyFolder);
+        });
+
+        return deleteFolderMono;
+    }
+
+    /**
      * Downloads a file and opens an input stream to the file.
      *
      * @param fileSystemRoot File system root (with credentials).
@@ -223,6 +278,29 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
     }
 
     /**
+     * Downloads a file asynchronously, returning a flux of file content blocks.
+     *
+     * @param fileSystemRoot        File system root (with credentials).
+     * @param relativeFilePath      Relative file path inside the remote root.
+     * @param lastKnownFileMetadata Last known file metadata. Could be used for verification or skipping an extra hashing.
+     * @return File download response with the flux of file content and the metadata.
+     */
+    @Override
+    public Mono<DownloadFileResponse> downloadFileAsync(AbstractFileSystemRoot fileSystemRoot,
+                                                        Path relativeFilePath,
+                                                        FileMetadata lastKnownFileMetadata) {
+        Mono<ByteBufFlux> byteBufFluxMono = Mono.fromCallable(() -> {
+            Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
+            ByteBufFlux byteBufFlux = ByteBufFlux.fromPath(fullPathToFile);
+            return byteBufFlux;
+        });
+
+        Mono<DownloadFileResponse> resultMono = byteBufFluxMono
+                .map(byteBufFlux -> new DownloadFileResponse(lastKnownFileMetadata, byteBufFlux));
+        return resultMono;
+    }
+
+    /**
      * Uploads a stream to the file system.
      *
      * @param fileSystemRoot   File system root (with credentials).
@@ -237,7 +315,12 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
         try {
             Path parentFolderPath = fullPathToFile.getParent();
             if (!Files.exists(parentFolderPath)) {
-                Files.createDirectories(parentFolderPath);
+                try {
+                    Files.createDirectories(parentFolderPath);
+                }
+                catch (Exception ex) {
+                    // ignore, probably a race condition
+                }
             }
 
             try (OutputStream fileOutputStream = Files.newOutputStream(fullPathToFile)) {
@@ -250,7 +333,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
             assert fullPathToFile.toFile().length() > 0;
 
             Path fileName = relativeFilePath.getFileName();
-            if (fileName.endsWith(".parquet")) {
+            if (fileName.getFileName().toString().endsWith(".parquet")) {
                 Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
                 Files.write(crcFilePath, fileHash);
             }
@@ -260,6 +343,90 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
         }
         finally {
             CloseableHelper.closeSilently(sourceStream);
+        }
+    }
+
+    /**
+     * Uploads a file to the file system as an asynchronous operation using Flux.
+     *
+     * @param fileSystemRoot   File system root.
+     * @param relativeFilePath Relative path to the uploaded file.
+     * @param bytesFlux        Source flux with byte buffers to be uploaded.
+     * @param fileMetadata     File metadata with the file length and file content hash.
+     * @return Mono returned when the file was fully uploaded.
+     */
+    @Override
+    public Mono<Path> uploadFileAsync(AbstractFileSystemRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux, FileMetadata fileMetadata) {
+        Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
+
+        try {
+            Path parentFolderPath = fullPathToFile.getParent();
+            if (!Files.exists(parentFolderPath)) {
+                try {
+                    Files.createDirectories(parentFolderPath);
+                }
+                catch (IOException ex) {
+                    // ignore, this could be just a race condition that another thread is trying to create the same folder
+                }
+            }
+
+            final FileOutputStream fileOutputStream = new FileOutputStream(fullPathToFile.toFile());
+            final ByteChannel outputByteChannel = fileOutputStream.getChannel();
+            return bytesFlux.doOnEach(byteBufSignal -> {
+                switch (byteBufSignal.getType()) {
+                    case ON_NEXT: {
+                        try {
+                            ByteBuf byteBuf = byteBufSignal.get();
+                            outputByteChannel.write(byteBuf.nioBuffer());
+                        }
+                        catch (Exception ex) {
+                            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                        }
+                        break;
+                    }
+
+                    case ON_ERROR: {
+                        try {
+                            outputByteChannel.close();
+                            fileOutputStream.close();
+                            Files.delete(fullPathToFile);
+
+                            Path fileName = relativeFilePath.getFileName();
+                            if (fileName.getFileName().toString().endsWith(".parquet")) {
+                                Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
+                                if (Files.exists(crcFilePath)) {
+                                    Files.delete(crcFilePath);
+                                }
+                            }
+                        }
+                        catch (Exception ex) {
+                            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                        }
+
+                        break;
+                    }
+
+                    case ON_COMPLETE: {
+                        try {
+                            outputByteChannel.close();
+                            fileOutputStream.close();
+
+                            Path fileName = relativeFilePath.getFileName();
+                            if (fileName.getFileName().toString().endsWith(".parquet")) {
+                                Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
+                                Files.write(crcFilePath, fileMetadata.getFileHash());
+                            }
+                        }
+                        catch (Exception ex) {
+                            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                        }
+                        break;
+                    }
+                }
+            }).then(Mono.just(relativeFilePath));
+        }
+        catch (Exception ex) {
+            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
         }
     }
 }

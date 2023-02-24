@@ -18,6 +18,7 @@ package ai.dqo.core.dqocloud.synchronization;
 import ai.dqo.BaseIntegrationTest;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.filesystem.synchronization.FileSynchronizationDirection;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 import ai.dqo.core.filesystem.synchronization.listeners.SilentFileSystemSynchronizationListener;
 import ai.dqo.metadata.sources.ConnectionWrapper;
@@ -49,12 +50,12 @@ public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrat
         postgresql.setDatabase("DB1");
         firstUserHomeContext.flush();
 
-        this.sut.synchronizeFolder(DqoRoot.SOURCES, this.listener);
+        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, this.listener);
 
         // clean
         UserHomeContext cleanUserHome = UserHomeContextObjectMother.createDefaultHomeContext(true);
-        this.sut.synchronizeFolder(DqoRoot.SOURCES, this.listener);  // this should download
-        this.sut.synchronizeFolder(DqoRoot.SOURCES, this.listener);  // this should detect no changes...
+        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, this.listener);  // this should download
+        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, this.listener);  // this should detect no changes...
 
         UserHomeContext restoredUserHomeContext = UserHomeContextObjectMother.createDefaultHomeContext(false);
         ConnectionWrapper secondConnWrapper = restoredUserHomeContext.getUserHome().getConnections().getByObjectName("src1", true);
@@ -63,10 +64,10 @@ public class DqoCloudSynchronizationServiceIntegrationTests extends BaseIntegrat
 
         secondConnWrapper.markForDeletion();
         restoredUserHomeContext.flush();
-        this.sut.synchronizeFolder(DqoRoot.SOURCES, this.listener);
+        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, this.listener);
 
         UserHomeContext userHomeAfterDelete = UserHomeContextObjectMother.createDefaultHomeContext(true);
-        this.sut.synchronizeFolder(DqoRoot.SOURCES, this.listener);
+        this.sut.synchronizeFolder(DqoRoot.sources, FileSynchronizationDirection.full, this.listener);
         ConnectionWrapper connectionWrapperAfterDelete = userHomeAfterDelete.getUserHome().getConnections().getByObjectName("src1", true);
         Assertions.assertNull(connectionWrapperAfterDelete);
     }

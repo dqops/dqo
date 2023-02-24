@@ -64,19 +64,25 @@ public class DqoUserHomeFileSystemFactoryImpl implements DqoUserHomeFileSystemFa
         Path localUserHomePath = this.localDqoUserHomePathProvider.getLocalUserHomePath();
 
         switch (rootType) {
-            case DATA_SENSOR_READOUTS:
+            case data_sensor_readouts:
                 return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.SENSOR_READOUTS);
 
-            case DATA_RULE_RESULTS:
+            case data_rule_results:
                 return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.RULE_RESULTS);
 
-            case SOURCES:
+            case data_errors:
+                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.ERRORS);
+
+            case data_statistics:
+                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.STATISTICS);
+
+            case sources:
                 return localUserHomePath.resolve(BuiltInFolderNames.SOURCES);
 
-            case SENSORS:
+            case sensors:
                 return localUserHomePath.resolve(BuiltInFolderNames.SENSORS);
 
-            case RULES:
+            case rules:
                 return localUserHomePath.resolve(BuiltInFolderNames.RULES);
 
             default:

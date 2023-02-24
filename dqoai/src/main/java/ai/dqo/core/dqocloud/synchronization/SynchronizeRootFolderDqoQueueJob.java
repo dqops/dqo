@@ -66,7 +66,8 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
     @Override
     public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
         this.cloudSynchronizationService.synchronizeFolder(
-                this.parameters.getRootType(),
+                this.parameters.getSynchronizationParameter().getFolder(),
+                this.parameters.getSynchronizationParameter().getDirection(),
                 this.parameters.getFileSystemSynchronizationListener());
         return null;
     }
@@ -89,7 +90,8 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
      */
     @Override
     public JobConcurrencyConstraint getConcurrencyConstraint() {
-        JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.SYNCHRONIZE_FOLDER, this.parameters.getRootType());
+        JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.SYNCHRONIZE_FOLDER,
+                this.parameters.getSynchronizationParameter().getFolder());
         return new JobConcurrencyConstraint(concurrencyTarget, 1);
     }
 

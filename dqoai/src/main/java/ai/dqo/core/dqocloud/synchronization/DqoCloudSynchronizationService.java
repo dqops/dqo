@@ -16,6 +16,7 @@
 package ai.dqo.core.dqocloud.synchronization;
 
 import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.filesystem.synchronization.FileSynchronizationDirection;
 import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
 
 /**
@@ -25,19 +26,22 @@ public interface DqoCloudSynchronizationService {
     /**
      * Performs synchronization of a given user home folder to the DQO Cloud.
      * @param dqoRoot User Home folder type to synchronize.
+     * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeFolder(DqoRoot dqoRoot, FileSystemSynchronizationListener synchronizationListener);
+    void synchronizeFolder(DqoRoot dqoRoot, FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener);
 
     /**
      * Synchronizes all roots (sources, check definitions, data).
+     * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeAll(FileSystemSynchronizationListener synchronizationListener);
+    void synchronizeAll(FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener);
 
     /**
      * Synchronizes only the data roots (sensor readouts, rule results).
+     * @param synchronizationDirection File synchronization direction (full, download, upload).
      * @param synchronizationListener Synchronization listener to notify about the progress.
      */
-    void synchronizeData(FileSystemSynchronizationListener synchronizationListener);
+    void synchronizeData(FileSynchronizationDirection fileSynchronizationDirection, FileSystemSynchronizationListener synchronizationListener);
 }

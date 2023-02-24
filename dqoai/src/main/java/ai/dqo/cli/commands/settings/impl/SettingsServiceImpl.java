@@ -16,6 +16,7 @@
 package ai.dqo.cli.commands.settings.impl;
 
 import ai.dqo.cli.commands.CliOperationStatus;
+import ai.dqo.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.settings.SettingsWrapper;
@@ -36,13 +37,16 @@ import java.util.TimeZone;
 @Component
 public class SettingsServiceImpl implements SettingsService {
 	private final UserHomeContextFactory userHomeContextFactory;
-	private DefaultTimeZoneProvider defaultTimeZoneProvider;
+	private final DefaultTimeZoneProvider defaultTimeZoneProvider;
+	private final DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
 
 	@Autowired
 	public SettingsServiceImpl(UserHomeContextFactory userHomeContextFactory,
-							   DefaultTimeZoneProvider defaultTimeZoneProvider) {
+							   DefaultTimeZoneProvider defaultTimeZoneProvider,
+							   DqoCloudAccessTokenCache dqoCloudAccessTokenCache) {
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+		this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
 	}
 
 	private SettingsWrapper createEmptySettingFile(UserHome userHome) {
@@ -214,6 +218,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		settings.setApiKey(key);
 		userHomeContext.flush();
+		this.dqoCloudAccessTokenCache.invalidate();
 		cliOperationStatus.setSuccessMessage("Successfully set api key");
 
 		return cliOperationStatus;
@@ -245,6 +250,7 @@ public class SettingsServiceImpl implements SettingsService {
 
 		settings.setApiKey(null);
 		userHomeContext.flush();
+		this.dqoCloudAccessTokenCache.invalidate();
 		cliOperationStatus.setSuccessMessage("Successfully removed api key");
 
 		return cliOperationStatus;

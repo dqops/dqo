@@ -98,8 +98,7 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
      */
 
     @CommandLine.Option(names = {"--dqo.cloud.api-key"},
-            description = "DQO cloud api key. Log in to https://cloud.dqo.ai/ to get the key. " +
-                    "This parameter is effective only in CLI mode.")
+            description = "DQO cloud api key. Log in to https://cloud.dqo.ai/ to get the key.")
     private String dqoCloudApiKey;
 
     @CommandLine.Option(names = {"--server.port"},
@@ -112,13 +111,11 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Boolean dqoUserInitializeUserHome;
 
     @CommandLine.Option(names = {"--logging.level.root"},
-            description = "Default logging level at the root level of the logging hierarchy. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "WARN")
+            description = "Default logging level at the root level of the logging hierarchy.", defaultValue = "WARN")
     private org.slf4j.event.Level loggingLevelRoot;
 
     @CommandLine.Option(names = {"--logging.level.ai.dqo"},
-            description = "Default logging level for the DQO runtime. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "WARN")
+            description = "Default logging level for the DQO runtime.", defaultValue = "WARN")
     private org.slf4j.event.Level loggingLevelAiDqo;
 
     @CommandLine.Option(names = {"--dqo.logging.enable-user-home-logging"},
@@ -177,9 +174,16 @@ public class DqoRootCliCommand extends BaseCommand implements ICommand {
     private Boolean dqoCorePrintStackTrace;
 
     @CommandLine.Option(names = {"--dqo.core.lock-wait-timeout-seconds"},
-            description = "Sets the maximum wait timeout in seconds to obtain a lock to read or write files. " +
-                    "This parameter is effective only in CLI mode.", defaultValue = "900")
+            description = "Sets the maximum wait timeout in seconds to obtain a lock to read or write files.", defaultValue = "900")
     private Long dqoLockWaitTimeoutSeconds;
+
+    @CommandLine.Option(names = {"--dqo.cloud.parallel-file-uploads"},
+            description = "The number of files that are uploaded to DQO Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
+    private Integer dqoClodParallelFileUploads;
+
+    @CommandLine.Option(names = {"--dqo.cloud.parallel-file-downloads"},
+            description = "The number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.", defaultValue = "500")
+    private Integer dqoClodParallelFileDownloads;
 
     @CommandLine.Option(names = {"--dqo.queue.threads"},
             description = "Sets the number of threads that the job queue creates for processing jobs (running data quality checks, importing metadata, etc.). ", defaultValue = "10")

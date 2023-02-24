@@ -57,6 +57,11 @@ public class DqoCloudApiKeyPayload {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     private Instant expiresAt;
 
+    @JsonProperty("dm")
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    private String domain;
+
+
     /**
      * Collection of ignored properties that were present in the YAML specification file, but were not present on the node.
      * The user has added invalid properties. We only want to know the names of these properties for validation purposes.
@@ -182,6 +187,22 @@ public class DqoCloudApiKeyPayload {
      */
     public void setExpiresAt(Instant expiresAt) {
         this.expiresAt = expiresAt;
+    }
+
+    /**
+     * Returns the domain name when the data for a tenant is stored in separate domains. The api key enables access to a single domain.
+     * @return Domain name or null when the default domain is used.
+     */
+    public String getDomain() {
+        return domain;
+    }
+
+    /**
+     * Sets the name of the data domain when the data for a separate domain is in use.
+     * @param domain Domain name or null when the default domain is used.
+     */
+    public void setDomain(String domain) {
+        this.domain = domain;
     }
 
     /**

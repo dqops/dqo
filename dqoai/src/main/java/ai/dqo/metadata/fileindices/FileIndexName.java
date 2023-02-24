@@ -50,7 +50,7 @@ public class FileIndexName {
             throw new IllegalArgumentException("Index file name is invalid");
         }
 
-        String indexName = baseFileName.substring(0, indexOfDot).toUpperCase(Locale.ROOT);
+        String indexName = baseFileName.substring(0, indexOfDot).toLowerCase(Locale.ROOT);
         Optional<DqoRoot> dqoRootOptional = Enums.getIfPresent(DqoRoot.class, indexName);
         if (!dqoRootOptional.isPresent()) {
             return null;
