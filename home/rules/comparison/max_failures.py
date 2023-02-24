@@ -61,11 +61,11 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
 
-    if not hasattr(rule_parameters,'previous_readouts'):
-        return RuleExecutionResult(True, None, None, None)
+    if not hasattr(rule_parameters, 'previous_readouts'):
+        return RuleExecutionResult()
 
     filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
     filtered.append(rule_parameters.actual_value)
@@ -75,12 +75,13 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     recent_failures  = 0
     for i in filtered:
         if i == 0:
-            recent_failures  += 1
+            recent_failures += 1
         else:
             break
 
-    passed = recent_failures <= rule_parameters.parameters.max_failures
-    expected_value = rule_parameters.parameters.max_failures
-    lower_bound = rule_parameters.parameters.max_failures
-    upper_bound = None
+    expected_value = None
+    lower_bound = None
+    upper_bound = rule_parameters.parameters.max_failures
+    passed = recent_failures <= upper_bound
+
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
