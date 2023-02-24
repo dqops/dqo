@@ -25,6 +25,7 @@ import io.netty.buffer.ByteBuf;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.ByteBufFlux;
 
@@ -143,6 +144,7 @@ public class LocalFileSystemServiceImpl implements LocalFileSystemService {
                 Stream<Path> fileListStream = Files.list(fullPathToFolder);
                 try {
                     fileListStream
+                            .parallel()
                             .forEach(childPath -> {
                                 Path childRelativePath = rootFileSystemPath.relativize(childPath);
                                 String fileName = childPath.getFileName().toString();
