@@ -16,6 +16,7 @@
 
 package ai.dqo.data.errors.services;
 
+import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
@@ -25,7 +26,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
@@ -42,7 +44,18 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
      */
     @Override
     public void deleteSelectedErrorsFragment(ErrorsFragmentFilter filter) {
-        Map<String, String> conditions = filter.getColumnConditions();
+        Map<String, String> simpleConditions = filter.getColumnConditions();
+        Map<String, Set<String>> conditions = new HashMap<>();
+        for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
+            String columnName = kv.getKey();
+            String columnValue = kv.getValue();
+            Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
+            conditions.put(columnName, wrappedValue);
+        }
+        if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
+            conditions.put(ErrorsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
+        }
+
         ErrorsSnapshot currentSnapshot = this.errorsSnapshotFactory.createSnapshot(
                 filter.getTableSearchFilters().getConnectionName(),
                 PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName())

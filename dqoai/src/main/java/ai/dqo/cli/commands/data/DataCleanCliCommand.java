@@ -44,6 +44,8 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * "data clean" 2nd level CLI command that deletes data selectively from the data.
@@ -185,7 +187,8 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
         }
 
         if (!Strings.isNullOrEmpty(this.column)) {
-            deleteStoredDataJobParameters.setColumnName(this.column);
+            List<String> columnNames = new LinkedList<>(){{add(column);}};
+            deleteStoredDataJobParameters.setColumnNames(columnNames);
         }
 
         if (!Strings.isNullOrEmpty(this.sensor)) {

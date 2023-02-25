@@ -379,9 +379,9 @@ public class TableDataSnapshot {
      * [NOT ON READ-ONLY]
      * @param startDate Start of the date range (to the day).
      * @param endDate End of the date range (to the day).
-     * @param columnConditions Column name to column value conditions. Column name must be a name of a valid string column in the table. Column value is tested for equality among the rows.
+     * @param columnConditions Column name to column values conditions. Column name must be a name of a valid string column in the table. Column values are the values that can be present in a row for that column.
      */
-    public void markSelectedForDeletion(LocalDate startDate, LocalDate endDate, Map<String, String> columnConditions) {
+    public void markSelectedForDeletion(LocalDate startDate, LocalDate endDate, Map<String, Set<String>> columnConditions) {
         if (this.isReadOnly()) {
             throw new DataStorageIOException("Read-only snapshots do not support deleting.");
         }
@@ -410,12 +410,16 @@ public class TableDataSnapshot {
 
             // Filter by string columns' conditions.
             try {
-                for (Map.Entry<String, String> columnCondition : columnConditions.entrySet()) {
+                for (Map.Entry<String, Set<String>> columnCondition : columnConditions.entrySet()) {
                     String colName = columnCondition.getKey();
-                    String colValue = columnCondition.getValue();
+                    Set<String> colValues = columnCondition.getValue();
+                    if (colValues == null || colValues.isEmpty()) {
+                        continue;
+                    }
+
                     toDelete = toDelete.and(
                             monthlyPartitionTable.stringColumn(colName)
-                                    .isEqualTo(colValue));
+                                    .isIn(colValues));
                 }
             }
             catch (IllegalStateException e) {

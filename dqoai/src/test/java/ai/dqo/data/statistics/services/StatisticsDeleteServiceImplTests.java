@@ -51,8 +51,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class StatisticsResultsDeleteServiceImplTests extends BaseTest {
-    private StatisticsResultsDeleteServiceImpl sut;
+public class StatisticsDeleteServiceImplTests extends BaseTest {
+    private StatisticsDeleteServiceImpl sut;
     private ParquetPartitionStorageService parquetPartitionStorageService;
     private FileStorageSettings profilingResultsStorageSettings;
     private StatisticsResultsTableFactory statisticsResultsTableFactory;
@@ -86,7 +86,7 @@ public class StatisticsResultsDeleteServiceImplTests extends BaseTest {
                 this.statisticsResultsTableFactory
         );
 
-        this.sut = new StatisticsResultsDeleteServiceImpl(statisticsSnapshotFactory);
+        this.sut = new StatisticsDeleteServiceImpl(statisticsSnapshotFactory);
     }
 
     private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {

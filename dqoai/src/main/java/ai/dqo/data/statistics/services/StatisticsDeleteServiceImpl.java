@@ -16,27 +16,30 @@
 
 package ai.dqo.data.statistics.services;
 
+import ai.dqo.data.statistics.factory.StatisticsColumnNames;
 import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactory;
 import ai.dqo.metadata.sources.PhysicalTableName;
-import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Service that deletes statistics data from parquet files.
  */
 @Service
-public class StatisticsResultsDeleteServiceImpl implements StatisticsResultsDeleteService {
-    private StatisticsSnapshotFactory statisticsResultsSnapshotFactory;
+public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
+    private StatisticsSnapshotFactory statisticsSnapshotFactory;
 
     @Autowired
-    public StatisticsResultsDeleteServiceImpl(StatisticsSnapshotFactory statisticsResultsSnapshotFactory) {
-        this.statisticsResultsSnapshotFactory = statisticsResultsSnapshotFactory;
+    public StatisticsDeleteServiceImpl(StatisticsSnapshotFactory statisticsSnapshotFactory) {
+        this.statisticsSnapshotFactory = statisticsSnapshotFactory;
     }
 
     /**
@@ -45,8 +48,19 @@ public class StatisticsResultsDeleteServiceImpl implements StatisticsResultsDele
      */
     @Override
     public void deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter) {
-        Map<String, String> conditions = filter.getColumnConditions();
-        StatisticsSnapshot currentSnapshot = this.statisticsResultsSnapshotFactory.createSnapshot(
+        Map<String, String> simpleConditions = filter.getColumnConditions();
+        Map<String, Set<String>> conditions = new HashMap<>();
+        for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
+            String columnName = kv.getKey();
+            String columnValue = kv.getValue();
+            Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
+            conditions.put(columnName, wrappedValue);
+        }
+        if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
+            conditions.put(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
+        }
+
+        StatisticsSnapshot currentSnapshot = this.statisticsSnapshotFactory.createSnapshot(
                 filter.getTableSearchFilters().getConnectionName(),
                 PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName())
         );

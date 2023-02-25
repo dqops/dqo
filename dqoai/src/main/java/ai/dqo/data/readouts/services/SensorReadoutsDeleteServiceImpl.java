@@ -16,16 +16,19 @@
 
 package ai.dqo.data.readouts.services;
 
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import ai.dqo.metadata.sources.PhysicalTableName;
-import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 @Service
 public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteService {
@@ -42,7 +45,17 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
      */
     @Override
     public void deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter) {
-        Map<String, String> conditions = filter.getColumnConditions();
+        Map<String, String> simpleConditions = filter.getColumnConditions();
+        Map<String, Set<String>> conditions = new HashMap<>();
+        for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
+            String columnName = kv.getKey();
+            String columnValue = kv.getValue();
+            Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
+            conditions.put(columnName, wrappedValue);
+        }
+        if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
+            conditions.put(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
+        }
 
         SensorReadoutsSnapshot currentSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(
                 filter.getTableSearchFilters().getConnectionName(),
