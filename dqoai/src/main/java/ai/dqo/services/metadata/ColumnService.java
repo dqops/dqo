@@ -16,7 +16,11 @@
 
 package ai.dqo.services.metadata;
 
+import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.metadata.sources.ColumnSpec;
+
+import java.util.List;
 
 /**
  * Service that performs column operations.
@@ -26,6 +30,7 @@ public interface ColumnService {
      * Deletes columns from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these columns.
      * @param columnSpecs Iterable of column specs.
+     * @return List of asynchronous job result objects for deferred background operations.
      */
-    void deleteColumns(Iterable<ColumnSpec> columnSpecs);
+    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteColumns(Iterable<ColumnSpec> columnSpecs);
 }
