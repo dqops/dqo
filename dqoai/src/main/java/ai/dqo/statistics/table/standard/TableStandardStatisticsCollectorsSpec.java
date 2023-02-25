@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.column.strings;
+package ai.dqo.statistics.table.standard;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.profiling.AbstractStatisticsCollectorCategorySpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorCategorySpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -29,39 +29,39 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Category of column level statistics collector that are analysing strings.
+ * Category of standard table level statistics collector (basic profiler).
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStatisticsCollectorsSpec extends AbstractStatisticsCollectorCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStatisticsCollectorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorCategorySpec.FIELDS) {
+public class TableStandardStatisticsCollectorsSpec extends AbstractStatisticsCollectorCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableStandardStatisticsCollectorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorCategorySpec.FIELDS) {
         {
-            put("string_max_length", o -> o.stringMaxLength);
+            put("row_count", o -> o.rowCount);
         }
     };
 
-    @JsonPropertyDescription("Configuration of the profiler that finds the maximum string length.")
+    @JsonPropertyDescription("Configuration of the row count profiler.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnStringsMaxLengthStatisticsCollectorSpec stringMaxLength = new ColumnStringsMaxLengthStatisticsCollectorSpec();
+    private TableStandardRowCountStatisticsCollectorSpec rowCount = new TableStandardRowCountStatisticsCollectorSpec();
 
     /**
-     * Returns the profiler configuration that finds the length of the longest string.
-     * @return Profiler for the max length.
+     * Returns the row count profiler specification.
+     * @return Row count profiler.
      */
-    public ColumnStringsMaxLengthStatisticsCollectorSpec getStringMaxLength() {
-        return stringMaxLength;
+    public TableStandardRowCountStatisticsCollectorSpec getRowCount() {
+        return rowCount;
     }
 
     /**
-     * Sets a reference to a max string length profiler.
-     * @param stringMaxLength Max string length profiler.
+     * Sets a reference to a row count profiler.
+     * @param rowCount Row count profiler.
      */
-    public void setStringMaxLength(ColumnStringsMaxLengthStatisticsCollectorSpec stringMaxLength) {
-        this.setDirtyIf(!Objects.equals(this.stringMaxLength, stringMaxLength));
-        this.stringMaxLength = stringMaxLength;
-        this.propagateHierarchyIdToField(stringMaxLength, "string_max_length");
+    public void setRowCount(TableStandardRowCountStatisticsCollectorSpec rowCount) {
+        this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
+        this.rowCount = rowCount;
+        this.propagateHierarchyIdToField(rowCount, "row_count");
     }
 
     /**

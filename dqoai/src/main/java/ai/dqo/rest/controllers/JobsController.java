@@ -55,6 +55,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
@@ -281,25 +282,30 @@ public class JobsController {
 
     /**
      * Starts a file synchronization job that will synchronize files to DQO Cloud.
-     * @param synchronizeFolderParameter Delete stored data job parameters.
-     * @return Job summary response with the identity of the started job.
+     * @param synchronizeFolderParameters Delete stored data job parameters.
+     * @return Job summary response with the identity of the started jobs.
      */
     @PostMapping("/synchronize")
-    @ApiOperation(value = "synchronizeFolder", notes = "Starts a file synchronization job that will synchronize files from a selected DQO User home folder to the DQO Cloud. " +
-            "The the default synchronization mode is a full synchronization (upload local files, download new files from the cloud).", response = DqoQueueJobId.class)
+    @ApiOperation(value = "synchronizeFolders", notes = "Starts a file synchronization job that will synchronize files from selected DQO User home folders to the DQO Cloud. " +
+            "The the default synchronization mode is a full synchronization (upload local files, download new files from the cloud).", response = DqoQueueJobId[].class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New job that will synchronize a folder was added to the queue", response = DqoQueueJobId.class),
+            @ApiResponse(code = 201, message = "New jobs that will synchronize a folder were added to the queue", response = DqoQueueJobId[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<DqoQueueJobId>> synchronizeFolder(
-            @ApiParam("Synchronize folder job parameters")
-            @RequestBody SynchronizeRootFolderParameters synchronizeFolderParameter) {
-        SynchronizeRootFolderDqoQueueJob synchronizeFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
-        SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(synchronizeFolderParameter,
-                new SilentFileSystemSynchronizationListener());
-        synchronizeFolderJob.setParameters(jobParameters);
-        PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeFolderJob);
-        return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201
+    public ResponseEntity<Flux<DqoQueueJobId>> synchronizeFolders(
+            @ApiParam("Synchronize folder job parameters, each parameter identifies a single folder synchronization job for one folder")
+            @RequestBody SynchronizeRootFolderParameters[] synchronizeFolderParameters) {
+        Flux<DqoQueueJobId> dqoQueueJobIdFlux = Flux.fromArray(synchronizeFolderParameters)
+                .flatMap(synchronizeFolderParameter -> {
+                    SynchronizeRootFolderDqoQueueJob synchronizeFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
+                    SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(synchronizeFolderParameter,
+                            new SilentFileSystemSynchronizationListener());
+                    synchronizeFolderJob.setParameters(jobParameters);
+                    PushJobResult<Void> pushJobResult = this.dqoJobQueue.pushJob(synchronizeFolderJob);
+                    return Mono.just(pushJobResult.getJobId());
+                });
+
+        return new ResponseEntity<>(dqoQueueJobIdFlux, HttpStatus.CREATED); // 201
     }
 }

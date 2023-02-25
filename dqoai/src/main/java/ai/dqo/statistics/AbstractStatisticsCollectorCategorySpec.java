@@ -13,25 +13,24 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling;
+package ai.dqo.statistics;
 
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 /**
- * Root container of statistics collectors (basic profilers) divided by categories.
+ * Group of statistics collectors (basic profiler) for the same data type or category.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractRootStatisticsCollectorsContainerSpec extends AbstractSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<AbstractRootStatisticsCollectorsContainerSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
+public abstract class AbstractStatisticsCollectorCategorySpec extends AbstractSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<AbstractStatisticsCollectorCategorySpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
         }
     };
@@ -46,11 +45,4 @@ public abstract class AbstractRootStatisticsCollectorsContainerSpec extends Abst
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
     }
-
-    /**
-     * Returns the type of the target (table or column).
-     * @return Target type.
-     */
-    @JsonIgnore
-    public abstract StatisticsCollectorTarget getTarget();
 }

@@ -17,7 +17,7 @@ package ai.dqo.metadata.search;
 
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyIdModel;
-import ai.dqo.profiling.StatisticsCollectorTarget;
+import ai.dqo.statistics.StatisticsCollectorTarget;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

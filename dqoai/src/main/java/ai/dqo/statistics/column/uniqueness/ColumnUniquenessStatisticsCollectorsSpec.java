@@ -13,13 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.table;
+package ai.dqo.statistics.column.uniqueness;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
-import ai.dqo.profiling.StatisticsCollectorTarget;
-import ai.dqo.profiling.table.standard.TableStandardStatisticsCollectorsSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorCategorySpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,39 +29,39 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Root profiler container that contains groups of table level statistics collectors (basic profilers).
+ * Category of column level statistics collectors that are analysing uniqueness.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableStatisticsCollectorsRootCategoriesSpec extends AbstractRootStatisticsCollectorsContainerSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableStatisticsCollectorsRootCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootStatisticsCollectorsContainerSpec.FIELDS) {
+public class ColumnUniquenessStatisticsCollectorsSpec extends AbstractStatisticsCollectorCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessStatisticsCollectorsSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorCategorySpec.FIELDS) {
         {
-            put("standard", o -> o.standard);
+            put("unique_values_count", o -> o.uniqueValuesCount);
         }
     };
 
-    @JsonPropertyDescription("Configuration of standard statistics collectors on a table level.")
+    @JsonPropertyDescription("Configuration of the profiler that counts unique (distinct) column values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardStatisticsCollectorsSpec standard = new TableStandardStatisticsCollectorsSpec();
+    private ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec uniqueValuesCount = new ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec();
 
     /**
-     * Returns the configuration of standard profilers on a table level.
-     * @return Configuration of standard profilers.
+     * Returns the profiler configuration that counts unique (distinct) values.
+     * @return Profiler for the distinct count.
      */
-    public TableStandardStatisticsCollectorsSpec getStandard() {
-        return standard;
+    public ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec getUniqueValuesCount() {
+        return uniqueValuesCount;
     }
 
     /**
-     * Sets a configuration of standard profilers on a table level.
-     * @param standard Standard profilers.
+     * Sets a reference to a unique values count profiler.
+     * @param uniqueValuesCount Unique (distinct) values count profiler.
      */
-    public void setStandard(TableStandardStatisticsCollectorsSpec standard) {
-        this.setDirtyIf(!Objects.equals(this.standard, standard));
-        this.standard = standard;
-        this.propagateHierarchyIdToField(standard, "standard");
+    public void setUniqueValuesCount(ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec uniqueValuesCount) {
+        this.setDirtyIf(!Objects.equals(this.uniqueValuesCount, uniqueValuesCount));
+        this.uniqueValuesCount = uniqueValuesCount;
+        this.propagateHierarchyIdToField(uniqueValuesCount, "unique_values_count");
     }
 
     /**
@@ -74,15 +72,5 @@ public class TableStatisticsCollectorsRootCategoriesSpec extends AbstractRootSta
     @Override
     protected ChildHierarchyNodeFieldMap getChildMap() {
         return FIELDS;
-    }
-
-    /**
-     * Returns the type of the target (table or column).
-     *
-     * @return Target type.
-     */
-    @Override
-    public StatisticsCollectorTarget getTarget() {
-        return StatisticsCollectorTarget.table;
     }
 }

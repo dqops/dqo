@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.table.standard;
+package ai.dqo.statistics.column.nulls;
 
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
-import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNotNullsCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,13 +31,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Table row count profiler.
+ * Column not null count profiler.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableStandardRowCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<TableStandardRowCountSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<TableStandardRowCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class ColumnNullsNotNullCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNullsNotNullsCountSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNotNullCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class TableStandardRowCountStatisticsCollectorSpec extends AbstractStatis
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableStandardRowCountSensorParametersSpec parameters = new TableStandardRowCountSensorParametersSpec();
+    private ColumnNullsNotNullsCountSensorParametersSpec parameters = new ColumnNullsNotNullsCountSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public TableStandardRowCountSensorParametersSpec getParameters() {
+    public ColumnNullsNotNullsCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class TableStandardRowCountStatisticsCollectorSpec extends AbstractStatis
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(TableStandardRowCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNullsNotNullsCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -84,6 +84,6 @@ public class TableStandardRowCountStatisticsCollectorSpec extends AbstractStatis
      */
     @Override
     public DataTypeCategory[] getSupportedDataTypes() {
-        return null;
+        return DataTypeCategory.ALL_KNOWN;
     }
 }

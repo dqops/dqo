@@ -34,7 +34,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
-import ai.dqo.profiling.table.TableStatisticsCollectorsRootCategoriesSpec;
+import ai.dqo.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;

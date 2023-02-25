@@ -13,16 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.column;
+package ai.dqo.statistics.column;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
-import ai.dqo.profiling.StatisticsCollectorTarget;
-import ai.dqo.profiling.column.nulls.ColumnNullsStatisticsCollectorsSpec;
-import ai.dqo.profiling.column.range.ColumnRangeStatisticsCollectorsSpec;
-import ai.dqo.profiling.column.strings.ColumnStringsStatisticsCollectorsSpec;
-import ai.dqo.profiling.column.uniqueness.ColumnUniquenessStatisticsCollectorsSpec;
+import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
+import ai.dqo.statistics.StatisticsCollectorTarget;
+import ai.dqo.statistics.column.nulls.ColumnNullsStatisticsCollectorsSpec;
+import ai.dqo.statistics.column.range.ColumnRangeStatisticsCollectorsSpec;
+import ai.dqo.statistics.column.strings.ColumnStringsStatisticsCollectorsSpec;
+import ai.dqo.statistics.column.uniqueness.ColumnUniquenessStatisticsCollectorsSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

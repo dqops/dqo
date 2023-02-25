@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.column.uniqueness;
+package ai.dqo.statistics.column.range;
 
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
-import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueCountSensorParametersSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
+import ai.dqo.sensors.column.range.ColumnRangeMaxValueSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,13 +31,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column profiler that counts distinct column values.
+ * Column profiler that finds the maximum value in the column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnUniquenessUniqueCountSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class ColumnRangeMaxValueStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnRangeMaxValueSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnRangeMaxValueStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec extends Ab
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnUniquenessUniqueCountSensorParametersSpec parameters = new ColumnUniquenessUniqueCountSensorParametersSpec();
+    private ColumnRangeMaxValueSensorParametersSpec parameters = new ColumnRangeMaxValueSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnUniquenessUniqueCountSensorParametersSpec getParameters() {
+    public ColumnRangeMaxValueSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnUniquenessUniqueValuesCountStatisticsCollectorSpec extends Ab
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnUniquenessUniqueCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnRangeMaxValueSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.column.range;
+package ai.dqo.statistics.table.standard;
 
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
-import ai.dqo.sensors.column.range.ColumnRangeMinValueSensorParametersSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
+import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,13 +31,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column profiler that finds the minimum value in the column.
+ * Table row count profiler.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnRangeMinValueStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnRangeMinValueSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnRangeMinValueStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class TableStandardRowCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<TableStandardRowCountSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<TableStandardRowCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class ColumnRangeMinValueStatisticsCollectorSpec extends AbstractStatisti
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnRangeMinValueSensorParametersSpec parameters = new ColumnRangeMinValueSensorParametersSpec();
+    private TableStandardRowCountSensorParametersSpec parameters = new TableStandardRowCountSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnRangeMinValueSensorParametersSpec getParameters() {
+    public TableStandardRowCountSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnRangeMinValueStatisticsCollectorSpec extends AbstractStatisti
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnRangeMinValueSensorParametersSpec parameters) {
+    public void setParameters(TableStandardRowCountSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -84,6 +84,6 @@ public class ColumnRangeMinValueStatisticsCollectorSpec extends AbstractStatisti
      */
     @Override
     public DataTypeCategory[] getSupportedDataTypes() {
-        return DataTypeCategory.COMPARABLE;
+        return null;
     }
 }

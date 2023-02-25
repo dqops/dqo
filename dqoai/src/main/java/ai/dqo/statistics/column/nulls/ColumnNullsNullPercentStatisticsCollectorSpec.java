@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.column.nulls;
+package ai.dqo.statistics.column.nulls;
 
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
-import ai.dqo.sensors.column.nulls.ColumnNullsNotNullsCountSensorParametersSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
+import ai.dqo.sensors.column.nulls.ColumnNullsNullsPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -36,8 +36,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNullsNotNullCountStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNullsNotNullsCountSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNotNullCountStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class ColumnNullsNullPercentStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnNullsNullsPercentSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNullsNullPercentStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class ColumnNullsNotNullCountStatisticsCollectorSpec extends AbstractStat
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnNullsNotNullsCountSensorParametersSpec parameters = new ColumnNullsNotNullsCountSensorParametersSpec();
+    private ColumnNullsNullsPercentSensorParametersSpec parameters = new ColumnNullsNullsPercentSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnNullsNotNullsCountSensorParametersSpec getParameters() {
+    public ColumnNullsNullsPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnNullsNotNullCountStatisticsCollectorSpec extends AbstractStat
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnNullsNotNullsCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnNullsNullsPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");

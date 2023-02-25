@@ -23,7 +23,7 @@ import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 
 /**
  * Factory for {@link SensorExecutionRunParameters} objects. Expands all parameters in the form ${ENV_VAR} or ${sm://secret-name}

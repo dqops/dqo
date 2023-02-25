@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling;
+package ai.dqo.statistics;
 
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.core.secrets.SecretValueProvider;

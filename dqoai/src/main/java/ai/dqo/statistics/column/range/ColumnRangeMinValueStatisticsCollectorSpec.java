@@ -13,13 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.profiling.column.range;
+package ai.dqo.statistics.column.range;
 
 import ai.dqo.connectors.DataTypeCategory;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
-import ai.dqo.sensors.column.range.ColumnRangeMaxValueSensorParametersSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
+import ai.dqo.sensors.column.range.ColumnRangeMinValueSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -31,13 +31,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column profiler that finds the maximum value in the column.
+ * Column profiler that finds the minimum value in the column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnRangeMaxValueStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnRangeMaxValueSensorParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnRangeMaxValueStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
+public class ColumnRangeMinValueStatisticsCollectorSpec extends AbstractStatisticsCollectorSpec<ColumnRangeMinValueSensorParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnRangeMinValueStatisticsCollectorSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractStatisticsCollectorSpec.FIELDS) {
         {
         }
     };
@@ -45,14 +45,14 @@ public class ColumnRangeMaxValueStatisticsCollectorSpec extends AbstractStatisti
     @JsonPropertyDescription("Profiler parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnRangeMaxValueSensorParametersSpec parameters = new ColumnRangeMaxValueSensorParametersSpec();
+    private ColumnRangeMinValueSensorParametersSpec parameters = new ColumnRangeMinValueSensorParametersSpec();
 
     /**
      * Returns the configuration of the sensor that performs profiling.
      * @return Sensor specification.
      */
     @Override
-    public ColumnRangeMaxValueSensorParametersSpec getParameters() {
+    public ColumnRangeMinValueSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -60,7 +60,7 @@ public class ColumnRangeMaxValueStatisticsCollectorSpec extends AbstractStatisti
      * Sets the sensor parameters instance.
      * @param parameters Sensor parameters instance.
      */
-    public void setParameters(ColumnRangeMaxValueSensorParametersSpec parameters) {
+    public void setParameters(ColumnRangeMinValueSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
