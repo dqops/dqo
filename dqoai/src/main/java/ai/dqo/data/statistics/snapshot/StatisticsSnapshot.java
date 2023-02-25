@@ -16,7 +16,7 @@
 package ai.dqo.data.statistics.snapshot;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.data.statistics.factory.StatisticsColumnNames;
 import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionStorageService;

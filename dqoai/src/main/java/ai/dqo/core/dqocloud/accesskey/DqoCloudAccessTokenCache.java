@@ -15,8 +15,7 @@
  */
 package ai.dqo.core.dqocloud.accesskey;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
-import com.google.auth.oauth2.AccessToken;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 
 /**
  * DQO Cloud access token cache that creates new GCP access tokens when they are about to expire.

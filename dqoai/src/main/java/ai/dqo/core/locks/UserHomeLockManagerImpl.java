@@ -16,7 +16,7 @@
 package ai.dqo.core.locks;
 
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

@@ -22,7 +22,7 @@ import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
-import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTrackerStub;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
@@ -50,7 +50,6 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 
 @SpringBootTest
 public class RuleResultsDeleteServiceImplTests extends BaseTest {

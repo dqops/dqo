@@ -16,7 +16,7 @@
 package ai.dqo.core.jobqueue.monitoring;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
-import ai.dqo.core.filesystem.synchronization.status.CloudSynchronizationFoldersStatusModel;
+import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import ai.dqo.core.jobqueue.DqoJobIdGenerator;
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
 import ai.dqo.core.jobqueue.DqoQueueJobExecutionException;

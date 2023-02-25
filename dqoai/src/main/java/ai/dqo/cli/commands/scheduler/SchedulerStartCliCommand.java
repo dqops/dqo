@@ -18,7 +18,7 @@ package ai.dqo.cli.commands.scheduler;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
-import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import org.springframework.beans.factory.annotation.Autowired;

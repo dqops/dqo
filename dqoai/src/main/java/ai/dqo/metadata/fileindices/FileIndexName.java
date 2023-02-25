@@ -15,7 +15,7 @@
  */
 package ai.dqo.metadata.fileindices;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import com.google.common.base.Enums;
 import com.google.common.base.Optional;
 

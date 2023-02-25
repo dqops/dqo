@@ -16,9 +16,9 @@
 package ai.dqo.data.storage;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
-import ai.dqo.core.filesystem.synchronization.status.FolderSynchronizationStatus;
-import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTracker;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.status.FolderSynchronizationStatus;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.core.filesystem.virtual.FolderName;
 import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;

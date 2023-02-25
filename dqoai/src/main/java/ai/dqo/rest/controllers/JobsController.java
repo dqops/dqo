@@ -16,12 +16,11 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
-import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
-import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJobParameters;
-import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderParameters;
-import ai.dqo.core.filesystem.synchronization.listeners.SilentFileSystemSynchronizationListener;
-import ai.dqo.core.filesystem.synchronization.status.CloudSynchronizationFoldersStatusModel;
-import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTracker;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJobParameters;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderParameters;
+import ai.dqo.core.synchronization.listeners.SilentFileSystemSynchronizationListener;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.DqoQueueJobId;

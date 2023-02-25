@@ -16,7 +16,7 @@
 package ai.dqo.core.jobqueue;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
-import ai.dqo.core.filesystem.synchronization.FileSynchronizationChangeDetectionService;
+import ai.dqo.core.synchronization.status.FileSynchronizationChangeDetectionService;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;

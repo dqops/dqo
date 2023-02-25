@@ -15,9 +15,9 @@
  */
 package ai.dqo.cli.commands.cloud.sync.impl;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
-import ai.dqo.core.filesystem.synchronization.FileSynchronizationDirection;
-import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 
 /**
  * Service called by "cloud sync" CLI commands to synchronize the data with DQO Cloud.

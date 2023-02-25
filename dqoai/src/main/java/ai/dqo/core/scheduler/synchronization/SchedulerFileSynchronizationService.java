@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.scheduler.synchronization;
 
-import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 
 /**
  * File synchronization service used by the job scheduler to synchronize the data (after checks were executed) and metadata.

@@ -16,7 +16,7 @@
 package ai.dqo.core.dqocloud.buckets;
 
 import ai.dqo.core.dqocloud.accesskey.*;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import com.google.auth.oauth2.OAuth2CredentialsWithRefresh;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;

@@ -15,11 +15,11 @@
  */
 package ai.dqo.metadata.storage.localfiles.userhome;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.localfiles.LocalFileStorageServiceImpl;
-import ai.dqo.core.filesystem.synchronization.status.FolderSynchronizationStatus;
-import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTracker;
+import ai.dqo.core.synchronization.status.FolderSynchronizationStatus;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;

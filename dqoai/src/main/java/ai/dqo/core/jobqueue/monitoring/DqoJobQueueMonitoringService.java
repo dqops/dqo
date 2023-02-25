@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.jobqueue.monitoring;
 
-import ai.dqo.core.filesystem.synchronization.status.CloudSynchronizationFoldersStatusModel;
+import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
 import reactor.core.publisher.Mono;
 

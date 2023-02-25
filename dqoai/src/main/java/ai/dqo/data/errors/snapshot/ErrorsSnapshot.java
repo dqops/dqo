@@ -1,7 +1,7 @@
 package ai.dqo.data.errors.snapshot;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionStorageService;

@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.jobqueue;
 
-import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;

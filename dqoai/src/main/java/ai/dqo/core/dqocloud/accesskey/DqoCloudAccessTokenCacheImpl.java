@@ -16,7 +16,7 @@
 package ai.dqo.core.dqocloud.accesskey;
 
 import ai.dqo.cloud.rest.model.TenantAccessTokenModel;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import com.google.auth.oauth2.AccessToken;
 import com.google.common.base.Supplier;
 import com.google.common.base.Suppliers;

@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.filesystem.localfiles;
 
-import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTrackerStub;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;

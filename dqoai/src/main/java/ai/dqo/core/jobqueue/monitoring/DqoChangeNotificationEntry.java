@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.jobqueue.monitoring;
 
-import ai.dqo.core.filesystem.synchronization.status.CloudSynchronizationFoldersStatusModel;
+import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 
 /**
  * Object published on the notification sink that should be published to the notification listeners. It is added to the change queue.

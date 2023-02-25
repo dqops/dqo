@@ -19,7 +19,7 @@ import ai.dqo.cloud.rest.api.AccessTokenIssueApi;
 import ai.dqo.cloud.rest.handler.ApiClient;
 import ai.dqo.cloud.rest.model.TenantAccessTokenModel;
 import ai.dqo.core.dqocloud.client.DqoCloudApiClientFactory;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import com.google.auth.oauth2.AccessToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

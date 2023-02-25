@@ -20,7 +20,7 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
-import ai.dqo.core.filesystem.synchronization.status.SynchronizationStatusTrackerStub;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
