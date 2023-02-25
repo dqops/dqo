@@ -492,7 +492,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
-            setColumnName("col2");
+            setColumnNames(new ArrayList<>(){{add("col2");}});
             setSensorName("s2");
         }};
 

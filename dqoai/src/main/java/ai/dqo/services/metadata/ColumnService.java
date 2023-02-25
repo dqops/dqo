@@ -27,6 +27,14 @@ import java.util.List;
  */
 public interface ColumnService {
     /**
+     * Deletes column from metadata and flushes user context.
+     * Cleans all stored data from .data folder related to this column.
+     * @param columnSpec Column spec.
+     * @return Asynchronous job result object for deferred background operations.
+     */
+    PushJobResult<DeleteStoredDataQueueJobResult> deleteColumn(ColumnSpec columnSpec);
+
+    /**
      * Deletes columns from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these columns.
      * @param columnSpecs Iterable of column specs.

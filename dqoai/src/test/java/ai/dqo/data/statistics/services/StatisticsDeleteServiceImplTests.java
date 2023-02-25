@@ -49,6 +49,7 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @SpringBootTest
 public class StatisticsDeleteServiceImplTests extends BaseTest {
@@ -471,7 +472,7 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
-            setColumnName("col2");
+            setColumnNames(new ArrayList<>(){{add("col2");}});
             setDataStreamName("ds1");
             setSensorName("s2");
         }};

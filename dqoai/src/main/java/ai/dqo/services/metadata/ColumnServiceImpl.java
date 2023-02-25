@@ -32,10 +32,7 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -52,6 +49,21 @@ public class ColumnServiceImpl implements ColumnService {
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
+    }
+
+    /**
+     * Deletes column from metadata and flushes user context.
+     * Cleans all stored data from .data folder related to this column.
+     *
+     * @param columnSpec Column spec.
+     * @return Asynchronous job result object for deferred background operations.
+     */
+    @Override
+    public PushJobResult<DeleteStoredDataQueueJobResult> deleteColumn(ColumnSpec columnSpec) {
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteColumns(
+                new LinkedList<>(){{add(columnSpec);}}
+        );
+        return jobResultList.get(0);
     }
 
     /**
@@ -75,13 +87,12 @@ public class ColumnServiceImpl implements ColumnService {
 
         List<DeleteStoredDataQueueJobParameters> deleteStoredDataParameters = this.getDeleteStoredDataQueueJobParameters(userHome, columnSpecs);
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> results = deleteStoredDataParameters.stream()
+        return deleteStoredDataParameters.stream()
                 .map(param -> {
                     DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
                     deleteStoredDataJob.setDeletionParameters(param);
                     return this.dqoJobQueue.pushJob(deleteStoredDataJob);
                 }).collect(Collectors.toList());
-        return results;
     }
 
     /**

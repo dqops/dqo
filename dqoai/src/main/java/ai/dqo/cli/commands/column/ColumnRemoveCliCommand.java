@@ -123,7 +123,6 @@ public class ColumnRemoveCliCommand extends BaseCommand implements ICommand, ICo
 	 */
 	@Override
 	public Integer call() throws Exception {
-
 		CliOperationStatus cliOperationStatus = columnCliService.removeColumn(connectionName, fullTableName, columnName);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;

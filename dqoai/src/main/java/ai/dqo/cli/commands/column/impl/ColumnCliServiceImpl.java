@@ -20,6 +20,8 @@ import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalTableWritter;
+import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.metadata.search.ColumnSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
 import ai.dqo.metadata.sources.ColumnSpec;
@@ -39,6 +41,8 @@ import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -210,8 +214,23 @@ public class ColumnCliServiceImpl implements ColumnCliService {
 			return cliOperationStatus;
 		}
 
-		this.columnService.deleteColumns(columnSpecs);
-		// TODO: Urgent! Wait for jobs to finish.
+		List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.columnService.deleteColumns(columnSpecs);
+
+		try {
+			for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
+				job.getFuture().get();
+			}
+		} catch (InterruptedException e) {
+			cliOperationStatus.setSuccessMessage(String.format("Removed %d columns.", columnSpecs.size())
+					+ " Deleting results for these columns has been cancelled."
+			);
+			return cliOperationStatus;
+		} catch (ExecutionException e) {
+			cliOperationStatus.setSuccessMessage(String.format("Removed %d columns.", columnSpecs.size())
+					+ " An exception occurred while deleting results for these columns."
+			);
+			return cliOperationStatus;
+		}
 
 		cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d columns.", columnSpecs.size()));
 		return cliOperationStatus;
