@@ -15,9 +15,8 @@
  */
 package ai.dqo.snowflake.sensors.column.strings;
 
-import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthInRangePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthBelowMinLengthCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +28,8 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
-    private ColumnStringsStringLengthInRangePercentSensorParametersSpec sut;
+public class SnowflakeColumnStringsStringLengthBelowMinLengthCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringLengthInRangePercentCheckSpec checkSpec;
+    private ColumnStringLengthBelowMinLengthCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,15 +49,14 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_min_length_test, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnStringsStringLengthInRangePercentSensorParametersSpec();
-        this.checkSpec = new ColumnStringLengthInRangePercentCheckSpec();
+        this.sut = new ColumnStringsStringLengthBelowMinLengthCountSensorParametersSpec();
+        this.checkSpec = new ColumnStringLengthBelowMinLengthCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
         this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
                 sampleTableMetadata, "text", this.checkSpec);
@@ -67,13 +66,12 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
         this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily);
@@ -83,13 +81,12 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
         this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly);
@@ -99,13 +96,12 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily,"date");
@@ -115,13 +111,12 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float)13.333, (float) resultTable.column(0).get(0), 0.001 );
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly,"date");
@@ -131,6 +126,6 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float)13.333, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 }
