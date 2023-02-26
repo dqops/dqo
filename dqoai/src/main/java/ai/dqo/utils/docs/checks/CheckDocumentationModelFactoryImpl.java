@@ -170,6 +170,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
         List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, TABLE_CATEGORY_HELP, tableSpec, CheckTarget.table);
 
+        resultList.sort(Comparator.comparing(CheckCategoryDocumentationModel::getCategoryName));
+
         return resultList;
     }
 
@@ -189,6 +191,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarColumnChecks(tableSpec, columnSpec);
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
         List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, COLUMN_CATEGORY_HELP, tableSpec, CheckTarget.column);
+
+        resultList.sort(Comparator.comparing(CheckCategoryDocumentationModel::getCategoryName));
 
         return resultList;
     }
@@ -328,7 +332,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         checkDocumentationModel.setCheckSample(createCheckSample(yamlSample, similarCheckModel, checkDocumentationModel));
 
-        checkDocumentationModel.setProviderTemplates(generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation));
+        List<CheckProviderRenderedSqlDocumentationModel> providerSamples = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
+        providerSamples.sort(Comparator.comparing(CheckProviderRenderedSqlDocumentationModel::getProviderType));
+        checkDocumentationModel.setProviderTemplates(providerSamples);
 
         trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key"));
         trimmedTableSpec.getColumns().put("state", createColumnWithLabel("column used as the second grouping key"));
@@ -342,7 +348,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         checkDocumentationModel.setSampleYamlWithDataStreams(yamlSampleWithDataStreams);
         createMarksForDataStreams(checkDocumentationModel, yamlSampleWithDataStreams);
 
-        checkDocumentationModel.setProviderTemplatesDataStreams(generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation));
+        List<CheckProviderRenderedSqlDocumentationModel> providerSamplesDataStream = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
+        providerSamplesDataStream.sort(Comparator.comparing(CheckProviderRenderedSqlDocumentationModel::getProviderType));
+        checkDocumentationModel.setProviderTemplatesDataStreams(providerSamplesDataStream);
 
 
         // TODO: generate sample CLI commands
