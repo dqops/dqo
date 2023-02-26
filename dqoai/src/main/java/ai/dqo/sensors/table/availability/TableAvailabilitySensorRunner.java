@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.execution.runners;
+package ai.dqo.sensors.table.availability;
 
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.execution.ExecutionContext;
@@ -23,7 +23,6 @@ import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.progress.SensorExecutionProgressListener;
 import ai.dqo.execution.sensors.runners.AbstractSensorRunner;
 import ai.dqo.execution.sqltemplates.JinjaSqlTemplateSensorRunner;
-import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,15 +36,15 @@ import java.time.LocalDateTime;
  */
 @Component
 @Slf4j
-public class AvailabilitySensorRunner extends AbstractSensorRunner {
+public class TableAvailabilitySensorRunner extends AbstractSensorRunner {
     /**
      * Sensor runner class name.
      */
-    public static final String CLASS_NAME = AvailabilitySensorRunner.class.getName();
+    public static final String CLASS_NAME = TableAvailabilitySensorRunner.class.getName();
     private JinjaSqlTemplateSensorRunner jinjaSqlTemplateSensorRunner;
 
     @Autowired
-    public AvailabilitySensorRunner(JinjaSqlTemplateSensorRunner jinjaSqlTemplateSensorRunner){
+    public TableAvailabilitySensorRunner(JinjaSqlTemplateSensorRunner jinjaSqlTemplateSensorRunner){
         this.jinjaSqlTemplateSensorRunner = jinjaSqlTemplateSensorRunner;
     }
 

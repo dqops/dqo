@@ -765,4 +765,16 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     public TreeNodeTraversalResult accept(RecurringSchedulesSpec recurringSchedulesSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
+
+    /**
+     * Accepts a configuration of incremental partition checks..
+     *
+     * @param partitionIncrementalTimeWindowSpec Configuration of incremental partition checks.
+     * @param parameter                          Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(PartitionIncrementalTimeWindowSpec partitionIncrementalTimeWindowSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
 }

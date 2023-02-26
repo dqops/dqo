@@ -469,6 +469,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                         null,
                         checkRootContainer.getCheckType(),
                         timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
+                        null,
                         tableSpec.getDataStreams().getFirstDataStreamMapping(),
                         checkSpec.getParameters(),
                         providerDialectSettings

@@ -73,6 +73,7 @@ public class RunChecksQueueJob extends DqoQueueJob<CheckExecutionSummary> {
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecks(
                 executionContext,
                 this.parameters.getCheckSearchFilters(),
+                this.parameters.getTimeWindowFilterParameters(),
                 this.parameters.getProgressListener(),
                 this.parameters.isDummySensorExecution());
         return checkExecutionSummary;

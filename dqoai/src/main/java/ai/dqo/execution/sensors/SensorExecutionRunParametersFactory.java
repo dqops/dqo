@@ -38,6 +38,8 @@ public interface SensorExecutionRunParametersFactory {
      * @param check Check specification.
      * @param checkType Check type (adhoc, checkpoint, partitioned).
      * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (ad-hoc, checkpoints, partitioned).
+     * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
+     *                             When not provided, the defaults are copied from the table's incremental time window configuration for a matching partition time scale.
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
@@ -47,6 +49,7 @@ public interface SensorExecutionRunParametersFactory {
                                                         AbstractCheckSpec<?,?,?,?> check,
                                                         CheckType checkType,
                                                         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
+                                                        TimeWindowFilterParameters userTimeWindowFilters,
                                                         ProviderDialectSettings dialectSettings);
 
     /**
@@ -56,13 +59,16 @@ public interface SensorExecutionRunParametersFactory {
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
      * @param statisticsCollectorSpec Statistics collector specification.
+     * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
+     * @param statisticsDataScope Data scope (whole table or per data stream) for collecting statistics.
      * @param dialectSettings Dialect settings.
      * @return Sensor execution run parameters.
      */
-    SensorExecutionRunParameters createSensorParameters(ConnectionSpec connection,
-                                                        TableSpec table,
-                                                        ColumnSpec column,
-                                                        AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
-                                                        StatisticsDataScope statisticsDataScope,
-                                                        ProviderDialectSettings dialectSettings);
+    SensorExecutionRunParameters createStatisticsSensorParameters(ConnectionSpec connection,
+                                                                  TableSpec table,
+                                                                  ColumnSpec column,
+                                                                  AbstractStatisticsCollectorSpec<?> statisticsCollectorSpec,
+                                                                  TimeWindowFilterParameters userTimeWindowFilters,
+                                                                  StatisticsDataScope statisticsDataScope,
+                                                                  ProviderDialectSettings dialectSettings);
 }

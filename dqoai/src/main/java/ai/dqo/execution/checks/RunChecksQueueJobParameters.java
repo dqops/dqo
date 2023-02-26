@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks;
 
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -26,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class RunChecksQueueJobParameters {
     private CheckSearchFilters checkSearchFilters;
+    private TimeWindowFilterParameters timeWindowFilterParameters;
     @JsonIgnore
     private CheckExecutionProgressListener progressListener;
     private boolean dummySensorExecution;
@@ -33,10 +35,12 @@ public class RunChecksQueueJobParameters {
     /**
      * Creates a check run parameters.
      * @param checkSearchFilters Check search filters.
+     * @param timeWindowFilterParameters Optional user provided time window filters, used to restrict the time range that is analyzed.
      * @param progressListener Progress listener to receive events during the check execution.
      * @param dummySensorExecution True when it is a dummy run, only for showing rendered sensor queries.
      */
     public RunChecksQueueJobParameters(CheckSearchFilters checkSearchFilters,
+                                       TimeWindowFilterParameters timeWindowFilterParameters,
                                        CheckExecutionProgressListener progressListener,
                                        boolean dummySensorExecution) {
         this.checkSearchFilters = checkSearchFilters;
@@ -50,6 +54,14 @@ public class RunChecksQueueJobParameters {
      */
     public CheckSearchFilters getCheckSearchFilters() {
         return checkSearchFilters;
+    }
+
+    /**
+     * Returns an optional filter that restricts the time period that is analyzed.
+     * @return Optional time window filter.
+     */
+    public TimeWindowFilterParameters getTimeWindowFilterParameters() {
+        return timeWindowFilterParameters;
     }
 
     /**

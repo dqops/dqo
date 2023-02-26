@@ -124,6 +124,7 @@ public class JobsController {
                 CheckRunReportingMode.silent, false);
         RunChecksQueueJobParameters runChecksQueueJobParameters = new RunChecksQueueJobParameters(
                 checkSearchFilters,
+                null,
                 progressListener,
                 false);
         runChecksJob.setParameters(runChecksQueueJobParameters);

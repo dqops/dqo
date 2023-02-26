@@ -48,7 +48,7 @@ public class SensorExecutionRunParametersObjectMother {
      */
     public static SensorExecutionRunParameters createEmptyBigQuery() {
         return new SensorExecutionRunParameters(BigQueryConnectionSpecObjectMother.create(),
-                null, null, null, null, null, null, null, null, null);
+                null, null, null, null, null, null, null, null, null, null);
     }
 
     /**
@@ -64,14 +64,15 @@ public class SensorExecutionRunParametersObjectMother {
      */
     public static SensorExecutionRunParameters createForTableAndCheck(
             UserHome userHome, String connectionName, String schemaName, String tableName,
-            AbstractCheckSpec checkSpec, CheckType checkType, TimeSeriesConfigurationSpec timeSeriesConfigurationSpec) {
+            AbstractCheckSpec<?,?,?,?> checkSpec, CheckType checkType,
+            TimeSeriesConfigurationSpec timeSeriesConfigurationSpec) {
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
         TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(new PhysicalTableName(schemaName, tableName), true);
         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionWrapper.getSpec().getProviderType());
         SensorExecutionRunParametersFactory factory = getFactory();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(
-                connectionWrapper.getSpec(), tableWrapper.getSpec(), null, checkSpec, checkType, timeSeriesConfigurationSpec, dialectSettings);
+                connectionWrapper.getSpec(), tableWrapper.getSpec(), null, checkSpec, checkType, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -83,7 +84,7 @@ public class SensorExecutionRunParametersObjectMother {
      */
      public static SensorExecutionRunParameters createForTableForAdHocCheck(
              SampleTableMetadata sampleTableMetadata,
-             AbstractCheckSpec checkSpec) {
+             AbstractCheckSpec<?,?,?,?> checkSpec) {
          ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
          ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
          TableSpec tableSpec = sampleTableMetadata.getTableSpec();
@@ -91,7 +92,7 @@ public class SensorExecutionRunParametersObjectMother {
          TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc();
 
          SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, CheckType.ADHOC, timeSeriesConfigurationSpec, dialectSettings);
+                checkSpec, CheckType.ADHOC, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -104,7 +105,7 @@ public class SensorExecutionRunParametersObjectMother {
      */
     public static SensorExecutionRunParameters createForTableForCheckpointCheck(
             SampleTableMetadata sampleTableMetadata,
-            AbstractCheckSpec checkSpec,
+            AbstractCheckSpec<?,?,?,?> checkSpec,
             CheckTimeScale timeScale) {
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
@@ -114,7 +115,7 @@ public class SensorExecutionRunParametersObjectMother {
                 TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForCheckpoint(timeScale);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, CheckType.CHECKPOINT, timeSeriesConfigurationSpec, dialectSettings);
+                checkSpec, CheckType.CHECKPOINT, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -128,7 +129,7 @@ public class SensorExecutionRunParametersObjectMother {
      */
     public static SensorExecutionRunParameters createForTableForPartitionedCheck(
             SampleTableMetadata sampleTableMetadata,
-            AbstractCheckSpec checkSpec,
+            AbstractCheckSpec<?,?,?,?> checkSpec,
             CheckTimeScale timeScale,
             String datePartitioningColumn) {
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
@@ -139,7 +140,7 @@ public class SensorExecutionRunParametersObjectMother {
                 TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(timeScale, datePartitioningColumn);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, dialectSettings);
+                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -157,7 +158,9 @@ public class SensorExecutionRunParametersObjectMother {
      */
     public static SensorExecutionRunParameters createForTableColumnAndCheck(
             UserHome userHome, String connectionName, String schemaName, String tableName, String columnName,
-            AbstractCheckSpec checkSpec, CheckType checkType, TimeSeriesConfigurationSpec timeSeriesConfigurationSpec) {
+            AbstractCheckSpec<?,?,?,?> checkSpec,
+            CheckType checkType,
+            TimeSeriesConfigurationSpec timeSeriesConfigurationSpec) {
         ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
         TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(new PhysicalTableName(schemaName, tableName), true);
         ConnectionSpec connectionSpec = connectionWrapper.getSpec();
@@ -167,7 +170,7 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, checkType, timeSeriesConfigurationSpec, dialectSettings);
+                checkSpec, checkType, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -181,7 +184,7 @@ public class SensorExecutionRunParametersObjectMother {
     public static SensorExecutionRunParameters createForTableColumnForAdHocCheck(
             SampleTableMetadata sampleTableMetadata,
             String columnName,
-            AbstractCheckSpec checkSpec) {
+            AbstractCheckSpec<?,?,?,?> checkSpec) {
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
@@ -190,7 +193,7 @@ public class SensorExecutionRunParametersObjectMother {
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, CheckType.ADHOC, timeSeriesConfigurationSpec, dialectSettings);
+                checkSpec, CheckType.ADHOC, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -205,7 +208,7 @@ public class SensorExecutionRunParametersObjectMother {
     public static SensorExecutionRunParameters createForTableColumnForCheckpointCheck(
             SampleTableMetadata sampleTableMetadata,
             String columnName,
-            AbstractCheckSpec checkSpec,
+            AbstractCheckSpec<?,?,?,?> checkSpec,
             CheckTimeScale checkTimeScale) {
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
         ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
@@ -215,7 +218,7 @@ public class SensorExecutionRunParametersObjectMother {
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForCheckpoint(checkTimeScale);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, CheckType.CHECKPOINT, timeSeriesConfigurationSpec, dialectSettings);
+                checkSpec, CheckType.CHECKPOINT, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -231,7 +234,7 @@ public class SensorExecutionRunParametersObjectMother {
     public static SensorExecutionRunParameters createForTableColumnForPartitionedCheck(
             SampleTableMetadata sampleTableMetadata,
             String columnName,
-            AbstractCheckSpec checkSpec,
+            AbstractCheckSpec<?,?,?,?> checkSpec,
             CheckTimeScale checkTimeScale,
             String timePartitioningColumn) {
         ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
@@ -243,7 +246,7 @@ public class SensorExecutionRunParametersObjectMother {
                 checkTimeScale, timePartitioningColumn);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, dialectSettings);
+                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 }

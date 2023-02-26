@@ -36,6 +36,7 @@ import ai.dqo.execution.rules.DataQualityRuleRunnerObjectMother;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -93,6 +94,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 null,
                 CheckType.ADHOC,
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
+                new TimeWindowFilterParameters(),
                 new DataStreamMappingSpec(),
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));

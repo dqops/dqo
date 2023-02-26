@@ -530,4 +530,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(RecurringSchedulesSpec recurringSchedulesSpec, P parameter);
+
+    /**
+     * Accepts a configuration of incremental partition checks..
+     * @param partitionIncrementalTimeWindowSpec Configuration of incremental partition checks.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(PartitionIncrementalTimeWindowSpec partitionIncrementalTimeWindowSpec, P parameter);
 }

@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.services.check.run.CheckService;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
@@ -361,7 +362,8 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setLabels(this.labels);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
-        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, progressListener, this.dummyRun);
+        TimeWindowFilterParameters timeWindowFilterParameters = null; // TODO: configure the time window, using parameters
+        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, timeWindowFilterParameters, progressListener, this.dummyRun);
 
         if (this.mode != CheckRunReportingMode.silent) {
             TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());
