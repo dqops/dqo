@@ -48,7 +48,7 @@ public class ColumnStringsStringMatchNameRegexPercentSensorParametersSpecBigQuer
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnStringsStringMatchNameRegexPercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.full_name_test, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -73,7 +73,8 @@ public class ColumnStringsStringMatchNameRegexPercentSensorParametersSpecBigQuer
     }
 
     private String getSubstitutedFilter(String tableName) {
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test

@@ -46,7 +46,7 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
     @BeforeEach
     void setUp() {
         this.sut = new ColumnPiiValidIp4AddressPercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -71,7 +71,8 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
     }
 
     private String getSubstitutedFilter(String tableName) {
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test

@@ -123,7 +123,9 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
       return;
     }
     await onUpdate();
-    JobApiClient.runChecks(check?.run_checks_job_template);
+    JobApiClient.runChecks({
+      checkSearchFilters: check?.run_checks_job_template
+    });
   };
 
   const isDisabled = !check?.configured || check?.disabled;

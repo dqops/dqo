@@ -49,7 +49,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnStringsStringMatchDateRegexPercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -90,7 +90,8 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
     }
 
     private String getSubstitutedFilter(String tableName) {
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test

@@ -20,32 +20,48 @@ import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonPropertyDescription;
+import io.swagger.annotations.ApiModel;
 
 /**
  * Parameters object for the run checks job.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
+@ApiModel(value = "RunChecksQueueJobParameters", description = "Run checks configuration, specifies the target checks that should be executed and an optional time window.")
 public class RunChecksQueueJobParameters {
+    @JsonPropertyDescription("Target data quality checks filter")
     private CheckSearchFilters checkSearchFilters;
-    private TimeWindowFilterParameters timeWindowFilterParameters;
+
+    @JsonPropertyDescription("Optional time window filter, configures the time range that is analyzed or the number of recent days/months to analyze for day or month partitioned data.")
+    private TimeWindowFilterParameters timeWindowFilter;
+
     @JsonIgnore
     private CheckExecutionProgressListener progressListener;
-    private boolean dummySensorExecution;
+
+    @JsonPropertyDescription("Set the value to true when the data quality checks should be executed in a dummy mode (without running checks on the target systems and storing the results). Only the jinja2 sensors will be rendered.")
+    private boolean dummyExecution;
+
+    /**
+     * Default constructor.
+     */
+    public RunChecksQueueJobParameters() {
+    }
 
     /**
      * Creates a check run parameters.
      * @param checkSearchFilters Check search filters.
-     * @param timeWindowFilterParameters Optional user provided time window filters, used to restrict the time range that is analyzed.
+     * @param timeWindowFilter Optional user provided time window filters, used to restrict the time range that is analyzed.
      * @param progressListener Progress listener to receive events during the check execution.
-     * @param dummySensorExecution True when it is a dummy run, only for showing rendered sensor queries.
+     * @param dummyExecution True when it is a dummy run, only for showing rendered sensor queries.
      */
     public RunChecksQueueJobParameters(CheckSearchFilters checkSearchFilters,
-                                       TimeWindowFilterParameters timeWindowFilterParameters,
+                                       TimeWindowFilterParameters timeWindowFilter,
                                        CheckExecutionProgressListener progressListener,
-                                       boolean dummySensorExecution) {
+                                       boolean dummyExecution) {
         this.checkSearchFilters = checkSearchFilters;
+        this.timeWindowFilter = timeWindowFilter;
         this.progressListener = progressListener;
-        this.dummySensorExecution = dummySensorExecution;
+        this.dummyExecution = dummyExecution;
     }
 
     /**
@@ -57,11 +73,27 @@ public class RunChecksQueueJobParameters {
     }
 
     /**
+     * Sets the check search filters.
+     * @param checkSearchFilters Check search filters.
+     */
+    public void setCheckSearchFilters(CheckSearchFilters checkSearchFilters) {
+        this.checkSearchFilters = checkSearchFilters;
+    }
+
+    /**
      * Returns an optional filter that restricts the time period that is analyzed.
      * @return Optional time window filter.
      */
-    public TimeWindowFilterParameters getTimeWindowFilterParameters() {
-        return timeWindowFilterParameters;
+    public TimeWindowFilterParameters getTimeWindowFilter() {
+        return timeWindowFilter;
+    }
+
+    /**
+     * Sets the user configuration of a time window.
+     * @param timeWindowFilter Time window filter.
+     */
+    public void setTimeWindowFilter(TimeWindowFilterParameters timeWindowFilter) {
+        this.timeWindowFilter = timeWindowFilter;
     }
 
     /**
@@ -73,10 +105,26 @@ public class RunChecksQueueJobParameters {
     }
 
     /**
+     * Sets a reference to a progress listener that will be used during the check execution.
+     * @param progressListener Progress listener.
+     */
+    public void setProgressListener(CheckExecutionProgressListener progressListener) {
+        this.progressListener = progressListener;
+    }
+
+    /**
      * Returns true if it should be just a dummy run without actually running any queries.
      * @return true when it is a dummy run.
      */
-    public boolean isDummySensorExecution() {
-        return dummySensorExecution;
+    public boolean isDummyExecution() {
+        return dummyExecution;
+    }
+
+    /**
+     * Sets the flag to run the checks in a dummy mode (just simulation).
+     * @param dummyExecution Run the checks in a dummy mode.
+     */
+    public void setDummyExecution(boolean dummyExecution) {
+        this.dummyExecution = dummyExecution;
     }
 }

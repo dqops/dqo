@@ -98,7 +98,7 @@ public class TableSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String stage;
 
-    @JsonPropertyDescription("SQL WHERE clause added to the sensor queries.")
+    @JsonPropertyDescription("SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String filter;
 

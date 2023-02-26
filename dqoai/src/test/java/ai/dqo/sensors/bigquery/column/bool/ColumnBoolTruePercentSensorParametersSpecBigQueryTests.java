@@ -46,7 +46,7 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnBoolTruePercentSensorParametersSpec();
-        this.sut.setFilter("LENGTH({table}.`length_string`) > 4");
+        this.sut.setFilter("LENGTH({alias}.`length_string`) > 4");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -71,8 +71,8 @@ public class ColumnBoolTruePercentSensorParametersSpecBigQueryTests extends Base
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test

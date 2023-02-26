@@ -52,7 +52,7 @@ public class ColumnNumericNumbersInSetPercentSensorParametersSpecBigQueryTests e
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnNumericNumbersInSetPercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
         ColumnNumericNumbersInSetPercentSensorParametersSpec altSut = (ColumnNumericNumbersInSetPercentSensorParametersSpec) this.sut.deepClone();
         this.sut.setValues(new ArrayList<>(){{
             add(12345L); add(123456L); add(1234567L);
@@ -88,8 +88,8 @@ public class ColumnNumericNumbersInSetPercentSensorParametersSpecBigQueryTests e
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test

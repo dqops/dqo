@@ -132,6 +132,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     @CommandLine.Option(names = {"-f", "--fail-at"}, description = "Lowest data quality issue severity level (warning, error, fatal) that will cause the command to return with an error code. Use 'none' to return always a success error code.", defaultValue = "error")
     private CheckRunCommandFailThreshold failAt;
 
+    @CommandLine.Mixin
+    private TimeWindowFilterParameters timeWindowFilterParameters;
+
     /**
      * Gets the connection name.
      * @return Connection name.
@@ -341,6 +344,22 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
+     * Returns the time window filter parameters.
+     * @return Time window filter parameters.
+     */
+    public TimeWindowFilterParameters getTimeWindowFilterParameters() {
+        return timeWindowFilterParameters;
+    }
+
+    /**
+     * Sets the time window filter parameters.
+     * @param timeWindowFilterParameters Time window filter parameters.
+     */
+    public void setTimeWindowFilterParameters(TimeWindowFilterParameters timeWindowFilterParameters) {
+        this.timeWindowFilterParameters = timeWindowFilterParameters;
+    }
+
+    /**
      * Computes a result, or throws an exception if unable to do so.
      *
      * @return computed result
@@ -362,8 +381,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setLabels(this.labels);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
-        TimeWindowFilterParameters timeWindowFilterParameters = null; // TODO: configure the time window, using parameters
-        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, timeWindowFilterParameters, progressListener, this.dummyRun);
+        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, progressListener, this.dummyRun);
 
         if (this.mode != CheckRunReportingMode.silent) {
             TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());

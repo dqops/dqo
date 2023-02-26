@@ -46,8 +46,8 @@ public class ColumnSqlConditionPassedPercentSensorParametersSpecBigQueryTests ex
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnSqlConditionPassedPercentSensorParametersSpec();
-        this.sut.setSqlCondition("{table}.{column} > 10000");
-        this.sut.setFilter("{table}.date > DATE(2022, 2, 4)");
+        this.sut.setSqlCondition("{column} > 10000");
+        this.sut.setFilter("{alias}.date > DATE(2022, 2, 4)");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -68,8 +68,8 @@ public class ColumnSqlConditionPassedPercentSensorParametersSpecBigQueryTests ex
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     private String getSubstitutedSqlCondition(SensorExecutionRunParameters runParameters, String tableName, String columnName) {
@@ -82,7 +82,8 @@ public class ColumnSqlConditionPassedPercentSensorParametersSpecBigQueryTests ex
         String fullColumnName = String.format("`%s`", columnName);
 
         return this.checkSpec.getParameters().getSqlCondition()
-                .replace("{table}", fullTableName).replace("{column}", fullColumnName);
+                .replace("{alias}", "analyzed_table").replace("{table}", fullTableName)
+                .replace("{column}", "analyzed_table." + fullColumnName);
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
