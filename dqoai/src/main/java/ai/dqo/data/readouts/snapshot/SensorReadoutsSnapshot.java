@@ -16,7 +16,7 @@
 package ai.dqo.data.readouts.snapshot;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionStorageService;
@@ -73,7 +73,7 @@ public class SensorReadoutsSnapshot extends TableDataSnapshot {
      * @return Storage settings.
      */
     public static FileStorageSettings createSensorReadoutsStorageSettings() {
-        return new FileStorageSettings(DqoRoot.DATA_SENSOR_READOUTS,
+        return new FileStorageSettings(DqoRoot.data_sensor_readouts,
                 BuiltInFolderNames.SENSOR_READOUTS,
                 PARQUET_FILE_NAME,
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME,

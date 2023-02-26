@@ -16,7 +16,6 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.AbstractCheckSpec;
-import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.id.HierarchyNode;
@@ -26,14 +25,13 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Finder service that traverses the hierarchy node tree and finds requested type of nodes.

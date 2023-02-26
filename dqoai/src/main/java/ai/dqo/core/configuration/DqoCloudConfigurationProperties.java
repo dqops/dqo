@@ -32,6 +32,9 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     private String restApiBaseUrl;
     private int apiKeyPickupTimeoutSeconds = 10 * 60;
     private int apiKeyPickupRetryDelayMillis = 1000;
+    private int parallelFileUploads = 500;
+    private int parallelFileDownloads = 500;
+    private int fileSynchronizationTimeLimitSeconds = 1200;
 
     /**
      * Returns the DQO Cloud API Key that was configured in an environment variable or in a configuration file.
@@ -128,6 +131,54 @@ public class DqoCloudConfigurationProperties implements Cloneable {
      */
     public void setRestApiBaseUrl(String apiBaseUrl) {
         this.restApiBaseUrl = apiBaseUrl;
+    }
+
+    /**
+     * Returns the number of files that are uploaded to DQO Cloud in parallel using HTTP/2 multiplexing.
+     * @return Number of files that are uploaded to DQO Cloud in parallel.
+     */
+    public int getParallelFileUploads() {
+        return parallelFileUploads;
+    }
+
+    /**
+     * Sets the number of files that are uploaded to DQO Cloud in parallel using HTTP/2 multiplexing.
+     * @param parallelFileUploads New number of files that are uploaded to DQO Cloud in parallel.
+     */
+    public void setParallelFileUploads(int parallelFileUploads) {
+        this.parallelFileUploads = parallelFileUploads;
+    }
+
+    /**
+     * Returns the number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.
+     * @return Number of files that are downloaded from DQO Cloud in parallel.
+     */
+    public int getParallelFileDownloads() {
+        return parallelFileDownloads;
+    }
+
+    /**
+     * Sets the number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.
+     * @param parallelFileDownloads New number of files that are downloaded from DQO Cloud in parallel.
+     */
+    public void setParallelFileDownloads(int parallelFileDownloads) {
+        this.parallelFileDownloads = parallelFileDownloads;
+    }
+
+    /**
+     * Returns the time limit in seconds for a file synchronization operation (upload of a folder or download a folder).
+     * @return Time limit in seconds.
+     */
+    public int getFileSynchronizationTimeLimitSeconds() {
+        return fileSynchronizationTimeLimitSeconds;
+    }
+
+    /**
+     * Sets the time limit in seconds for a file synchronization (download one folder or upload one folder).
+     * @param fileSynchronizationTimeLimitSeconds Time limit in seconds.
+     */
+    public void setFileSynchronizationTimeLimitSeconds(int fileSynchronizationTimeLimitSeconds) {
+        this.fileSynchronizationTimeLimitSeconds = fileSynchronizationTimeLimitSeconds;
     }
 
     /**

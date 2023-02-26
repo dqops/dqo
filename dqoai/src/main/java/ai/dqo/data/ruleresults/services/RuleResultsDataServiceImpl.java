@@ -17,6 +17,7 @@ import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -34,12 +35,15 @@ import java.util.stream.Collectors;
 public class RuleResultsDataServiceImpl implements RuleResultsDataService {
     private RuleResultsSnapshotFactory ruleResultsSnapshotFactory;
     private ErrorsSnapshotFactory errorsSnapshotFactory;
+    private DefaultTimeZoneProvider defaultTimeZoneProvider;
 
     @Autowired
     public RuleResultsDataServiceImpl(RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
-                                      ErrorsSnapshotFactory errorsSnapshotFactory) {
+                                      ErrorsSnapshotFactory errorsSnapshotFactory,
+                                      DefaultTimeZoneProvider defaultTimeZoneProvider) {
         this.ruleResultsSnapshotFactory = ruleResultsSnapshotFactory;
         this.errorsSnapshotFactory = errorsSnapshotFactory;
+        this.defaultTimeZoneProvider = defaultTimeZoneProvider;
     }
 
     /**
@@ -74,6 +78,8 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
 
         int rowCount = sortedTable.rowCount();
         DateTimeColumn timePeriodColumn = sortedTable.dateTimeColumn(SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME);
+        InstantColumn timePeriodUtcColumn = sortedTable.instantColumn(SensorReadoutsColumnNames.TIME_PERIOD_UTC_COLUMN_NAME);
+        InstantColumn executedAtColumn = sortedTable.instantColumn(SensorReadoutsColumnNames.EXECUTED_AT_COLUMN_NAME);
         IntColumn severityColumn = sortedTable.intColumn(RuleResultsColumnNames.SEVERITY_COLUMN_NAME);
         StringColumn dataStreamColumn = sortedTable.stringColumn(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
         LongColumn checkHashColumn = sortedTable.longColumn(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
@@ -82,6 +88,11 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
         DoubleColumn actualValueColumn = sortedTable.doubleColumn(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
         for (int i = 0; i < rowCount ; i++) {
             LocalDateTime timePeriod = timePeriodColumn.get(i);
+            Instant timePeriodUtc = timePeriodUtcColumn.get(i);
+            if (timePeriodUtc == null) {
+                timePeriodUtc = timePeriod.atZone(this.defaultTimeZoneProvider.getDefaultTimeZoneId().getRules().getOffset(timePeriod)).toInstant();
+            }
+            Instant executedAt = executedAtColumn.get(i);
             Integer severity = severityColumn.get(i);
             String dataStreamName = dataStreamColumn.get(i);
             Long checkHash = checkHashColumn.get(i);
@@ -99,7 +110,8 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
                 resultMap.put(checkHash, checkResultsOverviewDataModel);
             }
 
-            checkResultsOverviewDataModel.appendResult(timePeriod, severity, actualValue, dataStreamName, loadParameters.getResultsCount());
+            checkResultsOverviewDataModel.appendResult(timePeriod, timePeriodUtc, executedAt, rootChecksContainerSpec.getCheckTimeScale(),
+                    severity, actualValue, dataStreamName, loadParameters.getResultsCount());
         }
 
         resultMap.values().forEach(m -> m.reverseLists());

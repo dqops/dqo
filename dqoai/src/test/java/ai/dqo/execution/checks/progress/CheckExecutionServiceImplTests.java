@@ -152,7 +152,6 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 errorsNormalizationService,
                 ErrorsSnapshotFactoryObjectMother.createDummyErrorsStorageService(),
                 scheduledTargetChecksFindService,
-                UserHomeLockManagerObjectMother.getDefaultGlobalLockManager(),
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
                 notificationService);
     }

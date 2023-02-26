@@ -93,7 +93,6 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private ErrorsNormalizationService errorsNormalizationService;
     private ErrorsSnapshotFactory errorsSnapshotFactory;
     private final ScheduledTargetChecksFindService scheduledTargetChecksFindService;
-    private final UserHomeLockManager userHomeLockManager;
     private final RuleDefinitionFindService ruleDefinitionFindService;
     private final NotificationService notificationService;
 
@@ -126,7 +125,6 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      ErrorsNormalizationService errorsNormalizationService,
                                      ErrorsSnapshotFactory errorsSnapshotFactory,
                                      ScheduledTargetChecksFindService scheduledTargetChecksFindService,
-                                     UserHomeLockManager userHomeLockManager,
                                      RuleDefinitionFindService ruleDefinitionFindService,
                                      NotificationService notificationService) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
@@ -140,7 +138,6 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.errorsNormalizationService = errorsNormalizationService;
         this.errorsSnapshotFactory = errorsSnapshotFactory;
         this.scheduledTargetChecksFindService = scheduledTargetChecksFindService;
-        this.userHomeLockManager = userHomeLockManager;
         this.ruleDefinitionFindService = ruleDefinitionFindService;
         this.notificationService = notificationService;
     }

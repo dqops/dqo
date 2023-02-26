@@ -1,0 +1,1865 @@
+# averages
+___
+
+## **within percent moving average 30 days**
+**Full rule name**
+```
+averages/within_percent_moving_average_30_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinPercentMovingAverage30DaysRuleParametersSpec:
+    max_percent_within: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinPercentMovingAverage30DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **within percent moving average 7 days**
+**Full rule name**
+```
+averages/within_percent_moving_average_7_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinPercentMovingAverage7DaysRuleParametersSpec:
+    max_percent_within: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinPercentMovingAverage7DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **between percent moving average 30 days**
+**Full rule name**
+```
+averages/between_percent_moving_average_30_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+|max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class BetweenPercentMovingAverage30DaysRuleParametersSpec:
+    max_percent_above: float
+    max_percent_below: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: BetweenPercentMovingAverage30DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **between percent moving average 7 days**
+**Full rule name**
+```
+averages/between_percent_moving_average_7_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+|max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class BetweenPctMovingAverage7DaysRuleParametersSpec:
+    max_percent_above: float
+    max_percent_below: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: BetweenPctMovingAverage7DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **between percent moving average 60 days**
+**Full rule name**
+```
+averages/between_percent_moving_average_60_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+|max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class BetweenPercentMovingAverage60DaysRuleParametersSpec:
+    max_percent_above: float
+    max_percent_below: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: BetweenPercentMovingAverage60DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **within percent moving average 60 days**
+**Full rule name**
+```
+averages/within_percent_moving_average_60_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_within|Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinPercentMovingAverage60DaysRuleParametersSpec:
+    max_percent_within: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinPercentMovingAverage60DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **percent moving average**
+**Full rule name**
+```
+averages/percent_moving_average
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+|max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 10
+    min_periods_with_readouts: 5
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class PercentMovingAverageRuleParametersSpec:
+    max_percent_above: float
+    max_percent_below: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: PercentMovingAverageRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **within percent moving average 7 days**
+**Full rule name**
+```
+averages/within_percent_moving_average_7_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinPercentMovingAverage7DaysRuleParametersSpec:
+    max_percent_within: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinPercentMovingAverage7DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **within percent moving average 60 days**
+**Full rule name**
+```
+averages/within_percent_moving_average_60_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_within|Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinPercentMovingAverage60DaysRuleParametersSpec:
+    max_percent_within: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinPercentMovingAverage60DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **between percent moving average 7 days**
+**Full rule name**
+```
+averages/between_percent_moving_average_7_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+|max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class BetweenPctMovingAverage7DaysRuleParametersSpec:
+    max_percent_above: float
+    max_percent_below: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: BetweenPctMovingAverage7DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **between percent moving average 60 days**
+**Full rule name**
+```
+averages/between_percent_moving_average_60_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+|max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class BetweenPercentMovingAverage60DaysRuleParametersSpec:
+    max_percent_above: float
+    max_percent_below: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: BetweenPercentMovingAverage60DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **between percent moving average 7 days**
+**Full rule name**
+```
+averages/between_percent_moving_average_7_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+|max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class BetweenPctMovingAverage7DaysRuleParametersSpec:
+    max_percent_above: float
+    max_percent_below: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: BetweenPctMovingAverage7DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **within percent moving average 7 days**
+**Full rule name**
+```
+averages/within_percent_moving_average_7_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 7
+    min_periods_with_readouts: 3
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinPercentMovingAverage7DaysRuleParametersSpec:
+    max_percent_within: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinPercentMovingAverage7DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **between percent moving average 30 days**
+**Full rule name**
+```
+averages/between_percent_moving_average_30_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+|max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class BetweenPercentMovingAverage30DaysRuleParametersSpec:
+    max_percent_above: float
+    max_percent_below: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: BetweenPercentMovingAverage30DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **within percent moving average 30 days**
+**Full rule name**
+```
+averages/within_percent_moving_average_30_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinPercentMovingAverage30DaysRuleParametersSpec:
+    max_percent_within: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinPercentMovingAverage30DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **between percent moving average 60 days**
+**Full rule name**
+```
+averages/between_percent_moving_average_60_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+|max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class BetweenPercentMovingAverage60DaysRuleParametersSpec:
+    max_percent_above: float
+    max_percent_below: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: BetweenPercentMovingAverage60DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **within percent moving average 60 days**
+**Full rule name**
+```
+averages/within_percent_moving_average_60_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_within|Maximum percent (e.q. 3%) that the current sensor reading could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readings must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 60
+    min_periods_with_readouts: 20
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinPercentMovingAverage60DaysRuleParametersSpec:
+    max_percent_within: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readout: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinPercentMovingAverage60DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **within percent moving average 30 days**
+**Full rule name**
+```
+averages/within_percent_moving_average_30_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_within|Maximum percent (e.q. 3%) that the current sensor readout could be within a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class WithinPercentMovingAverage30DaysRuleParametersSpec:
+    max_percent_within: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: WithinPercentMovingAverage30DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_within / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_within / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **between percent moving average 30 days**
+**Full rule name**
+```
+averages/between_percent_moving_average_30_days
+```
+**Description**  
+Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent_above|Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+|max_percent_below|Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (low, medium, high) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 10
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+import scipy
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class BetweenPercentMovingAverage30DaysRuleParametersSpec:
+    max_percent_above: float
+    max_percent_below: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: BetweenPercentMovingAverage30DaysRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered_mean = float(scipy.mean(filtered))
+
+    upper_bound = filtered_mean * (1.0 + rule_parameters.parameters.max_percent_above / 100.0)
+    lower_bound = filtered_mean * (1.0 - rule_parameters.parameters.max_percent_below / 100.0)
+
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+    expected_value = filtered_mean
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___

@@ -23,7 +23,7 @@ import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import com.google.common.base.Strings;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,9 +1,9 @@
 ---
 swagger: "2.0"
 info:
-  description: "DQO.AI cloud API"
+  description: "DQO Cloud API"
   version: "v1"
-  title: "DQO.AICloud"
+  title: "DQO Cloud"
   termsOfService: "https://dqo.ai/terms-of-service"
   contact:
     name: "DQO Cloud Support"
@@ -25,9 +25,10 @@ paths:
     get:
       tags:
       - "AccessTokenIssue"
-      summary: "IssueTenantDataROQueryAccessKey"
-      description: ""
-      operationId: "issueTenantDataROQueryAccessKey"
+      summary: "issueTenantDataROQueryAccessToken"
+      description: "Issues a read-only Google access token used by the DQO Looker\
+        \ Studio Community Connector to query the tenant's data quality data warehouse."
+      operationId: "issueTenantDataROQueryAccessToken"
       parameters: []
       responses:
         200:
@@ -36,13 +37,14 @@ paths:
             $ref: "#/definitions/TenantQueryAccessTokenModel"
       security:
       - api_key: []
-  /api/v1/accesstokenissue/rw/alerts:
+  /api/v1/accesstokenissue/rw/errors:
     get:
       tags:
       - "AccessTokenIssue"
-      summary: "IssueBucketAlertsRWAccessKey"
-      description: ""
-      operationId: "issueBucketAlertsRWAccessKey"
+      summary: "issueBucketErrorsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with errors"
+      operationId: "issueBucketErrorsRWAccessToken"
       parameters: []
       responses:
         200:
@@ -51,30 +53,14 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
-      deprecated: true
-  /api/v1/accesstokenissue/rw/readings:
-    get:
-      tags:
-      - "AccessTokenIssue"
-      summary: "IssueBucketReadingRWAccessKey"
-      description: ""
-      operationId: "issueBucketReadingRWAccessKey"
-      parameters: []
-      responses:
-        200:
-          description: "successful operation"
-          schema:
-            $ref: "#/definitions/TenantAccessTokenModel"
-      security:
-      - api_key: []
-      deprecated: true
   /api/v1/accesstokenissue/rw/rule_results:
     get:
       tags:
       - "AccessTokenIssue"
-      summary: "IssueBucketRuleResultsRWAccessKey"
-      description: ""
-      operationId: "issueBucketRuleResultsRWAccessKey"
+      summary: "issueBucketRuleResultsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with rule results"
+      operationId: "issueBucketRuleResultsRWAccessToken"
       parameters: []
       responses:
         200:
@@ -87,9 +73,10 @@ paths:
     get:
       tags:
       - "AccessTokenIssue"
-      summary: "IssueBucketRulesRWAccessKey"
-      description: ""
-      operationId: "issueBucketRulesRWAccessKey"
+      summary: "issueBucketRulesRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with custom rule definitions"
+      operationId: "issueBucketRulesRWAccessToken"
       parameters: []
       responses:
         200:
@@ -102,9 +89,10 @@ paths:
     get:
       tags:
       - "AccessTokenIssue"
-      summary: "IssueBucketSensorReadoutsRWAccessKey"
-      description: ""
-      operationId: "issueBucketSensorReadoutsRWAccessKey"
+      summary: "issueBucketSensorReadoutsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with sensor readouts"
+      operationId: "issueBucketSensorReadoutsRWAccessToken"
       parameters: []
       responses:
         200:
@@ -117,9 +105,10 @@ paths:
     get:
       tags:
       - "AccessTokenIssue"
-      summary: "IssueBucketSensorsRWAccessKey"
-      description: ""
-      operationId: "issueBucketSensorsRWAccessKey"
+      summary: "issueBucketSensorsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with custom sensor definitions"
+      operationId: "issueBucketSensorsRWAccessToken"
       parameters: []
       responses:
         200:
@@ -132,9 +121,26 @@ paths:
     get:
       tags:
       - "AccessTokenIssue"
-      summary: "IssueBucketSourcesRWAccessKey"
-      description: ""
-      operationId: "issueBucketSourcesRWAccessKey"
+      summary: "issueBucketSourcesRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with sources and the data quality check configuration"
+      operationId: "issueBucketSourcesRWAccessToken"
+      parameters: []
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            $ref: "#/definitions/TenantAccessTokenModel"
+      security:
+      - api_key: []
+  /api/v1/accesstokenissue/rw/statistics:
+    get:
+      tags:
+      - "AccessTokenIssue"
+      summary: "issueBucketStatisticsRWAccessToken"
+      description: "Issues a Google Storage access token for accessing the tenant's\
+        \ folder with statistics"
+      operationId: "issueBucketStatisticsRWAccessToken"
       parameters: []
       responses:
         200:
@@ -147,8 +153,9 @@ paths:
     put:
       tags:
       - "ApiKeyRequest"
-      summary: "IssueApiKey"
-      description: ""
+      summary: "issueApiKey"
+      description: "Issues an API Key by the DQO Cloud UI, this operation can also\
+        \ generate a new fresh API key."
       operationId: "issueApiKey"
       produces:
       - "text/plain"
@@ -169,8 +176,9 @@ paths:
     post:
       tags:
       - "ApiKeyRequest"
-      summary: "RequestApiKey"
-      description: ""
+      summary: "requestApiKey"
+      description: "Initiates an API Key generation request, generating the most recent\
+        \ API Key version."
       operationId: "requestApiKey"
       produces:
       - "text/plain"
@@ -188,8 +196,9 @@ paths:
     get:
       tags:
       - "ApiKeyRequest"
-      summary: "PickApiKey"
-      description: ""
+      summary: "pickApiKey"
+      description: "Retrieves a previously generated API Key given an API Key generation\
+        \ request."
       operationId: "pickApiKey"
       produces:
       - "text/plain"
@@ -207,8 +216,9 @@ paths:
     post:
       tags:
       - "ApiKeyRequest"
-      summary: "RequestApiKeyVersion"
-      description: ""
+      summary: "requestApiKeyVersion"
+      description: "Initiates an API KEY generation process, asking for a specific\
+        \ version of the API key."
       operationId: "requestApiKeyVersion"
       produces:
       - "text/plain"
@@ -272,6 +282,8 @@ definitions:
         type: "string"
       billingProjectId:
         type: "string"
+    description: "Model returned by the DQO Cloud with an AccessToken for accessing\
+      \ a folder within the landing zone of the tenant's data quality data warehouse."
   TenantQueryAccessTokenModel:
     type: "object"
     properties:
@@ -287,3 +299,5 @@ definitions:
         type: "string"
       ruleResultsTableName:
         type: "string"
+    description: "Model that returns an AccessToken used by Looker Studio to query\
+      \ the data warehouse."

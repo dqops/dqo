@@ -23,10 +23,10 @@ class BetweenIntsRuleParametersSpec:
     from_: float
     to: float
 
-def __getattr__(self, name):
-    if name == "from":
-        return self.from_
-    return object.__getattribute__(self, name)
+    def __getattr__(self, name):
+        if name == "from":
+            return self.from_
+        return object.__getattribute__(self, name)
 
 class HistoricDataPoint:
     timestamp_utc: datetime
@@ -66,10 +66,12 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
-    expected_value = rule_parameters.parameters.to
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    expected_value = None
     lower_bound = getattr(rule_parameters.parameters,"from")
     upper_bound = rule_parameters.parameters.to
-    passed = (lower_bound <= rule_parameters.actual_value and rule_parameters.actual_value <= upper_bound)
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

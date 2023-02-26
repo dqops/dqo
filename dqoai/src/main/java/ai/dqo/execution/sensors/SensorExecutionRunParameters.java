@@ -23,7 +23,7 @@ import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
-import java.time.ZoneId;
 
 /**
  * Sensor execution parameter object that contains all objects required to run the sensor.

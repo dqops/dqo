@@ -367,7 +367,9 @@ public class FolderTreeNode {
                 .findFirst();
 
         if (first.isPresent()) {
-            throw new LocalFileSystemException("Local file " + fileName + " already exists");
+            FileTreeNode existingFileTreeNode = first.get();
+            existingFileTreeNode.changeContent(content);
+            return existingFileTreeNode;
         }
 
         HomeFilePath newFilePath = this.folderPath.resolveFile(fileName);
@@ -463,5 +465,12 @@ public class FolderTreeNode {
      */
     public Path getPhysicalAbsolutePath() {
         return null;
+    }
+
+    @Override
+    public String toString() {
+        return "FolderTreeNode{" +
+                "folderPath=" + folderPath +
+                '}';
     }
 }

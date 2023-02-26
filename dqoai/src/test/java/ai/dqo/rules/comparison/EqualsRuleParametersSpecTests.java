@@ -140,8 +140,8 @@ public class EqualsRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 }

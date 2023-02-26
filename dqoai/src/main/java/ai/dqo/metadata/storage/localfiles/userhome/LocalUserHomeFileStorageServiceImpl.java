@@ -15,9 +15,11 @@
  */
 package ai.dqo.metadata.storage.localfiles.userhome;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.localfiles.LocalFileStorageServiceImpl;
+import ai.dqo.core.synchronization.status.FolderSynchronizationStatus;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;
@@ -35,17 +37,21 @@ import java.util.List;
 @Service
 public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageServiceImpl implements LocalUserHomeFileStorageService {
     private final UserHomeLockManager userHomeLockManager;
+    private final SynchronizationStatusTracker synchronizationStatusTracker;
 
     /**
      * Creates a local file storage service that uses the DQO_USER_HOME folder.
      * @param homeLocationFindService User home location finder.
      * @param userHomeLockManager User home lock manager.
+     * @param synchronizationStatusTracker Synchronization status tracker.
      */
     @Autowired
     public LocalUserHomeFileStorageServiceImpl(HomeLocationFindService homeLocationFindService,
-                                               UserHomeLockManager userHomeLockManager) {
+                                               UserHomeLockManager userHomeLockManager,
+                                               SynchronizationStatusTracker synchronizationStatusTracker) {
         super(homeLocationFindService.getUserHomePath());
         this.userHomeLockManager = userHomeLockManager;
+        this.synchronizationStatusTracker = synchronizationStatusTracker;
     }
 
     @Override
@@ -81,6 +87,9 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
             try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope)) {
                 return super.tryDeleteFolder(folderPath);
             }
+            finally {
+                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, FolderSynchronizationStatus.changed);
+            }
         }
         else {
             return super.tryDeleteFolder(folderPath);
@@ -107,6 +116,9 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
             try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope)) {
                 super.saveFile(filePath, fileContent);
             }
+            finally {
+                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, FolderSynchronizationStatus.changed);
+            }
         }
         else {
             super.saveFile(filePath, fileContent);
@@ -119,6 +131,9 @@ public class LocalUserHomeFileStorageServiceImpl extends LocalFileStorageService
         if (lockFolderScope != null) {
             try (AcquiredExclusiveWriteLock lock = this.userHomeLockManager.lockExclusiveWrite(lockFolderScope)) {
                 return super.deleteFile(filePath);
+            }
+            finally {
+                this.synchronizationStatusTracker.changeFolderSynchronizationStatus(lockFolderScope, FolderSynchronizationStatus.changed);
             }
         }
         else {
