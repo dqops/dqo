@@ -55,10 +55,10 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
         Template template = HandlebarsDocumentationUtilities.compileTemplate("sensors/sensor_documentation");
 
         List<SensorDocumentationModel> sensorDocumentationModels = createSensorDocumentationModels(projectRootPath);
-        List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = groupSensorsByTarget(sensorDocumentationModels);
+        List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = groupSensors(sensorDocumentationModels);
 
         for (SensorGroupedDocumentationModel sensorGroupedDocumentation : sensorGroupedDocumentationModels) {
-            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorGroupedDocumentation.getTarget() + ".md");
+            DocumentationMarkdownFile documentationMarkdownFile = sensorsFolder.addNestedFile(sensorGroupedDocumentation.getTarget() + "/" + sensorGroupedDocumentation.getCategory() + " " + sensorGroupedDocumentation.getTarget() + " sensors" + ".md");
             documentationMarkdownFile.setRenderContext(sensorGroupedDocumentation);
 
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, sensorGroupedDocumentation);
@@ -95,29 +95,62 @@ public class SensorDocumentationGeneratorImpl implements SensorDocumentationGene
     }
 
     /**
-     * Groups into list sensor documentation models by target ('table' or 'column').
-     * @param sensorDocumentationModels List of all sensorDocumentationModel, used to iterating and grouping by target.
+     * Groups into list sensor grouped documentation models by target ('table' or 'column') and sensor category.
+     * @param sensorDocumentationModels List of all sensorDocumentationModel, used to iterating and grouping by target and sensor category.
      * @return Sensor grouped documentation list.
      */
-    public List<SensorGroupedDocumentationModel> groupSensorsByTarget(List<SensorDocumentationModel> sensorDocumentationModels) {
-        List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = new ArrayList<>();
-        SensorGroupedDocumentationModel columnGroupedDocumentationModel = new SensorGroupedDocumentationModel();
-        columnGroupedDocumentationModel.setTarget("column");
-        SensorGroupedDocumentationModel tableGroupedDocumentationModel = new SensorGroupedDocumentationModel();
-        tableGroupedDocumentationModel.setTarget("table");
-        Map<String, List<SensorDocumentationModel>> columnSensors = new HashMap<>();
-        Map<String, List<SensorDocumentationModel>> tableSensors = new HashMap<>();
+    public List<SensorGroupedDocumentationModel> groupSensors(List<SensorDocumentationModel> sensorDocumentationModels) {
+        sensorDocumentationModels.sort(Comparator.comparing(SensorDocumentationModel::getFullSensorName));
 
-        for (SensorDocumentationModel model : sensorDocumentationModels) {
-            if (model.getTarget().equals("column")) {
-                columnSensors.computeIfAbsent(model.getCategory(), k -> new ArrayList<>()).add(model);
+        List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = new ArrayList<>();
+        Map<String, Map<String, List<SensorDocumentationModel>>> groupedSensors = new HashMap<>();
+
+        for (SensorDocumentationModel sensor : sensorDocumentationModels) {
+            Map<String, List<SensorDocumentationModel>> categoryLevelSensorsGroup;
+            List<SensorDocumentationModel> sensorDocumentationModelsInCategory;
+
+            if (groupedSensors.containsKey(sensor.getTarget())) {
+                categoryLevelSensorsGroup = groupedSensors.get(sensor.getTarget());
+                if (categoryLevelSensorsGroup.containsKey(sensor.getCategory())) {
+                    sensorDocumentationModelsInCategory = categoryLevelSensorsGroup.get(sensor.getCategory());
+                } else {
+                    sensorDocumentationModelsInCategory = new ArrayList<>();
+                    categoryLevelSensorsGroup.put(sensor.getCategory(), sensorDocumentationModelsInCategory);
+                }
             } else {
-                tableSensors.computeIfAbsent(model.getCategory(), k -> new ArrayList<>()).add(model);
+                categoryLevelSensorsGroup = new HashMap<>();
+                sensorDocumentationModelsInCategory = new ArrayList<>();
+                categoryLevelSensorsGroup.put(sensor.getCategory(), sensorDocumentationModelsInCategory);
+                groupedSensors.put(sensor.getTarget(), categoryLevelSensorsGroup);
+
+            }
+            sensorDocumentationModelsInCategory.add(sensor);
+        }
+
+        Comparator<String> reverseComparator = Comparator.reverseOrder();
+        Map<String, Map<String, List<SensorDocumentationModel>>> reversedOrderGroupedSensor = new TreeMap<>(reverseComparator);
+        reversedOrderGroupedSensor.putAll(groupedSensors);
+
+        for (Map.Entry<String, Map<String, List<SensorDocumentationModel>>> targetLevelGroup : reversedOrderGroupedSensor.entrySet()) {
+            String target = targetLevelGroup.getKey();
+            Map<String, List<SensorDocumentationModel>> categoryLevelGroup = targetLevelGroup.getValue();
+
+            Comparator<String> comparator = String::compareTo;
+            Map<String, List<SensorDocumentationModel>> sortedCategoryLevelGroup = new TreeMap<>(comparator);
+            sortedCategoryLevelGroup.putAll(categoryLevelGroup);
+
+            for (Map.Entry<String, List<SensorDocumentationModel>> category : sortedCategoryLevelGroup.entrySet()) {
+                String categoryName = category.getKey();
+                List<SensorDocumentationModel> sensorDocumentationModelsInCategory = category.getValue();
+
+                SensorGroupedDocumentationModel sensorGroupedDocumentationModel = new SensorGroupedDocumentationModel();
+                sensorGroupedDocumentationModel.setTarget(target);
+                sensorGroupedDocumentationModel.setCategory(categoryName);
+                sensorGroupedDocumentationModel.setCollectedSensors(sensorDocumentationModelsInCategory);
+
+                sensorGroupedDocumentationModels.add(sensorGroupedDocumentationModel);
             }
         }
-        columnGroupedDocumentationModel.setGroupedSensors(columnSensors);
-        tableGroupedDocumentationModel.setGroupedSensors(tableSensors);
-        Collections.addAll(sensorGroupedDocumentationModels, columnGroupedDocumentationModel, tableGroupedDocumentationModel);
         return sensorGroupedDocumentationModels;
     }
 
