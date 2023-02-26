@@ -97,6 +97,7 @@ public class ColumnServiceImpl implements ColumnService {
 
     /**
      * Get parameters for delete stored data job, pointing to all results related to specific columns.
+     * @param userHome User home.
      * @param columnSpecs Column specs.
      * @return List of delete stored data job parameters.
      */

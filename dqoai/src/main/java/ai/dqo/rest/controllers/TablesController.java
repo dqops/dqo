@@ -25,6 +25,9 @@ import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.core.jobqueue.DqoQueueJobId;
+import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
@@ -45,6 +48,7 @@ import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
 import ai.dqo.rest.models.metadata.TableBasicModel;
 import ai.dqo.rest.models.metadata.TableModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import ai.dqo.services.metadata.TableService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -71,6 +75,7 @@ import java.util.stream.Stream;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Tables", description = "Manages tables inside a connection/schema")
 public class TablesController {
+    private final TableService tableService;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoHomeContextFactory dqoHomeContextFactory;
     private SpecToUiCheckMappingService specToUiCheckMappingService;
@@ -78,16 +83,19 @@ public class TablesController {
 
     /**
      * Creates an instance of a controller by injecting dependencies.
+     * @param tableService                     Table logic service.
      * @param userHomeContextFactory           User home context factory.
      * @param dqoHomeContextFactory            DQO home context factory, used to retrieve the definition of built-in sensors.
      * @param specToUiCheckMappingService      Check mapper to convert the check specification to a UI model.
      * @param uiToSpecCheckMappingService      Check mapper to convert the check UI model to a check specification.
      */
     @Autowired
-    public TablesController(UserHomeContextFactory userHomeContextFactory,
+    public TablesController(TableService tableService,
+                            UserHomeContextFactory userHomeContextFactory,
                             DqoHomeContextFactory dqoHomeContextFactory,
                             SpecToUiCheckMappingService specToUiCheckMappingService,
                             UiToSpecCheckMappingService uiToSpecCheckMappingService) {
+        this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToUiCheckMappingService = specToUiCheckMappingService;
@@ -2119,17 +2127,17 @@ public class TablesController {
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Empty response.
+     * @return Deferred operations job id.
      */
     @DeleteMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}")
     @ApiOperation(value = "deleteTable", notes = "Deletes a table")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table successfully deleted"),
+            @ApiResponse(code = 200, message = "Table successfully deleted", response = DqoQueueJobId.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> deleteTable(
+    public ResponseEntity<Mono<DqoQueueJobId>> deleteTable(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -2148,10 +2156,8 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
         }
 
-        tableWrapper.markForDeletion(); // will be deleted
-        userHomeContext.flush();
-
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.tableService.deleteTable(tableWrapper);
+        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
     }
 
 

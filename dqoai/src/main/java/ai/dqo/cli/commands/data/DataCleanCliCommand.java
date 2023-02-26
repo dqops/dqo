@@ -163,7 +163,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
                 this.begin,
                 this.end
         );
-        
+
         deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
         deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
         deleteStoredDataJobParameters.setDeleteRuleResults(this.deleteRuleResults);
@@ -213,7 +213,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
         if (this.statisticsTarget != null) {
             deleteStoredDataJobParameters.setCollectorTarget(this.statisticsTarget.name());
         }
-        
+
         return deleteStoredDataJobParameters;
     }
 

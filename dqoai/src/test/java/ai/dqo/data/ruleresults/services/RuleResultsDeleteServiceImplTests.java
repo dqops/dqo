@@ -50,6 +50,7 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @SpringBootTest
 public class RuleResultsDeleteServiceImplTests extends BaseTest {
