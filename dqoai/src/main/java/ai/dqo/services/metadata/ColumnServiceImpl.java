@@ -128,6 +128,10 @@ public class ColumnServiceImpl implements ColumnService {
                                 setConnectionName(connection);
                                 setSchemaTableName(table);
                                 setColumnNames(columns);
+                                setDeleteStatistics(true);
+                                setDeleteRuleResults(true);
+                                setDeleteSensorReadouts(true);
+                                setDeleteErrors(true);
                             }};
                             parameters.add(param);
                         }

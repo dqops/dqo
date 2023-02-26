@@ -21,7 +21,6 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
-import ai.dqo.cli.converters.StringToLocalDateCliConverterAbstract;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthEnd;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthStart;
 import ai.dqo.cli.output.OutputFormatService;
@@ -166,7 +165,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
         );
         
         deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
-        deleteStoredDataJobParameters.setDeleteProfilingResults(this.deleteStatistics);
+        deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
         deleteStoredDataJobParameters.setDeleteRuleResults(this.deleteRuleResults);
         deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
 

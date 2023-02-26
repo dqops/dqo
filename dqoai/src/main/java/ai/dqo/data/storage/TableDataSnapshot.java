@@ -23,6 +23,7 @@ import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
 
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -228,7 +229,7 @@ public class TableDataSnapshot {
      * @param start The date of the start month. It could be any date within the month, because the whole month is always loaded.
      * @param end The date of the end month. It could be any date within the month, because the whole month is always loaded.
      */
-    public void ensureMonthsAreLoaded(LocalDate start, LocalDate end) {
+    public void ensureMonthsAreLoaded(@NotNull LocalDate start, @NotNull LocalDate end) {
         LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(start);
         LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(end);
 
@@ -239,12 +240,14 @@ public class TableDataSnapshot {
             this.lastLoadedMonth = LocalDateTimeTruncateUtility.truncateMonth(endMonth);
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions = this.storageService.loadPartitionsForMonthsRange(
                     this.connectionName, this.tableName, this.firstLoadedMonth, this.lastLoadedMonth, this.storageSettings, this.columnNames);
-            if (this.loadedMonthlyPartitions == null) {
-                this.loadedMonthlyPartitions = new LinkedHashMap<>();
+            if (loadedPartitions != null) {
+                if (this.loadedMonthlyPartitions == null) {
+                    this.loadedMonthlyPartitions = new LinkedHashMap<>();
+                }
+                updateSchemaForLoadedPartitions(loadedPartitions);
+                this.loadedMonthlyPartitions.putAll(loadedPartitions);
+                return;
             }
-            updateSchemaForLoadedPartitions(loadedPartitions);
-            this.loadedMonthlyPartitions.putAll(loadedPartitions);
-            return;
         }
 
         if (startMonth.isBefore(this.firstLoadedMonth)) {
@@ -254,8 +257,11 @@ public class TableDataSnapshot {
 
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedEarlierPartitions = this.storageService.loadPartitionsForMonthsRange(
                     this.connectionName, this.tableName, this.firstLoadedMonth, lastMonthToLoad, this.storageSettings, this.columnNames);
-            updateSchemaForLoadedPartitions(loadedEarlierPartitions);
-            this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
+
+            if (loadedEarlierPartitions != null) {
+                updateSchemaForLoadedPartitions(loadedEarlierPartitions);
+                this.loadedMonthlyPartitions.putAll(loadedEarlierPartitions);
+            }
         }
 
         LocalDate truncatedEndMonth = LocalDateTimeTruncateUtility.truncateMonth(endMonth);
@@ -266,8 +272,10 @@ public class TableDataSnapshot {
 
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedLaterPartitions = this.storageService.loadPartitionsForMonthsRange(
                     this.connectionName, this.tableName, firstMonthToLoad, this.lastLoadedMonth, this.storageSettings, this.columnNames);
-            updateSchemaForLoadedPartitions(loadedLaterPartitions);
-            this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+            if (loadedLaterPartitions != null) {
+                updateSchemaForLoadedPartitions(loadedLaterPartitions);
+                this.loadedMonthlyPartitions.putAll(loadedLaterPartitions);
+            }
         }
     }
 
@@ -291,20 +299,23 @@ public class TableDataSnapshot {
             // no data ever loaded
             Map<ParquetPartitionId, LoadedMonthlyPartition> loadedPartitions = this.storageService.loadRecentPartitionsForMonthsRange(
                     this.connectionName, this.tableName, start, end, this.storageSettings, this.columnNames, monthCount);
-            this.firstLoadedMonth = loadedPartitions.keySet().stream()
-                    .map(ParquetPartitionId::getMonth)
-                    .min(LocalDate::compareTo)
-                    .orElse(null);
-            this.lastLoadedMonth = loadedPartitions.keySet().stream()
-                    .map(ParquetPartitionId::getMonth)
-                    .max(LocalDate::compareTo)
-                    .orElse(null);
 
-            if (this.loadedMonthlyPartitions == null) {
-                this.loadedMonthlyPartitions = new LinkedHashMap<>();
+            if (loadedPartitions != null) {
+                this.firstLoadedMonth = loadedPartitions.keySet().stream()
+                        .map(ParquetPartitionId::getMonth)
+                        .min(LocalDate::compareTo)
+                        .orElse(null);
+                this.lastLoadedMonth = loadedPartitions.keySet().stream()
+                        .map(ParquetPartitionId::getMonth)
+                        .max(LocalDate::compareTo)
+                        .orElse(null);
+
+                if (this.loadedMonthlyPartitions == null) {
+                    this.loadedMonthlyPartitions = new LinkedHashMap<>();
+                }
+                updateSchemaForLoadedPartitions(loadedPartitions);
+                this.loadedMonthlyPartitions.putAll(loadedPartitions);
             }
-            updateSchemaForLoadedPartitions(loadedPartitions);
-            this.loadedMonthlyPartitions.putAll(loadedPartitions);
         }
         else {
             if (end == null || end.isAfter(this.lastLoadedMonth)) {
@@ -365,7 +376,7 @@ public class TableDataSnapshot {
             this.ensureMonthsAreLoaded(monthDate, monthDate);
         }
 
-        if (this.loadedMonthlyPartitions == null || loadedMonthlyPartitions.size() == 0) {
+        if (this.loadedMonthlyPartitions == null) {
             return null;
         }
 
@@ -381,15 +392,27 @@ public class TableDataSnapshot {
      * @param endDate End of the date range (to the day).
      * @param columnConditions Column name to column values conditions. Column name must be a name of a valid string column in the table. Column values are the values that can be present in a row for that column.
      */
-    public void markSelectedForDeletion(LocalDate startDate, LocalDate endDate, Map<String, Set<String>> columnConditions) {
+    public void markSelectedForDeletion(LocalDate startDate,
+                                        LocalDate endDate,
+                                        Map<String, Set<String>> columnConditions) {
         if (this.isReadOnly()) {
             throw new DataStorageIOException("Read-only snapshots do not support deleting.");
         }
 
-        LocalDate startMonth = LocalDateTimeTruncateUtility.truncateMonth(startDate);
-        LocalDate endMonth = LocalDateTimeTruncateUtility.truncateMonth(endDate);
-        this.ensureMonthsAreLoaded(startMonth, endMonth);
+        LocalDate startMonth = startDate == null ? null : LocalDateTimeTruncateUtility.truncateMonth(startDate);
+        LocalDate endMonth = endDate == null ? null : LocalDateTimeTruncateUtility.truncateMonth(endDate);
+        this.ensureNRecentMonthsAreLoaded(startMonth, endMonth, Integer.MAX_VALUE);
+        if (this.loadedMonthlyPartitions == null) {
+            // No data to delete
+            return;
+        }
+
         List<String> idsToDelete = new ArrayList<>();
+
+        startDate = Objects.requireNonNullElse(startDate, this.firstLoadedMonth);
+        endDate = Objects.requireNonNullElse(endDate, this.lastLoadedMonth.plusMonths(1).minusDays(1));
+        startMonth = LocalDateTimeTruncateUtility.truncateMonth(startDate);
+        endMonth = LocalDateTimeTruncateUtility.truncateMonth(endDate);
 
         for (LocalDate currentMonth = startMonth; !currentMonth.isAfter(endMonth);
              currentMonth = currentMonth.plus(1L, ChronoUnit.MONTHS)) {

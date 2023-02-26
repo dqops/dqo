@@ -215,7 +215,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             FileStorageSettings storageSettings,
             String[] columnNames) {
         if (start == null || end == null) {
-            throw new IllegalArgumentException("Start and end dates indicating the range need to be concrete");
+            throw new IllegalArgumentException("Start and end dates indicating the range need to be specified");
         }
 
         return loadRecentPartitionsForMonthsRange(connectionName, tableName, start, end, storageSettings, columnNames, Integer.MAX_VALUE);
@@ -251,7 +251,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         }
         if (startNonNull == null) {
             // No data stored for this table
-            return resultPartitions;
+            return null;
         }
 
         LocalDate endNonNull = Objects.requireNonNullElse(endBoundary, LocalDate.now());

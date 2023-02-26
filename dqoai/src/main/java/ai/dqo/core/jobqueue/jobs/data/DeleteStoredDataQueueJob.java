@@ -157,7 +157,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
         if (this.deletionParameters.isDeleteErrors()) {
             this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter());
         }
-        if (this.deletionParameters.isDeleteProfilingResults()) {
+        if (this.deletionParameters.isDeleteStatistics()) {
             this.statisticsDeleteService.deleteSelectedStatisticsResultsFragment(this.getStatisticsResultsFragmentFilter());
         }
         if (this.deletionParameters.isDeleteRuleResults()) {

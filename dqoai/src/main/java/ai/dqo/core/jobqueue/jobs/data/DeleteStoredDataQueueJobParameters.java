@@ -35,7 +35,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
     private LocalDate dateEnd;
 
     private boolean deleteErrors = false;
-    private boolean deleteProfilingResults = false;
+    private boolean deleteStatistics = false;
     private boolean deleteRuleResults = false;
     private boolean deleteSensorReadouts = false;
 
@@ -90,7 +90,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
 
             setDeleteRuleResults(true);
             setDeleteErrors(true);
-            setDeleteProfilingResults(true);
+            setDeleteStatistics(true);
             setDeleteSensorReadouts(true);
         }};
     }
