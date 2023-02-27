@@ -56,7 +56,7 @@ public class ColumnNumericPercentile50InRangeSensorParametersSpec extends Abstra
      */
     public final void setPercentileValue(Double percentileValue) {
         this.setDirtyIf(!Objects.equals(this.percentileValue, percentileValue));
-        this.percentileValue = 0.5;
+        this.percentileValue = percentileValue;
     }
 
     /**
