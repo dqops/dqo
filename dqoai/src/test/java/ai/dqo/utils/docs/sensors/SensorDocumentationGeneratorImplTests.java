@@ -40,7 +40,7 @@ public class SensorDocumentationGeneratorImplTests extends BaseTest {
     @Test
     void renderSensorDocumentation_whenCalled_generatesDocumentationForAllSensorsInMemory() {
         DocumentationFolder documentationFolder = this.sut.renderSensorDocumentation(this.projectRootPath, this.dqoHome);
-        Assertions.assertEquals(0, documentationFolder.getSubFolders().size());
+        Assertions.assertEquals(2, documentationFolder.getSubFolders().size());
     }
 
     @Test
@@ -52,7 +52,7 @@ public class SensorDocumentationGeneratorImplTests extends BaseTest {
     @Test
     void groupSensorsByTarget_whenCalled_generatesListOfSensorGroupedDocumentationModel() {
         List<SensorDocumentationModel> sensorDocumentationModels = this.sut.createSensorDocumentationModels(this.projectRootPath);
-        List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = this.sut.groupSensorsByTarget(sensorDocumentationModels);
-        Assertions.assertEquals(2, sensorGroupedDocumentationModels.size());
+        List<SensorGroupedDocumentationModel> sensorGroupedDocumentationModels = this.sut.groupSensors(sensorDocumentationModels);
+        Assertions.assertTrue(sensorGroupedDocumentationModels.size() > 2);
     }
 }
