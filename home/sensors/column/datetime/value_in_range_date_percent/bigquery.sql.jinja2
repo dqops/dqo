@@ -1,17 +1,5 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
-{% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-    {%- if include_lower_bound and include_upper_bound -%}
-{{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-    {%- elif not include_lower_bound and include_upper_bound -%}
-{{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-    {%- elif include_lower_bound and not include_upper_bound -%}
-{{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-    {%- else -%}
-{{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-    {%- endif -%}
-{%- endmacro -%}
-
 {% macro render_date_format_cast() -%}
     {%- if lib.target_column_data_type == 'DATE' -%}
     {{ render_target_column('analyzed_table') }}
@@ -25,7 +13,7 @@
 SELECT
     100.0 * SUM(
         CASE
-            WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+            WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
             ELSE 0
         END
     ) / COUNT(*) AS actual_value
