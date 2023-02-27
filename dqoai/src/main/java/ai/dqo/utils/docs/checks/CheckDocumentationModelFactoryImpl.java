@@ -25,6 +25,7 @@ import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftConnectionProvider;
+import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -374,6 +375,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         List<String> checkSample = new ArrayList<>();
         boolean isCheckSection = false;
         String checkBeginMarker = "checks:";
+        String checkpointBeginMarker = "checkpoints:";
+        String partitionedCheckBeginMarker = "partitioned_checks:";
         String checkEndMarker = "";
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
             checkEndMarker = "  columns:";
@@ -383,7 +386,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         List<String> splitYaml = List.of(yamlSample.split("\\r?\\n|\\r"));
         for (int i = 0; i <= splitYaml.size(); i++) {
-            if (splitYaml.get(i).contains(checkBeginMarker)) {
+            if (splitYaml.get(i).contains(checkBeginMarker) || splitYaml.get(i).contains(checkpointBeginMarker) || splitYaml.get(i).contains(partitionedCheckBeginMarker)) {
                 isCheckSection = true;
                 checkDocumentationModel.setCheckSampleBeginLine(i + 1);
             }
@@ -464,6 +467,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }});
                 connectionSpec.setPostgresql(new PostgresqlParametersSpec() {{
                     setDatabase("your_postgresql_database");
+                }});
+                connectionSpec.setRedshift(new RedshiftParametersSpec() {{
+                    setDatabase("your_redshift_database");
                 }});
                 connectionSpec.setProviderType(providerType);
 
