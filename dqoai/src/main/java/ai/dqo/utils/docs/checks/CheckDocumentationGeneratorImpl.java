@@ -44,9 +44,9 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
     @Override
     public DocumentationFolder renderCheckDocumentation(Path projectRootPath) {
         DocumentationFolder rulesFolder = new DocumentationFolder();
-        rulesFolder.setFolderName("reference/checks");
+        rulesFolder.setFolderName("checks");
         rulesFolder.setLinkName("Checks");
-        rulesFolder.setDirectPath(projectRootPath.resolve("../docs/reference/checks").toAbsolutePath().normalize());
+        rulesFolder.setDirectPath(projectRootPath.resolve("../docs/checks").toAbsolutePath().normalize());
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("checks/check_documentation");
 

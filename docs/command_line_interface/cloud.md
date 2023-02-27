@@ -36,7 +36,8 @@ Synchronize local &quot;data&quot; folder with sensor readouts and rule results 
 
 **Summary (Shell)**
 ```
-dqo.ai> cloud sync data [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
+dqo.ai> cloud sync data [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                 [-of=<outputFormat>]
 
 ```
 
@@ -44,6 +45,7 @@ dqo.ai> cloud sync data [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
 |-----------------------------------------------|-------------|-----------------|-----------------|
+|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
@@ -63,7 +65,8 @@ Synchronize local &quot;sources&quot; connection and table level quality definit
 
 **Summary (Shell)**
 ```
-dqo.ai> cloud sync sources [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
+dqo.ai> cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                    [-of=<outputFormat>]
 
 ```
 
@@ -71,6 +74,7 @@ dqo.ai> cloud sync sources [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
 |-----------------------------------------------|-------------|-----------------|-----------------|
+|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
@@ -90,7 +94,8 @@ Synchronize local &quot;sensors&quot; folder with custom sensor definitions with
 
 **Summary (Shell)**
 ```
-dqo.ai> cloud sync sensors [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
+dqo.ai> cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                    [-of=<outputFormat>]
 
 ```
 
@@ -98,6 +103,7 @@ dqo.ai> cloud sync sensors [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
 |-----------------------------------------------|-------------|-----------------|-----------------|
+|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
@@ -117,7 +123,8 @@ Synchronize local &quot;rules&quot; folder with custom rule definitions with DQO
 
 **Summary (Shell)**
 ```
-dqo.ai> cloud sync rules [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
+dqo.ai> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                  [-of=<outputFormat>]
 
 ```
 
@@ -125,6 +132,7 @@ dqo.ai> cloud sync rules [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
 |-----------------------------------------------|-------------|-----------------|-----------------|
+|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
@@ -144,7 +152,8 @@ Synchronize local files with DQO Cloud (sources, table rules, custom rules, cust
 
 **Summary (Shell)**
 ```
-dqo.ai> cloud sync all [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
+dqo.ai> cloud sync all [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                [-of=<outputFormat>]
 
 ```
 
@@ -152,6 +161,7 @@ dqo.ai> cloud sync all [-h] [-fw] [-hl] [-m=<mode>] [-of=<outputFormat>]
   
 | Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
 |-----------------------------------------------|-------------|-----------------|-----------------|
+|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
