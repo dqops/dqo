@@ -38,7 +38,8 @@ public class ColumnNumericPercentile50InRangeSensorParametersSpec extends Abstra
         }
     };
 
-    @JsonPropertyDescription("50th percentile")
+
+    @JsonPropertyDescription("50th percentile, must equals to 0.5")
     private final Double percentileValue = 0.5;
 
     /**
