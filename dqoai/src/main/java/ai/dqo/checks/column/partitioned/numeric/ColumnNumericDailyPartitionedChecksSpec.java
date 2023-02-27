@@ -52,6 +52,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_in_range", o -> o.dailyPartitionMinInRange);
             put("daily_partition_mean_in_range", o -> o.dailyPartitionMeanInRange);
             put("daily_partition_percentile_in_range", o -> o.dailyPartitionPercentileInRange);
+            put("daily_partition_percentile_50_in_range", o -> o.dailyPartitionPercentile50InRange);
             put("daily_partition_sample_stddev_in_range", o -> o.dailyPartitionSampleStddevInRange);
             put("daily_partition_population_stddev_in_range", o -> o.dailyPartitionPopulationStddevInRange);
             put("daily_partition_sample_variance_in_range", o -> o.dailyPartitionSampleVarianceInRange);
@@ -112,6 +113,9 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
 
     @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnPercentileInRangeCheckSpec dailyPartitionPercentileInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPercentile50InRangeCheckSpec dailyPartitionPercentile50InRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnSampleStddevInRangeCheckSpec dailyPartitionSampleStddevInRange;
@@ -428,6 +432,24 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentileInRange, dailyPartitionPercentileInRange));
         this.dailyPartitionPercentileInRange = dailyPartitionPercentileInRange;
         propagateHierarchyIdToField(dailyPartitionPercentileInRange, "daily_partition_percentile_in_range");
+    }
+
+    /**
+     * Returns a percentile 50 in range check specification.
+     * @return Percentile 50 in range check specification.
+     */
+    public ColumnPercentile50InRangeCheckSpec getDailyPartitionPercentile50InRange() {
+        return dailyPartitionPercentile50InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 50 in range check.
+     * @param dailyPartitionPercentile50InRange percentile 50 in range check specification.
+     */
+    public void setDailyPartitionPercentile50InRange(ColumnPercentile50InRangeCheckSpec dailyPartitionPercentile50InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile50InRange, dailyPartitionPercentile50InRange));
+        this.dailyPartitionPercentile50InRange = dailyPartitionPercentile50InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile50InRange, "daily_partition_percentile_50_in_range");
     }
 
     /**
