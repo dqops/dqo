@@ -15,9 +15,8 @@
  */
 package ai.dqo.snowflake.sensors.column.strings;
 
-import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringLengthInRangePercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.strings.ColumnStringNotMatchDateRegexCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +28,9 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringLengthInRangePercentSensorParametersSpec;
+import ai.dqo.sensors.column.strings.ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec;
+import ai.dqo.sensors.column.strings.StringsBuiltInDateFormats;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,99 +39,89 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
-    private ColumnStringsStringLengthInRangePercentSensorParametersSpec sut;
+public class SnowflakeColumnStringsStringNotMatchDateRegexCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringLengthInRangePercentCheckSpec checkSpec;
+    private ColumnStringNotMatchDateRegexCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_min_length_test, ProviderType.snowflake);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnStringsStringLengthInRangePercentSensorParametersSpec();
-        this.checkSpec = new ColumnStringLengthInRangePercentCheckSpec();
+		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+        this.sut = new ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec();
+		this.checkSpec = new ColumnStringNotMatchDateRegexCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
-
+        this.sut.setDateFormats(StringsBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "text", this.checkSpec);
+                sampleTableMetadata, "valid_string_70", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(10L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
-
+        this.sut.setDateFormats(StringsBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "valid_string_70", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(10L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
-
+        this.sut.setDateFormats(StringsBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "valid_string_70", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(10L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
-
+        this.sut.setDateFormats(StringsBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "valid_string_70", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float)13.333, (float) resultTable.column(0).get(0), 0.001 );
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setMinLength(3);
-        this.sut.setMaxLength(4);
-
+        this.sut.setDateFormats(StringsBuiltInDateFormats.MonthDayYear);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "text", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "valid_string_70", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(6, resultTable.rowCount());
+        Assertions.assertEquals(2, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float)13.333, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(5L, resultTable.column(0).get(0));
     }
 }
