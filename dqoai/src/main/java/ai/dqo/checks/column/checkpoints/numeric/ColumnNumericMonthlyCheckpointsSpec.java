@@ -53,6 +53,10 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_mean_in_range", o -> o.monthlyCheckpointMeanInRange);
             put("monthly_checkpoint_percentile_in_range", o -> o.monthlyCheckpointPercentileInRange);
             put("monthly_checkpoint_percentile_50_in_range", o -> o.monthlyCheckpointPercentile50InRange);
+            put("monthly_checkpoint_percentile_10_in_range", o -> o.monthlyCheckpointPercentile10InRange);
+            put("monthly_checkpoint_percentile_25_in_range", o -> o.monthlyCheckpointPercentile25InRange);
+            put("monthly_checkpoint_percentile_75_in_range", o -> o.monthlyCheckpointPercentile75InRange);
+            put("monthly_checkpoint_percentile_90_in_range", o -> o.monthlyCheckpointPercentile90InRange);
             put("monthly_checkpoint_sample_stddev_in_range", o -> o.monthlyCheckpointSampleStddevInRange);
             put("monthly_checkpoint_population_stddev_in_range", o -> o.monthlyCheckpointPopulationStddevInRange);
             put("monthly_checkpoint_sample_variance_in_range", o -> o.monthlyCheckpointSampleVarianceInRange);
@@ -116,6 +120,18 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
 
     @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnPercentile50InRangeCheckSpec monthlyCheckpointPercentile50InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPercentile10InRangeCheckSpec monthlyCheckpointPercentile10InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPercentile25InRangeCheckSpec monthlyCheckpointPercentile25InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPercentile75InRangeCheckSpec monthlyCheckpointPercentile75InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPercentile90InRangeCheckSpec monthlyCheckpointPercentile90InRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnSampleStddevInRangeCheckSpec monthlyCheckpointSampleStddevInRange;
@@ -450,6 +466,79 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
         this.monthlyCheckpointPercentile50InRange = monthlyCheckpointPercentile50InRange;
         propagateHierarchyIdToField(monthlyCheckpointPercentile50InRange, "monthly_checkpoint_percentile_50_in_range");
     }
+
+    /**
+     * Returns a percentile 10 in range check specification.
+     * @return Percentile 10 in range check specification.
+     */
+    public ColumnPercentile10InRangeCheckSpec getMonthlyCheckpointPercentile10InRange() {
+        return monthlyCheckpointPercentile10InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 10 in range check.
+     * @param monthlyCheckpointPercentile10InRange Percentile 10 in range check specification.
+     */
+    public void setMonthlyCheckpointPercentile10InRange(ColumnPercentile10InRangeCheckSpec monthlyCheckpointPercentile10InRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointPercentile10InRange, monthlyCheckpointPercentile10InRange));
+        this.monthlyCheckpointPercentile10InRange = monthlyCheckpointPercentile10InRange;
+        propagateHierarchyIdToField(monthlyCheckpointPercentile10InRange, "monthly_checkpoint_percentile_10_in_range");
+    }
+
+    /**
+     * Returns a percentile 25 in range check specification.
+     * @return Percentile 25 in range check specification.
+     */
+    public ColumnPercentile25InRangeCheckSpec getMonthlyCheckpointPercentile25InRange() {
+        return monthlyCheckpointPercentile25InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 25 in range check.
+     * @param monthlyCheckpointPercentile25InRange Percentile 25 in range check specification.
+     */
+    public void setMonthlyCheckpointPercentile25InRange(ColumnPercentile25InRangeCheckSpec monthlyCheckpointPercentile25InRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointPercentile25InRange, monthlyCheckpointPercentile25InRange));
+        this.monthlyCheckpointPercentile25InRange = monthlyCheckpointPercentile25InRange;
+        propagateHierarchyIdToField(monthlyCheckpointPercentile25InRange, "monthly_checkpoint_percentile_25_in_range");
+    }
+
+    /**
+     * Returns a percentile 75 in range check specification.
+     * @return Percentile 75 in range check specification.
+     */
+    public ColumnPercentile75InRangeCheckSpec getMonthlyCheckpointPercentile75InRange() {
+        return monthlyCheckpointPercentile75InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 75 in range check.
+     * @param monthlyCheckpointPercentile75InRange Percentile 75 in range check specification.
+     */
+    public void setMonthlyCheckpointPercentile75InRange(ColumnPercentile75InRangeCheckSpec monthlyCheckpointPercentile75InRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointPercentile75InRange, monthlyCheckpointPercentile75InRange));
+        this.monthlyCheckpointPercentile75InRange = monthlyCheckpointPercentile75InRange;
+        propagateHierarchyIdToField(monthlyCheckpointPercentile75InRange, "monthly_checkpoint_percentile_75_in_range");
+    }
+
+    /**
+     * Returns a percentile 90 in range check specification.
+     * @return Percentile 90 in range check specification.
+     */
+    public ColumnPercentile90InRangeCheckSpec getMonthlyCheckpointPercentile90InRange() {
+        return monthlyCheckpointPercentile90InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 90 in range check.
+     * @param monthlyCheckpointPercentile90InRange Percentile 90 in range check specification.
+     */
+    public void setMonthlyCheckpointPercentile90InRange(ColumnPercentile90InRangeCheckSpec monthlyCheckpointPercentile90InRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointPercentile90InRange, monthlyCheckpointPercentile90InRange));
+        this.monthlyCheckpointPercentile90InRange = monthlyCheckpointPercentile90InRange;
+        propagateHierarchyIdToField(monthlyCheckpointPercentile90InRange, "monthly_checkpoint_percentile_90_in_range");
+    }
+
 
     /**
      * Returns a sample standard deviation in range check specification.

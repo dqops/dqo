@@ -53,6 +53,10 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("mean_in_range", o -> o.meanInRange);
             put("percentile_in_range", o -> o.percentileInRange);
             put("percentile_50_in_range", o -> o.percentile50InRange);
+            put("percentile_10_in_range", o -> o.percentile10InRange);
+            put("percentile_25_in_range", o -> o.percentile25InRange);
+            put("percentile_75_in_range", o -> o.percentile75InRange);
+            put("percentile_90_in_range", o -> o.percentile90InRange);
             put("sample_stddev_in_range", o -> o.sampleStddevInRange);
             put("population_stddev_in_range", o -> o.populationStddevInRange);
             put("sample_variance_in_range", o -> o.sampleVarianceInRange);
@@ -116,6 +120,18 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range.")
     private ColumnPercentile50InRangeCheckSpec percentile50InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range.")
+    private ColumnPercentile10InRangeCheckSpec percentile10InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range.")
+    private ColumnPercentile25InRangeCheckSpec percentile25InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range.")
+    private ColumnPercentile75InRangeCheckSpec percentile75InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range.")
+    private ColumnPercentile90InRangeCheckSpec percentile90InRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range.")
     private ColumnSampleStddevInRangeCheckSpec sampleStddevInRange;
@@ -448,6 +464,78 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.percentile50InRange, percentile50InRange));
         this.percentile50InRange = percentile50InRange;
         propagateHierarchyIdToField(percentile50InRange, "percentile_50_in_range");
+    }
+
+    /**
+     * Returns a percentile 10 in range check specification.
+     * @return Percentile 10 in range check specification.
+     */
+    public ColumnPercentile10InRangeCheckSpec getPercentile10InRange() {
+        return percentile10InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 10 in range check.
+     * @param percentile10InRange Percentile 10 in range check specification.
+     */
+    public void setPercentile10InRange(ColumnPercentile10InRangeCheckSpec percentile10InRange) {
+        this.setDirtyIf(!Objects.equals(this.percentile10InRange, percentile10InRange));
+        this.percentile10InRange = percentile10InRange;
+        propagateHierarchyIdToField(percentile10InRange, "percentile_10_in_range");
+    }
+
+    /**
+     * Returns a percentile 25 in range check specification.
+     * @return Percentile 25 in range check specification.
+     */
+    public ColumnPercentile25InRangeCheckSpec getPercentile25InRange() {
+        return percentile25InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 25 in range check.
+     * @param percentile25InRange Percentile 25 in range check specification.
+     */
+    public void setPercentile25InRange(ColumnPercentile25InRangeCheckSpec percentile25InRange) {
+        this.setDirtyIf(!Objects.equals(this.percentile25InRange, percentile25InRange));
+        this.percentile25InRange = percentile25InRange;
+        propagateHierarchyIdToField(percentile25InRange, "percentile_25_in_range");
+    }
+
+    /**
+     * Returns a percentile 75 in range check specification.
+     * @return Percentile 75 in range check specification.
+     */
+    public ColumnPercentile75InRangeCheckSpec getPercentile75InRange() {
+        return percentile75InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 75 in range check.
+     * @param percentile75InRange Percentile 75 in range check specification.
+     */
+    public void setPercentile75InRange(ColumnPercentile75InRangeCheckSpec percentile75InRange) {
+        this.setDirtyIf(!Objects.equals(this.percentile75InRange, percentile75InRange));
+        this.percentile75InRange = percentile75InRange;
+        propagateHierarchyIdToField(percentile75InRange, "percentile_75_in_range");
+    }
+
+    /**
+     * Returns a percentile 90 in range check specification.
+     * @return Percentile 90 in range check specification.
+     */
+    public ColumnPercentile90InRangeCheckSpec getPercentile90InRange() {
+        return percentile90InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 90 in range check.
+     * @param percentile90InRange Percentile 90 in range check specification.
+     */
+    public void setPercentile90InRange(ColumnPercentile90InRangeCheckSpec percentile90InRange) {
+        this.setDirtyIf(!Objects.equals(this.percentile90InRange, percentile90InRange));
+        this.percentile90InRange = percentile90InRange;
+        propagateHierarchyIdToField(percentile90InRange, "percentile_90_in_range");
     }
 
     /**
