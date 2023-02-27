@@ -225,7 +225,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 SimilarCheckModel firstCheckModel = similarChecksGroup.getSimilarChecks().get(0);
                 similarChecksDocumentationModel.setCategory(firstCheckModel.getCategory()); // the category of the first check, the other similar checks should be in the same category
                 similarChecksDocumentationModel.setTarget(target.name());
-                similarChecksDocumentationModel.setPrimaryCheckName(firstCheckModel.getCheckModel().getCheckName());
+                similarChecksDocumentationModel.setPrimaryCheckName(firstCheckModel.getCheckModel().getCheckName().replace('_', ' '));
 
                 ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(firstCheckModel.getCheckModel().getCheckSpec().getClass());
                 if (checkClassJavadoc != null) {
