@@ -1,12 +1,4 @@
-# {{categoryName}}
-{{#if categoryHelp}}
-**Category description**{{#with "  "}}{{.}}{{/with}}
-{{categoryHelp}}
-{{else}}
-{{/if}}
-___
-{{#each checkGroups}}
-## **{{replace primaryCheckName "_" " "}}** checks{{#with "  "}}{{.}}{{/with}}
+**{{replace primaryCheckName "_" " "}}** checks{{#with "  "}}{{.}}{{/with}}
 {{#if checkSpecClassJavaDoc}}
 **Description**{{#with "  "}}{{.}}{{/with}}
 {{checkSpecClassJavaDoc}}
@@ -14,7 +6,7 @@ ___
 {{/if}}
 ___
 {{#each allChecks}}
-### **{{replace checkName  "_" " "}}**{{#with "  "}}{{.}}{{/with}}
+## **{{replace checkName  "_" " "}}**{{#with "  "}}{{.}}{{/with}}
 {{#with "  "}}{{.}}{{/with}}
 **Check description**{{#with "  "}}{{.}}{{/with}}
 {{checkHelp}}{{#with "  "}}{{.}}{{/with}}
@@ -22,18 +14,6 @@ ___
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
 |{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|[{{sensor.sensorName}}](../../../sensors/{{target}}/#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../rules/{{rule.category}}/#{{replace rule.ruleName "_" "-"}})|
-{{#with "  "}}{{.}}{{/with}}
-**Set up a check (Shell)**{{#with "  "}}{{.}}{{/with}}
-To set up a basic data quality check, table editing information needs to be provided. To do this, use the command below
-```
-dqo.ai> table edit -c=connection_name -t=table_name
-```
-Following message appears
-``` hl_lines="2-2"
-dqo.ai> table edit -c=connection_name -t=table_name
-Launching VS Code, remember to install YAML extension by RedHat and Better Jinja by Samuel Colvin
-```
-and VS Code launches. Now the YAML file can be modified to set up a data quality check. Add check in structure as at sample below and save the file.{{#with "  "}}{{.}}{{/with}}
 {{#with "  "}}{{.}}{{/with}}
 **Run check (Shell)**{{#with "  "}}{{.}}{{/with}}
 To run a check provide connection and table name (including schema name) in [check run command](../../../cli/check/#dqo-check-run)
@@ -43,16 +23,6 @@ dqo.ai> check run -c=connection_name -t=table_name
 It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch={{checkName}}
-```
-The example result
-```
-dqo.ai> check run -c=connection_name -t=table_name
-Check evaluation summary per table:
-+---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
-|Connection     |Table     |Checks|Sensor results|Valid results|Warnings|Errors|Fatal errors|Execution errors|
-+---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
-|connection_name|table_name|1     |1             |0            |0       |0     |1           |0               |
-+---------------+----------+------+--------------+-------------+--------+------+------------+----------------+
 ```
 **Check structure (Yaml)**
 ```yaml
@@ -64,19 +34,16 @@ Check evaluation summary per table:
 ```yaml hl_lines="{{checkSampleBeginLine}}-{{checkSampleEndLine}}"
 {{{sampleYaml}}}
 ```
-**SQL Template (Jinja2)**{{#with "  "}}{{.}}{{/with}}
 {{#each providerTemplates~}}
-=== "{{providerType}}"
+### **{{providerType}}**
+=== "Sensor template for {{providerType}}"
     {{#with "  "}}{{.}}{{/with}}
     ```
     {{#each listOfJinjaTemplate~}}
     {{{this}}}
     {{/each~}}
     ```
-{{/each~}}
-**Rendered SQL**{{#with "  "}}{{.}}{{/with}}
-{{#each providerTemplates~}}
-=== "{{providerType}}"
+=== "Rendered SQL for {{providerType}}"
     {{#with "  "}}{{.}}{{/with}}
     ```
     {{#each listOfRenderedTemplate~}}
@@ -84,30 +51,30 @@ Check evaluation summary per table:
     {{/each~}}
     ```
 {{/each~}}
-**Sample configuration with a data stream (Yaml)**{{#with "  "}}{{.}}{{/with}}
-```yaml hl_lines="{{firstSectionBeginMarker}}-{{firstSectionEndMarker}} {{secondSectionBeginMarker}}-{{secondSectionEndMarker}}"
-{{{sampleYamlWithDataStreams}}}
-```
-**SQL Template with a data stream (Jinja2)**{{#with "  "}}{{.}}{{/with}}
-{{#each providerTemplatesDataStreams~}}
-=== "{{providerType}}"
-    {{#with "  "}}{{.}}{{/with}}
-    ```
-    {{#each listOfJinjaTemplate~}}
+### **Configuration with a data stream**{{#with "  "}}{{.}}{{/with}}
+??? info "Click to see more"{{#with "  "}}{{.}}{{/with}}
+    **Sample configuration with a data stream (Yaml)**{{#with "  "}}{{.}}{{/with}}
+    ```yaml hl_lines="{{firstSectionBeginMarker}}-{{firstSectionEndMarker}} {{secondSectionBeginMarker}}-{{secondSectionEndMarker}}"
+    {{#each splitSampleYamlWithDataStreams~}}
     {{{this}}}
     {{/each~}}
-    ```
-{{/each~}}
-**Rendered SQL with a data stream**{{#with "  "}}{{.}}{{/with}}
-{{#each providerTemplatesDataStreams~}}
-=== "{{providerType}}"
+    ```{{#with "  "}}{{.}}{{/with}}
+    {{#each providerTemplatesDataStreams~}}
+    **{{providerType}}**{{#with "  "}}{{.}}{{/with}}
     {{#with "  "}}{{.}}{{/with}}
-    ```
-    {{#each listOfRenderedTemplate~}}
-    {{{this}}}
+    === "Sensor template for {{providerType}}"
+        ```
+        {{#each listOfJinjaTemplate~}}
+        {{{this}}}
+        {{/each~}}
+        ```
+    === "Rendered SQL for {{providerType}}"
+        ```
+        {{#each listOfRenderedTemplate~}}
+        {{{this}}}
+        {{/each~}}
+        ```
     {{/each~}}
-    ```
-{{/each~}}
 {{#if runOnConnectionCliCommand}}
 **CLI command to run check on connection**{{#with "  "}}{{.}}{{/with}}
 ```
@@ -130,5 +97,4 @@ Check evaluation summary per table:
 {{else}}
 {{/if}}
 ___
-{{/each}}
 {{/each}}

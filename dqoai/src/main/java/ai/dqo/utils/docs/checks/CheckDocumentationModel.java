@@ -92,6 +92,11 @@ public class CheckDocumentationModel {
     private String sampleYamlWithDataStreams;
 
     /**
+     * Split sample yaml with data streams.
+     */
+    private List<String> splitSampleYamlWithDataStreams;
+
+    /**
      * Begin marker to highlight start first section data stream sample.
      */
     private int firstSectionBeginMarker;

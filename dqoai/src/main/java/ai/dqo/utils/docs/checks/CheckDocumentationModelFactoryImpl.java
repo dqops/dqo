@@ -346,6 +346,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         TableYaml tableYamlWithDataStreams = new TableYaml(trimmedTableSpec);
         String yamlSampleWithDataStreams = this.yamlSerializer.serialize(tableYamlWithDataStreams);
         checkDocumentationModel.setSampleYamlWithDataStreams(yamlSampleWithDataStreams);
+        checkDocumentationModel.setSplitSampleYamlWithDataStreams(splitStringByEndOfLine(yamlSampleWithDataStreams));
         createMarksForDataStreams(checkDocumentationModel, yamlSampleWithDataStreams);
 
         List<CheckProviderRenderedSqlDocumentationModel> providerSamplesDataStream = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
@@ -447,7 +448,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             providerDocModel.setProviderType(providerType);
             String sqlTemplate = providerSensorDefinitionWrapper.getSqlTemplate();
             providerDocModel.setJinjaTemplate(sqlTemplate);
-            providerDocModel.setListOfJinjaTemplate(splitSqlTemplates(sqlTemplate));
+            providerDocModel.setListOfJinjaTemplate(splitStringByEndOfLine(sqlTemplate));
 
             if (sqlTemplate != null) {
                 SensorDefinitionFindResult sensorDefinitionFindResult = new SensorDefinitionFindResult(sensorDefinitionWrapper.getSpec(),
@@ -487,7 +488,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 try {
                     String renderedTemplate = this.jinjaTemplateRenderService.renderTemplate(sqlTemplate, templateRenderParameters);
                     providerDocModel.setRenderedTemplate(renderedTemplate);
-                    providerDocModel.setListOfRenderedTemplate(splitSqlTemplates(renderedTemplate));
+                    providerDocModel.setListOfRenderedTemplate(splitStringByEndOfLine(renderedTemplate));
                 }
                 catch (Exception ex) {
                     System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName());
@@ -521,11 +522,11 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     }
 
     /**
-     * Create list of split sql templates by end of line.
-     * @param sqlTemplate Sql template.
-     * @return List of split sql templates by end of line.
+     * Create list of split string templates by end of line.
+     * @param template Template.
+     * @return List of split string templates by end of line.
      */
-    private List<String> splitSqlTemplates(String sqlTemplate) {
-        return List.of(sqlTemplate.split("\\r?\\n|\\r"));
+    private List<String> splitStringByEndOfLine(String template) {
+        return List.of(template.split("\\r?\\n|\\r"));
     }
 }
