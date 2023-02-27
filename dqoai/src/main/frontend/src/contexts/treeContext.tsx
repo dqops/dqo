@@ -20,7 +20,7 @@ import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { findTreeNode } from '../utils/tree';
 import { CheckTypes, ROUTES } from "../shared/routes";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const TreeContext = React.createContext({} as any);
 
@@ -65,6 +65,7 @@ function TreeProvider(props: any) {
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const history = useHistory();
+
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
       await ConnectionApiClient.getAllConnections();
@@ -821,6 +822,7 @@ function TreeProvider(props: any) {
   }
 
   const switchTab = (node: CustomTreeNode) => {
+    console.log('node:', node);
     if (!node) return;
     const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
@@ -833,7 +835,13 @@ function TreeProvider(props: any) {
       const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-      pushHistory(ROUTES.TABLE_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, subTabMap[node.id] || 'detail'));
+      let tab = subTabMap[node.id];
+      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.TIME_PARTITIONED) {
+        tab = tab || 'daily';
+      } else {
+        tab = tab || 'detail'
+      }
+      pushHistory(ROUTES.TABLE_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, tab));
     } else if ([TREE_LEVEL.TABLE_CHECKS, TREE_LEVEL.TABLE_DAILY_CHECKS, TREE_LEVEL.TABLE_MONTHLY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS].includes(node.level)) {
       const tableNode = findTreeNode(treeData, node.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
@@ -917,7 +925,15 @@ function TreeProvider(props: any) {
       const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-      pushHistory(ROUTES.COLUMN_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, subTabMap[node.id] || 'detail'));
+
+      let tab = subTabMap[node.id];
+      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.TIME_PARTITIONED) {
+        tab = tab || 'daily';
+      } else {
+        tab = tab || 'detail'
+      }
+
+      pushHistory(ROUTES.COLUMN_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, tab));
     } else {
       pushHistory('/checks');
     }

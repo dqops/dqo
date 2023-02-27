@@ -15,13 +15,8 @@ import { IRootState } from '../../redux/reducers';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
 import ColumnActionGroup from './ColumnActionGroup';
 import { CheckResultOverviewApi } from "../../services/apiClient";
-
-interface IColumnPartitionedChecksViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-  columnName: string;
-}
+import { useHistory, useParams } from "react-router-dom";
+import { ROUTES } from "../../shared/routes";
 
 const initTabs = [
   {
@@ -34,16 +29,12 @@ const initTabs = [
   }
 ];
 
-const ColumnPartitionedChecksView = ({
-  connectionName,
-  schemaName,
-  tableName,
-  columnName
-}: IColumnPartitionedChecksViewProps) => {
-  const [activeTab, setActiveTab] = useState('daily');
+const ColumnPartitionedChecksView = () => {
+  const { connection, schema, table, column, tab, checkTypes }: { checkTypes: string, connection: string, schema: string, table: string, column: string, tab: 'daily' | 'monthly' } = useParams();
   const [tabs, setTabs] = useState(initTabs);
 
   const dispatch = useActionDispatch();
+  const history = useHistory();
 
   const {
     columnBasic,
@@ -57,7 +48,7 @@ const ColumnPartitionedChecksView = ({
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnPartitionedChecksOverview(connectionName, schemaName, tableName, columnName, activeTab as any).then((res) => {
+    CheckResultOverviewApi.getColumnPartitionedChecksOverview(connection, schema, table, column, tab).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -65,57 +56,57 @@ const ColumnPartitionedChecksView = ({
   useEffect(() => {
     if (
       !dailyPartitionedChecks ||
-      columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schema_name !== schemaName ||
-      columnBasic?.table?.table_name !== tableName ||
-      columnBasic.column_name !== columnName
+      columnBasic?.connection_name !== connection ||
+      columnBasic?.table?.schema_name !== schema ||
+      columnBasic?.table?.table_name !== table ||
+      columnBasic.column_name !== column
     ) {
       dispatch(
         getColumnDailyPartitionedChecks(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName
+          connection,
+          schema,
+          table,
+          column
         )
       );
     }
     if (
       !monthlyPartitionedChecks ||
-      columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schema_name !== schemaName ||
-      columnBasic?.table?.table_name !== tableName ||
-      columnBasic.column_name !== columnName
+      columnBasic?.connection_name !== connection ||
+      columnBasic?.table?.schema_name !== schema ||
+      columnBasic?.table?.table_name !== table ||
+      columnBasic.column_name !== column
     ) {
       dispatch(
         getColumnMonthlyPartitionedChecks(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName
+          connection,
+          schema,
+          table,
+          column
         )
       );
     }
-  }, [connectionName, schemaName, columnName, tableName, columnBasic]);
+  }, [connection, schema, column, table, columnBasic]);
 
   const onUpdate = async () => {
-    if (activeTab === 'daily') {
+    if (tab === 'daily') {
       if (!dailyPartitionedChecks) return;
 
       await dispatch(
         updateColumnDailyPartitionedChecks(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName,
+          connection,
+          schema,
+          table,
+          column,
           dailyPartitionedChecks
         )
       );
       await dispatch(
         getColumnDailyPartitionedChecks(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName
+          connection,
+          schema,
+          table,
+          column
         )
       );
     } else {
@@ -123,19 +114,19 @@ const ColumnPartitionedChecksView = ({
 
       await dispatch(
         updateColumnMonthlyPartitionedChecks(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName,
+          connection,
+          schema,
+          table,
+          column,
           monthlyPartitionedChecks
         )
       );
       await dispatch(
         getColumnMonthlyPartitionedChecks(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName
+          connection,
+          schema,
+          table,
+          column
         )
       );
     }
@@ -169,6 +160,10 @@ const ColumnPartitionedChecksView = ({
     );
   }, [isUpdatedMonthlyPartitionedChecks]);
 
+  const onChangeTab = (tab: string) => {
+    history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connection, schema, table, column, tab));
+  };
+
   return (
     <div className="py-2">
       <ColumnActionGroup
@@ -180,10 +175,10 @@ const ColumnPartitionedChecksView = ({
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
       </div>
       <div>
-        {activeTab === 'daily' && (
+        {tab === 'daily' && (
           <DataQualityChecks
             onUpdate={onUpdate}
             checksUI={dailyPartitionedChecks}
@@ -193,7 +188,7 @@ const ColumnPartitionedChecksView = ({
             getCheckOverview={getCheckOverview}
           />
         )}
-        {activeTab === 'monthly' && (
+        {tab === 'monthly' && (
           <DataQualityChecks
             onUpdate={onUpdate}
             checksUI={monthlyPartitionedChecks}

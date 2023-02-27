@@ -15,7 +15,8 @@ import { IRootState } from '../../../redux/reducers';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import TableActionGroup from './TableActionGroup';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { ROUTES } from "../../../shared/routes";
 
 const initTabs = [
   {
@@ -29,12 +30,11 @@ const initTabs = [
 ];
 
 const TablePartitionedChecksView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
-  const [activeTab, setActiveTab] = useState('daily');
+  const { connection: connectionName, schema: schemaName, table: tableName, tab, checkTypes }: { checkTypes: string, connection: string, schema: string, table: string, tab: string } = useParams();
   const [tabs, setTabs] = useState(initTabs);
   const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [monthlyCheckResultsOverview, setMonthlyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
-
+  const history = useHistory();
   const dispatch = useActionDispatch();
 
   const {
@@ -70,7 +70,7 @@ const TablePartitionedChecksView = () => {
   }, [connectionName, schemaName, tableName, tableName, tableBasic]);
 
   const onUpdate = async () => {
-    if (activeTab === 'daily') {
+    if (tab === 'daily') {
       if (!dailyPartitionedChecks) return;
 
       await dispatch(
@@ -140,7 +140,11 @@ const TablePartitionedChecksView = () => {
       setMonthlyCheckResultsOverview(res.data);
     });
   };
-  
+
+  const onChangeTab = (tab: string) => {
+    history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, tab));
+  };
+
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       <TableActionGroup
@@ -152,9 +156,9 @@ const TablePartitionedChecksView = () => {
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
       </div>
-      {activeTab === 'daily' && (
+      {tab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={dailyPartitionedChecks}
@@ -163,7 +167,7 @@ const TablePartitionedChecksView = () => {
           getCheckOverview={getDailyCheckOverview}
         />
       )}
-      {activeTab === 'monthly' && (
+      {tab === 'monthly' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={monthlyPartitionedChecks}
