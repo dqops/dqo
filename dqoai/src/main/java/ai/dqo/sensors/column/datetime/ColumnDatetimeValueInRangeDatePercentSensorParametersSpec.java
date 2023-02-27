@@ -45,14 +45,6 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpec extends A
     @JsonPropertyDescription("Upper bound range variable.")
     private LocalDate maxValue;
 
-    @JsonPropertyDescription("The variable deciding whether to include the lower limit of the range. It does not include it by default.")
-    @Deprecated // do not use it, always inclusive
-    private Boolean includeMinValue = true;
-
-    @JsonPropertyDescription("The variable deciding whether to include the upper limit of the range. It does not include it by default.")
-    @Deprecated // do not use it, always inclusive
-    private Boolean includeMaxValue = true;
-
     /**
      * Returns the child map on the spec class with all fields.
      *
@@ -105,37 +97,5 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpec extends A
     public void setMaxValue(LocalDate maxValue) {
         this.setDirtyIf(!Objects.equals(this.maxValue,maxValue));
         this.maxValue = maxValue;
-    }
-    /**
-     * Returns the boolean deciding whether to include the lower limit of the range.
-     * @return Boolean deciding whether to include the lower bound.
-     */
-    public Boolean getIncludeMinValue() {
-        return includeMinValue;
-    }
-    /**
-     * Sets the boolean deciding whether to include the lower limit of the range.
-     * @param includeMinValue Boolean deciding whether to include the lower bound.
-     */
-    public void setIncludeMinValue(Boolean includeMinValue) {
-        this.setDirtyIf(!Objects.equals(this.includeMinValue,includeMinValue));
-        this.includeMinValue = includeMinValue;
-    }
-
-    /**
-     * Returns the boolean deciding whether to include the upper limit of the range.
-     * @return Boolean deciding whether to include the upper bound.
-     */
-    public Boolean getIncludeMaxValue() {
-        return includeMaxValue;
-    }
-
-    /**
-     * Sets the boolean deciding whether to include the upper limit of the range.
-     * @param includeMaxValue Boolean deciding whether to include the upper bound.
-     */
-    public void setIncludeMaxValue(Boolean includeMaxValue) {
-        this.setDirtyIf(!Objects.equals(this.includeMaxValue,includeMaxValue));
-        this.includeMaxValue = includeMaxValue;
     }
 }
