@@ -27,6 +27,7 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLGenerator;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.fasterxml.jackson.module.blackbird.BlackbirdModule;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -36,6 +37,7 @@ import java.nio.file.Path;
  * Yaml serializer and deserializer.
  */
 @Component
+@Slf4j
 public class YamlSerializerImpl implements YamlSerializer {
     private final ObjectMapper mapper;
     private final DqoConfigurationProperties configurationProperties;
@@ -138,7 +140,14 @@ public class YamlSerializerImpl implements YamlSerializer {
                 message += ", file path: " + filePathForMessage;
             }
 
-            throw new YamlSerializationException(message, e);
+            log.error("Failed to deserialize YAML, " + message, e);
+            try {
+                T emptyInstance = clazz.getDeclaredConstructor().newInstance();
+                return emptyInstance;
+            }
+            catch (Exception ex) {
+                throw new YamlSerializationException("Failed to instantiate a new object, because a YAML file was empty: " + message, e);
+            }
         }
     }
 }
