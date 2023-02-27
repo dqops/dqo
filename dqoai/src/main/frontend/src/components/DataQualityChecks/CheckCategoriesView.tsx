@@ -1,4 +1,4 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useState } from "react";
 import SvgIcon from "../SvgIcon";
 import CheckListItem from "./CheckListItem";
 import {
@@ -11,6 +11,7 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import { isEqual } from "lodash";
 import { JobApiClient } from "../../services/apiClient";
+import DeleteOnlyDataDialog from "../CustomTree/DeleteOnlyDataDialog";
 
 interface CheckCategoriesViewProps {
   category: UIQualityCategoryModel;
@@ -21,6 +22,7 @@ interface CheckCategoriesViewProps {
 }
 const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataDataStreams, onUpdate, getCheckOverview }: CheckCategoriesViewProps) => {
   const { jobs } = useSelector((state: IRootState) => state.job);
+  const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
 
   const job = jobs?.jobs?.find((item) =>
     isEqual(
@@ -71,7 +73,8 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
               )}
               <SvgIcon
                 name="delete"
-                className="text-red-700 h-5 cursor-pointer"
+                className="h-5 cursor-pointer"
+                onClick={() => setDeleteDataDialogOpened(true)}
               />
             </div>
           </div>
@@ -94,6 +97,17 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
             onUpdate={onUpdate}
           />
         ))}
+      <DeleteOnlyDataDialog
+        open={deleteDataDialogOpened}
+        onClose={() => setDeleteDataDialogOpened(false)}
+        onDelete={(params) => {
+          setDeleteDataDialogOpened(false);
+          JobApiClient.deleteStoredData({
+            ...category.data_clean_job_template,
+            ...params,
+          });
+        }}
+      />
     </Fragment>
   );
 };
