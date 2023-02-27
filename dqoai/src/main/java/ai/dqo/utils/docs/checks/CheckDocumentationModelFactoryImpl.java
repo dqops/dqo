@@ -25,6 +25,7 @@ import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlConnectionProvider;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftConnectionProvider;
+import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
@@ -170,6 +171,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
         List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, TABLE_CATEGORY_HELP, tableSpec, CheckTarget.table);
 
+        resultList.sort(Comparator.comparing(CheckCategoryDocumentationModel::getCategoryName));
+
         return resultList;
     }
 
@@ -189,6 +192,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         SimilarChecksContainer similarTableChecks = this.similarCheckMatchingService.findSimilarColumnChecks(tableSpec, columnSpec);
         Map<String, Collection<SimilarChecksGroup>> checksPerGroup = similarTableChecks.getChecksPerGroup();
         List<CheckCategoryDocumentationModel> resultList = buildDocumentationForChecks(checksPerGroup, COLUMN_CATEGORY_HELP, tableSpec, CheckTarget.column);
+
+        resultList.sort(Comparator.comparing(CheckCategoryDocumentationModel::getCategoryName));
 
         return resultList;
     }
@@ -221,7 +226,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 SimilarCheckModel firstCheckModel = similarChecksGroup.getSimilarChecks().get(0);
                 similarChecksDocumentationModel.setCategory(firstCheckModel.getCategory()); // the category of the first check, the other similar checks should be in the same category
                 similarChecksDocumentationModel.setTarget(target.name());
-                similarChecksDocumentationModel.setPrimaryCheckName(firstCheckModel.getCheckModel().getCheckName());
+                similarChecksDocumentationModel.setPrimaryCheckName(firstCheckModel.getCheckModel().getCheckName().replace('_', ' '));
 
                 ClassJavadoc checkClassJavadoc = RuntimeJavadoc.getJavadoc(firstCheckModel.getCheckModel().getCheckSpec().getClass());
                 if (checkClassJavadoc != null) {
@@ -328,7 +333,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         checkDocumentationModel.setCheckSample(createCheckSample(yamlSample, similarCheckModel, checkDocumentationModel));
 
-        checkDocumentationModel.setProviderTemplates(generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation));
+        List<CheckProviderRenderedSqlDocumentationModel> providerSamples = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
+        providerSamples.sort(Comparator.comparing(CheckProviderRenderedSqlDocumentationModel::getProviderType));
+        checkDocumentationModel.setProviderTemplates(providerSamples);
 
         trimmedTableSpec.getColumns().put("country", createColumnWithLabel("column used as the first grouping key"));
         trimmedTableSpec.getColumns().put("state", createColumnWithLabel("column used as the second grouping key"));
@@ -340,9 +347,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         TableYaml tableYamlWithDataStreams = new TableYaml(trimmedTableSpec);
         String yamlSampleWithDataStreams = this.yamlSerializer.serialize(tableYamlWithDataStreams);
         checkDocumentationModel.setSampleYamlWithDataStreams(yamlSampleWithDataStreams);
+        checkDocumentationModel.setSplitSampleYamlWithDataStreams(splitStringByEndOfLine(yamlSampleWithDataStreams));
         createMarksForDataStreams(checkDocumentationModel, yamlSampleWithDataStreams);
 
-        checkDocumentationModel.setProviderTemplatesDataStreams(generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation));
+        List<CheckProviderRenderedSqlDocumentationModel> providerSamplesDataStream = generateProviderSamples(trimmedTableSpec, checkSpec, checkRootContainer, sensorDocumentation);
+        providerSamplesDataStream.sort(Comparator.comparing(CheckProviderRenderedSqlDocumentationModel::getProviderType));
+        checkDocumentationModel.setProviderTemplatesDataStreams(providerSamplesDataStream);
 
 
         // TODO: generate sample CLI commands
@@ -365,6 +375,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         List<String> checkSample = new ArrayList<>();
         boolean isCheckSection = false;
         String checkBeginMarker = "checks:";
+        String checkpointBeginMarker = "checkpoints:";
+        String partitionedCheckBeginMarker = "partitioned_checks:";
         String checkEndMarker = "";
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
             checkEndMarker = "  columns:";
@@ -374,7 +386,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         List<String> splitYaml = List.of(yamlSample.split("\\r?\\n|\\r"));
         for (int i = 0; i <= splitYaml.size(); i++) {
-            if (splitYaml.get(i).contains(checkBeginMarker)) {
+            if (splitYaml.get(i).contains(checkBeginMarker) || splitYaml.get(i).contains(checkpointBeginMarker) || splitYaml.get(i).contains(partitionedCheckBeginMarker)) {
                 isCheckSection = true;
                 checkDocumentationModel.setCheckSampleBeginLine(i + 1);
             }
@@ -439,7 +451,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
             providerDocModel.setProviderType(providerType);
             String sqlTemplate = providerSensorDefinitionWrapper.getSqlTemplate();
             providerDocModel.setJinjaTemplate(sqlTemplate);
-            providerDocModel.setListOfJinjaTemplate(splitSqlTemplates(sqlTemplate));
+            providerDocModel.setListOfJinjaTemplate(splitStringByEndOfLine(sqlTemplate));
 
             if (sqlTemplate != null) {
                 SensorDefinitionFindResult sensorDefinitionFindResult = new SensorDefinitionFindResult(sensorDefinitionWrapper.getSpec(),
@@ -455,6 +467,9 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 }});
                 connectionSpec.setPostgresql(new PostgresqlParametersSpec() {{
                     setDatabase("your_postgresql_database");
+                }});
+                connectionSpec.setRedshift(new RedshiftParametersSpec() {{
+                    setDatabase("your_redshift_database");
                 }});
                 connectionSpec.setProviderType(providerType);
 
@@ -480,7 +495,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 try {
                     String renderedTemplate = this.jinjaTemplateRenderService.renderTemplate(sqlTemplate, templateRenderParameters);
                     providerDocModel.setRenderedTemplate(renderedTemplate);
-                    providerDocModel.setListOfRenderedTemplate(splitSqlTemplates(renderedTemplate));
+                    providerDocModel.setListOfRenderedTemplate(splitStringByEndOfLine(renderedTemplate));
                 }
                 catch (Exception ex) {
                     System.err.println("Failed to render a sample SQL for check " + checkSpec.getCheckName());
@@ -514,11 +529,11 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     }
 
     /**
-     * Create list of split sql templates by end of line.
-     * @param sqlTemplate Sql template.
-     * @return List of split sql templates by end of line.
+     * Create list of split string templates by end of line.
+     * @param template Template.
+     * @return List of split string templates by end of line.
      */
-    private List<String> splitSqlTemplates(String sqlTemplate) {
-        return List.of(sqlTemplate.split("\\r?\\n|\\r"));
+    private List<String> splitStringByEndOfLine(String template) {
+        return List.of(template.split("\\r?\\n|\\r"));
     }
 }

@@ -156,14 +156,14 @@ public class GenerateDocumentationPostProcessor {
      * @param projectRoot Path to the project root.
      */
     public static void generateDocumentationForCliCommands(Path projectRoot) {
-        Path cliDocPath = projectRoot.resolve("../docs/reference/command_line_interface").toAbsolutePath().normalize();
+        Path cliDocPath = projectRoot.resolve("../docs/command_line_interface").toAbsolutePath().normalize();
         DocumentationFolder currentCliDocFiles = DocumentationFolderFactory.loadCurrentFiles(cliDocPath);
         CliCommandDocumentationGenerator cliCommandDocumentationGenerator = new CliCommandDocumentationGeneratorImpl(new CliCommandDocumentationModelFactoryImpl());
 
         DocumentationFolder renderedDocumentation = cliCommandDocumentationGenerator.generateDocumentationForCliCommands(projectRoot);
         renderedDocumentation.writeModifiedFiles(currentCliDocFiles);
 
-        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
         MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY",
@@ -172,7 +172,7 @@ public class GenerateDocumentationPostProcessor {
 
 
     public static void generateDocumentationForChecks(Path projectRoot, DqoHomeContext dqoHomeContext) {
-        Path checksDocPath = projectRoot.resolve("../docs/reference/checks").toAbsolutePath().normalize();
+        Path checksDocPath = projectRoot.resolve("../docs/checks").toAbsolutePath().normalize();
         DocumentationFolder currentCheckDocFiles = DocumentationFolderFactory.loadCurrentFiles(checksDocPath);
         CheckDocumentationModelFactory checkDocumentationModelFactory = createCheckDocumentationModelFactory(projectRoot, dqoHomeContext);
         CheckDocumentationGenerator checkDocumentationGenerator = new CheckDocumentationGeneratorImpl(checkDocumentationModelFactory);
@@ -180,7 +180,7 @@ public class GenerateDocumentationPostProcessor {
         DocumentationFolder renderedDocumentation = checkDocumentationGenerator.renderCheckDocumentation(projectRoot);
         renderedDocumentation.writeModifiedFiles(currentCheckDocFiles);
 
-        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
         MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY",
