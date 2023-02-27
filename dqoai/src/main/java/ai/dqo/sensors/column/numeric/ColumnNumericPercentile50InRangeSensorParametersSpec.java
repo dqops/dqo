@@ -40,7 +40,7 @@ public class ColumnNumericPercentile50InRangeSensorParametersSpec extends Abstra
 
 
     @JsonPropertyDescription("50th percentile, must equals to 0.5")
-    private final Double percentileValue = 0.5;
+    private Double percentileValue = 0.5;
 
     /**
      * Returns the percentile 50 value of the range.
@@ -50,14 +50,14 @@ public class ColumnNumericPercentile50InRangeSensorParametersSpec extends Abstra
         return percentileValue;
     }
 
-//    /**
-//     * Sets the percentile 50 value of the range.
-//     * @param percentileValue Percentile 50 value of the range.
-//     */
-//    public void setPercentileValue(Double percentileValue) {
-//        this.setDirtyIf(!Objects.equals(this.percentileValue, percentileValue));
-//        this.percentileValue = percentileValue;
-//    }
+    /**
+     * Sets the percentile 50 value of the range.
+     * @param percentileValue Percentile 50 value of the range.
+     */
+    public final void setPercentileValue(Double percentileValue) {
+        this.setDirtyIf(!Objects.equals(this.percentileValue, percentileValue));
+        this.percentileValue = 0.5;
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
