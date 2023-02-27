@@ -46,7 +46,7 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
     @BeforeEach
     void setUp() {
 		this.sut = new TableTimelinessDataIngestionDelaySensorParametersSpec();
-        this.sut.setFilter("{table}.correct = 0");
+        this.sut.setFilter("{alias}.correct = 0");
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_timeliness_sensors, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.checkSpec = new TableDataIngestionDelayCheckSpec();
@@ -66,8 +66,8 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecBigQueryTests 
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     private String getEventTimestampColumn() {

@@ -34,7 +34,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
-import ai.dqo.profiling.table.TableStatisticsCollectorsRootCategoriesSpec;
+import ai.dqo.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -59,6 +59,7 @@ public class TableSpec extends AbstractSpec {
         {
 			put("target", o -> o.target);
             put("timestamp_columns", o -> o.timestampColumns);
+            put("incremental_time_window", o -> o.incrementalTimeWindow);
 			put("data_streams", o -> o.dataStreams);
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
@@ -97,7 +98,7 @@ public class TableSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String stage;
 
-    @JsonPropertyDescription("SQL WHERE clause added to the sensor queries.")
+    @JsonPropertyDescription("SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String filter;
 
@@ -105,6 +106,11 @@ public class TableSpec extends AbstractSpec {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TimestampColumnsSpec timestampColumns = new TimestampColumnsSpec();
+
+    @JsonPropertyDescription("Configuration of the time window for analyzing daily or monthly partitions. Specifies the number of recent days and recent months that are analyzed when the partitioned data quality checks are run in an incremental mode (the default mode).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private PartitionIncrementalTimeWindowSpec incrementalTimeWindow = new PartitionIncrementalTimeWindowSpec();
 
     @JsonPropertyDescription("Data stream mappings list. Data streams are configured in two cases: (1) a tag is assigned to a table (within a data stream level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a 'country' column used for partitioning.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -239,6 +245,24 @@ public class TableSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.timestampColumns, timestampColumns));
         this.timestampColumns = timestampColumns;
         propagateHierarchyIdToField(timestampColumns, "timestamp_columns");
+    }
+
+    /**
+     * Returns the configuration of incremental time window for running partitioned data quality checks in an incremental mode.
+     * @return Configuration of the incremental time window for partitioned checks.
+     */
+    public PartitionIncrementalTimeWindowSpec getIncrementalTimeWindow() {
+        return incrementalTimeWindow;
+    }
+
+    /**
+     * Sets the configuration of incremental time windows for running partitioned checks.
+     * @param incrementalTimeWindow New configuration of the incremental time windows.
+     */
+    public void setIncrementalTimeWindow(PartitionIncrementalTimeWindowSpec incrementalTimeWindow) {
+        setDirtyIf(!Objects.equals(this.incrementalTimeWindow, incrementalTimeWindow));
+        this.incrementalTimeWindow = incrementalTimeWindow;
+        propagateHierarchyIdToField(incrementalTimeWindow, "incremental_time_window");
     }
 
     /**
@@ -655,6 +679,9 @@ public class TableSpec extends AbstractSpec {
             if (cloned.timestampColumns != null) {
                 cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
             }
+            if (cloned.incrementalTimeWindow != null) {
+                cloned.incrementalTimeWindow = cloned.incrementalTimeWindow.deepClone();
+            }
             if (cloned.dataStreams != null) {
                 cloned.dataStreams = cloned.dataStreams.expandAndTrim(secretValueProvider);
             }
@@ -679,6 +706,9 @@ public class TableSpec extends AbstractSpec {
             }
             if (cloned.timestampColumns != null) {
                 cloned.timestampColumns = cloned.timestampColumns.deepClone();
+            }
+            if (cloned.incrementalTimeWindow != null) {
+                cloned.incrementalTimeWindow = cloned.incrementalTimeWindow.deepClone();
             }
             cloned.checks = null;
             cloned.checkpoints = null;
@@ -712,6 +742,7 @@ public class TableSpec extends AbstractSpec {
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timestampColumns = null;
+            cloned.incrementalTimeWindow = null;
             cloned.dataStreams = null;
             cloned.labels = null;
             cloned.comments = null;

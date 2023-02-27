@@ -15,7 +15,7 @@
  */
 package ai.dqo.data.storage;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 
 /**

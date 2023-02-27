@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.dqocloud.buckets;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import com.google.cloud.storage.Storage;
 
 /**

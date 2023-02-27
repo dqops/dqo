@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.jobqueue.monitoring;
 
+import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
 import reactor.core.publisher.Mono;
 
@@ -86,4 +87,10 @@ public interface DqoJobQueueMonitoringService {
      * @return Mono with a list of changes and the next sequence id.
      */
     Mono<DqoJobQueueIncrementalSnapshotModel> getIncrementalJobChanges(long lastChangeId, long timeout, TimeUnit timeUnit);
+
+    /**
+     * Publishes the current folder synchronization status.
+     * @param synchronizationStatus Folder synchronization status.
+     */
+    void publishFolderSynchronizationStatus(CloudSynchronizationFoldersStatusModel synchronizationStatus);
 }

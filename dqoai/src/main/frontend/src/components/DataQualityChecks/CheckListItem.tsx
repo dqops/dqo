@@ -123,7 +123,9 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
       return;
     }
     await onUpdate();
-    JobApiClient.runChecks(check?.run_checks_job_template);
+    JobApiClient.runChecks({
+      checkSearchFilters: check?.run_checks_job_template
+    });
   };
 
   const isDisabled = !check?.configured || check?.disabled;
@@ -267,10 +269,11 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                     key={index}
                     content={
                       <div className="text-gray-900">
-                        <div>{checkResult?.results?.[index]}</div>
-                        <div className="capitalize">{getStatusLabel(status)}</div>
-                        <div>{checkResult?.timePeriods ? moment(checkResult.timePeriods[index]).format('YYYY-MM-DD HH:mm:ss') : ''}</div>
-                        <div>{checkResult?.dataStreams ? checkResult.dataStreams[index] : ''}</div>
+                        <div>Sensor value: {checkResult?.results?.[index]}</div>
+                        <div>Most severe status: <span className="capitalize">{getStatusLabel(status)}</span></div>
+                        <div>Executed at: {checkResult?.executedAtTimestamps ? moment(checkResult.executedAtTimestamps[index]).format('YYYY-MM-DD HH:mm:ss') + ' UTC' : ''}</div>
+                        <div>Time period: {checkResult?.timePeriodDisplayTexts ? checkResult.timePeriodDisplayTexts[index] : ''}</div>                        
+                        <div>Data stream: {checkResult?.dataStreams ? checkResult.dataStreams[index] : ''}</div>
                       </div>
                     }
                     className="max-w-80 py-4 px-4 bg-white shadow-2xl"

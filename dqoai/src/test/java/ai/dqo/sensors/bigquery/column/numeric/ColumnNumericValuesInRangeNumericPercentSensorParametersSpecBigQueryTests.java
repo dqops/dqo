@@ -46,7 +46,7 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecBigQuer
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnNumericValuesInRangeNumericPercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.nulls_and_uniqueness, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -71,7 +71,8 @@ public class ColumnNumericValuesInRangeNumericPercentSensorParametersSpecBigQuer
     }
 
     private String getSubstitutedFilter(String tableName) {
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test

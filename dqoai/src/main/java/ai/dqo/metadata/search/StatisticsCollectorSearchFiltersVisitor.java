@@ -19,12 +19,12 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
-import ai.dqo.profiling.AbstractStatisticsCollectorCategorySpec;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
-import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
-import ai.dqo.profiling.StatisticsCollectorTarget;
-import ai.dqo.profiling.column.ColumnStatisticsCollectorsRootCategoriesSpec;
-import ai.dqo.profiling.table.TableStatisticsCollectorsRootCategoriesSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorCategorySpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
+import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
+import ai.dqo.statistics.StatisticsCollectorTarget;
+import ai.dqo.statistics.column.ColumnStatisticsCollectorsRootCategoriesSpec;
+import ai.dqo.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.google.common.base.Strings;
 

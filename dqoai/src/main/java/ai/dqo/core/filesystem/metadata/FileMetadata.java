@@ -47,6 +47,9 @@ public class FileMetadata implements Cloneable {
     @JsonProperty("s")
     private long statusCheckedAt;
 
+    @JsonProperty("l")
+    private long fileLength;
+
     /**
      * Default constructor - to be used by the deserializer.
      */
@@ -59,15 +62,18 @@ public class FileMetadata implements Cloneable {
      * @param lastModifiedAt Last modified timestamp retrieved from the file system.
      * @param fileHash Hash of the file. It is actually a content of the .[filename].parquet.crc file if such a file was found. Otherwise, a hash must be calculated from the file.
      * @param statusCheckedAt The timestamp (now) when the file status was checked for the last time.
+     * @param fileLength File length in bytes.
      */
     public FileMetadata(Path relativePath,
                         long lastModifiedAt,
                         byte[] fileHash,
-                        long statusCheckedAt) {
+                        long statusCheckedAt,
+                        long fileLength) {
         this.relativePath = relativePath;
         this.lastModifiedAt = lastModifiedAt;
         this.fileHash = fileHash;
         this.statusCheckedAt = statusCheckedAt;
+        this.fileLength = fileLength;
     }
 
     /**
@@ -144,6 +150,22 @@ public class FileMetadata implements Cloneable {
     }
 
     /**
+     * Returns the file size.
+     * @return File size in bytes.
+     */
+    public long getFileLength() {
+        return fileLength;
+    }
+
+    /**
+     * Private setter - used by the deserializer.
+     * @param fileLength File length.
+     */
+    private void setFileLength(long fileLength) {
+        this.fileLength = fileLength;
+    }
+
+    /**
      * Calculates a 64 bit hash of the file path and the hash itself. The timestamps are not part of the hash.
      * @return 64 bit farm hash.
      */
@@ -166,7 +188,7 @@ public class FileMetadata implements Cloneable {
 
         FileMetadata that = (FileMetadata) o;
 
-        return relativePath.equals(that.relativePath);
+        return relativePath.equals(that.relativePath); // we are comparing only the paths, because we use it as a hash table key
     }
 
     @Override

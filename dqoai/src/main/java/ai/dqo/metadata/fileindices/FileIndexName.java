@@ -15,7 +15,7 @@
  */
 package ai.dqo.metadata.fileindices;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import com.google.common.base.Enums;
 import com.google.common.base.Optional;
 
@@ -50,7 +50,7 @@ public class FileIndexName {
             throw new IllegalArgumentException("Index file name is invalid");
         }
 
-        String indexName = baseFileName.substring(0, indexOfDot).toUpperCase(Locale.ROOT);
+        String indexName = baseFileName.substring(0, indexOfDot).toLowerCase(Locale.ROOT);
         Optional<DqoRoot> dqoRootOptional = Enums.getIfPresent(DqoRoot.class, indexName);
         if (!dqoRootOptional.isPresent()) {
             return null;

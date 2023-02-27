@@ -186,4 +186,12 @@ public class FileTreeNode {
     public Path getPhysicalAbsolutePath() {
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "FileTreeNode{" +
+                "filePath=" + filePath +
+                ", status=" + status +
+                '}';
+    }
 }

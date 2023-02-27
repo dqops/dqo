@@ -25,6 +25,7 @@ import ai.dqo.data.normalization.CommonTableNormalizationServiceImpl;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -77,6 +78,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
                 null,
                 CheckType.ADHOC,
                 null, // time series
+                new TimeWindowFilterParameters(),
                 null, // data stream mapping
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));

@@ -56,7 +56,7 @@ public class BigQueryTableSqlAggregatedExpressionSensorParametersSpecIntegration
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setSqlExpression("COUNT({table})");
+        this.sut.setSqlExpression("COUNT({alias}.id)");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -71,7 +71,7 @@ public class BigQueryTableSqlAggregatedExpressionSensorParametersSpecIntegration
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setSqlExpression("COUNT({table})");
+        this.sut.setSqlExpression("COUNT({alias}.id)");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -86,7 +86,7 @@ public class BigQueryTableSqlAggregatedExpressionSensorParametersSpecIntegration
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setSqlExpression("COUNT({table})");
+        this.sut.setSqlExpression("COUNT({alias}.id)");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
@@ -101,7 +101,7 @@ public class BigQueryTableSqlAggregatedExpressionSensorParametersSpecIntegration
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sut.setSqlExpression("COUNT({table})");
+        this.sut.setSqlExpression("COUNT({alias}.id)");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
@@ -116,7 +116,7 @@ public class BigQueryTableSqlAggregatedExpressionSensorParametersSpecIntegration
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sut.setSqlExpression("COUNT({table})");
+        this.sut.setSqlExpression("COUNT({alias}.id)");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");

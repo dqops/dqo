@@ -340,12 +340,10 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
                     HierarchyNode clonedChild = hierarchyNode.deepClone();
                     fieldInfo.setRawFieldValue(clonedChild, cloned);
                 }
-
-                if (currentValue instanceof Map){
+                else if (currentValue instanceof Map){
                     Map<?,?> clonedChild = cloneMap((Map<?,?>) currentValue);
                     fieldInfo.setRawFieldValue(clonedChild, cloned);
                 }
-
                 else {
                     throw new UnsupportedOperationException("Cannot clone object of type " + currentValue.getClass().getCanonicalName() +
                             " on field: " + fieldInfo.getClassFieldName() + ", class: " + this.getClass().getCanonicalName());

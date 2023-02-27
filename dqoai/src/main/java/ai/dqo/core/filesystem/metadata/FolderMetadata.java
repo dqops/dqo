@@ -354,9 +354,11 @@ public class FolderMetadata implements Cloneable {
      * @param newFile New file metadata. Could be null if the file was deleted.
      */
     public void applyChange(Path relativePath, FileMetadata newFile) {
-        this.removeFile(relativePath);
-        if (newFile != null) {
-            this.addFile(newFile);
+        synchronized (this) {
+            this.removeFile(relativePath);
+            if (newFile != null) {
+                this.addFile(newFile);
+            }
         }
     }
 

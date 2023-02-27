@@ -16,7 +16,7 @@
 package ai.dqo.core.locks;
 
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -43,13 +43,14 @@ public class UserHomeLockManagerImpl implements UserHomeLockManager {
         this.coreConfigurationProperties = coreConfigurationProperties;
         long lockWaitTimeoutSeconds = coreConfigurationProperties.getLockWaitTimeoutSeconds();
         this.locks = new LinkedHashMap<>() {{
-            put(DqoRoot.SOURCES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.SENSORS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.RULES, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.DATA_SENSOR_READOUTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.DATA_RULE_RESULTS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.DATA_STATISTICS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
-            put(DqoRoot.DATA_ERRORS, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.sources, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.sensors, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.rules, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.data_sensor_readouts, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.data_rule_results, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.data_statistics, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot.data_errors, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
+            put(DqoRoot._indexes, new ReaderWriterLockHolder(lockWaitTimeoutSeconds));
         }};
     }
 

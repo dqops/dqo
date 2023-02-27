@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.filesystem.localfiles;
 
+import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
@@ -33,7 +34,8 @@ public class LocalHomeTestUtilities {
         try {
             HomeLocationFindServiceImpl homeLocationFindService = HomeLocationFindServiceObjectMother.getWithTestUserHome(true);
             UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
-            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager);
+            LocalUserHomeFileStorageServiceImpl localHomeStorageService = new LocalUserHomeFileStorageServiceImpl(
+                    homeLocationFindService, newLockManager, new SynchronizationStatusTrackerStub());
             LocalUserHomeCreatorObjectMother.initializeDqoUserHomeAt(localHomeStorageService.getHomePath());
         }
         catch( Exception ex) {

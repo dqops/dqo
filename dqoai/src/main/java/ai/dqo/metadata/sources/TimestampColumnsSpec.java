@@ -55,7 +55,7 @@ public class TimestampColumnsSpec extends AbstractSpec {
     private String ingestionTimestampColumn;
 
     @JsonPropertyDescription("Date/time partitioned checks timestamp source. Decides if the date/time partitioned data quality checks are calculated for rounded time periods (days, weeks) for rows grouped by event timestamp (when the action happened) or the ingestion timestamp (when the data was loaded).")
-    private PartitionedDataQualityChecksTimestampSource partitionedChecksTimestampSource = PartitionedDataQualityChecksTimestampSource.event_timestamp;
+    private PartitionedChecksTimestampSource partitionedChecksTimestampSource = PartitionedChecksTimestampSource.event_timestamp;
 
     /**
      * Returns the name of the column that identifies the event timestamp, it could be the transaction timestamp.
@@ -95,7 +95,7 @@ public class TimestampColumnsSpec extends AbstractSpec {
      * Returns the type of the timestamp column used to group rows into time periods for date/time partitioned data quality checks.
      * @return Partitioned checks grouping column.
      */
-    public PartitionedDataQualityChecksTimestampSource getPartitionedChecksTimestampSource() {
+    public PartitionedChecksTimestampSource getPartitionedChecksTimestampSource() {
         return partitionedChecksTimestampSource;
     }
 
@@ -103,7 +103,7 @@ public class TimestampColumnsSpec extends AbstractSpec {
      * Sets the type of column used for date/time partitioned checks.
      * @param partitionedChecksTimestampSource Partitioned data quality checks column source.
      */
-    public void setPartitionedChecksTimestampSource(PartitionedDataQualityChecksTimestampSource partitionedChecksTimestampSource) {
+    public void setPartitionedChecksTimestampSource(PartitionedChecksTimestampSource partitionedChecksTimestampSource) {
         this.setDirtyIf(this.partitionedChecksTimestampSource != partitionedChecksTimestampSource);
         this.partitionedChecksTimestampSource = partitionedChecksTimestampSource;
     }

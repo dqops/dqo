@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.scheduler;
 
-import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.quartz.JobKeys;
 import ai.dqo.core.scheduler.scan.JobSchedulesDelta;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;

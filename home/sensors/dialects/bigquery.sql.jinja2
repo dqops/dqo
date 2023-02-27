@@ -2,6 +2,7 @@
 {% set macro_schema_name = table.target.schema_name -%}
 {% set macro_table_name = table.target.table_name -%}
 {% set time_series = effective_time_series | default(none, true) -%}
+{% set time_window_filter = time_window_filter | default(none, true) -%}
 {% set timestamp_column_data_type = table.columns[time_series.timestamp_column].type_snapshot.column_type | upper | default(none, true) -%}
 {% set data_streams = effective_data_streams | default(none, true) -%}
 {% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
@@ -22,7 +23,7 @@
     {{ quote_identifier(macro_project_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
 {%- endmacro %}
 
-{%- macro render_target_column(table_alias_prefix = '') -%}
+{%- macro render_target_column(table_alias_prefix = 'analyzed_table') -%}
     {{ table_alias_prefix }}.{{ quote_identifier(column_name) }}
 {%- endmacro %}
 
@@ -66,7 +67,7 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_time_dimension_expression(table_alias_prefix = '') %}
+{% macro render_time_dimension_expression(table_alias_prefix = 'analyzed_table') %}
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
             {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
@@ -82,7 +83,7 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_data_stream_projections(table_alias_prefix = '', indentation = '    ') %}
+{% macro render_data_stream_projections(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
     {%- if data_streams is not none and (data_streams | length()) > 0 -%}
         {%- for attribute in data_streams -%}
             {{ ',' }}
@@ -97,7 +98,7 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_time_dimension_projection(table_alias_prefix = '', indentation = '    ') %}
+{% macro render_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') %}
     {%- if time_series is not none -%}
         {{ ',' -}}{{- eol() -}}
         {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
@@ -105,7 +106,100 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_where_clause(extra_filter = none) %}
+{% macro render_end_date_filter(prefix_to_render = none, table_alias_prefix = 'analyzed_table') %}
+    {%- if time_window_filter is not none -%}
+        {%- if time_window_filter.to_date_time_offset is not none -%}
+            {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date_time_offset) -}}
+        {%- elif time_window_filter.to_date_time is not none -%}
+            {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date_time) -}}
+        {%- elif time_window_filter.to_date is not none -%}
+            {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date) -}}
+        {%- elif time_window_filter.daily_partitioning_include_today is not none -%}
+            {{ prefix_to_render -}}
+            {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                CAST(CURRENT_DATE() AS TIMESTAMP)
+            {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                CURRENT_DATE()
+            {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                CAST(CURRENT_DATE() AS DATETIME)
+            {%- else -%}
+                CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}} AS DATE){{- ' < ' -}}
+                CURRENT_DATE()
+            {%- endif -%}
+        {%- elif time_window_filter.monthly_partitioning_include_current_month is not none -%}
+            {{ prefix_to_render -}}
+            {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                CAST(date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} AS TIMESTAMP)
+            {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+            {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+                {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
+                CAST(date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} AS DATETIME)
+            {%- else -%}
+                CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}} AS DATE){{- ' < ' -}}
+                date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_date_range_filters(prefix_to_render = none, table_alias_prefix = 'analyzed_table') %}
+    {%- if time_window_filter is not none -%}
+        {%- if (time_series.timestamp_column | default(none, true)) is not none -%}
+            {%- if time_window_filter.from_date_time_offset is not none -%}
+                 {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} >= {{ make_text_constant(time_window_filter.from_date_time_offset) -}}
+                 {{- render_end_date_filter(' AND ', table_alias_prefix) -}}
+            {%- elif time_window_filter.from_date_time is not none -%}
+                {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} >= {{ make_text_constant(time_window_filter.from_date_time) -}}
+                {{- render_end_date_filter(' AND ', table_alias_prefix) -}}
+            {%- elif time_window_filter.from_date is not none -%}
+                {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} >= {{ make_text_constant(time_window_filter.from_date) -}}
+                {{- render_end_date_filter(' AND ', table_alias_prefix) -}}
+            {%- elif time_window_filter.daily_partitioning_recent_days is not none -%}
+                {{ prefix_to_render -}}
+                {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                     CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAYS) AS TIMESTAMP)
+                {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                     DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAYS)
+                {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                     CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAYS) AS DATETIME)
+                {%- else -%}
+                     CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}} AS DATE){{- ' >= ' -}}
+                     DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAYS)
+                {%- endif -%}
+                {{- render_end_date_filter(' AND ', table_alias_prefix) -}}
+            {%- elif time_window_filter.monthly_partitioning_recent_months is not none -%}
+                {{ prefix_to_render -}}
+                {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                     CAST(DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTHS) AS TIMESTAMP)
+                {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                     DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTHS)
+                {%- elif table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+                     {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
+                     CAST(DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTHS) AS DATETIME)
+                {%- else -%}
+                     CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}} AS DATE){{- ' >= ' -}}
+                     DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTHS)
+                {%- endif -%}
+                {{- render_end_date_filter(' AND ', table_alias_prefix) -}}
+            {%- else -%}
+                {{- render_end_date_filter(prefix_to_render, table_alias_prefix) -}}
+            {%- endif -%}
+        {%- endif -%}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro render_where_clause(extra_filter = none, table_alias_prefix = 'analyzed_table') %}
     {%- with filters = [table.filter|default(none, true), parameters.filter|default(none, true), extra_filter|default(none, true)] | reject('none') | list -%}
         {%- if (filters | length) > 0 %}
 {{ 'WHERE ' }}
@@ -113,8 +207,11 @@
                 {%- if not loop.first -%}
                     {{ ' AND '}}
                 {%- endif -%}
-                {{ filter }}
+                {{ filter | replace('{column}', render_target_column('analyzed_table')) | replace('{table}', render_target_table()) | replace('{alias}', table_alias_prefix) }}
             {%- endfor -%}
+            {{ render_date_range_filters(' AND ', table_alias_prefix) }}
+        {%- else -%}
+            {{ render_date_range_filters('WHERE ', table_alias_prefix)}}
         {%- endif -%}
     {%- endwith -%}
 {% endmacro %}

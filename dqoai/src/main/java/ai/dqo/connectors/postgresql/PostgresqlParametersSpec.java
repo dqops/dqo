@@ -72,7 +72,7 @@ public class PostgresqlParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Connect to PostgreSQL using SSL. The default value is false.")
     private Boolean ssl;
 
-    @CommandLine.Option(names = {"--postgresql-properties"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
+    @CommandLine.Option(names = {"-P"}, description = "PostgreSQL additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 
