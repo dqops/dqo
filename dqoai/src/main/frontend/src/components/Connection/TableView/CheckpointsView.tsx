@@ -15,7 +15,8 @@ import { IRootState } from '../../../redux/reducers';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import TableActionGroup from './TableActionGroup';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
-import { useParams } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
+import { ROUTES } from "../../../shared/routes";
 
 const initTabs = [
   {
@@ -29,12 +30,12 @@ const initTabs = [
 ];
 
 const CheckpointsView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
-  const [activeTab, setActiveTab] = useState('daily');
+  const { connection: connectionName, schema: schemaName, table: tableName, tab, checkTypes }: { checkTypes: string, connection: string, schema: string, table: string, tab: string } = useParams();
   const [tabs, setTabs] = useState(initTabs);
   const dispatch = useActionDispatch();
   const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [monthlyCheckResultsOverview, setMonthlyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const history = useHistory();
 
   const {
     tableBasic,
@@ -67,7 +68,7 @@ const CheckpointsView = () => {
   }, [connectionName, schemaName, tableName, tableBasic]);
 
   const onUpdate = async () => {
-    if (activeTab === 'daily') {
+    if (tab === 'daily') {
       if (!dailyCheckpoints) return;
 
       await dispatch(
@@ -137,7 +138,11 @@ const CheckpointsView = () => {
       setMonthlyCheckResultsOverview(res.data);
     });
   };
-  
+
+  const onChangeTab = (tab: string) => {
+    history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, tab));
+  };
+
   return (
     <div className="flex-grow min-h-0 flex flex-col">
       <TableActionGroup
@@ -147,9 +152,9 @@ const CheckpointsView = () => {
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
       </div>
-      {activeTab === 'daily' && (
+      {tab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={dailyCheckpoints}
@@ -158,7 +163,7 @@ const CheckpointsView = () => {
           getCheckOverview={getDailyCheckOverview}
         />
       )}
-      {activeTab === 'monthly' && (
+      {tab === 'monthly' && (
         <DataQualityChecks
           onUpdate={onUpdate}
           checksUI={monthlyCheckpoints}

@@ -14,7 +14,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
   const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode, sidebarWidth } =
     useTree();
 
-  const { connection, schema, table, column, category, timePartitioned, checkName } = useParams() as any;
+  const { connection, schema, table, column, category, timePartitioned, checkName, checkTypes } = useParams() as any;
   const match = useRouteMatch();
 
 
