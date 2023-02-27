@@ -67,7 +67,7 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals((float)13.333, (float) resultTable.column(0).get(0), 0.001 );
     }
 
     @Test
@@ -131,6 +131,6 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals((float)13.333, (float) resultTable.column(0).get(0), 0.001);
     }
 }

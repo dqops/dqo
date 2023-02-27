@@ -1,9 +1,5 @@
-# {{target}}
-{{#each groupedSensors}}
-## **{{@key}}** {{target}} sensors
-___
-{{#each this}}
-### **{{replace sensorName "_" " "}}**
+{{#each collectedSensors}}
+## **{{replace sensorName "_" " "}}**
 **Full sensor name**
 ```
 {{fullSensorName}}
@@ -39,5 +35,4 @@ ___
     ```
 {{/each~}}
 ___
-{{/each}}
 {{/each}}
