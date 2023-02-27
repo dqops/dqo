@@ -35,15 +35,15 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch={{checkN
 {{{sampleYaml}}}
 ```
 {{#each providerTemplates~}}
-### **{{providerType}}**
-=== "Sensor template for {{providerType}}"
+### **{{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}**
+=== "Sensor template for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}"
     {{#with "  "}}{{.}}{{/with}}
     ```
     {{#each listOfJinjaTemplate~}}
     {{{this}}}
     {{/each~}}
     ```
-=== "Rendered SQL for {{providerType}}"
+=== "Rendered SQL for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}"
     {{#with "  "}}{{.}}{{/with}}
     ```
     {{#each listOfRenderedTemplate~}}
@@ -60,15 +60,15 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch={{checkN
     {{/each~}}
     ```{{#with "  "}}{{.}}{{/with}}
     {{#each providerTemplatesDataStreams~}}
-    **{{providerType}}**{{#with "  "}}{{.}}{{/with}}
+    **{{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}**{{#with "  "}}{{.}}{{/with}}
     {{#with "  "}}{{.}}{{/with}}
-    === "Sensor template for {{providerType}}"
+    === "Sensor template for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}"
         ```
         {{#each listOfJinjaTemplate~}}
         {{{this}}}
         {{/each~}}
         ```
-    === "Rendered SQL for {{providerType}}"
+    === "Rendered SQL for {{#if (eq (lower providerType) "bigquery")}}BigQuery{{else}}{{/if}}{{#if (eq (lower providerType) "snowflake")}}Snowflake{{else}}{{/if}}{{#if (eq (lower providerType) "postgresql")}}PostgreSQL{{else}}{{/if}}{{#if (eq (lower providerType) "redshift")}}Redshift{{else}}{{/if}}"
         ```
         {{#each listOfRenderedTemplate~}}
         {{{this}}}
