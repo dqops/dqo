@@ -42,6 +42,7 @@ const ColumnPartitionedChecksView = () => {
     monthlyPartitionedChecks,
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks,
+    loading,
     isUpdating
   } = useSelector((state: IRootState) => state.column);
 
@@ -186,6 +187,7 @@ const ColumnPartitionedChecksView = () => {
             className="max-h-checks"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
+            loading={loading}
           />
         )}
         {tab === 'monthly' && (
@@ -196,6 +198,7 @@ const ColumnPartitionedChecksView = () => {
             className="max-h-checks"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
+            loading={loading}
           />
         )}
       </div>

@@ -15,7 +15,7 @@ import Button from "../../components/Button";
 
 const TableAdHockChecksUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, category, checkName }: { connection: string, schema: string, table: string, category: string, checkName: string } = useParams();
-  const { checksUIFilter, isUpdatedChecksUIFilter } = useSelector(
+  const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(
     (state: IRootState) => state.table
   );
   const dispatch = useActionDispatch();
@@ -76,6 +76,7 @@ const TableAdHockChecksUIFilterView = () => {
           onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>
