@@ -78,6 +78,7 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
                 "ai.dqo.rules", projectRootPath, AbstractRuleParametersSpec.class);
 
         for (Class<? extends AbstractRuleParametersSpec> ruleParametersClass : classes) {
+            boolean isDuplicated = false;
             AbstractRuleParametersSpec abstractRuleParametersSpec = createRuleParameterInstance(ruleParametersClass);
             if (abstractRuleParametersSpec instanceof CustomRuleParametersSpec) {
                 continue;
@@ -87,8 +88,18 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
             if (ruleDocumentation == null) {
                 continue; // rule not found
             }
+            for (RuleDocumentationModel rule : ruleDocumentationModels) {
+                if (rule.getFullRuleName().equals(ruleDocumentation.getFullRuleName())) {
+                    isDuplicated = true;
+                    break;
+                }
+            }
+            if (isDuplicated) {
+                continue;
+            }
             ruleDocumentationModels.add(ruleDocumentation);
         }
+        ruleDocumentationModels.sort(Comparator.comparing(RuleDocumentationModel::getFullRuleName));
         return ruleDocumentationModels;
     }
 
@@ -110,6 +121,7 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
             ruleGroupedDocumentationModel.setRuleDocumentationModels(groupOfRules.getValue());
             ruleGroupedDocumentationModels.add(ruleGroupedDocumentationModel);
         }
+        ruleGroupedDocumentationModels.sort(Comparator.comparing(RuleGroupedDocumentationModel::getCategory));
         return ruleGroupedDocumentationModels;
     }
 
