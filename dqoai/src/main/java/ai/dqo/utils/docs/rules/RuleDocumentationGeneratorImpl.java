@@ -53,7 +53,8 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("rules/rule_documentation");
 
-        List<RuleDocumentationModel> ruleDocumentationModels = createRuleDocumentationModels(projectRootPath);
+        List<RuleDocumentationModel> ruleDocumentationModels = new ArrayList<>(createRuleDocumentationModels(projectRootPath));
+        ruleDocumentationModels.sort(Comparator.comparing(RuleDocumentationModel::getFullRuleName));
         List<RuleGroupedDocumentationModel> ruleGroupedDocumentationModels = groupRulesByCategory(ruleDocumentationModels);
 
         for (RuleGroupedDocumentationModel ruleGroupedDocumentationModel : ruleGroupedDocumentationModels) {
@@ -71,8 +72,8 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
      * @return Rules documentation model list.
      */
-    public List<RuleDocumentationModel> createRuleDocumentationModels(Path projectRootPath) {
-        List<RuleDocumentationModel> ruleDocumentationModels = new ArrayList<>();
+    public Set<RuleDocumentationModel> createRuleDocumentationModels(Path projectRootPath) {
+        Set<RuleDocumentationModel> ruleDocumentationModels = new HashSet<>();
 
         List<? extends Class<? extends AbstractRuleParametersSpec>> classes = TargetClassSearchUtility.findClasses(
                 "ai.dqo.rules", projectRootPath, AbstractRuleParametersSpec.class);
@@ -88,18 +89,8 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
             if (ruleDocumentation == null) {
                 continue; // rule not found
             }
-            for (RuleDocumentationModel rule : ruleDocumentationModels) {
-                if (rule.getFullRuleName().equals(ruleDocumentation.getFullRuleName())) {
-                    isDuplicated = true;
-                    break;
-                }
-            }
-            if (isDuplicated) {
-                continue;
-            }
             ruleDocumentationModels.add(ruleDocumentation);
         }
-        ruleDocumentationModels.sort(Comparator.comparing(RuleDocumentationModel::getFullRuleName));
         return ruleDocumentationModels;
     }
 
