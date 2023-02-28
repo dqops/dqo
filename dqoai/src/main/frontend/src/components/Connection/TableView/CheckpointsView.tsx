@@ -43,7 +43,8 @@ const CheckpointsView = () => {
     monthlyCheckpoints,
     isUpdatedDailyCheckpoints,
     isUpdatedMonthlyCheckpoints,
-    isUpdating
+    isUpdating,
+    loading,
   } = useSelector((state: IRootState) => state.table);
 
   useEffect(() => {
@@ -161,6 +162,7 @@ const CheckpointsView = () => {
           onChange={onDailyCheckpointsChange}
           checkResultsOverview={dailyCheckResultsOverview}
           getCheckOverview={getDailyCheckOverview}
+          loading={loading}
         />
       )}
       {tab === 'monthly' && (
@@ -170,6 +172,7 @@ const CheckpointsView = () => {
           onChange={onMonthlyCheckpointsChange}
           checkResultsOverview={monthlyCheckResultsOverview}
           getCheckOverview={getMonthlyCheckOverview}
+          loading={loading}
         />
       )}
     </div>

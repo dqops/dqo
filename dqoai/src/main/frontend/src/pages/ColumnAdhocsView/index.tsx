@@ -17,7 +17,7 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 
 const ColumnAdhocsView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { connection: string, schema: string, table: string, column: string } = useParams();
-  const { checksUI, isUpdating } = useSelector(
+  const { checksUI, isUpdating, loading } = useSelector(
     (state: IRootState) => state.column
   );
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
@@ -87,6 +87,7 @@ const ColumnAdhocsView = () => {
           className="max-h-checks-1"
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>
