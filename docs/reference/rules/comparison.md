@@ -1,19 +1,20 @@
 # comparison
 ___
 
-## **max count**
+## **between floats**
 **Full rule name**
 ```
-comparison/max_count
+comparison/between_floats
 ```
 **Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+Data quality rule that verifies if a data quality check readout is between from and to values.
 
 **Parameters**  
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+|from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -35,101 +36,14 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxCountRuleParametersSpec:
-    max_count: int
+class BetweenIntsRuleParametersSpec:
+    from_: float
+    to: float
 
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxCountRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_count
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max failures**
-**Full rule name**
-```
-comparison/max_failures
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: previous_readouts
-  time_window:
-    prediction_time_window: 30
-    min_periods_with_readouts: 0
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxFailuresRuleParametersSpec:
-    max_failures: int
-
+    def __getattr__(self, name):
+        if name == "from":
+            return self.from_
+        return object.__getattribute__(self, name)
 
 class HistoricDataPoint:
     timestamp_utc: datetime
@@ -146,7 +60,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: MaxFailuresRuleParametersSpec
+    parameters: BetweenIntsRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -172,25 +86,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    if not hasattr(rule_parameters, 'previous_readouts'):
-        return RuleExecutionResult()
-
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
-    filtered.append(rule_parameters.actual_value)
-
-    filtered.reverse()
-
-    recent_failures  = 0
-    for i in filtered:
-        if i == 0:
-            recent_failures += 1
-        else:
-            break
-
     expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_failures
-    passed = recent_failures <= upper_bound
+    lower_bound = getattr(rule_parameters.parameters,"from")
+    upper_bound = rule_parameters.parameters.to
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 
@@ -293,19 +192,20 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-## **min count**
+## **equals**
 **Full rule name**
 ```
-comparison/min_count
+comparison/equals
 ```
 **Description**  
-Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
+Data quality rule that verifies that a data quality check readout equals a given value. A margin of error may be configured.
 
 **Parameters**  
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+|expected_value|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|double| ||
+|error_margin|Error margin for comparison.|double| ||
 
 
 
@@ -327,8 +227,9 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class MinCountRuleParametersSpec:
-    min_count: float
+class EqualsRuleParametersSpec:
+    expected_value: float
+    error_margin: float
 
 
 class HistoricDataPoint:
@@ -346,7 +247,95 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: MinCountRuleParametersSpec
+    parameters: EqualsRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    expected_value = rule_parameters.parameters.expected_value
+    lower_bound = expected_value - rule_parameters.parameters.error_margin
+    upper_bound = expected_value + rule_parameters.parameters.error_margin
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+```
+___
+
+## **max**
+**Full rule name**
+```
+comparison/max
+```
+**Description**  
+Data quality rule that verifies if a data quality check readsout is less or equal a maximum value.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class MaxRuleParametersSpec:
+    max_value: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    max_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: MaxRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -373,28 +362,28 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult()
 
     expected_value = None
-    lower_bound = rule_parameters.parameters.min_count
-    upper_bound = None
-    passed = rule_parameters.actual_value >= lower_bound
+    lower_bound = None
+    upper_bound = rule_parameters.parameters.max_value
+    passed = rule_parameters.actual_value <= upper_bound
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 
 ```
 ___
 
-## **min count**
+## **max count**
 **Full rule name**
 ```
-comparison/min_count
+comparison/max_count
 ```
 **Description**  
-Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
+Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 
 **Parameters**  
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -416,8 +405,8 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class MinCountRuleParametersSpec:
-    min_count: float
+class MaxCountRuleParametersSpec:
+    max_count: int
 
 
 class HistoricDataPoint:
@@ -429,13 +418,13 @@ class HistoricDataPoint:
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    min_periods_with_readouts: int
+    max_periods_with_readouts: int
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: MinCountRuleParametersSpec
+    parameters: MaxCountRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -458,32 +447,32 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
+    if not hasattr(rule_parameters,'actual_value'):
         return RuleExecutionResult()
 
     expected_value = None
-    lower_bound = rule_parameters.parameters.min_count
-    upper_bound = None
-    passed = rule_parameters.actual_value >= lower_bound
+    lower_bound = None
+    upper_bound = rule_parameters.parameters.max_count
+    passed = rule_parameters.actual_value <= upper_bound
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 
 ```
 ___
 
-## **min percent**
+## **max days**
 **Full rule name**
 ```
-comparison/min_percent
+comparison/max_days
 ```
 **Description**  
-Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
+Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
 
 **Parameters**  
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
 
 
 
@@ -505,8 +494,8 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class MinPercentRuleParametersSpec:
-    min_percent: float
+class MaxValueRuleParametersSpec:
+    max_days: float
 
 
 class HistoricDataPoint:
@@ -518,13 +507,209 @@ class HistoricDataPoint:
 
 class RuleTimeWindowSettingsSpec:
     prediction_time_window: int
-    min_periods_with_readouts: int
+    max_periods_with_readouts: int
 
 
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: MinPercentRuleParametersSpec
+    parameters: MaxValueRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters,'actual_value'):
+        return RuleExecutionResult(True, None, None, None)
+
+    expected_value = None
+    lower_bound = None
+    upper_bound = rule_parameters.parameters.max_days
+    passed = rule_parameters.actual_value <= upper_bound
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **max failures**
+**Full rule name**
+```
+comparison/max_failures
+```
+**Description**  
+Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: previous_readouts
+  time_window:
+    prediction_time_window: 30
+    min_periods_with_readouts: 0
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class MaxFailuresRuleParametersSpec:
+    max_failures: int
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    max_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: MaxFailuresRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    if not hasattr(rule_parameters, 'previous_readouts'):
+        return RuleExecutionResult()
+
+    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
+    filtered.append(rule_parameters.actual_value)
+
+    filtered.reverse()
+
+    recent_failures  = 0
+    for i in filtered:
+        if i == 0:
+            recent_failures += 1
+        else:
+            break
+
+    expected_value = None
+    lower_bound = None
+    upper_bound = rule_parameters.parameters.max_failures
+    passed = recent_failures <= upper_bound
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+
+```
+___
+
+## **max percent**
+**Full rule name**
+```
+comparison/max_percent
+```
+**Description**  
+Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+
+
+
+**Example**
+```yaml
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  mode: current_value
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class MaxPercentRuleParametersSpec:
+    max_percent: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    max_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    actual_value: float
+    parameters: MaxPercentRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -551,9 +736,9 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult()
 
     expected_value = None
-    lower_bound = rule_parameters.parameters.min_percent
-    upper_bound = None
-    passed = rule_parameters.actual_value >= lower_bound
+    lower_bound = None
+    upper_bound = rule_parameters.parameters.max_percent
+    passed = rule_parameters.actual_value <= upper_bound
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 
@@ -649,291 +834,6 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-## **max count**
-**Full rule name**
-```
-comparison/max_count
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxCountRuleParametersSpec:
-    max_count: int
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxCountRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_count
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max failures**
-**Full rule name**
-```
-comparison/max_failures
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: previous_readouts
-  time_window:
-    prediction_time_window: 30
-    min_periods_with_readouts: 0
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxFailuresRuleParametersSpec:
-    max_failures: int
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxFailuresRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    if not hasattr(rule_parameters, 'previous_readouts'):
-        return RuleExecutionResult()
-
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
-    filtered.append(rule_parameters.actual_value)
-
-    filtered.reverse()
-
-    recent_failures  = 0
-    for i in filtered:
-        if i == 0:
-            recent_failures += 1
-        else:
-            break
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_failures
-    passed = recent_failures <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **min percent**
-**Full rule name**
-```
-comparison/min_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MinPercentRuleParametersSpec:
-    min_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    min_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MinPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = rule_parameters.parameters.min_percent
-    upper_bound = None
-    passed = rule_parameters.actual_value >= lower_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
 ## **min**
 **Full rule name**
 ```
@@ -1023,277 +923,10 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
-## **max days**
+## **min count**
 **Full rule name**
 ```
-comparison/max_days
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxValueRuleParametersSpec:
-    max_days: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxValueRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_days
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max percent**
-**Full rule name**
-```
-comparison/max_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxPercentRuleParametersSpec:
-    max_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_percent
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max days**
-**Full rule name**
-```
-comparison/max_days
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxValueRuleParametersSpec:
-    max_days: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxValueRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_days
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **min percent**
-**Full rule name**
-```
-comparison/min_percent
+comparison/min_count
 ```
 **Description**  
 Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
@@ -1302,7 +935,7 @@ Data quality rule that verifies if a data quality check readout is greater or eq
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
+|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
 
 
 
@@ -1324,8 +957,8 @@ from typing import Sequence
 
 
 # rule specific parameters object, contains values received from the quality check threshold configuration
-class MinPercentRuleParametersSpec:
-    min_percent: float
+class MinCountRuleParametersSpec:
+    min_count: float
 
 
 class HistoricDataPoint:
@@ -1343,7 +976,7 @@ class RuleTimeWindowSettingsSpec:
 # rule execution parameters, contains the sensor value (actual_value) and the rule parameters
 class RuleExecutionRunParameters:
     actual_value: float
-    parameters: MinPercentRuleParametersSpec
+    parameters: MinCountRuleParametersSpec
     time_period_local: datetime
     previous_readouts: Sequence[HistoricDataPoint]
     time_window: RuleTimeWindowSettingsSpec
@@ -1370,7 +1003,7 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult()
 
     expected_value = None
-    lower_bound = rule_parameters.parameters.min_percent
+    lower_bound = rule_parameters.parameters.min_count
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound
 
@@ -1462,1276 +1095,6 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     lower_bound = rule_parameters.parameters.min_percent
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max percent**
-**Full rule name**
-```
-comparison/max_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxPercentRuleParametersSpec:
-    max_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_percent
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **min percent**
-**Full rule name**
-```
-comparison/min_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MinPercentRuleParametersSpec:
-    min_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    min_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MinPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = rule_parameters.parameters.min_percent
-    upper_bound = None
-    passed = rule_parameters.actual_value >= lower_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max percent**
-**Full rule name**
-```
-comparison/max_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxPercentRuleParametersSpec:
-    max_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_percent
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max days**
-**Full rule name**
-```
-comparison/max_days
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_days|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxValueRuleParametersSpec:
-    max_days: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxValueRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult(True, None, None, None)
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_days
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max failures**
-**Full rule name**
-```
-comparison/max_failures
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_failures|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: previous_readouts
-  time_window:
-    prediction_time_window: 30
-    min_periods_with_readouts: 0
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxFailuresRuleParametersSpec:
-    max_failures: int
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxFailuresRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    if not hasattr(rule_parameters, 'previous_readouts'):
-        return RuleExecutionResult()
-
-    filtered = [readouts.sensor_readout for readouts in rule_parameters.previous_readouts if readouts is not None]
-    filtered.append(rule_parameters.actual_value)
-
-    filtered.reverse()
-
-    recent_failures  = 0
-    for i in filtered:
-        if i == 0:
-            recent_failures += 1
-        else:
-            break
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_failures
-    passed = recent_failures <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max percent**
-**Full rule name**
-```
-comparison/max_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxPercentRuleParametersSpec:
-    max_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_percent
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max percent**
-**Full rule name**
-```
-comparison/max_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxPercentRuleParametersSpec:
-    max_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_percent
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **min percent**
-**Full rule name**
-```
-comparison/min_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MinPercentRuleParametersSpec:
-    min_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    min_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MinPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = rule_parameters.parameters.min_percent
-    upper_bound = None
-    passed = rule_parameters.actual_value >= lower_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max percent**
-**Full rule name**
-```
-comparison/max_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxPercentRuleParametersSpec:
-    max_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_percent
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max percent**
-**Full rule name**
-```
-comparison/max_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxPercentRuleParametersSpec:
-    max_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_percent
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max percent**
-**Full rule name**
-```
-comparison/max_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_percent|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxPercentRuleParametersSpec:
-    max_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_percent
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **between floats**
-**Full rule name**
-```
-comparison/between_floats
-```
-**Description**  
-Data quality rule that verifies if a data quality check readout is between from and to values.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|from|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-|to|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class BetweenIntsRuleParametersSpec:
-    from_: float
-    to: float
-
-    def __getattr__(self, name):
-        if name == "from":
-            return self.from_
-        return object.__getattribute__(self, name)
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: BetweenIntsRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = getattr(rule_parameters.parameters,"from")
-    upper_bound = rule_parameters.parameters.to
-    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max count**
-**Full rule name**
-```
-comparison/max_count
-```
-**Description**  
-Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxCountRuleParametersSpec:
-    max_count: int
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxCountRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters,'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_count
-    passed = rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **max**
-**Full rule name**
-```
-comparison/max
-```
-**Description**  
-Data quality rule that verifies if a data quality check readsout is less or equal a maximum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|max_value|Maximum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxRuleParametersSpec:
-    max_value: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    max_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MaxRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_value
-    passed = rule_parameters.actual_value <= upper_bound
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 
@@ -2819,274 +1182,6 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 
     expected_value = None
     lower_bound = rule_parameters.parameters.min_value
-    upper_bound = None
-    passed = rule_parameters.actual_value >= lower_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **equals**
-**Full rule name**
-```
-comparison/equals
-```
-**Description**  
-Data quality rule that verifies that a data quality check readout equals a given value. A margin of error may be configured.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|expected_value|Expected value for the actual_value returned by the sensor. The sensor value should equal expected_value +/- the error_margin.|double| ||
-|error_margin|Error margin for comparison.|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class EqualsRuleParametersSpec:
-    expected_value: float
-    error_margin: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    min_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: EqualsRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = rule_parameters.parameters.expected_value
-    lower_bound = expected_value - rule_parameters.parameters.error_margin
-    upper_bound = expected_value + rule_parameters.parameters.error_margin
-    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-```
-___
-
-## **min percent**
-**Full rule name**
-```
-comparison/min_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MinPercentRuleParametersSpec:
-    min_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    min_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MinPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = rule_parameters.parameters.min_percent
-    upper_bound = None
-    passed = rule_parameters.actual_value >= lower_bound
-
-    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
-
-```
-___
-
-## **min percent**
-**Full rule name**
-```
-comparison/min_percent
-```
-**Description**  
-Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
-
-**Parameters**  
-  
-| Field name | Description | Allowed data type | Is it required? | Allowed values |
-|------------|-------------|-------------------|-----------------|----------------|
-|min_percent|Minimum accepted value for the actual_value returned by the sensor (inclusive).|double| ||
-
-
-
-**Example**
-```yaml
-apiVersion: dqo/v1
-kind: rule
-spec:
-  type: python
-  mode: current_value
-```
-
-
-
-**Rule implementation (Python)**
-```python
-from datetime import datetime
-from typing import Sequence
-
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MinPercentRuleParametersSpec:
-    min_percent: float
-
-
-class HistoricDataPoint:
-    timestamp_utc: datetime
-    local_datetime: datetime
-    back_periods_index: int
-    sensor_readout: float
-
-
-class RuleTimeWindowSettingsSpec:
-    prediction_time_window: int
-    min_periods_with_readouts: int
-
-
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
-class RuleExecutionRunParameters:
-    actual_value: float
-    parameters: MinPercentRuleParametersSpec
-    time_period_local: datetime
-    previous_readouts: Sequence[HistoricDataPoint]
-    time_window: RuleTimeWindowSettingsSpec
-
-
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
-class RuleExecutionResult:
-    passed: bool
-    expected_value: float
-    lower_bound: float
-    upper_bound: float
-
-    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
-        self.passed = passed
-        self.expected_value = expected_value
-        self.lower_bound = lower_bound
-        self.upper_bound = upper_bound
-
-
-# rule evaluation method that should be modified for each type of rule
-def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
-        return RuleExecutionResult()
-
-    expected_value = None
-    lower_bound = rule_parameters.parameters.min_percent
     upper_bound = None
     passed = rule_parameters.actual_value >= lower_bound
 
