@@ -15,11 +15,19 @@ Calculates the time difference in days between the most recent event timestamp a
 |data_ingestion_delay|adhoc| |[data_ingestion_delay](../../../../reference/sensors/table/timeliness%20table%20sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=data_ingestion_delay
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=data_ingestion_delay
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=data_ingestion_delay
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=data_ingestion_delay
 ```
@@ -606,11 +614,19 @@ Daily checkpoint calculating the time difference in days between the most recent
 |daily_checkpoint_data_ingestion_delay|checkpoint|daily|[data_ingestion_delay](../../../../reference/sensors/table/timeliness%20table%20sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_checkpoint_data_ingestion_delay
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_data_ingestion_delay
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_data_ingestion_delay
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_data_ingestion_delay
 ```
@@ -1200,11 +1216,19 @@ Monthly checkpoint calculating the time difference in days between the most rece
 |monthly_checkpoint_data_ingestion_delay|checkpoint|monthly|[data_ingestion_delay](../../../../reference/sensors/table/timeliness%20table%20sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_checkpoint_data_ingestion_delay
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_data_ingestion_delay
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_data_ingestion_delay
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_data_ingestion_delay
 ```
@@ -1794,11 +1818,19 @@ Daily partition checkpoint calculating the time difference in days between the m
 |daily_partition_data_ingestion_delay|partitioned|daily|[data_ingestion_delay](../../../../reference/sensors/table/timeliness%20table%20sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_partition_data_ingestion_delay
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_partition_data_ingestion_delay
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_data_ingestion_delay
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_data_ingestion_delay
 ```
@@ -2388,11 +2420,19 @@ Monthly partition checkpoint calculating the time difference in days between the
 |monthly_partition_data_ingestion_delay|partitioned|monthly|[data_ingestion_delay](../../../../reference/sensors/table/timeliness%20table%20sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_partition_data_ingestion_delay
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_partition_data_ingestion_delay
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_data_ingestion_delay
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_data_ingestion_delay
 ```

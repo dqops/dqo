@@ -22,7 +22,8 @@ Column level sensor that executes a given SQL expression on a column.
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -35,7 +36,8 @@ Column level sensor that executes a given SQL expression on a column.
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -48,7 +50,8 @@ Column level sensor that executes a given SQL expression on a column.
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -61,7 +64,8 @@ Column level sensor that executes a given SQL expression on a column.
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -97,7 +101,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                     THEN 1
                 ELSE 0
             END
@@ -117,7 +122,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                     THEN 1
                 ELSE 0
             END
@@ -137,7 +143,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                     THEN 1
                 ELSE 0
             END
@@ -157,7 +164,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                     THEN 1
                 ELSE 0
             END
@@ -199,7 +207,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -222,7 +231,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -245,7 +255,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -268,7 +279,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND NOT ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -309,7 +321,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                     THEN 1
                 ELSE 0
             END
@@ -329,7 +342,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                     THEN 1
                 ELSE 0
             END
@@ -349,7 +363,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                     THEN 1
                 ELSE 0
             END
@@ -369,7 +384,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                        replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                     THEN 1
                 ELSE 0
             END
@@ -411,7 +427,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -434,7 +451,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -457,7 +475,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -480,7 +499,8 @@ Column level sensor that uses a custom SQL condition (an SQL expression that ret
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
