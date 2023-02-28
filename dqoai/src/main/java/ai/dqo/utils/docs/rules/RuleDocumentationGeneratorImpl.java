@@ -79,7 +79,6 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
                 "ai.dqo.rules", projectRootPath, AbstractRuleParametersSpec.class);
 
         for (Class<? extends AbstractRuleParametersSpec> ruleParametersClass : classes) {
-            boolean isDuplicated = false;
             AbstractRuleParametersSpec abstractRuleParametersSpec = createRuleParameterInstance(ruleParametersClass);
             if (abstractRuleParametersSpec instanceof CustomRuleParametersSpec) {
                 continue;
