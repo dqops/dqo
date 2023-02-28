@@ -54,7 +54,7 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
             put("sql", o -> o.sql);
-            put("availability", o -> o.availability);
+//            put("availability", o -> o.availability);
         }
     };
 
@@ -73,10 +73,10 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableSqlMonthlyPartitionedSpec sql;
 
-    @JsonPropertyDescription("Monthly partitioned availability checks")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAvailabilityMonthlyPartitionedSpec availability;
+//    @JsonPropertyDescription("Monthly partitioned availability checks")
+//    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+//    private TableAvailabilityMonthlyPartitionedSpec availability;
 
     /**
      * Returns the container of daily partitioned checks for standard data quality checks.
@@ -132,23 +132,23 @@ public class TableMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChec
         this.propagateHierarchyIdToField(sql, "sql");
     }
 
-    /**
-     * Returns a container of custom sql checks.
-     * @return Custom sql checks.
-     */
-    public TableAvailabilityMonthlyPartitionedSpec getAvailability() {
-        return availability;
-    }
-
-    /**
-     * Sets a reference to a container of custom sql checks.
-     * @param availability Container of custom sql checks.
-     */
-    public void setAvailability(TableAvailabilityMonthlyPartitionedSpec availability) {
-        this.setDirtyIf(!Objects.equals(this.availability, availability));
-        this.availability = availability;
-        this.propagateHierarchyIdToField(availability, "availability");
-    }
+//    /**
+//     * Returns a container of custom sql checks.
+//     * @return Custom sql checks.
+//     */
+//    public TableAvailabilityMonthlyPartitionedSpec getAvailability() {
+//        return availability;
+//    }
+//
+//    /**
+//     * Sets a reference to a container of custom sql checks.
+//     * @param availability Container of custom sql checks.
+//     */
+//    public void setAvailability(TableAvailabilityMonthlyPartitionedSpec availability) {
+//        this.setDirtyIf(!Objects.equals(this.availability, availability));
+//        this.availability = availability;
+//        this.propagateHierarchyIdToField(availability, "availability");
+//    }
 
     /**
      * Returns the child map on the spec class with all fields.
