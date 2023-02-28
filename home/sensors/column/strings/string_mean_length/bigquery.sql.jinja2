@@ -1,7 +1,16 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+
+{% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+    {%- if (lib.target_column_data_type == 'STRING') -%}
+        {{ lib.render_target_column(analyzed_table_to_render) }}
+    {%- else -%}
+        SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+    {%- endif -%}
+{% endmacro -%}
+
 SELECT
     AVG(
-        LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+        LENGTH({{render_column_cast_to_string('analyzed_table')}})
     ) AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
     {{- lib.render_time_dimension_projection('analyzed_table') }}
