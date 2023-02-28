@@ -1,10 +1,19 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+
+{% macro render_column_cast_to_string(analyzed_table_to_render) %}
+    {%- if (target_column_data_type == 'STRING') -%}
+        {{ lib.render_target_column(analyzed_table_to_render) }}
+    {%- else -%}
+        TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
+    {%- endif -%}
+{% endmacro %}
+
 SELECT
     SUM(
         CASE
             WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-            AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
-            AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+            AND TRIM({{ render_column_cast_to_string('analyzed_table')}}) <> ''
+            AND ({{ render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ render_column_cast_to_string('analyzed_table')}})
                 THEN 1
             ELSE 0
         END
