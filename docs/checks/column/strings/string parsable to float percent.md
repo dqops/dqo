@@ -15,11 +15,19 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |string_parsable_to_float_percent|adhoc| |[string_parsable_to_float_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=string_parsable_to_float_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=string_parsable_to_float_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=string_parsable_to_float_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_parsable_to_float_percent
 ```
@@ -115,7 +123,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -132,7 +140,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                TRY_TO_NUMERIC(analyzed_table."target_column")
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
@@ -211,9 +219,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -307,7 +315,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                    TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
                 ) / COUNT(*)
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -323,7 +331,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                    TRY_TO_NUMERIC(analyzed_table."target_column")
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -424,11 +432,19 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |daily_checkpoint_string_parsable_to_float_percent|checkpoint|daily|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_checkpoint_string_parsable_to_float_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_string_parsable_to_float_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_string_parsable_to_float_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_parsable_to_float_percent
 ```
@@ -526,7 +542,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -543,7 +559,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                TRY_TO_NUMERIC(analyzed_table."target_column")
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
@@ -622,9 +638,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -719,7 +735,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                    TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
                 ) / COUNT(*)
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -735,7 +751,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                    TRY_TO_NUMERIC(analyzed_table."target_column")
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -836,11 +852,19 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |monthly_checkpoint_string_parsable_to_float_percent|checkpoint|monthly|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_checkpoint_string_parsable_to_float_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_string_parsable_to_float_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_string_parsable_to_float_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_parsable_to_float_percent
 ```
@@ -938,7 +962,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -955,7 +979,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                TRY_TO_NUMERIC(analyzed_table."target_column")
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
@@ -1034,9 +1058,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1131,7 +1155,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                    TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
                 ) / COUNT(*)
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1147,7 +1171,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                    TRY_TO_NUMERIC(analyzed_table."target_column")
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1248,11 +1272,19 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |daily_partition_string_parsable_to_float_percent|partitioned|daily|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_partition_string_parsable_to_float_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_partition_string_parsable_to_float_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_string_parsable_to_float_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_parsable_to_float_percent
 ```
@@ -1350,7 +1382,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1367,7 +1399,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                TRY_TO_NUMERIC(analyzed_table."target_column")
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -1446,9 +1478,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1543,7 +1575,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                    TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
                 ) / COUNT(*)
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1559,7 +1591,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                    TRY_TO_NUMERIC(analyzed_table."target_column")
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1660,11 +1692,19 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |monthly_partition_string_parsable_to_float_percent|partitioned|monthly|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_partition_string_parsable_to_float_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_partition_string_parsable_to_float_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_string_parsable_to_float_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_parsable_to_float_percent
 ```
@@ -1762,7 +1802,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1779,7 +1819,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                TRY_TO_NUMERIC(analyzed_table."target_column")
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -1858,9 +1898,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1955,7 +1995,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                    TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
                 ) / COUNT(*)
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1971,7 +2011,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                    TRY_TO_NUMERIC(analyzed_table."target_column")
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS stream_level_1,

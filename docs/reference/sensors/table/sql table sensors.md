@@ -23,7 +23,7 @@ Table level sensor that executes a given SQL expression on a table.
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression |
-           replace('{table}', 'analyzed_table') }}) AS actual_value
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -37,7 +37,7 @@ Table level sensor that executes a given SQL expression on a table.
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression |
-           replace('{table}', 'analyzed_table') }}) AS actual_value
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -51,7 +51,7 @@ Table level sensor that executes a given SQL expression on a table.
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         ({{ parameters.sql_expression |
-           replace('{table}', 'analyzed_table') }}) AS actual_value
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -87,7 +87,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -107,7 +107,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -127,7 +127,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -169,7 +169,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN NOT ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -191,7 +191,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN NOT ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -213,7 +213,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN NOT ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -253,7 +253,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
         SUM(
             CASE
                 WHEN ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                         replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -273,7 +273,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
         SUM(
             CASE
                 WHEN ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                         replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -293,7 +293,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
         SUM(
             CASE
                 WHEN ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                         replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -335,7 +335,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -357,7 +357,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -379,7 +379,7 @@ Table level sensor that uses a custom SQL condition (an SQL expression that retu
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)

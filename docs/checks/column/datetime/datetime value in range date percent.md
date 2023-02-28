@@ -15,11 +15,19 @@ Verifies that the percentage of date values in the range defined by the user in 
 |datetime_value_in_range_date_percent|adhoc| |[value_in_range_date_percent](../../../../reference/sensors/column/datetime%20column%20sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=datetime_value_in_range_date_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=datetime_value_in_range_date_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=datetime_value_in_range_date_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=datetime_value_in_range_date_percent
 ```
@@ -28,9 +36,6 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=datetime
       checks:
         datetime:
           datetime_value_in_range_date_percent:
-            parameters:
-              include_min_value: true
-              include_max_value: true
             error:
               max_percent: 2.0
             warning:
@@ -39,7 +44,7 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=datetime
               max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="14-25"
+```yaml hl_lines="14-22"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -56,9 +61,6 @@ spec:
       checks:
         datetime:
           datetime_value_in_range_date_percent:
-            parameters:
-              include_min_value: true
-              include_max_value: true
             error:
               max_percent: 2.0
             warning:
@@ -81,18 +83,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-        {%- if include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
@@ -106,7 +96,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -139,32 +129,20 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -178,12 +156,10 @@ spec:
 === "Rendered SQL for Snowflake"
       
     ```
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -199,18 +175,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -224,7 +188,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -238,8 +202,6 @@ spec:
 === "Rendered SQL for PostgreSQL"
       
     ```
-    
-    
     
     
     SELECT
@@ -261,18 +223,6 @@ spec:
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -286,7 +236,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -302,8 +252,6 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -317,10 +265,10 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
-    ```yaml hl_lines="12-19 42-47"
+    **Sample configuration (Yaml)**  
+    ```yaml hl_lines="12-19 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -345,9 +293,6 @@ spec:
           checks:
             datetime:
               datetime_value_in_range_date_percent:
-                parameters:
-                  include_min_value: true
-                  include_max_value: true
                 error:
                   max_percent: 2.0
                 warning:
@@ -375,18 +320,6 @@ spec:
         ```
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-            {%- if include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {%- endmacro -%}
-        
         {% macro render_date_format_cast() -%}
             {%- if lib.target_column_data_type == 'DATE' -%}
             {{ render_target_column('analyzed_table') }}
@@ -400,7 +333,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -434,32 +367,20 @@ spec:
         ```
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast() -%}
             {%- if lib.target_column_data_type == 'DATE' -%}
             {{ render_target_column('analyzed_table') }}
             {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- else -%}
-            SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -472,12 +393,10 @@ spec:
         ```
     === "Rendered SQL for Snowflake"
         ```
-        
-        
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value,
@@ -495,18 +414,6 @@ spec:
         ```
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast()%}
             {%- if lib.target_column_data_type == 'date' -%}
             {{ render_target_column('analyzed_table') }}
@@ -520,7 +427,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -533,8 +440,6 @@ spec:
         ```
     === "Rendered SQL for PostgreSQL"
         ```
-        
-        
         
         
         SELECT
@@ -558,18 +463,6 @@ spec:
         ```
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast()%}
             {%- if lib.target_column_data_type == 'date' -%}
             {{ render_target_column('analyzed_table') }}
@@ -583,7 +476,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -596,8 +489,6 @@ spec:
         ```
     === "Rendered SQL for Redshift"
         ```
-        
-        
         
         
         SELECT
@@ -633,11 +524,19 @@ Verifies that the percentage of date values in the range defined by the user in 
 |daily_checkpoint_datetime_value_in_range_date_percent|checkpoint|daily|[value_in_range_date_percent](../../../../reference/sensors/column/datetime%20column%20sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_checkpoint_datetime_value_in_range_date_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_datetime_value_in_range_date_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_datetime_value_in_range_date_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_datetime_value_in_range_date_percent
 ```
@@ -647,9 +546,6 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_ch
         daily:
           datetime:
             daily_checkpoint_datetime_value_in_range_date_percent:
-              parameters:
-                include_min_value: true
-                include_max_value: true
               error:
                 max_percent: 2.0
               warning:
@@ -658,7 +554,7 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_ch
                 max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="14-26"
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -676,9 +572,6 @@ spec:
         daily:
           datetime:
             daily_checkpoint_datetime_value_in_range_date_percent:
-              parameters:
-                include_min_value: true
-                include_max_value: true
               error:
                 max_percent: 2.0
               warning:
@@ -701,18 +594,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-        {%- if include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
@@ -726,7 +607,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -759,32 +640,20 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -798,12 +667,10 @@ spec:
 === "Rendered SQL for Snowflake"
       
     ```
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -819,18 +686,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -844,7 +699,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -858,8 +713,6 @@ spec:
 === "Rendered SQL for PostgreSQL"
       
     ```
-    
-    
     
     
     SELECT
@@ -881,18 +734,6 @@ spec:
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -906,7 +747,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -922,8 +763,6 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -937,10 +776,10 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
-    ```yaml hl_lines="12-19 43-48"
+    **Sample configuration (Yaml)**  
+    ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -966,9 +805,6 @@ spec:
             daily:
               datetime:
                 daily_checkpoint_datetime_value_in_range_date_percent:
-                  parameters:
-                    include_min_value: true
-                    include_max_value: true
                   error:
                     max_percent: 2.0
                   warning:
@@ -996,18 +832,6 @@ spec:
         ```
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-            {%- if include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {%- endmacro -%}
-        
         {% macro render_date_format_cast() -%}
             {%- if lib.target_column_data_type == 'DATE' -%}
             {{ render_target_column('analyzed_table') }}
@@ -1021,7 +845,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -1055,32 +879,20 @@ spec:
         ```
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast() -%}
             {%- if lib.target_column_data_type == 'DATE' -%}
             {{ render_target_column('analyzed_table') }}
             {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- else -%}
-            SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -1093,12 +905,10 @@ spec:
         ```
     === "Rendered SQL for Snowflake"
         ```
-        
-        
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value,
@@ -1116,18 +926,6 @@ spec:
         ```
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast()%}
             {%- if lib.target_column_data_type == 'date' -%}
             {{ render_target_column('analyzed_table') }}
@@ -1141,7 +939,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -1154,8 +952,6 @@ spec:
         ```
     === "Rendered SQL for PostgreSQL"
         ```
-        
-        
         
         
         SELECT
@@ -1179,18 +975,6 @@ spec:
         ```
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast()%}
             {%- if lib.target_column_data_type == 'date' -%}
             {{ render_target_column('analyzed_table') }}
@@ -1204,7 +988,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -1217,8 +1001,6 @@ spec:
         ```
     === "Rendered SQL for Redshift"
         ```
-        
-        
         
         
         SELECT
@@ -1254,11 +1036,19 @@ Verifies that the percentage of date values in the range defined by the user in 
 |monthly_checkpoint_datetime_value_in_range_date_percent|checkpoint|monthly|[value_in_range_date_percent](../../../../reference/sensors/column/datetime%20column%20sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_checkpoint_datetime_value_in_range_date_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_datetime_value_in_range_date_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_datetime_value_in_range_date_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_datetime_value_in_range_date_percent
 ```
@@ -1268,9 +1058,6 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
         monthly:
           datetime:
             monthly_checkpoint_datetime_value_in_range_date_percent:
-              parameters:
-                include_min_value: true
-                include_max_value: true
               error:
                 max_percent: 2.0
               warning:
@@ -1279,7 +1066,7 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
                 max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="14-26"
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1297,9 +1084,6 @@ spec:
         monthly:
           datetime:
             monthly_checkpoint_datetime_value_in_range_date_percent:
-              parameters:
-                include_min_value: true
-                include_max_value: true
               error:
                 max_percent: 2.0
               warning:
@@ -1322,18 +1106,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-        {%- if include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
@@ -1347,7 +1119,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -1380,32 +1152,20 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -1419,12 +1179,10 @@ spec:
 === "Rendered SQL for Snowflake"
       
     ```
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -1440,18 +1198,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -1465,7 +1211,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -1479,8 +1225,6 @@ spec:
 === "Rendered SQL for PostgreSQL"
       
     ```
-    
-    
     
     
     SELECT
@@ -1502,18 +1246,6 @@ spec:
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -1527,7 +1259,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -1543,8 +1275,6 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -1558,10 +1288,10 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
-    ```yaml hl_lines="12-19 43-48"
+    **Sample configuration (Yaml)**  
+    ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -1587,9 +1317,6 @@ spec:
             monthly:
               datetime:
                 monthly_checkpoint_datetime_value_in_range_date_percent:
-                  parameters:
-                    include_min_value: true
-                    include_max_value: true
                   error:
                     max_percent: 2.0
                   warning:
@@ -1617,18 +1344,6 @@ spec:
         ```
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-            {%- if include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {%- endmacro -%}
-        
         {% macro render_date_format_cast() -%}
             {%- if lib.target_column_data_type == 'DATE' -%}
             {{ render_target_column('analyzed_table') }}
@@ -1642,7 +1357,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -1676,32 +1391,20 @@ spec:
         ```
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast() -%}
             {%- if lib.target_column_data_type == 'DATE' -%}
             {{ render_target_column('analyzed_table') }}
             {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- else -%}
-            SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -1714,12 +1417,10 @@ spec:
         ```
     === "Rendered SQL for Snowflake"
         ```
-        
-        
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value,
@@ -1737,18 +1438,6 @@ spec:
         ```
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast()%}
             {%- if lib.target_column_data_type == 'date' -%}
             {{ render_target_column('analyzed_table') }}
@@ -1762,7 +1451,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -1775,8 +1464,6 @@ spec:
         ```
     === "Rendered SQL for PostgreSQL"
         ```
-        
-        
         
         
         SELECT
@@ -1800,18 +1487,6 @@ spec:
         ```
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast()%}
             {%- if lib.target_column_data_type == 'date' -%}
             {{ render_target_column('analyzed_table') }}
@@ -1825,7 +1500,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -1838,8 +1513,6 @@ spec:
         ```
     === "Rendered SQL for Redshift"
         ```
-        
-        
         
         
         SELECT
@@ -1875,11 +1548,19 @@ Verifies that the percentage of date values in the range defined by the user in 
 |daily_partition_datetime_value_in_range_date_percent|partitioned|daily|[value_in_range_date_percent](../../../../reference/sensors/column/datetime%20column%20sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_partition_datetime_value_in_range_date_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_partition_datetime_value_in_range_date_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_datetime_value_in_range_date_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_datetime_value_in_range_date_percent
 ```
@@ -1889,9 +1570,6 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_pa
         daily:
           datetime:
             daily_partition_datetime_value_in_range_date_percent:
-              parameters:
-                include_min_value: true
-                include_max_value: true
               error:
                 max_percent: 2.0
               warning:
@@ -1900,7 +1578,7 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_pa
                 max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="14-26"
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -1918,9 +1596,6 @@ spec:
         daily:
           datetime:
             daily_partition_datetime_value_in_range_date_percent:
-              parameters:
-                include_min_value: true
-                include_max_value: true
               error:
                 max_percent: 2.0
               warning:
@@ -1943,18 +1618,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-        {%- if include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
@@ -1968,7 +1631,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -2001,32 +1664,20 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -2040,12 +1691,10 @@ spec:
 === "Rendered SQL for Snowflake"
       
     ```
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -2061,18 +1710,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -2086,7 +1723,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -2100,8 +1737,6 @@ spec:
 === "Rendered SQL for PostgreSQL"
       
     ```
-    
-    
     
     
     SELECT
@@ -2123,18 +1758,6 @@ spec:
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -2148,7 +1771,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -2164,8 +1787,6 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -2179,10 +1800,10 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
-    ```yaml hl_lines="12-19 43-48"
+    **Sample configuration (Yaml)**  
+    ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2208,9 +1829,6 @@ spec:
             daily:
               datetime:
                 daily_partition_datetime_value_in_range_date_percent:
-                  parameters:
-                    include_min_value: true
-                    include_max_value: true
                   error:
                     max_percent: 2.0
                   warning:
@@ -2238,18 +1856,6 @@ spec:
         ```
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-            {%- if include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {%- endmacro -%}
-        
         {% macro render_date_format_cast() -%}
             {%- if lib.target_column_data_type == 'DATE' -%}
             {{ render_target_column('analyzed_table') }}
@@ -2263,7 +1869,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -2297,32 +1903,20 @@ spec:
         ```
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast() -%}
             {%- if lib.target_column_data_type == 'DATE' -%}
             {{ render_target_column('analyzed_table') }}
             {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- else -%}
-            SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -2335,12 +1929,10 @@ spec:
         ```
     === "Rendered SQL for Snowflake"
         ```
-        
-        
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value,
@@ -2358,18 +1950,6 @@ spec:
         ```
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast()%}
             {%- if lib.target_column_data_type == 'date' -%}
             {{ render_target_column('analyzed_table') }}
@@ -2383,7 +1963,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -2396,8 +1976,6 @@ spec:
         ```
     === "Rendered SQL for PostgreSQL"
         ```
-        
-        
         
         
         SELECT
@@ -2421,18 +1999,6 @@ spec:
         ```
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast()%}
             {%- if lib.target_column_data_type == 'date' -%}
             {{ render_target_column('analyzed_table') }}
@@ -2446,7 +2012,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -2459,8 +2025,6 @@ spec:
         ```
     === "Rendered SQL for Redshift"
         ```
-        
-        
         
         
         SELECT
@@ -2496,11 +2060,19 @@ Verifies that the percentage of date values in the range defined by the user in 
 |monthly_partition_datetime_value_in_range_date_percent|partitioned|monthly|[value_in_range_date_percent](../../../../reference/sensors/column/datetime%20column%20sensors/#value-in-range-date-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_partition_datetime_value_in_range_date_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_partition_datetime_value_in_range_date_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_datetime_value_in_range_date_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_datetime_value_in_range_date_percent
 ```
@@ -2510,9 +2082,6 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
         monthly:
           datetime:
             monthly_partition_datetime_value_in_range_date_percent:
-              parameters:
-                include_min_value: true
-                include_max_value: true
               error:
                 max_percent: 2.0
               warning:
@@ -2521,7 +2090,7 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
                 max_percent: 5.0
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="14-26"
+```yaml hl_lines="14-23"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
@@ -2539,9 +2108,6 @@ spec:
         monthly:
           datetime:
             monthly_partition_datetime_value_in_range_date_percent:
-              parameters:
-                include_min_value: true
-                include_max_value: true
               error:
                 max_percent: 2.0
               warning:
@@ -2564,18 +2130,6 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-        {%- if include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {%- endmacro -%}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
@@ -2589,7 +2143,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -2622,32 +2176,20 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -2661,12 +2203,10 @@ spec:
 === "Rendered SQL for Snowflake"
       
     ```
-    
-    
     SELECT
         100.0 * SUM(
             CASE
-                WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value,
@@ -2682,18 +2222,6 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -2707,7 +2235,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -2721,8 +2249,6 @@ spec:
 === "Rendered SQL for PostgreSQL"
       
     ```
-    
-    
     
     
     SELECT
@@ -2744,18 +2270,6 @@ spec:
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -2769,7 +2283,7 @@ spec:
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -2785,8 +2299,6 @@ spec:
     ```
     
     
-    
-    
     SELECT
         100.0 * SUM(
             CASE
@@ -2800,10 +2312,10 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
-    ```yaml hl_lines="12-19 43-48"
+    **Sample configuration (Yaml)**  
+    ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
@@ -2829,9 +2341,6 @@ spec:
             monthly:
               datetime:
                 monthly_partition_datetime_value_in_range_date_percent:
-                  parameters:
-                    include_min_value: true
-                    include_max_value: true
                   error:
                     max_percent: 2.0
                   warning:
@@ -2859,18 +2368,6 @@ spec:
         ```
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-            {%- if include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {%- endmacro -%}
-        
         {% macro render_date_format_cast() -%}
             {%- if lib.target_column_data_type == 'DATE' -%}
             {{ render_target_column('analyzed_table') }}
@@ -2884,7 +2381,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -2918,32 +2415,20 @@ spec:
         ```
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast() -%}
             {%- if lib.target_column_data_type == 'DATE' -%}
             {{ render_target_column('analyzed_table') }}
             {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-            CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- else -%}
-            SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+            TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
             {%- endif -%}
         {%- endmacro -%}
         
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -2956,12 +2441,10 @@ spec:
         ```
     === "Rendered SQL for Snowflake"
         ```
-        
-        
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(analyzed_table."target_column" AS DATE) >= '' AND SAFE_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
+                    WHEN TRY_CAST(analyzed_table."target_column" AS DATE) >= '' AND TRY_CAST(analyzed_table."target_column" AS DATE) <= '' THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value,
@@ -2979,18 +2462,6 @@ spec:
         ```
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast()%}
             {%- if lib.target_column_data_type == 'date' -%}
             {{ render_target_column('analyzed_table') }}
@@ -3004,7 +2475,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -3017,8 +2488,6 @@ spec:
         ```
     === "Rendered SQL for PostgreSQL"
         ```
-        
-        
         
         
         SELECT
@@ -3042,18 +2511,6 @@ spec:
         ```
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         
-        {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-            {%- if include_lower_bound and include_upper_bound -%}
-         {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif not include_lower_bound and include_upper_bound -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-            {%- elif include_lower_bound and not include_upper_bound -%}
-        {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- else -%}
-        {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-            {%- endif -%}
-        {% endmacro %}
-        
         {% macro render_date_format_cast()%}
             {%- if lib.target_column_data_type == 'date' -%}
             {{ render_target_column('analyzed_table') }}
@@ -3067,7 +2524,7 @@ spec:
         SELECT
             100.0 * SUM(
                 CASE
-                    WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                    WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                     ELSE 0
                 END
             ) / COUNT(*) AS actual_value
@@ -3080,8 +2537,6 @@ spec:
         ```
     === "Rendered SQL for Redshift"
         ```
-        
-        
         
         
         SELECT
