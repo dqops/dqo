@@ -81,7 +81,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -123,7 +123,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -165,7 +165,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -196,9 +196,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 38-43"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -255,7 +255,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -298,7 +298,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -341,7 +341,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -477,7 +477,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -519,7 +519,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -561,7 +561,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -592,9 +592,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 48-53"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -661,7 +661,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -704,7 +704,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -747,7 +747,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -883,7 +883,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -925,7 +925,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -967,7 +967,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -998,9 +998,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 48-53"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1067,7 +1067,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -1110,7 +1110,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -1153,7 +1153,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -1289,7 +1289,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -1331,7 +1331,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -1373,7 +1373,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -1404,9 +1404,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 48-53"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1473,7 +1473,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -1516,7 +1516,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -1559,7 +1559,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -1695,7 +1695,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -1737,7 +1737,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -1779,7 +1779,7 @@ spec:
             ELSE 100.0 * SUM(
                              CASE
                                  WHEN ({{ parameters.sql_condition |
-                                         replace('{table}', 'analyzed_table') }})
+                                          replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                       THEN 1
                                  ELSE 0
                              END) / COUNT(*)
@@ -1810,9 +1810,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 48-53"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1879,7 +1879,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -1922,7 +1922,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)
@@ -1965,7 +1965,7 @@ spec:
                 ELSE 100.0 * SUM(
                                  CASE
                                      WHEN ({{ parameters.sql_condition |
-                                             replace('{table}', 'analyzed_table') }})
+                                              replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                                           THEN 1
                                      ELSE 0
                                  END) / COUNT(*)

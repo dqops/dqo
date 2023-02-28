@@ -119,8 +119,8 @@ spec:
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
             END
@@ -139,8 +139,8 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
-                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
+                AND analyzed_table."target_column" <> ''
+                AND TRIM(analyzed_table."target_column") = ''
                     THEN 1
                 ELSE 0
             END
@@ -233,9 +233,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -333,8 +333,8 @@ spec:
             SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                    AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                    AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -352,8 +352,8 @@ spec:
             SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
-                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
+                    AND analyzed_table."target_column" <> ''
+                    AND TRIM(analyzed_table."target_column") = ''
                         THEN 1
                     ELSE 0
                 END
@@ -574,8 +574,8 @@ spec:
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
             END
@@ -594,8 +594,8 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
-                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
+                AND analyzed_table."target_column" <> ''
+                AND TRIM(analyzed_table."target_column") = ''
                     THEN 1
                 ELSE 0
             END
@@ -688,9 +688,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -789,8 +789,8 @@ spec:
             SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                    AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                    AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -808,8 +808,8 @@ spec:
             SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
-                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
+                    AND analyzed_table."target_column" <> ''
+                    AND TRIM(analyzed_table."target_column") = ''
                         THEN 1
                     ELSE 0
                 END
@@ -1030,8 +1030,8 @@ spec:
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
             END
@@ -1050,8 +1050,8 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
-                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
+                AND analyzed_table."target_column" <> ''
+                AND TRIM(analyzed_table."target_column") = ''
                     THEN 1
                 ELSE 0
             END
@@ -1144,9 +1144,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1245,8 +1245,8 @@ spec:
             SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                    AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                    AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -1264,8 +1264,8 @@ spec:
             SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
-                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
+                    AND analyzed_table."target_column" <> ''
+                    AND TRIM(analyzed_table."target_column") = ''
                         THEN 1
                     ELSE 0
                 END
@@ -1486,8 +1486,8 @@ spec:
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
             END
@@ -1506,8 +1506,8 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
-                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
+                AND analyzed_table."target_column" <> ''
+                AND TRIM(analyzed_table."target_column") = ''
                     THEN 1
                 ELSE 0
             END
@@ -1600,9 +1600,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1701,8 +1701,8 @@ spec:
             SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                    AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                    AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -1720,8 +1720,8 @@ spec:
             SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
-                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
+                    AND analyzed_table."target_column" <> ''
+                    AND TRIM(analyzed_table."target_column") = ''
                         THEN 1
                     ELSE 0
                 END
@@ -1942,8 +1942,8 @@ spec:
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
             END
@@ -1962,8 +1962,8 @@ spec:
         SUM(
             CASE
                 WHEN analyzed_table."target_column" IS NOT NULL
-                AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
-                AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
+                AND analyzed_table."target_column" <> ''
+                AND TRIM(analyzed_table."target_column") = ''
                     THEN 1
                 ELSE 0
             END
@@ -2056,9 +2056,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2157,8 +2157,8 @@ spec:
             SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                    AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                    AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -2176,8 +2176,8 @@ spec:
             SUM(
                 CASE
                     WHEN analyzed_table."target_column" IS NOT NULL
-                    AND TRY_CAST(analyzed_table."target_column" AS VARCHAR) <> ''
-                    AND TRIM(TRY_CAST(analyzed_table."target_column" AS VARCHAR)) = ''
+                    AND analyzed_table."target_column" <> ''
+                    AND TRIM(analyzed_table."target_column") = ''
                         THEN 1
                     ELSE 0
                 END

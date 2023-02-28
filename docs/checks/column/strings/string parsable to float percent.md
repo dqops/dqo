@@ -115,7 +115,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -132,7 +132,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                TRY_TO_NUMERIC(analyzed_table."target_column")
             ) / COUNT(*)
         END AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
@@ -211,9 +211,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -307,7 +307,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                    TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
                 ) / COUNT(*)
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -323,7 +323,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                    TRY_TO_NUMERIC(analyzed_table."target_column")
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -526,7 +526,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -543,7 +543,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                TRY_TO_NUMERIC(analyzed_table."target_column")
             ) / COUNT(*)
         END AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
@@ -622,9 +622,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -719,7 +719,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                    TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
                 ) / COUNT(*)
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -735,7 +735,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                    TRY_TO_NUMERIC(analyzed_table."target_column")
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -938,7 +938,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -955,7 +955,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                TRY_TO_NUMERIC(analyzed_table."target_column")
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
@@ -1034,9 +1034,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1131,7 +1131,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                    TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
                 ) / COUNT(*)
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1147,7 +1147,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                    TRY_TO_NUMERIC(analyzed_table."target_column")
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1350,7 +1350,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1367,7 +1367,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                TRY_TO_NUMERIC(analyzed_table."target_column")
             ) / COUNT(*)
         END AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
@@ -1446,9 +1446,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1543,7 +1543,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                    TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
                 ) / COUNT(*)
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1559,7 +1559,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                    TRY_TO_NUMERIC(analyzed_table."target_column")
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS stream_level_1,
@@ -1762,7 +1762,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
             ) / COUNT(*)
         END AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1779,7 +1779,7 @@ spec:
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * COUNT(
-                TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                TRY_TO_NUMERIC(analyzed_table."target_column")
             ) / COUNT(*)
         END AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
@@ -1858,9 +1858,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1955,7 +1955,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS FLOAT64)
+                    TRY_TO_NUMERIC({{ lib.render_target_column('analyzed_table') }})
                 ) / COUNT(*)
             END AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -1971,7 +1971,7 @@ spec:
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * COUNT(
-                    TRY_CAST(analyzed_table."target_column" AS FLOAT64)
+                    TRY_TO_NUMERIC(analyzed_table."target_column")
                 ) / COUNT(*)
             END AS actual_value,
             analyzed_table."country" AS stream_level_1,

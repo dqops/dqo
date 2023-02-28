@@ -156,7 +156,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -177,7 +177,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -303,9 +303,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -438,7 +438,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
                             THEN 1
                         ELSE 0
                     END
@@ -458,7 +458,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
                             THEN 1
                         ELSE 0
                     END
@@ -749,7 +749,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -770,7 +770,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -896,9 +896,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1032,7 +1032,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1052,7 +1052,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1343,7 +1343,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1364,7 +1364,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1490,9 +1490,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1626,7 +1626,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1646,7 +1646,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1937,7 +1937,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1958,7 +1958,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2084,9 +2084,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2220,7 +2220,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2240,7 +2240,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2531,7 +2531,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2552,7 +2552,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2678,9 +2678,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2814,7 +2814,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}}) IS NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2834,7 +2834,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column", '%Y-%m-%d') IS NULL
                             THEN 1
                         ELSE 0
                     END

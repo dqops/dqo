@@ -122,7 +122,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -143,7 +143,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -251,9 +251,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -354,7 +354,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -374,7 +374,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -613,7 +613,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -634,7 +634,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -742,9 +742,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -846,7 +846,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -866,7 +866,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1105,7 +1105,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1126,7 +1126,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1234,9 +1234,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1338,7 +1338,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1358,7 +1358,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1597,7 +1597,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1618,7 +1618,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1726,9 +1726,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1830,7 +1830,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1850,7 +1850,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2089,7 +2089,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2110,7 +2110,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2218,9 +2218,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2322,7 +2322,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2342,7 +2342,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                             THEN 1
                         ELSE 0
                     END

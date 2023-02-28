@@ -214,8 +214,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
 |------------|-------------|-------------------|-----------------|----------------|
 |min_value|Lower bound range variable.|date| ||
 |max_value|Upper bound range variable.|date| ||
-|include_min_value|The variable deciding whether to include the lower limit of the range. It does not include it by default.|boolean| ||
-|include_max_value|The variable deciding whether to include the upper limit of the range. It does not include it by default.|boolean| ||
 
 
 
@@ -225,18 +223,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
-    
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) -%}
-        {%- if include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {%- endmacro -%}
     
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
@@ -251,7 +237,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -267,18 +253,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -292,7 +266,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -308,18 +282,6 @@ Column level sensor that calculates the percent of non-negative values in a colu
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast()%}
         {%- if lib.target_column_data_type == 'date' -%}
         {{ render_target_column('analyzed_table') }}
@@ -333,7 +295,7 @@ Column level sensor that calculates the percent of non-negative values in a colu
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value
@@ -349,32 +311,20 @@ Column level sensor that calculates the percent of non-negative values in a colu
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
-    {% macro render_date_range(lower_bound, upper_bound, include_lower_bound = true, include_upper_bound = true) %}
-        {%- if include_lower_bound and include_upper_bound -%}
-     {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif not include_lower_bound and include_upper_bound -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(upper_bound) }}
-        {%- elif include_lower_bound and not include_upper_bound -%}
-    {{ render_date_format_cast() }} >= {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- else -%}
-    {{ render_date_format_cast() }} > {{ lib.make_text_constant(lower_bound) }} AND {{ render_date_format_cast() }} < {{ lib.make_text_constant(upper_bound) }}
-        {%- endif -%}
-    {% endmacro %}
-    
     {% macro render_date_format_cast() -%}
         {%- if lib.target_column_data_type == 'DATE' -%}
         {{ render_target_column('analyzed_table') }}
         {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
-        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
-        SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- endif -%}
     {%- endmacro -%}
     
     SELECT
         100.0 * SUM(
             CASE
-                WHEN {{ render_date_range(parameters.min_value, parameters.max_value, parameters.include_min_value, parameters.include_max_value) }} THEN 1
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
                 ELSE 0
             END
         ) / COUNT(*) AS actual_value

@@ -136,7 +136,7 @@ spec:
     {%- endmacro -%}
     
     {%- macro render_regex(regex) -%}
-         r{{ make_text_constant(regex) }}
+         {{ make_text_constant(regex) }}
     {%- endmacro -%}
     
     SELECT
@@ -144,7 +144,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -165,7 +165,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(analyzed_table."target_column", r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                    WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                         THEN 1
                     ELSE 0
                 END
@@ -281,9 +281,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -396,7 +396,7 @@ spec:
         {%- endmacro -%}
         
         {%- macro render_regex(regex) -%}
-             r{{ make_text_constant(regex) }}
+             {{ make_text_constant(regex) }}
         {%- endmacro -%}
         
         SELECT
@@ -404,7 +404,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                             THEN 1
                         ELSE 0
                     END
@@ -424,7 +424,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(analyzed_table."target_column", r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                        WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                             THEN 1
                         ELSE 0
                     END
@@ -685,7 +685,7 @@ spec:
     {%- endmacro -%}
     
     {%- macro render_regex(regex) -%}
-         r{{ make_text_constant(regex) }}
+         {{ make_text_constant(regex) }}
     {%- endmacro -%}
     
     SELECT
@@ -693,7 +693,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -714,7 +714,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(analyzed_table."target_column", r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                    WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                         THEN 1
                     ELSE 0
                 END
@@ -830,9 +830,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -946,7 +946,7 @@ spec:
         {%- endmacro -%}
         
         {%- macro render_regex(regex) -%}
-             r{{ make_text_constant(regex) }}
+             {{ make_text_constant(regex) }}
         {%- endmacro -%}
         
         SELECT
@@ -954,7 +954,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                             THEN 1
                         ELSE 0
                     END
@@ -974,7 +974,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(analyzed_table."target_column", r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                        WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                             THEN 1
                         ELSE 0
                     END
@@ -1235,7 +1235,7 @@ spec:
     {%- endmacro -%}
     
     {%- macro render_regex(regex) -%}
-         r{{ make_text_constant(regex) }}
+         {{ make_text_constant(regex) }}
     {%- endmacro -%}
     
     SELECT
@@ -1243,7 +1243,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -1264,7 +1264,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(analyzed_table."target_column", r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                    WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                         THEN 1
                     ELSE 0
                 END
@@ -1380,9 +1380,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1496,7 +1496,7 @@ spec:
         {%- endmacro -%}
         
         {%- macro render_regex(regex) -%}
-             r{{ make_text_constant(regex) }}
+             {{ make_text_constant(regex) }}
         {%- endmacro -%}
         
         SELECT
@@ -1504,7 +1504,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                             THEN 1
                         ELSE 0
                     END
@@ -1524,7 +1524,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(analyzed_table."target_column", r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                        WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                             THEN 1
                         ELSE 0
                     END
@@ -1785,7 +1785,7 @@ spec:
     {%- endmacro -%}
     
     {%- macro render_regex(regex) -%}
-         r{{ make_text_constant(regex) }}
+         {{ make_text_constant(regex) }}
     {%- endmacro -%}
     
     SELECT
@@ -1793,7 +1793,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -1814,7 +1814,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(analyzed_table."target_column", r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                    WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                         THEN 1
                     ELSE 0
                 END
@@ -1930,9 +1930,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2046,7 +2046,7 @@ spec:
         {%- endmacro -%}
         
         {%- macro render_regex(regex) -%}
-             r{{ make_text_constant(regex) }}
+             {{ make_text_constant(regex) }}
         {%- endmacro -%}
         
         SELECT
@@ -2054,7 +2054,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                             THEN 1
                         ELSE 0
                     END
@@ -2074,7 +2074,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(analyzed_table."target_column", r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                        WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                             THEN 1
                         ELSE 0
                     END
@@ -2335,7 +2335,7 @@ spec:
     {%- endmacro -%}
     
     {%- macro render_regex(regex) -%}
-         r{{ make_text_constant(regex) }}
+         {{ make_text_constant(regex) }}
     {%- endmacro -%}
     
     SELECT
@@ -2343,7 +2343,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                         THEN 1
                     ELSE 0
                 END
@@ -2364,7 +2364,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(analyzed_table."target_column", r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                    WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                         THEN 1
                     ELSE 0
                 END
@@ -2480,9 +2480,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2596,7 +2596,7 @@ spec:
         {%- endmacro -%}
         
         {%- macro render_regex(regex) -%}
-             r{{ make_text_constant(regex) }}
+             {{ make_text_constant(regex) }}
         {%- endmacro -%}
         
         SELECT
@@ -2604,7 +2604,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS({{ lib.render_target_column('analyzed_table') }}, {{ render_regex(parameters.regex) }})
+                        WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP {{ render_regex(parameters.regex) }}
                             THEN 1
                         ELSE 0
                     END
@@ -2624,7 +2624,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(analyzed_table."target_column", r'^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$')
+                        WHEN analyzed_table."target_column" REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                             THEN 1
                         ELSE 0
                     END

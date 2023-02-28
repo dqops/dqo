@@ -84,7 +84,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -129,7 +130,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -174,7 +176,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -219,7 +222,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -253,9 +257,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -315,7 +319,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -361,7 +366,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -407,7 +413,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -453,7 +460,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -577,7 +585,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -622,7 +631,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -667,7 +677,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -712,7 +723,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -746,9 +758,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -809,7 +821,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -855,7 +868,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -901,7 +915,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -947,7 +962,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -1071,7 +1087,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -1116,7 +1133,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -1161,7 +1179,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -1206,7 +1225,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -1240,9 +1260,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1303,7 +1323,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -1349,7 +1370,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -1395,7 +1417,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -1441,7 +1464,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -1565,7 +1589,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -1610,7 +1635,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -1655,7 +1681,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -1700,7 +1727,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -1734,9 +1762,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1797,7 +1825,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -1843,7 +1872,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -1889,7 +1919,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -1935,7 +1966,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -2059,7 +2091,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -2104,7 +2137,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -2149,7 +2183,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -2194,7 +2229,8 @@ spec:
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                    AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                         THEN 1
                     ELSE 0
                 END
@@ -2228,9 +2264,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2291,7 +2327,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -2337,7 +2374,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -2383,7 +2421,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END
@@ -2429,7 +2468,8 @@ spec:
                 ELSE 100.0 * SUM(
                     CASE
                         WHEN {{ lib.render_target_column('analyzed_table') }} IS NOT NULL
-                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }})
+                        AND ({{ parameters.sql_condition | replace('{column}', lib.render_target_column('analyzed_table')) |
+                                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                             THEN 1
                         ELSE 0
                     END

@@ -111,7 +111,7 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
-            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -125,7 +125,7 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
+            LENGTH(analyzed_table."target_column")
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
         TO_TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
@@ -191,9 +191,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -280,7 +280,7 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             AVG(
-                LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+                LENGTH({{ lib.render_target_column('analyzed_table') }})
             ) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -293,7 +293,7 @@ spec:
         ```
         SELECT
             AVG(
-                LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
+                LENGTH(analyzed_table."target_column")
             ) AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -479,7 +479,7 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
-            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -493,7 +493,7 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
+            LENGTH(analyzed_table."target_column")
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS date) AS time_period,
         TO_TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS date)) AS time_period_utc
@@ -559,9 +559,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -649,7 +649,7 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             AVG(
-                LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+                LENGTH({{ lib.render_target_column('analyzed_table') }})
             ) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -662,7 +662,7 @@ spec:
         ```
         SELECT
             AVG(
-                LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
+                LENGTH(analyzed_table."target_column")
             ) AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -848,7 +848,7 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
-            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -862,7 +862,7 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
+            LENGTH(analyzed_table."target_column")
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(CURRENT_TIMESTAMP() AS date))) AS time_period_utc
@@ -928,9 +928,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1018,7 +1018,7 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             AVG(
-                LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+                LENGTH({{ lib.render_target_column('analyzed_table') }})
             ) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1031,7 +1031,7 @@ spec:
         ```
         SELECT
             AVG(
-                LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
+                LENGTH(analyzed_table."target_column")
             ) AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -1217,7 +1217,7 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
-            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1231,7 +1231,7 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
+            LENGTH(analyzed_table."target_column")
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
@@ -1297,9 +1297,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1387,7 +1387,7 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             AVG(
-                LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+                LENGTH({{ lib.render_target_column('analyzed_table') }})
             ) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1400,7 +1400,7 @@ spec:
         ```
         SELECT
             AVG(
-                LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
+                LENGTH(analyzed_table."target_column")
             ) AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,
@@ -1586,7 +1586,7 @@ spec:
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         AVG(
-            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+            LENGTH({{ lib.render_target_column('analyzed_table') }})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1600,7 +1600,7 @@ spec:
     ```
     SELECT
         AVG(
-            LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
+            LENGTH(analyzed_table."target_column")
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
@@ -1666,9 +1666,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1756,7 +1756,7 @@ spec:
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
             AVG(
-                LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+                LENGTH({{ lib.render_target_column('analyzed_table') }})
             ) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -1769,7 +1769,7 @@ spec:
         ```
         SELECT
             AVG(
-                LENGTH(TRY_CAST(analyzed_table."target_column" AS VARCHAR))
+                LENGTH(analyzed_table."target_column")
             ) AS actual_value,
             analyzed_table."country" AS stream_level_1,
             analyzed_table."state" AS stream_level_2,

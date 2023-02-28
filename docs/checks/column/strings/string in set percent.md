@@ -157,9 +157,9 @@ spec:
         {%- endfor -%}
     {% endmacro -%}
     
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
+    {%- macro actual_value() -%}
+        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+        0.0
         {%- else -%}
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -170,12 +170,12 @@ spec:
                     ELSE 0
                 END
             ) / COUNT(*)
+        END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-        {{render_else()}}
-        END AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -327,9 +327,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -460,9 +460,9 @@ spec:
             {%- endfor -%}
         {% endmacro -%}
         
-        {%- macro render_else() -%}
-            {%- if parameters['values']|length == 0 -%}
-                NULL
+        {%- macro actual_value() -%}
+            {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+            0.0
             {%- else -%}
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -473,12 +473,12 @@ spec:
                         ELSE 0
                     END
                 ) / COUNT(*)
+            END
             {%- endif -%}
         {% endmacro -%}
         
         SELECT
-            {{render_else()}}
-            END AS actual_value
+            {{ actual_value() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -795,9 +795,9 @@ spec:
         {%- endfor -%}
     {% endmacro -%}
     
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
+    {%- macro actual_value() -%}
+        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+        0.0
         {%- else -%}
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -808,12 +808,12 @@ spec:
                     ELSE 0
                 END
             ) / COUNT(*)
+        END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-        {{render_else()}}
-        END AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -965,9 +965,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1099,9 +1099,9 @@ spec:
             {%- endfor -%}
         {% endmacro -%}
         
-        {%- macro render_else() -%}
-            {%- if parameters['values']|length == 0 -%}
-                NULL
+        {%- macro actual_value() -%}
+            {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+            0.0
             {%- else -%}
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1112,12 +1112,12 @@ spec:
                         ELSE 0
                     END
                 ) / COUNT(*)
+            END
             {%- endif -%}
         {% endmacro -%}
         
         SELECT
-            {{render_else()}}
-            END AS actual_value
+            {{ actual_value() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1434,9 +1434,9 @@ spec:
         {%- endfor -%}
     {% endmacro -%}
     
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
+    {%- macro actual_value() -%}
+        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+        0.0
         {%- else -%}
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -1447,12 +1447,12 @@ spec:
                     ELSE 0
                 END
             ) / COUNT(*)
+        END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-        {{render_else()}}
-        END AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1604,9 +1604,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1738,9 +1738,9 @@ spec:
             {%- endfor -%}
         {% endmacro -%}
         
-        {%- macro render_else() -%}
-            {%- if parameters['values']|length == 0 -%}
-                NULL
+        {%- macro actual_value() -%}
+            {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+            0.0
             {%- else -%}
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -1751,12 +1751,12 @@ spec:
                         ELSE 0
                     END
                 ) / COUNT(*)
+            END
             {%- endif -%}
         {% endmacro -%}
         
         SELECT
-            {{render_else()}}
-            END AS actual_value
+            {{ actual_value() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2073,9 +2073,9 @@ spec:
         {%- endfor -%}
     {% endmacro -%}
     
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
+    {%- macro actual_value() -%}
+        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+        0.0
         {%- else -%}
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2086,12 +2086,12 @@ spec:
                     ELSE 0
                 END
             ) / COUNT(*)
+        END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-        {{render_else()}}
-        END AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2243,9 +2243,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2377,9 +2377,9 @@ spec:
             {%- endfor -%}
         {% endmacro -%}
         
-        {%- macro render_else() -%}
-            {%- if parameters['values']|length == 0 -%}
-                NULL
+        {%- macro actual_value() -%}
+            {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+            0.0
             {%- else -%}
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -2390,12 +2390,12 @@ spec:
                         ELSE 0
                     END
                 ) / COUNT(*)
+            END
             {%- endif -%}
         {% endmacro -%}
         
         SELECT
-            {{render_else()}}
-            END AS actual_value
+            {{ actual_value() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2712,9 +2712,9 @@ spec:
         {%- endfor -%}
     {% endmacro -%}
     
-    {%- macro render_else() -%}
-        {%- if parameters['values']|length == 0 -%}
-            NULL
+    {%- macro actual_value() -%}
+        {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+        0.0
         {%- else -%}
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
@@ -2725,12 +2725,12 @@ spec:
                     ELSE 0
                 END
             ) / COUNT(*)
+        END
         {%- endif -%}
     {% endmacro -%}
     
     SELECT
-        {{render_else()}}
-        END AS actual_value
+        {{ actual_value() }} AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -2882,9 +2882,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -3016,9 +3016,9 @@ spec:
             {%- endfor -%}
         {% endmacro -%}
         
-        {%- macro render_else() -%}
-            {%- if parameters['values']|length == 0 -%}
-                NULL
+        {%- macro actual_value() -%}
+            {%- if 'values' not in parameters or parameters['values']|length == 0 -%}
+            0.0
             {%- else -%}
             CASE
                 WHEN COUNT(*) = 0 THEN 100.0
@@ -3029,12 +3029,12 @@ spec:
                         ELSE 0
                     END
                 ) / COUNT(*)
+            END
             {%- endif -%}
         {% endmacro -%}
         
         SELECT
-            {{render_else()}}
-            END AS actual_value
+            {{ actual_value() }} AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
