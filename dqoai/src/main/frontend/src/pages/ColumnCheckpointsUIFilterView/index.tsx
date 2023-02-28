@@ -15,7 +15,7 @@ import Button from "../../components/Button";
 
 const ColumnCheckpointsUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, timePartitioned, category, checkName }: { connection: string, schema: string, table: string, column: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
-  const { checkpointsUIFilter, isUpdatedCheckpointsUIFilter } = useSelector(
+  const { checkpointsUIFilter, isUpdatedCheckpointsUIFilter, loading } = useSelector(
     (state: IRootState) => state.column
   );
   const dispatch = useActionDispatch();
@@ -77,6 +77,7 @@ const ColumnCheckpointsUIFilterView = () => {
           onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>

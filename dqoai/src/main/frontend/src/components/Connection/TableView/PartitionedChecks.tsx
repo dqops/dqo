@@ -43,7 +43,8 @@ const TablePartitionedChecksView = () => {
     monthlyPartitionedChecks,
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks,
-    isUpdating
+    isUpdating,
+    loading,
   } = useSelector((state: IRootState) => state.table);
 
   useEffect(() => {
@@ -165,6 +166,7 @@ const TablePartitionedChecksView = () => {
           onChange={onDailyPartitionedChecksChange}
           checkResultsOverview={dailyCheckResultsOverview}
           getCheckOverview={getDailyCheckOverview}
+          loading={loading}
         />
       )}
       {tab === 'monthly' && (
@@ -174,6 +176,7 @@ const TablePartitionedChecksView = () => {
           onChange={onMonthlyPartitionedChecksChange}
           checkResultsOverview={monthlyCheckResultsOverview}
           getCheckOverview={getMonthlyCheckOverview}
+          loading={loading}
         />
       )}
     </div>

@@ -16,7 +16,7 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 
 const TableMonthlyPartitionedChecksView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
-  const { monthlyPartitionedChecks, isUpdating } = useSelector(
+  const { monthlyPartitionedChecks, isUpdating, loading } = useSelector(
     (state: IRootState) => state.table
   );
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
@@ -85,6 +85,7 @@ const TableMonthlyPartitionedChecksView = () => {
           onChange={onChangeUI}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>
