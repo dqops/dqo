@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
 import { ITab } from '../shared/interfaces';
 import {AuthenticatedDashboardModel, DashboardsFolderSpec, DashboardSpec} from "../api";
@@ -10,6 +10,7 @@ function DashboardProvider(props: any) {
   const [tabs, setTabs] = useState<ITab[]>([]);
   const [activeTab, setActiveTab] = useState<string>();
   const [openedDashboards, setOpenedDashboards] = useState<AuthenticatedDashboardModel[]>([]);
+  const [dashboardStatus, setDashboardStatus] = useState<Record<string, boolean>>({});
 
   const closeTab = (value: string) => {
     const newTabs = tabs.filter((item) => item.value !== value);
@@ -75,6 +76,21 @@ function DashboardProvider(props: any) {
     onAddTab();
   }, []);
 
+  const toggleDashboardFolder = useCallback((key: string) => {
+    console.log('1');
+    setDashboardStatus({
+      ...dashboardStatus,
+      [key]: !dashboardStatus[key]
+    });
+  }, [dashboardStatus]);
+
+  const openDashboardFolder = useCallback((keys: string[]) => {
+    setDashboardStatus({
+      ...dashboardStatus,
+      ...keys.reduce((obj, key) => ({ ...obj, [key]: true }), {})
+    });
+  }, [dashboardStatus]);
+
   return (
     <DashboardContext.Provider
       value={{
@@ -85,6 +101,9 @@ function DashboardProvider(props: any) {
         closeTab,
         onAddTab,
         changeActiveTab,
+        dashboardStatus,
+        toggleDashboardFolder,
+        openDashboardFolder,
       }}
       {...props}
     />
