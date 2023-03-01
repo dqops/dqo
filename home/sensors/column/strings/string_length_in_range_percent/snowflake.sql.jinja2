@@ -1,20 +1,12 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 
-{% macro render_column_cast_to_string(analyzed_table_to_render) %}
-    {%- if (target_column_data_type == 'STRING') -%}
-        {{ lib.render_target_column(analyzed_table_to_render) }}
-    {%- else -%}
-        TRY_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-    {%- endif -%}
-{% endmacro %}
-
 SELECT
     CASE
         WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
         ELSE
             100.0 * SUM(
                 CASE
-                    WHEN LENGTH( {{ render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                    WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                     ELSE 0
                 END
         ) / COUNT({{ lib.render_target_column('analyzed_table') }})
