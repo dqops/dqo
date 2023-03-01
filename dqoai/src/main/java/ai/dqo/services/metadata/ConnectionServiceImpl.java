@@ -22,10 +22,9 @@ import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
-import ai.dqo.metadata.sources.TableWrapper;
+import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
-import ai.dqo.metadata.userhome.UserHome;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -37,61 +36,58 @@ import java.util.List;
 
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class TableServiceImpl implements TableService {
+public class ConnectionServiceImpl implements ConnectionService {
     private final UserHomeContextFactory userHomeContextFactory;
     private final DqoQueueJobFactory dqoQueueJobFactory;
     private final DqoJobQueue dqoJobQueue;
 
     @Autowired
-    public TableServiceImpl(UserHomeContextFactory userHomeContextFactory,
-                            DqoQueueJobFactory dqoQueueJobFactory,
-                            DqoJobQueue dqoJobQueue) {
+    public ConnectionServiceImpl(UserHomeContextFactory userHomeContextFactory,
+                                 DqoQueueJobFactory dqoQueueJobFactory,
+                                 DqoJobQueue dqoJobQueue) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
     }
 
     /**
-     * Deletes table from metadata and flushes user context.
-     * Cleans all stored data from .data folder related to this table.
+     * Deletes connection from metadata and flushes user context.
+     * Cleans all stored data from .data folder related to this connection.
      *
-     * @param tableWrapper Table wrapper.
+     * @param connectionWrapper Connection wrapper.
      * @return Asynchronous job result object for deferred background operations.
      */
     @Override
-    public PushJobResult<DeleteStoredDataQueueJobResult> deleteTable(TableWrapper tableWrapper) {
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteTables(
-                new LinkedList<>(){{add(tableWrapper);}}
+    public PushJobResult<DeleteStoredDataQueueJobResult> deleteConnection(ConnectionWrapper connectionWrapper) {
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteConnections(
+                new LinkedList<>(){{add(connectionWrapper);}}
         );
         return jobResultList.get(0);
     }
 
     /**
-     * Deletes tables from metadata and flushes user context.
-     * Cleans all stored data from .data folder related to these tables.
+     * Deletes connections from metadata and flushes user context.
+     * Cleans all stored data from .data folder related to these connections.
      *
-     * @param tableWrappers Iterable of table wrappers.
-     * @return Asynchronous job result object for deferred background operations.
+     * @param connectionWrappers Iterable of connection wrappers.
+     * @return List of asynchronous job result objects for deferred background operations.
      */
     @Override
-    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteTables(Iterable<TableWrapper> tableWrappers) {
+    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteConnections(Iterable<ConnectionWrapper> connectionWrappers) {
         UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
 
-        for (TableWrapper tableWrapper: tableWrappers) {
-            tableWrapper.markForDeletion();
+        for (ConnectionWrapper connectionWrapper: connectionWrappers) {
+            connectionWrapper.markForDeletion();
         }
         userHomeContext.flush();
 
         List<PushJobResult<DeleteStoredDataQueueJobResult>> results = new ArrayList<>();
-        for (TableWrapper tableWrapper: tableWrappers) {
-            String connection = userHome.findConnectionFor(tableWrapper.getHierarchyId()).getName();
-            String table = tableWrapper.getPhysicalTableName().toTableSearchFilter();
+        for (ConnectionWrapper connectionWrapper: connectionWrappers) {
+            String connection = connectionWrapper.getName();
 
             DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
             DeleteStoredDataQueueJobParameters param = new DeleteStoredDataQueueJobParameters() {{
                 setConnectionName(connection);
-                setSchemaTableName(table);
                 setDeleteStatistics(true);
                 setDeleteRuleResults(true);
                 setDeleteSensorReadouts(true);

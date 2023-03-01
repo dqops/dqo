@@ -17,7 +17,7 @@ package ai.dqo.cli.commands.connection;
 
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.connection.impl.ConnectionService;
+import ai.dqo.cli.commands.connection.impl.ConnectionCliService;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.terminal.TerminalReader;
 import com.google.common.base.Strings;
@@ -35,7 +35,7 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "edit", header = "Edit connection that matches a given condition", description = "Edit the connection or connections that match the filter conditions specified in the options. It allows the user to modify the details of an existing connection in the application.")
 public class ConnectionEditCliCommand extends BaseCommand implements ICommand {
 	private TerminalReader terminalReader;
-	private ConnectionService connectionService;
+	private ConnectionCliService connectionCliService;
 
 	public ConnectionEditCliCommand() {
 	}
@@ -43,13 +43,13 @@ public class ConnectionEditCliCommand extends BaseCommand implements ICommand {
 	/**
 	 * Default injection constructor.
 	 * @param terminalReader Terminal reader.
-	 * @param connectionService Connection service.
+	 * @param connectionCliService Connection service.
 	 */
 	@Autowired
 	public ConnectionEditCliCommand(TerminalReader terminalReader,
-								ConnectionService connectionService) {
+								ConnectionCliService connectionCliService) {
 		this.terminalReader = terminalReader;
-		this.connectionService = connectionService;
+		this.connectionCliService = connectionCliService;
 	}
 
 	@CommandLine.Option(names = {"-n", "--connection"}, description = "Connection Name", completionCandidates = ConnectionNameCompleter.class)
@@ -85,6 +85,6 @@ public class ConnectionEditCliCommand extends BaseCommand implements ICommand {
 			this.connection = this.terminalReader.prompt("Connection name (--connection)", null, false);
 		}
 
-		return this.connectionService.launchEditorForConnection(this.connection);
+		return this.connectionCliService.launchEditorForConnection(this.connection);
 	}
 }
