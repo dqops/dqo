@@ -48,6 +48,9 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         super(jdbcConnectionPool, secretValueProvider, sqlServerConnectionProvider);
     }
 
+
+
+
     /**
      * Creates a hikari connection pool config for the connection specification.
      *
@@ -70,7 +73,6 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                 int portNumber = Integer.parseInt(port);
                 jdbcConnectionBuilder.append(";port=");
                 jdbcConnectionBuilder.append(portNumber);
-                jdbcConnectionBuilder.append(';');
             }
             catch (NumberFormatException nfe) {
                 throw new ConnectorOperationFailedException("Cannot create a connection to SQLSERVER, the port number is invalid: " + port, nfe);
@@ -78,6 +80,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         }
         String database = this.getSecretValueProvider().expandValue(sqlserverSpec.getDatabase());
         if (!Strings.isNullOrEmpty(database)) {
+            jdbcConnectionBuilder.append(";databaseName=");
             jdbcConnectionBuilder.append(database);
         }
 

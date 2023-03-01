@@ -35,7 +35,6 @@ public class SqlServerConnectionSpecObjectMother {
             sharedContainer = new MSSQLServerContainer<>(MSSQLServerContainer.IMAGE)
                     .withExposedPorts(PORT)
                     .withPassword("Te$t_sqlserver1")
-                    .withUrlParam("trustServerCertificate", "true")
                     .acceptLicense()
                     .withReuse(TestContainersObjectMother.shouldUseReusableTestContainers());
             sharedContainer.start();
@@ -50,7 +49,7 @@ public class SqlServerConnectionSpecObjectMother {
     public static final String CONNECTION_NAME = "sqlserver_connection";
 
     /**
-     * Creates a default connection spec to postgresql database that should be started by test containers.
+     * Creates a default connection spec to sql server database that should be started by test containers.
      * @return Connection spec to a test container instance.
      */
     public static ConnectionSpec create() {
@@ -63,6 +62,7 @@ public class SqlServerConnectionSpecObjectMother {
             {{
                 setHost("localhost");
                 setPort(testContainer.getMappedPort(PORT).toString());
+                setDatabase("master");
                 setUser(testContainer.getUsername());
                 setPassword(testContainer.getPassword());
             }});
@@ -71,7 +71,7 @@ public class SqlServerConnectionSpecObjectMother {
     }
 
     /**
-     * Returns the default schema used for a testable postgresql database. Tables are created in this schema.
+     * Returns the default schema used for a testable sql server database. Tables are created in this schema.
      * @return Schema name.
      */
     public static String getSchemaName() {

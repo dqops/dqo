@@ -18,37 +18,13 @@
 {{ '' }}
 {% endmacro %}
 
-{%- macro render_target_table() -%}
-    {{ quote_identifier(macro_database_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
-{%- endmacro %}
-
-{%- macro render_target_column(table_alias_prefix = '') -%}
-    {{ quote_identifier(column_name) }}
-{%- endmacro %}
-
-{%- macro render_column(name, table_alias_prefix = '') -%}
-    {%- if table_alias_prefix != '' -%}
-        {{ table_alias_prefix }}.{{ quote_identifier(name) }}
-    {%- else -%}
-        {{ quote_identifier(name) }}
-    {%- endif -%}
-{%- endmacro %}
-
-{% macro render_column_cast_to_string(analyzed_table_to_render) %}
-    {%- if (target_column_data_type == 'STRING') -%}
-        {{ render_target_column(analyzed_table_to_render) }}
-    {%- else -%}
-        SAFE_CAST({{ render_target_column(analyzed_table_to_render) }} AS STRING)
-    {%- endif -%}
-{% endmacro %}
-
 {% macro date_trunc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
         DATE_TRUNC('YEAR', CAST({{value}} AS date))
     {%- elif part == 'quarter' -%}
         DATE_TRUNC('QUARTER', CAST({{value}} AS date))
     {%- elif part == 'month' -%}
-        DATE_TRUNC('MONTH', CAST({{value}} AS date))
+        DATEADD(MONTH, DATEDIFF(MONTH, 0, {{value}}), 0)
     {%- elif part == 'week' -%}
         DATE_TRUNC('WEEK', CAST({{value}} AS date))
     {%- elif part == 'day' -%}
@@ -66,37 +42,13 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro date_trunc_utc(value, part='day', datatype=none) %}
-    {%- if part == 'year' -%}
-        DATE_TRUNC('year', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
-    {%- elif part == 'quarter' -%}
-        DATE_TRUNC('quarter', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
-    {%- elif part == 'month' -%}
-        DATE_TRUNC('month', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP)
-    {%- elif part == 'week' -%}
-        DATE_TRUNC('week', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP)
-    {%- elif part == 'day' -%}
-        {%- if datatype == 'date' -%}
-            {{value}}
-        {%- else -%}
-            (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
-        {%- endif -%}
-    {%- elif part == 'hour' -%}
-        DATE_TRUNC('hour', (CAST({{value}} AS DATETIME)|| ' 00:00:00'):: TIMESTAMP
-    {%- elif part == 'millisecond' -%}
-        CAST({{value}} AS timestamp)
-    {%- else -%}
-        (CAST({{value}} AS date)|| ' 00:00:00'):: TIMESTAMP
-    {%- endif -%}
-{% endmacro %}
-
 {% macro render_time_dimension_expression(table_alias_prefix = '') %}
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
             {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
-                {{ date_trunc('LOCALTIMESTAMP', time_series.time_gradient, 'timestamp') }}
+                {{ date_trunc('CURRENT_TIMESTAMP', time_series.time_gradient, 'timestamp') }}
             {%- else -%}
-                LOCALTIMESTAMP
+                CURRENT_TIMESTAMP
             {%- endif -%}
         {%- elif time_series.mode == 'timestamp_column' -%}
             {{ date_trunc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
@@ -106,21 +58,25 @@
     {%- endif -%}
 {% endmacro %}
 
-{% macro render_time_dimension_expression_utc(table_alias_prefix = '') %}
-    {%- if time_series is not none-%}
-        {%- if time_series.mode == 'current_time' -%}
-            {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
-                {{ date_trunc_utc('LOCALTIMESTAMP', time_series.time_gradient, 'timestamp') }}
-            {%- else -%}
-                LOCALTIMESTAMP
-            {%- endif -%}
-        {%- elif time_series.mode == 'timestamp_column' -%}
-            {{ date_trunc_utc(table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column), time_series.time_gradient, timestamp_column_data_type) }}
-        {%- else -%}
-            <INVALID TIME SERIES MODE: {{time_series.mode}}/>
-        {%- endif -%}
+{%- macro render_target_table() -%}
+    {{ quote_identifier(macro_database_name) }}.{{ quote_identifier(macro_schema_name) }}.{{ quote_identifier(macro_table_name) }}
+{%- endmacro %}
+
+{%- macro render_target_column(table_alias_prefix = '') -%}
+    {{ quote_identifier(column_name) }}
+{%- endmacro %}
+
+{%- macro render_column(name, table_alias_prefix = '') -%}
+    {%- if table_alias_prefix != '' -%}
+        {{ table_alias_prefix }}.{{ quote_identifier(name) }}
+    {%- else -%}
+        {{ quote_identifier(name) }}
     {%- endif -%}
-{% endmacro %}
+{%- endmacro %}
+
+{% macro make_text_constant(string) -%}
+    {{ '\'' }}{{ string | replace('\'', '\'\'') }}{{ '\'' }}
+{%- endmacro %}
 
 {% macro render_data_stream_projections(table_alias_prefix = '', indentation = '    ') %}
     {%- if data_streams is not none and (data_streams | length()) > 0 -%}
@@ -137,11 +93,12 @@
     {%- endif -%}
 {% endmacro %}
 
+
 {% macro render_time_dimension_projection(table_alias_prefix = '', indentation = '    ') %}
     {%- if time_series is not none -%}
         {{ ',' -}}{{- eol() -}}
         {{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS time_period,{{ eol() -}}
-        {{ indentation }}{{ render_time_dimension_expression_utc(table_alias_prefix) }} AS time_period_utc
+        {{ indentation }}SWITCHOFFSET(({{ render_time_dimension_expression(table_alias_prefix) }}), DATEPART(TZOFFSET, SYSDATETIMEOFFSET())) AS time_period_utc
     {%- endif -%}
 {% endmacro %}
 
@@ -170,20 +127,38 @@
     {%- endif -%}
     {%- if time_series is not none -%}
         {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-            {{ ', ' }}
+            GROUP BY {{ render_time_dimension_expression(table_alias_prefix) }},{{ eol() -}},
+            SWITCHOFFSET(({{ render_time_dimension_expression(table_alias_prefix) }}), DATEPART(TZOFFSET, SYSDATETIMEOFFSET()))
         {%- endif -%}
-            {{ 'time_period' }}, {{ 'time_period_utc' }}
     {%- endif -%}
 {% endmacro %}
 
 {% macro render_group_by() %}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
-GROUP BY {{ render_grouping_column_names() }}
+   {%- if time_series.mode != 'current_time' %}
+{{ render_grouping_column_names() }}
+   {%- endif -%}
+{% endmacro %}
+
+{% macro render_order_by_column_names() %}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+        {%- for attribute in data_streams -%}
+            {%- if not loop.first -%}
+                {{ ', ' }}
+            {%- endif -%}
+                stream_{{ attribute }}
+        {%- endfor -%}
+    {%- endif -%}
+    {%- if time_series is not none -%}
+        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+            GROUP BY {{ render_time_dimension_expression(table_alias_prefix) }},{{ eol() -}},
+            SWITCHOFFSET(({{ render_time_dimension_expression(table_alias_prefix) }}), DATEPART(TZOFFSET, SYSDATETIMEOFFSET()))
+        {%- endif -%}
     {%- endif -%}
 {% endmacro %}
 
 {% macro render_order_by() %}
     {%- if (data_streams is not none and (data_streams | length()) > 0) or time_series is not none %}
-ORDER BY {{ render_grouping_column_names() }}
+ORDER BY {{ render_time_dimension_expression(table_alias_prefix) }},{{ eol() -}},
+SWITCHOFFSET(({{ render_time_dimension_expression(table_alias_prefix) }}), DATEPART(TZOFFSET, SYSDATETIMEOFFSET()))
     {%- endif -%}
 {% endmacro %}

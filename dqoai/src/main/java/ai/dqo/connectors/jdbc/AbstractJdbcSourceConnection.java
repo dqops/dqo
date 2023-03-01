@@ -17,11 +17,14 @@ package ai.dqo.connectors.jdbc;
 
 import ai.dqo.connectors.AbstractSqlSourceConnection;
 import ai.dqo.connectors.ConnectionProvider;
+import ai.dqo.connectors.sqlserver.SqlServerResultSet;
 import ai.dqo.core.secrets.SecretValueProvider;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
+import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
+import tech.tablesaw.io.jdbc.SqlResultSetReader;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -114,13 +117,16 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
         try {
             try (Statement statement = this.jdbcConnection.createStatement()) {
                 try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                    Table resultTable = Table.read().db(results, "query_result");
-                    for (Column<?> column : resultTable.columns()) {
-                        if (column.name() != null) {
-                            column.setName(column.name().toLowerCase(Locale.ENGLISH));
+                    SqlResultSetReader.mapJdbcTypeToColumnType(-155, ColumnType.INSTANT);
+                    try (SqlServerResultSet sqlServerResultSet = new SqlServerResultSet(results)) {
+                        Table resultTable = Table.read().db(sqlServerResultSet, "query_result");
+                        for (Column<?> column : resultTable.columns()) {
+                            if (column.name() != null) {
+                                column.setName(column.name().toLowerCase(Locale.ENGLISH));
+                            }
                         }
+                        return resultTable;
                     }
-                    return resultTable;
                 }
             }
         }
