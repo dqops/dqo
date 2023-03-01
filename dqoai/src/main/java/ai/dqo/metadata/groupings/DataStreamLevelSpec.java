@@ -186,8 +186,8 @@ public class DataStreamLevelSpec extends AbstractSpec {
      */
     public DataStreamLevelSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         DataStreamLevelSpec cloned = this.deepClone();
-        cloned.tag = secretValueProvider.expandValue(cloned.tag);
-        cloned.column = secretValueProvider.expandValue(cloned.column);
+        cloned.tag = cloned.source == DataStreamLevelSource.tag ? secretValueProvider.expandValue(cloned.tag) : null;
+        cloned.column = cloned.source == DataStreamLevelSource.column_value ? secretValueProvider.expandValue(cloned.column) : null;
         return cloned;
     }
 }
