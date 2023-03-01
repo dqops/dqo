@@ -18,7 +18,7 @@ import { useParams } from "react-router-dom";
 const TableAdhocsView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
 
-  const { checksUI, isUpdating } = useSelector(
+  const { checksUI, isUpdating, loading } = useSelector(
     (state: IRootState) => state.table
   );
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
@@ -86,6 +86,7 @@ const TableAdhocsView = () => {
           className="max-h-checks-1"
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>

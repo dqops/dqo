@@ -15,11 +15,19 @@ Verifies that the percentage of strings matching the date format regex in a colu
 |string_match_date_regex_percent|adhoc| |[string_match_date_regex_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=string_match_date_regex_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=string_match_date_regex_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=string_match_date_regex_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_match_date_regex_percent
 ```
@@ -139,17 +147,15 @@ spec:
     
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
+            'YYYY-MM-DD'
         {%- elif date_formats == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
+            'MM/DD/YYYY'
         {%- elif date_formats == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
+            'DD/MM/YYYY'
         {%- elif date_formats == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
+            'YYYY/MM/DD'
         {%- elif date_formats == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- else -%}
-            'INVALID DATA TYPE'
+            'Month DD,YYYY'
         {%- endif -%}
     {% endmacro -%}
     
@@ -158,7 +164,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                    WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -179,7 +185,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
+                    WHEN TRY_TO_DATE (analyzed_table."target_column",'YYYY-MM-DD') IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -305,9 +311,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -423,17 +429,15 @@ spec:
         
         {% macro render_date_formats(date_formats) %}
             {%- if date_formats == 'YYYY-MM-DD'-%}
-                '%Y-%m-%d'
+                'YYYY-MM-DD'
             {%- elif date_formats == 'MM/DD/YYYY' -%}
-                '%m/%d/%Y'
+                'MM/DD/YYYY'
             {%- elif date_formats == 'DD/MM/YYYY' -%}
-                '%d/%m/%Y'
+                'DD/MM/YYYY'
             {%- elif date_formats == 'YYYY/MM/DD'-%}
-                '%Y/%m/%d'
+                'YYYY/MM/DD'
             {%- elif date_formats == 'Month D, YYYY'-%}
-                '%b %d, %Y'
-            {%- else -%}
-                'INVALID DATA TYPE'
+                'Month DD,YYYY'
             {%- endif -%}
         {% endmacro -%}
         
@@ -442,7 +446,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                        WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -462,7 +466,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
+                        WHEN TRY_TO_DATE (analyzed_table."target_column",'YYYY-MM-DD') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -610,11 +614,19 @@ Verifies that the percentage of strings matching the date format regex in a colu
 |daily_checkpoint_string_match_date_regex_percent|checkpoint|daily|[string_match_date_regex_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_checkpoint_string_match_date_regex_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_string_match_date_regex_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_string_match_date_regex_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_match_date_regex_percent
 ```
@@ -736,17 +748,15 @@ spec:
     
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
+            'YYYY-MM-DD'
         {%- elif date_formats == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
+            'MM/DD/YYYY'
         {%- elif date_formats == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
+            'DD/MM/YYYY'
         {%- elif date_formats == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
+            'YYYY/MM/DD'
         {%- elif date_formats == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- else -%}
-            'INVALID DATA TYPE'
+            'Month DD,YYYY'
         {%- endif -%}
     {% endmacro -%}
     
@@ -755,7 +765,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                    WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -776,7 +786,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
+                    WHEN TRY_TO_DATE (analyzed_table."target_column",'YYYY-MM-DD') IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -902,9 +912,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1021,17 +1031,15 @@ spec:
         
         {% macro render_date_formats(date_formats) %}
             {%- if date_formats == 'YYYY-MM-DD'-%}
-                '%Y-%m-%d'
+                'YYYY-MM-DD'
             {%- elif date_formats == 'MM/DD/YYYY' -%}
-                '%m/%d/%Y'
+                'MM/DD/YYYY'
             {%- elif date_formats == 'DD/MM/YYYY' -%}
-                '%d/%m/%Y'
+                'DD/MM/YYYY'
             {%- elif date_formats == 'YYYY/MM/DD'-%}
-                '%Y/%m/%d'
+                'YYYY/MM/DD'
             {%- elif date_formats == 'Month D, YYYY'-%}
-                '%b %d, %Y'
-            {%- else -%}
-                'INVALID DATA TYPE'
+                'Month DD,YYYY'
             {%- endif -%}
         {% endmacro -%}
         
@@ -1040,7 +1048,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                        WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1060,7 +1068,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
+                        WHEN TRY_TO_DATE (analyzed_table."target_column",'YYYY-MM-DD') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1208,11 +1216,19 @@ Verifies that the percentage of strings matching the date format regex in a colu
 |monthly_checkpoint_string_match_date_regex_percent|checkpoint|monthly|[string_match_date_regex_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_checkpoint_string_match_date_regex_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_string_match_date_regex_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_string_match_date_regex_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_match_date_regex_percent
 ```
@@ -1334,17 +1350,15 @@ spec:
     
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
+            'YYYY-MM-DD'
         {%- elif date_formats == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
+            'MM/DD/YYYY'
         {%- elif date_formats == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
+            'DD/MM/YYYY'
         {%- elif date_formats == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
+            'YYYY/MM/DD'
         {%- elif date_formats == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- else -%}
-            'INVALID DATA TYPE'
+            'Month DD,YYYY'
         {%- endif -%}
     {% endmacro -%}
     
@@ -1353,7 +1367,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                    WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1374,7 +1388,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
+                    WHEN TRY_TO_DATE (analyzed_table."target_column",'YYYY-MM-DD') IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1500,9 +1514,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1619,17 +1633,15 @@ spec:
         
         {% macro render_date_formats(date_formats) %}
             {%- if date_formats == 'YYYY-MM-DD'-%}
-                '%Y-%m-%d'
+                'YYYY-MM-DD'
             {%- elif date_formats == 'MM/DD/YYYY' -%}
-                '%m/%d/%Y'
+                'MM/DD/YYYY'
             {%- elif date_formats == 'DD/MM/YYYY' -%}
-                '%d/%m/%Y'
+                'DD/MM/YYYY'
             {%- elif date_formats == 'YYYY/MM/DD'-%}
-                '%Y/%m/%d'
+                'YYYY/MM/DD'
             {%- elif date_formats == 'Month D, YYYY'-%}
-                '%b %d, %Y'
-            {%- else -%}
-                'INVALID DATA TYPE'
+                'Month DD,YYYY'
             {%- endif -%}
         {% endmacro -%}
         
@@ -1638,7 +1650,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                        WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1658,7 +1670,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
+                        WHEN TRY_TO_DATE (analyzed_table."target_column",'YYYY-MM-DD') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1806,11 +1818,19 @@ Verifies that the percentage of strings matching the date format regex in a colu
 |daily_partition_string_match_date_regex_percent|partitioned|daily|[string_match_date_regex_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_partition_string_match_date_regex_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_partition_string_match_date_regex_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_string_match_date_regex_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_match_date_regex_percent
 ```
@@ -1932,17 +1952,15 @@ spec:
     
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
+            'YYYY-MM-DD'
         {%- elif date_formats == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
+            'MM/DD/YYYY'
         {%- elif date_formats == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
+            'DD/MM/YYYY'
         {%- elif date_formats == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
+            'YYYY/MM/DD'
         {%- elif date_formats == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- else -%}
-            'INVALID DATA TYPE'
+            'Month DD,YYYY'
         {%- endif -%}
     {% endmacro -%}
     
@@ -1951,7 +1969,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                    WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1972,7 +1990,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
+                    WHEN TRY_TO_DATE (analyzed_table."target_column",'YYYY-MM-DD') IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2098,9 +2116,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2217,17 +2235,15 @@ spec:
         
         {% macro render_date_formats(date_formats) %}
             {%- if date_formats == 'YYYY-MM-DD'-%}
-                '%Y-%m-%d'
+                'YYYY-MM-DD'
             {%- elif date_formats == 'MM/DD/YYYY' -%}
-                '%m/%d/%Y'
+                'MM/DD/YYYY'
             {%- elif date_formats == 'DD/MM/YYYY' -%}
-                '%d/%m/%Y'
+                'DD/MM/YYYY'
             {%- elif date_formats == 'YYYY/MM/DD'-%}
-                '%Y/%m/%d'
+                'YYYY/MM/DD'
             {%- elif date_formats == 'Month D, YYYY'-%}
-                '%b %d, %Y'
-            {%- else -%}
-                'INVALID DATA TYPE'
+                'Month DD,YYYY'
             {%- endif -%}
         {% endmacro -%}
         
@@ -2236,7 +2252,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                        WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2256,7 +2272,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
+                        WHEN TRY_TO_DATE (analyzed_table."target_column",'YYYY-MM-DD') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2404,11 +2420,19 @@ Verifies that the percentage of strings matching the date format regex in a colu
 |monthly_partition_string_match_date_regex_percent|partitioned|monthly|[string_match_date_regex_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_partition_string_match_date_regex_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_partition_string_match_date_regex_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_string_match_date_regex_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_match_date_regex_percent
 ```
@@ -2530,17 +2554,15 @@ spec:
     
     {% macro render_date_formats(date_formats) %}
         {%- if date_formats == 'YYYY-MM-DD'-%}
-            '%Y-%m-%d'
+            'YYYY-MM-DD'
         {%- elif date_formats == 'MM/DD/YYYY' -%}
-            '%m/%d/%Y'
+            'MM/DD/YYYY'
         {%- elif date_formats == 'DD/MM/YYYY' -%}
-            '%d/%m/%Y'
+            'DD/MM/YYYY'
         {%- elif date_formats == 'YYYY/MM/DD'-%}
-            '%Y/%m/%d'
+            'YYYY/MM/DD'
         {%- elif date_formats == 'Month D, YYYY'-%}
-            '%b %d, %Y'
-        {%- else -%}
-            'INVALID DATA TYPE'
+            'Month DD,YYYY'
         {%- endif -%}
     {% endmacro -%}
     
@@ -2549,7 +2571,7 @@ spec:
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                    WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2570,7 +2592,7 @@ spec:
             WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
+                    WHEN TRY_TO_DATE (analyzed_table."target_column",'YYYY-MM-DD') IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2696,9 +2718,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2815,17 +2837,15 @@ spec:
         
         {% macro render_date_formats(date_formats) %}
             {%- if date_formats == 'YYYY-MM-DD'-%}
-                '%Y-%m-%d'
+                'YYYY-MM-DD'
             {%- elif date_formats == 'MM/DD/YYYY' -%}
-                '%m/%d/%Y'
+                'MM/DD/YYYY'
             {%- elif date_formats == 'DD/MM/YYYY' -%}
-                '%d/%m/%Y'
+                'DD/MM/YYYY'
             {%- elif date_formats == 'YYYY/MM/DD'-%}
-                '%Y/%m/%d'
+                'YYYY/MM/DD'
             {%- elif date_formats == 'Month D, YYYY'-%}
-                '%b %d, %Y'
-            {%- else -%}
-                'INVALID DATA TYPE'
+                'Month DD,YYYY'
             {%- endif -%}
         {% endmacro -%}
         
@@ -2834,7 +2854,7 @@ spec:
                 WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE({{render_date_formats(parameters.date_formats)}}, {{ lib.render_target_column('analyzed_table') }}) IS NOT NULL
+                        WHEN TRY_TO_DATE ({{ lib.render_target_column('analyzed_table') }},{{render_date_formats(parameters.date_formats)}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2854,7 +2874,7 @@ spec:
                 WHEN COUNT(analyzed_table."target_column") = 0 THEN NULL
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE.PARSE_DATE('%Y-%m-%d', analyzed_table."target_column") IS NOT NULL
+                        WHEN TRY_TO_DATE (analyzed_table."target_column",'YYYY-MM-DD') IS NOT NULL
                             THEN 1
                         ELSE 0
                     END

@@ -15,11 +15,19 @@ Verifies that a set number of rows failed a custom SQL condition (expression).
 |sql_condition_failed_count_on_table|adhoc| |[sql_condition_failed_count](../../../../reference/sensors/table/sql%20table%20sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=sql_condition_failed_count_on_table
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=sql_condition_failed_count_on_table
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=sql_condition_failed_count_on_table
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=sql_condition_failed_count_on_table
 ```
@@ -79,7 +87,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -117,7 +125,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -155,7 +163,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -184,9 +192,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 38-43"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -241,7 +249,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -280,7 +288,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -319,7 +327,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -367,11 +375,19 @@ Verifies that a set number of rows failed a custom SQL condition (expression).
 |daily_checkpoint_sql_condition_failed_count_on_table|checkpoint|daily|[sql_condition_failed_count](../../../../reference/sensors/table/sql%20table%20sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_checkpoint_sql_condition_failed_count_on_table
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_sql_condition_failed_count_on_table
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_sql_condition_failed_count_on_table
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_sql_condition_failed_count_on_table
 ```
@@ -433,7 +449,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -471,7 +487,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -509,7 +525,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -538,9 +554,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -596,7 +612,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -635,7 +651,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -674,7 +690,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -722,11 +738,19 @@ Verifies that a set number of rows failed a custom SQL condition (expression).
 |monthly_checkpoint_sql_condition_failed_count_on_table|checkpoint|monthly|[sql_condition_failed_count](../../../../reference/sensors/table/sql%20table%20sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_checkpoint_sql_condition_failed_count_on_table
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_sql_condition_failed_count_on_table
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_sql_condition_failed_count_on_table
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_sql_condition_failed_count_on_table
 ```
@@ -788,7 +812,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -826,7 +850,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -864,7 +888,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -893,9 +917,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -951,7 +975,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -990,7 +1014,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -1029,7 +1053,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -1077,11 +1101,19 @@ Verifies that a set number of rows failed a custom SQL condition (expression).
 |daily_partition_sql_condition_failed_count_on_table|partitioned|daily|[sql_condition_failed_count](../../../../reference/sensors/table/sql%20table%20sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_partition_sql_condition_failed_count_on_table
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_partition_sql_condition_failed_count_on_table
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_sql_condition_failed_count_on_table
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_condition_failed_count_on_table
 ```
@@ -1143,7 +1175,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -1181,7 +1213,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -1219,7 +1251,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -1248,9 +1280,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1306,7 +1338,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -1345,7 +1377,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -1384,7 +1416,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -1432,11 +1464,19 @@ Verifies that a set number of rows failed a custom SQL condition (expression).
 |monthly_partition_sql_condition_failed_count_on_table|partitioned|monthly|[sql_condition_failed_count](../../../../reference/sensors/table/sql%20table%20sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_partition_sql_condition_failed_count_on_table
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_partition_sql_condition_failed_count_on_table
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_sql_condition_failed_count_on_table
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_condition_failed_count_on_table
 ```
@@ -1498,7 +1538,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -1536,7 +1576,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -1574,7 +1614,7 @@ spec:
         SUM(
             CASE
                 WHEN NOT ({{ parameters.sql_condition |
-                            replace('{table}', 'analyzed_table') }})
+                             replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                      THEN 1
                 ELSE 0
             END
@@ -1603,9 +1643,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1661,7 +1701,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -1700,7 +1740,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END
@@ -1739,7 +1779,7 @@ spec:
             SUM(
                 CASE
                     WHEN NOT ({{ parameters.sql_condition |
-                                replace('{table}', 'analyzed_table') }})
+                                 replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }})
                          THEN 1
                     ELSE 0
                 END

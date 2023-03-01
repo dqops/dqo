@@ -5,6 +5,7 @@ import clsx from 'clsx';
 import { useParams } from "react-router-dom";
 import CheckCategoriesView from "./CheckCategoriesView";
 import TableHeader from "./CheckTableHeader";
+import Loader from "../Loader";
 
 interface IDataQualityChecksProps {
   checksUI?: UIAllChecksModel;
@@ -13,9 +14,10 @@ interface IDataQualityChecksProps {
   checkResultsOverview: CheckResultsOverviewDataModel[];
   getCheckOverview: () => void;
   onUpdate: () => void;
+  loading?: boolean;
 }
 
-const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview = [], getCheckOverview, onUpdate }: IDataQualityChecksProps) => {
+const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview = [], getCheckOverview, onUpdate, loading }: IDataQualityChecksProps) => {
   const { connection, schema, table, column }: { connection: string, schema: string, table: string, column: string } = useParams();
 
   const { sidebarWidth } = useTree();
@@ -46,6 +48,14 @@ const DataQualityChecks = ({ checksUI, onChange, className, checkResultsOverview
   useEffect(() => {
     getCheckOverview();
   }, [connection, schema, table, column]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center min-h-80">
+        <Loader isFull={false} className="w-8 h-8 fill-green-700" />
+      </div>
+    );
+  }
 
   if (!checksUI?.categories) {
     return <div className="p-4">No Checks</div>;

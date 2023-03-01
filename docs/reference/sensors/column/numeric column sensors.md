@@ -922,13 +922,448 @@ ___
 column/numeric/percentile
 ```
 **Description**  
+Column level sensor that finds the percentile 90 in a given column.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percentile_value|75th percentile, must equals to 0.75|double| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_time_dimension_projection(table_alias_prefix = '', indentation = '            ') -%}
+        {%- if lib.time_series is not none -%}
+            {{- lib.eol() -}}
+            {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE_CONT(({{ lib.render_target_column('analyzed_table')}}), {{ parameters.percentile_value }}) OVER (PARTITION BY{{render_time_dimension_projection('analyzed_table') }}
+            )
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table)
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+## **percentile**
+**Full sensor name**
+```
+column/numeric/percentile
+```
+**Description**  
+Column level sensor that finds the percentile 25 in a given column.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percentile_value|75th percentile, must equals to 0.75|double| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_time_dimension_projection(table_alias_prefix = '', indentation = '            ') -%}
+        {%- if lib.time_series is not none -%}
+            {{- lib.eol() -}}
+            {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE_CONT(({{ lib.render_target_column('analyzed_table')}}), {{ parameters.percentile_value }}) OVER (PARTITION BY{{render_time_dimension_projection('analyzed_table') }}
+            )
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table)
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+## **percentile**
+**Full sensor name**
+```
+column/numeric/percentile
+```
+**Description**  
+Column level sensor that finds the percentile 50 in a given column.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percentile_value|75th percentile, must equals to 0.75|double| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_time_dimension_projection(table_alias_prefix = '', indentation = '            ') -%}
+        {%- if lib.time_series is not none -%}
+            {{- lib.eol() -}}
+            {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE_CONT(({{ lib.render_target_column('analyzed_table')}}), {{ parameters.percentile_value }}) OVER (PARTITION BY{{render_time_dimension_projection('analyzed_table') }}
+            )
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table)
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+## **percentile**
+**Full sensor name**
+```
+column/numeric/percentile
+```
+**Description**  
 Column level sensor that finds the percentile in a given column. The percentile value is defined by the user. It works only on numeric, big numeric and float data types.
 
 **Parameters**  
   
 | Field name | Description | Allowed data type | Is it required? | Allowed values |
 |------------|-------------|-------------------|-----------------|----------------|
-|percentile_value|Must be a literal in the range [0, 1].|double| ||
+|percentile_value|75th percentile, must equals to 0.75|double| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_time_dimension_projection(table_alias_prefix = '', indentation = '            ') -%}
+        {%- if lib.time_series is not none -%}
+            {{- lib.eol() -}}
+            {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE_CONT(({{ lib.render_target_column('analyzed_table')}}), {{ parameters.percentile_value }}) OVER (PARTITION BY{{render_time_dimension_projection('analyzed_table') }}
+            )
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table)
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+## **percentile**
+**Full sensor name**
+```
+column/numeric/percentile
+```
+**Description**  
+Column level sensor that finds the percentile 10 in a given column.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percentile_value|75th percentile, must equals to 0.75|double| ||
+
+
+
+
+**SQL Template (Jinja2)**  
+=== "bigquery"
+      
+    ```
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {%- macro render_time_dimension_projection(table_alias_prefix = '', indentation = '            ') -%}
+        {%- if lib.time_series is not none -%}
+            {{- lib.eol() -}}
+            {{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
+        FROM(
+            SELECT
+                PERCENTILE_CONT(({{ lib.render_target_column('analyzed_table')}}), {{ parameters.percentile_value }}) OVER (PARTITION BY{{render_time_dimension_projection('analyzed_table') }}
+            )
+        AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table)
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "postgresql"
+      
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
+      
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
+      
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
+    SELECT
+        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+___
+
+## **percentile**
+**Full sensor name**
+```
+column/numeric/percentile
+```
+**Description**  
+Column level sensor that finds the percentile 75 in a given column.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|percentile_value|75th percentile, must equals to 0.75|double| ||
 
 
 

@@ -200,8 +200,8 @@ nav:
 ########## END INCLUDE SENSOR REFERENCE
 ########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY
     - Rules:
-      - comparison: 'reference/rules/comparison.md'
       - averages: 'reference/rules/averages.md'
+      - comparison: 'reference/rules/comparison.md'
       - stdev: 'reference/rules/stdev.md'
 ########## END INCLUDE RULE REFERENCE
 

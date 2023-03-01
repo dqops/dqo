@@ -28,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
+ * Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)

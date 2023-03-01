@@ -15,11 +15,19 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |sql_aggregate_expr_column|adhoc| |[sql_aggregated_expression](../../../../reference/sensors/column/sql%20column%20sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=sql_aggregate_expr_column
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=sql_aggregate_expr_column
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=sql_aggregate_expr_column
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=sql_aggregate_expr_column
 ```
@@ -85,7 +93,8 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -110,7 +119,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -135,7 +145,8 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -160,7 +171,8 @@ spec:
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -179,9 +191,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -239,7 +251,8 @@ spec:
         ```
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -265,7 +278,8 @@ spec:
         ```
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -291,7 +305,8 @@ spec:
         ```
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -317,7 +332,8 @@ spec:
         ```
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -355,11 +371,19 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |daily_checkpoint_sql_aggregate_expr_column|checkpoint|daily|[sql_aggregated_expression](../../../../reference/sensors/column/sql%20column%20sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_checkpoint_sql_aggregate_expr_column
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_sql_aggregate_expr_column
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_sql_aggregate_expr_column
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_sql_aggregate_expr_column
 ```
@@ -427,7 +451,8 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -452,7 +477,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -477,7 +503,8 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -502,7 +529,8 @@ spec:
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -521,9 +549,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -582,7 +610,8 @@ spec:
         ```
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -608,7 +637,8 @@ spec:
         ```
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -634,7 +664,8 @@ spec:
         ```
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -660,7 +691,8 @@ spec:
         ```
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -698,11 +730,19 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |monthly_checkpoint_sql_aggregate_expr_column|checkpoint|monthly|[sql_aggregated_expression](../../../../reference/sensors/column/sql%20column%20sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_checkpoint_sql_aggregate_expr_column
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_sql_aggregate_expr_column
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_sql_aggregate_expr_column
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_sql_aggregate_expr_column
 ```
@@ -770,7 +810,8 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -795,7 +836,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -820,7 +862,8 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -845,7 +888,8 @@ spec:
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -864,9 +908,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -925,7 +969,8 @@ spec:
         ```
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -951,7 +996,8 @@ spec:
         ```
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -977,7 +1023,8 @@ spec:
         ```
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1003,7 +1050,8 @@ spec:
         ```
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1041,11 +1089,19 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |daily_partition_sql_aggregate_expr_column|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/column/sql%20column%20sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_partition_sql_aggregate_expr_column
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_partition_sql_aggregate_expr_column
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_sql_aggregate_expr_column
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sql_aggregate_expr_column
 ```
@@ -1113,7 +1169,8 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1138,7 +1195,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1163,7 +1221,8 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1188,7 +1247,8 @@ spec:
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1207,9 +1267,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1268,7 +1328,8 @@ spec:
         ```
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1294,7 +1355,8 @@ spec:
         ```
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1320,7 +1382,8 @@ spec:
         ```
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1346,7 +1409,8 @@ spec:
         ```
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1384,11 +1448,19 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |monthly_partition_sql_aggregate_expr_column|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/column/sql%20column%20sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_partition_sql_aggregate_expr_column
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_partition_sql_aggregate_expr_column
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_sql_aggregate_expr_column
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sql_aggregate_expr_column
 ```
@@ -1456,7 +1528,8 @@ spec:
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1481,7 +1554,8 @@ spec:
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1506,7 +1580,8 @@ spec:
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1531,7 +1606,8 @@ spec:
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     SELECT
-        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+        ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+            replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1550,9 +1626,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 45-50"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1611,7 +1687,8 @@ spec:
         ```
         {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1637,7 +1714,8 @@ spec:
         ```
         {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1663,7 +1741,8 @@ spec:
         ```
         {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table
@@ -1689,7 +1768,8 @@ spec:
         ```
         {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
         SELECT
-            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) | replace('{table}', lib.render_target_table()) }}) AS actual_value
+            ({{ parameters.sql_expression | replace('{column}', lib.render_target_column('analyzed_table')) |
+                replace('{table}', lib.render_target_table()) | replace('{alias}', 'analyzed_table') }}) AS actual_value
             {{- lib.render_data_stream_projections('analyzed_table') }}
             {{- lib.render_time_dimension_projection('analyzed_table') }}
         FROM {{ lib.render_target_table() }} AS analyzed_table

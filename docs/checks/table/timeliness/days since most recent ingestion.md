@@ -15,11 +15,19 @@ Calculates the time difference in days between the current date and the most rec
 |days_since_most_recent_ingestion|adhoc| |[days_since_most_recent_ingestion](../../../../reference/sensors/table/timeliness%20table%20sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=days_since_most_recent_ingestion
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=days_since_most_recent_ingestion
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=days_since_most_recent_ingestion
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=days_since_most_recent_ingestion
 ```
@@ -282,9 +290,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 36-41"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -566,11 +574,19 @@ Daily checkpoint calculating the time difference in days between the current dat
 |daily_checkpoint_days_since_most_recent_ingestion|checkpoint|daily|[days_since_most_recent_ingestion](../../../../reference/sensors/table/timeliness%20table%20sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_checkpoint_days_since_most_recent_ingestion
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_days_since_most_recent_ingestion
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_days_since_most_recent_ingestion
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_days_since_most_recent_ingestion
 ```
@@ -835,9 +851,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 37-42"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1120,11 +1136,19 @@ Monthly checkpoint calculating the time difference in days between the current d
 |monthly_checkpoint_days_since_most_recent_ingestion|checkpoint|monthly|[days_since_most_recent_ingestion](../../../../reference/sensors/table/timeliness%20table%20sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_checkpoint_days_since_most_recent_ingestion
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_days_since_most_recent_ingestion
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_days_since_most_recent_ingestion
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_days_since_most_recent_ingestion
 ```
@@ -1389,9 +1413,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 37-42"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1674,11 +1698,19 @@ Daily partition checkpoint calculating the time difference in days between the c
 |daily_partition_days_since_most_recent_ingestion|partitioned|daily|[days_since_most_recent_ingestion](../../../../reference/sensors/table/timeliness%20table%20sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_partition_days_since_most_recent_ingestion
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_partition_days_since_most_recent_ingestion
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_days_since_most_recent_ingestion
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_days_since_most_recent_ingestion
 ```
@@ -1943,9 +1975,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 37-42"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2228,11 +2260,19 @@ Monthly partition checkpoint calculating the time difference in days between the
 |monthly_partition_days_since_most_recent_ingestion|partitioned|monthly|[days_since_most_recent_ingestion](../../../../reference/sensors/table/timeliness%20table%20sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_partition_days_since_most_recent_ingestion
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_partition_days_since_most_recent_ingestion
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_days_since_most_recent_ingestion
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_days_since_most_recent_ingestion
 ```
@@ -2497,9 +2537,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 37-42"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1

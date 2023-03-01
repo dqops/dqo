@@ -15,11 +15,19 @@ Verifies that the sample standard deviation of all values in a column is not out
 |sample_stddev_in_range|adhoc| |[sample_stddev](../../../../reference/sensors/column/numeric%20column%20sensors/#sample-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=sample_stddev_in_range
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=sample_stddev_in_range
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=sample_stddev_in_range
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=sample_stddev_in_range
 ```
@@ -175,9 +183,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -349,11 +357,19 @@ Verifies that the sample standard deviation of all values in a column is not out
 |daily_checkpoint_sample_stddev_in_range|checkpoint|daily|[sample_stddev](../../../../reference/sensors/column/numeric%20column%20sensors/#sample-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_checkpoint_sample_stddev_in_range
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_sample_stddev_in_range
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_sample_stddev_in_range
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_sample_stddev_in_range
 ```
@@ -511,9 +527,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -686,11 +702,19 @@ Verifies that the sample standard deviation of all values in a column is not out
 |monthly_checkpoint_sample_stddev_in_range|checkpoint|monthly|[sample_stddev](../../../../reference/sensors/column/numeric%20column%20sensors/#sample-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_checkpoint_sample_stddev_in_range
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_sample_stddev_in_range
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_sample_stddev_in_range
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_sample_stddev_in_range
 ```
@@ -848,9 +872,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1023,11 +1047,19 @@ Verifies that the sample standard deviation of all values in a column is not out
 |daily_partition_sample_stddev_in_range|partitioned|daily|[sample_stddev](../../../../reference/sensors/column/numeric%20column%20sensors/#sample-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_partition_sample_stddev_in_range
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_partition_sample_stddev_in_range
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_sample_stddev_in_range
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_sample_stddev_in_range
 ```
@@ -1185,9 +1217,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1360,11 +1392,19 @@ Verifies that the sample standard deviation of all values in a column is not out
 |monthly_partition_sample_stddev_in_range|partitioned|monthly|[sample_stddev](../../../../reference/sensors/column/numeric%20column%20sensors/#sample-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_partition_sample_stddev_in_range
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_partition_sample_stddev_in_range
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_sample_stddev_in_range
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_sample_stddev_in_range
 ```
@@ -1522,9 +1562,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1

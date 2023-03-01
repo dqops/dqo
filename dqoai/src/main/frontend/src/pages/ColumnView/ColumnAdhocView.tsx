@@ -25,7 +25,7 @@ const AdhocView = ({
   tableName,
   columnName
 }: IAdhocViewProps) => {
-  const { columnBasic, checksUI, isUpdating, isUpdatedChecksUi } = useSelector(
+  const { columnBasic, checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(
     (state: IRootState) => state.column
   );
   const dispatch = useActionDispatch();
@@ -87,6 +87,7 @@ const AdhocView = ({
         onChange={handleChange}
         checkResultsOverview={checkResultsOverview}
         getCheckOverview={getCheckOverview}
+        loading={loading}
       />
     </div>
   );

@@ -16,11 +16,19 @@ ___
 |{{checkName}}|{{checkType}}|{{#if timeScale}}{{timeScale}}{{else}} {{/if}}|[{{sensor.sensorName}}](../../../../reference/sensors/{{target}}/{{sensor.category}}%20{{target}}%20sensors/#{{replace sensor.sensorName "_" "-"}})|[{{rule.ruleName}}](../../../../reference/rules/{{rule.category}}/#{{replace rule.ruleName "_" "-"}})|
 {{#with "  "}}{{.}}{{/with}}
 **Run check (Shell)**{{#with "  "}}{{.}}{{/with}}
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch={{checkName}}
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch={{checkName}}
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch={{checkName}}
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch={{checkName}}
 ```
@@ -51,9 +59,9 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch={{checkN
     {{/each~}}
     ```
 {{/each~}}
-### **Configuration with a data stream**{{#with "  "}}{{.}}{{/with}}
+### **Configuration with a data stream segmentation**{{#with "  "}}{{.}}{{/with}}
 ??? info "Click to see more"{{#with "  "}}{{.}}{{/with}}
-    **Sample configuration with a data stream (Yaml)**{{#with "  "}}{{.}}{{/with}}
+    **Sample configuration (Yaml)**{{#with "  "}}{{.}}{{/with}}
     ```yaml hl_lines="{{firstSectionBeginMarker}}-{{firstSectionEndMarker}} {{secondSectionBeginMarker}}-{{secondSectionEndMarker}}"
     {{#each splitSampleYamlWithDataStreams~}}
     {{{this}}}

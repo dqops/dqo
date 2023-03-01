@@ -41,7 +41,8 @@ const CheckpointsView = () => {
     monthlyCheckpoints,
     isUpdatedDailyCheckpoints,
     isUpdatedMonthlyCheckpoints,
-    isUpdating
+    isUpdating,
+    loading,
   } = useSelector((state: IRootState) => state.column);
 
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
@@ -183,6 +184,7 @@ const CheckpointsView = () => {
             className="max-h-checks"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
+            loading={loading}
           />
         )}
         {tab === 'monthly' && (
@@ -193,6 +195,7 @@ const CheckpointsView = () => {
             className="max-h-checks"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
+            loading={loading}
           />
         )}
       </div>

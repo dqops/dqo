@@ -15,11 +15,19 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |string_valid_dates_percent|adhoc| |[string_valid_date_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-valid-date-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=string_valid_dates_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=string_valid_dates_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=string_valid_dates_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_valid_dates_percent
 ```
@@ -122,7 +130,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -143,7 +151,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -251,9 +259,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 39-44"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -354,7 +362,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -374,7 +382,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -504,11 +512,19 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |daily_checkpoint_string_valid_dates_percent|checkpoint|daily|[string_valid_date_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-valid-date-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_checkpoint_string_valid_dates_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_string_valid_dates_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_string_valid_dates_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_valid_dates_percent
 ```
@@ -613,7 +629,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -634,7 +650,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -742,9 +758,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -846,7 +862,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -866,7 +882,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -996,11 +1012,19 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |monthly_checkpoint_string_valid_dates_percent|checkpoint|monthly|[string_valid_date_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-valid-date-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_checkpoint_string_valid_dates_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_string_valid_dates_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_string_valid_dates_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_valid_dates_percent
 ```
@@ -1105,7 +1129,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1126,7 +1150,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1234,9 +1258,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1338,7 +1362,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1358,7 +1382,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1488,11 +1512,19 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |daily_partition_string_valid_dates_percent|partitioned|daily|[string_valid_date_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-valid-date-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=daily_partition_string_valid_dates_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=daily_partition_string_valid_dates_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_string_valid_dates_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_string_valid_dates_percent
 ```
@@ -1597,7 +1629,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1618,7 +1650,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -1726,9 +1758,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -1830,7 +1862,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1850,7 +1882,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -1980,11 +2012,19 @@ Verifies that the percentage of valid dates in a column does not exceed the mini
 |monthly_partition_string_valid_dates_percent|partitioned|monthly|[string_valid_date_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-valid-date-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
-To run a check provide connection and table name (including schema name) in [check run command](../../../../command_line_interface/check/#dqo-check-run)
+To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -c=connection_name -t=table_name
+dqo.ai> check run -ch=monthly_partition_string_valid_dates_percent
 ```
-It is also possible to run a check on a specific column. In order to do this, add the name of the check and the column name to the above
+It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
+```
+dqo.ai> check run -c=connection_name -ch=monthly_partition_string_valid_dates_percent
+```
+It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
+```
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_string_valid_dates_percent
+```
+It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
 dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_string_valid_dates_percent
 ```
@@ -2089,7 +2129,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2110,7 +2150,7 @@ spec:
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                    WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -2218,9 +2258,9 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
-### **Configuration with a data stream**  
+### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
-    **Sample configuration with a data stream (Yaml)**  
+    **Sample configuration (Yaml)**  
     ```yaml hl_lines="12-19 40-45"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -2322,7 +2362,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
                             THEN 1
                         ELSE 0
                     END
@@ -2342,7 +2382,7 @@ spec:
                 WHEN COUNT(*) = 0 THEN 100.0
                 ELSE 100.0 * SUM(
                     CASE
-                        WHEN SAFE_CAST(TRY_CAST(analyzed_table."target_column" AS VARCHAR) AS DATE) IS NOT NULL
+                        WHEN TRY_TO_DATE(analyzed_table."target_column") IS NOT NULL
                             THEN 1
                         ELSE 0
                     END

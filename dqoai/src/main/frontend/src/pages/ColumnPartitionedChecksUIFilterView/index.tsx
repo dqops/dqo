@@ -17,7 +17,7 @@ import Button from "../../components/Button";
 const ColumnPartitionedChecksUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, timePartitioned, category, checkName }: { connection: string, schema: string, table: string, column: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
 
-  const { partitionedChecksUIFilter, isUpdatedPartitionedChecksUIFilter } = useSelector(
+  const { partitionedChecksUIFilter, isUpdatedPartitionedChecksUIFilter, loading } = useSelector(
     (state: IRootState) => state.column
   );
   const dispatch = useActionDispatch();
@@ -80,6 +80,7 @@ const ColumnPartitionedChecksUIFilterView = () => {
           onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>
