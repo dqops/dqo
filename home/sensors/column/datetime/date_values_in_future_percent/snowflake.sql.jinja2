@@ -2,25 +2,25 @@
 {% macro render_value_in_future() -%}
     {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
+                WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
                     THEN 1
                 ELSE 0
             END
     {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
+                WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
                     THEN 1
                 ELSE 0
             END
     {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
             CASE
-                WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
+                WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
                     THEN 1
                 ELSE 0
             END
     {%- else -%}
             CASE
-                WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
+                WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
                     THEN 1
                 ELSE 0
             END
