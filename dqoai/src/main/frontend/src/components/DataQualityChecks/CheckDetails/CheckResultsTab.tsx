@@ -49,19 +49,19 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
     {
       label: 'Actual Value',
       value: 'actualValue',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Expected Value',
       value: 'expectedValue',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Issue Severity Level',
       value: 'severity',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number) => {
         let name = '';
         switch (value) {
@@ -89,37 +89,37 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
     {
       label: 'Warning - Lower Threshold',
       value: 'warningLowerBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Warning - Upper Threshold',
       value: 'warningUpperBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Error - Lower Threshold',
       value: 'errorLowerBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Error - Upper Threshold',
       value: 'errorUpperBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Fatal - Lower Threshold',
       value: 'fatalLowerBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Fatal - Upper Threshold',
       value: 'fatalUpperBound',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
@@ -135,12 +135,17 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
     {
       label: 'Duration Ms',
       value: 'durationMs',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
     },
     {
       label: 'Data Stream',
       value: 'dataStream',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+    },
+    {
+      label: 'Readout Id',
+      value: 'readoutId',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
     },
   ];
 
