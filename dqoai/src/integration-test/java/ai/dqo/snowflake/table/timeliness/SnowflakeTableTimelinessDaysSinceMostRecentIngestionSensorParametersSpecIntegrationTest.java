@@ -40,7 +40,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class SnowflakeTableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableDaysSinceMostRecentIngestionCheckSpec checkSpec;
@@ -48,7 +48,7 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecInte
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec();

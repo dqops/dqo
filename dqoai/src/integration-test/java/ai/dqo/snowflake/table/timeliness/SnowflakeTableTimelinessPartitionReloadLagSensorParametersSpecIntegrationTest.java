@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class TableTimelinessPartitionReloadLagSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class SnowflakeTableTimelinessPartitionReloadLagSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
     private TableTimelinessPartitionReloadLagSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TablePartitionReloadLagCheckSpec checkSpec;
@@ -46,7 +46,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecIntegrationTes
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableTimelinessPartitionReloadLagSensorParametersSpec();
@@ -67,7 +67,7 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(10.041666666666666, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.041, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -83,6 +83,6 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(10.041666666666666, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.041, (double) resultTable.column(0).get(0), 0.001);
     }
 }

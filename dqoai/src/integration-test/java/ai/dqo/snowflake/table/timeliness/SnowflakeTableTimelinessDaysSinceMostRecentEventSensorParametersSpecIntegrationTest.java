@@ -15,7 +15,6 @@
  */
 package ai.dqo.snowflake.table.timeliness;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentEventCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -30,6 +29,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentEventSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +40,7 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class SnowflakeTableTimelinessDaysSinceMostRecentEventSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private TableTimelinessDaysSinceMostRecentEventSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableDaysSinceMostRecentEventCheckSpec checkSpec;
@@ -48,7 +48,7 @@ public class TableTimelinessDaysSinceMostRecentEventSensorParametersSpecIntegrat
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableTimelinessDaysSinceMostRecentEventSensorParametersSpec();
