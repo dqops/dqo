@@ -100,7 +100,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -135,7 +135,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -168,7 +168,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -201,7 +201,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -239,7 +239,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -274,7 +274,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -311,7 +311,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -356,7 +356,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -397,7 +397,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -438,7 +438,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END

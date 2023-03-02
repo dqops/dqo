@@ -5,7 +5,7 @@ SELECT
         ELSE 100.0 * SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                AND LENGTH({{ lib.render_target_column('analyzed_table')}}) <> 0
                 AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
