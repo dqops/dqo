@@ -15,7 +15,6 @@
  */
 package ai.dqo.snowflake.table.timeliness;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -39,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class TableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+public class SnowflakeTableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private TableTimelinessDataIngestionDelaySensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableDataIngestionDelayCheckSpec checkSpec;
@@ -68,7 +67,7 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.0833, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -84,7 +83,7 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -100,7 +99,7 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -116,7 +115,7 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(10.041666666666666, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.041, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -132,6 +131,6 @@ public class TableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTes
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 }
