@@ -28,7 +28,7 @@
     {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
                 SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
     {%- else -%}
-        <INVALID DATA TYPE>
+        {{ lib.render_target_column(analyzed_table_to_render) }}
     {%- endif -%}
 {% endmacro -%}
 
