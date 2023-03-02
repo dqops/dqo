@@ -32,7 +32,7 @@ const CommentItem = ({
     <tr>
       <td className="pr-4 min-w-40 py-2">
         {isEditing ? (
-          <Input value={text} onChange={(e) => setText(e.target.value)} />
+          <Input className="focus:!ring-0 focus:!border" value={text} onChange={(e) => setText(e.target.value)} />
         ) : (
           comment.comment
         )}
