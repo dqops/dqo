@@ -32,7 +32,7 @@ const CommentItem = ({
     <tr>
       <td className="pr-4 min-w-40 py-2">
         {isEditing ? (
-          <Input value={text} onChange={(e) => setText(e.target.value)} />
+          <Input className="focus:!ring-0 focus:!border" value={text} onChange={(e) => setText(e.target.value)} />
         ) : (
           comment.comment
         )}
@@ -41,12 +41,12 @@ const CommentItem = ({
       <td className="px-8 min-w-60 py-2">
         {moment(comment.date).format('MMM, DD YYYY')}
       </td>
-      <td className="px-8 min-w-40 py-2">
-        <div className="flex space-x-2 items-center justify-center">
-          <IconButton size="sm" onClick={isEditing ? onSave : onEdit}>
+      <td className="px-8 min-w-34 max-w-34 py-2">
+        <div className="flex space-x-2 items-center justify-end">
+          <IconButton size="sm" onClick={isEditing ? onSave : onEdit} color="teal">
             <SvgIcon name={isEditing ? 'save' : 'edit'} className="w-4" />
           </IconButton>
-          <IconButton size="sm" onClick={() => onRemove(idx)}>
+          <IconButton size="sm" onClick={() => onRemove(idx)} color="teal">
             <SvgIcon name="delete" className="w-4" />
           </IconButton>
         </div>
