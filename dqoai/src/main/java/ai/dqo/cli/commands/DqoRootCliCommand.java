@@ -48,8 +48,8 @@ import java.util.List;
         name = "",
         description = {
                 "DQO Interactive Shell",
-                "Hit @|magenta <TAB>|@ to see available commands.",
-                "Hit @|magenta ALT-S|@ to toggle tailtips.",
+                "Hit @|yellow <TAB>|@ to see available commands.",
+                "Hit @|yellow ALT-S|@ to toggle tailtips.",
                 ""},
         footer = {"", "Press Ctrl-D to exit."},
         subcommands = {

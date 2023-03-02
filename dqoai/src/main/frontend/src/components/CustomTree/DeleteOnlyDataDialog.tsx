@@ -44,7 +44,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
   const isDisabled = mode === 'all';
 
   return (
-    <Dialog open={open} handler={onClose} className="min-w-160">
+    <Dialog open={open} handler={onClose} className="min-w-200">
       <DialogHeader className="font-bold text-center justify-center">Delete all collected results for the time range:</DialogHeader>
       <DialogBody>
         <Radio
@@ -55,6 +55,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
           checked={mode === 'all'}
           onChange={(e) => setMode(e.target.value)}
           className="outline-none"
+          color="teal"
         />
         <div>
           <div className="flex mt-4 items-center">
@@ -64,6 +65,7 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
               value="part"
               checked={mode === 'part'}
               onChange={(e) => setMode(e.target.value)}
+              color="teal"
             />
             <div className="flex space-x-6 items-center">
               <DatePicker
@@ -89,29 +91,33 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
               onChange={(deleteErrors) => onChangeParams({ deleteErrors })}
               label="Error"
               disabled={isDisabled}
+              checkClassName="bg-teal-500"
             />
             <Checkbox
               checked={params.deleteProfilingResults}
               onChange={(deleteProfilingResults) => onChangeParams({ deleteProfilingResults })}
               label="Profiling Results"
               disabled={isDisabled}
+              checkClassName="bg-teal-500"
             />
             <Checkbox
               checked={params.deleteRuleResults}
               onChange={(deleteRuleResults) => onChangeParams({ deleteRuleResults })}
               label="Rule Results"
               disabled={isDisabled}
+              checkClassName="bg-teal-500"
             />
             <Checkbox
               checked={params.deleteSensorReadouts}
               onChange={(deleteSensorReadouts) => onChangeParams({ deleteSensorReadouts })}
               label="Sensor Readouts"
               disabled={isDisabled}
+              checkClassName="bg-teal-500"
             />
           </div>
         </div>
       </DialogBody>
-      <DialogFooter className="flex gap-6 items-center">
+      <DialogFooter className="flex gap-6 items-center mt-10">
         <Button
           color="secondary"
           className="px-8"
