@@ -35,7 +35,7 @@ const LabelsView = ({ labels, onChange }: ILabelsViewProps) => {
       <table className="my-3 w-full">
         <thead>
           <th className="text-left min-w-40 w-full pr-4 py-2">Label</th>
-          <th className="px-8 min-w-40 py-2">Action</th>
+          <th className="px-8 min-w-34 max-w-34 py-2">Action</th>
         </thead>
         <tbody>
           {data.map((label, index) => (
