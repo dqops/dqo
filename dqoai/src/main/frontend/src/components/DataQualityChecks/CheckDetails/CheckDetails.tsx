@@ -500,7 +500,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
   }
 
   return (
-    <div className="my-4" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 80}px` }}>
+    <div className="my-4" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 85}px` }}>
       <div className="bg-white px-4 py-6 border border-gray-200 relative">
         <IconButton
           className="absolute right-4 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"
