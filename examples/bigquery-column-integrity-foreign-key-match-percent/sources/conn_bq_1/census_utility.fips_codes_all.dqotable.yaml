@@ -1,0 +1,54 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
+apiVersion: dqo/v1
+kind: table
+spec:
+  target:
+    schema_name: census_utility
+    table_name: fips_codes_all
+  timestamp_columns:
+    partitioned_checks_timestamp_source: event_timestamp
+  columns:
+    summary_level:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    summary_level_name:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    state_fips_code:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+      checks:
+        integrity:
+          foreign_key_match_percent:
+            parameters:
+              foreign_table: fips_codes_states
+              foreign_column: state_fips_code
+            error:
+              max_percent: 2.0
+            warning:
+              max_percent: 1.0
+            fatal:
+              max_percent: 5.0
+    county_fips_code:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    county_subdivision_fips_code:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    place_fips_code:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    consolidated_city_fips_code:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
+    area_name:
+      type_snapshot:
+        column_type: STRING
+        nullable: true
