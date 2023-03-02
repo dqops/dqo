@@ -29,7 +29,6 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
       label: 'Check Name',
       value: 'checkName',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Executed At',
@@ -185,7 +184,7 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={result.singleCheckResults || []}
+            data={(result.singleCheckResults || []).map((item) => ({ ...item, checkName: result.checkName }))}
             emptyMessage="No Data"
             getRowClass={getSeverityClass}
           />
