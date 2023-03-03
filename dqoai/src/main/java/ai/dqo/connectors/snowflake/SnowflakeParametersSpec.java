@@ -68,7 +68,7 @@ public class SnowflakeParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Snowflake role name. Supports also a ${SNOWFLAKE_ROLE} configuration with a custom environment variable.")
     private String role;
 
-    @CommandLine.Option(names = {"--snowflake-properties"}, description = "Snowflake additional properties that are added to the JDBC connection string")
+    @CommandLine.Option(names = {"-F"}, description = "Snowflake additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 

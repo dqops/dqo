@@ -21,6 +21,7 @@ import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.RunChecksQueueJob;
 import ai.dqo.execution.checks.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -48,15 +49,18 @@ public class CheckServiceImpl implements CheckService {
     /**
      * Runs checks given the filters.
      * @param checkSearchFilters Check search filters.
+     * @param timeWindowFilterParameters Optional user provided time window parameters, limits the time period that is analyzed.
      * @param checkExecutionProgressListener Progress listener that will report the progress.
      * @param dummyRun Run the sensors in a dummy mode (sensors are not executed).
      * @return Check execution summary.
      */
     public CheckExecutionSummary runChecks(CheckSearchFilters checkSearchFilters,
+                                           TimeWindowFilterParameters timeWindowFilterParameters,
                                            CheckExecutionProgressListener checkExecutionProgressListener,
 										   boolean dummyRun) {
         RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
-        RunChecksQueueJobParameters parameters = new RunChecksQueueJobParameters(checkSearchFilters, checkExecutionProgressListener, dummyRun);
+        RunChecksQueueJobParameters parameters = new RunChecksQueueJobParameters(checkSearchFilters, timeWindowFilterParameters,
+                checkExecutionProgressListener, dummyRun);
         runChecksJob.setParameters(parameters);
 
         this.dqoJobQueue.pushJob(runChecksJob);

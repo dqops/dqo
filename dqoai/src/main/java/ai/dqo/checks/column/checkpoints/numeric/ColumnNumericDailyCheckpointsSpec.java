@@ -51,11 +51,22 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_max_in_range", o -> o.dailyCheckpointMaxInRange);
             put("daily_checkpoint_min_in_range", o -> o.dailyCheckpointMinInRange);
             put("daily_checkpoint_mean_in_range", o -> o.dailyCheckpointMeanInRange);
+            put("daily_checkpoint_percentile_in_range", o -> o.dailyCheckpointPercentileInRange);
+            put("daily_checkpoint_percentile_50_in_range", o -> o.dailyCheckpointPercentile50InRange);
+            put("daily_checkpoint_percentile_10_in_range", o -> o.dailyCheckpointPercentile10InRange);
+            put("daily_checkpoint_percentile_25_in_range", o -> o.dailyCheckpointPercentile25InRange);
+            put("daily_checkpoint_percentile_75_in_range", o -> o.dailyCheckpointPercentile75InRange);
+            put("daily_checkpoint_percentile_90_in_range", o -> o.dailyCheckpointPercentile90InRange);
             put("daily_checkpoint_sample_stddev_in_range", o -> o.dailyCheckpointSampleStddevInRange);
             put("daily_checkpoint_population_stddev_in_range", o -> o.dailyCheckpointPopulationStddevInRange);
             put("daily_checkpoint_sample_variance_in_range", o -> o.dailyCheckpointSampleVarianceInRange);
             put("daily_checkpoint_population_variance_in_range", o -> o.dailyCheckpointPopulationVarianceInRange);
             put("daily_checkpoint_sum_in_range", o -> o.dailyCheckpointSumInRange);
+            put("daily_checkpoint_invalid_latitude_count", o -> o.dailyCheckpointInvalidLatitudeCount);
+            put("daily_checkpoint_valid_latitude_percent", o -> o.dailyCheckpointValidLatitudePercent);
+            put("daily_checkpoint_invalid_longitude_count", o -> o.dailyCheckpointInvalidLongitudeCount);
+            put("daily_checkpoint_valid_longitude_percent", o -> o.dailyCheckpointValidLongitudePercent);
+
         }
     };
 
@@ -104,6 +115,24 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnMeanInRangeCheckSpec dailyCheckpointMeanInRange;
 
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnPercentileInRangeCheckSpec dailyCheckpointPercentileInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPercentile50InRangeCheckSpec dailyCheckpointPercentile50InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPercentile10InRangeCheckSpec dailyCheckpointPercentile10InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPercentile25InRangeCheckSpec dailyCheckpointPercentile25InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPercentile75InRangeCheckSpec dailyCheckpointPercentile75InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPercentile90InRangeCheckSpec dailyCheckpointPercentile90InRange;
+
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnSampleStddevInRangeCheckSpec dailyCheckpointSampleStddevInRange;
 
@@ -118,6 +147,18 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnSumInRangeCheckSpec dailyCheckpointSumInRange;
+
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnInvalidLatitudeCountCheckSpec dailyCheckpointInvalidLatitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnValidLatitudePercentCheckSpec dailyCheckpointValidLatitudePercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnInvalidLongitudeCountCheckSpec dailyCheckpointInvalidLongitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnValidLongitudePercentCheckSpec dailyCheckpointValidLongitudePercent;
 
     /**
      * Returns a negative values count check specification.
@@ -390,6 +431,114 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
     }
 
     /**
+     * Returns a percentile in range check specification.
+     * @return Percentile in range check specification.
+     */
+    public ColumnPercentileInRangeCheckSpec getDailyCheckpointPercentileInRange() {
+        return dailyCheckpointPercentileInRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile in range check.
+     * @param dailyCheckpointPercentileInRange Percentile in range check specification.
+     */
+    public void setDailyCheckpointPercentileInRange(ColumnPercentileInRangeCheckSpec dailyCheckpointPercentileInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentileInRange, dailyCheckpointPercentileInRange));
+        this.dailyCheckpointPercentileInRange = dailyCheckpointPercentileInRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentileInRange, "daily_checkpoint_percentile_in_range");
+    }
+
+    /**
+     * Returns a percentile 50 in range check specification.
+     * @return Percentile 50 in range check specification.
+     */
+    public ColumnPercentile50InRangeCheckSpec getDailyCheckpointPercentile50InRange() {
+        return dailyCheckpointPercentile50InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 50 in range check.
+     * @param dailyCheckpointPercentile50InRange Percentile 50 in range check specification.
+     */
+    public void setDailyCheckpointPercentile50InRange(ColumnPercentile50InRangeCheckSpec dailyCheckpointPercentile50InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile50InRange, dailyCheckpointPercentile50InRange));
+        this.dailyCheckpointPercentile50InRange = dailyCheckpointPercentile50InRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentile50InRange, "daily_checkpoint_percentile_50_in_range");
+    }
+
+    /**
+     * Returns a percentile 10 in range check specification.
+     * @return Percentile 10 in range check specification.
+     */
+    public ColumnPercentile10InRangeCheckSpec getDailyCheckpointPercentile10InRange() {
+        return dailyCheckpointPercentile10InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 10 in range check.
+     * @param dailyCheckpointPercentile10InRange Percentile 10 in range check specification.
+     */
+    public void setDailyCheckpointPercentile10InRange(ColumnPercentile10InRangeCheckSpec dailyCheckpointPercentile10InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile10InRange, dailyCheckpointPercentile10InRange));
+        this.dailyCheckpointPercentile10InRange = dailyCheckpointPercentile10InRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentile10InRange, "daily_checkpoint_percentile_10_in_range");
+    }
+
+    /**
+     * Returns a percentile 25 in range check specification.
+     * @return Percentile 25 in range check specification.
+     */
+    public ColumnPercentile25InRangeCheckSpec getDailyCheckpointPercentile25InRange() {
+        return dailyCheckpointPercentile25InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 25 in range check.
+     * @param dailyCheckpointPercentile25InRange Percentile 25 in range check specification.
+     */
+    public void setDailyCheckpointPercentile25InRange(ColumnPercentile25InRangeCheckSpec dailyCheckpointPercentile25InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile25InRange, dailyCheckpointPercentile25InRange));
+        this.dailyCheckpointPercentile25InRange = dailyCheckpointPercentile25InRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentile25InRange, "daily_checkpoint_percentile_25_in_range");
+    }
+
+    /**
+     * Returns a percentile 75 in range check specification.
+     * @return Percentile 75 in range check specification.
+     */
+    public ColumnPercentile75InRangeCheckSpec getDailyCheckpointPercentile75InRange() {
+        return dailyCheckpointPercentile75InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 75 in range check.
+     * @param dailyCheckpointPercentile75InRange Percentile 75 in range check specification.
+     */
+    public void setDailyCheckpointPercentile75InRange(ColumnPercentile75InRangeCheckSpec dailyCheckpointPercentile75InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile75InRange, dailyCheckpointPercentile75InRange));
+        this.dailyCheckpointPercentile75InRange = dailyCheckpointPercentile75InRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentile75InRange, "daily_checkpoint_percentile_75_in_range");
+    }
+
+    /**
+     * Returns a percentile 90 in range check specification.
+     * @return Percentile 90 in range check specification.
+     */
+    public ColumnPercentile90InRangeCheckSpec getDailyCheckpointPercentile90InRange() {
+        return dailyCheckpointPercentile90InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 90 in range check.
+     * @param dailyCheckpointPercentile90InRange Percentile 90 in range check specification.
+     */
+    public void setDailyCheckpointPercentile90InRange(ColumnPercentile90InRangeCheckSpec dailyCheckpointPercentile90InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile90InRange, dailyCheckpointPercentile90InRange));
+        this.dailyCheckpointPercentile90InRange = dailyCheckpointPercentile90InRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentile90InRange, "daily_checkpoint_percentile_90_in_range");
+    }
+
+    /**
      * Returns a sample standard deviation in range check specification.
      * @return Sample standard deviation in range check specification.
      */
@@ -477,6 +626,78 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.dailyCheckpointSumInRange, dailyCheckpointSumInRange));
         this.dailyCheckpointSumInRange = dailyCheckpointSumInRange;
         propagateHierarchyIdToField(dailyCheckpointSumInRange, "daily_checkpoint_sum_in_range");
+    }
+
+    /**
+     * Returns an invalid latitude count check specification.
+     * @return Invalid latitude count check specification.
+     */
+    public ColumnInvalidLatitudeCountCheckSpec getDailyCheckpointInvalidLatitudeCount() {
+        return dailyCheckpointInvalidLatitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid latitude count check.
+     * @param dailyCheckpointInvalidLatitudeCount Invalid latitude count check specification.
+     */
+    public void setDailyCheckpointInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec dailyCheckpointInvalidLatitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointInvalidLatitudeCount, dailyCheckpointInvalidLatitudeCount));
+        this.dailyCheckpointInvalidLatitudeCount = dailyCheckpointInvalidLatitudeCount;
+        propagateHierarchyIdToField(dailyCheckpointInvalidLatitudeCount, "daily_checkpoint_invalid_latitude_count");
+    }
+
+    /**
+     * Returns a valid latitude percent check specification.
+     * @return Valid latitude percent check specification.
+     */
+    public ColumnValidLatitudePercentCheckSpec getDailyCheckpointValidLatitudePercent() {
+        return dailyCheckpointValidLatitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid latitude percent check.
+     * @param dailyCheckpointValidLatitudePercent Valid latitude percent check specification.
+     */
+    public void setDailyCheckpointValidLatitudePercent(ColumnValidLatitudePercentCheckSpec dailyCheckpointValidLatitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointValidLatitudePercent, dailyCheckpointValidLatitudePercent));
+        this.dailyCheckpointValidLatitudePercent = dailyCheckpointValidLatitudePercent;
+        propagateHierarchyIdToField(dailyCheckpointValidLatitudePercent, "daily_checkpoint_valid_latitude_percent");
+    }
+
+    /**
+     * Returns an invalid longitude count check specification.
+     * @return Invalid longitude count check specification.
+     */
+    public ColumnInvalidLongitudeCountCheckSpec getDailyCheckpointInvalidLongitudeCount() {
+        return dailyCheckpointInvalidLongitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid longitude count check.
+     * @param dailyCheckpointInvalidLongitudeCount Invalid longitude count check specification.
+     */
+    public void setDailyCheckpointInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec dailyCheckpointInvalidLongitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointInvalidLongitudeCount, dailyCheckpointInvalidLongitudeCount));
+        this.dailyCheckpointInvalidLongitudeCount = dailyCheckpointInvalidLongitudeCount;
+        propagateHierarchyIdToField(dailyCheckpointInvalidLongitudeCount, "daily_checkpoint_invalid_longitude_count");
+    }
+
+    /**
+     * Returns a valid longitude percent check specification.
+     * @return Valid longitude percent check specification.
+     */
+    public ColumnValidLongitudePercentCheckSpec getDailyCheckpointValidLongitudePercent() {
+        return dailyCheckpointValidLongitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid longitude percent check.
+     * @param dailyCheckpointValidLongitudePercent Valid longitude percent check specification.
+     */
+    public void setDailyCheckpointValidLongitudePercent(ColumnValidLongitudePercentCheckSpec dailyCheckpointValidLongitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointValidLongitudePercent, dailyCheckpointValidLongitudePercent));
+        this.dailyCheckpointValidLongitudePercent = dailyCheckpointValidLongitudePercent;
+        propagateHierarchyIdToField(dailyCheckpointValidLongitudePercent, "daily_checkpoint_valid_longitude_percent");
     }
 
     /**

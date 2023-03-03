@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.nio.file.Path;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -45,13 +46,13 @@ public class RuleDocumentationGeneratorImplTests extends BaseTest {
 
     @Test
     void createRuleDocumentationModels_whenCalled_generatesListOfRuleDocumentationModel() {
-        List<RuleDocumentationModel> ruleDocumentationModels = this.sut.createRuleDocumentationModels(projectRootPath);
+        List<RuleDocumentationModel> ruleDocumentationModels = new ArrayList<>(this.sut.createRuleDocumentationModels(projectRootPath));
         Assertions.assertTrue(ruleDocumentationModels.size() > 1);
     }
 
     @Test
     void groupRulesByCategory_whenCalled_generatesListOfRuleGroupedDocumentationModel() {
-        List<RuleDocumentationModel> ruleDocumentationModels = this.sut.createRuleDocumentationModels(projectRootPath);
+        List<RuleDocumentationModel> ruleDocumentationModels = new ArrayList<>(this.sut.createRuleDocumentationModels(projectRootPath));
         List<RuleGroupedDocumentationModel> ruleGroupedDocumentationModels = this.sut.groupRulesByCategory(ruleDocumentationModels);
         Assertions.assertTrue(ruleGroupedDocumentationModels.size() >= 3);
     }

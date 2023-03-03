@@ -3,23 +3,24 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableCheckpointsUIFilter,
+  getTableCheckpointsUIFilter, setTableUpdatedCheckpointsUIFilter,
 } from '../../redux/actions/table.actions';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
-import { CheckResultOverviewApi } from "../../services/apiClient";
+import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
+import Button from "../../components/Button";
 
 const TableCheckpointsUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, timePartitioned, category, checkName }: { connection: string, schema: string, table: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
-  const { checkpointsUIFilter } = useSelector(
+  const { checkpointsUIFilter, isUpdatedCheckpointsUIFilter, loading } = useSelector(
     (state: IRootState) => state.table
   );
   const dispatch = useActionDispatch();
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getTableCheckpointsOverview(connectionName, schemaName, tableName, timePartitioned).then((res) => {
@@ -28,15 +29,31 @@ const TableCheckpointsUIFilterView = () => {
   };
 
   useEffect(() => {
-    setUpdatedChecksUI(checkpointsUIFilter);
-  }, [checkpointsUIFilter]);
-  
-  useEffect(() => {
     dispatch(
       getTableCheckpointsUIFilter(connectionName, schemaName, tableName, timePartitioned, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
-  
+
+  const onUpdate = async () => {
+    setIsUpdating(true);
+    await TableApiClient.updateTableCheckpointsUI(
+      connectionName,
+      schemaName,
+      tableName,
+      timePartitioned,
+      checkpointsUIFilter
+    );
+
+    await dispatch(
+      getTableCheckpointsUIFilter(connectionName, schemaName, tableName, timePartitioned, category, checkName)
+    );
+    setIsUpdating(false);
+  };
+
+  const onChange = (ui: UIAllChecksModel) => {
+    dispatch(setTableUpdatedCheckpointsUIFilter(ui));
+  };
+
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -44,15 +61,24 @@ const TableCheckpointsUIFilterView = () => {
           <SvgIcon name="database" className="w-5 h-5" />
           <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}.checks.${category} - ${checkName}`}</div>
         </div>
+        <Button
+          color={isUpdatedCheckpointsUIFilter ? 'primary' : 'secondary'}
+          variant="contained"
+          label="Save"
+          className="w-40"
+          onClick={onUpdate}
+          loading={isUpdating}
+        />
       </div>
       <div>
         <DataQualityChecks
-          onUpdate={() => {}}
+          onUpdate={onUpdate}
           className="max-h-checks-1"
-          checksUI={updatedChecksUI}
-          onChange={setUpdatedChecksUI}
+          checksUI={checkpointsUIFilter}
+          onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>

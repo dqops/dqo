@@ -275,13 +275,25 @@ public class FolderTreeNodeTests extends BaseTest {
     }
 
     @Test
-    void addChildFile_whenFilePresentAndAddingToRootFolder_thenThrowsException() {
+    void addChildFile_whenFilePresentAndAddingToRootFolder_thenReplacesContent() {
         FolderTreeNode sut = FolderTreeNode.createRootFolderNode();
         FileTreeNode first = sut.addChildFile("file.txt", new FileContent("content"));
 
-        Assertions.assertThrows(LocalFileSystemException.class, () -> {
-            FileTreeNode second = sut.addChildFile("file.txt", new FileContent("content"));
-        });
+        FileTreeNode second = sut.addChildFile("file.txt", new FileContent("content2"));
+        FileTreeNode found = sut.getChildFileByFileName("file.txt");
+        Assertions.assertEquals("content2", found.getContent().getTextContent());
+    }
+
+    @Test
+    void addChildFile_whenFileWasAddedAndDeletedAndAddingToRootFolderAgain_thenReplacesContent() {
+        FolderTreeNode sut = FolderTreeNode.createRootFolderNode();
+        FileTreeNode first = sut.addChildFile("file.txt", new FileContent("content"));
+        first.markForDeletion();
+
+        FileTreeNode second = sut.addChildFile("file.txt", new FileContent("content2"));
+        FileTreeNode found = sut.getChildFileByFileName("file.txt");
+        Assertions.assertEquals("content2", found.getContent().getTextContent());
+        Assertions.assertEquals(FileTreeNodeStatus.MODIFIED, found.getStatus());
     }
 
     @Test

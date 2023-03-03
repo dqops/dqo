@@ -20,7 +20,7 @@ import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { findTreeNode } from '../utils/tree';
 import { CheckTypes, ROUTES } from "../shared/routes";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const TreeContext = React.createContext({} as any);
 
@@ -65,6 +65,7 @@ function TreeProvider(props: any) {
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const history = useHistory();
+
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
       await ConnectionApiClient.getAllConnections();
@@ -614,7 +615,9 @@ function TreeProvider(props: any) {
 
   const runChecks = async (node: CustomTreeNode) => {
     if (node.run_checks_job_template) {
-      JobApiClient.runChecks(node.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: node.run_checks_job_template
+      });
       return;
     }
 
@@ -655,7 +658,9 @@ function TreeProvider(props: any) {
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
@@ -665,7 +670,9 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
@@ -675,7 +682,9 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
@@ -685,7 +694,9 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
@@ -695,7 +706,9 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
 
@@ -706,7 +719,9 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         columnNode?.label ?? ''
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
@@ -717,7 +732,9 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
@@ -728,7 +745,9 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
@@ -739,7 +758,9 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
@@ -750,7 +771,9 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
   };
@@ -762,7 +785,7 @@ function TreeProvider(props: any) {
     }
   };
 
-  const deleteStoredData = async (node: CustomTreeNode, dateStart: string, dateEnd: string) => {
+  const deleteStoredData = async (node: CustomTreeNode, params: { [key: string]: string | boolean }) => {
     if (node.data_clean_job_template) {
       let checkType;
       switch (sourceRoute) {
@@ -782,8 +805,7 @@ function TreeProvider(props: any) {
       JobApiClient.deleteStoredData({
         ...node.data_clean_job_template,
         checkType,
-        dateStart,
-        dateEnd
+        ...params,
       });
       return;
     }
@@ -800,6 +822,7 @@ function TreeProvider(props: any) {
   }
 
   const switchTab = (node: CustomTreeNode) => {
+    console.log('node:', node);
     if (!node) return;
     const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
@@ -812,7 +835,13 @@ function TreeProvider(props: any) {
       const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-      pushHistory(ROUTES.TABLE_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, subTabMap[node.id] || 'detail'));
+      let tab = subTabMap[node.id];
+      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.TIME_PARTITIONED) {
+        tab = tab || 'daily';
+      } else {
+        tab = tab || 'detail'
+      }
+      pushHistory(ROUTES.TABLE_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, tab));
     } else if ([TREE_LEVEL.TABLE_CHECKS, TREE_LEVEL.TABLE_DAILY_CHECKS, TREE_LEVEL.TABLE_MONTHLY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS].includes(node.level)) {
       const tableNode = findTreeNode(treeData, node.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
@@ -896,7 +925,15 @@ function TreeProvider(props: any) {
       const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-      pushHistory(ROUTES.COLUMN_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, subTabMap[node.id] || 'detail'));
+
+      let tab = subTabMap[node.id];
+      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.TIME_PARTITIONED) {
+        tab = tab || 'daily';
+      } else {
+        tab = tab || 'detail'
+      }
+
+      pushHistory(ROUTES.COLUMN_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, tab));
     } else {
       pushHistory('/checks');
     }

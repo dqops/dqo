@@ -17,6 +17,7 @@ package ai.dqo.execution.checks;
 
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 
@@ -28,12 +29,14 @@ public interface CheckExecutionService {
      * Executes data quality checks. Reports progress and saves the results.
      * @param executionContext Check execution context with access to the user home and dqo home.
      * @param checkSearchFilters Check search filters to find the right checks.
+     * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     CheckExecutionSummary executeChecks(ExecutionContext executionContext,
                                         CheckSearchFilters checkSearchFilters,
+                                        TimeWindowFilterParameters userTimeWindowFilters,
                                         CheckExecutionProgressListener progressListener,
                                         boolean dummySensorExecution);
 

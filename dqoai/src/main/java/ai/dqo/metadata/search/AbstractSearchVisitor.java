@@ -47,9 +47,9 @@ import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.profiling.AbstractRootStatisticsCollectorsContainerSpec;
-import ai.dqo.profiling.AbstractStatisticsCollectorCategorySpec;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
+import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorCategorySpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
@@ -763,6 +763,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(RecurringSchedulesSpec recurringSchedulesSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a configuration of incremental partition checks..
+     *
+     * @param partitionIncrementalTimeWindowSpec Configuration of incremental partition checks.
+     * @param parameter                          Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(PartitionIncrementalTimeWindowSpec partitionIncrementalTimeWindowSpec, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

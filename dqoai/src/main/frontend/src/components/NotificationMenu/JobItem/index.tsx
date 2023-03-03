@@ -44,7 +44,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
             {renderStatus()}
           </div>
           <div>
-            {moment(job.jobId?.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+            {moment(job?.statusChangedAt).format('YYYY-MM-DD HH:mm:ss')}
           </div>
         </div>
       </AccordionHeader>
@@ -109,7 +109,13 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
               <tr>
                 <td className="px-2 capitalize">Synchronized folder</td>
                 <td className="px-2 max-w-76">
-                  {job?.parameters?.synchronizeRootFolderParameters?.rootType}
+                  {job?.parameters?.synchronizeRootFolderParameters?.synchronizationParameter?.folder}
+                </td>
+              </tr>
+              <tr>
+                <td className="px-2 capitalize">Synchronization direction</td>
+                <td className="px-2 max-w-76">
+                  {job?.parameters?.synchronizeRootFolderParameters?.synchronizationParameter?.direction}
                 </td>
               </tr>
             </>

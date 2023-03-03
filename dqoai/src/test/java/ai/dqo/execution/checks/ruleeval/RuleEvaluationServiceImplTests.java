@@ -36,6 +36,7 @@ import ai.dqo.execution.rules.DataQualityRuleRunnerObjectMother;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -93,6 +94,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
                 null,
                 CheckType.ADHOC,
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
+                new TimeWindowFilterParameters(),
                 new DataStreamMappingSpec(),
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));
@@ -115,7 +117,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals(0, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(11.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(11.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
@@ -140,7 +142,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals(1, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(11.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(11.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
@@ -165,7 +167,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals(0, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(11.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(11.0, evaluationResult.getErrorLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
@@ -190,7 +192,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals(2, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(11.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(11.0, evaluationResult.getErrorLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
@@ -215,7 +217,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals(0, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(11.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(11.0, evaluationResult.getFatalLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
@@ -240,7 +242,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals(3, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(11.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(11.0, evaluationResult.getFatalLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
@@ -267,7 +269,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals(0, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(10.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(12.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(11.0, evaluationResult.getErrorLowerBoundColumn().get(0));
         Assertions.assertEquals(10.0, evaluationResult.getFatalLowerBoundColumn().get(0));
@@ -294,7 +296,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals(3, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(10.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(12.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(11.0, evaluationResult.getErrorLowerBoundColumn().get(0));
         Assertions.assertEquals(10.0, evaluationResult.getFatalLowerBoundColumn().get(0));
@@ -321,7 +323,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals(2, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(10.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(13.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(12.0, evaluationResult.getErrorLowerBoundColumn().get(0));
         Assertions.assertEquals(10.0, evaluationResult.getFatalLowerBoundColumn().get(0));
@@ -348,7 +350,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals(1, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(10.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(13.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(11.0, evaluationResult.getErrorLowerBoundColumn().get(0));
         Assertions.assertEquals(10.0, evaluationResult.getFatalLowerBoundColumn().get(0));
@@ -372,7 +374,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(14.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(14.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
@@ -384,7 +386,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertNull(evaluationResult.getErrorLowerBoundColumn().get(0));
 
         Assertions.assertEquals(1, evaluationResult.getSeverityColumn().get(1));
-        Assertions.assertEquals(14.0, evaluationResult.getExpectedValueColumn().get(1));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(1));
         Assertions.assertEquals(14.0, evaluationResult.getWarningLowerBoundColumn().get(1));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(1));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(1));
@@ -409,7 +411,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 
         Table resultTable = evaluationResult.getRuleResultsTable();
         Assertions.assertEquals(1, evaluationResult.getSeverityColumn().get(0));
-        Assertions.assertEquals(12.0, evaluationResult.getExpectedValueColumn().get(0));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(0));
         Assertions.assertEquals(12.0, evaluationResult.getWarningLowerBoundColumn().get(0));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(0));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(0));
@@ -422,7 +424,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         Assertions.assertNull(evaluationResult.getErrorLowerBoundColumn().get(0));
 
         Assertions.assertEquals(1, evaluationResult.getSeverityColumn().get(1));
-        Assertions.assertEquals(12.0, evaluationResult.getExpectedValueColumn().get(1));
+        Assertions.assertNull(evaluationResult.getExpectedValueColumn().get(1));
         Assertions.assertEquals(12.0, evaluationResult.getWarningLowerBoundColumn().get(1));
         Assertions.assertEquals(4093888846442877636L, resultTable.column(SensorReadoutsColumnNames.CONNECTION_HASH_COLUMN_NAME).get(1));
         Assertions.assertEquals(8593232963387153742L, resultTable.column(SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME).get(1));

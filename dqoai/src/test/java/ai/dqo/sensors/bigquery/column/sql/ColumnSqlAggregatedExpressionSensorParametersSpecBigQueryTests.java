@@ -46,8 +46,8 @@ public class ColumnSqlAggregatedExpressionSensorParametersSpecBigQueryTests exte
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnSqlAggregatedExpressionSensorParametersSpec();
-        this.sut.setSqlExpression("SUM({table}.{column})");
-        this.sut.setFilter("{table}.date > DATE(2022, 2, 4)");
+        this.sut.setSqlExpression("SUM({column})");
+        this.sut.setFilter("{alias}.date > DATE(2022, 2, 4)");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -67,9 +67,10 @@ public class ColumnSqlAggregatedExpressionSensorParametersSpecBigQueryTests exte
         return SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(this.sampleTableMetadata, "length_int", this.checkSpec, timeScale, timeSeriesColumn);
     }
 
+
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     private String getSubstitutedSqlExpression(SensorExecutionRunParameters runParameters, String tableName, String columnName) {
@@ -82,7 +83,7 @@ public class ColumnSqlAggregatedExpressionSensorParametersSpecBigQueryTests exte
         String fullColumnName = String.format("`%s`", columnName);
 
         return this.checkSpec.getParameters().getSqlExpression()
-                .replace("{table}", fullTableName).replace("{column}", fullColumnName);
+                .replace("{alias}", "analyzed_table").replace("{table}", fullTableName).replace("{column}", "analyzed_table." + fullColumnName);
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {

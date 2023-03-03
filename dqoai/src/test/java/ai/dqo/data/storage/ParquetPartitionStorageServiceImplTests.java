@@ -22,6 +22,7 @@ import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindService;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
@@ -30,12 +31,8 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorNormalizedResultObjectMother;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactoryObjectMother;
 import ai.dqo.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import ai.dqo.metadata.sources.PhysicalTableName;
-import ai.dqo.metadata.storage.localfiles.dqohome.LocalDqoHomeFileStorageService;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageService;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeFileStorageServiceImpl;
 import org.junit.jupiter.api.Assertions;
@@ -67,10 +64,12 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
 
         HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(dqoUserConfigurationProperties, dqoConfigurationProperties);
-        LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager);
+        SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
+        LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
+                homeLocationFindService, newLockManager, synchronizationStatusTracker);
 
         this.sut = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService);
+                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker);
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
     }
 

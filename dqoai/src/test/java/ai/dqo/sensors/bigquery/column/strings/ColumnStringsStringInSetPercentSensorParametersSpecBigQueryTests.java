@@ -51,7 +51,7 @@ public class ColumnStringsStringInSetPercentSensorParametersSpecBigQueryTests ex
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnStringsStringInSetPercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
         ColumnStringsStringInSetPercentSensorParametersSpec altSut = (ColumnStringsStringInSetPercentSensorParametersSpec) this.sut.deepClone();
         this.sut.setValues(new ArrayList<>(){{
             add("abcde"); add("abcdef"); add("abcdefg");
@@ -89,8 +89,8 @@ public class ColumnStringsStringInSetPercentSensorParametersSpecBigQueryTests ex
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test

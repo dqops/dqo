@@ -52,7 +52,7 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnNumericNumbersInSetCountSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
         ColumnNumericNumbersInSetCountSensorParametersSpec altSut = (ColumnNumericNumbersInSetCountSensorParametersSpec) this.sut.deepClone();
         this.sut.setValues(new ArrayList<>(){{
             add(12345L); add(123456L); add(1234567L);
@@ -88,8 +88,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test

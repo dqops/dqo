@@ -15,7 +15,7 @@
  */
 package ai.dqo.core.locks;
 
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 
 /**
  * Lock manager that controls access to the user home in a parallel environment.

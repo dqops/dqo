@@ -15,7 +15,7 @@ import { useParams } from "react-router-dom";
 
 const AdhocView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
-  const { checksUI, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
+  const { checksUI, loading, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
     (state: IRootState) => state.table
   );
   const dispatch = useActionDispatch();
@@ -68,6 +68,7 @@ const AdhocView = () => {
         onChange={handleChange}
         checkResultsOverview={checkResultsOverview}
         getCheckOverview={getCheckOverview}
+        loading={loading}
       />
     </div>
   );

@@ -91,7 +91,7 @@ public class GenerateDocumentationPostProcessor {
      * @param dqoHomeContext DQO home instance with access to the sensor references and SQLs.
      */
     public static void generateDocumentationForSensors(Path projectRoot, DqoHomeContext dqoHomeContext) {
-        Path sensorsDocPath = projectRoot.resolve("../docs/sensors").toAbsolutePath().normalize();
+        Path sensorsDocPath = projectRoot.resolve("../docs/reference/sensors").toAbsolutePath().normalize();
         DocumentationFolder currentSensorDocFiles = DocumentationFolderFactory.loadCurrentFiles(sensorsDocPath);
         SensorDocumentationModelFactory sensorDocumentationModelFactory = createSensorDocumentationModelFactory(dqoHomeContext);
         SensorDocumentationGenerator sensorDocumentationGenerator = new SensorDocumentationGeneratorImpl(sensorDocumentationModelFactory);
@@ -99,7 +99,7 @@ public class GenerateDocumentationPostProcessor {
         DocumentationFolder renderedDocumentation = sensorDocumentationGenerator.renderSensorDocumentation(projectRoot, dqoHomeContext.getDqoHome());
         renderedDocumentation.writeModifiedFiles(currentSensorDocFiles);
 
-        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
         MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY",
@@ -124,7 +124,7 @@ public class GenerateDocumentationPostProcessor {
      * @param dqoHomeContext DQO home instance with access to the rule references.
      */
     public static void generateDocumentationForRules(Path projectRoot, DqoHomeContext dqoHomeContext) {
-        Path rulesDocPath = projectRoot.resolve("../docs/rules").toAbsolutePath().normalize();
+        Path rulesDocPath = projectRoot.resolve("../docs/reference/rules").toAbsolutePath().normalize();
         DocumentationFolder currentRuleDocFiles = DocumentationFolderFactory.loadCurrentFiles(rulesDocPath);
         RuleDocumentationModelFactory ruleDocumentationModelFactory = createRuleDocumentationModelFactory(projectRoot, dqoHomeContext);
         RuleDocumentationGenerator ruleDocumentationGenerator = new RuleDocumentationGeneratorImpl(ruleDocumentationModelFactory);
@@ -132,7 +132,7 @@ public class GenerateDocumentationPostProcessor {
         DocumentationFolder renderedDocumentation = ruleDocumentationGenerator.renderRuleDocumentation(projectRoot, dqoHomeContext.getDqoHome());
         renderedDocumentation.writeModifiedFiles(currentRuleDocFiles);
 
-        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
         MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE RULE REFERENCE - DO NOT MODIFY MANUALLY",
@@ -156,7 +156,7 @@ public class GenerateDocumentationPostProcessor {
      * @param projectRoot Path to the project root.
      */
     public static void generateDocumentationForCliCommands(Path projectRoot) {
-        Path cliDocPath = projectRoot.resolve("../docs/cli").toAbsolutePath().normalize();
+        Path cliDocPath = projectRoot.resolve("../docs/command_line_interface").toAbsolutePath().normalize();
         DocumentationFolder currentCliDocFiles = DocumentationFolderFactory.loadCurrentFiles(cliDocPath);
         CliCommandDocumentationGenerator cliCommandDocumentationGenerator = new CliCommandDocumentationGeneratorImpl(new CliCommandDocumentationModelFactoryImpl());
 

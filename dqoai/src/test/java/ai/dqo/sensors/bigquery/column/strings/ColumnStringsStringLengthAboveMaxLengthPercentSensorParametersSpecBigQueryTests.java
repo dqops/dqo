@@ -46,7 +46,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -71,8 +71,8 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test
@@ -100,7 +100,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(SAFE_CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -135,7 +135,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(SAFE_CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -168,7 +168,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(SAFE_CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -201,7 +201,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(SAFE_CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -239,7 +239,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(SAFE_CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -274,7 +274,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(SAFE_CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -311,7 +311,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(SAFE_CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -356,7 +356,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(SAFE_CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -397,7 +397,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(SAFE_CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END
@@ -438,7 +438,7 @@ public class ColumnStringsStringLengthAboveMaxLengthPercentSensorParametersSpecB
                     WHEN COUNT(*) = 0 THEN 100.0
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN LENGTH(SAFE_CAST(%s AS STRING)) >= 0
+                            WHEN LENGTH(%s) >= 0
                                 THEN 1
                             ELSE 0
                         END

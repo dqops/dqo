@@ -152,7 +152,6 @@ public class CheckExecutionServiceImplTests extends BaseTest {
                 errorsNormalizationService,
                 ErrorsSnapshotFactoryObjectMother.createDummyErrorsStorageService(),
                 scheduledTargetChecksFindService,
-                UserHomeLockManagerObjectMother.getDefaultGlobalLockManager(),
                 RuleDefinitionFindServiceObjectMother.getRuleDefinitionFindService(),
                 notificationService);
     }
@@ -173,14 +172,14 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         partitionedFilters.setCheckType(CheckType.PARTITIONED);
 
         CheckExecutionSummary adHocSummary = this.sut.executeChecks(
-                this.executionContext, adHocFilters, this.progressListener, true);
+                this.executionContext, adHocFilters, null, this.progressListener, true);
         CheckExecutionSummary checkpointSummary = this.sut.executeChecks(
-                this.executionContext, checkpointFilters, this.progressListener, true);
+                this.executionContext, checkpointFilters, null, this.progressListener, true);
         CheckExecutionSummary partitionedSummary = this.sut.executeChecks(
-                this.executionContext, partitionedFilters, this.progressListener, true);
+                this.executionContext, partitionedFilters, null, this.progressListener, true);
 
         CheckExecutionSummary allSummary = this.sut.executeChecks(
-                this.executionContext, allFilters, this.progressListener, true);
+                this.executionContext, allFilters, null, this.progressListener, true);
 
         Assertions.assertEquals(0, partitionedSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(2, adHocSummary.getTotalChecksExecutedCount());

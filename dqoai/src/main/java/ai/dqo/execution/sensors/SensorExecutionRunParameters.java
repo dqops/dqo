@@ -23,7 +23,7 @@ import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.profiling.AbstractStatisticsCollectorSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -32,7 +32,6 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
 import java.time.Instant;
-import java.time.ZoneId;
 
 /**
  * Sensor execution parameter object that contains all objects required to run the sensor.
@@ -50,6 +49,7 @@ public class SensorExecutionRunParameters {
     @JsonIgnore
     private AbstractStatisticsCollectorSpec<?> profiler;
     private TimeSeriesConfigurationSpec timeSeries;
+    private TimeWindowFilterParameters timeWindowFilter;
     private DataStreamMappingSpec dataStreams;
     private AbstractSensorParametersSpec sensorParameters;
     private ProviderDialectSettings dialectSettings;
@@ -65,6 +65,7 @@ public class SensorExecutionRunParameters {
      * @param profiler Profiler specification (when a profiler is executed).
      * @param checkType Check type (adhoc, checkpoint, partitioned).
      * @param timeSeries Effective time series configuration.
+     * @param timeWindowFilter Time window filter (optional), configures the absolute time range of data to analyze and/or the time window (recent days/months) for incremental partition checks.
      * @param dataStreams Effective data streams configuration.
      * @param sensorParameters Sensor parameters.
      * @param dialectSettings Dialect settings.
@@ -77,6 +78,7 @@ public class SensorExecutionRunParameters {
             AbstractStatisticsCollectorSpec<?> profiler,
             CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
+            TimeWindowFilterParameters timeWindowFilter,
             DataStreamMappingSpec dataStreams,
 			AbstractSensorParametersSpec sensorParameters,
 			ProviderDialectSettings dialectSettings) {
@@ -87,6 +89,7 @@ public class SensorExecutionRunParameters {
         this.profiler = profiler;
         this.checkType = checkType;
         this.timeSeries = timeSeries;
+        this.timeWindowFilter = timeWindowFilter;
         this.dataStreams = dataStreams;
         this.sensorParameters = sensorParameters;
         this.dialectSettings = dialectSettings;
@@ -205,6 +208,22 @@ public class SensorExecutionRunParameters {
     }
 
     /**
+     * Returns the time window filter when a date/time range filters were applied.
+     * @return Time window filter.
+     */
+    public TimeWindowFilterParameters getTimeWindowFilter() {
+        return timeWindowFilter;
+    }
+
+    /**
+     * Sets a time window filter, when the time window filter was applied.
+     * @param timeWindowFilter Time window filter.
+     */
+    public void setTimeWindowFilter(TimeWindowFilterParameters timeWindowFilter) {
+        this.timeWindowFilter = timeWindowFilter;
+    }
+
+    /**
      * Returns the effective data streams configuration.
      * @return Effective data streams configuration.
      */
@@ -267,19 +286,5 @@ public class SensorExecutionRunParameters {
      */
     public void setStartedAt(Instant startedAt) {
         this.startedAt = startedAt;
-    }
-
-    /**
-     * Finds the effective time series configuration as it will be used by the sensor. The priority is: check/column/table/connection.
-     * @return Effective time series configuration or a default time series (current time, day granularity).
-     */
-    @JsonIgnore
-    @Deprecated
-    public TimeSeriesConfigurationSpec getEffectiveTimeSeries() {
-        if (this.timeSeries != null) {
-            return this.timeSeries;
-        }
-
-        return TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds();
     }
 }

@@ -46,7 +46,7 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnDatetimeDateValuesInFuturePercentSensorParametersSpec();
-        this.sut.setFilter("{table}.id <> 4");
+        this.sut.setFilter("{alias}.id <> 4");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -71,8 +71,8 @@ public class ColumnDatetimeDateValuesInFuturePercentSensorParametersSpecBigQuery
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test

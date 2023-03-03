@@ -37,9 +37,9 @@ public class MinCountRuleParametersSpecTests extends BaseTest {
         this.sut.setMinCount(20L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(20.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20, ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 
     @Test
@@ -47,9 +47,9 @@ public class MinCountRuleParametersSpecTests extends BaseTest {
         this.sut.setMinCount(20L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(21.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20, ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 
     @Test
@@ -57,9 +57,9 @@ public class MinCountRuleParametersSpecTests extends BaseTest {
         this.sut.setMinCount(20L);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(19.0, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(20, ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(20, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 
     @Test
@@ -85,8 +85,8 @@ public class MinCountRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsNull_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertEquals(null, ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(null, ruleExecutionResult.getLowerBound());
-        Assertions.assertEquals(null, ruleExecutionResult.getUpperBound());
+        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
+        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 }

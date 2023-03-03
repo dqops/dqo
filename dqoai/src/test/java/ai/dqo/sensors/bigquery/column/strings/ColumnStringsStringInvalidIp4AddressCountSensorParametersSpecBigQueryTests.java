@@ -46,7 +46,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
     @BeforeEach
     void setUp() {
         this.sut = new ColumnStringsStringInvalidIp4AddressCountSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -71,7 +71,8 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
     }
 
     private String getSubstitutedFilter(String tableName) {
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test
@@ -97,7 +98,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                             THEN 0
                         ELSE 1
                     END
@@ -129,7 +130,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
                 SELECT
                     SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                                 THEN 0
                             ELSE 1
                         END
@@ -159,7 +160,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                             THEN 0
                         ELSE 1
                     END
@@ -189,7 +190,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                             THEN 0
                         ELSE 1
                     END
@@ -224,7 +225,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                             THEN 0
                         ELSE 1
                     END
@@ -256,7 +257,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                             THEN 0
                         ELSE 1
                     END
@@ -290,7 +291,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                             THEN 0
                         ELSE 1
                     END
@@ -332,7 +333,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                             THEN 0
                         ELSE 1
                     END
@@ -370,7 +371,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                             THEN 0
                         ELSE 1
                     END
@@ -408,7 +409,7 @@ public class ColumnStringsStringInvalidIp4AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
                             THEN 0
                         ELSE 1
                     END

@@ -16,7 +16,7 @@
 package ai.dqo.data.ruleresults.snapshot;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionStorageService;
@@ -68,7 +68,7 @@ public class RuleResultsSnapshot extends TableDataSnapshot {
      * @return Storage settings.
      */
     public static FileStorageSettings createRuleResultsStorageSettings() {
-        return new FileStorageSettings(DqoRoot.DATA_RULE_RESULTS,
+        return new FileStorageSettings(DqoRoot.data_rule_results,
                 BuiltInFolderNames.RULE_RESULTS,
                 PARQUET_FILE_NAME,
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME,

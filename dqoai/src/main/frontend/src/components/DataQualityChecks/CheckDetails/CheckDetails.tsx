@@ -15,6 +15,7 @@ import { useTree } from "../../../contexts/treeContext";
 import SensorReadoutsTab from "./SensorReadoutsTab";
 import CheckErrorsTab from "./CheckErrorsTab";
 import DeleteOnlyDataDialog from "../../CustomTree/DeleteOnlyDataDialog";
+import moment from "moment/moment";
 
 const tabs = [
   {
@@ -44,80 +45,88 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
   const [errors, setErrors] = useState<ErrorsDetailedDataModel[]>([]);
   const [deleteDataDialogOpened, setDeleteDataDialogOpened] = useState(false);
   const [dataStreamName, setDataStreamName] = useState<string>();
+  const [month, setMonth] = useState(moment().format('MMMM YYYY'));
 
   const { sidebarWidth } = useTree();
 
+  const getCheckResult = (data: CheckResultsDetailedDataModel[]): CheckResultsDetailedDataModel[] => {
+    return data.filter((item) => item.checkName === check.check_name);
+  };
+
   useEffect(() => {
+    const startDate = month ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD') : '';
+    const endDate = month ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD') : '';
+
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.adhoc) {
       if (column) {
-        CheckResultApi.getColumnAdHocChecksResults(connection, schema, table, column, dataStreamName).then((res) => {
-          setCheckResults(res.data);
+        CheckResultApi.getColumnAdHocChecksResults(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
+          setCheckResults(getCheckResult(res.data));
         });
-        SensorReadoutsApi.getColumnAdHocSensorReadouts(connection, schema, table, column, dataStreamName).then((res) => {
+        SensorReadoutsApi.getColumnAdHocSensorReadouts(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getColumnAdHocErrors(connection, schema, table, column, dataStreamName).then((res) => {
+        ErrorsApi.getColumnAdHocErrors(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       } else {
-        CheckResultApi.getTableAdHocChecksResults(connection, schema, table, dataStreamName).then((res) => {
-          setCheckResults(res.data);
+        CheckResultApi.getTableAdHocChecksResults(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
+          setCheckResults(getCheckResult(res.data));
         });
-        SensorReadoutsApi.getTableAdHocSensorReadouts(connection, schema, table, dataStreamName).then((res) => {
+        SensorReadoutsApi.getTableAdHocSensorReadouts(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getTableAdHocErrors(connection, schema, table, dataStreamName).then((res) => {
+        ErrorsApi.getTableAdHocErrors(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       }
     }
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.checkpoint) {
       if (column) {
-        CheckResultApi.getColumnCheckpointsResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
-          setCheckResults(res.data);
+        CheckResultApi.getColumnCheckpointsResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+          setCheckResults(getCheckResult(res.data));
         });
-        SensorReadoutsApi.getColumnCheckpointsSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        SensorReadoutsApi.getColumnCheckpointsSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getColumnCheckpointsErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        ErrorsApi.getColumnCheckpointsErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       } else {
-        CheckResultApi.getTableCheckpointsResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
-          setCheckResults(res.data);
+        CheckResultApi.getTableCheckpointsResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+          setCheckResults(getCheckResult(res.data));
         });
-        SensorReadoutsApi.getTableCheckpointsSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        SensorReadoutsApi.getTableCheckpointsSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getTableCheckpointsErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        ErrorsApi.getTableCheckpointsErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       }
     }
     if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.partitioned) {
       if (column) {
-        CheckResultApi.getColumnPartitionedChecksResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
-          setCheckResults(res.data);
+        CheckResultApi.getColumnPartitionedChecksResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+          setCheckResults(getCheckResult(res.data));
         });
-        SensorReadoutsApi.getColumnPartitionedSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        SensorReadoutsApi.getColumnPartitionedSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getColumnPartitionedErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        ErrorsApi.getColumnPartitionedErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       } else {
-        CheckResultApi.getTablePartitionedChecksResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
-          setCheckResults(res.data);
+        CheckResultApi.getTablePartitionedChecksResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+          setCheckResults(getCheckResult(res.data));
         });
-        SensorReadoutsApi.getTablePartitionedSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        SensorReadoutsApi.getTablePartitionedSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getTablePartitionedErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName).then((res) => {
+        ErrorsApi.getTablePartitionedErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       }
     }
-  }, [check, dataStreamName, connection, schema, table, column]);
+  }, [check, dataStreamName, connection, schema, table, column, month]);
 
   const openDeleteDialog = () => {
     setDeleteDataDialogOpened(true);
@@ -128,7 +137,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
   }
 
   return (
-    <div className="my-4" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 80}px` }}>
+    <div className="my-4" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 85}px` }}>
       <div className="bg-white px-4 py-6 border border-gray-200 relative">
         <IconButton
           className="absolute right-4 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"
@@ -149,6 +158,8 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
           <CheckResultsTab
             results={checkResults}
             dataStreamName={dataStreamName}
+            month={month}
+            onChangeMonth={setMonth}
             onChangeDataStream={onChangeDataStream}
           />
         )}
@@ -156,6 +167,8 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
           <SensorReadoutsTab
             sensorReadouts={sensorReadouts}
             dataStreamName={dataStreamName}
+            month={month}
+            onChangeMonth={setMonth}
             onChangeDataStream={onChangeDataStream}
           />
         )}
@@ -163,6 +176,8 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
           <CheckErrorsTab
             errors={errors}
             dataStreamName={dataStreamName}
+            month={month}
+            onChangeMonth={setMonth}
             onChangeDataStream={onChangeDataStream}
           />
         )}
@@ -170,12 +185,11 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
         <DeleteOnlyDataDialog
           open={deleteDataDialogOpened}
           onClose={() => setDeleteDataDialogOpened(false)}
-          onDelete={(dateStart, dateEnd) => {
+          onDelete={(params) => {
             setDeleteDataDialogOpened(false);
             JobApiClient.deleteStoredData({
               ...check.data_clean_job_template,
-              dateStart,
-              dateEnd
+              ...params,
             });
           }}
         />

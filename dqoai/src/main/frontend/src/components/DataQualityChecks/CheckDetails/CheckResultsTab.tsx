@@ -1,106 +1,67 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { CheckResultDetailedSingleModel, CheckResultsDetailedDataModel } from "../../../api";
 import Select from "../../Select";
 import { Table } from "../../Table";
 import { useTree } from "../../../contexts/treeContext";
-import clsx from "clsx";
+import moment from "moment";
 
 interface CheckResultsTabProps {
   results: CheckResultsDetailedDataModel[];
   dataStreamName?: string;
+  month?: string;
+  onChangeMonth: (month: string) => void;
   onChangeDataStream: (name: string) => void;
 }
 
-const CheckResultsTab = ({ results, dataStreamName, onChangeDataStream }: CheckResultsTabProps) => {
+const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChangeDataStream }: CheckResultsTabProps) => {
   const { sidebarWidth } = useTree();
 
-  const getSeverityClass = (severity?: number) => {
-    if (severity === 1) return 'bg-yellow-100';
-    if (severity === 2) return 'bg-orange-100';
-    if (severity === 3) return 'bg-red-100';
+  const getSeverityClass = (row: CheckResultDetailedSingleModel) => {
+    if (row.severity === 1) return 'bg-yellow-100';
+    if (row.severity === 2) return 'bg-orange-100';
+    if (row.severity === 3) return 'bg-red-100';
 
     return '';
   };
 
   const columns = [
     {
-      label: 'Actual Value',
-      value: 'actualValue',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: number | string, row: CheckResultDetailedSingleModel) => (
-        <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{typeof value === 'number' ? value : ''}</div>
-      ),
-    },
-    {
-      label: 'Expected Value',
-      value: 'expectedValue',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: number | string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{typeof value === 'number' ? value : ''}</div>,
+      label: 'Check Name',
+      value: 'checkName',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
     },
     {
       label: 'Executed At',
       value: 'executedAt',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
     },
     {
-      label: 'Time Gradient',
+      label: 'Time Scale',
       value: 'timeGradient',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
     },
     {
       label: 'Time Period',
       value: 'timePeriod',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
     },
     {
-      label: 'Warning Lower Bound',
-      value: 'warningLowerBound',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: number | string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{typeof value === 'number' ? value : ''}</div>,
+      label: 'Actual Value',
+      value: 'actualValue',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
-      label: 'Warning Upper Bound',
-      value: 'warningUpperBound',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: number | string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{typeof value === 'number' ? value : ''}</div>,
+      label: 'Expected Value',
+      value: 'expectedValue',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
-      label: 'Error Lower Bound',
-      value: 'errorLowerBound',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: number | string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{typeof value === 'number' ? value : ''}</div>,
-    },
-    {
-      label: 'Fatal Lower Bound',
-      value: 'fatalLowerBound',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: number | string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{typeof value === 'number' ? value : ''}</div>,
-    },
-    {
-      label: 'Fatal Upper Bound',
-      value: 'fatalUpperBound',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: number | string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{typeof value === 'number' ? value : ''}</div>,
-    },
-    {
-      label: 'Severity',
+      label: 'Issue Severity Level',
       value: 'severity',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: number, row: CheckResultDetailedSingleModel) => {
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number) => {
         let name = '';
         switch (value) {
           case 0:
@@ -120,84 +81,112 @@ const CheckResultsTab = ({ results, dataStreamName, onChangeDataStream }: CheckR
         }
 
         return (
-          <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{name}</div>
+          <div>{name}</div>
         )
       },
     },
     {
-      label: 'Column Name',
-      value: 'columnName',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      header: () => <span>Warning<br/>Lower Threshold</span>,
+      value: 'warningLowerBound',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
-      label: 'Data Stream',
-      value: 'dataStream',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      header: () => <span>Warning<br/>Upper Threshold</span>,
+      value: 'warningUpperBound',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
-      label: 'Duration Ms',
-      value: 'durationMs',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      header: () => <span>Error<br/>Lower Threshold</span>,
+      value: 'errorLowerBound',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
+    },
+    {
+      header: () => <span>Error<br/>Upper Threshold</span>,
+      value: 'errorUpperBound',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
+    },
+    {
+      header: () => <span>Fatal<br/>Lower Threshold</span>,
+      value: 'fatalLowerBound',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
+    },
+    {
+      header: () => <span>Fatal<br/>Upper Threshold</span>,
+      value: 'fatalUpperBound',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Include In Kpi',
       value: 'includeInKpi',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
     },
     {
       label: 'Include In Sla',
       value: 'includeInSla',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
     },
     {
-      label: 'Provider',
-      value: 'provider',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      label: 'Duration Ms',
+      value: 'durationMs',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
     },
     {
-      label: 'Quality Dimension',
-      value: 'qualityDimension',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      label: 'Data Stream',
+      value: 'dataStream',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
     },
     {
-      label: 'Sensor Name',
-      value: 'sensorName',
-      className: 'text-sm !p-0 whitespace-nowrap text-gray-700',
-      header: (text: string) => <div className="py-2 px-4">{text}</div>,
-      render: (value: string, row: CheckResultDetailedSingleModel) => <div className={clsx('px-4 py-2', getSeverityClass(row.severity))}>{value}</div>,
+      label: 'Readout Id',
+      value: 'readoutId',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
     },
   ];
 
+  const monthOptions = useMemo(() => {
+    return Array(24).fill('').map((item, index) => ({
+      label: moment().subtract(index, 'months').format('MMMM YYYY'),
+      value: moment().subtract(index, 'months').format('MMMM YYYY')
+    }))
+  }, []);
+
   return (
     <div className="py-3 overflow-auto" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 100}px` }}>
+      <div className="flex space-x-8 items-center">
+        <div className="flex space-x-4 items-center">
+          <div className="text-sm">Data stream</div>
+          <Select
+            value={dataStreamName}
+            options={(results[0]?.dataStreamNames || []).map((item) => ({ label: item, value: item })) || []}
+            onChange={onChangeDataStream}
+          />
+        </div>
+        <div className="flex space-x-4 items-center">
+          <div className="text-sm">Month</div>
+          <Select
+            value={month}
+            options={monthOptions}
+            onChange={onChangeMonth}
+          />
+        </div>
+      </div>
+      {results.length === 0 && (
+        <div className="text-gray-700 mt-5">No Data</div>
+      )}
+
       {results.map((result, index) => (
         <div key={index}>
-          <div className="flex space-x-4 items-center">
-            <div className="text-sm">Data stream</div>
-            <Select
-              value={dataStreamName}
-              options={result.dataStreamNames?.map((item) => ({ label: item, value: item })) || []}
-              onChange={onChangeDataStream}
-            />
-          </div>
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={result.singleCheckResults || []}
+            data={(result.singleCheckResults || []).map((item) => ({ ...item, checkName: result.checkName }))}
+            emptyMessage="No Data"
+            getRowClass={getSeverityClass}
           />
         </div>
       ))}

@@ -1,9 +1,5 @@
-# {{target}}
-{{#each groupedSensors}}
-## **{{@key}}** {{target}} sensors
-___
-{{#each this}}
-### **{{replace sensorName "_" " "}}**
+{{#each collectedSensors}}
+## **{{replace sensorName "_" " "}}**
 **Full sensor name**
 ```
 {{fullSensorName}}
@@ -19,6 +15,15 @@ ___
 {{/each}}
 {{else}}
 {{/if}}
+{{#if definition.spec.parameters}}
+**Additional sensor definition parameters**{{#with "  "}}{{.}}{{/with}}
+{{#with "  "}}{{.}}{{/with}}
+| Parameters name | Value |
+|-----------------|-------|
+{{#each definition.spec.parameters}}|{{@key}}|{{this}}|
+{{/each}}
+{{else}}
+{{/if}}
 **SQL Template (Jinja2)**{{#with "  "}}{{.}}{{/with}}
 {{#each sqlTemplates~}}
 === "{{@key}}"
@@ -30,5 +35,4 @@ ___
     ```
 {{/each~}}
 ___
-{{/each}}
 {{/each}}

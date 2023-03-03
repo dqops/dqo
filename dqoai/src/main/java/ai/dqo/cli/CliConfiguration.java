@@ -22,8 +22,10 @@ import ai.dqo.cli.exceptions.CommandExecutionErrorHandler;
 import ai.dqo.cli.terminal.*;
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
 import ai.dqo.utils.StaticBeanFactory;
+import org.jline.builtins.Nano.SyntaxHighlighter;
 import org.jline.console.SystemRegistry;
 import org.jline.console.impl.Builtins;
+import org.jline.console.impl.SystemHighlighter;
 import org.jline.console.impl.SystemRegistryImpl;
 import org.jline.keymap.KeyMap;
 import org.jline.reader.*;
@@ -144,10 +146,16 @@ public class CliConfiguration {
 									SystemRegistry systemRegistry,
 									Builtins builtins) {
         LineReader lineReader = LineReaderBuilder.builder()
+                .highlighter(new SystemHighlighter(
+                        SyntaxHighlighter.build("classpath:dqo_cli.nanorc"),  // For optional future use.
+                        SyntaxHighlighter.build("classpath:dqo_cli.nanorc"),  // The editable file is in
+                        SyntaxHighlighter.build("classpath:dqo_cli.nanorc")   // resources/org/jline/builtins/dqo_cli.nanorc
+                ))
                 .terminal(terminal)
                 .completer(new InputCapturingCompleter(systemRegistry.completer()))
                 .parser(defaultParser)
-                .variable(LineReader.LIST_MAX, 50)   // max tab completion candidates
+                .variable(LineReader.LIST_MAX, 50)  // max tab completion candidates
+                .variable(LineReader.COMPLETION_STYLE_STARTING, "fg:yellow")  // starting part highlight of the completer widget
                 .build();
 
         builtins.setLineReader(lineReader);

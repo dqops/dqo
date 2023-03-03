@@ -18,17 +18,17 @@ package ai.dqo.cli.commands.cloud.sync.impl;
 import ai.dqo.cli.commands.cloud.impl.CloudLoginService;
 import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
 import ai.dqo.cli.terminal.TerminalFactory;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
-import ai.dqo.core.dqocloud.synchronization.DqoCloudSynchronizationService;
-import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJob;
-import ai.dqo.core.dqocloud.synchronization.SynchronizeRootFolderDqoQueueJobParameters;
-import ai.dqo.core.filesystem.filesystemservice.contract.DqoRoot;
-import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListener;
-import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationListenerProvider;
-import ai.dqo.core.filesystem.synchronization.listeners.FileSystemSynchronizationReportingMode;
+import ai.dqo.core.synchronization.service.DqoCloudSynchronizationService;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJobParameters;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderParameters;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationListener;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationListenerProvider;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,12 +80,14 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
      * @param rootType Root type.
      * @param reportingMode File synchronization progress reporting mode.
      * @param headlessMode The application was started in a headless mode and should not bother the user with questions (prompts).
+     * @param synchronizationDirection File synchronization direction.
      * @param runOnBackgroundQueue True when the actual synchronization operation should be executed in the background on the DQO job queue.
      *                             False when the operation should be executed on the caller's thread.
      * @return 0 when success, -1 when an error.
      */
     public int synchronizeRoot(DqoRoot rootType,
                                FileSystemSynchronizationReportingMode reportingMode,
+                               FileSynchronizationDirection synchronizationDirection,
                                boolean headlessMode,
                                boolean runOnBackgroundQueue) {
         DqoCloudApiKey apiKey = this.apiKeyProvider.getApiKey();
@@ -111,14 +113,17 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
 
         if (runOnBackgroundQueue) {
             SynchronizeRootFolderDqoQueueJob synchronizeRootFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
-            SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(rootType, synchronizationListener);
+            SynchronizeRootFolderParameters synchronizationParameter = new SynchronizeRootFolderParameters(
+                    rootType, FileSynchronizationDirection.full);
+            SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(
+                    synchronizationParameter, synchronizationListener);
             synchronizeRootFolderJob.setParameters(jobParameters);
 
             this.dqoJobQueue.pushJob(synchronizeRootFolderJob);
             synchronizeRootFolderJob.waitForFinish();
         }
         else {
-            this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationListener);
+            this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationDirection, synchronizationListener);
         }
 
         this.terminalFactory.getWriter().writeLine(rootType.toString() + " synchronization between local DQO User Home and DQO Cloud finished.\n");

@@ -140,14 +140,14 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
                 className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
                 onClick={() => setDeleteDataDialogOpened(true)}
               >
-                Delete Data Only
+                Delete results
               </div>
               <DeleteOnlyDataDialog
                 open={deleteDataDialogOpened}
                 onClose={() => setDeleteDataDialogOpened(false)}
-                onDelete={(startDate, endDate) => {
+                onDelete={(params) => {
                   setDeleteDataDialogOpened(false);
-                  deleteStoredData(node, startDate, endDate);
+                  deleteStoredData(node, params);
                   setOpen(false);
                 }}
               />

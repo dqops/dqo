@@ -47,7 +47,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
     @BeforeEach
     void setUp() {
         this.sut = new ColumnStringsStringInvalidIp6AddressCountSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip6_test, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -72,7 +72,8 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
     }
 
     private String getSubstitutedFilter(String tableName) {
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test
@@ -98,7 +99,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -131,7 +132,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
                 SELECT
                     SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), %s)
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                                 THEN 0
                             ELSE 1
                         END
@@ -162,7 +163,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -193,7 +194,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -229,7 +230,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -262,7 +263,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -297,7 +298,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -340,7 +341,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -379,7 +380,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END
@@ -418,7 +419,7 @@ public class ColumnStringsStringInvalidIp6AddressCountSensorParametersSpecBigQue
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), %s)
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
                             THEN 0
                         ELSE 1
                     END

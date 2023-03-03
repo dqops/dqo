@@ -1,28 +1,24 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
-import {
-  getColumnAdHockChecksUIFilter,
-  updateColumnCheckUI
-} from '../../redux/actions/column.actions';
-import { CheckResultOverviewApi } from "../../services/apiClient";
+import { getColumnAdHockChecksUIFilter, setColumnUpdatedCheckUiFilter } from '../../redux/actions/column.actions';
+import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import Button from "../../components/Button";
-import { isEqual } from "lodash";
 
 const ColumnAdHockChecksUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, category, checkName }: { connection: string, schema: string, table: string, column: string, category: string, checkName: string } = useParams();
-  const { checksUIFilter, isUpdating } = useSelector(
+  const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(
     (state: IRootState) => state.column
   );
   const dispatch = useActionDispatch();
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const [isUpdating, setIsUpdating] = useState(false);
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnAdHocChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
@@ -31,38 +27,30 @@ const ColumnAdHockChecksUIFilterView = () => {
   };
 
   const onUpdate = async () => {
-    if (!updatedChecksUI) {
-      return;
-    }
-    await dispatch(
-      updateColumnCheckUI(
-        connectionName,
-        schemaName,
-        tableName,
-        columnName,
-        updatedChecksUI
-      )
+    setIsUpdating(true);
+    await ColumnApiClient.updateColumnAdHocChecksUI(
+      connectionName,
+      schemaName,
+      tableName,
+      columnName,
+      checksUIFilter
     );
     await dispatch(
       getColumnAdHockChecksUIFilter(connectionName, schemaName, tableName, columnName, category, checkName)
     );
+    setIsUpdating(false);
   };
 
-  const isUpdated = useMemo(
-    () => !isEqual(updatedChecksUI, checksUIFilter),
-    [checksUIFilter, updatedChecksUI]
-  );
-
-  useEffect(() => {
-    setUpdatedChecksUI(checksUIFilter);
-  }, [checksUIFilter]);
-  
   useEffect(() => {
     dispatch(
       getColumnAdHockChecksUIFilter(connectionName, schemaName, tableName, columnName, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
-  
+
+  const onChange = (ui: UIAllChecksModel) => {
+    dispatch(setColumnUpdatedCheckUiFilter(ui));
+  };
+
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
@@ -71,7 +59,7 @@ const ColumnAdHockChecksUIFilterView = () => {
           <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}.${columnName}.checks.${category} - ${checkName}`}</div>
         </div>
         <Button
-          color={isUpdated ? 'primary' : 'secondary'}
+          color={isUpdatedChecksUIFilter ? 'primary' : 'secondary'}
           variant="contained"
           label="Save"
           className="ml-auto w-40"
@@ -83,10 +71,11 @@ const ColumnAdHockChecksUIFilterView = () => {
         <DataQualityChecks
           onUpdate={() => {}}
           className="max-h-checks-1"
-          checksUI={updatedChecksUI}
-          onChange={setUpdatedChecksUI}
+          checksUI={checksUIFilter}
+          onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>

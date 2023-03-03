@@ -19,14 +19,12 @@
                     THEN 1
                 ELSE 0
             END
-    {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'STRING' -%}
+    {%- else -%}
             CASE
                 WHEN SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS TIMESTAMP) > CURRENT_TIMESTAMP()
                     THEN 1
                 ELSE 0
             END
-    {%- else -%}
-    <INVALID DATA TYPE: table.columns[column_name].type_snapshot.column_type/>
     {%- endif -%}
 {%- endmacro -%}
 

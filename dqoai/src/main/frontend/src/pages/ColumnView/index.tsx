@@ -145,20 +145,10 @@ const ColumnView = () => {
           </div>
         </div>
         {isCheckpointOnly && (
-          <CheckpointsView
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-            columnName={columnName}
-          />
+          <CheckpointsView />
         )}
         {isPartitionCheckOnly && (
-          <ColumnPartitionedChecksView
-            connectionName={connectionName}
-            schemaName={schemaName}
-            tableName={tableName}
-            columnName={columnName}
-          />
+          <ColumnPartitionedChecksView />
         )}
         {isAdHocCheckOnly && (
           <ColumnAdhocView

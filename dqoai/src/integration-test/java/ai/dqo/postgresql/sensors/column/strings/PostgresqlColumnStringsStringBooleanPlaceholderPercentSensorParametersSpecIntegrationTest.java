@@ -65,7 +65,7 @@ public class PostgresqlColumnStringsStringBooleanPlaceholderPercentSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(86.666, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -78,7 +78,7 @@ public class PostgresqlColumnStringsStringBooleanPlaceholderPercentSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(86.666, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -91,7 +91,7 @@ public class PostgresqlColumnStringsStringBooleanPlaceholderPercentSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(86.666, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class PostgresqlColumnStringsStringBooleanPlaceholderPercentSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(83.333, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(83.333, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -117,6 +117,6 @@ public class PostgresqlColumnStringsStringBooleanPlaceholderPercentSensorParamet
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.667, Precision.round((double) resultTable.column(0).get(0),3));
+        Assertions.assertEquals(86.666, (double) resultTable.column(0).get(0), 0.001);
     }
 }

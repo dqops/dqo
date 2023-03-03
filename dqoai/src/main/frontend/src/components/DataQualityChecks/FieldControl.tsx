@@ -13,6 +13,7 @@ import StringListField from '../StringListField';
 import ColumnSelect from './ColumnSelect';
 import TextArea from '../TextArea';
 import IntegerListField from '../IntegerListField';
+import FieldDatePicker from "../FieldDatePicker";
 
 interface ISensorParametersFieldSettingsProps {
   field: UIFieldModel;
@@ -87,7 +88,7 @@ const FieldControl = ({
               label={label}
               value={value}
               tooltipText={tooltip}
-              className=""
+              className="!min-w-40 !max-w-40"
               onChange={(e) => handleChange({ string_value: e.target.value })}
               disabled={disabled}
               error={isInvalid}
@@ -98,7 +99,7 @@ const FieldControl = ({
               label={label}
               value={value}
               tooltipText={tooltip}
-              className="!h-8 !min-w-30 !max-w-30"
+              className="!h-8 !min-w-40 !max-w-40"
               onChange={(e) => handleChange({ string_value: e.target.value })}
               disabled={disabled}
               error={isInvalid}
@@ -112,7 +113,7 @@ const FieldControl = ({
           value={value}
           onChange={(value) => handleChange({ integer_value: value })}
           tooltipText={tooltip}
-          className="!h-8 !min-w-30 !max-w-30"
+          className="!h-8 !min-w-40 !max-w-40"
           disabled={disabled}
           error={isInvalid}
         />
@@ -123,7 +124,7 @@ const FieldControl = ({
           value={value}
           onChange={(value) => handleChange({ long_value: value })}
           tooltipText={tooltip}
-          className="!h-8 !min-w-30 !max-w-30"
+          className="!h-8 !min-w-40 !max-w-40"
           disabled={disabled}
           error={isInvalid}
         />
@@ -151,7 +152,7 @@ const FieldControl = ({
             })) || []
           }
           tooltipText={tooltip}
-          triggerClassName="!h-8"
+          triggerClassName="!h-8 min-w-40 max-w-40"
           onChange={(value) => handleChange({ enum_value: value })}
           disabled={disabled}
           error={isInvalid}
@@ -186,7 +187,7 @@ const FieldControl = ({
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.column_name && (
         <ColumnSelect
-          triggerClassName="!h-8"
+          triggerClassName="!h-8 !min-w-40 !max-w-40"
           label={label}
           value={value}
           tooltipText={tooltip}
@@ -200,13 +201,12 @@ const FieldControl = ({
       {field?.definition?.data_type ===
         ParameterDefinitionSpecDataTypeEnum.date && (
         <div>
-          <Input
+          <FieldDatePicker
             label={label}
             value={value}
-            type="date"
-            tooltipText={tooltip}
+            onChange={(date_value) => handleChange({ date_value })}
             className="!h-8 !min-w-40 !max-w-40"
-            onChange={(e) => handleChange({ date_value: e.target.value })}
+            tooltipText={tooltip}
             disabled={disabled}
             error={isInvalid}
           />

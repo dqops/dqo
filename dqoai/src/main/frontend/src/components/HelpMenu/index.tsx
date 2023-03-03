@@ -36,7 +36,7 @@ const HelpMenu = () => {
           Browse documentation
         </a>
         <a
-          href="https://cloud.dqo.ai/"
+          href="https://cloud.dqo.ai/account"
           target="_blank"
           rel="noreferrer"
           className="block"

@@ -46,7 +46,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
     @BeforeEach
     void setUp() {
         this.sut = new ColumnStringsStringInvalidEmailCountSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -71,7 +71,8 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
     }
 
     private String getSubstitutedFilter(String tableName) {
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test
@@ -97,7 +98,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -129,7 +130,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
                 SELECT
                     SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
                                 THEN 0
                             ELSE 1
                         END
@@ -159,7 +160,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -189,7 +190,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -224,7 +225,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -256,7 +257,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -290,7 +291,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -332,7 +333,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -370,7 +371,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END
@@ -408,7 +409,7 @@ public class ColumnStringsStringInvalidEmailCountSensorParametersSpecBigQueryTes
             SELECT
                 SUM(
                     CASE
-                        WHEN REGEXP_CONTAINS(SAFE_CAST( %s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
+                        WHEN REGEXP_CONTAINS(CAST(%s AS STRING), r"^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,4}$")
                             THEN 0
                         ELSE 1
                     END

@@ -49,7 +49,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnStringsStringMatchDateRegexPercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -90,7 +90,8 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
     }
 
     private String getSubstitutedFilter(String tableName) {
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test
@@ -120,7 +121,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -152,7 +153,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -184,7 +185,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -216,7 +217,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -248,7 +249,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -284,7 +285,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -319,7 +320,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -354,7 +355,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -394,7 +395,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -431,7 +432,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -470,7 +471,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -517,7 +518,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -560,7 +561,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END
@@ -603,7 +604,7 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
                     WHEN COUNT(%1$s) = 0 THEN NULL
                     ELSE 100.0 * SUM(
                         CASE
-                            WHEN SAFE.PARSE_DATE(%2$s, CAST(%1$s AS STRING)) IS NOT NULL
+                            WHEN SAFE.PARSE_DATE(%2$s, %1$s) IS NOT NULL
                                 THEN 1
                             ELSE 0
                         END

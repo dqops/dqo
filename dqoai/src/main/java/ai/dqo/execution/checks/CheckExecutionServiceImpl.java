@@ -21,7 +21,6 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
-import ai.dqo.core.locks.UserHomeLockManager;
 import ai.dqo.core.notifications.NotificationService;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationService;
 import ai.dqo.data.errors.normalization.ErrorsNormalizedResult;
@@ -42,10 +41,7 @@ import ai.dqo.execution.checks.scheduled.ScheduledTableChecksCollection;
 import ai.dqo.execution.checks.scheduled.ScheduledTargetChecksFindService;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindResult;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindService;
-import ai.dqo.execution.sensors.DataQualitySensorRunner;
-import ai.dqo.execution.sensors.SensorExecutionResult;
-import ai.dqo.execution.sensors.SensorExecutionRunParameters;
-import ai.dqo.execution.sensors.SensorExecutionRunParametersFactory;
+import ai.dqo.execution.sensors.*;
 import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
 import ai.dqo.execution.sensors.progress.SensorFailedEvent;
@@ -93,7 +89,6 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
     private ErrorsNormalizationService errorsNormalizationService;
     private ErrorsSnapshotFactory errorsSnapshotFactory;
     private final ScheduledTargetChecksFindService scheduledTargetChecksFindService;
-    private final UserHomeLockManager userHomeLockManager;
     private final RuleDefinitionFindService ruleDefinitionFindService;
     private final NotificationService notificationService;
 
@@ -110,7 +105,6 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param errorsNormalizationService Error normalization service - creates datasets with the error information.
      * @param errorsSnapshotFactory Error snapshot factory, provides read and write support for errors stored in tabular format.
      * @param scheduledTargetChecksFindService Service that finds matching checks that are assigned to a given schedule.
-     * @param userHomeLockManager User home lock manager - used to ensure synchronized access to data files.
      * @param ruleDefinitionFindService Rule definition find service - used to find the rule definitions and get their configured time windows.
      * @param notificationService Notification service - sends notifications about new issues.
      */
@@ -126,7 +120,6 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      ErrorsNormalizationService errorsNormalizationService,
                                      ErrorsSnapshotFactory errorsSnapshotFactory,
                                      ScheduledTargetChecksFindService scheduledTargetChecksFindService,
-                                     UserHomeLockManager userHomeLockManager,
                                      RuleDefinitionFindService ruleDefinitionFindService,
                                      NotificationService notificationService) {
         this.hierarchyNodeTreeSearcher = hierarchyNodeTreeSearcher;
@@ -140,7 +133,6 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         this.errorsNormalizationService = errorsNormalizationService;
         this.errorsSnapshotFactory = errorsSnapshotFactory;
         this.scheduledTargetChecksFindService = scheduledTargetChecksFindService;
-        this.userHomeLockManager = userHomeLockManager;
         this.ruleDefinitionFindService = ruleDefinitionFindService;
         this.notificationService = notificationService;
     }
@@ -149,12 +141,14 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * Executes data quality checks. Reports progress and saves the results.
      * @param executionContext Check execution context with access to the user home and dqo home.
      * @param checkSearchFilters Check search filters to find the right checks.
+     * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
      * @param progressListener Progress listener that receives progress calls.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @return Check summary table with the count of alerts, checks and rules for each table.
      */
     public CheckExecutionSummary executeChecks(ExecutionContext executionContext,
                                                CheckSearchFilters checkSearchFilters,
+                                               TimeWindowFilterParameters userTimeWindowFilters,
                                                CheckExecutionProgressListener progressListener,
                                                boolean dummySensorExecution) {
         UserHome userHome = executionContext.getUserHomeContext().getUserHome();
@@ -164,7 +158,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         for (TableWrapper targetTable :  targetTables) {
             // TODO: we can increase DOP here by turning each call (running sensors on a single table) into a multi step pipeline, we will start up to DOP pipelines, we will start new when a pipeline has finished...
             ConnectionWrapper connectionWrapper = userHome.findConnectionFor(targetTable.getHierarchyId());
-			executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
+			executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, userTimeWindowFilters, progressListener,
                     dummySensorExecution, checkExecutionSummary);
         }
 
@@ -199,7 +193,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             checkSearchFilters.setSchemaTableName(targetTable.getPhysicalTableName().toString());
             checkSearchFilters.setCheckHierarchyIds(scheduledChecksForTable.getChecks());
 
-            executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, progressListener,
+            executeChecksOnTable(executionContext, userHome, connectionWrapper, targetTable, checkSearchFilters, null, progressListener,
                     false, checkExecutionSummary);
         }
 
@@ -215,6 +209,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * @param connectionWrapper  Target connection.
      * @param targetTable Target table.
      * @param checkSearchFilters Check search filters.
+     * @param userTimeWindowFilters Optional user provided time window filters to restrict the range of dates that are analyzed.
      * @param progressListener Progress listener.
      * @param dummySensorExecution When true, the sensor is not executed and dummy results are returned. Dummy run will report progress and show a rendered template, but will not touch the target system.
      * @param checkExecutionSummary Target object to gather the check execution summary information for the table.
@@ -224,6 +219,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                                      ConnectionWrapper connectionWrapper,
                                      TableWrapper targetTable,
                                      CheckSearchFilters checkSearchFilters,
+                                     TimeWindowFilterParameters userTimeWindowFilters,
                                      CheckExecutionProgressListener progressListener,
                                      boolean dummySensorExecution,
                                      CheckExecutionSummary checkExecutionSummary) {
@@ -261,7 +257,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
             checksCount++;
 
             try {
-                SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, checkSpec);
+                SensorExecutionRunParameters sensorRunParameters = prepareSensorRunParameters(userHome, checkSpec, userTimeWindowFilters);
                 TimeSeriesConfigurationSpec effectiveTimeSeries = sensorRunParameters.getTimeSeries();
                 TimeSeriesGradient timeGradient = effectiveTimeSeries.getTimeGradient();
 
@@ -399,9 +395,12 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
      * Creates a sensor run parameters from the check specification. Retrieves the connection, table, column and sensor parameters.
      * @param userHome User home with the metadata.
      * @param checkSpec Check specification.
+     * @param userTimeWindowFilters Optional user time window filters, to run the checks for a given time period.
      * @return Sensor run parameters.
      */
-    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome, AbstractCheckSpec<?,?,?,?> checkSpec) {
+    public SensorExecutionRunParameters prepareSensorRunParameters(UserHome userHome,
+                                                                   AbstractCheckSpec<?,?,?,?> checkSpec,
+                                                                   TimeWindowFilterParameters userTimeWindowFilters) {
         HierarchyId checkHierarchyId = checkSpec.getHierarchyId();
         ConnectionWrapper connectionWrapper = userHome.findConnectionFor(checkHierarchyId);
         TableWrapper tableWrapper = userHome.findTableFor(checkHierarchyId);
@@ -430,7 +429,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         CheckType checkType = rootChecksContainerSpec.getCheckType();
 
         SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
-                connectionSpec, tableSpec, columnSpec, checkSpec, checkType, timeSeriesConfigurationSpec, dialectSettings);
+                connectionSpec, tableSpec, columnSpec, checkSpec, checkType, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorRunParameters;
     }
 }

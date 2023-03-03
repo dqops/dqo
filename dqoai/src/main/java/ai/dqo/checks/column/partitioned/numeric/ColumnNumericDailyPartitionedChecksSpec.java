@@ -51,11 +51,22 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_max_in_range", o -> o.dailyPartitionMaxInRange);
             put("daily_partition_min_in_range", o -> o.dailyPartitionMinInRange);
             put("daily_partition_mean_in_range", o -> o.dailyPartitionMeanInRange);
+            put("daily_partition_percentile_in_range", o -> o.dailyPartitionPercentileInRange);
+            put("daily_partition_percentile_50_in_range", o -> o.dailyPartitionPercentile50InRange);
+            put("daily_partition_percentile_10_in_range", o -> o.dailyPartitionPercentile10InRange);
+            put("daily_partition_percentile_25_in_range", o -> o.dailyPartitionPercentile25InRange);
+            put("daily_partition_percentile_75_in_range", o -> o.dailyPartitionPercentile75InRange);
+            put("daily_partition_percentile_90_in_range", o -> o.dailyPartitionPercentile90InRange);
             put("daily_partition_sample_stddev_in_range", o -> o.dailyPartitionSampleStddevInRange);
             put("daily_partition_population_stddev_in_range", o -> o.dailyPartitionPopulationStddevInRange);
             put("daily_partition_sample_variance_in_range", o -> o.dailyPartitionSampleVarianceInRange);
             put("daily_partition_population_variance_in_range", o -> o.dailyPartitionPopulationVarianceInRange);
             put("daily_partition_sum_in_range", o -> o.dailyPartitionSumInRange);
+            put("daily_partition_invalid_latitude_count", o -> o.dailyPartitionInvalidLatitudeCount);
+            put("daily_partition_valid_latitude_percent", o -> o.dailyPartitionValidLatitudePercent);
+            put("daily_partition_invalid_longitude_count", o -> o.dailyPartitionInvalidLongitudeCount);
+            put("daily_partition_valid_longitude_percent", o -> o.dailyPartitionValidLongitudePercent);
+
         }
     };
 
@@ -104,6 +115,24 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnMeanInRangeCheckSpec dailyPartitionMeanInRange;
 
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPercentileInRangeCheckSpec dailyPartitionPercentileInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPercentile50InRangeCheckSpec dailyPartitionPercentile50InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPercentile10InRangeCheckSpec dailyPartitionPercentile10InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPercentile25InRangeCheckSpec dailyPartitionPercentile25InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPercentile75InRangeCheckSpec dailyPartitionPercentile75InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPercentile90InRangeCheckSpec dailyPartitionPercentile90InRange;
+
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnSampleStddevInRangeCheckSpec dailyPartitionSampleStddevInRange;
 
@@ -119,6 +148,17 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnSumInRangeCheckSpec dailyPartitionSumInRange;
 
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnInvalidLatitudeCountCheckSpec dailyPartitionInvalidLatitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnValidLatitudePercentCheckSpec dailyPartitionValidLatitudePercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnInvalidLongitudeCountCheckSpec dailyPartitionInvalidLongitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnValidLongitudePercentCheckSpec dailyPartitionValidLongitudePercent;
 
 
     /**
@@ -393,6 +433,114 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
+     * Returns a percentile in range check specification.
+     * @return Percentile in range check specification.
+     */
+    public ColumnPercentileInRangeCheckSpec getDailyPartitionPercentileInRange() {
+        return dailyPartitionPercentileInRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile in range check.
+     * @param dailyPartitionPercentileInRange percentile in range check specification.
+     */
+    public void setDailyPartitionPercentileInRange(ColumnPercentileInRangeCheckSpec dailyPartitionPercentileInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentileInRange, dailyPartitionPercentileInRange));
+        this.dailyPartitionPercentileInRange = dailyPartitionPercentileInRange;
+        propagateHierarchyIdToField(dailyPartitionPercentileInRange, "daily_partition_percentile_in_range");
+    }
+
+    /**
+     * Returns a percentile 50 in range check specification.
+     * @return Percentile 50 in range check specification.
+     */
+    public ColumnPercentile50InRangeCheckSpec getDailyPartitionPercentile50InRange() {
+        return dailyPartitionPercentile50InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 50 in range check.
+     * @param dailyPartitionPercentile50InRange percentile 50 in range check specification.
+     */
+    public void setDailyPartitionPercentile50InRange(ColumnPercentile50InRangeCheckSpec dailyPartitionPercentile50InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile50InRange, dailyPartitionPercentile50InRange));
+        this.dailyPartitionPercentile50InRange = dailyPartitionPercentile50InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile50InRange, "daily_partition_percentile_50_in_range");
+    }
+
+    /**
+     * Returns a percentile 10 in range check specification.
+     * @return Percentile 10 in range check specification.
+     */
+    public ColumnPercentile10InRangeCheckSpec getDailyPartitionPercentile10InRange() {
+        return dailyPartitionPercentile10InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 10 in range check.
+     * @param dailyPartitionPercentile10InRange percentile 10 in range check specification.
+     */
+    public void setDailyPartitionPercentile10InRange(ColumnPercentile10InRangeCheckSpec dailyPartitionPercentile10InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile10InRange, dailyPartitionPercentile10InRange));
+        this.dailyPartitionPercentile10InRange = dailyPartitionPercentile10InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile10InRange, "daily_partition_percentile_10_in_range");
+    }
+
+    /**
+     * Returns a percentile 25 in range check specification.
+     * @return Percentile 25 in range check specification.
+     */
+    public ColumnPercentile25InRangeCheckSpec getDailyPartitionPercentile25InRange() {
+        return dailyPartitionPercentile25InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 25 in range check.
+     * @param dailyPartitionPercentile25InRange percentile 25 in range check specification.
+     */
+    public void setDailyPartitionPercentile25InRange(ColumnPercentile25InRangeCheckSpec dailyPartitionPercentile25InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile25InRange, dailyPartitionPercentile25InRange));
+        this.dailyPartitionPercentile25InRange = dailyPartitionPercentile25InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile25InRange, "daily_partition_percentile_25_in_range");
+    }
+
+    /**
+     * Returns a percentile 75 in range check specification.
+     * @return Percentile 75 in range check specification.
+     */
+    public ColumnPercentile75InRangeCheckSpec getDailyPartitionPercentile75InRange() {
+        return dailyPartitionPercentile75InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 75 in range check.
+     * @param dailyPartitionPercentile75InRange percentile 75 in range check specification.
+     */
+    public void setDailyPartitionPercentile75InRange(ColumnPercentile75InRangeCheckSpec dailyPartitionPercentile75InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile75InRange, dailyPartitionPercentile75InRange));
+        this.dailyPartitionPercentile75InRange = dailyPartitionPercentile75InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile75InRange, "daily_partition_percentile_75_in_range");
+    }
+
+    /**
+     * Returns a percentile 90 in range check specification.
+     * @return Percentile 90 in range check specification.
+     */
+    public ColumnPercentile90InRangeCheckSpec getDailyPartitionPercentile90InRange() {
+        return dailyPartitionPercentile90InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 90 in range check.
+     * @param dailyPartitionPercentile90InRange percentile 90 in range check specification.
+     */
+    public void setDailyPartitionPercentile90InRange(ColumnPercentile90InRangeCheckSpec dailyPartitionPercentile90InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile90InRange, dailyPartitionPercentile90InRange));
+        this.dailyPartitionPercentile90InRange = dailyPartitionPercentile90InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile90InRange, "daily_partition_percentile_90_in_range");
+    }
+
+    /**
      * Returns a sample standard deviation in range check specification.
      * @return Sample standard deviation in range check specification.
      */
@@ -481,6 +629,79 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
         this.dailyPartitionSumInRange = dailyPartitionSumInRange;
         propagateHierarchyIdToField(dailyPartitionSumInRange, "daily_partition_sum_in_range");
     }
+
+    /**
+     * Returns an invalid latitude count check specification.
+     * @return invalid latitude count check specification.
+     */
+    public ColumnInvalidLatitudeCountCheckSpec getDailyPartitionInvalidLatitudeCount() {
+        return dailyPartitionInvalidLatitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid latitude count check.
+     * @param dailyPartitionInvalidLatitudeCount invalid latitude count check specification.
+     */
+    public void setDailyPartitionInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec dailyPartitionInvalidLatitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidLatitudeCount, dailyPartitionInvalidLatitudeCount));
+        this.dailyPartitionInvalidLatitudeCount = dailyPartitionInvalidLatitudeCount;
+        propagateHierarchyIdToField(dailyPartitionInvalidLatitudeCount, "daily_partition_invalid_latitude_count");
+    }
+
+    /**
+     * Returns a valid latitude percent check specification.
+     * @return Valid latitude percent check specification.
+     */
+    public ColumnValidLatitudePercentCheckSpec getDailyPartitionValidLatitudePercent() {
+        return dailyPartitionValidLatitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid latitude percent check.
+     * @param dailyPartitionValidLatitudePercent Valid latitude percent check specification.
+     */
+    public void setDailyPartitionValidLatitudePercent(ColumnValidLatitudePercentCheckSpec dailyPartitionValidLatitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidLatitudePercent, dailyPartitionValidLatitudePercent));
+        this.dailyPartitionValidLatitudePercent = dailyPartitionValidLatitudePercent;
+        propagateHierarchyIdToField(dailyPartitionValidLatitudePercent, "daily_partition_valid_latitude_percent");
+    }
+
+    /**
+     * Returns an invalid longitude count check specification.
+     * @return invalid longitude count check specification.
+     */
+    public ColumnInvalidLongitudeCountCheckSpec getDailyPartitionInvalidLongitudeCount() {
+        return dailyPartitionInvalidLongitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid longitude count check.
+     * @param dailyPartitionInvalidLongitudeCount invalid longitude count check specification.
+     */
+    public void setDailyPartitionInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec dailyPartitionInvalidLongitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionInvalidLongitudeCount, dailyPartitionInvalidLongitudeCount));
+        this.dailyPartitionInvalidLongitudeCount = dailyPartitionInvalidLongitudeCount;
+        propagateHierarchyIdToField(dailyPartitionInvalidLongitudeCount, "daily_partition_invalid_longitude_count");
+    }
+
+    /**
+     * Returns a valid longitude percent check specification.
+     * @return Valid longitude percent check specification.
+     */
+    public ColumnValidLongitudePercentCheckSpec getDailyPartitionValidLongitudePercent() {
+        return dailyPartitionValidLongitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid longitude percent check.
+     * @param dailyPartitionValidLongitudePercent Valid longitude percent check specification.
+     */
+    public void setDailyPartitionValidLongitudePercent(ColumnValidLongitudePercentCheckSpec dailyPartitionValidLongitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionValidLongitudePercent, dailyPartitionValidLongitudePercent));
+        this.dailyPartitionValidLongitudePercent = dailyPartitionValidLongitudePercent;
+        propagateHierarchyIdToField(dailyPartitionValidLongitudePercent, "daily_partition_valid_longitude_percent");
+    }
+
 
     /**
      * Returns the child map on the spec class with all fields.

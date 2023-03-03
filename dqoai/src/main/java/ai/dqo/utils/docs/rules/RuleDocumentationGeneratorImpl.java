@@ -47,13 +47,14 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
     @Override
     public DocumentationFolder renderRuleDocumentation(Path projectRootPath, DqoHome dqoHome) {
         DocumentationFolder rulesFolder = new DocumentationFolder();
-        rulesFolder.setFolderName("rules");
-        rulesFolder.setLinkName("Rule reference");
-        rulesFolder.setDirectPath(projectRootPath.resolve("../docs/rules").toAbsolutePath().normalize());
+        rulesFolder.setFolderName("reference/rules");
+        rulesFolder.setLinkName("Rules");
+        rulesFolder.setDirectPath(projectRootPath.resolve("../docs/reference/rules").toAbsolutePath().normalize());
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("rules/rule_documentation");
 
-        List<RuleDocumentationModel> ruleDocumentationModels = createRuleDocumentationModels(projectRootPath);
+        List<RuleDocumentationModel> ruleDocumentationModels = new ArrayList<>(createRuleDocumentationModels(projectRootPath));
+        ruleDocumentationModels.sort(Comparator.comparing(RuleDocumentationModel::getFullRuleName));
         List<RuleGroupedDocumentationModel> ruleGroupedDocumentationModels = groupRulesByCategory(ruleDocumentationModels);
 
         for (RuleGroupedDocumentationModel ruleGroupedDocumentationModel : ruleGroupedDocumentationModels) {
@@ -71,8 +72,8 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
      * @param projectRootPath Path to the project root folder, used to find the target/classes folder and scan for classes.
      * @return Rules documentation model list.
      */
-    public List<RuleDocumentationModel> createRuleDocumentationModels(Path projectRootPath) {
-        List<RuleDocumentationModel> ruleDocumentationModels = new ArrayList<>();
+    public Set<RuleDocumentationModel> createRuleDocumentationModels(Path projectRootPath) {
+        Set<RuleDocumentationModel> ruleDocumentationModels = new HashSet<>();
 
         List<? extends Class<? extends AbstractRuleParametersSpec>> classes = TargetClassSearchUtility.findClasses(
                 "ai.dqo.rules", projectRootPath, AbstractRuleParametersSpec.class);
@@ -110,6 +111,7 @@ public class RuleDocumentationGeneratorImpl implements RuleDocumentationGenerato
             ruleGroupedDocumentationModel.setRuleDocumentationModels(groupOfRules.getValue());
             ruleGroupedDocumentationModels.add(ruleGroupedDocumentationModel);
         }
+        ruleGroupedDocumentationModels.sort(Comparator.comparing(RuleGroupedDocumentationModel::getCategory));
         return ruleGroupedDocumentationModels;
     }
 

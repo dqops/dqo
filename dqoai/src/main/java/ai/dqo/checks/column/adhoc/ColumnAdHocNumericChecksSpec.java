@@ -51,11 +51,22 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("max_in_range", o -> o.maxInRange);
             put("min_in_range", o -> o.minInRange);
             put("mean_in_range", o -> o.meanInRange);
+            put("percentile_in_range", o -> o.percentileInRange);
+            put("percentile_50_in_range", o -> o.percentile50InRange);
+            put("percentile_10_in_range", o -> o.percentile10InRange);
+            put("percentile_25_in_range", o -> o.percentile25InRange);
+            put("percentile_75_in_range", o -> o.percentile75InRange);
+            put("percentile_90_in_range", o -> o.percentile90InRange);
             put("sample_stddev_in_range", o -> o.sampleStddevInRange);
             put("population_stddev_in_range", o -> o.populationStddevInRange);
             put("sample_variance_in_range", o -> o.sampleVarianceInRange);
             put("population_variance_in_range", o -> o.populationVarianceInRange);
             put("sum_in_range", o -> o.sumInRange);
+            put("invalid_latitude_count", o -> o.invalidLatitudeCount);
+            put("valid_latitude_percent", o -> o.validLatitudePercent);
+            put("invalid_longitude_count", o -> o.invalidLongitudeCount);
+            put("valid_longitude_percent", o -> o.validLongitudePercent);
+
         }
     };
 
@@ -104,6 +115,24 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the average (mean) of all values in a column is not outside the set range.")
     private ColumnMeanInRangeCheckSpec meanInRange;
 
+    @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range.")
+    private ColumnPercentileInRangeCheckSpec percentileInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range.")
+    private ColumnPercentile50InRangeCheckSpec percentile50InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range.")
+    private ColumnPercentile10InRangeCheckSpec percentile10InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range.")
+    private ColumnPercentile25InRangeCheckSpec percentile25InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range.")
+    private ColumnPercentile75InRangeCheckSpec percentile75InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range.")
+    private ColumnPercentile90InRangeCheckSpec percentile90InRange;
+
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range.")
     private ColumnSampleStddevInRangeCheckSpec sampleStddevInRange;
 
@@ -118,6 +147,18 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the sum of all values in a column is not outside the set range.")
     private ColumnSumInRangeCheckSpec sumInRange;
+
+    @JsonPropertyDescription("Verifies that the number of invalid latitude values in a column does not exceed the maximum accepted count.")
+    private ColumnInvalidLatitudeCountCheckSpec invalidLatitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid latitude values in a column does not exceed the minimum accepted percentage.")
+    private ColumnValidLatitudePercentCheckSpec validLatitudePercent;
+
+    @JsonPropertyDescription("Verifies that the number of invalid longitude values in a column does not exceed the maximum accepted count.")
+    private ColumnInvalidLongitudeCountCheckSpec invalidLongitudeCount;
+
+    @JsonPropertyDescription("Verifies that the percentage of valid longitude values in a column does not exceed the minimum accepted percentage.")
+    private ColumnValidLongitudePercentCheckSpec validLongitudePercent;
 
     /**
      * Returns a negative count check specification.
@@ -390,6 +431,114 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
+     * Returns a percentile in range check specification.
+     * @return Percentile in range check specification.
+     */
+    public ColumnPercentileInRangeCheckSpec getPercentileInRange() {
+        return percentileInRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile in range check.
+     * @param percentileInRange Percentile in range check specification.
+     */
+    public void setPercentileInRange(ColumnPercentileInRangeCheckSpec percentileInRange) {
+        this.setDirtyIf(!Objects.equals(this.percentileInRange, percentileInRange));
+        this.percentileInRange = percentileInRange;
+        propagateHierarchyIdToField(percentileInRange, "percentile_in_range");
+    }
+
+    /**
+     * Returns a percentile 50 in range check specification.
+     * @return Percentile 50 in range check specification.
+     */
+    public ColumnPercentile50InRangeCheckSpec getPercentile50InRange() {
+        return percentile50InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 50 in range check.
+     * @param percentile50InRange Percentile 50 in range check specification.
+     */
+    public void setPercentile50InRange(ColumnPercentile50InRangeCheckSpec percentile50InRange) {
+        this.setDirtyIf(!Objects.equals(this.percentile50InRange, percentile50InRange));
+        this.percentile50InRange = percentile50InRange;
+        propagateHierarchyIdToField(percentile50InRange, "percentile_50_in_range");
+    }
+
+    /**
+     * Returns a percentile 10 in range check specification.
+     * @return Percentile 10 in range check specification.
+     */
+    public ColumnPercentile10InRangeCheckSpec getPercentile10InRange() {
+        return percentile10InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 10 in range check.
+     * @param percentile10InRange Percentile 10 in range check specification.
+     */
+    public void setPercentile10InRange(ColumnPercentile10InRangeCheckSpec percentile10InRange) {
+        this.setDirtyIf(!Objects.equals(this.percentile10InRange, percentile10InRange));
+        this.percentile10InRange = percentile10InRange;
+        propagateHierarchyIdToField(percentile10InRange, "percentile_10_in_range");
+    }
+
+    /**
+     * Returns a percentile 25 in range check specification.
+     * @return Percentile 25 in range check specification.
+     */
+    public ColumnPercentile25InRangeCheckSpec getPercentile25InRange() {
+        return percentile25InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 25 in range check.
+     * @param percentile25InRange Percentile 25 in range check specification.
+     */
+    public void setPercentile25InRange(ColumnPercentile25InRangeCheckSpec percentile25InRange) {
+        this.setDirtyIf(!Objects.equals(this.percentile25InRange, percentile25InRange));
+        this.percentile25InRange = percentile25InRange;
+        propagateHierarchyIdToField(percentile25InRange, "percentile_25_in_range");
+    }
+
+    /**
+     * Returns a percentile 75 in range check specification.
+     * @return Percentile 75 in range check specification.
+     */
+    public ColumnPercentile75InRangeCheckSpec getPercentile75InRange() {
+        return percentile75InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 75 in range check.
+     * @param percentile75InRange Percentile 75 in range check specification.
+     */
+    public void setPercentile75InRange(ColumnPercentile75InRangeCheckSpec percentile75InRange) {
+        this.setDirtyIf(!Objects.equals(this.percentile75InRange, percentile75InRange));
+        this.percentile75InRange = percentile75InRange;
+        propagateHierarchyIdToField(percentile75InRange, "percentile_75_in_range");
+    }
+
+    /**
+     * Returns a percentile 90 in range check specification.
+     * @return Percentile 90 in range check specification.
+     */
+    public ColumnPercentile90InRangeCheckSpec getPercentile90InRange() {
+        return percentile90InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 90 in range check.
+     * @param percentile90InRange Percentile 90 in range check specification.
+     */
+    public void setPercentile90InRange(ColumnPercentile90InRangeCheckSpec percentile90InRange) {
+        this.setDirtyIf(!Objects.equals(this.percentile90InRange, percentile90InRange));
+        this.percentile90InRange = percentile90InRange;
+        propagateHierarchyIdToField(percentile90InRange, "percentile_90_in_range");
+    }
+
+    /**
      * Returns a sample standard deviation in range check specification.
      * @return Sample standard deviation in range check specification.
      */
@@ -477,6 +626,78 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.sumInRange, sumInRange));
         this.sumInRange = sumInRange;
         propagateHierarchyIdToField(sumInRange, "sum_in_range");
+    }
+
+    /**
+     * Returns an invalid latitude count check specification.
+     * @return Invalid latitude count check specification.
+     */
+    public ColumnInvalidLatitudeCountCheckSpec getInvalidLatitudeCount() {
+        return invalidLatitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid latitude count check.
+     * @param invalidLatitudeCount Invalid latitude count check specification.
+     */
+    public void setInvalidLatitudeCount(ColumnInvalidLatitudeCountCheckSpec invalidLatitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.invalidLatitudeCount, invalidLatitudeCount));
+        this.invalidLatitudeCount = invalidLatitudeCount;
+        propagateHierarchyIdToField(invalidLatitudeCount, "invalid_latitude_count");
+    }
+
+    /**
+     * Returns a valid latitude percent check specification.
+     * @return Valid latitude percent check specification.
+     */
+    public ColumnValidLatitudePercentCheckSpec getValidLatitudePercent() {
+        return validLatitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid latitude percent check.
+     * @param validLatitudePercent Valid latitude count percent specification.
+     */
+    public void setValidLatitudePercent(ColumnValidLatitudePercentCheckSpec validLatitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.validLatitudePercent, validLatitudePercent));
+        this.validLatitudePercent = validLatitudePercent;
+        propagateHierarchyIdToField(validLatitudePercent, "valid_latitude_percent");
+    }
+
+    /**
+     * Returns an invalid longitude count check specification.
+     * @return Invalid longitude count check specification.
+     */
+    public ColumnInvalidLongitudeCountCheckSpec getInvalidLongitudeCount() {
+        return invalidLongitudeCount;
+    }
+
+    /**
+     * Sets a new specification of an invalid longitude count check.
+     * @param invalidLongitudeCount Invalid longitude count check specification.
+     */
+    public void setInvalidLongitudeCount(ColumnInvalidLongitudeCountCheckSpec invalidLongitudeCount) {
+        this.setDirtyIf(!Objects.equals(this.invalidLongitudeCount, invalidLongitudeCount));
+        this.invalidLongitudeCount = invalidLongitudeCount;
+        propagateHierarchyIdToField(invalidLongitudeCount, "invalid_longitude_count");
+    }
+
+    /**
+     * Returns a valid longitude percent check specification.
+     * @return Valid longitude percent check specification.
+     */
+    public ColumnValidLongitudePercentCheckSpec getValidLongitudePercent() {
+        return validLongitudePercent;
+    }
+
+    /**
+     * Sets a new specification of a valid longitude percent check.
+     * @param validLongitudePercent Valid longitude count percent specification.
+     */
+    public void setValidLongitudePercent(ColumnValidLongitudePercentCheckSpec validLongitudePercent) {
+        this.setDirtyIf(!Objects.equals(this.validLongitudePercent, validLongitudePercent));
+        this.validLongitudePercent = validLongitudePercent;
+        propagateHierarchyIdToField(validLongitudePercent, "valid_longitude_percent");
     }
 
     /**

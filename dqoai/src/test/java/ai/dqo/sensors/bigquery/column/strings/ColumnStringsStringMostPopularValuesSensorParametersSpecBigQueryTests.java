@@ -115,7 +115,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
             FROM(
                 SELECT
                     top_col_values.top_values as top_values,
-                    top_col_values.time_period as time_period,
+                    top_col_values.time_period as time_period, time_period_utc,
                     RANK() OVER(partition by top_col_values.time_period
                     ORDER BY top_col_values.total_values) as top_values_rank
                 FROM (
@@ -156,31 +156,35 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT
-                SUM(
-                    CASE
-                        WHEN top_values IN ('a111a', 'd44d') THEN 1
-                        ELSE 0
-                    END
-                ) AS actual_value,
-                time_period
-            FROM(
                 SELECT
-                    top_col_values.top_values as top_values,
-                    top_col_values.time_period as time_period,
-                    RANK() OVER(partition by top_col_values.time_period
-                    ORDER BY top_col_values.total_values) as top_values_rank
-                FROM (
+                    SUM(
+                        CASE
+                            WHEN top_values IN ('a111a', 'd44d') THEN 1
+                            ELSE 0
+                        END
+                    ) AS actual_value,
+                    time_period
+                FROM(
                     SELECT
-                    %1$s AS top_values,
-                    COUNT(*) AS total_values
-                    FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
-            WHERE %5$s, top_values, total_values
-                ) top_col_values
-            )
-            WHERE top_values_rank <= 2
-            GROUP BY time_period
-            ORDER BY time_period""";
+                        top_col_values.top_values as top_values,
+                        top_col_values.time_period as time_period, time_period_utc,
+                        RANK() OVER(partition by top_col_values.time_period
+                        ORDER BY top_col_values.total_values) as top_values_rank
+                    FROM (
+                        SELECT
+                        %1$s AS top_values,
+                        COUNT(*) AS total_values,
+                    analyzed_table.`date` AS time_period,
+                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE %5$s
+                GROUP BY time_period, time_period_utc, top_values
+                ORDER BY time_period, time_period_utc, total_values
+                    ) top_col_values
+                )
+                WHERE top_values_rank <= 2
+                GROUP BY time_period, time_period_utc
+                ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -193,25 +197,46 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
     @Test
     void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTopValues(2L);
+        this.sut.setFilter("id < 5");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
+                SELECT
+                    SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                                THEN 1
+                            WHEN top_values IN ('a111a', 'd44d') THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
-                END AS actual_value, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+                    ) AS actual_value,
+                    time_period
+                FROM(
+                    SELECT
+                        top_col_values.top_values as top_values,
+                        top_col_values.time_period as time_period, time_period_utc,
+                        RANK() OVER(partition by top_col_values.time_period
+                        ORDER BY top_col_values.total_values) as top_values_rank
+                    FROM (
+                        SELECT
+                        %1$s AS top_values,
+                        COUNT(*) AS total_values,
+                    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE %5$s
+                GROUP BY time_period, time_period_utc, top_values
+                ORDER BY time_period, time_period_utc, total_values
+                    ) top_col_values
+                )
+                WHERE top_values_rank <= 2
+                GROUP BY time_period, time_period_utc
+                ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -224,25 +249,46 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTopValues(2L);
+        this.sut.setFilter("id < 5");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
+                SELECT
+                    SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                                THEN 1
+                            WHEN top_values IN ('a111a', 'd44d') THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`date` AS time_period
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY time_period
-            ORDER BY time_period""";
+                    ) AS actual_value,
+                    time_period
+                FROM(
+                    SELECT
+                        top_col_values.top_values as top_values,
+                        top_col_values.time_period as time_period, time_period_utc,
+                        RANK() OVER(partition by top_col_values.time_period
+                        ORDER BY top_col_values.total_values) as top_values_rank
+                    FROM (
+                        SELECT
+                        %1$s AS top_values,
+                        COUNT(*) AS total_values,
+                    analyzed_table.`date` AS time_period,
+                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE %5$s
+                GROUP BY time_period, time_period_utc, top_values
+                ORDER BY time_period, time_period_utc, total_values
+                    ) top_col_values
+                )
+                WHERE top_values_rank <= 2
+                GROUP BY time_period, time_period_utc
+                ORDER BY time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -256,6 +302,13 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
     @Test
     void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTopValues(2L);
+        this.sut.setFilter("id < 5");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
@@ -264,21 +317,34 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
+                SELECT
+                    SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                                THEN 1
+                            WHEN top_values IN ('a111a', 'd44d') THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY stream_level_1
-            ORDER BY stream_level_1""";
+                    ) AS actual_value,
+                    time_period
+                FROM(
+                    SELECT
+                        top_col_values.top_values as top_values,
+                        top_col_values.time_period as time_period, time_period_utc,
+                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
+                    FROM (
+                        SELECT
+                        %1$s AS top_values,
+                        COUNT(*) AS total_values,
+                    analyzed_table.`result` AS stream_level_1
+                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE %5$s
+                GROUP BY stream_level_1, top_values
+                ORDER BY stream_level_1, total_values
+                    ) top_col_values
+                )
+                WHERE top_values_rank <= 2
+                GROUP BY stream_level_1
+                ORDER BY stream_level_1""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -291,6 +357,13 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
     @Test
     void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTopValues(2L);
+        this.sut.setFilter("id < 5");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -298,21 +371,36 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
+                SELECT
+                    SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                                THEN 1
+                            WHEN top_values IN ('a111a', 'd44d') THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY stream_level_1, time_period
-            ORDER BY stream_level_1, time_period""";
+                    ) AS actual_value,
+                    time_period
+                FROM(
+                    SELECT
+                        top_col_values.top_values as top_values,
+                        top_col_values.time_period as time_period, time_period_utc,
+                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
+                    FROM (
+                        SELECT
+                        %1$s AS top_values,
+                        COUNT(*) AS total_values,
+                    analyzed_table.`result` AS stream_level_1,
+                    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE %5$s
+                GROUP BY stream_level_1, time_period, time_period_utc, top_values
+                ORDER BY stream_level_1, time_period, time_period_utc, total_values
+                    ) top_col_values
+                )
+                WHERE top_values_rank <= 2
+                GROUP BY stream_level_1, time_period, time_period_utc
+                ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -325,6 +413,13 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTopValues(2L);
+        this.sut.setFilter("id < 5");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -332,21 +427,36 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
+                SELECT
+                    SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                                THEN 1
+                            WHEN top_values IN ('a111a', 'd44d') THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1, analyzed_table.`date` AS time_period
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY stream_level_1, time_period
-            ORDER BY stream_level_1, time_period""";
+                    ) AS actual_value,
+                    time_period
+                FROM(
+                    SELECT
+                        top_col_values.top_values as top_values,
+                        top_col_values.time_period as time_period, time_period_utc,
+                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1
+                    FROM (
+                        SELECT
+                        %1$s AS top_values,
+                        COUNT(*) AS total_values,
+                    analyzed_table.`result` AS stream_level_1,
+                    analyzed_table.`date` AS time_period,
+                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE %5$s
+                GROUP BY stream_level_1, time_period, time_period_utc, top_values
+                ORDER BY stream_level_1, time_period, time_period_utc, total_values
+                    ) top_col_values
+                )
+                WHERE top_values_rank <= 2
+                GROUP BY stream_level_1, time_period, time_period_utc
+                ORDER BY stream_level_1, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -360,6 +470,13 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
     @Test
     void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTopValues(2L);
+        this.sut.setFilter("id < 5");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
@@ -373,22 +490,40 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
                         DataStreamLevelSpecObjectMother.createColumnMapping("result")));
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+
         String target_query = """
-            SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
+                SELECT
+                    SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                                THEN 1
+                            WHEN top_values IN ('a111a', 'd44d') THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1, analyzed_table.`result` AS stream_level_2, analyzed_table.`result` AS stream_level_3, analyzed_table.`date` AS time_period
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
+                    ) AS actual_value,
+                    time_period
+                FROM(
+                    SELECT
+                        top_col_values.top_values as top_values,
+                        top_col_values.time_period as time_period, time_period_utc,
+                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                    FROM (
+                        SELECT
+                        %1$s AS top_values,
+                        COUNT(*) AS total_values,
+                    analyzed_table.`result` AS stream_level_1,
+                    analyzed_table.`result` AS stream_level_2,
+                    analyzed_table.`result` AS stream_level_3,
+                    analyzed_table.`date` AS time_period,
+                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE %5$s
+                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_values
+                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
+                    ) top_col_values
+                )
+                WHERE top_values_rank <= 2
+                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -401,6 +536,13 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
     @Test
     void renderSensor_whenCheckpointDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTopValues(2L);
+        this.sut.setFilter("id < 5");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -410,21 +552,38 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
+                SELECT
+                    SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                                THEN 1
+                            WHEN top_values IN ('a111a', 'd44d') THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1, analyzed_table.`result` AS stream_level_2, analyzed_table.`result` AS stream_level_3, DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
+                    ) AS actual_value,
+                    time_period
+                FROM(
+                    SELECT
+                        top_col_values.top_values as top_values,
+                        top_col_values.time_period as time_period, time_period_utc,
+                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                    FROM (
+                        SELECT
+                        %1$s AS top_values,
+                        COUNT(*) AS total_values,
+                    analyzed_table.`result` AS stream_level_1,
+                    analyzed_table.`result` AS stream_level_2,
+                    analyzed_table.`result` AS stream_level_3,
+                    DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
+                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
+                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE %5$s
+                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_values
+                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
+                    ) top_col_values
+                )
+                WHERE top_values_rank <= 2
+                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
@@ -437,6 +596,13 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
     @Test
     void renderSensor_whenPartitionedDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        List<String> values = new ArrayList<>();
+        values.add("a111a");
+        values.add("d44d");
+        this.sut.setExpectedValues(values);
+        this.sut.setTopValues(2L);
+        this.sut.setFilter("id < 5");
+
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -446,21 +612,38 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
-            SELECT
-                CASE
-                    WHEN COUNT(*) = 0 THEN 100.0
-                    ELSE 100.0 * SUM(
+                SELECT
+                    SUM(
                         CASE
-                            WHEN REGEXP_CONTAINS(CAST(%s AS STRING), %s)
-                                THEN 1
+                            WHEN top_values IN ('a111a', 'd44d') THEN 1
                             ELSE 0
                         END
-                    ) / COUNT(*)
-                END AS actual_value, analyzed_table.`result` AS stream_level_1, analyzed_table.`result` AS stream_level_2, analyzed_table.`result` AS stream_level_3, analyzed_table.`date` AS time_period
-            FROM `%s`.`%s`.`%s` AS analyzed_table
-            WHERE %s
-            GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period
-            ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period""";
+                    ) AS actual_value,
+                    time_period
+                FROM(
+                    SELECT
+                        top_col_values.top_values as top_values,
+                        top_col_values.time_period as time_period, time_period_utc,
+                        RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                        ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2, top_col_values.stream_level_3
+                    FROM (
+                        SELECT
+                        %1$s AS top_values,
+                        COUNT(*) AS total_values,
+                    analyzed_table.`result` AS stream_level_1,
+                    analyzed_table.`result` AS stream_level_2,
+                    analyzed_table.`result` AS stream_level_3,
+                    analyzed_table.`date` AS time_period,
+                    TIMESTAMP(analyzed_table.`date`) AS time_period_utc
+                        FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
+                WHERE %5$s
+                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_values
+                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
+                    ) top_col_values
+                )
+                WHERE top_values_rank <= 2
+                GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
+                ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
