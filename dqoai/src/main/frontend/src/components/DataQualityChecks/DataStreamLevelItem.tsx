@@ -85,14 +85,11 @@ const DataStreamLevelItem = ({
         <div className="flex-1">
           <ColumnSelect
             triggerClassName="!h-8"
-            disabled={
-              dataStreamLevel?.source !==
-              DataStreamLevelSpecSourceEnum.column_value
-            }
             value={dataStreamLevel?.column}
             onChange={(value) =>
               onChange({
                 ...dataStreamLevel,
+                source: DataStreamLevelSpecSourceEnum.column_value,
                 column: value
               })
             }
