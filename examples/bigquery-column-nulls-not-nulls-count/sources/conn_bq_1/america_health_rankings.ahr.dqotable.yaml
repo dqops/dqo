@@ -21,14 +21,14 @@ spec:
         column_type: STRING
         nullable: true
       checks:
-        strings:
-          string_max_length:
+        nulls:
+          not_nulls_count:
             error:
-              max_value: 5.0
+              max_count: 15
             warning:
-              max_value: 6.0
+              max_count: 10
             fatal:
-              max_value: 8.0
+              max_count: 20
     state_name:
       type_snapshot:
         column_type: STRING
