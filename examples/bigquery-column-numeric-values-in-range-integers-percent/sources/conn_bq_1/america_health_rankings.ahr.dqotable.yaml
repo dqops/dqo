@@ -15,6 +15,11 @@ spec:
       checks:
         numeric:
           values_in_range_integers_percent:
+            comments:
+              - date: 2023-03-03T11:09:57.430+00:00
+                comment_by: user
+                comment: In this example values in "edition" column are verified
+                  whether the percentage of values within the indicated range (2021 - 2022) reaches the indicated thresholds.
             parameters:
               min_value: 2021
               max_value: 2022

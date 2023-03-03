@@ -79,6 +79,11 @@ spec:
       checks:
         numeric:
           valid_latitude_percent:
+            comments:
+              - date: 2023-03-03T11:09:57.430+00:00
+                comment_by: user
+                comment: In this example values in "latitude" column are verified
+                  whether the percentage of values within the latitude range does not exceed the indicated thresholds.
             error:
               max_percent: 98.0
             warning:

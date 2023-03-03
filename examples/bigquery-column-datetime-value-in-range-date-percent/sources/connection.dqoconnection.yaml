@@ -5,7 +5,5 @@ spec:
   provider_type: bigquery
   bigquery:
     source_project_id: bigquery-public-data
-    billing_project_id: dqo-ai-testing
     authentication_mode: google_application_credentials
-    quota_project_id: dqo-ai-testing
   time_zone: UTC

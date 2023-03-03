@@ -23,6 +23,11 @@ spec:
       checks:
         nulls:
           not_nulls_count:
+            comments:
+              - date: 2023-03-03T11:09:57.430+00:00
+                comment_by: user
+                comment: In this example values in "measure_name" column are verified
+                  whether the number of not null values does not exceed the indicated thresholds.
             error:
               max_count: 15
             warning:

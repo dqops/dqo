@@ -35,6 +35,11 @@ spec:
       checks:
         bool:
           true_percent:
+            comments:
+              - date: 2023-03-03T10:57:05.939+00:00
+                comment_by: user
+                comment: In this example values in "areal" column are verified whether
+                  the percentage of true values reaches the indicated thresholds.
             error:
               min_percent: 98.0
             warning:

@@ -23,6 +23,12 @@ spec:
       checks:
         integrity:
           foreign_key_match_percent:
+            comments:
+              - date: 2023-03-03T11:09:57.430+00:00
+                comment_by: user
+                comment: In this example values in "state_fips_code" column are verified
+                  whether the percentage of those values match the values in table "fips_codes_states" in column "state_fips_code"
+                  does not exceed the indicated thresholds.
             parameters:
               foreign_table: fips_codes_states
               foreign_column: state_fips_code

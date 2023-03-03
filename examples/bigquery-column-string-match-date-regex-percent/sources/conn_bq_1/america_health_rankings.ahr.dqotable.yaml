@@ -51,6 +51,11 @@ spec:
       checks:
         strings:
           string_match_date_regex_percent:
+            comments:
+              - date: 2023-03-03T11:09:57.430+00:00
+                comment_by: user
+                comment: In this example values in "source_date" column are verified
+                  whether the percentage of values in the indicated format (YYYY-MM-DD) reaches the indicated thresholds.
             parameters:
               date_formats: YYYY-MM-DD
             error:
