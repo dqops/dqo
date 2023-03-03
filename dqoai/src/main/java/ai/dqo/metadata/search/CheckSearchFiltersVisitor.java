@@ -220,13 +220,20 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
 
-        if (enabledFilter != null) {
-            if (enabledFilter && columnSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && !columnSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
+        if (enabledFilter != null
+                && (enabledFilter ^ !columnSpec.isDisabled())) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        if (this.filters.getColumnDataType() != null
+                && !this.filters.getColumnDataType().equals(columnSpec.getTypeSnapshot().getColumnType())) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        Boolean columnIsNullable = columnSpec.getTypeSnapshot() == null ? null : columnSpec.getTypeSnapshot().getNullable();
+        if (this.filters.getColumnNullable() != null
+                && (columnIsNullable == null || this.filters.getColumnNullable() ^ columnIsNullable)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         if (columnSpec.isDisabled()) {
@@ -262,13 +269,9 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
 
         AbstractSensorParametersSpec sensorParameters = abstractCheckSpec.getParameters();
         boolean checkEnabled = !abstractCheckSpec.isDisabled();
-        if (enabledFilter != null) {
-            if (enabledFilter && !checkEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && checkEnabled) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
+        if ((enabledFilter != null && (checkEnabled ^ enabledFilter))
+                || (enabledFilter == null && !checkEnabled)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         DataStreamMappingSpec selectedDataStream =
@@ -295,12 +298,6 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
-        // TODO: Delete? Check if it really should be deleted, ie. contradicts the assumptions.
-        //       Write tests and confirm with Piotr.
-        //       Then, this visitor could be used for enabling checks.
-        if (!checkEnabled) {
-            return TreeNodeTraversalResult.SKIP_CHILDREN;
-        }
 
         String checkNameFilter = this.filters.getCheckName();
         if (!Strings.isNullOrEmpty(checkNameFilter)) {
