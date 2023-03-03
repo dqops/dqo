@@ -20,6 +20,7 @@ import ai.dqo.cli.completion.InputCapturingCompleter;
 import ai.dqo.cli.configuration.DqoCliOneshotConfigurationProperties;
 import ai.dqo.cli.exceptions.CommandExecutionErrorHandler;
 import ai.dqo.cli.terminal.*;
+import ai.dqo.cli.terminal.ansi.UrlFormatter;
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
 import ai.dqo.utils.StaticBeanFactory;
 import org.jline.builtins.Nano.SyntaxHighlighter;
@@ -85,7 +86,8 @@ public class CliConfiguration {
         }
 
         Terminal terminal = StaticBeanFactory.getBeanFactory().getBean(Terminal.class);
-        return new TerminalWriterImpl(terminal);
+        UrlFormatter urlFormatter = StaticBeanFactory.getBeanFactory().getBean(UrlFormatter.class);
+        return new TerminalWriterImpl(terminal, urlFormatter);
     }
 
     /**
