@@ -57,7 +57,7 @@ public class SnowflakeColumnStringsStringSurroundedByWhitespaceCountSensorParame
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec);
+                sampleTableMetadata, "email_ok", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

@@ -34,14 +34,6 @@
     {%- endif -%}
 {%- endmacro %}
 
-{% macro render_column_cast_to_string(analyzed_table_to_render) %}
-    {%- if (target_column_data_type == 'STRING') -%}
-        {{ render_target_column(analyzed_table_to_render) }}
-    {%- else -%}
-        TRY_CAST({{ render_target_column(analyzed_table_to_render) }} AS VARCHAR)
-    {%- endif -%}
-{% endmacro %}
-
 {% macro date_trunc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
         DATE_TRUNC('YEAR', CAST({{value}} AS date))

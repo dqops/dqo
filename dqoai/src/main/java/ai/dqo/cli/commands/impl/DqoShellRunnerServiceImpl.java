@@ -56,7 +56,10 @@ public class DqoShellRunnerServiceImpl implements DqoShellRunnerService {
      */
     @Override
     public Integer call() throws Exception {
-        String prompt = new AttributedStringBuilder().append(DQO_PROMPT, AttributedStyle.DEFAULT.foreground(4)).toAnsi();
+        String prompt = new AttributedStringBuilder()
+                .style(AttributedStyle.DEFAULT.foreground(255, 153,0)) // DQO Orange
+                .append(DQO_PROMPT)
+                .toAnsi();
         String rightPrompt = null;
 
         // start the shell and process input until the user quits with Ctrl-D
