@@ -1,7 +1,7 @@
 This section shows how to connect to the data source and explains YAML file with the connection specification.
 
 ### Connection
-In order to to successfully establish a connection with BigQuery couple of things need to be specified:
+In order to successfully establish a connection with BigQuery couple of things need to be specified:
 
 - connection name
 - provider name
