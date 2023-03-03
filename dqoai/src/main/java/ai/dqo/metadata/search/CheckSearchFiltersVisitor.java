@@ -355,6 +355,11 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             }
         }
 
+        CheckTarget checkTarget = this.filters.getColumnName() == null ? null : CheckTarget.column;
+        if (checkTarget != null && checkTarget != checksContainerSpec.getCheckTarget()) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
         return super.accept(checksContainerSpec, parameter);
     }
 

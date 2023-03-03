@@ -105,8 +105,8 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     @CommandLine.Option(names = {"-dt", "--data-type"}, description = "Datatype of columns on which to enable checks.")
     private String datatypeFilter;
 
-    @CommandLine.Option(names = {"-n", "--nullable"}, description = "Enable check only on nullable columns (false for not nullable columns).")
-    private Boolean nullable = null;
+    @CommandLine.Option(names = {"-n", "--nullable"}, description = "Enable check only on nullable columns (false for explicitly non-nullable columns).")
+    private Boolean columnNullable = null;
 
     @CommandLine.Option(names = {"-wrn", "--warning"}, description = "Enable warning rules on checks.")
     private Boolean warningLevelEnabled = false;
@@ -304,16 +304,6 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
             this.check = this.terminalReader.prompt("Data quality check name (--check)", null, false);
         }
 
-        private String datatypeFilter;
-        private Boolean nullable = null;
-
-        private Boolean warningLevelEnabled = false;
-        private Map<String, Boolean> warningLevelOptions;
-        private Boolean errorLevelEnabled = false;
-        private Map<String, Boolean> errorLevelOptions;
-        private Boolean fatalLevelEnabled = false;
-        private Map<String, Boolean> fatalLevelOptions;
-
         CheckSearchFilters filters = new CheckSearchFilters();
         filters.setConnectionName(this.connection);
         filters.setSchemaTableName(this.table);
@@ -323,22 +313,24 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
         filters.setCheckType(this.checkType);
         filters.setTimeScale(this.timeScale);
         filters.setCheckCategory(this.checkCategory);
+        filters.setColumnDataType(this.datatypeFilter);
+        filters.setColumnNullable(this.columnNullable);
 
-        if (warningLevelOptions != null) {
-            warningLevelEnabled = true;
+        if (this.warningLevelOptions != null) {
+            this.warningLevelEnabled = true;
         }
-        if (errorLevelOptions != null) {
-            errorLevelEnabled = true;
+        if (this.errorLevelOptions != null) {
+            this.errorLevelEnabled = true;
         }
-        if (fatalLevelOptions != null) {
-            fatalLevelEnabled = true;
+        if (this.fatalLevelOptions != null) {
+            this.fatalLevelEnabled = true;
         }
 
-        if (!warningLevelEnabled && !errorLevelEnabled && !fatalLevelEnabled) {
+        if (!this.warningLevelEnabled && !this.errorLevelEnabled && !this.fatalLevelEnabled) {
             // By default, enable on every alert level
-            warningLevelEnabled = true;
-            errorLevelEnabled = true;
-            fatalLevelEnabled = true;
+            this.warningLevelEnabled = true;
+            this.errorLevelEnabled = true;
+            this.fatalLevelEnabled = true;
         }
 
 

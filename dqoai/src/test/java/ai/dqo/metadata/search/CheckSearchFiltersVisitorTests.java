@@ -16,7 +16,15 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.BaseTest;
+import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.AbstractCheckSpec;
+import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
+import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
@@ -24,6 +32,8 @@ import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
+import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
+import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -54,6 +64,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 		checkSearchFilters.setSchemaTableName("test.test");
 		checkSearchFilters.setColumnName("test");
 		this.sut = new CheckSearchFiltersVisitor(checkSearchFilters);
+
 		this.connectionList = this.userHomeContext.getUserHome().getConnections();
 		this.connectionWrapper = connectionList.createAndAddNew("test");
 		this.tableList = this.connectionWrapper.getTables();
@@ -189,5 +200,79 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
         matchingNodes.add(abstractCheckSpec);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.abstractCheckSpec, new SearchParameterObject(matchingNodes));
         Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
+    }
+
+    private void structure1Setup() {
+        // Check attached to table.
+        this.tableSpec.setChecks(new TableAdHocCheckCategoriesSpec() {{
+            setStandard(new TableAdHocStandardChecksSpec() {{
+                setRowCount(new TableRowCountCheckSpec() {{
+                    setError(new MinCountRule0ParametersSpec(10L));
+                }});
+            }});
+        }});
+
+        // Check attached to column.
+        this.columnSpec.setChecks(new ColumnAdHocCheckCategoriesSpec() {{
+            setNulls(new ColumnAdHocNullsChecksSpec() {{
+                setNullsCount(new ColumnNullsCountCheckSpec() {{
+                    setError(new MaxCountRule0ParametersSpec(20L));
+                }});
+            }});
+        }});
+    }
+    @Test
+    void acceptTableSpec_whenCalledForSelectedColumnCheck_thenTraverseChildren() {
+        this.structure1Setup();
+
+        SearchParameterObject searchParameterObject = new SearchParameterObject();
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableSpec, searchParameterObject);
+        Assertions.assertEquals(TreeNodeTraversalResult.TRAVERSE_CHILDREN, treeNodeTraversalResult);
+        Assertions.assertTrue(searchParameterObject.getNodes().isEmpty());
+    }
+
+    @Test
+    void acceptAbstractRootCheckContainerSpec_whenCalledForSelectedColumnCheckOnTable_thenSkipChildrenReturnEmpty() {
+        this.structure1Setup();
+        AbstractRootChecksContainerSpec tableCheckContainer = this.tableSpec.getTableCheckRootContainer(CheckType.ADHOC, null);
+
+        SearchParameterObject searchParameterObject = new SearchParameterObject();
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(tableCheckContainer, searchParameterObject);
+        Assertions.assertEquals(TreeNodeTraversalResult.SKIP_CHILDREN, treeNodeTraversalResult);
+        Assertions.assertTrue(searchParameterObject.getNodes().isEmpty());
+    }
+
+    @Test
+    void acceptAbstractRootCheckContainerSpec_whenCalledForSelectedColumnCheckOnColumn_thenTraverseChildren() {
+        this.structure1Setup();
+        AbstractRootChecksContainerSpec columnCheckContainer = this.columnSpec.getColumnCheckRootContainer(CheckType.ADHOC, null);
+
+        SearchParameterObject searchParameterObject = new SearchParameterObject();
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(columnCheckContainer, searchParameterObject);
+        Assertions.assertEquals(TreeNodeTraversalResult.TRAVERSE_CHILDREN, treeNodeTraversalResult);
+        Assertions.assertTrue(searchParameterObject.getNodes().isEmpty());
+    }
+
+    @Test
+    void acceptAbstractCheckCategorySpec_whenCalledForSelectedColumnCheckOnColumn_thenTraverseChildren() {
+        this.structure1Setup();
+        AbstractCheckCategorySpec columnCheckCategorySpec = this.columnSpec.getChecks().getNulls();
+
+        SearchParameterObject searchParameterObject = new SearchParameterObject();
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(columnCheckCategorySpec, searchParameterObject);
+        Assertions.assertEquals(TreeNodeTraversalResult.TRAVERSE_CHILDREN, treeNodeTraversalResult);
+        Assertions.assertTrue(searchParameterObject.getNodes().isEmpty());
+    }
+
+    @Test
+    void acceptAbstractCheckSpec_whenCalledForSelectedColumnCheckOnColumn_thenSkipChildrenReturnCheck() {
+        this.structure1Setup();
+        AbstractCheckSpec columnCheckSpec = this.columnSpec.getChecks().getNulls().getNullsCount();
+
+        SearchParameterObject searchParameterObject = new SearchParameterObject();
+        TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(columnCheckSpec, searchParameterObject);
+
+        Assertions.assertEquals(TreeNodeTraversalResult.SKIP_CHILDREN, treeNodeTraversalResult);
+        Assertions.assertIterableEquals(new ArrayList<>() {{add(columnCheckSpec);}}, searchParameterObject.getNodes());
     }
 }
