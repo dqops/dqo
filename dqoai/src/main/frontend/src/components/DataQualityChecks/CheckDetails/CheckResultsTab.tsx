@@ -29,7 +29,6 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
       label: 'Check Name',
       value: 'checkName',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
-      render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
       label: 'Executed At',
@@ -87,37 +86,37 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
       },
     },
     {
-      label: 'Warning - Lower Threshold',
+      header: () => <span>Warning<br/>Lower Threshold</span>,
       value: 'warningLowerBound',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
-      label: 'Warning - Upper Threshold',
+      header: () => <span>Warning<br/>Upper Threshold</span>,
       value: 'warningUpperBound',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
-      label: 'Error - Lower Threshold',
+      header: () => <span>Error<br/>Lower Threshold</span>,
       value: 'errorLowerBound',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
-      label: 'Error - Upper Threshold',
+      header: () => <span>Error<br/>Upper Threshold</span>,
       value: 'errorUpperBound',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
-      label: 'Fatal - Lower Threshold',
+      header: () => <span>Fatal<br/>Lower Threshold</span>,
       value: 'fatalLowerBound',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
     },
     {
-      label: 'Fatal - Upper Threshold',
+      header: () => <span>Fatal<br/>Upper Threshold</span>,
       value: 'fatalUpperBound',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
       render: (value: number | string) => <div>{typeof value === 'number' ? value : ''}</div>,
@@ -185,7 +184,7 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
           <Table
             className="mt-4 w-full"
             columns={columns}
-            data={result.singleCheckResults || []}
+            data={(result.singleCheckResults || []).map((item) => ({ ...item, checkName: result.checkName }))}
             emptyMessage="No Data"
             getRowClass={getSeverityClass}
           />

@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.snowflake.sensors.column.strings;
+package ai.dqo.snowflake.sensors.column.sql;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.strings.ColumnStringWhitespaceCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.sql.ColumnSqlConditionPassedPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -28,7 +28,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.strings.ColumnStringsStringWhitespaceCountSensorParametersSpec;
+import ai.dqo.sensors.column.sql.ColumnSqlConditionPassedPercentSensorParametersSpec;
 import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -36,39 +36,42 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-
 @SpringBootTest
-public class SnowflakeColumnStringsStringWhitespaceCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
-    private ColumnStringsStringWhitespaceCountSensorParametersSpec sut;
+public class SnowflakeColumnSqlConditionPassedPercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private ColumnSqlConditionPassedPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnStringWhitespaceCountCheckSpec checkSpec;
+    private ColumnSqlConditionPassedPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.snowflake);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-        this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnStringsStringWhitespaceCountSensorParametersSpec();
-        this.checkSpec = new ColumnStringWhitespaceCountCheckSpec();
+		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
+		this.sut = new ColumnSqlConditionPassedPercentSensorParametersSpec();
+		this.checkSpec = new ColumnSqlConditionPassedPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+        this.sut.setSqlCondition("length({column}) < 30");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "email_ok", this.checkSpec);
+                sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+        this.sut.setSqlCondition("length({column}) < 30");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.daily);
 
@@ -77,11 +80,13 @@ public class SnowflakeColumnStringsStringWhitespaceCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+        this.sut.setSqlCondition("length({column}) < 30");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
                 sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.monthly);
 
@@ -90,11 +95,13 @@ public class SnowflakeColumnStringsStringWhitespaceCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+        this.sut.setSqlCondition("length({column}) < 8");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.daily,"date");
 
@@ -103,11 +110,13 @@ public class SnowflakeColumnStringsStringWhitespaceCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(50.0f, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+        this.sut.setSqlCondition("length({column}) < 30");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
                 sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec, CheckTimeScale.monthly,"date");
 
@@ -116,6 +125,6 @@ public class SnowflakeColumnStringsStringWhitespaceCountSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 }
