@@ -60,3 +60,7 @@ input::-webkit-inner-spin-button {
 ::-webkit-scrollbar-thumb:hover {
     background: #ACB3BF;
 }
+
+.react-datepicker__day--selected, .react-datepicker__day--selected:hover {
+    @apply bg-teal-500;
+}

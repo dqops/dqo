@@ -25,7 +25,6 @@ const CommentsView = ({
   text,
   setText
 }: ICommentsViewProps) => {
-
   const onAdd = () => {
     onChange([
       ...comments,
@@ -69,7 +68,7 @@ const CommentsView = ({
           <th className="text-left w-full pr-4 py-2">Comment</th>
           <th className="text-left px-8 py-2">Author</th>
           <th className="text-left px-8 py-2">Date</th>
-          <th className="px-8 py-2">Action</th>
+          <th className="px-8 py-2 text-center max-w-34 min-w-34 w-34">Action</th>
         </thead>
         <tbody>
           {comments &&
@@ -84,12 +83,12 @@ const CommentsView = ({
             ))}
         </tbody>
       </table>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 mr-8">
         <div className="flex-1">
-          <Input className="h-10" value={text} onChange={onChangeText} />
+          <Input className="h-10 focus:!ring-0 focus:!border" value={text} onChange={onChangeText} />
         </div>
-        <IconButton className="w-10 h-10" onClick={onAdd}>
-          <SvgIcon name="add" className="w-6" />
+        <IconButton size="sm" className="w-10 h-10" color="teal" onClick={onAdd}>
+          <SvgIcon name="add" className="w-5" />
         </IconButton>
       </div>
     </div>

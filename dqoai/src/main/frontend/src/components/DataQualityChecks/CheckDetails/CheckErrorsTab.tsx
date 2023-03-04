@@ -42,7 +42,7 @@ const CheckErrorsTab = ({ errors, dataStreamName, onChangeDataStream, month, onC
     {
       label: 'Readout Id',
       value: 'readoutId',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-80',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 w-80 text-right',
     },
   ];
 

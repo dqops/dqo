@@ -15,11 +15,8 @@
  */
 package ai.dqo.snowflake.table.sql;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec
-
-;
+import ai.dqo.checks.table.checkspecs.sql.TableSqlAggregateExprCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -27,11 +24,11 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.table.sql.TableSqlAggregatedExpressionSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,29 +37,24 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private TableSqlAggregatedExpressionSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableSqlAggregateExprCheckSpec
-
- checkSpec;
+    private TableSqlAggregateExprCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.snowflake);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableSqlAggregatedExpressionSensorParametersSpec();
-        this.checkSpec = new TableSqlAggregateExprCheckSpec
-
-();
+        this.checkSpec = new TableSqlAggregateExprCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setSqlExpression("COUNT({table})");
+        this.sut.setSqlExpression("COUNT(*)");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -77,7 +69,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setSqlExpression("COUNT({table})");
+        this.sut.setSqlExpression("COUNT(*)");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -92,8 +84,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setSqlExpression("COUNT({table})");
-
+        this.sut.setSqlExpression("COUNT(*)");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
 
@@ -107,8 +98,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sut.setSqlExpression("COUNT({table})");
-
+        this.sut.setSqlExpression("COUNT(*)");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
 
@@ -122,8 +112,7 @@ public class TableSqlAggregatedExpressionSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sut.setSqlExpression("COUNT({table})");
-
+        this.sut.setSqlExpression("COUNT(*)");
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
 

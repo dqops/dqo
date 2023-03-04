@@ -42,13 +42,17 @@ module.exports = withMT({
         green: {
           400: '#00D63A',
           500: '#10B981',
-          600: '#00BB9E'
+          600: '#00BB9E',
         },
         red: {
           50: '#F9FAFC',
         },
         purple: {
           500: '#5048E5',
+        },
+        teal: {
+          500: '#02A88C',
+          550: '#029A80',
         }
       },
       fontSize: {
