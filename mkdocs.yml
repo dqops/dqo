@@ -204,6 +204,16 @@ nav:
       - comparison: 'reference/rules/comparison.md'
       - stdev: 'reference/rules/stdev.md'
 ########## END INCLUDE RULE REFERENCE
+########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY
+    - Yaml:
+      - ConnectionYaml: 'reference/yaml/ConnectionYaml.md'
+      - DashboardYaml: 'reference/yaml/DashboardYaml.md'
+      - ProviderSensorYaml: 'reference/yaml/ProviderSensorYaml.md'
+      - RuleDefinitionYaml: 'reference/yaml/RuleDefinitionYaml.md'
+      - SensorDefinitionYaml: 'reference/yaml/SensorDefinitionYaml.md'
+      - SettingsYaml: 'reference/yaml/SettingsYaml.md'
+      - TableYaml: 'reference/yaml/TableYaml.md'
+########## END INCLUDE YAML REFERENCE
 
 # Visual settings
 theme:
