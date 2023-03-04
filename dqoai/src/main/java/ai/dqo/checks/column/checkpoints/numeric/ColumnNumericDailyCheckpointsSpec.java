@@ -52,11 +52,11 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
             put("daily_checkpoint_min_in_range", o -> o.dailyCheckpointMinInRange);
             put("daily_checkpoint_mean_in_range", o -> o.dailyCheckpointMeanInRange);
             put("daily_checkpoint_percentile_in_range", o -> o.dailyCheckpointPercentileInRange);
-            put("daily_checkpoint_percentile_50_in_range", o -> o.dailyCheckpointPercentile50InRange);
-            put("daily_checkpoint_percentile_10_in_range", o -> o.dailyCheckpointPercentile10InRange);
-            put("daily_checkpoint_percentile_25_in_range", o -> o.dailyCheckpointPercentile25InRange);
-            put("daily_checkpoint_percentile_75_in_range", o -> o.dailyCheckpointPercentile75InRange);
-            put("daily_checkpoint_percentile_90_in_range", o -> o.dailyCheckpointPercentile90InRange);
+            put("daily_checkpoint_percentile_50_in_range", o -> o.dailyCheckpointPercentile_50InRange);
+            put("daily_checkpoint_percentile_10_in_range", o -> o.dailyCheckpointPercentile_10InRange);
+            put("daily_checkpoint_percentile_25_in_range", o -> o.dailyCheckpointPercentile_25InRange);
+            put("daily_checkpoint_percentile_75_in_range", o -> o.dailyCheckpointPercentile_75InRange);
+            put("daily_checkpoint_percentile_90_in_range", o -> o.dailyCheckpointPercentile_90InRange);
             put("daily_checkpoint_sample_stddev_in_range", o -> o.dailyCheckpointSampleStddevInRange);
             put("daily_checkpoint_population_stddev_in_range", o -> o.dailyCheckpointPopulationStddevInRange);
             put("daily_checkpoint_sample_variance_in_range", o -> o.dailyCheckpointSampleVarianceInRange);
@@ -119,19 +119,19 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
     private ColumnPercentileInRangeCheckSpec dailyCheckpointPercentileInRange;
 
     @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnPercentile50InRangeCheckSpec dailyCheckpointPercentile50InRange;
+    private ColumnPercentile50InRangeCheckSpec dailyCheckpointPercentile_50InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnPercentile10InRangeCheckSpec dailyCheckpointPercentile10InRange;
+    private ColumnPercentile10InRangeCheckSpec dailyCheckpointPercentile_10InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnPercentile25InRangeCheckSpec dailyCheckpointPercentile25InRange;
+    private ColumnPercentile25InRangeCheckSpec dailyCheckpointPercentile_25InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnPercentile75InRangeCheckSpec dailyCheckpointPercentile75InRange;
+    private ColumnPercentile75InRangeCheckSpec dailyCheckpointPercentile_75InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnPercentile90InRangeCheckSpec dailyCheckpointPercentile90InRange;
+    private ColumnPercentile90InRangeCheckSpec dailyCheckpointPercentile_90InRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnSampleStddevInRangeCheckSpec dailyCheckpointSampleStddevInRange;
@@ -452,90 +452,90 @@ public class ColumnNumericDailyCheckpointsSpec extends AbstractCheckCategorySpec
      * Returns a percentile 50 in range check specification.
      * @return Percentile 50 in range check specification.
      */
-    public ColumnPercentile50InRangeCheckSpec getDailyCheckpointPercentile50InRange() {
-        return dailyCheckpointPercentile50InRange;
+    public ColumnPercentile50InRangeCheckSpec getDailyCheckpointPercentile_50InRange() {
+        return dailyCheckpointPercentile_50InRange;
     }
 
     /**
      * Sets a new specification of a percentile 50 in range check.
-     * @param dailyCheckpointPercentile50InRange Percentile 50 in range check specification.
+     * @param dailyCheckpointPercentile_50InRange Percentile 50 in range check specification.
      */
-    public void setDailyCheckpointPercentile50InRange(ColumnPercentile50InRangeCheckSpec dailyCheckpointPercentile50InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile50InRange, dailyCheckpointPercentile50InRange));
-        this.dailyCheckpointPercentile50InRange = dailyCheckpointPercentile50InRange;
-        propagateHierarchyIdToField(dailyCheckpointPercentile50InRange, "daily_checkpoint_percentile_50_in_range");
+    public void setDailyCheckpointPercentile_50InRange(ColumnPercentile50InRangeCheckSpec dailyCheckpointPercentile_50InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile_50InRange, dailyCheckpointPercentile_50InRange));
+        this.dailyCheckpointPercentile_50InRange = dailyCheckpointPercentile_50InRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentile_50InRange, "daily_checkpoint_percentile_50_in_range");
     }
 
     /**
      * Returns a percentile 10 in range check specification.
      * @return Percentile 10 in range check specification.
      */
-    public ColumnPercentile10InRangeCheckSpec getDailyCheckpointPercentile10InRange() {
-        return dailyCheckpointPercentile10InRange;
+    public ColumnPercentile10InRangeCheckSpec getDailyCheckpointPercentile_10InRange() {
+        return dailyCheckpointPercentile_10InRange;
     }
 
     /**
      * Sets a new specification of a percentile 10 in range check.
-     * @param dailyCheckpointPercentile10InRange Percentile 10 in range check specification.
+     * @param dailyCheckpointPercentile_10InRange Percentile 10 in range check specification.
      */
-    public void setDailyCheckpointPercentile10InRange(ColumnPercentile10InRangeCheckSpec dailyCheckpointPercentile10InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile10InRange, dailyCheckpointPercentile10InRange));
-        this.dailyCheckpointPercentile10InRange = dailyCheckpointPercentile10InRange;
-        propagateHierarchyIdToField(dailyCheckpointPercentile10InRange, "daily_checkpoint_percentile_10_in_range");
+    public void setDailyCheckpointPercentile_10InRange(ColumnPercentile10InRangeCheckSpec dailyCheckpointPercentile_10InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile_10InRange, dailyCheckpointPercentile_10InRange));
+        this.dailyCheckpointPercentile_10InRange = dailyCheckpointPercentile_10InRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentile_10InRange, "daily_checkpoint_percentile_10_in_range");
     }
 
     /**
      * Returns a percentile 25 in range check specification.
      * @return Percentile 25 in range check specification.
      */
-    public ColumnPercentile25InRangeCheckSpec getDailyCheckpointPercentile25InRange() {
-        return dailyCheckpointPercentile25InRange;
+    public ColumnPercentile25InRangeCheckSpec getDailyCheckpointPercentile_25InRange() {
+        return dailyCheckpointPercentile_25InRange;
     }
 
     /**
      * Sets a new specification of a percentile 25 in range check.
-     * @param dailyCheckpointPercentile25InRange Percentile 25 in range check specification.
+     * @param dailyCheckpointPercentile_25InRange Percentile 25 in range check specification.
      */
-    public void setDailyCheckpointPercentile25InRange(ColumnPercentile25InRangeCheckSpec dailyCheckpointPercentile25InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile25InRange, dailyCheckpointPercentile25InRange));
-        this.dailyCheckpointPercentile25InRange = dailyCheckpointPercentile25InRange;
-        propagateHierarchyIdToField(dailyCheckpointPercentile25InRange, "daily_checkpoint_percentile_25_in_range");
+    public void setDailyCheckpointPercentile_25InRange(ColumnPercentile25InRangeCheckSpec dailyCheckpointPercentile_25InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile_25InRange, dailyCheckpointPercentile_25InRange));
+        this.dailyCheckpointPercentile_25InRange = dailyCheckpointPercentile_25InRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentile_25InRange, "daily_checkpoint_percentile_25_in_range");
     }
 
     /**
      * Returns a percentile 75 in range check specification.
      * @return Percentile 75 in range check specification.
      */
-    public ColumnPercentile75InRangeCheckSpec getDailyCheckpointPercentile75InRange() {
-        return dailyCheckpointPercentile75InRange;
+    public ColumnPercentile75InRangeCheckSpec getDailyCheckpointPercentile_75InRange() {
+        return dailyCheckpointPercentile_75InRange;
     }
 
     /**
      * Sets a new specification of a percentile 75 in range check.
-     * @param dailyCheckpointPercentile75InRange Percentile 75 in range check specification.
+     * @param dailyCheckpointPercentile_75InRange Percentile 75 in range check specification.
      */
-    public void setDailyCheckpointPercentile75InRange(ColumnPercentile75InRangeCheckSpec dailyCheckpointPercentile75InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile75InRange, dailyCheckpointPercentile75InRange));
-        this.dailyCheckpointPercentile75InRange = dailyCheckpointPercentile75InRange;
-        propagateHierarchyIdToField(dailyCheckpointPercentile75InRange, "daily_checkpoint_percentile_75_in_range");
+    public void setDailyCheckpointPercentile_75InRange(ColumnPercentile75InRangeCheckSpec dailyCheckpointPercentile_75InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile_75InRange, dailyCheckpointPercentile_75InRange));
+        this.dailyCheckpointPercentile_75InRange = dailyCheckpointPercentile_75InRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentile_75InRange, "daily_checkpoint_percentile_75_in_range");
     }
 
     /**
      * Returns a percentile 90 in range check specification.
      * @return Percentile 90 in range check specification.
      */
-    public ColumnPercentile90InRangeCheckSpec getDailyCheckpointPercentile90InRange() {
-        return dailyCheckpointPercentile90InRange;
+    public ColumnPercentile90InRangeCheckSpec getDailyCheckpointPercentile_90InRange() {
+        return dailyCheckpointPercentile_90InRange;
     }
 
     /**
      * Sets a new specification of a percentile 90 in range check.
-     * @param dailyCheckpointPercentile90InRange Percentile 90 in range check specification.
+     * @param dailyCheckpointPercentile_90InRange Percentile 90 in range check specification.
      */
-    public void setDailyCheckpointPercentile90InRange(ColumnPercentile90InRangeCheckSpec dailyCheckpointPercentile90InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile90InRange, dailyCheckpointPercentile90InRange));
-        this.dailyCheckpointPercentile90InRange = dailyCheckpointPercentile90InRange;
-        propagateHierarchyIdToField(dailyCheckpointPercentile90InRange, "daily_checkpoint_percentile_90_in_range");
+    public void setDailyCheckpointPercentile_90InRange(ColumnPercentile90InRangeCheckSpec dailyCheckpointPercentile_90InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyCheckpointPercentile_90InRange, dailyCheckpointPercentile_90InRange));
+        this.dailyCheckpointPercentile_90InRange = dailyCheckpointPercentile_90InRange;
+        propagateHierarchyIdToField(dailyCheckpointPercentile_90InRange, "daily_checkpoint_percentile_90_in_range");
     }
 
     /**

@@ -52,11 +52,11 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_in_range", o -> o.dailyPartitionMinInRange);
             put("daily_partition_mean_in_range", o -> o.dailyPartitionMeanInRange);
             put("daily_partition_percentile_in_range", o -> o.dailyPartitionPercentileInRange);
-            put("daily_partition_percentile_50_in_range", o -> o.dailyPartitionPercentile50InRange);
-            put("daily_partition_percentile_10_in_range", o -> o.dailyPartitionPercentile10InRange);
-            put("daily_partition_percentile_25_in_range", o -> o.dailyPartitionPercentile25InRange);
-            put("daily_partition_percentile_75_in_range", o -> o.dailyPartitionPercentile75InRange);
-            put("daily_partition_percentile_90_in_range", o -> o.dailyPartitionPercentile90InRange);
+            put("daily_partition_percentile_50_in_range", o -> o.dailyPartitionPercentile_50InRange);
+            put("daily_partition_percentile_10_in_range", o -> o.dailyPartitionPercentile_10InRange);
+            put("daily_partition_percentile_25_in_range", o -> o.dailyPartitionPercentile_25InRange);
+            put("daily_partition_percentile_75_in_range", o -> o.dailyPartitionPercentile_75InRange);
+            put("daily_partition_percentile_90_in_range", o -> o.dailyPartitionPercentile_90InRange);
             put("daily_partition_sample_stddev_in_range", o -> o.dailyPartitionSampleStddevInRange);
             put("daily_partition_population_stddev_in_range", o -> o.dailyPartitionPopulationStddevInRange);
             put("daily_partition_sample_variance_in_range", o -> o.dailyPartitionSampleVarianceInRange);
@@ -119,19 +119,19 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     private ColumnPercentileInRangeCheckSpec dailyPartitionPercentileInRange;
 
     @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPercentile50InRangeCheckSpec dailyPartitionPercentile50InRange;
+    private ColumnPercentile50InRangeCheckSpec dailyPartitionPercentile_50InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPercentile10InRangeCheckSpec dailyPartitionPercentile10InRange;
+    private ColumnPercentile10InRangeCheckSpec dailyPartitionPercentile_10InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPercentile25InRangeCheckSpec dailyPartitionPercentile25InRange;
+    private ColumnPercentile25InRangeCheckSpec dailyPartitionPercentile_25InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPercentile75InRangeCheckSpec dailyPartitionPercentile75InRange;
+    private ColumnPercentile75InRangeCheckSpec dailyPartitionPercentile_75InRange;
 
     @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPercentile90InRangeCheckSpec dailyPartitionPercentile90InRange;
+    private ColumnPercentile90InRangeCheckSpec dailyPartitionPercentile_90InRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnSampleStddevInRangeCheckSpec dailyPartitionSampleStddevInRange;
@@ -454,90 +454,90 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
      * Returns a percentile 50 in range check specification.
      * @return Percentile 50 in range check specification.
      */
-    public ColumnPercentile50InRangeCheckSpec getDailyPartitionPercentile50InRange() {
-        return dailyPartitionPercentile50InRange;
+    public ColumnPercentile50InRangeCheckSpec getDailyPartitionPercentile_50InRange() {
+        return dailyPartitionPercentile_50InRange;
     }
 
     /**
      * Sets a new specification of a percentile 50 in range check.
-     * @param dailyPartitionPercentile50InRange percentile 50 in range check specification.
+     * @param dailyPartitionPercentile_50InRange percentile 50 in range check specification.
      */
-    public void setDailyPartitionPercentile50InRange(ColumnPercentile50InRangeCheckSpec dailyPartitionPercentile50InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile50InRange, dailyPartitionPercentile50InRange));
-        this.dailyPartitionPercentile50InRange = dailyPartitionPercentile50InRange;
-        propagateHierarchyIdToField(dailyPartitionPercentile50InRange, "daily_partition_percentile_50_in_range");
+    public void setDailyPartitionPercentile_50InRange(ColumnPercentile50InRangeCheckSpec dailyPartitionPercentile_50InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile_50InRange, dailyPartitionPercentile_50InRange));
+        this.dailyPartitionPercentile_50InRange = dailyPartitionPercentile_50InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile_50InRange, "daily_partition_percentile_50_in_range");
     }
 
     /**
      * Returns a percentile 10 in range check specification.
      * @return Percentile 10 in range check specification.
      */
-    public ColumnPercentile10InRangeCheckSpec getDailyPartitionPercentile10InRange() {
-        return dailyPartitionPercentile10InRange;
+    public ColumnPercentile10InRangeCheckSpec getDailyPartitionPercentile_10InRange() {
+        return dailyPartitionPercentile_10InRange;
     }
 
     /**
      * Sets a new specification of a percentile 10 in range check.
-     * @param dailyPartitionPercentile10InRange percentile 10 in range check specification.
+     * @param dailyPartitionPercentile_10InRange percentile 10 in range check specification.
      */
-    public void setDailyPartitionPercentile10InRange(ColumnPercentile10InRangeCheckSpec dailyPartitionPercentile10InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile10InRange, dailyPartitionPercentile10InRange));
-        this.dailyPartitionPercentile10InRange = dailyPartitionPercentile10InRange;
-        propagateHierarchyIdToField(dailyPartitionPercentile10InRange, "daily_partition_percentile_10_in_range");
+    public void setDailyPartitionPercentile_10InRange(ColumnPercentile10InRangeCheckSpec dailyPartitionPercentile_10InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile_10InRange, dailyPartitionPercentile_10InRange));
+        this.dailyPartitionPercentile_10InRange = dailyPartitionPercentile_10InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile_10InRange, "daily_partition_percentile_10_in_range");
     }
 
     /**
      * Returns a percentile 25 in range check specification.
      * @return Percentile 25 in range check specification.
      */
-    public ColumnPercentile25InRangeCheckSpec getDailyPartitionPercentile25InRange() {
-        return dailyPartitionPercentile25InRange;
+    public ColumnPercentile25InRangeCheckSpec getDailyPartitionPercentile_25InRange() {
+        return dailyPartitionPercentile_25InRange;
     }
 
     /**
      * Sets a new specification of a percentile 25 in range check.
-     * @param dailyPartitionPercentile25InRange percentile 25 in range check specification.
+     * @param dailyPartitionPercentile_25InRange percentile 25 in range check specification.
      */
-    public void setDailyPartitionPercentile25InRange(ColumnPercentile25InRangeCheckSpec dailyPartitionPercentile25InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile25InRange, dailyPartitionPercentile25InRange));
-        this.dailyPartitionPercentile25InRange = dailyPartitionPercentile25InRange;
-        propagateHierarchyIdToField(dailyPartitionPercentile25InRange, "daily_partition_percentile_25_in_range");
+    public void setDailyPartitionPercentile_25InRange(ColumnPercentile25InRangeCheckSpec dailyPartitionPercentile_25InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile_25InRange, dailyPartitionPercentile_25InRange));
+        this.dailyPartitionPercentile_25InRange = dailyPartitionPercentile_25InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile_25InRange, "daily_partition_percentile_25_in_range");
     }
 
     /**
      * Returns a percentile 75 in range check specification.
      * @return Percentile 75 in range check specification.
      */
-    public ColumnPercentile75InRangeCheckSpec getDailyPartitionPercentile75InRange() {
-        return dailyPartitionPercentile75InRange;
+    public ColumnPercentile75InRangeCheckSpec getDailyPartitionPercentile_75InRange() {
+        return dailyPartitionPercentile_75InRange;
     }
 
     /**
      * Sets a new specification of a percentile 75 in range check.
-     * @param dailyPartitionPercentile75InRange percentile 75 in range check specification.
+     * @param dailyPartitionPercentile_75InRange percentile 75 in range check specification.
      */
-    public void setDailyPartitionPercentile75InRange(ColumnPercentile75InRangeCheckSpec dailyPartitionPercentile75InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile75InRange, dailyPartitionPercentile75InRange));
-        this.dailyPartitionPercentile75InRange = dailyPartitionPercentile75InRange;
-        propagateHierarchyIdToField(dailyPartitionPercentile75InRange, "daily_partition_percentile_75_in_range");
+    public void setDailyPartitionPercentile_75InRange(ColumnPercentile75InRangeCheckSpec dailyPartitionPercentile_75InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile_75InRange, dailyPartitionPercentile_75InRange));
+        this.dailyPartitionPercentile_75InRange = dailyPartitionPercentile_75InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile_75InRange, "daily_partition_percentile_75_in_range");
     }
 
     /**
      * Returns a percentile 90 in range check specification.
      * @return Percentile 90 in range check specification.
      */
-    public ColumnPercentile90InRangeCheckSpec getDailyPartitionPercentile90InRange() {
-        return dailyPartitionPercentile90InRange;
+    public ColumnPercentile90InRangeCheckSpec getDailyPartitionPercentile_90InRange() {
+        return dailyPartitionPercentile_90InRange;
     }
 
     /**
      * Sets a new specification of a percentile 90 in range check.
-     * @param dailyPartitionPercentile90InRange percentile 90 in range check specification.
+     * @param dailyPartitionPercentile_90InRange percentile 90 in range check specification.
      */
-    public void setDailyPartitionPercentile90InRange(ColumnPercentile90InRangeCheckSpec dailyPartitionPercentile90InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile90InRange, dailyPartitionPercentile90InRange));
-        this.dailyPartitionPercentile90InRange = dailyPartitionPercentile90InRange;
-        propagateHierarchyIdToField(dailyPartitionPercentile90InRange, "daily_partition_percentile_90_in_range");
+    public void setDailyPartitionPercentile_90InRange(ColumnPercentile90InRangeCheckSpec dailyPartitionPercentile_90InRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile_90InRange, dailyPartitionPercentile_90InRange));
+        this.dailyPartitionPercentile_90InRange = dailyPartitionPercentile_90InRange;
+        propagateHierarchyIdToField(dailyPartitionPercentile_90InRange, "daily_partition_percentile_90_in_range");
     }
 
     /**
