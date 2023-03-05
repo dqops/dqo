@@ -19,10 +19,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
-import ai.dqo.metadata.sources.TableOwnerSpec;
-import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.metadata.sources.TableTargetSpec;
-import ai.dqo.metadata.sources.TimestampColumnsSpec;
+import ai.dqo.metadata.sources.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -49,6 +46,9 @@ public class TableBasicModel {
 
     @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
     private TimestampColumnsSpec timestampColumns;
+
+    @JsonPropertyDescription("Configuration of time windows for executing partition checks incrementally, configures the number of recent days to analyze for daily partitioned tables or the number of recent months for monthly partitioned data.")
+    private PartitionIncrementalTimeWindowSpec incrementalTimeWindow;
 
     @JsonPropertyDescription("Disables all data quality checks on the table. Data quality checks will not be executed.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -162,6 +162,7 @@ public class TableBasicModel {
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getTarget());
             setTimestampColumns(tableSpec.getTimestampColumns());
+            setIncrementalTimeWindow(tableSpec.getIncrementalTimeWindow());
             setDisabled(tableSpec.isDisabled());
             setStage(tableSpec.getStage());
             setFilter(tableSpec.getFilter());
@@ -222,11 +223,19 @@ public class TableBasicModel {
         targetTableSpec.setStage(this.getStage());
         targetTableSpec.setFilter(this.getFilter());
         targetTableSpec.setOwner(this.getOwner());
+
         if (this.getTimestampColumns() != null) {
             targetTableSpec.setTimestampColumns(this.getTimestampColumns());
         }
         else {
             targetTableSpec.setTimestampColumns(new TimestampColumnsSpec()); // default configuration because the object is not null
+        }
+
+        if (this.getIncrementalTimeWindow() != null) {
+            targetTableSpec.setIncrementalTimeWindow(this.getIncrementalTimeWindow());
+        }
+        else {
+            targetTableSpec.setIncrementalTimeWindow(new PartitionIncrementalTimeWindowSpec()); // default configuration because the object is not null
         }
     }
 }
