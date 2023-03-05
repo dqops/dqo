@@ -148,13 +148,13 @@
             {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date) -}}
         {%- elif time_window_filter.daily_partitioning_include_today is false -%}
             {{ prefix_to_render -}}
-            {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP WITH TIME ZONE' -%}
+            {%- if timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 {{ date_trunc_utc('LOCALTIMESTAMP', 'day', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
-            {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+            {%- elif timestamp_column_data_type == 'DATE' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 CAST(LOCALTIMESTAMP AS DATE)
-            {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP WITHOUT TIME ZONE' -%}
+            {%- elif timestamp_column_data_type == 'TIMESTAMP WITHOUT TIME ZONE' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 CAST(LOCALTIMESTAMP AS TIMESTAMP WITHOUT TIME ZONE)
             {%- else -%}
@@ -163,18 +163,18 @@
             {%- endif -%}
         {%- elif time_window_filter.monthly_partitioning_include_current_month is false -%}
             {{ prefix_to_render -}}
-            {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP WITH TIME ZONE' -%}
+            {%- if timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
-                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} AS TIMESTAMP WITH TIME ZONE)
-            {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} AS TIMESTAMP WITH TIME ZONE)
+            {%- elif timestamp_column_data_type == 'DATE' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
-                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} AS DATE)
-            {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP WITHOUT TIME ZONE' -%}
+                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} AS DATE)
+            {%- elif timestamp_column_data_type == 'TIMESTAMP WITHOUT TIME ZONE' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
-                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} AS TIMESTAMP WITHOUT TIME ZONE)
+                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} AS TIMESTAMP WITHOUT TIME ZONE)
             {%- else -%}
                 CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' < ' -}}
-                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} AS DATE)
+                CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} AS DATE)
             {%- endif -%}
         {%- endif -%}
     {%- endif -%}
@@ -194,13 +194,13 @@
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- elif time_window_filter.daily_partitioning_recent_days | default(none, true) is not none -%}
                 {{ prefix_to_render -}}
-                {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP WITH TIME ZONE' -%}
+                {%- if timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      CAST(CAST(LOCALTIMESTAMP AS DATE) -{{time_window_filter.daily_partitioning_recent_days}} AS TIMESTAMP WITH TIME ZONE)
-                {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+                {%- elif timestamp_column_data_type == 'DATE' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      CAST(LOCALTIMESTAMP AS DATE) -{{time_window_filter.daily_partitioning_recent_days}}
-                {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP WITHOUT TIME ZONE' -%}
+                {%- elif timestamp_column_data_type == 'TIMESTAMP WITHOUT TIME ZONE' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      CAST(CAST(LOCALTIMESTAMP AS DATE) -{{time_window_filter.daily_partitioning_recent_days}} AS TIMESTAMP WITHOUT TIME ZONE)
                 {%- else -%}
@@ -210,18 +210,18 @@
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- elif time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
                 {{ prefix_to_render -}}
-                {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP WITH TIME ZONE' -%}
+                {%- if timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITH TIME ZONE)
-                {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITH TIME ZONE)
+                {%- elif timestamp_column_data_type == 'DATE' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
-                {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP WITHOUT TIME ZONE' -%}
+                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
+                {%- elif timestamp_column_data_type == 'TIMESTAMP WITHOUT TIME ZONE' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITHOUT TIME ZONE)
+                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITHOUT TIME ZONE)
                 {%- else -%}
                      CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
-                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
+                     CAST({{ date_trunc('LOCALTIMESTAMP', 'month', timestamp_column_data_type) }} - interval '{{time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
                 {%- endif -%}
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- else -%}

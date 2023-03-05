@@ -45,7 +45,7 @@
     {%- elif part == 'week' -%}
         DATE_TRUNC(CAST({{value}} AS DATE), WEEK)
     {%- elif part == 'day' -%}
-        {%- if datatype == 'DATE' -%}
+        {%- if datatype | upper == 'DATE' -%}
             {{value}}
         {%- else -%}
             CAST({{value}} AS DATE)
@@ -108,13 +108,13 @@
             {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date) -}}
         {%- elif time_window_filter.daily_partitioning_include_today is false -%}
             {{ prefix_to_render -}}
-            {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+            {%- if timestamp_column_data_type == 'TIMESTAMP' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 CAST(CURRENT_DATE() AS TIMESTAMP)
-            {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+            {%- elif timestamp_column_data_type == 'DATE' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 CURRENT_DATE()
-            {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+            {%- elif timestamp_column_data_type == 'DATETIME' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 CAST(CURRENT_DATE() AS DATETIME)
             {%- else -%}
@@ -123,18 +123,18 @@
             {%- endif -%}
         {%- elif time_window_filter.monthly_partitioning_include_current_month is false -%}
             {{ prefix_to_render -}}
-            {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+            {%- if timestamp_column_data_type == 'TIMESTAMP' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
-                CAST({{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} AS TIMESTAMP)
-            {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+                CAST({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }} AS TIMESTAMP)
+            {%- elif timestamp_column_data_type == 'DATE' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
-                {{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
-            {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+                {{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}
+            {%- elif timestamp_column_data_type == 'DATETIME' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
-                CAST({{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }} AS DATETIME)
+                CAST({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }} AS DATETIME)
             {%- else -%}
                 CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' < ' -}}
-                {{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}
+                {{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}
             {%- endif -%}
         {%- endif -%}
     {%- endif -%}
@@ -154,13 +154,13 @@
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- elif time_window_filter.daily_partitioning_recent_days | default(none, true) is not none -%}
                 {{ prefix_to_render -}}
-                {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                {%- if timestamp_column_data_type == 'TIMESTAMP' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAY) AS TIMESTAMP)
-                {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+                {%- elif timestamp_column_data_type == 'DATE' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAY)
-                {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+                {%- elif timestamp_column_data_type == 'DATETIME' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAY) AS DATETIME)
                 {%- else -%}
@@ -170,18 +170,18 @@
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- elif time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
                 {{ prefix_to_render -}}
-                {%- if table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+                {%- if timestamp_column_data_type == 'TIMESTAMP' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST(DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS TIMESTAMP)
-                {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
+                     CAST(DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS TIMESTAMP)
+                {%- elif timestamp_column_data_type == 'DATE' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH)
-                {%- elif table.columns[time_series.timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
+                     DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH)
+                {%- elif timestamp_column_data_type == 'DATETIME' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST(DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATETIME)
+                     CAST(DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATETIME)
                 {%- else -%}
                      CAST({{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
-                     DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', table.columns[time_series.timestamp_column].type_snapshot.column_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH)
+                     DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH)
                 {%- endif -%}
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- else -%}
