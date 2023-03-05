@@ -22,6 +22,7 @@ import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
+import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.groupings.TimeSeriesMode;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
@@ -142,7 +143,10 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
         PartitionIncrementalTimeWindowSpec tableTimeWindowSpec = tableSpec.getIncrementalTimeWindow();
         TimeWindowFilterParameters resultFilter = new TimeWindowFilterParameters();
 
-        switch (timeSeriesConfigurationSpec.getTimeGradient()) {
+
+        TimeSeriesGradient partitioningTimeGradient = timeSeriesConfigurationSpec.getMode() == TimeSeriesMode.timestamp_column ?
+                timeSeriesConfigurationSpec.getTimeGradient() : null;
+        switch (partitioningTimeGradient) {
             case day:
                 resultFilter.setDailyPartitioningRecentDays(tableTimeWindowSpec.getDailyPartitioningRecentDays());
                 resultFilter.setDailyPartitioningIncludeToday(tableTimeWindowSpec.isDailyPartitioningIncludeToday());
@@ -156,7 +160,8 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                 break;
         }
 
-        TimeWindowFilterParameters effectiveFilter = resultFilter.withUserFilters(userTimeWindowFilters); // override defaults with the user provided settings
+        TimeWindowFilterParameters effectiveFilter = resultFilter.withUserFilters(userTimeWindowFilters,
+                partitioningTimeGradient); // override defaults with the user provided settings
         return effectiveFilter;
     }
 }

@@ -39,17 +39,17 @@ public class PartitionIncrementalTimeWindowSpec extends AbstractSpec {
         }
     };
 
-    @JsonPropertyDescription("Number of recent days that are analyzed by daily partitioned checks in incremental mode.")
-    private Integer dailyPartitioningRecentDays;
+    @JsonPropertyDescription("Number of recent days that are analyzed by daily partitioned checks in incremental mode. The default value is 7 days back.")
+    private Integer dailyPartitioningRecentDays = 7;
 
-    @JsonPropertyDescription("Analyze also today's data by daily partitioned checks in incremental mode.")
+    @JsonPropertyDescription("Analyze also today's data by daily partitioned checks in incremental mode. The default value is false, which means that the today's and the future partitions are not analyzed, only yesterday's partition and earlier daily partitions are analyzed because today's data could be still incomplete. Change the value to 'true' if the current day should be also analyzed. The change may require configuring the schedule for daily checks correctly, to run after the data load.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean dailyPartitioningIncludeToday;
 
-    @JsonPropertyDescription("Number of recent months that are analyzed by monthly partitioned checks in incremental mode.")
-    private Integer monthlyPartitioningRecentMonths;
+    @JsonPropertyDescription("Number of recent months that are analyzed by monthly partitioned checks in incremental mode. The default value is 1 month back which means the previous calendar month.")
+    private Integer monthlyPartitioningRecentMonths = 1;
 
-    @JsonPropertyDescription("Analyze also this month's data by monthly partitioned checks in incremental mode.")
+    @JsonPropertyDescription("Analyze also this month's data by monthly partitioned checks in incremental mode. The default value is false, which means that the current month is not analyzed and future data is also filtered out because the current month could be incomplete. Set the value to 'true' if the current month should be analyzed before the end of the month. The schedule for running monthly checks should be also configured to run more frequently (daily, hourly, etc.).")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean monthlyPartitioningIncludeCurrentMonth;
 

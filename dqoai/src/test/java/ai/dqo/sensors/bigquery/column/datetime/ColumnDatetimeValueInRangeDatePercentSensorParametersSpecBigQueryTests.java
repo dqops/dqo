@@ -252,6 +252,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
+                  AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                  AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -369,6 +371,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                     TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
                 FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                      AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
                 GROUP BY stream_level_1, time_period, time_period_utc
                 ORDER BY stream_level_1, time_period, time_period_utc""";
 
@@ -498,6 +502,8 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
             WHERE %5$s
+                  AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                  AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
 
