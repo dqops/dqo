@@ -45,7 +45,7 @@
     {%- elif part == 'week' -%}
         DATE_TRUNC('WEEK', CAST({{value}} AS date))
     {%- elif part == 'day' -%}
-        {%- if datatype == 'DATE' -%}
+        {%- if datatype | upper == 'DATE' -%}
             {{value}}
         {%- else -%}
             CAST({{value}} AS date)
@@ -69,7 +69,7 @@
     {%- elif part == 'week' -%}
         DATE_TRUNC('week', (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP)
     {%- elif part == 'day' -%}
-        {%- if datatype == 'date' -%}
+        {%- if datatype | upper == 'DATE' -%}
             {{value}}
         {%- else -%}
             (CAST({{value}} AS date) || ' 00:00:00'):: TIMESTAMP
@@ -87,7 +87,7 @@
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
             {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
-                {{ date_trunc('LOCALTIMESTAMP', time_series.time_gradient, 'timestamp') }}
+                {{ date_trunc('LOCALTIMESTAMP', time_series.time_gradient, 'TIMESTAMP WITH TIME ZONE') }}
             {%- else -%}
                 LOCALTIMESTAMP
             {%- endif -%}
@@ -103,7 +103,7 @@
     {%- if time_series is not none-%}
         {%- if time_series.mode == 'current_time' -%}
             {%- if time_series.time_gradient is defined and time_series.time_gradient != 'millisecond' -%}
-                {{ date_trunc_utc('LOCALTIMESTAMP', time_series.time_gradient, 'timestamp') }}
+                {{ date_trunc_utc('LOCALTIMESTAMP', time_series.time_gradient, 'TIMESTAMP WITH TIME ZONE') }}
             {%- else -%}
                 LOCALTIMESTAMP
             {%- endif -%}
