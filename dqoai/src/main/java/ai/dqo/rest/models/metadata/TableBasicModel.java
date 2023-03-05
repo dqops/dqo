@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import org.apache.http.annotation.Obsolete;
 
 /**
  * Table basic model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
@@ -45,10 +46,8 @@ public class TableBasicModel {
     private TableTargetSpec target;
 
     @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
+    @Deprecated
     private TimestampColumnsSpec timestampColumns;
-
-    @JsonPropertyDescription("Configuration of time windows for executing partition checks incrementally, configures the number of recent days to analyze for daily partitioned tables or the number of recent months for monthly partitioned data.")
-    private PartitionIncrementalTimeWindowSpec incrementalTimeWindow;
 
     @JsonPropertyDescription("Disables all data quality checks on the table. Data quality checks will not be executed.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -162,7 +161,6 @@ public class TableBasicModel {
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
             setTarget(tableSpec.getTarget());
             setTimestampColumns(tableSpec.getTimestampColumns());
-            setIncrementalTimeWindow(tableSpec.getIncrementalTimeWindow());
             setDisabled(tableSpec.isDisabled());
             setStage(tableSpec.getStage());
             setFilter(tableSpec.getFilter());
@@ -229,13 +227,6 @@ public class TableBasicModel {
         }
         else {
             targetTableSpec.setTimestampColumns(new TimestampColumnsSpec()); // default configuration because the object is not null
-        }
-
-        if (this.getIncrementalTimeWindow() != null) {
-            targetTableSpec.setIncrementalTimeWindow(this.getIncrementalTimeWindow());
-        }
-        else {
-            targetTableSpec.setIncrementalTimeWindow(new PartitionIncrementalTimeWindowSpec()); // default configuration because the object is not null
         }
     }
 }
