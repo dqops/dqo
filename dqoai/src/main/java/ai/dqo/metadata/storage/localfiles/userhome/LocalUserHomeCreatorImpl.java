@@ -166,6 +166,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
                                 BuiltInFolderNames.DATA + "/\n" +
                                 BuiltInFolderNames.INDEX + "/\n" +
                                 BuiltInFolderNames.LOGS + "/\n" +
+                                ".venv/\n" +
                                 SpecFileNames.SETTINGS_SPEC_FILE_NAME_YAML + "\n";
 
                 Files.writeString(gitIgnorePath, gitIgnoreContent);
