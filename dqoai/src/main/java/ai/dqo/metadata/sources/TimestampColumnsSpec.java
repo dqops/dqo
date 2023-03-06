@@ -27,6 +27,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 
 import java.util.Objects;
@@ -54,7 +55,12 @@ public class TimestampColumnsSpec extends AbstractSpec {
     @ControlType(ParameterDataType.column_name_type)
     private String ingestionTimestampColumn;
 
-    @JsonPropertyDescription("Date/time partitioned checks timestamp source. Decides if the date/time partitioned data quality checks are calculated for rounded time periods (days, weeks) for rows grouped by event timestamp (when the action happened) or the ingestion timestamp (when the data was loaded).")
+    @JsonPropertyDescription("Column name that contains the date, datetime or timestamp column for date/time partitioned data. Partition checks (daily partition checks and monthly partition checks) use this column in a GROUP BY clause in order to detect data quality issues in each partition separately. It should be a DATE type, DATETIME type (using a local server time zone) or a TIMESTAMP type (a UTC absolute time).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @ControlType(ParameterDataType.column_name_type)
+    private String partitionByColumn;
+
+    @JsonPropertyDescription("Date/time partitioned checks timestamp source. Decides if the date/time partitioned data quality checks are calculated for rounded time periods (days, weeks) for rows grouped by event timestamp (when the action happened) or the ingestion timestamp (when the data was loaded). Additionally, date range filtering uses this column when the data for a given time period is analyzed.")
     private PartitionedChecksTimestampSource partitionedChecksTimestampSource = PartitionedChecksTimestampSource.event_timestamp;
 
     /**
@@ -89,6 +95,23 @@ public class TimestampColumnsSpec extends AbstractSpec {
     public void setIngestionTimestampColumn(String ingestionTimestampColumn) {
         this.setDirtyIf(!Objects.equals(this.ingestionTimestampColumn, ingestionTimestampColumn));
         this.ingestionTimestampColumn = ingestionTimestampColumn;
+    }
+
+    /**
+     * Returns the name of the date/datetime/timestamp column used for partition checks.
+     * @return Column name used for partition checks.
+     */
+    public String getPartitionByColumn() {
+        return partitionByColumn;
+    }
+
+    /**
+     * Sets the name of a column used for partition checks.
+     * @param partitionByColumn A new column name used for partitioning.
+     */
+    public void setPartitionByColumn(String partitionByColumn) {
+        this.setDirtyIf(!Objects.equals(this.partitionByColumn, partitionByColumn));
+        this.partitionByColumn = partitionByColumn;
     }
 
     /**
@@ -147,6 +170,7 @@ public class TimestampColumnsSpec extends AbstractSpec {
         TimestampColumnsSpec cloned = this.deepClone();
         cloned.eventTimestampColumn = secretValueProvider.expandValue(cloned.eventTimestampColumn);
         cloned.ingestionTimestampColumn = secretValueProvider.expandValue(cloned.ingestionTimestampColumn);
+        cloned.partitionByColumn = secretValueProvider.expandValue(cloned.partitionByColumn);
         return cloned;
     }
 
@@ -155,7 +179,12 @@ public class TimestampColumnsSpec extends AbstractSpec {
      * @return Column name used for grouping rows for date/time partitioned checks.
      */
     @JsonIgnore
+    @Deprecated  // this is just a fallback version
     public String getEffectivePartitioningColumn() {
+        if (!Strings.isNullOrEmpty(this.partitionByColumn)) {
+            return this.partitionByColumn;
+        }
+
         switch (this.partitionedChecksTimestampSource) {
             case event_timestamp:
                 return this.eventTimestampColumn;
