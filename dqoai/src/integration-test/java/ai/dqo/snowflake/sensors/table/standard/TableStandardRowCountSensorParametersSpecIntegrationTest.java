@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.snowflake.table.timeliness;
+package ai.dqo.snowflake.sensors.table.standard;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.timeliness.TableDaysSinceMostRecentIngestionCheckSpec;
+import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,130 +29,96 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.timeliness.TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec;
+import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
-
 @SpringBootTest
-public class SnowflakeTableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec sut;
+public class TableStandardRowCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private TableStandardRowCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableDaysSinceMostRecentIngestionCheckSpec checkSpec;
+    private TableRowCountCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.snowflake);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec();
-        this.checkSpec = new TableDaysSinceMostRecentIngestionCheckSpec();
+        this.sut = new TableStandardRowCountSensorParametersSpec();
+        this.checkSpec = new TableRowCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
+        TableAdHocStandardChecksSpec category = new TableAdHocStandardChecksSpec();
+        this.sampleTableMetadata.getTableSpec().getChecks().setStandard(category);
+        category.setRowCount(this.checkSpec);
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
-
+    void runSensor_whenSensorExecuted_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
                 sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
-        LocalDateTime ldt = LocalDateTime.now();
-        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ldt);
-        double min = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 - 1;
-        double max = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 + 1;
-
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertEquals(24L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
-        LocalDateTime ldt = LocalDateTime.now();
-        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ldt);
-        double min = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 - 1;
-        double max = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 + 1;
-
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertEquals(24L, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
-                sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        LocalDateTime ldt = LocalDateTime.now();
-        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ldt);
-        double min = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 - 1;
-        double max = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 + 1;
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertEquals(24L, resultTable.column(0).get(0));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
-
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        LocalDateTime ldt = LocalDateTime.now();
-        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").get(0),ldt);
-        double min = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 - 1;
-        double max = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 + 1;
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(24, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertEquals(1L, resultTable.column(0).get(0));
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date1");
-
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly, "date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        LocalDateTime ldt = LocalDateTime.now();
-        Duration timeDiff = Duration.between(this.sampleTableMetadata.getTableData().getTable().dateTimeColumn("date1").max(),ldt);
-        double min = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 - 1;
-        double max = timeDiff.toMillis() / 24.0 / 3600.0 / 1000.0 + 1;
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertTrue((double)resultTable.column(0).get(0)>=min && (double)resultTable.column(0).get(0)<=max);
+        Assertions.assertEquals(24L, resultTable.column(0).get(0));
     }
 }
