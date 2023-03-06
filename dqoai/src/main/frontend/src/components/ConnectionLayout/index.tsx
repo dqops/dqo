@@ -11,12 +11,11 @@ interface ConnectionLayoutProps {
 }
 
 const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
-  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode, sidebarWidth } =
+  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode } =
     useTree();
 
-  const { connection, schema, table, column, category, timePartitioned, checkName, checkTypes } = useParams() as any;
+  const { connection, schema, table, column, category, timePartitioned, checkName } = useParams() as any;
   const match = useRouteMatch();
-
 
   useEffect(() => {
     if (activeNode) {
@@ -219,7 +218,11 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
           className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
           style={{ maxHeight: "calc(100vh - 80px)" }}
         >
-          {children}
+          {!tabs[activeTab] && (
+            <div>
+              {children}
+            </div>
+          )}
         </div>
       </div>
     </MainLayout>
