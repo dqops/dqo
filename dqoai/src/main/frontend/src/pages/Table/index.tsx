@@ -39,7 +39,7 @@ const initTabs = [
     value: 'data-streams'
   },
   {
-    label: 'Timestamps',
+    label: 'Date and time columns',
     value: 'timestamps'
   }
 ];

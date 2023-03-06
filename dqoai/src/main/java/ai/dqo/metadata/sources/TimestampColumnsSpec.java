@@ -60,9 +60,6 @@ public class TimestampColumnsSpec extends AbstractSpec {
     @ControlType(ParameterDataType.column_name_type)
     private String partitionByColumn;
 
-    @JsonPropertyDescription("Date/time partitioned checks timestamp source. Decides if the date/time partitioned data quality checks are calculated for rounded time periods (days, weeks) for rows grouped by event timestamp (when the action happened) or the ingestion timestamp (when the data was loaded). Additionally, date range filtering uses this column when the data for a given time period is analyzed.")
-    private PartitionedChecksTimestampSource partitionedChecksTimestampSource = PartitionedChecksTimestampSource.event_timestamp;
-
     /**
      * Returns the name of the column that identifies the event timestamp, it could be the transaction timestamp.
      * @return Event timestamp column name.
@@ -115,23 +112,6 @@ public class TimestampColumnsSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the type of the timestamp column used to group rows into time periods for date/time partitioned data quality checks.
-     * @return Partitioned checks grouping column.
-     */
-    public PartitionedChecksTimestampSource getPartitionedChecksTimestampSource() {
-        return partitionedChecksTimestampSource;
-    }
-
-    /**
-     * Sets the type of column used for date/time partitioned checks.
-     * @param partitionedChecksTimestampSource Partitioned data quality checks column source.
-     */
-    public void setPartitionedChecksTimestampSource(PartitionedChecksTimestampSource partitionedChecksTimestampSource) {
-        this.setDirtyIf(this.partitionedChecksTimestampSource != partitionedChecksTimestampSource);
-        this.partitionedChecksTimestampSource = partitionedChecksTimestampSource;
-    }
-
-    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -176,24 +156,24 @@ public class TimestampColumnsSpec extends AbstractSpec {
 
     /**
      * Returns the effective name of a column used for time partitioned checks.
+     * This method is a temporary solution, because we should only read the partitionByColumn in the future, do not perform any fallbacks.
      * @return Column name used for grouping rows for date/time partitioned checks.
      */
     @JsonIgnore
-    @Deprecated  // this is just a fallback version
+    @Deprecated
     public String getEffectivePartitioningColumn() {
         if (!Strings.isNullOrEmpty(this.partitionByColumn)) {
             return this.partitionByColumn;
         }
 
-        switch (this.partitionedChecksTimestampSource) {
-            case event_timestamp:
-                return this.eventTimestampColumn;
-
-            case ingestion_timestamp:
-                return this.ingestionTimestampColumn;
-
-            default:
-                throw new IllegalArgumentException("Effective column used for time window grouping for date/time partitioned data quality checks is not correctly configured.");
+        if (!Strings.isNullOrEmpty(this.eventTimestampColumn)) {
+            return this.eventTimestampColumn;
         }
+
+        if (!Strings.isNullOrEmpty(this.ingestionTimestampColumn)) {
+            return this.ingestionTimestampColumn;
+        }
+
+        throw new IllegalArgumentException("Effective column used for time window grouping for date/time partitioned data quality checks is not correctly configured.");
     }
 }
