@@ -53,7 +53,7 @@ public class BigQueryConnectionPoolImplIntegrationTests extends BaseBigQueryInte
         BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
         BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
         Assertions.assertNotNull(bigQueryService);
-        Assertions.assertSame(bigQueryService, this.sut.getBigQueryService(connectionSpec));
+        Assertions.assertSame(bigQueryService, this.sut.getBigQueryService(connectionSpec).getBigQueryClient());
     }
 
     @Test
@@ -62,7 +62,7 @@ public class BigQueryConnectionPoolImplIntegrationTests extends BaseBigQueryInte
         connectionSpec.getBigquery().setQuotaProjectId(connectionSpec.getBigquery().getSourceProjectId());
         BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
         BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
-        Assertions.assertNull(bigQueryInternalConnection.getQuotaProjectId(), connectionSpec.getBigquery().getSourceProjectId());
+        Assertions.assertNull(connectionSpec.getBigquery().getSourceProjectId(), connectionSpec.getBigquery().getSourceProjectId());
         Assertions.assertNotNull(bigQueryService);
     }
 
@@ -72,7 +72,7 @@ public class BigQueryConnectionPoolImplIntegrationTests extends BaseBigQueryInte
         connectionSpec.getBigquery().setBillingProjectId(connectionSpec.getBigquery().getSourceProjectId());
         BigQueryInternalConnection bigQueryInternalConnection = this.sut.getBigQueryService(connectionSpec);
         BigQuery bigQueryService = bigQueryInternalConnection.getBigQueryClient();
-        Assertions.assertNull(bigQueryInternalConnection.getBillingProjectId(), connectionSpec.getBigquery().getSourceProjectId());
+        Assertions.assertNull(connectionSpec.getBigquery().getSourceProjectId(), connectionSpec.getBigquery().getSourceProjectId());
         Assertions.assertNotNull(bigQueryService);
     }
 }

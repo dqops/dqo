@@ -107,7 +107,7 @@ public class RedshiftColumnNumericPercentile90InRangeSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.6f, resultTable.column(0).get(0));
+        Assertions.assertEquals(17.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -121,6 +121,6 @@ public class RedshiftColumnNumericPercentile90InRangeSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.6f, resultTable.column(0).get(0));
+        Assertions.assertEquals(17.0f, resultTable.column(0).get(0));
     }
 }

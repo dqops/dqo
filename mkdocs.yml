@@ -1,55 +1,57 @@
-site_name: DQO AI
+site_name: Documentation
 site_url: https://docs.dqo.ai/latest/
 
 # Docs navigation
 nav:
-  - Home: 'index.md'
-  - What is DQO: 'what_is_dqo/what_is_dqo.md'
+  - What is DQO?: 'index.md'
   - Getting started:
-    - Set up: 'getting_started/set_up/set_up.md'
-    - Connect to a data source: 'getting_started/connect_to_a_data_source/connect_to_a_data_source.md'
-    - Import metadata: 'getting_started/import_metadata/import_metadata.md'
-    - Enable data quality checks: 'getting_started/enable_data_quality_checks/enable_data_quality_checks.md'
-    - Run data quality checks: 'getting_started/run_data_quality_checks/run_data_quality_checks.md'
-    - Use the DQO shell: 'getting_started/use_the_DQO_shell/use_the_DQO_shell.md'
-    - Push data to the cloud: 'getting_started/push_data_to_the_cloud/push_data_to_the_cloud.md'
-  - DQO concept:
-    - Sensors: 'dqo_concept/sensors/sensors.md'
-    - Rules: 'dqo_concept/rules/rules.md'
-    - Dimensions: 'dqo_concept/dimensions.md'
-    - Time series: 'dqo_concept/time_series/time_series.md'
-#TODO: tbd:
-#  - Folder structures:
-#    - DQO_USER_HOME: 'dqo_concept/how_data_is_stored/how_data_is_stored.md'
+    - 'getting-started/index.md'
+    - Set up: 'getting-started/set-up/set-up.md'
+    - Start DQO: 'getting-started/start-dqo/start-dqo.md'
+    - Connect to a data source: 'getting-started/connect-to-a-data-source/connect-to-a-data-source.md'
+    - Import metadata: 'getting-started/import-metadata/import-metadata.md'
+    - Run initial profiling: 'getting-started/run-initial-profiling/run-initial-profiling.md'
+    - Run data quality checks: 'getting-started/run-data-quality-checks/run-data-quality-checks.md'
+    - Inspect results: 'getting-started/inspect-results/inspect-results.md'
+  - DQO concepts:
+    - 'dqo-concepts/index.md'
+    - Checks:
+      - 'dqo-concepts/checks/index.md'
+      - Advanced profiling: 'dqo-concepts/checks/advanced-profiling/advanced-profiling.md'
+      - Checks: 'dqo-concepts/checks/checks/checks.md'
+      - Partition checks: 'dqo-concepts/checks/partition-checks/partition-checks.md'
+    - Sensors: 'dqo-concepts/sensors/sensors.md'
+    - Rules: 'dqo-concepts/rules/rules.md'
+    - Data quality KPIs: 'dqo-concepts/data-quality-kpis/data-quality-kpis.md'
+    - Dashboards: 'dqo-concepts/dashboards/dashboards.md'
+    - Data quality dimensions: 'dqo-concepts/data-quality-dimensions/data-quality-dimensions.md'
+    - Data stream segmentation: 'dqo-concepts/data-stream-segmentation/data-stream-segmentation.md'
+    - Working with YAML files: 'dqo-concepts/working-with-yaml-files/working-with-yaml-files.md'
+    - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
+    - Architecture: 'dqo-concepts/architecture/architecture.md'
+    - Data storage: 'dqo-concepts\data-storage\data-storage.md'
   - Working with DQO:
-    - Adding connections: 'working_with_dqo/add_connection.md'
-  - Scheduler:
-    - Introduction to the scheduler: 'scheduler/introduction_to_the_scheduler.md'
-    - Cron formatting: 'scheduler/cron_formatting.md'
-    - Enabling and disabling schedules: 'scheduler/enabling_and_disabling_schedules.md'
-    - Cloud logging: 'scheduler/cloud_logging.md'
-    - Console logging modes: 'scheduler/console_logging_modes.md'
-    - Timezone configuration: 'scheduler/timezone_configuration.md'
-  - Examples:
-    - Running examples: 'examples/running_examples.md'
-    - Timeliness:
-      - current_delay: 'examples/timeliness/current_delay/current_delay.md'
-      - average_delay: 'examples/timeliness/average_delay/average_delay.md'
-      - column_datetime_difference_percent: 'examples/timeliness/column_datetime_difference_percent/column_datetime_difference_percent.md'
-    - Uniqueness:
-      - distinct_count: 'examples/uniqueness/distinct_count/distinct_count.md'
-      - distinct_count_percent: 'examples/uniqueness/distinct_count_percent/distinct_count_percent.md'
-    - Validity:
-      - date_type_percent: 'examples/validity/date_type_percent/date_type_percent.md'
-      - values_in_set_percent: 'examples/validity/values_in_set_percent/values_in_set_percent.md'
-      - value_in_range_date_percent: 'examples/validity/value_in_range_date_percent/value_in_range_date_percent.md'
-      - value_in_range_numerical_percent: 'examples/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md'
-      - string_length_in_range_percent: 'examples/validity/string_length_in_range_percent/string_length_in_range_percent.md'
-      - regex_match_percent: 'examples/validity/regex_match_percent/regex_match_percent.md'
-      - non_negative_percent: 'examples/validity/non_negative_percent/non_negative_percent.md'
-      - not_null_count: 'examples/validity/not_null_count/not_null_count.md'
-      - non_negative_count: 'examples/validity/non_negative_count/non_negative_count.md'
-      - numerical_type_percent: 'examples/validity/numerical_type_percent/numerical_type_percent.md'
+    - 'working-with-dqo/index.md'
+    - Connections:
+      - 'working-with-dqo/connections/index.md'
+      - BigQuery: 'working-with-dqo/connections/bigquery.md'
+      - Snowflake: 'working-with-dqo/connections/snowflake.md'
+      - Redshift: 'working-with-dqo/connections/redshift.md'
+      - PostgreSQL: 'working-with-dqo/connections/postgresql.md'
+      - SQL Server: 'working-with-dqo/connections/sql-server.md'
+    - DQO Shell:
+      - 'working-with-dqo/dqo-shell/index.md'
+      - Run modes: 'working-with-dqo/dqo-shell/run-modes.md'
+      - Push data to the cloud: 'working-with-dqo/dqo-shell/push-data-to-the-cloud.md'
+    - Scheduler:
+      - 'working-with-dqo/scheduler/index.md'
+      - Cron formatting: 'working-with-dqo/scheduler/cron_formatting.md'
+      - Enabling and disabling schedules: 'working-with-dqo/scheduler/enabling_and_disabling_schedules.md'
+      - Timezone configuration: 'working-with-dqo/scheduler/timezone_configuration.md'
+    - Notifications: 'working-with-dqo/notifications/notifications.md'
+    - Initial profiling: 'working-with-dqo/initial-profiling/initial-profiling.md'
+  - Examples: 'examples/examples.md'
+  - Security: 'security/security.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - dqo: 'command_line_interface/dqo.md'
@@ -204,25 +206,39 @@ nav:
       - comparison: 'reference/rules/comparison.md'
       - stdev: 'reference/rules/stdev.md'
 ########## END INCLUDE RULE REFERENCE
+########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY
+    - Yaml:
+      - ConnectionYaml: 'reference/yaml/ConnectionYaml.md'
+      - DashboardYaml: 'reference/yaml/DashboardYaml.md'
+      - ProviderSensorYaml: 'reference/yaml/ProviderSensorYaml.md'
+      - RuleDefinitionYaml: 'reference/yaml/RuleDefinitionYaml.md'
+      - SensorDefinitionYaml: 'reference/yaml/SensorDefinitionYaml.md'
+      - SettingsYaml: 'reference/yaml/SettingsYaml.md'
+      - TableYaml: 'reference/yaml/TableYaml.md'
+########## END INCLUDE YAML REFERENCE
 
 # Visual settings
 theme:
   name: material
   features:
     - navigation.indexes
-#    - navigation.sections
     - content.tabs.link
     - content.code.copy
     - content.code.annotate
   logo: assets/logo.svg
+  favicon: images/favicon.ico
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
+      primary: white
+      accent: teal
       toggle:
         icon: material/weather-night
         name: Switch to dark mode
     - media: "(prefers-color-scheme: dark)"
       scheme: slate
+      primary: white
+      accent: teal
       toggle:
         icon: material/weather-sunny
         name: Switch to light mode
@@ -261,7 +277,6 @@ extra:
 
 
 
-# TODO change theme
 # TODO Cookie consent https://squidfunk.github.io/mkdocs-material/setup/ensuring-data-privacy/
 # TODO Navigation
 # TODO Tags

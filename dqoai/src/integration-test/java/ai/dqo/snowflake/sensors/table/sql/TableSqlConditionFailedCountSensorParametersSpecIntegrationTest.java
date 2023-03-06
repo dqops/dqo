@@ -15,7 +15,6 @@
  */
 package ai.dqo.snowflake.sensors.table.sql;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionFailedCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
@@ -30,6 +29,7 @@ import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
 import ai.dqo.sensors.table.sql.TableSqlConditionFailedCountSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,7 +38,7 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
     private TableSqlConditionFailedCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private TableSqlConditionFailedCountCheckSpec checkSpec;
@@ -46,7 +46,7 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new TableSqlConditionFailedCountSensorParametersSpec();
@@ -56,7 +56,9 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("length("
+                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
+                +") > 3");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
                 sampleTableMetadata, this.checkSpec);
@@ -71,7 +73,9 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("length("
+                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
+                +") > 3");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -86,7 +90,9 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("length("
+                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
+                +") > 3");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
@@ -101,7 +107,9 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("length("
+                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
+                +") > 3");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
@@ -116,7 +124,9 @@ public class TableSqlConditionFailedCountSensorParametersSpecIntegrationTest ext
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sut.setSqlCondition("{table} is null");
+        this.sut.setSqlCondition("length("
+                +"\""+this.sampleTableMetadata.getTableSpec().getColumns().getAt(0).getColumnName()+"\""
+                +") > 3");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");

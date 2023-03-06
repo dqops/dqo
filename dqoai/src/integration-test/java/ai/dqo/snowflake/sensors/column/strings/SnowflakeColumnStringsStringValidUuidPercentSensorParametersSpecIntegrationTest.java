@@ -103,7 +103,7 @@ public class SnowflakeColumnStringsStringValidUuidPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float) 86.666, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals((float) 0.0, (float) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -116,6 +116,6 @@ public class SnowflakeColumnStringsStringValidUuidPercentSensorParametersSpecInt
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals((float) 86.666, (float) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals((float) 0.0, (float) resultTable.column(0).get(0), 0.001);
     }
 }

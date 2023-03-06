@@ -282,6 +282,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()
                 GROUP BY time_period, time_period_utc, top_values
                 ORDER BY time_period, time_period_utc, total_values
                     ) top_col_values
@@ -450,6 +452,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()
                 GROUP BY stream_level_1, time_period, time_period_utc, top_values
                 ORDER BY stream_level_1, time_period, time_period_utc, total_values
                     ) top_col_values
@@ -637,6 +641,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()
                 GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_values
                 ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
                     ) top_col_values

@@ -194,62 +194,111 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                 onChange={onChangeConfigured}
               />
             </div>
-            <SvgIcon
-              name={!check?.disabled ? 'stop' : 'disable'}
-              className={clsx(
-                'w-5 h-5 cursor-pointer',
-                !check?.disabled ? 'text-blue-700' : 'text-red-700'
-              )}
-              onClick={() =>
-                check?.configured &&
-                handleChange({ disabled: !check?.disabled })
-              }
-            />
-            <SvgIcon
-              name="cog"
-              className="w-5 h-5 text-blue-700 cursor-pointer"
-              onClick={openCheckSettings}
-            />
-            <SvgIcon
-              name={
-                check?.schedule_override?.disabled ? 'clock-off' : 'clock'
-              }
-              className={clsx(
-                'w-5 h-5 cursor-pointer',
-                check?.schedule_override
-                  ? 'text-gray-700'
-                  : 'text-black font-bold',
-                check?.schedule_override?.disabled ? 'line-through' : ''
-              )}
-              strokeWidth={check?.schedule_override ? 4 : 2}
-            />
+            <Tooltip
+              content={!check?.disabled ? 'Enabled' : 'Disabled'}
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div>
+                <SvgIcon
+                  name={!check?.disabled ? 'stop' : 'disable'}
+                  className={clsx(
+                    'w-5 h-5 cursor-pointer',
+                    !check?.disabled ? 'text-blue-700' : 'text-red-700'
+                  )}
+                  onClick={() =>
+                    check?.configured &&
+                    handleChange({ disabled: !check?.disabled })
+                  }
+                />
+              </div>
+            </Tooltip>
+            <Tooltip
+              content="Settings"
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div>
+                <SvgIcon
+                  name="cog"
+                  className="w-5 h-5 text-blue-700 cursor-pointer"
+                  onClick={openCheckSettings}
+                />
+              </div>
+            </Tooltip>
+            <Tooltip
+              content={check?.schedule_override?.disabled ? 'Schedule disabled' : 'Schedule enabled'}
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div>
+                <SvgIcon
+                  name={
+                    check?.schedule_override?.disabled ? 'clock-off' : 'clock'
+                  }
+                  className={clsx(
+                    'w-5 h-5 cursor-pointer',
+                    check?.schedule_override
+                      ? 'text-gray-700'
+                      : 'text-black font-bold',
+                    check?.schedule_override?.disabled ? 'line-through' : ''
+                  )}
+                  strokeWidth={check?.schedule_override ? 4 : 2}
+                />
+              </div>
+            </Tooltip>
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-              <SvgIcon
-                name="play"
-                className="text-green-700 h-5 cursor-pointer"
-                onClick={onRunCheck}
-              />
+                <Tooltip
+                  content="Run Check"
+                  className="max-w-80 py-4 px-4 bg-gray-800"
+                >
+                  <div>
+                    <SvgIcon
+                      name="play"
+                      className="text-green-700 h-5 cursor-pointer"
+                      onClick={onRunCheck}
+                    />
+                  </div>
+                </Tooltip>
             )}
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
-              <SvgIcon
-                name="hourglass"
-                className="text-gray-700 h-5 cursor-pointer"
-              />
+              <Tooltip
+                content="Waiting"
+                className="max-w-80 py-4 px-4 bg-gray-800"
+              >
+                <div>
+                  <SvgIcon
+                    name="hourglass"
+                    className="text-gray-700 h-5 cursor-pointer"
+                  />
+                </div>
+              </Tooltip>
             )}
             {(job?.status === DqoJobHistoryEntryModelStatusEnum.running ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.queued) && (
-              <SvgIcon
-                name="hourglass"
-                className="text-gray-700 h-5 cursor-pointer"
-              />
+              <Tooltip
+                content="Running"
+                className="max-w-80 py-4 px-4 bg-gray-800"
+              >
+                <div>
+                  <SvgIcon
+                    name="hourglass"
+                    className="text-gray-700 h-5 cursor-pointer"
+                  />
+                </div>
+              </Tooltip>
             )}
-            <SvgIcon
-              name="rectangle-list"
-              className="text-gray-700 h-5 cursor-pointer"
-              onClick={toggleCheckDetails}
-            />
+            <Tooltip
+              content="Check Details"
+              className="max-w-80 py-4 px-4 bg-gray-800"
+            >
+              <div className="w-5 h-5">
+                <SvgIcon
+                  name="rectangle-list"
+                  className="text-gray-700 h-5 cursor-pointer"
+                  onClick={toggleCheckDetails}
+                />
+              </div>
+            </Tooltip>
             <Tooltip
               content={check.help_text}
               className="max-w-80 py-4 px-4 bg-gray-800"

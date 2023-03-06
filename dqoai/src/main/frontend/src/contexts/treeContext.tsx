@@ -988,7 +988,8 @@ function TreeProvider(props: any) {
         switchTab,
         activeNode,
         setSourceRoute,
-        deleteStoredData
+        deleteStoredData,
+        sourceRoute,
       }}
       {...props}
     />

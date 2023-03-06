@@ -138,9 +138,17 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec =
                 TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(timeScale, datePartitioningColumn);
+        TimeWindowFilterParameters userTimeWindowFilters = new TimeWindowFilterParameters();
+
+        if (timeScale == CheckTimeScale.daily) {
+            userTimeWindowFilters.setDailyPartitioningRecentDays(365 * 10 + 3);  // TODO: analyze the last 10 years of data
+        }
+        else if (timeScale == CheckTimeScale.monthly) {
+            userTimeWindowFilters.setMonthlyPartitioningRecentMonths(12 * 10);   // TODO: analyze the last 10 years of data
+        }
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -244,9 +252,17 @@ public class SensorExecutionRunParametersObjectMother {
         SensorExecutionRunParametersFactory factory = getFactory();
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForPartitionedCheck(
                 checkTimeScale, timePartitioningColumn);
+        TimeWindowFilterParameters userTimeWindowFilters = new TimeWindowFilterParameters();
+
+        if (checkTimeScale == CheckTimeScale.daily) {
+            userTimeWindowFilters.setDailyPartitioningRecentDays(365 * 10 + 3);  // TODO: analyze the last 10 years of data
+        }
+        else if (checkTimeScale == CheckTimeScale.monthly) {
+            userTimeWindowFilters.setMonthlyPartitioningRecentMonths(12 * 10);   // TODO: analyze the last 10 years of data
+        }
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, CheckType.PARTITIONED, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorExecutionRunParameters;
     }
 }

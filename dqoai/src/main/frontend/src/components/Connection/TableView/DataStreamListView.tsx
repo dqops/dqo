@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { DataStreamBasicModel } from "../../../api";
 import Button from "../../Button";
 import SvgIcon from "../../SvgIcon";
 import { DataStreamsApi } from "../../../services/apiClient";
+import ConfirmDialog from "../../CustomTree/ConfirmDialog";
 
 interface IDataStreamListViewProps {
   dataStreams: DataStreamBasicModel[];
@@ -17,6 +18,9 @@ const DataStreamListView = ({
   onCreate,
   onEdit
 }: IDataStreamListViewProps) => {
+  const [open, setOpen] = useState(false);
+  const [selectedStream, setSelectedStream] = useState<DataStreamBasicModel>();
+
   const setDefaultStream = async (stream: DataStreamBasicModel) => {
     try {
       await DataStreamsApi.setDefaultDataStream(
@@ -31,7 +35,11 @@ const DataStreamListView = ({
     }
   };
 
-  const deleteStream = async (stream: DataStreamBasicModel) => {
+  const deleteStream = async (stream?: DataStreamBasicModel) => {
+    if (!stream) {
+      return;
+    }
+
     try {
       await DataStreamsApi.deleteDataStream(
         stream.connection_name || '',
@@ -43,6 +51,11 @@ const DataStreamListView = ({
     } catch (err) {
       console.error(err);
     }
+  };
+
+  const openConfirmDeleteModal = (stream: DataStreamBasicModel) => {
+    setOpen(true);
+    setSelectedStream(stream);
   };
 
   return (
@@ -81,7 +94,7 @@ const DataStreamListView = ({
                   label="Delete"
                   color="primary"
                   variant="text"
-                  onClick={() => deleteStream(stream)}
+                  onClick={() => openConfirmDeleteModal(stream)}
                 />
               </td>
               <td className="px-2 py-1">
@@ -103,6 +116,12 @@ const DataStreamListView = ({
         label="New data stream configuration"
         color="primary"
         onClick={onCreate}
+      />
+      <ConfirmDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        message={`Are you sure to delete data stream ${selectedStream?.data_stream_name}?`}
+        onConfirm={() => deleteStream(selectedStream)}
       />
     </div>
   );

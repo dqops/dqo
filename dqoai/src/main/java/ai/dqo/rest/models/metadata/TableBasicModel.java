@@ -19,16 +19,14 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
-import ai.dqo.metadata.sources.TableOwnerSpec;
-import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.metadata.sources.TableTargetSpec;
-import ai.dqo.metadata.sources.TimestampColumnsSpec;
+import ai.dqo.metadata.sources.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import org.apache.http.annotation.Obsolete;
 
 /**
  * Table basic model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
@@ -48,6 +46,7 @@ public class TableBasicModel {
     private TableTargetSpec target;
 
     @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
+    @Deprecated
     private TimestampColumnsSpec timestampColumns;
 
     @JsonPropertyDescription("Disables all data quality checks on the table. Data quality checks will not be executed.")
@@ -222,6 +221,7 @@ public class TableBasicModel {
         targetTableSpec.setStage(this.getStage());
         targetTableSpec.setFilter(this.getFilter());
         targetTableSpec.setOwner(this.getOwner());
+
         if (this.getTimestampColumns() != null) {
             targetTableSpec.setTimestampColumns(this.getTimestampColumns());
         }

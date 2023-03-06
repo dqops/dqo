@@ -17,6 +17,7 @@ package ai.dqo.execution.sqltemplates;
 
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
@@ -44,6 +45,7 @@ public class JinjaTemplateRenderParameters {
     private String columnName; // may be null
     private AbstractSensorParametersSpec parameters;
     private TimeSeriesConfigurationSpec effectiveTimeSeries;
+    private TimeWindowFilterParameters effectiveTimeWindowFilter;
     private DataStreamMappingSpec effectiveDataStreams;
     private SensorDefinitionSpec sensorDefinition;
     private ProviderSensorDefinitionSpec providerSensorDefinition;
@@ -63,6 +65,7 @@ public class JinjaTemplateRenderParameters {
      * @param columnName Column name.
      * @param parameters Sensor parameters spec.
      * @param effectiveTimeSeries Effective time series configuration.
+     * @param effectiveTimeWindowFilter Effective time window filter for partitioned checks or checks with a time window (start and end dates).
      * @param effectiveDataStreams Effective data streams configuration.
      * @param sensorDefinition Sensor definition spec.
      * @param providerSensorDefinition Provider sensor definition spec.
@@ -74,6 +77,7 @@ public class JinjaTemplateRenderParameters {
 										 String columnName,
 										 AbstractSensorParametersSpec parameters,
                                          TimeSeriesConfigurationSpec effectiveTimeSeries,
+                                         TimeWindowFilterParameters effectiveTimeWindowFilter,
                                          DataStreamMappingSpec effectiveDataStreams,
 										 SensorDefinitionSpec sensorDefinition,
 										 ProviderSensorDefinitionSpec providerSensorDefinition,
@@ -84,6 +88,7 @@ public class JinjaTemplateRenderParameters {
         this.columnName = columnName;
         this.parameters = parameters;
         this.effectiveTimeSeries = effectiveTimeSeries;
+        this.effectiveTimeWindowFilter = effectiveTimeWindowFilter;
         this.effectiveDataStreams = effectiveDataStreams;
         this.sensorDefinition = sensorDefinition;
         this.providerSensorDefinition = providerSensorDefinition;
@@ -111,6 +116,7 @@ public class JinjaTemplateRenderParameters {
 			setSensorDefinition(sensorDefinitions.getSensorDefinitionSpec().trim());
 			setProviderSensorDefinition(sensorDefinitions.getProviderSensorDefinitionSpec().trim());
 			setDialectSettings(sensorRunParameters.getDialectSettings());
+            setEffectiveTimeWindowFilter(sensorRunParameters.getTimeWindowFilter());
         }};
 
         return result;
@@ -210,6 +216,22 @@ public class JinjaTemplateRenderParameters {
      */
     public void setEffectiveTimeSeries(TimeSeriesConfigurationSpec effectiveTimeSeries) {
         this.effectiveTimeSeries = effectiveTimeSeries;
+    }
+
+    /**
+     * Returns the effective time window filter used for the partitioned checks or when a period of time should be analyzed by any checks.
+     * @return Effective time window filter.
+     */
+    public TimeWindowFilterParameters getEffectiveTimeWindowFilter() {
+        return effectiveTimeWindowFilter;
+    }
+
+    /**
+     * Sets teh effective time window filter for the partitioned checks or when a period of time should be analyzed by any checks.
+     * @param effectiveTimeWindowFilter Effective time window filter.
+     */
+    public void setEffectiveTimeWindowFilter(TimeWindowFilterParameters effectiveTimeWindowFilter) {
+        this.effectiveTimeWindowFilter = effectiveTimeWindowFilter;
     }
 
     /**

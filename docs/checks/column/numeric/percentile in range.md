@@ -387,37 +387,37 @@ spec:
 
 ___
 
-## **percentile50 in range**  
+## **percentile 50 in range**  
   
 **Check description**  
 Verifies that the percentile 50 of all values in a column is not outside the set range.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile50_in_range|adhoc| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_50_in_range|adhoc| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=percentile50_in_range
+dqo.ai> check run -ch=percentile_50_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=percentile50_in_range
+dqo.ai> check run -c=connection_name -ch=percentile_50_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=percentile50_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=percentile_50_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile50_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_50_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checks:
         numeric:
-          percentile50_in_range:
+          percentile_50_in_range:
             parameters:
               percentile_value: 0.5
             error:
@@ -447,7 +447,7 @@ spec:
     target_column:
       checks:
         numeric:
-          percentile50_in_range:
+          percentile_50_in_range:
             parameters:
               percentile_value: 0.5
             error:
@@ -616,7 +616,7 @@ spec:
         target_column:
           checks:
             numeric:
-              percentile50_in_range:
+              percentile_50_in_range:
                 parameters:
                   percentile_value: 0.5
                 error:
@@ -775,37 +775,37 @@ spec:
 
 ___
 
-## **percentile10 in range**  
+## **percentile 10 in range**  
   
 **Check description**  
 Verifies that the percentile 10 of all values in a column is not outside the set range.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile10_in_range|adhoc| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_10_in_range|adhoc| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=percentile10_in_range
+dqo.ai> check run -ch=percentile_10_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=percentile10_in_range
+dqo.ai> check run -c=connection_name -ch=percentile_10_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=percentile10_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=percentile_10_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile10_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_10_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checks:
         numeric:
-          percentile10_in_range:
+          percentile_10_in_range:
             parameters:
               percentile_value: 0.1
             error:
@@ -835,7 +835,7 @@ spec:
     target_column:
       checks:
         numeric:
-          percentile10_in_range:
+          percentile_10_in_range:
             parameters:
               percentile_value: 0.1
             error:
@@ -1004,7 +1004,7 @@ spec:
         target_column:
           checks:
             numeric:
-              percentile10_in_range:
+              percentile_10_in_range:
                 parameters:
                   percentile_value: 0.1
                 error:
@@ -1163,37 +1163,37 @@ spec:
 
 ___
 
-## **percentile25 in range**  
+## **percentile 25 in range**  
   
 **Check description**  
 Verifies that the percentile 25 of all values in a column is not outside the set range.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile25_in_range|adhoc| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_25_in_range|adhoc| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=percentile25_in_range
+dqo.ai> check run -ch=percentile_25_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=percentile25_in_range
+dqo.ai> check run -c=connection_name -ch=percentile_25_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=percentile25_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=percentile_25_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile25_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_25_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checks:
         numeric:
-          percentile25_in_range:
+          percentile_25_in_range:
             parameters:
               percentile_value: 0.25
             error:
@@ -1223,7 +1223,7 @@ spec:
     target_column:
       checks:
         numeric:
-          percentile25_in_range:
+          percentile_25_in_range:
             parameters:
               percentile_value: 0.25
             error:
@@ -1392,7 +1392,7 @@ spec:
         target_column:
           checks:
             numeric:
-              percentile25_in_range:
+              percentile_25_in_range:
                 parameters:
                   percentile_value: 0.25
                 error:
@@ -1551,37 +1551,37 @@ spec:
 
 ___
 
-## **percentile75 in range**  
+## **percentile 75 in range**  
   
 **Check description**  
 Verifies that the percentile 75 of all values in a column is not outside the set range.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile75_in_range|adhoc| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_75_in_range|adhoc| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=percentile75_in_range
+dqo.ai> check run -ch=percentile_75_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=percentile75_in_range
+dqo.ai> check run -c=connection_name -ch=percentile_75_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=percentile75_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=percentile_75_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile75_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_75_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checks:
         numeric:
-          percentile75_in_range:
+          percentile_75_in_range:
             parameters:
               percentile_value: 0.75
             error:
@@ -1611,7 +1611,7 @@ spec:
     target_column:
       checks:
         numeric:
-          percentile75_in_range:
+          percentile_75_in_range:
             parameters:
               percentile_value: 0.75
             error:
@@ -1780,7 +1780,7 @@ spec:
         target_column:
           checks:
             numeric:
-              percentile75_in_range:
+              percentile_75_in_range:
                 parameters:
                   percentile_value: 0.75
                 error:
@@ -1939,37 +1939,37 @@ spec:
 
 ___
 
-## **percentile90 in range**  
+## **percentile 90 in range**  
   
 **Check description**  
 Verifies that the percentile 90 of all values in a column is not outside the set range.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile90_in_range|adhoc| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_90_in_range|adhoc| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=percentile90_in_range
+dqo.ai> check run -ch=percentile_90_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=percentile90_in_range
+dqo.ai> check run -c=connection_name -ch=percentile_90_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=percentile90_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=percentile_90_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile90_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=percentile_90_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checks:
         numeric:
-          percentile90_in_range:
+          percentile_90_in_range:
             parameters:
               percentile_value: 0.9
             error:
@@ -1999,7 +1999,7 @@ spec:
     target_column:
       checks:
         numeric:
-          percentile90_in_range:
+          percentile_90_in_range:
             parameters:
               percentile_value: 0.9
             error:
@@ -2168,7 +2168,7 @@ spec:
         target_column:
           checks:
             numeric:
-              percentile90_in_range:
+              percentile_90_in_range:
                 parameters:
                   percentile_value: 0.9
                 error:
@@ -2712,38 +2712,38 @@ spec:
 
 ___
 
-## **daily checkpoint percentile50 in range**  
+## **daily checkpoint percentile 50 in range**  
   
 **Check description**  
 Verifies that the percentile 50 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile50_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_50_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_checkpoint_percentile50_in_range
+dqo.ai> check run -ch=daily_checkpoint_percentile_50_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_checkpoint_percentile50_in_range
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_percentile_50_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_percentile50_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_percentile_50_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_percentile50_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_percentile_50_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checkpoints:
         daily:
           numeric:
-            daily_checkpoint_percentile50_in_range:
+            daily_checkpoint_percentile_50_in_range:
               parameters:
                 percentile_value: 0.5
               error:
@@ -2774,7 +2774,7 @@ spec:
       checkpoints:
         daily:
           numeric:
-            daily_checkpoint_percentile50_in_range:
+            daily_checkpoint_percentile_50_in_range:
               parameters:
                 percentile_value: 0.5
               error:
@@ -2944,7 +2944,7 @@ spec:
           checkpoints:
             daily:
               numeric:
-                daily_checkpoint_percentile50_in_range:
+                daily_checkpoint_percentile_50_in_range:
                   parameters:
                     percentile_value: 0.5
                   error:
@@ -3103,38 +3103,38 @@ spec:
 
 ___
 
-## **daily checkpoint percentile10 in range**  
+## **daily checkpoint percentile 10 in range**  
   
 **Check description**  
 Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile10_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_10_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_checkpoint_percentile10_in_range
+dqo.ai> check run -ch=daily_checkpoint_percentile_10_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_checkpoint_percentile10_in_range
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_percentile_10_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_percentile10_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_percentile_10_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_percentile10_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_percentile_10_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checkpoints:
         daily:
           numeric:
-            daily_checkpoint_percentile10_in_range:
+            daily_checkpoint_percentile_10_in_range:
               parameters:
                 percentile_value: 0.1
               error:
@@ -3165,7 +3165,7 @@ spec:
       checkpoints:
         daily:
           numeric:
-            daily_checkpoint_percentile10_in_range:
+            daily_checkpoint_percentile_10_in_range:
               parameters:
                 percentile_value: 0.1
               error:
@@ -3335,7 +3335,7 @@ spec:
           checkpoints:
             daily:
               numeric:
-                daily_checkpoint_percentile10_in_range:
+                daily_checkpoint_percentile_10_in_range:
                   parameters:
                     percentile_value: 0.1
                   error:
@@ -3494,38 +3494,38 @@ spec:
 
 ___
 
-## **daily checkpoint percentile25 in range**  
+## **daily checkpoint percentile 25 in range**  
   
 **Check description**  
 Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile25_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_25_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_checkpoint_percentile25_in_range
+dqo.ai> check run -ch=daily_checkpoint_percentile_25_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_checkpoint_percentile25_in_range
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_percentile_25_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_percentile25_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_percentile_25_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_percentile25_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_percentile_25_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checkpoints:
         daily:
           numeric:
-            daily_checkpoint_percentile25_in_range:
+            daily_checkpoint_percentile_25_in_range:
               parameters:
                 percentile_value: 0.25
               error:
@@ -3556,7 +3556,7 @@ spec:
       checkpoints:
         daily:
           numeric:
-            daily_checkpoint_percentile25_in_range:
+            daily_checkpoint_percentile_25_in_range:
               parameters:
                 percentile_value: 0.25
               error:
@@ -3726,7 +3726,7 @@ spec:
           checkpoints:
             daily:
               numeric:
-                daily_checkpoint_percentile25_in_range:
+                daily_checkpoint_percentile_25_in_range:
                   parameters:
                     percentile_value: 0.25
                   error:
@@ -3885,38 +3885,38 @@ spec:
 
 ___
 
-## **daily checkpoint percentile75 in range**  
+## **daily checkpoint percentile 75 in range**  
   
 **Check description**  
 Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile75_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_75_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_checkpoint_percentile75_in_range
+dqo.ai> check run -ch=daily_checkpoint_percentile_75_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_checkpoint_percentile75_in_range
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_percentile_75_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_percentile75_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_percentile_75_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_percentile75_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_percentile_75_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checkpoints:
         daily:
           numeric:
-            daily_checkpoint_percentile75_in_range:
+            daily_checkpoint_percentile_75_in_range:
               parameters:
                 percentile_value: 0.75
               error:
@@ -3947,7 +3947,7 @@ spec:
       checkpoints:
         daily:
           numeric:
-            daily_checkpoint_percentile75_in_range:
+            daily_checkpoint_percentile_75_in_range:
               parameters:
                 percentile_value: 0.75
               error:
@@ -4117,7 +4117,7 @@ spec:
           checkpoints:
             daily:
               numeric:
-                daily_checkpoint_percentile75_in_range:
+                daily_checkpoint_percentile_75_in_range:
                   parameters:
                     percentile_value: 0.75
                   error:
@@ -4276,38 +4276,38 @@ spec:
 
 ___
 
-## **daily checkpoint percentile90 in range**  
+## **daily checkpoint percentile 90 in range**  
   
 **Check description**  
 Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile90_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_90_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_checkpoint_percentile90_in_range
+dqo.ai> check run -ch=daily_checkpoint_percentile_90_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_checkpoint_percentile90_in_range
+dqo.ai> check run -c=connection_name -ch=daily_checkpoint_percentile_90_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_percentile90_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_percentile_90_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_percentile90_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_percentile_90_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checkpoints:
         daily:
           numeric:
-            daily_checkpoint_percentile90_in_range:
+            daily_checkpoint_percentile_90_in_range:
               parameters:
                 percentile_value: 0.9
               error:
@@ -4338,7 +4338,7 @@ spec:
       checkpoints:
         daily:
           numeric:
-            daily_checkpoint_percentile90_in_range:
+            daily_checkpoint_percentile_90_in_range:
               parameters:
                 percentile_value: 0.9
               error:
@@ -4508,7 +4508,7 @@ spec:
           checkpoints:
             daily:
               numeric:
-                daily_checkpoint_percentile90_in_range:
+                daily_checkpoint_percentile_90_in_range:
                   parameters:
                     percentile_value: 0.9
                   error:
@@ -5052,38 +5052,38 @@ spec:
 
 ___
 
-## **monthly checkpoint percentile50 in range**  
+## **monthly checkpoint percentile 50 in range**  
   
 **Check description**  
 Verifies that the percentile 50 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile50_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_50_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_checkpoint_percentile50_in_range
+dqo.ai> check run -ch=monthly_checkpoint_percentile_50_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_percentile50_in_range
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_percentile_50_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_percentile50_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_percentile_50_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_percentile50_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_percentile_50_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checkpoints:
         monthly:
           numeric:
-            monthly_checkpoint_percentile50_in_range:
+            monthly_checkpoint_percentile_50_in_range:
               parameters:
                 percentile_value: 0.5
               error:
@@ -5114,7 +5114,7 @@ spec:
       checkpoints:
         monthly:
           numeric:
-            monthly_checkpoint_percentile50_in_range:
+            monthly_checkpoint_percentile_50_in_range:
               parameters:
                 percentile_value: 0.5
               error:
@@ -5284,7 +5284,7 @@ spec:
           checkpoints:
             monthly:
               numeric:
-                monthly_checkpoint_percentile50_in_range:
+                monthly_checkpoint_percentile_50_in_range:
                   parameters:
                     percentile_value: 0.5
                   error:
@@ -5443,38 +5443,38 @@ spec:
 
 ___
 
-## **monthly checkpoint percentile10 in range**  
+## **monthly checkpoint percentile 10 in range**  
   
 **Check description**  
 Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile10_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_10_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_checkpoint_percentile10_in_range
+dqo.ai> check run -ch=monthly_checkpoint_percentile_10_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_percentile10_in_range
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_percentile_10_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_percentile10_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_percentile_10_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_percentile10_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_percentile_10_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checkpoints:
         monthly:
           numeric:
-            monthly_checkpoint_percentile10_in_range:
+            monthly_checkpoint_percentile_10_in_range:
               parameters:
                 percentile_value: 0.1
               error:
@@ -5505,7 +5505,7 @@ spec:
       checkpoints:
         monthly:
           numeric:
-            monthly_checkpoint_percentile10_in_range:
+            monthly_checkpoint_percentile_10_in_range:
               parameters:
                 percentile_value: 0.1
               error:
@@ -5675,7 +5675,7 @@ spec:
           checkpoints:
             monthly:
               numeric:
-                monthly_checkpoint_percentile10_in_range:
+                monthly_checkpoint_percentile_10_in_range:
                   parameters:
                     percentile_value: 0.1
                   error:
@@ -5834,38 +5834,38 @@ spec:
 
 ___
 
-## **monthly checkpoint percentile25 in range**  
+## **monthly checkpoint percentile 25 in range**  
   
 **Check description**  
 Verifies that the percentile 25 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile25_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_25_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_checkpoint_percentile25_in_range
+dqo.ai> check run -ch=monthly_checkpoint_percentile_25_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_percentile25_in_range
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_percentile_25_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_percentile25_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_percentile_25_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_percentile25_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_percentile_25_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checkpoints:
         monthly:
           numeric:
-            monthly_checkpoint_percentile25_in_range:
+            monthly_checkpoint_percentile_25_in_range:
               parameters:
                 percentile_value: 0.25
               error:
@@ -5896,7 +5896,7 @@ spec:
       checkpoints:
         monthly:
           numeric:
-            monthly_checkpoint_percentile25_in_range:
+            monthly_checkpoint_percentile_25_in_range:
               parameters:
                 percentile_value: 0.25
               error:
@@ -6066,7 +6066,7 @@ spec:
           checkpoints:
             monthly:
               numeric:
-                monthly_checkpoint_percentile25_in_range:
+                monthly_checkpoint_percentile_25_in_range:
                   parameters:
                     percentile_value: 0.25
                   error:
@@ -6225,38 +6225,38 @@ spec:
 
 ___
 
-## **monthly checkpoint percentile75 in range**  
+## **monthly checkpoint percentile 75 in range**  
   
 **Check description**  
 Verifies that the percentile 75 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile75_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_75_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_checkpoint_percentile75_in_range
+dqo.ai> check run -ch=monthly_checkpoint_percentile_75_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_percentile75_in_range
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_percentile_75_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_percentile75_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_percentile_75_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_percentile75_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_percentile_75_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checkpoints:
         monthly:
           numeric:
-            monthly_checkpoint_percentile75_in_range:
+            monthly_checkpoint_percentile_75_in_range:
               parameters:
                 percentile_value: 0.75
               error:
@@ -6287,7 +6287,7 @@ spec:
       checkpoints:
         monthly:
           numeric:
-            monthly_checkpoint_percentile75_in_range:
+            monthly_checkpoint_percentile_75_in_range:
               parameters:
                 percentile_value: 0.75
               error:
@@ -6457,7 +6457,7 @@ spec:
           checkpoints:
             monthly:
               numeric:
-                monthly_checkpoint_percentile75_in_range:
+                monthly_checkpoint_percentile_75_in_range:
                   parameters:
                     percentile_value: 0.75
                   error:
@@ -6616,38 +6616,38 @@ spec:
 
 ___
 
-## **monthly checkpoint percentile90 in range**  
+## **monthly checkpoint percentile 90 in range**  
   
 **Check description**  
 Verifies that the percentile 90 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile90_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_90_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_checkpoint_percentile90_in_range
+dqo.ai> check run -ch=monthly_checkpoint_percentile_90_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_percentile90_in_range
+dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_percentile_90_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_percentile90_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_percentile_90_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_percentile90_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_percentile_90_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       checkpoints:
         monthly:
           numeric:
-            monthly_checkpoint_percentile90_in_range:
+            monthly_checkpoint_percentile_90_in_range:
               parameters:
                 percentile_value: 0.9
               error:
@@ -6678,7 +6678,7 @@ spec:
       checkpoints:
         monthly:
           numeric:
-            monthly_checkpoint_percentile90_in_range:
+            monthly_checkpoint_percentile_90_in_range:
               parameters:
                 percentile_value: 0.9
               error:
@@ -6848,7 +6848,7 @@ spec:
           checkpoints:
             monthly:
               numeric:
-                monthly_checkpoint_percentile90_in_range:
+                monthly_checkpoint_percentile_90_in_range:
                   parameters:
                     percentile_value: 0.9
                   error:
@@ -7392,38 +7392,38 @@ spec:
 
 ___
 
-## **daily partition percentile50 in range**  
+## **daily partition percentile 50 in range**  
   
 **Check description**  
 Verifies that the percentile 50 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile50_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_50_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_percentile50_in_range
+dqo.ai> check run -ch=daily_partition_percentile_50_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_percentile50_in_range
+dqo.ai> check run -c=connection_name -ch=daily_partition_percentile_50_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile50_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_50_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile50_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_50_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       partitioned_checks:
         daily:
           numeric:
-            daily_partition_percentile50_in_range:
+            daily_partition_percentile_50_in_range:
               parameters:
                 percentile_value: 0.5
               error:
@@ -7454,7 +7454,7 @@ spec:
       partitioned_checks:
         daily:
           numeric:
-            daily_partition_percentile50_in_range:
+            daily_partition_percentile_50_in_range:
               parameters:
                 percentile_value: 0.5
               error:
@@ -7624,7 +7624,7 @@ spec:
           partitioned_checks:
             daily:
               numeric:
-                daily_partition_percentile50_in_range:
+                daily_partition_percentile_50_in_range:
                   parameters:
                     percentile_value: 0.5
                   error:
@@ -7783,38 +7783,38 @@ spec:
 
 ___
 
-## **daily partition percentile10 in range**  
+## **daily partition percentile 10 in range**  
   
 **Check description**  
 Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile10_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_10_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_percentile10_in_range
+dqo.ai> check run -ch=daily_partition_percentile_10_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_percentile10_in_range
+dqo.ai> check run -c=connection_name -ch=daily_partition_percentile_10_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile10_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_10_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile10_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_10_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       partitioned_checks:
         daily:
           numeric:
-            daily_partition_percentile10_in_range:
+            daily_partition_percentile_10_in_range:
               parameters:
                 percentile_value: 0.1
               error:
@@ -7845,7 +7845,7 @@ spec:
       partitioned_checks:
         daily:
           numeric:
-            daily_partition_percentile10_in_range:
+            daily_partition_percentile_10_in_range:
               parameters:
                 percentile_value: 0.1
               error:
@@ -8015,7 +8015,7 @@ spec:
           partitioned_checks:
             daily:
               numeric:
-                daily_partition_percentile10_in_range:
+                daily_partition_percentile_10_in_range:
                   parameters:
                     percentile_value: 0.1
                   error:
@@ -8174,38 +8174,38 @@ spec:
 
 ___
 
-## **daily partition percentile25 in range**  
+## **daily partition percentile 25 in range**  
   
 **Check description**  
 Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile25_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_25_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_percentile25_in_range
+dqo.ai> check run -ch=daily_partition_percentile_25_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_percentile25_in_range
+dqo.ai> check run -c=connection_name -ch=daily_partition_percentile_25_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile25_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_25_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile25_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_25_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       partitioned_checks:
         daily:
           numeric:
-            daily_partition_percentile25_in_range:
+            daily_partition_percentile_25_in_range:
               parameters:
                 percentile_value: 0.25
               error:
@@ -8236,7 +8236,7 @@ spec:
       partitioned_checks:
         daily:
           numeric:
-            daily_partition_percentile25_in_range:
+            daily_partition_percentile_25_in_range:
               parameters:
                 percentile_value: 0.25
               error:
@@ -8406,7 +8406,7 @@ spec:
           partitioned_checks:
             daily:
               numeric:
-                daily_partition_percentile25_in_range:
+                daily_partition_percentile_25_in_range:
                   parameters:
                     percentile_value: 0.25
                   error:
@@ -8565,38 +8565,38 @@ spec:
 
 ___
 
-## **daily partition percentile75 in range**  
+## **daily partition percentile 75 in range**  
   
 **Check description**  
 Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile75_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_75_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_percentile75_in_range
+dqo.ai> check run -ch=daily_partition_percentile_75_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_percentile75_in_range
+dqo.ai> check run -c=connection_name -ch=daily_partition_percentile_75_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile75_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_75_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile75_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_75_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       partitioned_checks:
         daily:
           numeric:
-            daily_partition_percentile75_in_range:
+            daily_partition_percentile_75_in_range:
               parameters:
                 percentile_value: 0.75
               error:
@@ -8627,7 +8627,7 @@ spec:
       partitioned_checks:
         daily:
           numeric:
-            daily_partition_percentile75_in_range:
+            daily_partition_percentile_75_in_range:
               parameters:
                 percentile_value: 0.75
               error:
@@ -8797,7 +8797,7 @@ spec:
           partitioned_checks:
             daily:
               numeric:
-                daily_partition_percentile75_in_range:
+                daily_partition_percentile_75_in_range:
                   parameters:
                     percentile_value: 0.75
                   error:
@@ -8956,38 +8956,38 @@ spec:
 
 ___
 
-## **daily partition percentile90 in range**  
+## **daily partition percentile 90 in range**  
   
 **Check description**  
 Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile90_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_90_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_partition_percentile90_in_range
+dqo.ai> check run -ch=daily_partition_percentile_90_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_partition_percentile90_in_range
+dqo.ai> check run -c=connection_name -ch=daily_partition_percentile_90_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile90_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_partition_percentile_90_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile90_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_partition_percentile_90_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       partitioned_checks:
         daily:
           numeric:
-            daily_partition_percentile90_in_range:
+            daily_partition_percentile_90_in_range:
               parameters:
                 percentile_value: 0.9
               error:
@@ -9018,7 +9018,7 @@ spec:
       partitioned_checks:
         daily:
           numeric:
-            daily_partition_percentile90_in_range:
+            daily_partition_percentile_90_in_range:
               parameters:
                 percentile_value: 0.9
               error:
@@ -9188,7 +9188,7 @@ spec:
           partitioned_checks:
             daily:
               numeric:
-                daily_partition_percentile90_in_range:
+                daily_partition_percentile_90_in_range:
                   parameters:
                     percentile_value: 0.9
                   error:
@@ -9732,38 +9732,38 @@ spec:
 
 ___
 
-## **monthly partition percentile50 in range**  
+## **monthly partition percentile 50 in range**  
   
 **Check description**  
 Verifies that the percentile 50 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile50_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_50_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_percentile50_in_range
+dqo.ai> check run -ch=monthly_partition_percentile_50_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile50_in_range
+dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile_50_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile50_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_50_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile50_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_50_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       partitioned_checks:
         monthly:
           numeric:
-            monthly_partition_percentile50_in_range:
+            monthly_partition_percentile_50_in_range:
               parameters:
                 percentile_value: 0.5
               error:
@@ -9794,7 +9794,7 @@ spec:
       partitioned_checks:
         monthly:
           numeric:
-            monthly_partition_percentile50_in_range:
+            monthly_partition_percentile_50_in_range:
               parameters:
                 percentile_value: 0.5
               error:
@@ -9964,7 +9964,7 @@ spec:
           partitioned_checks:
             monthly:
               numeric:
-                monthly_partition_percentile50_in_range:
+                monthly_partition_percentile_50_in_range:
                   parameters:
                     percentile_value: 0.5
                   error:
@@ -10123,38 +10123,38 @@ spec:
 
 ___
 
-## **monthly partition percentile10 in range**  
+## **monthly partition percentile 10 in range**  
   
 **Check description**  
 Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile10_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_10_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_percentile10_in_range
+dqo.ai> check run -ch=monthly_partition_percentile_10_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile10_in_range
+dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile_10_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile10_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_10_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile10_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_10_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       partitioned_checks:
         monthly:
           numeric:
-            monthly_partition_percentile10_in_range:
+            monthly_partition_percentile_10_in_range:
               parameters:
                 percentile_value: 0.1
               error:
@@ -10185,7 +10185,7 @@ spec:
       partitioned_checks:
         monthly:
           numeric:
-            monthly_partition_percentile10_in_range:
+            monthly_partition_percentile_10_in_range:
               parameters:
                 percentile_value: 0.1
               error:
@@ -10355,7 +10355,7 @@ spec:
           partitioned_checks:
             monthly:
               numeric:
-                monthly_partition_percentile10_in_range:
+                monthly_partition_percentile_10_in_range:
                   parameters:
                     percentile_value: 0.1
                   error:
@@ -10514,38 +10514,38 @@ spec:
 
 ___
 
-## **monthly partition percentile25 in range**  
+## **monthly partition percentile 25 in range**  
   
 **Check description**  
 Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile25_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_25_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_percentile25_in_range
+dqo.ai> check run -ch=monthly_partition_percentile_25_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile25_in_range
+dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile_25_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile25_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_25_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile25_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_25_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       partitioned_checks:
         monthly:
           numeric:
-            monthly_partition_percentile25_in_range:
+            monthly_partition_percentile_25_in_range:
               parameters:
                 percentile_value: 0.25
               error:
@@ -10576,7 +10576,7 @@ spec:
       partitioned_checks:
         monthly:
           numeric:
-            monthly_partition_percentile25_in_range:
+            monthly_partition_percentile_25_in_range:
               parameters:
                 percentile_value: 0.25
               error:
@@ -10746,7 +10746,7 @@ spec:
           partitioned_checks:
             monthly:
               numeric:
-                monthly_partition_percentile25_in_range:
+                monthly_partition_percentile_25_in_range:
                   parameters:
                     percentile_value: 0.25
                   error:
@@ -10905,38 +10905,38 @@ spec:
 
 ___
 
-## **monthly partition percentile75 in range**  
+## **monthly partition percentile 75 in range**  
   
 **Check description**  
 Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile75_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_75_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_percentile75_in_range
+dqo.ai> check run -ch=monthly_partition_percentile_75_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile75_in_range
+dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile_75_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile75_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_75_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile75_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_75_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       partitioned_checks:
         monthly:
           numeric:
-            monthly_partition_percentile75_in_range:
+            monthly_partition_percentile_75_in_range:
               parameters:
                 percentile_value: 0.75
               error:
@@ -10967,7 +10967,7 @@ spec:
       partitioned_checks:
         monthly:
           numeric:
-            monthly_partition_percentile75_in_range:
+            monthly_partition_percentile_75_in_range:
               parameters:
                 percentile_value: 0.75
               error:
@@ -11137,7 +11137,7 @@ spec:
           partitioned_checks:
             monthly:
               numeric:
-                monthly_partition_percentile75_in_range:
+                monthly_partition_percentile_75_in_range:
                   parameters:
                     percentile_value: 0.75
                   error:
@@ -11296,38 +11296,38 @@ spec:
 
 ___
 
-## **monthly partition percentile90 in range**  
+## **monthly partition percentile 90 in range**  
   
 **Check description**  
 Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile90_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_90_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_percentile90_in_range
+dqo.ai> check run -ch=monthly_partition_percentile_90_in_range
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile90_in_range
+dqo.ai> check run -c=connection_name -ch=monthly_partition_percentile_90_in_range
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile90_in_range
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_percentile_90_in_range
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile90_in_range
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_percentile_90_in_range
 ```
 **Check structure (Yaml)**
 ```yaml
       partitioned_checks:
         monthly:
           numeric:
-            monthly_partition_percentile90_in_range:
+            monthly_partition_percentile_90_in_range:
               parameters:
                 percentile_value: 0.9
               error:
@@ -11358,7 +11358,7 @@ spec:
       partitioned_checks:
         monthly:
           numeric:
-            monthly_partition_percentile90_in_range:
+            monthly_partition_percentile_90_in_range:
               parameters:
                 percentile_value: 0.9
               error:
@@ -11528,7 +11528,7 @@ spec:
           partitioned_checks:
             monthly:
               numeric:
-                monthly_partition_percentile90_in_range:
+                monthly_partition_percentile_90_in_range:
                   parameters:
                     percentile_value: 0.9
                   error:

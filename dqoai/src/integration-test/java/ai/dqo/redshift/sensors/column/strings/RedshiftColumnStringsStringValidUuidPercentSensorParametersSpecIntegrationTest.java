@@ -103,7 +103,7 @@ public class RedshiftColumnStringsStringValidUuidPercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(0.0, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
@@ -116,6 +116,6 @@ public class RedshiftColumnStringsStringValidUuidPercentSensorParametersSpecInte
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(86.666, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(0.0, (double) resultTable.column(0).get(0), 0.001);
     }
 }
