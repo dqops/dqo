@@ -12,6 +12,7 @@ import { useParams } from "react-router-dom";
 import ScheduleView from "../../ScheduleView";
 import Tabs from "../../Tabs";
 import { CheckRunRecurringScheduleGroup } from "../../../shared/enums/scheduling.enum";
+import { useTree } from "../../../contexts/treeContext";
 
 const pageTabs = [
   {
@@ -39,6 +40,7 @@ const ScheduleDetail = () => {
   const updatedSchedule = scheduleGroups?.[activeTab]?.updatedSchedule;
   const isUpdatedSchedule = scheduleGroups?.[activeTab]?.isUpdatedSchedule;
   const { isUpdating } = useSelector((state: IRootState) => state.connection);
+  const { sourceRoute } = useTree();
 
   const onChangeTab = (tab: CheckRunRecurringScheduleGroup) => {
     setActiveTab(tab);
@@ -77,6 +79,31 @@ const ScheduleDetail = () => {
     setTabs(prev => prev.map(tab => ({ ...tab, isUpdate: false })))
     dispatch(resetConnectionSchedulingGroup());
   }, [connection]);
+
+  useEffect(() => {
+    if (sourceRoute === 'profiling') {
+      setTabs([
+        {
+          label: 'Profiling',
+          value: CheckRunRecurringScheduleGroup.profiling
+        },
+      ]);
+      setActiveTab(CheckRunRecurringScheduleGroup.profiling);
+    } else {
+      setTabs([
+        {
+          label: 'Daily',
+          value: CheckRunRecurringScheduleGroup.daily
+        },
+        {
+          label: 'Monthly',
+          value: CheckRunRecurringScheduleGroup.monthly
+        },
+      ]);
+      setActiveTab(CheckRunRecurringScheduleGroup.daily);
+    }
+  }, [sourceRoute]);
+
   return (
     <div className="p-4">
       <ConnectionActionGroup
