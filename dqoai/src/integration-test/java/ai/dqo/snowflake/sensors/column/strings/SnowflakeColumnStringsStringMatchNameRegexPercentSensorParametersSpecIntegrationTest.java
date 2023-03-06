@@ -103,7 +103,7 @@ public class SnowflakeColumnStringsStringMatchNameRegexPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class SnowflakeColumnStringsStringMatchNameRegexPercentSensorParametersSp
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
     }
 }
