@@ -132,6 +132,7 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
         checkSpec.setComments(checkModel.getComments());
         checkSpec.setDisabled(checkModel.isDisabled());
         checkSpec.setExcludeFromKpi(checkModel.isExcludeFromKpi());
+        checkSpec.setIncludeInSla(checkModel.isIncludeInSla());
         checkSpec.getParameters().setFilter(checkModel.getFilter());
         checkSpec.setDataStream(checkModel.getDataStream());
 
