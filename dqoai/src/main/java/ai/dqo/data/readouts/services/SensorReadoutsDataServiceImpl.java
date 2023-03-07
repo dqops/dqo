@@ -101,6 +101,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
         }
 
         for (Row row : workingTable) {
+            String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
             Double actualValue = row.getDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
             Double expectedValue = row.getDouble(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
 
@@ -123,6 +124,7 @@ public class SensorReadoutsDataServiceImpl implements SensorReadoutsDataService 
             String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
 
             SensorReadoutDetailedSingleModel singleModel = new SensorReadoutDetailedSingleModel() {{
+                setId(id);
                 setActualValue(actualValue);
                 setExpectedValue(expectedValue);
 
