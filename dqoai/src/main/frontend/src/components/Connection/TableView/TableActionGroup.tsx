@@ -39,7 +39,7 @@ const TableActionGroup = ({
         <Button
           variant="text"
           color="info"
-          label="Delete"
+          label="Delete Table"
           onClick={() => setIsOpen(true)}
         />
       )}
