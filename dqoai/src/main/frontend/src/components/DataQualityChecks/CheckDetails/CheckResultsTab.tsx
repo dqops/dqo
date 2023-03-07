@@ -26,6 +26,11 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
 
   const columns = [
     {
+      label: 'Id',
+      value: 'id',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+    },
+    {
       label: 'Check Name',
       value: 'checkName',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
@@ -139,11 +144,6 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
     {
       label: 'Data Stream',
       value: 'dataStream',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
-    },
-    {
-      label: 'Readout Id',
-      value: 'readoutId',
       className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
     },
   ];
