@@ -40,15 +40,14 @@ public class RedshiftColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIn
     private UserHomeContext userHomeContext;
     private ColumnIntegrityForeignKeyMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
-    
-    private SampleTableMetadataForeign sampleTableMetadataForeign;
+    private SampleTableMetadata sampleTableMetadataForeign;
 
     @BeforeEach
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.redshift);
-        this.sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.bigquery);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-        IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
+        this.sampleTableMetadataForeign = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.redshift);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataForeign);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec();
         this.checkSpec = new ColumnIntegrityForeignKeyMatchPercentCheckSpec();

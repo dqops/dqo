@@ -87,4 +87,18 @@ public class CreateAllSampleTablesBigqueryIntegrationTest extends BaseBigQueryIn
         SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.string_test_data, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
     }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_value_match_left_table_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
+
+    @Test
+    void runTest_whenTestDataFileNamedTest_geographic_coordinate_system_test_IsCreated_thenPutItInPostgresql() {
+
+        SampleTableMetadata sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.geographic_coordinate_system_test, ProviderType.bigquery);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
+    }
 }
