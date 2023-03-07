@@ -25,8 +25,10 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rest.models.metadata.RuleBasicModel;
 import ai.dqo.rest.models.metadata.RuleModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import ai.dqo.services.rule.mapper.RuleMapperService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,17 +53,21 @@ public class RuleController {
 
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
+    private RuleMapperService ruleMapperService;
 
 
     /**
      * Creates an instance of a controller by injecting dependencies.
      * @param dqoHomeContextFactory  Dqo home context factory.
      * @param userHomeContextFactory User home context factory.
+     * @param ruleMapperService Rule mapper service.
      */
     @Autowired
-    public RuleController(DqoHomeContextFactory dqoHomeContextFactory, UserHomeContextFactory userHomeContextFactory) {
+    public RuleController(DqoHomeContextFactory dqoHomeContextFactory, UserHomeContextFactory userHomeContextFactory,
+                          RuleMapperService ruleMapperService) {
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.userHomeContextFactory = userHomeContextFactory;
+        this.ruleMapperService = ruleMapperService;
     }
 
     /**
@@ -236,7 +242,7 @@ public class RuleController {
     /**
      * Updates an existing custom rule.
      * @param ruleName  Rule name.
-     * @param ruleModel List of rule definitions.
+     * @param ruleBasicModel List of rule definitions.
      * @return Empty response.
      */
     @PutMapping("/custom/{ruleName}")
@@ -250,8 +256,8 @@ public class RuleController {
     })
     public ResponseEntity<Mono<?>> updateCustomRule(
             @ApiParam("Rule name") @PathVariable String ruleName,
-            @ApiParam("List of rule definitions") @RequestBody RuleModel ruleModel) {
-        if (Strings.isNullOrEmpty(ruleName) || ruleModel == null) {
+            @ApiParam("List of rule definitions") @RequestBody RuleBasicModel ruleBasicModel) {
+        if (Strings.isNullOrEmpty(ruleName) || ruleBasicModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -264,8 +270,7 @@ public class RuleController {
         if (existingRuleDefinitionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
         }
-        existingRuleDefinitionWrapper.setSpec(ruleModel.getRuleDefinitionSpec());
-        existingRuleDefinitionWrapper.setRulePythonModuleContent(ruleModel.getRulePythonModuleContent());
+        existingRuleDefinitionWrapper = ruleMapperService.toRuleDefinitionWrapper(ruleBasicModel);
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
@@ -277,7 +282,7 @@ public class RuleController {
      * @param rulePythonModuleContent Rule Python module content.
      * @return Empty response.
      */
-    @PutMapping("/custom/{ruleName}/ruleContent")
+    @PutMapping("/custom/{ruleName}/{ruleContent}")
     @ApiOperation(value = "updateCustomRuleContent", notes = "Updates an existing custom rule content")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
