@@ -64,17 +64,16 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
         </td>
         <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400" />
         <td
+          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-l border-b font-semibold bg-gray-400"
+        >
+          Passing check
+        </td>
+        <td className="w-5 border-b" />
+        <td
           className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-l border-b border-r font-semibold bg-gray-400"
           colSpan={2}
         >
           Failing check
-        </td>
-        <td className="w-5 border-b" />
-        <td
-          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-l border-b font-semibold bg-gray-400"
-          colSpan={2}
-        >
-          Passing check
         </td>
       </tr>
       <tr>
@@ -84,15 +83,15 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
         <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400">
           Sensor parameters
         </td>
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-yellow-100">
+          Warning threshold
+        </td>
+        <td className="w-5 border-b" />
         <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-orange-100">
           Error threshold
         </td>
         <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-red-100">
           Fatal threshold
-        </td>
-        <td className="w-5 border-b" />
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-yellow-100">
-          Warning threshold
         </td>
       </tr>
       <DeleteOnlyDataDialog
