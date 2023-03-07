@@ -1,19 +1,18 @@
 package ai.dqo.services.rule;
 
-import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.rest.models.metadata.RuleBasicModel;
 
 import java.util.List;
 
-public interface RuleService {
+public interface RuleRestService {
 
     List<RuleBasicModel> getAllBuiltInRules();
 
     RuleBasicModel getBuiltInRule(String ruleName);
 
-    RuleBasicModel getAllCustomInRules();
+    List<RuleBasicModel> getAllCustomInRules();
 
-    RuleBasicModel getCustomRule(String name);
+    RuleBasicModel getCustomRule(String ruleName);
 
     void createRule(RuleBasicModel ruleBasicModel);
 

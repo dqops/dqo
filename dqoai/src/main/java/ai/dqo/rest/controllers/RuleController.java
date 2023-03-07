@@ -29,8 +29,7 @@ import ai.dqo.rest.models.metadata.RuleBasicModel;
 import ai.dqo.rest.models.metadata.RuleModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.rule.RuleNotFoundException;
-import ai.dqo.services.rule.RuleService;
-import ai.dqo.services.rule.mapping.RuleMappingService;
+import ai.dqo.services.rule.RuleRestService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -55,21 +54,21 @@ public class RuleController {
 
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
-    private RuleService ruleService;
+    private RuleRestService ruleRestService;
 
 
     /**
      * Creates an instance of a controller by injecting dependencies.
      * @param dqoHomeContextFactory  Dqo home context factory.
      * @param userHomeContextFactory User home context factory.
-     * @param ruleService Rule mapper service.
+     * @param ruleRestService Rule mapper service.
      */
     @Autowired
     public RuleController(DqoHomeContextFactory dqoHomeContextFactory, UserHomeContextFactory userHomeContextFactory,
-                          RuleService ruleService) {
+                          RuleRestService ruleRestService) {
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.userHomeContextFactory = userHomeContextFactory;
-        this.ruleService = ruleService;
+        this.ruleRestService = ruleRestService;
     }
 
     /**
@@ -80,12 +79,12 @@ public class RuleController {
     @ApiOperation(value = "getAllBuiltInRules", notes = "Returns a list of builtin rules", response = RuleModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Flux<RuleBasicModel>> getAllBuiltInRules() {
 
-        Stream<RuleBasicModel> ruleBasicModelStream = this.ruleService.getAllBuiltInRules().stream();
+        Stream<RuleBasicModel> ruleBasicModelStream = this.ruleRestService.getAllBuiltInRules().stream();
 
         return new ResponseEntity<>(Flux.fromStream(ruleBasicModelStream), HttpStatus.OK);
     }
@@ -99,7 +98,7 @@ public class RuleController {
     @ApiOperation(value = "getBuiltInRule", notes = "Returns a builtin rule", response = RuleModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleModel.class),
+            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel.class),
             @ApiResponse(code = 404, message = "Rule name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -108,7 +107,7 @@ public class RuleController {
     ) {
         RuleBasicModel ruleBasicModel;
         try {
-            ruleBasicModel = this.ruleService.getBuiltInRule(ruleName);
+            ruleBasicModel = this.ruleRestService.getBuiltInRule(ruleName);
         } catch (RuleNotFoundException e){
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
@@ -124,25 +123,14 @@ public class RuleController {
     @ApiOperation(value = "getAllCustomInRules", notes = "Returns a list of custom rules", response = RuleModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleModel[].class),
+            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<RuleModel>> getAllCustomInRules() {
+    public ResponseEntity<Flux<RuleBasicModel>> getAllCustomInRules() {
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
+        Stream<RuleBasicModel> ruleBasicModelStream = this.ruleRestService.getAllCustomInRules().stream();
 
-        RuleDefinitionList ruleDefinitionList = userHome.getRules();
-
-        List<RuleDefinitionWrapper> ruleDefinitionWrapperList = ruleDefinitionList.toList();
-
-        Stream<RuleModel> ruleModel = ruleDefinitionWrapperList.stream().map(s -> new RuleModel() {{
-            setRuleName(s.getRuleName());
-            setRulePythonModuleContent(s.getRulePythonModuleContent());
-            setRuleDefinitionSpec(s.getSpec());
-        }});
-
-        return new ResponseEntity<>(Flux.fromStream(ruleModel), HttpStatus.OK);
+        return new ResponseEntity<>(Flux.fromStream(ruleBasicModelStream), HttpStatus.OK);
     }
 
     /**
@@ -154,29 +142,21 @@ public class RuleController {
     @ApiOperation(value = "getCustomRule", notes = "Returns a custom rule", response = RuleModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleModel.class),
+            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel.class),
             @ApiResponse(code = 404, message = "Rule name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<RuleModel>> getCustomRule(
+    public ResponseEntity<Mono<RuleBasicModel>> getCustomRule(
             @ApiParam("Rule name") @PathVariable String ruleName
     ) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        RuleDefinitionList ruleDefinitionList = userHome.getRules();
-        RuleDefinitionWrapper ruleDefinitionWrapper = ruleDefinitionList.getByObjectName(ruleName, true);
-
-        if (ruleDefinitionWrapper == null) {
+        RuleBasicModel ruleBasicModel;
+        try {
+            ruleBasicModel = this.ruleRestService.getBuiltInRule(ruleName);
+        } catch (RuleNotFoundException e){
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 
-        RuleModel ruleModel = new RuleModel();
-        ruleModel.setRuleName(ruleDefinitionWrapper.getRuleName());
-        ruleModel.setRulePythonModuleContent(ruleDefinitionWrapper.getRulePythonModuleContent());
-        ruleModel.setRuleDefinitionSpec(ruleDefinitionWrapper.getSpec());
-
-        return new ResponseEntity<>(Mono.just(ruleModel), HttpStatus.OK);
+        return new ResponseEntity<>(Mono.just(ruleBasicModel), HttpStatus.OK);
     }
 
 
@@ -198,25 +178,11 @@ public class RuleController {
     })
     public ResponseEntity<Mono<?>> createRule(
             @ApiParam("Rule name") @PathVariable String ruleName,
-            @ApiParam("List of rule definitions") @RequestBody RuleModel ruleModel) {
+            @ApiParam("List of rule definitions") @RequestBody RuleBasicModel ruleModel) {
         if (Strings.isNullOrEmpty(ruleName) || ruleModel == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE);
         }
 
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        RuleDefinitionList ruleDefinitionList = userHome.getRules();
-
-        RuleDefinitionWrapper existingRuleDefinitionWrapper = ruleDefinitionList.getByObjectName(ruleName, true);
-        if (existingRuleDefinitionWrapper != null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
-        }
-
-        RuleDefinitionWrapper ruleDefinitionWrapper = ruleDefinitionList.createAndAddNew(ruleName);
-        ruleDefinitionWrapper.setSpec(ruleModel.getRuleDefinitionSpec());
-        ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.getRulePythonModuleContent());
-        userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
     }
@@ -264,7 +230,7 @@ public class RuleController {
      * @param rulePythonModuleContent Rule Python module content.
      * @return Empty response.
      */
-    @PutMapping("/custom/{ruleName}/{ruleContent}")
+    @PutMapping("/custom/{ruleName}/ruleContent")
     @ApiOperation(value = "updateCustomRuleContent", notes = "Updates an existing custom rule content")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {

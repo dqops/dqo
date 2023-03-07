@@ -14,7 +14,20 @@ public class RuleMappingServiceImpl implements RuleMappingService {
     @Override
     public RuleDefinitionWrapper toRuleDefinitionWrapper(RuleBasicModel ruleBasicModel) {
 
-        FileContent fileContent = new FileContent(ruleBasicModel.getRulePythonModuleContent());
+        FileContent fileContent = withRuleDefinitionPythonModuleContent(ruleBasicModel);
+
+        RuleDefinitionSpec ruleDefinitionSpec = withRuleDefinitionSpec(ruleBasicModel);
+
+        RuleDefinitionWrapper ruleDefinitionWrapper = new RuleDefinitionWrapperImpl();
+        ruleDefinitionWrapper.setRuleName(ruleBasicModel.getRuleName());
+        ruleDefinitionWrapper.setSpec(ruleDefinitionSpec);
+        ruleDefinitionWrapper.setRulePythonModuleContent(fileContent);
+
+        return ruleDefinitionWrapper;
+    }
+
+    @Override
+    public RuleDefinitionSpec withRuleDefinitionSpec(RuleBasicModel ruleBasicModel) {
 
         RuleDefinitionSpec ruleDefinitionSpec = new RuleDefinitionSpec();
         ruleDefinitionSpec.setType(ruleBasicModel.getType());
@@ -24,12 +37,12 @@ public class RuleMappingServiceImpl implements RuleMappingService {
         ruleDefinitionSpec.setFields(ruleBasicModel.getFields());
         ruleDefinitionSpec.setParameters(ruleBasicModel.getParameters());
 
-        RuleDefinitionWrapper ruleDefinitionWrapper = new RuleDefinitionWrapperImpl();
-        ruleDefinitionWrapper.setRuleName(ruleBasicModel.getRuleName());
-        ruleDefinitionWrapper.setSpec(new RuleDefinitionSpec());
-        ruleDefinitionWrapper.setRulePythonModuleContent(fileContent);
+        return ruleDefinitionSpec;
+    }
 
-        return ruleDefinitionWrapper;
+    @Override
+    public FileContent withRuleDefinitionPythonModuleContent(RuleBasicModel ruleBasicModel) {
+        return new FileContent(ruleBasicModel.getRulePythonModuleContent());
     }
 
     @Override

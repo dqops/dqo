@@ -5,11 +5,12 @@ import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.RuleBasicModel;
 import ai.dqo.rest.models.metadata.RuleModel;
 import ai.dqo.services.rule.mapping.RuleMappingService;
-import com.google.api.gax.rpc.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class RuleServiceImpl implements RuleService{
+public class RuleRestServiceImpl implements RuleRestService {
 
     private final DqoHomeContextFactory dqoHomeContextFactory;
     private final UserHomeContextFactory userHomeContextFactory;
@@ -28,9 +29,9 @@ public class RuleServiceImpl implements RuleService{
     private final RuleMappingService ruleMappingService;
 
     @Autowired
-    public RuleServiceImpl(DqoHomeContextFactory dqoHomeContextFactory,
-                           UserHomeContextFactory userHomeContextFactory,
-                           RuleMappingService ruleMappingService)
+    public RuleRestServiceImpl(DqoHomeContextFactory dqoHomeContextFactory,
+                               UserHomeContextFactory userHomeContextFactory,
+                               RuleMappingService ruleMappingService)
     {
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.userHomeContextFactory = userHomeContextFactory;
@@ -67,18 +68,51 @@ public class RuleServiceImpl implements RuleService{
     }
 
     @Override
-    public RuleBasicModel getAllCustomInRules() {
-        return null;
+    public List<RuleBasicModel> getAllCustomInRules() {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        RuleDefinitionList ruleDefinitionList = userHome.getRules();
+
+        return ruleDefinitionList.toList().stream()
+                .map(ruleMappingService::toRuleBasicModel)
+                .collect(Collectors.toList());
+
     }
 
     @Override
-    public RuleBasicModel getCustomRule(String name) {
-        return null;
+    public RuleBasicModel getCustomRule(String ruleName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        RuleDefinitionList ruleDefinitionList = userHome.getRules();
+        RuleDefinitionWrapper ruleDefinitionWrapper = ruleDefinitionList.getByObjectName(ruleName, true);
+
+        if (ruleDefinitionWrapper == null) {
+            throw new RuleNotFoundException("The given rule name: "+ruleName+" was not found");
+        }
+
+        return ruleMappingService.toRuleBasicModel(ruleDefinitionWrapper);
     }
 
     @Override
     public void createRule(RuleBasicModel ruleBasicModel) {
 
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        RuleDefinitionList ruleDefinitionList = userHome.getRules();
+
+        RuleDefinitionWrapper existingRuleDefinitionWrapper = ruleDefinitionList.getByObjectName(ruleBasicModel.getRuleName(), true);
+        if (existingRuleDefinitionWrapper != null) {
+            throw new RuleConflictException("The given rule name: "+ruleBasicModel.getRuleName()+" already exists");
+        }
+
+        RuleDefinitionWrapper ruleDefinitionWrapper = ruleDefinitionList.createAndAddNew(ruleBasicModel.getRuleName());
+        ruleDefinitionWrapper.setSpec(ruleMappingService.withRuleDefinitionSpec(ruleBasicModel));
+        ruleDefinitionWrapper.setRulePythonModuleContent(ruleMappingService.withRuleDefinitionPythonModuleContent(ruleBasicModel));
+
+        userHomeContext.flush();
     }
 
     @Override
