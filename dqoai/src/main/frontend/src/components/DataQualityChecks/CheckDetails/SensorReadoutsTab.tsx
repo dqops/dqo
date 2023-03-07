@@ -18,6 +18,11 @@ const SensorReadoutsTab = ({ sensorReadouts, dataStreamName, onChangeDataStream,
 
   const columns = [
     {
+      label: 'Id',
+      value: 'id',
+      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right',
+    },
+    {
       label: 'Check Name',
       value: 'checkName',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
@@ -52,11 +57,6 @@ const SensorReadoutsTab = ({ sensorReadouts, dataStreamName, onChangeDataStream,
       label: 'Data Stream',
       value: 'dataStream',
       className: 'text-sm !py-2 whitespace-nowrap text-gray-700',
-    },
-    {
-      label: 'Readout Id',
-      value: 'readoutId',
-      className: 'text-sm !py-2 whitespace-nowrap text-gray-700 text-right',
     },
   ];
 
