@@ -36,6 +36,7 @@ package ai.dqo.data.storage.parquet;
  * limitations under the License.
  */
 
+import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
@@ -61,8 +62,8 @@ import org.apache.hadoop.util.Progressable;
  * the API for reserving space in the FS. The uri of this filesystem starts with
  * ramfs:// .
  */
-public class InMemoryFileSystem extends ChecksumFileSystem {
-    private static class RawInMemoryFileSystem extends FileSystem {
+public class DqoInMemoryFileSystem extends ChecksumFileSystem {
+    public static class RawInMemoryFileSystem extends FileSystem {
         private URI uri;
         private long fsSize;
         private volatile long totalUsed;
@@ -117,7 +118,8 @@ public class InMemoryFileSystem extends ChecksumFileSystem {
                     if (fAttr == null) {
                         throw new FileNotFoundException("File " + f + " does not exist");
                     }
-                    din.reset(fAttr.data, 0, fAttr.size);
+                    byte[] bytes = fAttr.bytes;
+                    din.reset(bytes, 0, bytes.length);
                 }
             }
 
@@ -126,9 +128,9 @@ public class InMemoryFileSystem extends ChecksumFileSystem {
             }
 
             public void seek(long pos) throws IOException {
-                if ((int)pos > fAttr.size)
+                if ((int)pos > fAttr.bytes.length)
                     throw new IOException("Cannot seek after EOF");
-                din.reset(fAttr.data, (int)pos, fAttr.size - (int)pos);
+                din.reset(fAttr.bytes, (int)pos, fAttr.bytes.length - (int)pos);
             }
 
             public boolean seekToNewSource(long targetPos) throws IOException {
@@ -172,6 +174,8 @@ public class InMemoryFileSystem extends ChecksumFileSystem {
 
             public void close() throws IOException {
                 synchronized (RawInMemoryFileSystem.this) {
+                    fAttr.bytes = fAttr.bos.toByteArray();
+                    fAttr.bos = null;
                     pathToFileAttribs.put(getPath(f), fAttr);
                 }
             }
@@ -184,19 +188,17 @@ public class InMemoryFileSystem extends ChecksumFileSystem {
                     return;
                 }
                 int newcount = count + len;
-                if (newcount > fAttr.size) {
-                    throw new IOException("Insufficient space");
-                }
-                System.arraycopy(b, off, fAttr.data, count, len);
+//                if (newcount > fAttr.size) {
+//                    throw new IOException("Insufficient space");
+//                }
+
+                fAttr.bos.write(b, off, len);
                 count = newcount;
             }
 
             public void write(int b) throws IOException {
                 int newcount = count + 1;
-                if (newcount > fAttr.size) {
-                    throw new IOException("Insufficient space");
-                }
-                fAttr.data[count] = (byte)b;
+                fAttr.bos.write(b);
                 count = newcount;
             }
         }
@@ -221,7 +223,7 @@ public class InMemoryFileSystem extends ChecksumFileSystem {
                 FileAttributes fAttr = tempFileAttribs.remove(getPath(f));
                 if (fAttr != null)
                     return create(f, fAttr);
-                return null;
+                return create(f, new FileAttributes());
             }
         }
 
@@ -275,8 +277,8 @@ public class InMemoryFileSystem extends ChecksumFileSystem {
             synchronized (this) {
                 FileAttributes fAttr = pathToFileAttribs.remove(getPath(f));
                 if (fAttr != null) {
-                    fAttr.data = null;
-                    totalUsed -= fAttr.size;
+                    fAttr.bytes = null;
+//                    totalUsed -= fAttr.size;
                     return true;
                 }
                 return false;
@@ -324,7 +326,7 @@ public class InMemoryFileSystem extends ChecksumFileSystem {
                     return false;
                 FileAttributes fileAttr;
                 try {
-                    fileAttr = new FileAttributes((int)size);
+                    fileAttr = new FileAttributes();
                 } catch (OutOfMemoryError o) {
                     return false;
                 }
@@ -336,10 +338,10 @@ public class InMemoryFileSystem extends ChecksumFileSystem {
         public void unreserveSpace(Path f) {
             synchronized (this) {
                 FileAttributes fAttr = tempFileAttribs.remove(getPath(f));
-                if (fAttr != null) {
-                    fAttr.data = null;
-                    totalUsed -= fAttr.size;
-                }
+//                if (fAttr != null) {
+//                    fAttr.data = null;
+//                    totalUsed -= fAttr.size;
+//                }
             }
         }
 
@@ -404,28 +406,38 @@ public class InMemoryFileSystem extends ChecksumFileSystem {
         }
 
         private static class FileAttributes {
-            private byte[] data;
-            private int size;
+            public ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            private byte[] bytes;
 
-            public FileAttributes(int size) {
-                this.size = size;
-                this.data = new byte[size];
+            public FileAttributes() {
             }
         }
 
         private class InMemoryFileStatus extends FileStatus {
             InMemoryFileStatus(Path f, FileAttributes attr) throws IOException {
-                super(attr.size, false, 1, getDefaultBlockSize(), 0, f);
+                super(attr.bytes != null ? attr.bytes.length : 0, false, 1, getDefaultBlockSize(), 0, f);
             }
+        }
+
+        /**
+         * Check that a Path belongs to this FileSystem.
+         *
+         * @param path
+         */
+        @Override
+        protected void checkPath(Path path) {
+//        super.checkPath(path);
         }
     }
 
-    public InMemoryFileSystem() {
+    public DqoInMemoryFileSystem() {
         super(new RawInMemoryFileSystem());
     }
 
-    public InMemoryFileSystem(URI uri, Configuration conf) {
+    public DqoInMemoryFileSystem(URI uri, Configuration conf) {
         super(new RawInMemoryFileSystem(uri, conf));
+        this.setWriteChecksum(false);
+        this.setVerifyChecksum(false);
     }
 
     /**

@@ -32,6 +32,9 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class SensorReadoutDetailedSingleModel {
+    @JsonPropertyDescription("Sensor readout ID.")
+    String id;
+
     @JsonPropertyDescription("Check name.")
     String checkName;
     @JsonPropertyDescription("Check display name.")

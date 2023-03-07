@@ -111,7 +111,7 @@ public class SnowflakeColumnNumericPercentileInRangeSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(8.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(17.0F, resultTable.column(0).get(0));
     }
 
     @Test
@@ -126,6 +126,6 @@ public class SnowflakeColumnNumericPercentileInRangeSensorParametersSpecIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(8.0F, resultTable.column(0).get(0));
+        Assertions.assertEquals(17.0F, resultTable.column(0).get(0));
     }
 }

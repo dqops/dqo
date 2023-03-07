@@ -3,7 +3,6 @@ import BaseDatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 
 const DatePicker = ({ ...props }: any) => {
-  console.log(props)
   return (
     <div className="relative flex items-center">
       {
