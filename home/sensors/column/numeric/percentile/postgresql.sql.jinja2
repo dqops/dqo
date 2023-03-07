@@ -1,14 +1,60 @@
 {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
 
+{%- macro render_time_dimension_projection_grouping(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
+    {%- if lib.time_series is not none -%}
+        {{ ',' -}}{{- lib.eol() -}}
+        {{ indentation }}{{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }} AS date,
+        CAST(({{ lib.render_time_dimension_expression(table_alias_prefix) }}) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro render_group_by() -%}
+    {%- if (lib.data_streams is not none and (lib.data_streams | length()) > 0) or time_series is not none %}
+GROUP BY {{ render_grouping_column_names() }}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro render_order_by() -%}
+    {%- if (lib.data_streams is not none and (lib.data_streams | length()) > 0) or time_series is not none %}
+ORDER BY {{ render_grouping_column_names() }}
+    {%- endif -%}
+{%- endmacro -%}
+
+{%- macro render_grouping_column_names() -%}
+    {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+        {%- for attribute in data_streams -%}
+            {%- if not loop.first -%}
+                {{ ', ' }}
+            {%- endif -%}
+                stream_{{ attribute }}
+        {%- endfor -%}
+    {%- endif -%}
+    {%- if time_series is not none -%}
+        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
+            {{ ', ' }}
+        {%- endif -%}
+            {{ 'date' }}, {{ 'time_period_utc' }}
+    {%- endif -%}
+{%- endmacro -%}
+
+{% macro render_grouping_where() %}
+    {%- if lib.render_where_clause() is not none -%}
+        {{- render_group_by() -}}
+    {%- else -%}
+    {%- endif -%}
+{% endmacro %}
+
 SELECT
-    MAX(actual_value) AS actual_value, time_period, time_period_utc
+    MAX(actual_value) AS actual_value
+    {{- lib.render_data_stream_projections('nested_table') }}
+    {{- lib.render_time_dimension_projection('nested_table') }}
 FROM(
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
+        {{- render_time_dimension_projection_grouping('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause(indentation = '    ') -}}
-    {{- lib.render_group_by() -}}) AS nested_table
-{{- lib.render_group_by() -}}
-{{- lib.render_order_by() -}}
+    {{- render_grouping_where() -}}) AS nested_table
+{{- render_group_by() -}}
+{{- render_order_by() -}}
