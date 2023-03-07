@@ -1,7 +1,7 @@
 import { Dialog, DialogBody, DialogFooter, DialogHeader, Radio } from "@material-tailwind/react";
 import DatePicker from "../DatePicker";
 import Button from "../Button";
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import moment from "moment";
 import Checkbox from "../Checkbox";
 
@@ -41,30 +41,30 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
     });
   };
 
-  const isDisabled = mode === 'all';
+  const isDisabled = useMemo(() => mode === 'all', [mode]);
 
   return (
-    <Dialog open={open} handler={onClose} className="min-w-200">
+    <Dialog open={open} handler={onClose} className="min-w-200 p-4">
       <DialogHeader className="font-bold text-center justify-center">Delete all collected results for the time range:</DialogHeader>
       <DialogBody>
         <Radio
           id="all"
-          name="mode"
+          name="delete_mode"
           value="all"
           label="All"
           checked={mode === 'all'}
-          onChange={(e) => setMode(e.target.value)}
+          onChange={(e) => setMode('all')}
           className="outline-none"
           color="teal"
         />
         <div>
           <div className="flex mt-4 items-center">
             <Radio
-              id="all"
-              name="mode"
+              id="part"
+              name="delete_mode"
               value="part"
               checked={mode === 'part'}
-              onChange={(e) => setMode(e.target.value)}
+              onChange={(e) => setMode('part')}
               color="teal"
             />
             <div className="flex space-x-6 items-center">
