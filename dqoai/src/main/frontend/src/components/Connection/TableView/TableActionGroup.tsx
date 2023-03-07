@@ -4,6 +4,7 @@ import ConfirmDialog from './ConfirmDialog';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { TableApiClient } from '../../../services/apiClient';
+import { useTree } from "../../../contexts/treeContext";
 
 interface ITableActionGroupProps {
   isDisabled?: boolean;
@@ -22,6 +23,7 @@ const TableActionGroup = ({
 }: ITableActionGroupProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { tableBasic } = useSelector((state: IRootState) => state.table);
+  const { deleteData } = useTree();
 
   const removeTable = async () => {
     if (tableBasic) {
@@ -30,6 +32,9 @@ const TableActionGroup = ({
         tableBasic.target?.schema_name ?? '',
         tableBasic.target?.table_name ?? ''
       );
+
+      const identify = `${tableBasic?.connection_name}.${tableBasic?.target?.schema_name}.${tableBasic?.target?.table_name}`;
+      deleteData(identify);
     }
   };
 

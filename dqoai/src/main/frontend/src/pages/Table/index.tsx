@@ -16,6 +16,7 @@ import TableCommentView from "../../components/Connection/TableView/TableComment
 import TableLabelsView from "../../components/Connection/TableView/TableLabelsView";
 import TableDataStream from "../../components/Connection/TableView/TableDataStream";
 import TimestampsView from "../../components/Connection/TableView/TimestampsView";
+import { findTreeNode } from "../../utils/tree";
 
 const initTabs = [
   {
@@ -46,7 +47,7 @@ const initTabs = [
 
 const TablePage = () => {
   const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: string } = useParams();
-  const { activeTab: pageTab, tabMap, setTabMap } = useTree();
+  const { activeTab: pageTab, tabMap, setTabMap, treeData } = useTree();
   const history = useHistory();
   const [tabs, setTabs] = useState(initTabs);
   const {
@@ -163,50 +164,57 @@ const TablePage = () => {
     );
   }, [isUpdatedDailyPartitionedChecks, isUpdatedMonthlyPartitionedChecks]);
 
+  const activeNode = findTreeNode(treeData, pageTab);
+
+  console.log('activeTab', activeTab, pageTab, activeNode);
   return (
     <ConnectionLayout>
-      <div className="relative h-full flex flex-col">
-        <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-13 items-center flex-shrink-0">
-          <div className="flex items-center space-x-2">
-            <SvgIcon name="database" className="w-5 h-5" />
-            <div className="text-xl font-semibold">{`${connection}.${schema}.${table}`}</div>
+      {!activeNode ? (
+        <div />
+      ) : (
+        <div className="relative h-full flex flex-col">
+          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-13 items-center flex-shrink-0">
+            <div className="flex items-center space-x-2">
+              <SvgIcon name="database" className="w-5 h-5" />
+              <div className="text-xl font-semibold">{`${connection}.${schema}.${table}`}</div>
+            </div>
           </div>
+          {isAdHocChecksOnly && (
+            <AdhocView />
+          )}
+          {isCheckpointOnly && (
+            <CheckpointsView />
+          )}
+          {isPartitionChecksOnly && (
+            <PartitionedChecks />
+          )}
+          {showAllSubTabs && (
+            <>
+              <div className="border-b border-gray-300">
+                <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+              </div>
+              <div>
+                {activeTab === 'detail' && <TableDetails />}
+              </div>
+              <div>
+                {activeTab === 'schedule' && <ScheduleDetail />}
+              </div>
+              <div>
+                {activeTab === 'comments' && <TableCommentView />}
+              </div>
+              <div>
+                {activeTab === 'labels' && <TableLabelsView />}
+              </div>
+              <div>
+                {activeTab === 'data-streams' && <TableDataStream />}
+              </div>
+              <div>
+                {activeTab === 'timestamps' && <TimestampsView />}
+              </div>
+            </>
+          )}
         </div>
-        {isAdHocChecksOnly && (
-          <AdhocView />
-        )}
-        {isCheckpointOnly && (
-          <CheckpointsView />
-        )}
-        {isPartitionChecksOnly && (
-          <PartitionedChecks />
-        )}
-        {showAllSubTabs && (
-          <>
-            <div className="border-b border-gray-300">
-              <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
-            </div>
-            <div>
-              {activeTab === 'detail' && <TableDetails />}
-            </div>
-            <div>
-              {activeTab === 'schedule' && <ScheduleDetail />}
-            </div>
-            <div>
-              {activeTab === 'comments' && <TableCommentView />}
-            </div>
-            <div>
-              {activeTab === 'labels' && <TableLabelsView />}
-            </div>
-            <div>
-              {activeTab === 'data-streams' && <TableDataStream />}
-            </div>
-            <div>
-              {activeTab === 'timestamps' && <TimestampsView />}
-            </div>
-          </>
-        )}
-      </div>
+      )}
     </ConnectionLayout>
   );
 };
