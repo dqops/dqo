@@ -1,73 +1,102 @@
 # Sensors
 
-Describe sensors. Use eBook
+In DQO, the data quality sensor and [data quality rule](../rules/rules.md) form the [data quality check](../checks/index.md).
 
-# Old version:
-Sensor are a predefined and customizable Jinja templates whose goal is to render SQL query in accordance with provider's
-SQL dialect.
+Data quality sensor reads the value from the data source at a given point in time. Examples of these reads includes the
+number of rows, the percentage of null values in a column, or the current delay between the timestamp of the latest row
+and the current system time.
 
-Dialects (Jinja2 macros) are variables obtained from the table metadata and macros performing various functions, written
-in Jinja2.
+## Sensor templating
 
-User can configure basic statements as `where`, `group by`, `order by`, [time series](../time_series/time_series.md) mode,
-and different parameters
-characteristic for the individual sensors (see the [examples](sensors.md#examples)).
+To implement sensors DQO uses the Jinja2 templating engine which is rendered into a SQL query.
 
-!!! tip
-    When changing configuration in YAML file in your editor, you can use code completion and check possible fields.
-    We highly recommend using [Visual Studio Code](https://code.visualstudio.com/) with installed
-    [Better Jinja](https://marketplace.visualstudio.com/items?itemName=samuelcolvin.jinjahtml) by Samuel Colvin and
-    [YAML](https://marketplace.visualstudio.com/items?itemName=redhat.vscode-yaml) by Red Hat plugins.
+The following examples show a data quality sensor template for various database types that calculates the number of rows
+in a table.
 
-# Sensor types and categories
+**SQL Template (Jinja2)**  
+=== "bigquery"
 
-Sensors are divided into types:
-
-- column,
-- table,
-
-and [dimensions](../data-quality-dimensions/data-quality-dimensions.md):
-
-- validity,
-- timeliness,
-- completeness,
-- relevance,
-- uniqueness,
-- consistency.
-
-Each check adds value to the level indicated by the type. All timeliness checks, for example,
-are table type since they correspond to the various time aspects of the whole table, whereas column
-level checks only provide value to the data inside solitary columns.
-
-Each check category relates to a distinct set of business requirements. Validity tests, for example, ensure that
-the data follows particular guidelines, such as numerical numbers being inside a certain range.
-
-## Choosing sensor for a check
-Check configuration is very simple, in fact it is almost the same both for column and table type.
-To configure quality checks on a table level, you have to add field `checks` under table configuration, choose the
-category and desired sensor. In case of column level checks, the configuration is the same, only done under chosen
-column configuration.
-
-=== "Table level"
-    ```yaml hl_lines="11-21" linenums="1"
-    --8<-- "docs/dqo_concept/sensors/yamls/sample_table_check.yml"
     ```
-
-=== "Column level"
-    ```yaml hl_lines="20-37" linenums="1"
-    --8<-- "docs/dqo_concept/sensors/yamls/sample_column_check.yml"
+    {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
     ```
+=== "postgresql"
 
-## Examples
-Configuration of a column level validity check `values_in_range_date_percent` with `count_equals` rule.
+    ```
+    {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "redshift"
 
+    ```
+    {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "snowflake"
 
-YAML file:
+    ```
+    {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+The file starts with an import of reusable dialects specific to the database.
 
-```yaml
---8<-- "docs/dqo_concept/sensors/yamls/sample_column_check.yml"
-```
+| Maro name                        | Description                                                                                                                                       |
+|----------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------|
+| render_target_table              | Adds target table name.                                                                                                                           |
+| render_data_stream_projections   | Optional data stream projection that allows tracking data quality results for different data streams aggregated in the same table.                |
+| render_time_dimension_projection | Optional time dimension projection that allows measuring individual data quality results for each time period (hour, day, week, etc.) separately. |
+| render_where_clause              | WHERE clause is used to filter records.                                                                                                           |
+| render_group_by                  | GROUP BY statement group rows by dates, partitions or additional columns.                                                                         |
+| render_order_by                  | ORDER BY sort the results from oldest to the newest daily partitions.                                                                             |
 
-```SQL
-{{ process_template_request(get_request("docs/dqo_concept/sensors/requests/sample_column_check.json")) }}
-```
+## Sensor types and categories
+
+Sensors are divided into two types: table and column. Each type has several categories and subcategories.
+A full list of sensors within each category is available at the link.
+
+| Sensor category                                                                            | Description                                                                                                                                                                                                |
+|--------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Table**                                                                                  |                                                                                                                                                                                                            |
+| [availability table sensors](../../../reference/sensors/table/availability-table-sensors/) | Detects problems with datasource stability.                                                                                                                                                                |
+| [sql table sensors](../../../reference/sensors/table/sql-table-sensors/)                   | Verifies custom SQL queries at the table level.                                                                                                                                                            |
+| [standard table sensors](../../../reference/sensors/table/standard-table-sensors/)         | Verifies data volume.                                                                                                                                                                                      |
+| [timeliness table sensors](../../../reference/sensors/table/timeliness-table-sensors/)     | Verifies freshness, staleness and ingestion delay.                                                                                                                                                         |
+| **Column**                                                                                 |                                                                                                                                                                                                            |
+| [bool column sensors](../../../reference/sensors/column/bool-column-sensors/)              | Detects issues in columns with boolean-type data.                                                                                                                                                          |
+| [datetime column sensors](../../../reference/sensors/column/datetime-column-sensors/)      | Detects issues in columns with datetime-type data.                                                                                                                                                         |
+| [integrity column sensors](../../../reference/sensors/column/integrity-column-sensors/)    | Detects integrity issues between different columns.                                                                                                                                                        |
+| [nulls column sensors](../../../reference/sensors/column/nulls-column-sensors/)            | Detects nulls and not nulls on columns.                                                                                                                                                                    |
+| [numeric column sensors](../../../reference/sensors/column/numeric-column-sensors/)        | Detects issues in columns with numeric data such as negative values and values in sets or in range. Detects whether basic statistic calculations such as max, min, mean, median, sum, stddev are in range. |
+| [pii column sensors](../../../reference/sensors/column/pii-column-sensors/)                | Detects presence of sensitive data such as phone number, zip code, e-mail, and IP4 and IP6 addresses.                                                                                                      |
+| [range column sensors](../../../reference/sensors/column/range-column-sensors/)            |                                                                                                                                                                                                            |
+| [sql column sensors](../../../reference/sensors/column/sql-column-sensors/)                | Verifies custom SQL queries at the column level.                                                                                                                                                           |
+| [strings column sensors](../../../reference/sensors/column/strings-column-sensors/)        | Detects issues in columns with string-type data.                                                                                                                                                           |
+| [uniqueness column sensors](../../../reference/sensors/column/uniqueness-column-sensors/)  | Detect uniqueness and duplications.                                                                                                                                                                        |

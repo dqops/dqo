@@ -113,7 +113,7 @@ public class CliInitializerImpl implements CliInitializer {
     protected void displayUiLinks() {
         String dqoUiHome = this.localUrlAddresses.getDqoUiUrl();
         String swaggerUi = this.localUrlAddresses.getSwaggerUiUrl();
-        this.terminalWriter.writeLine("Click with CTRL to open links in the browser:");
+        this.terminalWriter.writeLine("Press CTRL and click the link to open it in the browser:");
         this.terminalWriter.writeUrl(dqoUiHome, "- DQO.ai User Interface Console (" + dqoUiHome + ")\n");
         this.terminalWriter.writeUrl(swaggerUi, "- DQO.ai API Reference (" + swaggerUi + ")\n");
     }

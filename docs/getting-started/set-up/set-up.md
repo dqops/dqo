@@ -5,6 +5,8 @@ Przygotuj sobie katalog gdzie zainstalujesz DQO
 Zainstalowac
 Uruchomic
 
+This page walks you through the setup steps required to use DQO
+
 Since DQO.ai is available on:
 
 - [PyPi](https://pypi.org/project/dqoai/)
