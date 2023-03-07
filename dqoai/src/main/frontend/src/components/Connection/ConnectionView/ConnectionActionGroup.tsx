@@ -52,7 +52,7 @@ const ConnectionActionGroup = ({
           <Button
             variant="text"
             color="info"
-            label="Delete"
+            label="Delete Connection"
             onClick={() => setIsOpen(true)}
           />
           <Button
