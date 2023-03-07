@@ -1,10 +1,13 @@
-package ai.dqo.services.rule.mapper;
+package ai.dqo.services.rule.mapping;
 
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.rest.models.metadata.RuleBasicModel;
 import ai.dqo.rest.models.metadata.RuleModel;
 
-public interface RuleMapperService {
+/**
+ * Interface for mapping a RuleBasicModel (REST model) object to a RuleDefinitionWrapper object.
+ */
+public interface RuleMappingService {
 
     RuleDefinitionWrapper toRuleDefinitionWrapper(RuleBasicModel ruleBasicModel);
 

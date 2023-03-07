@@ -1,4 +1,4 @@
-package ai.dqo.services.rule.mapper;
+package ai.dqo.services.rule.mapping;
 
 import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
@@ -6,11 +6,10 @@ import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapperImpl;
 import ai.dqo.rest.models.metadata.RuleBasicModel;
 import ai.dqo.rest.models.metadata.RuleModel;
-import ai.dqo.services.rule.mapper.RuleMapperService;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RuleMapperServiceImpl implements RuleMapperService {
+public class RuleMappingServiceImpl implements RuleMappingService {
 
     @Override
     public RuleDefinitionWrapper toRuleDefinitionWrapper(RuleBasicModel ruleBasicModel) {
