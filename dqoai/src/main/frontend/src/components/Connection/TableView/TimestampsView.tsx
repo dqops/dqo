@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import {
-  TimestampColumnsSpec,
-  TimestampColumnsSpecPartitionedChecksTimestampSourceEnum
+  TimestampColumnsSpec
 } from '../../../api';
-import Select from '../../Select';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
 import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
@@ -14,19 +12,6 @@ import {
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { useParams } from "react-router-dom";
-
-const partitionedChecksOptions = [
-  {
-    label: 'Event Timestamp Column (event_timestamp)',
-    value:
-      TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.event_timestamp
-  },
-  {
-    label: 'Ingestion Timestamp Column (ingestion_timestamp)',
-    value:
-      TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.ingestion_timestamp
-  }
-];
 
 const TimestampsView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
@@ -64,14 +49,7 @@ const TimestampsView = () => {
     setIsUpdated(false);
   };
 
-  const isDisabled =
-    !isUpdated ||
-    (columnsSpec?.partitioned_checks_timestamp_source ===
-      TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.ingestion_timestamp &&
-      !columnsSpec?.ingestion_timestamp_column) ||
-    (columnsSpec?.partitioned_checks_timestamp_source ===
-      TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.event_timestamp &&
-      !columnsSpec?.event_timestamp_column);
+  const isDisabled = !isUpdated;
 
   return (
     <div className="py-4 px-8 flex flex-col">
@@ -84,50 +62,42 @@ const TimestampsView = () => {
 
       <div className="mb-4">
         <ColumnSelect
-          label="Event Timestamp Column"
+          label="Event timestamp column name for timeliness checks"
           value={columnsSpec?.event_timestamp_column}
           onChange={(column) =>
             handleChange({
               event_timestamp_column: column
             })
           }
-          error={
-            columnsSpec?.partitioned_checks_timestamp_source ===
-              TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.event_timestamp &&
-            !columnsSpec?.event_timestamp_column
-          }
         />
       </div>
 
       <div className="mb-4">
         <ColumnSelect
-          label="Ingestion Timestamp Column"
+          label="Ingestion timestamp column name for timeliness checks"
           value={columnsSpec?.ingestion_timestamp_column}
           onChange={(column) =>
             handleChange({
               ingestion_timestamp_column: column
             })
           }
-          error={
-            columnsSpec?.partitioned_checks_timestamp_source ===
-              TimestampColumnsSpecPartitionedChecksTimestampSourceEnum.ingestion_timestamp &&
-            !columnsSpec?.ingestion_timestamp_column
-          }
         />
       </div>
 
       <div className="mb-4">
-        <Select
-          label="Partitioned Checks Timestamp Source"
-          options={partitionedChecksOptions}
-          value={columnsSpec?.partitioned_checks_timestamp_source}
+        <ColumnSelect
+          label="DATE or DATETIME column name for time partition checks"
+          value={columnsSpec?.partition_by_column}
           onChange={(column) =>
             handleChange({
-              partitioned_checks_timestamp_source: column
+              partition_by_column: column
             })
           }
+          error={
+            !columnsSpec?.partition_by_column
+          }
         />
-      </div>
+      </div>      
     </div>
   );
 };

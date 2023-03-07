@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.bigquery.sensors.column.integrity;
+package ai.dqo.snowflake.sensors.column.pii;
 
-import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.integrity.ColumnIntegrityForeignKeyNotMatchCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.pii.ColumnPiiValidIp4AddressPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -25,8 +24,12 @@ import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
-import ai.dqo.sampledata.*;
-import ai.dqo.sensors.column.integrity.ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec;
+import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
+import ai.dqo.sampledata.SampleCsvFileNames;
+import ai.dqo.sampledata.SampleTableMetadata;
+import ai.dqo.sampledata.SampleTableMetadataObjectMother;
+import ai.dqo.sensors.column.pii.ColumnPiiValidIp4AddressPercentSensorParametersSpec;
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -35,102 +38,84 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec sut;
+public class SnowflakeColumnPiiValidIp4AddressPercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private ColumnPiiValidIp4AddressPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnIntegrityForeignKeyNotMatchCountCheckSpec checkSpec;
+    private ColumnPiiValidIp4AddressPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
-    private SampleTableMetadata sampleTableMetadataForeign;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.bigquery);
-        this.sampleTableMetadataForeign = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.bigquery);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataForeign);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.snowflake);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnIntegrityForeignKeyNotMatchCountSensorParametersSpec();
-        this.checkSpec = new ColumnIntegrityForeignKeyNotMatchCountCheckSpec();
+        this.sut = new ColumnPiiValidIp4AddressPercentSensorParametersSpec();
+        this.checkSpec = new ColumnPiiValidIp4AddressPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
-        this.sut.setForeignColumn("primary_key");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "foreign_key", this.checkSpec);
+                sampleTableMetadata, "ip4", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
-        this.sut.setForeignColumn("primary_key");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "ip4", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
-        this.sut.setForeignColumn("primary_key");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "ip4", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(5L, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
-        this.sut.setForeignColumn("primary_key");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "ip4", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1L, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
-        this.sut.setForeignColumn("primary_key");
-
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "ip4", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1L, resultTable.column(0).get(0));
+        Assertions.assertEquals(100.0f, resultTable.column(0).get(0));
     }
 }
