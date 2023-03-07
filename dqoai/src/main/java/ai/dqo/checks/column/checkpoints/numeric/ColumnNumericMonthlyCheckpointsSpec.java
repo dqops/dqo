@@ -52,7 +52,7 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
             put("monthly_checkpoint_min_in_range", o -> o.monthlyCheckpointMinInRange);
             put("monthly_checkpoint_mean_in_range", o -> o.monthlyCheckpointMeanInRange);
             put("monthly_checkpoint_percentile_in_range", o -> o.monthlyCheckpointPercentileInRange);
-            put("monthly_checkpoint_percentile_50_in_range", o -> o.monthlyCheckpointPercentile_50InRange);
+            put("monthly_checkpoint_median_in_range", o -> o.monthlyCheckpointMedianInRange);
             put("monthly_checkpoint_percentile_10_in_range", o -> o.monthlyCheckpointPercentile_10InRange);
             put("monthly_checkpoint_percentile_25_in_range", o -> o.monthlyCheckpointPercentile_25InRange);
             put("monthly_checkpoint_percentile_75_in_range", o -> o.monthlyCheckpointPercentile_75InRange);
@@ -118,8 +118,8 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnPercentileInRangeCheckSpec monthlyCheckpointPercentileInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
-    private ColumnPercentile50InRangeCheckSpec monthlyCheckpointPercentile_50InRange;
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnMedianInRangeCheckSpec monthlyCheckpointMedianInRange;
 
     @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnPercentile10InRangeCheckSpec monthlyCheckpointPercentile_10InRange;
@@ -450,21 +450,21 @@ public class ColumnNumericMonthlyCheckpointsSpec extends AbstractCheckCategorySp
     }
 
     /**
-     * Returns a percentile 50 in range check specification.
-     * @return Percentile 50 in range check specification.
+     * Returns a median in range check specification.
+     * @return median in range check specification.
      */
-    public ColumnPercentile50InRangeCheckSpec getMonthlyCheckpointPercentile_50InRange() {
-        return monthlyCheckpointPercentile_50InRange;
+    public ColumnMedianInRangeCheckSpec getMonthlyCheckpointMedianInRange() {
+        return monthlyCheckpointMedianInRange;
     }
 
     /**
-     * Sets a new specification of a percentile 50 in range check.
-     * @param monthlyCheckpointPercentile_50InRange Percentile 50 in range check specification.
+     * Sets a new specification of a median in range check.
+     * @param monthlyCheckpointMedianInRange median in range check specification.
      */
-    public void setMonthlyCheckpointPercentile_50InRange(ColumnPercentile50InRangeCheckSpec monthlyCheckpointPercentile_50InRange) {
-        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointPercentile_50InRange, monthlyCheckpointPercentile_50InRange));
-        this.monthlyCheckpointPercentile_50InRange = monthlyCheckpointPercentile_50InRange;
-        propagateHierarchyIdToField(monthlyCheckpointPercentile_50InRange, "monthly_checkpoint_percentile_50_in_range");
+    public void setMonthlyCheckpointMedianInRange(ColumnMedianInRangeCheckSpec monthlyCheckpointMedianInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyCheckpointMedianInRange, monthlyCheckpointMedianInRange));
+        this.monthlyCheckpointMedianInRange = monthlyCheckpointMedianInRange;
+        propagateHierarchyIdToField(monthlyCheckpointMedianInRange, "monthly_checkpoint_median_in_range");
     }
 
     /**

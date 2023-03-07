@@ -52,7 +52,7 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
             put("min_in_range", o -> o.minInRange);
             put("mean_in_range", o -> o.meanInRange);
             put("percentile_in_range", o -> o.percentileInRange);
-            put("percentile_50_in_range", o -> o.percentile_50InRange);
+            put("median_in_range", o -> o.medianInRange);
             put("percentile_10_in_range", o -> o.percentile_10InRange);
             put("percentile_25_in_range", o -> o.percentile_25InRange);
             put("percentile_75_in_range", o -> o.percentile_75InRange);
@@ -118,8 +118,8 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range.")
     private ColumnPercentileInRangeCheckSpec percentileInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range.")
-    private ColumnPercentile50InRangeCheckSpec percentile_50InRange;
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range.")
+    private ColumnMedianInRangeCheckSpec medianInRange;
 
     @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range.")
     private ColumnPercentile10InRangeCheckSpec percentile_10InRange;
@@ -449,21 +449,21 @@ public class ColumnAdHocNumericChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
-     * Returns a percentile 50 in range check specification.
-     * @return Percentile 50 in range check specification.
+     * Returns a median in range check specification.
+     * @return median in range check specification.
      */
-    public ColumnPercentile50InRangeCheckSpec getPercentile_50InRange() {
-        return percentile_50InRange;
+    public ColumnMedianInRangeCheckSpec getMedianInRange() {
+        return medianInRange;
     }
 
     /**
-     * Sets a new specification of a percentile 50 in range check.
-     * @param percentile_50InRange Percentile 50 in range check specification.
+     * Sets a new specification of a median in range check.
+     * @param medianInRange median in range check specification.
      */
-    public void setPercentile_50InRange(ColumnPercentile50InRangeCheckSpec percentile_50InRange) {
-        this.setDirtyIf(!Objects.equals(this.percentile_50InRange, percentile_50InRange));
-        this.percentile_50InRange = percentile_50InRange;
-        propagateHierarchyIdToField(percentile_50InRange, "percentile_50_in_range");
+    public void setMedianInRange(ColumnMedianInRangeCheckSpec medianInRange) {
+        this.setDirtyIf(!Objects.equals(this.medianInRange, medianInRange));
+        this.medianInRange = medianInRange;
+        propagateHierarchyIdToField(medianInRange, "median_in_range");
     }
 
     /**

@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.numeric;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.numeric.ColumnPercentile50InRangeCheckSpec;
+import ai.dqo.checks.column.checkspecs.numeric.ColumnMedianInRangeCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.numeric.ColumnNumericPercentile50InRangeSensorParametersSpec;
+import ai.dqo.sensors.column.numeric.ColumnNumericMedianInRangeSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnNumericPercentile50InRangeSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnNumericPercentile50InRangeSensorParametersSpec sut;
+public class BigQueryColumnNumericMedianInRangeSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnNumericMedianInRangeSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnPercentile50InRangeCheckSpec checkSpec;
+    private ColumnMedianInRangeCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
@@ -49,8 +49,8 @@ public class BigQueryColumnNumericPercentile50InRangeSensorParametersSpecIntegra
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.below_above_value_test, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnNumericPercentile50InRangeSensorParametersSpec();
-        this.checkSpec = new ColumnPercentile50InRangeCheckSpec();
+        this.sut = new ColumnNumericMedianInRangeSensorParametersSpec();
+        this.checkSpec = new ColumnMedianInRangeCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 

@@ -7,14 +7,14 @@
     {%- endif -%}
 {%- endmacro -%}
 
-SELECT MAX(actual_value) AS actual_value, time_period, time_period_utc
-    FROM(
-        SELECT
-            PERCENTILE_CONT(({{ lib.render_target_column('analyzed_table')}}), {{ parameters.percentile_value }}) OVER (PARTITION BY{{render_time_dimension_projection('analyzed_table') }}
-        )
-    AS actual_value
-    {{- lib.render_data_stream_projections('analyzed_table') }}
-    {{- lib.render_time_dimension_projection('analyzed_table') }}
+SELECT
+    MAX(actual_value) AS actual_value, time_period, time_period_utc
+FROM(
+    SELECT
+        PERCENTILE_CONT(({{ lib.render_target_column('analyzed_table')}}), {{ parameters.percentile_value }}) OVER (PARTITION BY{{render_time_dimension_projection('analyzed_table') }}
+        ) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
 {{- lib.render_group_by() -}}
