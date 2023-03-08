@@ -112,9 +112,9 @@ public interface FileSystemSynchronizationOperations {
      * @param fileSystemRoot File system root (with credentials).
      * @param relativeFilePath Relative file path inside the root file system.
      * @param sourceStream Source stream that will be uploaded. The method should close this stream after the upload finishes.
-     * @param fileHash File hash that is expected.
+     * @param fileHashMd5Base64 MD5 file hash that is expected, encoded as a base64 string.
      */
-    void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, byte[] fileHash);
+    void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, String fileHashMd5Base64);
 
     /**
      * Downloads a file asynchronously, returning a flux of file content blocks.

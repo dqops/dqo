@@ -21,6 +21,7 @@ import ai.dqo.core.synchronization.contract.*;
 import ai.dqo.utils.exceptions.CloseableHelper;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
+import com.google.common.io.BaseEncoding;
 import io.netty.buffer.ByteBuf;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -74,29 +75,18 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
             }
 
             long lastModifiedMillis = file.lastModified();
-            String fileName = file.getName();
-            byte[] fileHash = null;
+            String fileHashMd5Base64 = null;
 
             if (lastKnownFileMetadata != null && lastModifiedMillis == lastKnownFileMetadata.getLastModifiedAt()) {
-                fileHash = lastKnownFileMetadata.getFileHash();
+                fileHashMd5Base64 = lastKnownFileMetadata.getMd5();
             }
             else {
-                if (fileName.endsWith(".parquet")) {
-                    Path crcFilePath = fullPathToFile.getParent().resolve("." + fileName + ".crc");
-                    File crcFile = crcFilePath.toFile();
-                    if (crcFile.exists()) {
-                        fileHash = Files.readAllBytes(crcFilePath);
-                    }
-                }
-
-                if (fileHash == null) {
-                    HashCode fileHashCode = com.google.common.io.Files.asByteSource(file).hash(Hashing.sha256());
-                    fileHash = fileHashCode.asBytes();
-                }
+                HashCode fileHashCode = com.google.common.io.Files.asByteSource(file).hash(Hashing.md5());
+                fileHashMd5Base64 = BaseEncoding.base64().encode(fileHashCode.asBytes());
             }
 
             long now = Instant.now().toEpochMilli();
-            return new FileMetadata(relativeFilePath, lastModifiedMillis, fileHash, now, file.length());
+            return new FileMetadata(relativeFilePath, lastModifiedMillis, fileHashMd5Base64, now, file.length());
         }
         catch (IOException ex) {
             throw new FileMetadataReadException(fullPathToFile, ex.getMessage(), ex);
@@ -299,13 +289,13 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
     /**
      * Uploads a stream to the file system.
      *
-     * @param fileSystemRoot   File system root (with credentials).
-     * @param relativeFilePath Relative file path inside the root file system.
-     * @param sourceStream     Source stream that will be uploaded. The method should close this stream after the upload finishes.
-     * @param fileHash         File hash that is expected.
+     * @param fileSystemRoot    File system root (with credentials).
+     * @param relativeFilePath  Relative file path inside the root file system.
+     * @param sourceStream      Source stream that will be uploaded. The method should close this stream after the upload finishes.
+     * @param fileHashMd5Base64 MD5 file hash that is expected.
      */
     @Override
-    public void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, byte[] fileHash) {
+    public void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, String fileHashMd5Base64) {
         Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
 
         try {
@@ -327,12 +317,6 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
             }
 
             assert fullPathToFile.toFile().length() > 0;
-
-//            Path fileName = relativeFilePath.getFileName();
-//            if (fileName.getFileName().toString().endsWith(".parquet")) {
-//                Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
-//                Files.write(crcFilePath, fileHash);
-//            }
         }
         catch (Exception ex) {
             throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
@@ -387,7 +371,7 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                             fileOutputStream.close();
                             Files.delete(fullPathToFile);
 
-                            // OLD code...
+                            // cleans old parquet-mr .crc files, to be deleted... it is here only for cleaning
                             Path fileName = relativeFilePath.getFileName();
                             if (fileName.getFileName().toString().endsWith(".parquet")) {
                                 Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
@@ -407,12 +391,6 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                         try {
                             outputByteChannel.close();
                             fileOutputStream.close();
-
-//                            Path fileName = relativeFilePath.getFileName();
-//                            if (fileName.getFileName().toString().endsWith(".parquet")) {
-//                                Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
-//                                Files.write(crcFilePath, fileMetadata.getFileHash());
-//                            }
                         }
                         catch (Exception ex) {
                             throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);

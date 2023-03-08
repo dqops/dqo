@@ -84,7 +84,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImplIntegrationTests ext
         Assertions.assertNotNull(localFileMetadata);
         InputStream localFileInputStream = localFileSystemFileSystemSynchronizationOperations.downloadFile(localFileSystem.getFileSystemRoot(), relativeFilePath);
 
-        this.sut.uploadFile(remoteFileSystem.getFileSystemRoot(), relativeFilePath, localFileInputStream, localFileMetadata.getFileHash());
+        this.sut.uploadFile(remoteFileSystem.getFileSystemRoot(), relativeFilePath, localFileInputStream, localFileMetadata.getMd5());
 
         FolderMetadata folderMetadata = this.sut.listFilesInFolder(remoteFileSystem.getFileSystemRoot(), null, null);
         Assertions.assertNotNull(folderMetadata);
@@ -126,7 +126,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImplIntegrationTests ext
         Assertions.assertEquals(localFileMetadata.getFileLength(), currentFileMetadata.getFileLength());
         Assertions.assertEquals(localFileMetadata.getFileName(), currentFileMetadata.getFileName());
         Assertions.assertEquals(localFileMetadata.getRelativePath(), currentFileMetadata.getRelativePath());
-        Assertions.assertTrue(Arrays.equals(localFileMetadata.getFileHash(), currentFileMetadata.getFileHash()));
+        Assertions.assertEquals(localFileMetadata.getMd5(), currentFileMetadata.getMd5());
 
         FolderMetadata folderMetadata = this.sut.listFilesInFolder(remoteFileSystem.getFileSystemRoot(), null, null);
         Assertions.assertNotNull(folderMetadata);

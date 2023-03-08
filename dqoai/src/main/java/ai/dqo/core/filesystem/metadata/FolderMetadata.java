@@ -505,7 +505,7 @@ public class FolderMetadata implements Cloneable {
             String fileName = myFile.getFileName();
             FileMetadata otherFile = otherFolderMetadata.files.get(fileName);
 
-            if (otherFile == null || !Arrays.equals(myFile.getFileHash(), otherFile.getFileHash())) {
+            if (otherFile == null || !Objects.equals(myFile.getMd5(), otherFile.getMd5())) {
                 if (differences == null) {
                     differences = new ArrayList<>();
                 }

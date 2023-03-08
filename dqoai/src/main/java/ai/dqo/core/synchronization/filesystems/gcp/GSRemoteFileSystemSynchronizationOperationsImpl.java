@@ -29,10 +29,12 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
+import com.google.common.io.BaseEncoding;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -54,7 +56,6 @@ import java.util.concurrent.CompletableFuture;
  */
 @Component
 public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemoteFileSystemSynchronizationOperations {
-    public static final String HEADER_FILE_HASH = "Hash";
     private final DqoStorageGcpConfigurationProperties gcpConfigurationProperties;
     private final SharedHttpClientProvider sharedHttpClientProvider;
     private final DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
@@ -108,17 +109,11 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             String linuxStyleFilePath = pathToFileInsideBlob.toString().replace('\\', '/');
             BlobId blobId = BlobId.of(gsFileSystemRoot.getBucketName(), linuxStyleFilePath);
             Blob blob = storage.get(blobId);
-            Map<String, String> metadata = blob.getMetadata();
-            String hashString = metadata.get(HEADER_FILE_HASH);
-            if (hashString == null) {
-                hashString = metadata.get(HEADER_FILE_HASH.toLowerCase(Locale.ROOT));
-            }
-            byte[] hashBytes = hashString != null ? Hex.decodeHex(hashString) : null;
-
+            String md5Base64 = blob.getMd5();
             long updatedAt = blob.getUpdateTime();
 
             long statusCheckedAt = Instant.now().toEpochMilli();
-            FileMetadata fileMetadata = new FileMetadata(relativeFilePath, updatedAt, hashBytes, statusCheckedAt, blob.getSize());
+            FileMetadata fileMetadata = new FileMetadata(relativeFilePath, updatedAt, md5Base64, statusCheckedAt, blob.getSize());
             return fileMetadata;
         }
         catch (Exception ex) {
@@ -156,14 +151,20 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                         HttpHeaders headers = httpClientResponse.responseHeaders();
                         Integer fileLength = headers.getInt(HttpHeaderNames.CONTENT_LENGTH);
                         Long lastModified = headers.getTimeMillis(HttpHeaderNames.LAST_MODIFIED);
-                        String fileHashHex = headers.getAsString("x-goog-meta-" + HEADER_FILE_HASH);
-                        if (fileHashHex == null) {
-                            fileHashHex = headers.getAsString("x-goog-meta-" + HEADER_FILE_HASH.toLowerCase(Locale.ROOT));
+                        List<String> googleHashHeaderValues = headers.getAllAsString("x-goog-hash");
+                        String md5Base64 = null;
+                        for (String googleHashHeaderValue :  googleHashHeaderValues) {
+                            String[] hashEntries = StringUtils.split(googleHashHeaderValue, ',');
+                            for (String hashEntry : hashEntries) {
+                                if (hashEntry.startsWith("md5=")) {
+                                    md5Base64 = hashEntry.substring("md5=".length());
+                                    break;
+                                }
+                            }
                         }
-                        byte[] hashBytes = fileHashHex != null ? Hex.decodeHex(fileHashHex) : null;
 
                         long statusCheckedAt = Instant.now().toEpochMilli();
-                        FileMetadata fileMetadata = new FileMetadata(relativeFilePath, lastModified, hashBytes, statusCheckedAt, fileLength);
+                        FileMetadata fileMetadata = new FileMetadata(relativeFilePath, lastModified, md5Base64, statusCheckedAt, fileLength);
                         return byteBufMono.then(Mono.just(fileMetadata));
                     }
                     catch (Exception ex) {
@@ -213,23 +214,20 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                 String blobFileName = blob.getName();
                 Path fullBlobFilePathInsideBucket = Path.of(blobFileName);
                 Map<String, String> metadata = blob.getMetadata();
-                if (Objects.equals(metadata.get("DQOFileType"), "empty-parquet")) {
+                if (metadata != null && Objects.equals(metadata.get("DQOFileType"), "empty-parquet")) {
                     // ignoring because it is a special empty file to ensure that the schema of an external table could be detected from a parquet file
                     continue;
                 }
 
-                String hash = metadata.get(HEADER_FILE_HASH);
-                if (hash == null) {
-                    hash = metadata.get(HEADER_FILE_HASH.toLowerCase(Locale.ROOT));
-                }
-                byte[] hashBytes = hash != null ? Hex.decodeHex(hash) : null;
+                String md5Base64 = blob.getMd5();
+
                 long updatedAt = blob.getUpdateTime();
                 Path blobPathRelativeToRoot = fullBlobFilePathInsideBucket;
                 if (fileSystemRoot.getRootPath() != null) {
                     blobPathRelativeToRoot = fileSystemRoot.getRootPath().relativize(blobPathRelativeToRoot);
                 }
 
-                FileMetadata fileMetadata = new FileMetadata(blobPathRelativeToRoot, updatedAt, hashBytes, now, blob.getSize());
+                FileMetadata fileMetadata = new FileMetadata(blobPathRelativeToRoot, updatedAt, md5Base64, now, blob.getSize());
                 folderMetadata.addFile(fileMetadata);
             }
 
@@ -289,13 +287,13 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
     /**
      * Uploads a stream to the file system.
      *
-     * @param fileSystemRoot   File system root (with credentials).
-     * @param relativeFilePath Relative file path inside the root file system.
-     * @param sourceStream     Source stream that will be uploaded. The method should close this stream after the upload finishes.
-     * @param fileHash         File hash that is expected.
+     * @param fileSystemRoot    File system root (with credentials).
+     * @param relativeFilePath  Relative file path inside the root file system.
+     * @param sourceStream      Source stream that will be uploaded. The method should close this stream after the upload finishes.
+     * @param fileHashMd5Base64 MD5 file hash that is expected.
      */
     @Override
-    public void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, byte[] fileHash) {
+    public void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, String fileHashMd5Base64) {
         try {
             Storage storage = null;
             BlobInfo blobInfo = null;
@@ -311,14 +309,11 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
                     fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
                             "application/octet-stream";
-            String fileHashHex = Hex.encodeHexString(fileHash);
 
             BlobId blobId = BlobId.of(gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket);
             blobInfo = BlobInfo.newBuilder(blobId)
                     .setContentType(contentType)
-                    .setMetadata(new HashMap<>() {{
-                        put(HEADER_FILE_HASH, fileHashHex);
-                    }})
+                    .setMd5(fileHashMd5Base64)
                     .build();
 
             int firstBlockSize = this.gcpConfigurationProperties.getUploadBufferSize();
@@ -525,14 +520,13 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
                     fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
                             "application/octet-stream";
-            String fileHashHex = Hex.encodeHexString(fileMetadata.getFileHash());
 
             Mono<HttpClientResponse> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                     .headers(httpHeaders -> httpHeaders
                             .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
                             .add(HttpHeaderNames.CONTENT_TYPE, contentType)
                             .add(HttpHeaderNames.CONTENT_LENGTH, fileMetadata.getFileLength())
-                            .add("x-goog-meta-" + HEADER_FILE_HASH, fileHashHex))
+                            .add("x-goog-hash", "md5=" + fileMetadata.getMd5()))
                     .put()
                     .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
                     .send(bytesFlux)
