@@ -31,14 +31,14 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
   return (
     <thead>
       <tr>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400">
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400">
           <div className="flex space-x-1">
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
               <SvgIcon
                 name="play"
-                className="text-green-700 h-5 cursor-pointer"
+                className="text-primary h-5 cursor-pointer"
                 onClick={onRunChecks}
               />
             )}
@@ -62,15 +62,14 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
             />
           </div>
         </td>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-gray-400" />
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400" />
         <td
-          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-l border-b font-semibold bg-gray-400"
+          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400"
         >
           Passing check
         </td>
-        <td className="w-5 border-b" />
         <td
-          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-l border-b border-r font-semibold bg-gray-400"
+          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400"
           colSpan={2}
         >
           Failing check
@@ -86,7 +85,6 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
         <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-yellow-100">
           Warning threshold
         </td>
-        <td className="w-5 border-b" />
         <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-orange-100">
           Error threshold
         </td>

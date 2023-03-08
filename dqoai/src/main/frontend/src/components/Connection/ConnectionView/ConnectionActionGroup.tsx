@@ -50,15 +50,15 @@ const ConnectionActionGroup = ({
       {isSourceScreen ? (
         <>
           <Button
-            variant="text"
-            color="info"
+            variant="outlined"
+            color="primary"
             label="Delete Connection"
             onClick={() => setIsOpen(true)}
           />
           <Button
             label="Import metadata"
-            color="info"
-            variant="text"
+            color="primary"
+            variant="outlined"
             onClick={() => goToSchemas()}
           />
         </>
@@ -66,8 +66,8 @@ const ConnectionActionGroup = ({
         tab === 'schemas' ? (
           <Button
             label="Manage metadata"
-            color="info"
-            variant="text"
+            color="primary"
+            variant="outlined"
             onClick={() => goToSchemas(false)}
           />
         ) : null

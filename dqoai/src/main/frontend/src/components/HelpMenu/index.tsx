@@ -12,7 +12,7 @@ const HelpMenu = () => {
   return (
     <Popover placement="bottom-end" open={isOpen} handler={toggleOpen}>
       <PopoverHandler>
-        <IconButton className="!mr-3" variant="text">
+        <IconButton className="!mr-3 !bg-transparent" variant="text" ripple={false}>
           <div className="relative">
             <SvgIcon name="help-circle" className="w-5 h-5 text-gray-500" />
           </div>
