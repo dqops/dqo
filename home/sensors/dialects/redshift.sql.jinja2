@@ -2,6 +2,7 @@
 {% set macro_schema_name = table.target.schema_name -%}
 {% set macro_table_name = table.target.table_name -%}
 {% set time_series = effective_time_series | default(none, true) -%}
+{% set time_window_filter = effective_time_window_filter | default(none, true) -%}
 {% set timestamp_column_data_type = table.columns[time_series.timestamp_column].type_snapshot.column_type | upper | default(none, true) -%}
 {% set data_streams = effective_data_streams | default(none, true) -%}
 {% set target_column_data_type = table.columns[column_name].type_snapshot.column_type | default(none, true) -%}
