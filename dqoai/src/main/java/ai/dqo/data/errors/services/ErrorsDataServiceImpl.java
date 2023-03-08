@@ -28,6 +28,7 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
+import ai.dqo.utils.tables.TableRowUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.Row;
@@ -102,8 +103,8 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
         }
 
         for (Row row : workingTable) {
-            Double actualValue = row.getDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-            Double expectedValue = row.getDouble(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+            Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+            Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
 
             String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
             String checkDisplayName = row.getString(SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
@@ -111,7 +112,7 @@ public class ErrorsDataServiceImpl implements ErrorsDataService {
             String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
             String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
-            String columnName = row.getString(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+            String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
             String dataStream = row.getString(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
 
             Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
