@@ -76,28 +76,28 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                                              DqoRoot dqoRoot,
                                              FileSynchronizationDirection synchronizationDirection,
                                              FileSystemSynchronizationListener synchronizationListener) {
-        SynchronizationRoot sourceFileSystem = local.getFileSystem();
-        FolderMetadata lastSourceFolderIndex = local.getStoredFileIndex();
-        SynchronizationRoot targetFileSystem = remote.getFileSystem();
-        FolderMetadata lastTargetFolderIndex = remote.getStoredFileIndex();
+        SynchronizationRoot localFileSystem = local.getFileSystem();
+        FolderMetadata lastLocalFolderIndex = local.getStoredFileIndex();
+        SynchronizationRoot remoteFileSystem = remote.getFileSystem();
+        FolderMetadata lastRemoteFolderIndex = remote.getStoredFileIndex();
 
-        assert Objects.equals(lastSourceFolderIndex.getRelativePath(), lastTargetFolderIndex.getRelativePath());
+        assert Objects.equals(lastLocalFolderIndex.getRelativePath(), lastRemoteFolderIndex.getRelativePath());
 
-        synchronizationListener.onSynchronizationBegin(dqoRoot, sourceFileSystem, targetFileSystem);
+        synchronizationListener.onSynchronizationBegin(dqoRoot, localFileSystem, remoteFileSystem);
 
-        FileSystemSynchronizationOperations targetFileSystemSynchronizationOperations = targetFileSystem.getFileSystemService();
-        FileSystemSynchronizationRoot targetFileSystemRoot = targetFileSystem.getFileSystemRoot();
+        FileSystemSynchronizationOperations targetFileSystemSynchronizationOperations = remoteFileSystem.getFileSystemService();
+        FileSystemSynchronizationRoot targetFileSystemRoot = remoteFileSystem.getFileSystemRoot();
 
         assert remote.getCurrentFileIndex().isEmpty() || remote.getCurrentFileIndex().get().isFrozen();
         FolderMetadata currentTargetFolderIndex = remote.getCurrentFileIndex()
                 .orElseGet(() -> targetFileSystemSynchronizationOperations.listFilesInFolder(
-                        targetFileSystemRoot, lastTargetFolderIndex.getRelativePath(), lastTargetFolderIndex));
+                        targetFileSystemRoot, lastRemoteFolderIndex.getRelativePath(), lastRemoteFolderIndex));
         FolderMetadata newTargetFolderIndex = currentTargetFolderIndex.isFrozen() ?
                 currentTargetFolderIndex.cloneUnfrozen() : currentTargetFolderIndex;
 
 
-        FileSystemSynchronizationOperations sourceFileSystemSynchronizationOperations = sourceFileSystem.getFileSystemService();
-        FileSystemSynchronizationRoot sourceFileSystemRoot = sourceFileSystem.getFileSystemRoot();
+        FileSystemSynchronizationOperations sourceFileSystemSynchronizationOperations = localFileSystem.getFileSystemService();
+        FileSystemSynchronizationRoot sourceFileSystemRoot = localFileSystem.getFileSystemRoot();
         FolderMetadata currentSourceFolderIndex;
 
         Collection<FileDifference> unsyncedTargetChanges;
@@ -109,15 +109,15 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
             assert local.getCurrentFileIndex().isEmpty() || local.getCurrentFileIndex().get().isFrozen();
             currentSourceFolderIndex = local.getCurrentFileIndex()
                     .orElseGet(() -> sourceFileSystemSynchronizationOperations.listFilesInFolder(
-                            sourceFileSystemRoot, lastSourceFolderIndex.getRelativePath(), lastSourceFolderIndex));
+                            sourceFileSystemRoot, lastLocalFolderIndex.getRelativePath(), lastLocalFolderIndex));
             newSourceFolderIndex = currentSourceFolderIndex.isFrozen() ? currentSourceFolderIndex.cloneUnfrozen() : currentSourceFolderIndex;
 
             if (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.upload) {
-                Collection<FileDifference> localChanges = lastSourceFolderIndex.findFileDifferences(currentSourceFolderIndex);
+                Collection<FileDifference> localChanges = lastLocalFolderIndex.findFileDifferences(currentSourceFolderIndex);
 
                 if (localChanges != null) {
                     // upload source (local) changes to the remote file system
-                    synchronizedSourceChanges = uploadLocalToRemoteAsync(dqoRoot, synchronizationListener, sourceFileSystem, targetFileSystem, targetFileSystemSynchronizationOperations,
+                    synchronizedSourceChanges = uploadLocalToRemoteAsync(dqoRoot, synchronizationListener, localFileSystem, remoteFileSystem, targetFileSystemSynchronizationOperations,
                             targetFileSystemRoot, newTargetFolderIndex, sourceFileSystemSynchronizationOperations, sourceFileSystemRoot, localChanges)
                             .subscribeOn(Schedulers.parallel())
                             .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
@@ -132,13 +132,13 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
         Collection<FolderMetadata> emptyTargetFolders =
                 (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.upload)
                         ? newTargetFolderIndex.detachEmptyFolders() : null;
-        unsyncedTargetChanges = lastTargetFolderIndex.findFileDifferences(currentTargetFolderIndex);
+        unsyncedTargetChanges = lastRemoteFolderIndex.findFileDifferences(currentTargetFolderIndex);
 
         if (unsyncedTargetChanges != null || emptySourceFolders != null || emptyTargetFolders != null) {
             try (AcquiredExclusiveWriteLock acquiredExclusiveWriteLock = this.userHomeLockManager.lockExclusiveWrite(dqoRoot)) {
                 // download changes from the remote file system
                 if (unsyncedTargetChanges != null && (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.download)) {
-                    downloadRemoteToLocalAsync(dqoRoot, synchronizationListener, sourceFileSystem, targetFileSystem, targetFileSystemSynchronizationOperations, targetFileSystemRoot,
+                    downloadRemoteToLocalAsync(dqoRoot, synchronizationListener, localFileSystem, remoteFileSystem, targetFileSystemSynchronizationOperations, targetFileSystemRoot,
                             sourceFileSystemSynchronizationOperations, sourceFileSystemRoot, unsyncedTargetChanges, synchronizedSourceChanges, newSourceFolderIndex)
                             .subscribeOn(Schedulers.parallel())
                             .block(Duration.ofSeconds(this.dqoCloudConfigurationProperties.getFileSynchronizationTimeLimitSeconds()));
@@ -146,9 +146,9 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
 
                 ///// the code below is a version that will perform a full refresh from the source... not using the local knowledge, it is "just in case" if we don't trust our merge..
 //        FolderMetadata sourceFileIndexAfterChanges = sourceFileSystemService.listFilesInFolder(
-//                sourceFileSystemRoot, lastSourceFolderIndex.getRelativePath(), newSourceFolderIndex);
+//                sourceFileSystemRoot, lastLocalFolderIndex.getRelativePath(), newSourceFolderIndex);
 //        FolderMetadata targetFileIndexAfterChanges = targetFileSystemService.listFilesInFolder(
-//                targetFileSystemRoot, lastTargetFolderIndex.getRelativePath(), newTargetFolderIndex);
+//                targetFileSystemRoot, lastRemoteFolderIndex.getRelativePath(), newTargetFolderIndex);
 //
 //        Collection<FolderMetadata> emptySourceFolders = sourceFileIndexAfterChanges.detachEmptyFolders();
 //        if (emptySourceFolders != null) {
@@ -184,7 +184,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
             }
         }
 
-        synchronizationListener.onSynchronizationFinished(dqoRoot, sourceFileSystem, targetFileSystem);
+        synchronizationListener.onSynchronizationFinished(dqoRoot, localFileSystem, remoteFileSystem);
 
         return new SynchronizationResult(newSourceFolderIndex, newTargetFolderIndex);
 //        return new SynchronizationResult(sourceFileIndexAfterChanges, targetFileIndexAfterChanges);
