@@ -166,7 +166,6 @@ const TablePage = () => {
 
   const activeNode = findTreeNode(treeData, pageTab);
 
-  console.log('activeTab', activeTab, pageTab, activeNode);
   return (
     <ConnectionLayout>
       {!activeNode ? (
