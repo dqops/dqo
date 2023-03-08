@@ -3,7 +3,7 @@
 {%- macro render_local_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
     {%- if lib.time_series is not none -%}
         {{- lib.eol() -}}
-        {{ indentation }}{{ indentation }}TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }})
+        {{ indentation }}{{ indentation }}({{ lib.render_time_dimension_expression(table_alias_prefix) }})
     {%- endif -%}
 {%- endmacro -%}
 

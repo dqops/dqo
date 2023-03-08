@@ -141,7 +141,7 @@ public class ColumnNumericPercentile90InRangeSensorParametersSpecBigQueryTests e
                     (%s), 
                     0.9) 
                     OVER (PARTITION BY
-                    TIMESTAMP(analyzed_table.`date`)) AS actual_value,
+                    (analyzed_table.`date`)) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -175,7 +175,7 @@ public class ColumnNumericPercentile90InRangeSensorParametersSpecBigQueryTests e
                     (%s), 
                     0.9) 
                     OVER (PARTITION BY
-                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))) AS actual_value,
+                    (DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))) AS actual_value,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -209,7 +209,7 @@ public class ColumnNumericPercentile90InRangeSensorParametersSpecBigQueryTests e
                     (%s), 
                     0.9) 
                     OVER (PARTITION BY
-                    TIMESTAMP(analyzed_table.`date`)) AS actual_value,
+                    (analyzed_table.`date`)) AS actual_value,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -285,7 +285,7 @@ public class ColumnNumericPercentile90InRangeSensorParametersSpecBigQueryTests e
                     (%s), 
                     0.9) 
                     OVER (PARTITION BY
-                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))) AS actual_value,
+                    (DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))) AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
@@ -323,7 +323,7 @@ public class ColumnNumericPercentile90InRangeSensorParametersSpecBigQueryTests e
                     (%s), 
                     0.9) 
                     OVER (PARTITION BY
-                    TIMESTAMP(analyzed_table.`date`)) AS actual_value,
+                    (analyzed_table.`date`)) AS actual_value,
                 analyzed_table.`length_string` AS stream_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
@@ -371,7 +371,7 @@ public class ColumnNumericPercentile90InRangeSensorParametersSpecBigQueryTests e
                     (%s), 
                     0.9) 
                     OVER (PARTITION BY
-                    TIMESTAMP(analyzed_table.`date`)) AS actual_value,
+                    (analyzed_table.`date`)) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_string` AS stream_level_3,
@@ -413,7 +413,7 @@ public class ColumnNumericPercentile90InRangeSensorParametersSpecBigQueryTests e
                     (%s), 
                     0.9) 
                     OVER (PARTITION BY
-                    TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))) AS actual_value,
+                    (DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_string` AS stream_level_3,
@@ -455,7 +455,7 @@ public class ColumnNumericPercentile90InRangeSensorParametersSpecBigQueryTests e
                     (%s), 
                     0.9) 
                     OVER (PARTITION BY
-                    TIMESTAMP(analyzed_table.`date`)) AS actual_value,
+                    (analyzed_table.`date`)) AS actual_value,
                 analyzed_table.`strings_with_numbers` AS stream_level_1,
                 analyzed_table.`mix_of_values` AS stream_level_2,
                 analyzed_table.`length_string` AS stream_level_3,
