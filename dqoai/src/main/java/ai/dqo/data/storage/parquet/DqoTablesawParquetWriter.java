@@ -61,7 +61,7 @@ public class DqoTablesawParquetWriter extends TablesawParquetWriter {
                     new DqoInMemoryFileSystem(new URI("ramfs://inmemory/"), this.configuration);
 
             String inMemoryFileName = "ramfs://inmemory/output.parquet" + (options.getCompressionCodec() == TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED ? "" :
-                    "." + options.getCompressionCodec().name().toLowerCase(Locale.ENGLISH));
+                    "." + options.getCompressionCodec().name().toLowerCase(Locale.ROOT));
 
             DqoInMemoryPath inMemoryParquetPath = new DqoInMemoryPath(inMemoryFileName, inMemoryFileSystem);
             Builder builder = new Builder(inMemoryParquetPath, table);
