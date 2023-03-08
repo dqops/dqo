@@ -3,61 +3,8 @@
 {%- macro render_time_dimension_projection_grouping(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
     {%- if lib.time_series is not none -%}
         {{ ',' -}}{{- lib.eol() -}}
-        {{ indentation }}{{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }} AS date,
+        {{ indentation }}{{ indentation }}{{ lib.render_time_dimension_expression(table_alias_prefix) }} AS time_period,
         TO_TIMESTAMP({{ lib.render_time_dimension_expression(table_alias_prefix) }}) AS time_period_utc
-    {%- endif -%}
-{%- endmacro -%}
-
-{%- macro render_time_dimension_projection(table_alias_prefix = 'analyzed_table', indentation = '    ') -%}
-    {%- if lib.time_series is not none -%}
-        {{ ',' -}}{{- lib.eol() -}}
-        {{ indentation }}{{ indentation }}{{ render_time_dimension_expression(table_alias_prefix) }} AS date,
-        TO_TIMESTAMP({{ render_time_dimension_expression(table_alias_prefix) }}) AS time_period_utc
-    {%- endif -%}
-{%- endmacro -%}
-
-{% macro render_time_dimension_expression(table_alias_prefix = 'analyzed_table') %}
-    {%- if lib.time_series is not none-%}
-        {%- if lib.time_series.mode == 'current_time' -%}
-            {%- if lib.time_series.time_gradient is defined and lib.time_series.time_gradient != 'millisecond' -%}
-                {{ lib.date_trunc('TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())', lib.time_series.time_gradient, 'TIMESTAMP_NTZ') }}
-            {%- else -%}
-                TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())
-            {%- endif -%}
-        {%- elif lib.time_series.mode == 'timestamp_column' -%}
-            {{ lib.date_trunc(table_alias_prefix ~ '.' ~ lib.time_series.timestamp_column, lib.time_series.time_gradient, lib.timestamp_column_data_type) }}
-        {%- else -%}
-            <INVALID TIME SERIES MODE: {{lib.time_series.mode}}>
-        {%- endif -%}
-    {%- endif -%}
-{% endmacro %}
-
-{%- macro render_group_by() -%}
-    {%- if (lib.data_streams is not none and (lib.data_streams | length()) > 0) or lib.time_series is not none %}
-GROUP BY {{ render_grouping_column_names() }}
-    {%- endif -%}
-{%- endmacro -%}
-
-{%- macro render_order_by() -%}
-    {%- if (lib.data_streams is not none and (lib.data_streams | length()) > 0) or lib.time_series is not none %}
-ORDER BY {{ render_grouping_column_names() }}
-    {%- endif -%}
-{%- endmacro -%}
-
-{%- macro render_grouping_column_names() -%}
-    {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-        {%- for attribute in data_streams -%}
-            {%- if not loop.first -%}
-                {{ ', ' }}
-            {%- endif -%}
-                stream_{{ attribute }}
-        {%- endfor -%}
-    {%- endif -%}
-    {%- if lib.time_series is not none -%}
-        {%- if (data_streams is not none and (data_streams | length()) > 0) -%}
-            {{ ', ' }}
-        {%- endif -%}
-            {{ 'date' }}, {{ 'time_period_utc' }}
     {%- endif -%}
 {%- endmacro -%}
 
@@ -106,7 +53,7 @@ ORDER BY {{ render_grouping_column_names() }}
                      CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}}
                 {%- endif -%}
                 {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
-                GROUP BY {{ render_grouping_column_names() }}
+                GROUP BY {{ lib.render_grouping_column_names() }}
             {%- elif lib.time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
                 {{ prefix_to_render -}}
                 {%- if lib.timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
@@ -123,7 +70,7 @@ ORDER BY {{ render_grouping_column_names() }}
                      CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
                 {%- endif -%}
                 {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
-                GROUP BY {{ render_grouping_column_names() }}
+                GROUP BY {{ lib.render_grouping_column_names() }}
             {%- else -%}
                 {{- lib.render_end_date_filter(prefix_to_render, table_alias_prefix) -}}
             {%- endif -%}
@@ -132,15 +79,16 @@ ORDER BY {{ render_grouping_column_names() }}
 {%- endmacro -%}
 
 SELECT
-    MAX(actual_value) AS actual_value
-    {{- lib.render_data_stream_projections('nested_table') }}
-    {{- render_time_dimension_projection('nested_table') }}
+    MAX(actual_value) AS actual_value,
+    nested_table.time_period AS time_period,
+    nested_table.time_period_utc AS time_period_utc
 FROM(
     SELECT
-        PERCENTILE_CONT({{ parameters.percentile_value }}) WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        PERCENTILE_CONT({{ parameters.percentile_value }})
+        WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- render_time_dimension_projection_grouping('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- render_where_clause(indentation = '    ') -}}) AS nested_table
-{{- render_group_by() -}}
-{{- render_order_by() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}
