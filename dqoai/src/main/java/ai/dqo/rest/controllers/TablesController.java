@@ -1962,7 +1962,7 @@ public class TablesController {
         }
 
         if (uiAllChecksModel.isPresent()) {
-            this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checksToUpdate);
+            this.uiToSpecCheckMappingService.updateCheckContainerSpec(uiAllChecksModel.get(), checksToUpdate);
             tableSpec.setTableCheckRootContainer(checksToUpdate);
         } else {
             // we cannot just remove all checks because the UI model is a patch, no changes in the patch means no changes to the object

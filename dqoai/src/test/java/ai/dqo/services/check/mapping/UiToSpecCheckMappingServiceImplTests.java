@@ -72,7 +72,7 @@ public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
         UICheckContainerModel uiModel = this.specToUiMapper.createUiModel(tableCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, null, null);
 
-        this.sut.updateAllChecksSpecs(uiModel, tableCheckCategoriesSpec);
+        this.sut.updateCheckContainerSpec(uiModel, tableCheckCategoriesSpec);
     }
 
     @Test
@@ -81,6 +81,6 @@ public class UiToSpecCheckMappingServiceImplTests extends BaseTest {
         UICheckContainerModel uiModel = this.specToUiMapper.createUiModel(columnCheckCategoriesSpec, new CheckSearchFilters(),
                 this.bigQueryConnectionSpec, this.tableSpec, null, null);
 
-        this.sut.updateAllChecksSpecs(uiModel, columnCheckCategoriesSpec);
+        this.sut.updateCheckContainerSpec(uiModel, columnCheckCategoriesSpec);
     }
 }

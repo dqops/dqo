@@ -23,10 +23,10 @@ import ai.dqo.services.check.mapping.models.UICheckContainerModel;
  */
 public interface UiToSpecCheckMappingService {
     /**
-     * Updates the <code>checkCategoriesSpec</code> with the updates received from the UI in the <code>model</code>.
+     * Updates the <code>checkContainerSpec</code> with the updates received from the UI in the <code>model</code>.
      *
      * @param model               Data quality check UI model with the updates.
-     * @param checkCategoriesSpec The target check categories spec object that will be updated.
+     * @param checkContainerSpec The target check container spec object that will be updated.
      */
-    void updateAllChecksSpecs(UICheckContainerModel model, AbstractRootChecksContainerSpec checkCategoriesSpec);
+    void updateCheckContainerSpec(UICheckContainerModel model, AbstractRootChecksContainerSpec checkContainerSpec);
 }

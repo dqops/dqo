@@ -1701,7 +1701,7 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
 
         if (uiCheckContainerModel.isPresent()) {
-            this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiCheckContainerModel.get(), checksToUpdate);
+            this.uiToSpecCheckMappingService.updateCheckContainerSpec(uiCheckContainerModel.get(), checksToUpdate);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
@@ -1758,7 +1758,7 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale);
 
         if (uiCheckContainerModel.isPresent()) {
-            this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiCheckContainerModel.get(), checksToUpdate);
+            this.uiToSpecCheckMappingService.updateCheckContainerSpec(uiCheckContainerModel.get(), checksToUpdate);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }
@@ -1815,7 +1815,7 @@ public class ColumnsController {
         AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
 
         if (uiAllChecksModel.isPresent()) {
-            this.uiToSpecCheckMappingService.updateAllChecksSpecs(uiAllChecksModel.get(), checksToUpdate);
+            this.uiToSpecCheckMappingService.updateCheckContainerSpec(uiAllChecksModel.get(), checksToUpdate);
             if (!checksToUpdate.isDefault()) {
                 columnSpec.setColumnCheckRootContainer(checksToUpdate);
             }

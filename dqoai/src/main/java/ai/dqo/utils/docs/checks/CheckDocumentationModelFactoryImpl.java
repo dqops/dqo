@@ -316,7 +316,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         sampleCheckModel.applySampleValues();
         uiCategoryModel.getChecks().add(sampleCheckModel);
         allChecksModel.getCategories().add(uiCategoryModel);
-        this.uiToSpecCheckMappingService.updateAllChecksSpecs(allChecksModel, checkRootContainer);
+        this.uiToSpecCheckMappingService.updateCheckContainerSpec(allChecksModel, checkRootContainer);
 
         HierarchyNode checkCategoryContainer = checkRootContainer.getChild(similarCheckModel.getCategory());
         if (checkCategoryContainer == null) {
