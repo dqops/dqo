@@ -35,6 +35,8 @@ public class DqoCloudConfigurationProperties implements Cloneable {
     private int parallelFileUploads = 500;
     private int parallelFileDownloads = 500;
     private int fileSynchronizationTimeLimitSeconds = 1200;
+    private int maxRetries = 5;
+    private long retryBackoffMillis = 10;
 
     /**
      * Returns the DQO Cloud API Key that was configured in an environment variable or in a configuration file.
@@ -179,6 +181,38 @@ public class DqoCloudConfigurationProperties implements Cloneable {
      */
     public void setFileSynchronizationTimeLimitSeconds(int fileSynchronizationTimeLimitSeconds) {
         this.fileSynchronizationTimeLimitSeconds = fileSynchronizationTimeLimitSeconds;
+    }
+
+    /**
+     * Returns the number of retries during file upload or download to the DQO cloud.
+     * @return Max number of retries.
+     */
+    public int getMaxRetries() {
+        return maxRetries;
+    }
+
+    /**
+     * Sets the number of retries during file upload or download to the DQO cloud.
+     * @param maxRetries Maximum number of retries.
+     */
+    public void setMaxRetries(int maxRetries) {
+        this.maxRetries = maxRetries;
+    }
+
+    /**
+     * Returns the initial delay for the first retry of uploading or downloading files to the DQO Cloud, specified in milliseconds.
+     * @return The initial delay in milliseconds for the first retry.
+     */
+    public long getRetryBackoffMillis() {
+        return retryBackoffMillis;
+    }
+
+    /**
+     * Sets the initial delay for the first retry of uploading or downloading files to the DQO Cloud, specified in milliseconds.
+     * @param retryBackoffMillis The initial delay in milliseconds for the first retry.
+     */
+    public void setRetryBackoffMillis(long retryBackoffMillis) {
+        this.retryBackoffMillis = retryBackoffMillis;
     }
 
     /**

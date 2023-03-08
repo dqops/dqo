@@ -30,9 +30,11 @@ import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
+import reactor.util.retry.Retry;
 
 import java.nio.file.Path;
 import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -85,11 +87,13 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
 
         FileSystemSynchronizationOperations targetFileSystemSynchronizationOperations = targetFileSystem.getFileSystemService();
         FileSystemSynchronizationRoot targetFileSystemRoot = targetFileSystem.getFileSystemRoot();
+
+        assert remote.getCurrentFileIndex().isEmpty() || remote.getCurrentFileIndex().get().isFrozen();
         FolderMetadata currentTargetFolderIndex = remote.getCurrentFileIndex()
                 .orElseGet(() -> targetFileSystemSynchronizationOperations.listFilesInFolder(
                         targetFileSystemRoot, lastTargetFolderIndex.getRelativePath(), lastTargetFolderIndex));
-        currentTargetFolderIndex.freeze();
-        FolderMetadata newTargetFolderIndex = currentTargetFolderIndex.cloneUnfrozen();
+        FolderMetadata newTargetFolderIndex = currentTargetFolderIndex.isFrozen() ?
+                currentTargetFolderIndex.cloneUnfrozen() : currentTargetFolderIndex;
 
 
         FileSystemSynchronizationOperations sourceFileSystemSynchronizationOperations = sourceFileSystem.getFileSystemService();
@@ -102,11 +106,11 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
 
         this.synchronizationStatusTracker.changeFolderSynchronizationStatus(dqoRoot, FolderSynchronizationStatus.synchronizing);
         try (AcquiredSharedReadLock acquiredSharedReadLock = this.userHomeLockManager.lockSharedRead(dqoRoot)) {
+            assert local.getCurrentFileIndex().isEmpty() || local.getCurrentFileIndex().get().isFrozen();
             currentSourceFolderIndex = local.getCurrentFileIndex()
                     .orElseGet(() -> sourceFileSystemSynchronizationOperations.listFilesInFolder(
                             sourceFileSystemRoot, lastSourceFolderIndex.getRelativePath(), lastSourceFolderIndex));
-            currentSourceFolderIndex.freeze();
-            newSourceFolderIndex = currentSourceFolderIndex.cloneUnfrozen();
+            newSourceFolderIndex = currentSourceFolderIndex.isFrozen() ? currentSourceFolderIndex.cloneUnfrozen() : currentSourceFolderIndex;
 
             if (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.upload) {
                 Collection<FileDifference> localChanges = lastSourceFolderIndex.findFileDifferences(currentSourceFolderIndex);
@@ -219,11 +223,15 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                     if (localChange.isCurrentNew() || localChange.isCurrentChanged()) {
                         // send the current file to the remote
                         Mono<DownloadFileResponse> downloadFileResponseMono = sourceFileSystemSynchronizationOperations.downloadFileAsync(
-                                sourceFileSystemRoot, localChange.getNewFile().getRelativePath(), localChange.getNewFile());
-                        fileExchangeOperationMono = downloadFileResponseMono.flatMap((DownloadFileResponse downloadFileResponse) -> {
-                            return targetFileSystemSynchronizationOperations.uploadFileAsync(targetFileSystemRoot, localChange.getNewFile().getRelativePath(),
-                                    downloadFileResponse.getByteBufFlux(), downloadFileResponse.getMetadata());
-                        });
+                                sourceFileSystemRoot, localChange.getNewFile().getRelativePath(), localChange.getNewFile())
+                                .retryWhen(Retry.backoff(this.dqoCloudConfigurationProperties.getMaxRetries(),
+                                        Duration.of(this.dqoCloudConfigurationProperties.getRetryBackoffMillis(), ChronoUnit.MILLIS)));
+
+                        fileExchangeOperationMono = targetFileSystemSynchronizationOperations
+                                .uploadFileAsync(
+                                        targetFileSystemRoot, localChange.getNewFile().getRelativePath(), downloadFileResponseMono)
+                                .retryWhen(Retry.backoff(this.dqoCloudConfigurationProperties.getMaxRetries(),
+                                        Duration.of(this.dqoCloudConfigurationProperties.getRetryBackoffMillis(), ChronoUnit.MILLIS)));
                     } else if (localChange.isCurrentDeleted()) {
                         fileExchangeOperationMono = targetFileSystemSynchronizationOperations.deleteFileAsync(targetFileSystemRoot, localChange.getRelativePath());
                     }
@@ -280,11 +288,15 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                     if (otherChange.isCurrentNew() || otherChange.isCurrentChanged()) {
                         // download the change from the remote file system.
                         Mono<DownloadFileResponse> downloadFileResponseMono = targetFileSystemSynchronizationOperations.downloadFileAsync(
-                                targetFileSystemRoot, otherChange.getNewFile().getRelativePath(), otherChange.getNewFile());
-                        fileExchangeOperationMono = downloadFileResponseMono.flatMap((DownloadFileResponse downloadFileResponse) -> {
-                            return sourceFileSystemSynchronizationOperations.uploadFileAsync(sourceFileSystemRoot, otherChange.getRelativePath(),
-                                    downloadFileResponse.getByteBufFlux(), downloadFileResponse.getMetadata());
-                        });
+                                targetFileSystemRoot, otherChange.getNewFile().getRelativePath(), otherChange.getNewFile())
+                                .retryWhen(Retry.backoff(this.dqoCloudConfigurationProperties.getMaxRetries(),
+                                        Duration.of(this.dqoCloudConfigurationProperties.getRetryBackoffMillis(), ChronoUnit.MILLIS)));
+
+                        fileExchangeOperationMono = sourceFileSystemSynchronizationOperations
+                                .uploadFileAsync(
+                                        sourceFileSystemRoot, otherChange.getRelativePath(), downloadFileResponseMono)
+                                .retryWhen(Retry.backoff(this.dqoCloudConfigurationProperties.getMaxRetries(),
+                                        Duration.of(this.dqoCloudConfigurationProperties.getRetryBackoffMillis(), ChronoUnit.MILLIS)));
                     } else if (otherChange.isCurrentDeleted()) {
                         fileExchangeOperationMono = sourceFileSystemSynchronizationOperations.deleteFileAsync(sourceFileSystemRoot, otherChange.getRelativePath());
                     }

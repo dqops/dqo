@@ -129,10 +129,8 @@ public interface FileSystemSynchronizationOperations {
      * Uploads a file to the file system as an asynchronous operation using Flux.
      * @param fileSystemRoot File system root.
      * @param relativeFilePath Relative path to the uploaded file.
-     * @param bytesFlux Source flux with byte buffers to be uploaded.
-     * @param fileMetadata File metadata with the file length and file content hash.
+     * @param downloadFileResponseMono Mono that has a response with a downloaded file
      * @return Mono returned when the file was fully uploaded.
      */
-    Mono<Path> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux,
-                               FileMetadata fileMetadata);
+    Mono<Path> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, Mono<DownloadFileResponse> downloadFileResponseMono);
 }

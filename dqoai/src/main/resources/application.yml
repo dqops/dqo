@@ -82,6 +82,8 @@ dqo:
     parallel-file-uploads: 500
     parallel-file-downloads: 500
     file-synchronization-time-limit-seconds: 1200
+    max-retries: 5
+    retry-backoff-millis: 10
   secrets:
     enable-gcp-secret-manager: true
     gcp-project-id: ${GOOGLE_CLOUD_PROJECT}

@@ -498,53 +498,58 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
     /**
      * Uploads a file to the file system as an asynchronous operation using Flux.
      *
-     * @param fileSystemRoot   File system root.
-     * @param relativeFilePath Relative path to the uploaded file.
-     * @param bytesFlux        Source flux with byte buffers to be uploaded.
-     * @param fileMetadata     File metadata with the file length and file content hash.
+     * @param fileSystemRoot           File system root.
+     * @param relativeFilePath         Relative path to the uploaded file.
+     * @param downloadFileResponseMono Mono that has a response with a downloaded file
      * @return Mono returned when the file was fully uploaded.
      */
     @Override
     public Mono<Path> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot,
                                       Path relativeFilePath,
-                                      ByteBufFlux bytesFlux,
-                                      FileMetadata fileMetadata) {
-        try {
-            GSFileSystemSynchronizationRoot gsFileSystemRoot = (GSFileSystemSynchronizationRoot) fileSystemRoot;
-            Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
-                    (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
-                    relativeFilePath;
-            String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+                                      Mono<DownloadFileResponse> downloadFileResponseMono) {
+        Mono<Path> uploadFinishMono = downloadFileResponseMono
+                .flatMap((DownloadFileResponse downloadResponse) -> {
+                    ByteBufFlux bytesFlux = downloadResponse.getByteBufFlux();
+                    FileMetadata fileMetadata = downloadResponse.getMetadata();
+                    try {
+                    GSFileSystemSynchronizationRoot gsFileSystemRoot = (GSFileSystemSynchronizationRoot) fileSystemRoot;
+                    Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
+                            (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
+                            relativeFilePath;
+                    String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
 
-            Path fileName = relativeFilePath.getFileName();
-            String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
-                    fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
-                            "application/octet-stream";
+                    Path fileName = relativeFilePath.getFileName();
+                    String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
+                            fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
+                                    "application/octet-stream";
 
-            Mono<HttpClientResponse> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
-                    .headers(httpHeaders -> httpHeaders
-                            .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
-                            .add(HttpHeaderNames.CONTENT_TYPE, contentType)
-                            .add(HttpHeaderNames.CONTENT_LENGTH, fileMetadata.getFileLength())
-                            .add("x-goog-hash", "md5=" + fileMetadata.getMd5()))
-                    .put()
-                    .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
-                    .send(bytesFlux)
-                    .response()
-                    .flatMap(httpClientResponse -> {
-                        if (httpClientResponse.status() == HttpResponseStatus.OK) {
-                            return Mono.just(httpClientResponse);
-                        }
-                        else {
-                            return Mono.error(new FileSystemChangeException(relativeFilePath,
-                                    "Failed to upload a file to DQO Cloud, http error code: " + httpClientResponse.status().code()));
-                        }
-                    });
+                    Mono<HttpClientResponse> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
+                            .headers(httpHeaders -> httpHeaders
+                                    .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                                    .add(HttpHeaderNames.CONTENT_TYPE, contentType)
+                                    .add(HttpHeaderNames.CONTENT_LENGTH, fileMetadata.getFileLength())
+                                    .add("x-goog-hash", "md5=" + fileMetadata.getMd5()))
+                            .put()
+                            .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
+                            .send(bytesFlux)
+                            .response()
+                            .flatMap(httpClientResponse -> {
+                                if (httpClientResponse.status() == HttpResponseStatus.OK) {
+                                    return Mono.just(httpClientResponse);
+                                }
+                                else {
+                                    return Mono.error(new FileSystemChangeException(relativeFilePath,
+                                            "Failed to upload a file to DQO Cloud, http error code: " + httpClientResponse.status().code()));
+                                }
+                            });
 
-            return uploadFileMono.thenReturn(relativeFilePath);
-        }
-        catch (Exception ex) {
-            throw new FileSystemChangeException(relativeFilePath, ex.getMessage(), ex);
-        }
+                    return uploadFileMono.thenReturn(relativeFilePath);
+                }
+                catch (Exception ex) {
+                    throw new FileSystemChangeException(relativeFilePath, ex.getMessage(), ex);
+                }
+            });
+
+        return uploadFinishMono;
     }
 }

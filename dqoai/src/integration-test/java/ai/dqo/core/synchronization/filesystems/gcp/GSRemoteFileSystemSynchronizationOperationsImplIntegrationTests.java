@@ -115,10 +115,9 @@ public class GSRemoteFileSystemSynchronizationOperationsImplIntegrationTests ext
         Assertions.assertNotNull(localFileMetadata);
         Mono<DownloadFileResponse> downloadLocalFileMono = localFileSystemFileSystemSynchronizationOperations.downloadFileAsync(localFileSystem.getFileSystemRoot(), relativeFilePath, localFileMetadata);
 
-        Mono<Void> uploadMono = downloadLocalFileMono.flatMap(localFileDownloadResponse -> {
-            return this.sut.uploadFileAsync(remoteFileSystem.getFileSystemRoot(),
-                    relativeFilePath, localFileDownloadResponse.getByteBufFlux(), localFileDownloadResponse.getMetadata());
-        }).then();
+        Mono<Path> uploadMono = this.sut.uploadFileAsync(remoteFileSystem.getFileSystemRoot(),
+                    relativeFilePath, downloadLocalFileMono);
+
         uploadMono.block();
 
         FileMetadata currentFileMetadata = this.sut.readFileMetadataAsync(remoteFileSystem.getFileSystemRoot(), relativeFilePath, null)
@@ -157,10 +156,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImplIntegrationTests ext
         Assertions.assertNotNull(localFileMetadata);
         Mono<DownloadFileResponse> downloadLocalFileMono = localFileSystemFileSystemSynchronizationOperations.downloadFileAsync(localFileSystem.getFileSystemRoot(), relativeFilePath, localFileMetadata);
 
-        Mono<Void> uploadMono = downloadLocalFileMono.flatMap(localFileDownloadResponse -> {
-            return this.sut.uploadFileAsync(remoteFileSystem.getFileSystemRoot(),
-                    relativeFilePath, localFileDownloadResponse.getByteBufFlux(), localFileDownloadResponse.getMetadata());
-        }).then();
+        Mono<Path> uploadMono = this.sut.uploadFileAsync(remoteFileSystem.getFileSystemRoot(),
+                    relativeFilePath, downloadLocalFileMono);
         uploadMono.block();
 
         FolderMetadata folderMetadata = this.sut.listFilesInFolder(remoteFileSystem.getFileSystemRoot(), null, null);
