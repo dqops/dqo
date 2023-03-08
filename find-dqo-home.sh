@@ -29,7 +29,7 @@ if [ ! -d $DQO_USER_HOME ]; then
 fi
 
 if [ -z $DQO_JAVA_OPTS ]; then
-  export DQO_JAVA_OPTS=-Xmx1024m -XX:TieredStopAtLevel=1
+  export DQO_JAVA_OPTS=-Xmx1024m
 fi
 
 # Figure out where java is.

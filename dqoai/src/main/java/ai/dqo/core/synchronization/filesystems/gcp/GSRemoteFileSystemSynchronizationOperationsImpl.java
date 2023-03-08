@@ -111,7 +111,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             Map<String, String> metadata = blob.getMetadata();
             String hashString = metadata.get(HEADER_FILE_HASH);
             if (hashString == null) {
-                hashString = metadata.get(HEADER_FILE_HASH.toLowerCase(Locale.ENGLISH));
+                hashString = metadata.get(HEADER_FILE_HASH.toLowerCase(Locale.ROOT));
             }
             byte[] hashBytes = hashString != null ? Hex.decodeHex(hashString) : null;
 
@@ -158,7 +158,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                         Long lastModified = headers.getTimeMillis(HttpHeaderNames.LAST_MODIFIED);
                         String fileHashHex = headers.getAsString("x-goog-meta-" + HEADER_FILE_HASH);
                         if (fileHashHex == null) {
-                            fileHashHex = headers.getAsString("x-goog-meta-" + HEADER_FILE_HASH.toLowerCase(Locale.ENGLISH));
+                            fileHashHex = headers.getAsString("x-goog-meta-" + HEADER_FILE_HASH.toLowerCase(Locale.ROOT));
                         }
                         byte[] hashBytes = fileHashHex != null ? Hex.decodeHex(fileHashHex) : null;
 
@@ -220,7 +220,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
 
                 String hash = metadata.get(HEADER_FILE_HASH);
                 if (hash == null) {
-                    hash = metadata.get(HEADER_FILE_HASH.toLowerCase(Locale.ENGLISH));
+                    hash = metadata.get(HEADER_FILE_HASH.toLowerCase(Locale.ROOT));
                 }
                 byte[] hashBytes = hash != null ? Hex.decodeHex(hash) : null;
                 long updatedAt = blob.getUpdateTime();

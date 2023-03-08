@@ -25,7 +25,7 @@ if "x%DQO_USER_HOME%"=="x" (
 )
 
 if "x%DQO_JAVA_OPTS%"=="x" (
-    set DQO_JAVA_OPTS=-Xmx1024m -XX:TieredStopAtLevel=1
+    set DQO_JAVA_OPTS=-Xmx1024m
 )
 
 if not exist "%DQO_USER_HOME%" (

@@ -112,7 +112,7 @@ public abstract class AbstractSqlConnectionProvider implements ConnectionProvide
             return null;
         }
 
-        String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ENGLISH);
+        String columnType = columnTypeSnapshot.getColumnType().toLowerCase(Locale.ROOT);
         if (StringCheckUtility.containsAny(columnType, "array")) {
             return DataTypeCategory.array;
         }

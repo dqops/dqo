@@ -27,6 +27,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.google.common.base.Strings;
 import lombok.EqualsAndHashCode;
 
+import java.util.Locale;
 import java.util.Objects;
 
 /**
@@ -120,7 +121,7 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
         int indexOfClose = dataType.indexOf(')');
         if (indexOfOpen < 0 || indexOfClose != dataType.length() - 1) {
             // just a type name like "INT", we can use it as is
-            result.setColumnType(dataType);
+            result.setColumnType(dataType.toUpperCase(Locale.ROOT));
         } else {
             result.setColumnType(dataType.substring(0, indexOfOpen));
             String numbersSection = dataType.substring(indexOfOpen + 1, indexOfClose);
