@@ -30,6 +30,7 @@ import ai.dqo.cli.terminal.TerminalTableWritter;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.services.check.CheckService;
+import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.utils.serialization.JsonSerializer;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -113,19 +115,19 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
 
     // TODO: Explain how does the filtering work in level options, what is the difference between true, false and not considered (right now it's TBD tbh).
     @CommandLine.Option(names = {"-W", "--warning-rule"}, mapFallbackValue = "true", description = "Warning level rule options.\nUsage:\n\t-W<rule_name>,\n\t-W<rule_name>=false,\n\t--warning-rule=<rule_name>,\n\t--warning-rule=<rule_name>=false.")
-    private Map<String, Boolean> warningLevelOptions;
+    private Map<String, String> warningLevelOptions;
 
     @CommandLine.Option(names = {"-err", "--error"}, description = "Enable error rules on checks.")
     private Boolean errorLevelEnabled = false;
 
     @CommandLine.Option(names = {"-E", "--error-rule"}, mapFallbackValue = "true", description = "Error level rule options.\nUsage:\n\t-E<rule_name>,\n\t-E<rule_name>=false,\n\t--error-rule=<rule_name>,\n\t--error-rule=<rule_name>=false.")
-    private Map<String, Boolean> errorLevelOptions;
+    private Map<String, String> errorLevelOptions;
 
     @CommandLine.Option(names = {"-ftl", "--fatal"}, description = "Enable fatal rules on checks.")
     private Boolean fatalLevelEnabled = false;
 
     @CommandLine.Option(names = {"-F", "--fatal-rule"}, mapFallbackValue = "true", description = "Fatal level rule options.\nUsage:\n\t-F<rule_name>,\n\t-F<rule_name>=false,\n\t--fatal-rule=<rule_name>,\n\t--fatal-rule=<rule_name>=false.")
-    private Map<String, Boolean> fatalLevelOptions;
+    private Map<String, String> fatalLevelOptions;
 
     /**
      * Gets the connection name.
@@ -267,7 +269,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
      * Gets the warning level options map.
      * @return Warning level rule options map.
      */
-    public Map<String, Boolean> getWarningLevelOptions() {
+    public Map<String, String> getWarningLevelOptions() {
         return warningLevelOptions;
     }
 
@@ -275,7 +277,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
      * Gets the error level options map.
      * @return Error level rule options map.
      */
-    public Map<String, Boolean> getErrorLevelOptions() {
+    public Map<String, String> getErrorLevelOptions() {
         return errorLevelOptions;
     }
 
@@ -283,7 +285,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
      * Gets the fatal level options map.
      * @return Fatal level rule options map.
      */
-    public Map<String, Boolean> getFatalLevelOptions() {
+    public Map<String, String> getFatalLevelOptions() {
         return fatalLevelOptions;
     }
 
@@ -316,24 +318,33 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
         filters.setColumnDataType(this.datatypeFilter);
         filters.setColumnNullable(this.columnNullable);
 
-        if (this.warningLevelOptions != null) {
-            this.warningLevelEnabled = true;
+        if (this.warningLevelEnabled && this.warningLevelOptions == null) {
+            this.warningLevelOptions = new HashMap<>();
         }
-        if (this.errorLevelOptions != null) {
-            this.errorLevelEnabled = true;
+        if (this.errorLevelEnabled && this.errorLevelOptions == null) {
+            this.errorLevelOptions = new HashMap<>();
         }
-        if (this.fatalLevelOptions != null) {
-            this.fatalLevelEnabled = true;
+        if (this.fatalLevelEnabled && this.fatalLevelOptions == null) {
+            this.fatalLevelOptions = new HashMap<>();
         }
 
-        if (!this.warningLevelEnabled && !this.errorLevelEnabled && !this.fatalLevelEnabled) {
+        if (this.warningLevelOptions == null
+                && this.errorLevelOptions == null
+                && this.fatalLevelOptions == null) {
             // By default, enable on every alert level
-            this.warningLevelEnabled = true;
-            this.errorLevelEnabled = true;
-            this.fatalLevelEnabled = true;
+            this.warningLevelOptions = new HashMap<>();
+            this.errorLevelOptions = new HashMap<>();
+            this.fatalLevelOptions = new HashMap<>();
         }
 
+        UIAllChecksPatchParameters patchParameters = new UIAllChecksPatchParameters() {{
+            setCheckSearchFilters(filters);
+            setWarningLevelOptions(warningLevelOptions);
+            setErrorLevelOptions(errorLevelOptions);
+            setFatalLevelOptions(fatalLevelOptions);
+        }};
 
+        this.checkService.updateAllChecksPatch(patchParameters);
 
         return 0;
     }

@@ -32,25 +32,25 @@ public interface ConnectionList extends Iterable<ConnectionWrapper>, HierarchyNo
 
     /**
      * Finds an existing object given the object name.
-     * @param sourceName Object name.
+     * @param connectionName Object name.
      * @param loadAllWhenMissing Forces loading all elements from the persistence store when the element is missing. When false, then simply checks if the element is in the dictionary.
      * @return Existing object (model wrapper) or null when the object was not found.
      */
-    ConnectionWrapper getByObjectName(String sourceName, boolean loadAllWhenMissing);
+    ConnectionWrapper getByObjectName(String connectionName, boolean loadAllWhenMissing);
 
     /**
      * Creates a new element instance that is marked as new and should be saved on flush.
-     * @param sourceName Object key (source name).
+     * @param connectionName Object key (connection name).
      * @return Created object instance.
      */
-    ConnectionWrapper createAndAddNew(String sourceName);
+    ConnectionWrapper createAndAddNew(String connectionName);
 
     /**
-     * Removes a source model. The source is marked for deletion and will be removed on flush.
-     * @param sourceName Source model to remove.
+     * Removes a connection model. The connection is marked for deletion and will be removed on flush.
+     * @param connectionName Connection model to remove.
      * @return True when the model will be removed, false otherwise.
      */
-    boolean remove(String sourceName);
+    boolean remove(String connectionName);
 
     /**
      * Returns the collection as an immutable list.

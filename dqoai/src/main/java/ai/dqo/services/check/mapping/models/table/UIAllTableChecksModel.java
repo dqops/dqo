@@ -47,6 +47,6 @@ public class UIAllTableChecksModel {
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored table checks results on this connection.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
-    @JsonPropertyDescription("Flattened table list containing information related to columns in each table.")
-    private List<UITableColumnChecksModel> uiTableColumnChecksModels = new ArrayList<>();
+    @JsonPropertyDescription("List containing information related to tables in each schema.")
+    private List<UISchemaTableChecksModel> uiSchemaTableChecksModels = new ArrayList<>();
 }

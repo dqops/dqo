@@ -18,6 +18,7 @@ package ai.dqo.services.check.mapping.models.table;
 
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -47,5 +48,5 @@ public class UITableChecksModel {
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     @JsonPropertyDescription("List of check categories on this table.")
-    private List<UIQualityCategoryModel> checkCategories = new ArrayList<>();
+    private List<UICheckContainerModel> checkContainers = new ArrayList<>();
 }

@@ -42,16 +42,16 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
 
     /**
      * Finds an existing object given the object name.
-     * @param objectName Object name.
+     * @param connectionName Object name.
      * @param loadAllWhenMissing Forces loading all elements from the persistence store when the element is missing. When false, then simply checks if the element is in the dictionary.
      * @return Existing object (model wrapper) or null when the object was not found.
      */
-    public V getByObjectName(K objectName, boolean loadAllWhenMissing) {
-        V result = this.index.get(objectName);
+    public V getByObjectName(K connectionName, boolean loadAllWhenMissing) {
+        V result = this.index.get(connectionName);
         if (result == null) {
             if (loadAllWhenMissing) {
 				loadOnce();
-                result = this.index.get(objectName);
+                result = this.index.get(connectionName);
             }
         }
         return result;
@@ -193,26 +193,26 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
 
     /**
      * Creates a new element instance that is marked as new and should be saved on flush.
-     * @param key Object key.
+     * @param connectionName Object key.
      * @return Created object instance.
      */
-    public V createAndAddNew(K key) {
-        V existingElement = this.getByObjectName(key, true);
+    public V createAndAddNew(K connectionName) {
+        V existingElement = this.getByObjectName(connectionName, true);
         if (existingElement != null) {
             throw new DuplicateKeyException("Object with this name already exist");
         }
         if (this.deleted.size() > 0) {
-            Optional<V> deleted = this.deleted.stream().filter(w -> Objects.equals(w.getObjectName(), key)).findFirst();
+            Optional<V> deleted = this.deleted.stream().filter(w -> Objects.equals(w.getObjectName(), connectionName)).findFirst();
             if(deleted.isPresent()) {
                 this.deleted.remove(deleted.get()); // resurrect
             }
         }
-        V newElement = createNewElement(key);
+        V newElement = createNewElement(connectionName);
         newElement.setStatus(InstanceStatus.ADDED);
-		this.index.put(key, newElement);
+		this.index.put(connectionName, newElement);
 		this.list.add(newElement);
         if (this.hierarchyId != null) {
-            newElement.setHierarchyId(new HierarchyId(this.hierarchyId, key));
+            newElement.setHierarchyId(new HierarchyId(this.hierarchyId, connectionName));
         }
 		this.dirty = true;
         return newElement;
