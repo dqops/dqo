@@ -54,7 +54,7 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
                 job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
                 <SvgIcon
                   name="play"
-                  className="text-green-700 h-5 cursor-pointer"
+                  className="text-primary h-5 cursor-pointer"
                   onClick={onRunChecks}
                 />
               )}
@@ -80,7 +80,6 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
           </div>
         </td>
         <td className="py-2 px-4 bg-gray-50 border-b border-t bg-yellow-100" />
-        <td className="w-5 border-b" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t bg-orange-100" />
         <td className="py-2 px-4 bg-gray-50 border-b border-t bg-red-100" />
       </tr>

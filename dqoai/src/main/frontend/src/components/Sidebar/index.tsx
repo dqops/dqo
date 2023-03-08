@@ -56,7 +56,7 @@ const Sidebar = () => {
           label="Create new connection"
           color="primary"
           className="px-4"
-          leftIcon={<SvgIcon name="add" className="mr-2 w-5" />}
+          leftIcon={<SvgIcon name="add" className="text-white mr-2 w-5" />}
           onClick={() => history.push('/create')}
         />
       </div>

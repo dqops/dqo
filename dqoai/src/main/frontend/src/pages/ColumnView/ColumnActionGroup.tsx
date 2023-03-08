@@ -38,8 +38,8 @@ const ColumnActionGroup = ({
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {shouldDelete && (
         <Button
-          variant="text"
-          color="info"
+          color="primary"
+          variant="outlined"
           label="Delete Column"
           onClick={() => setIsOpen(true)}
         />
