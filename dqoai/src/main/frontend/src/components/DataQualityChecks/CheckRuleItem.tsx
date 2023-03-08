@@ -4,6 +4,7 @@ import FieldControl from './FieldControl';
 import { UIFieldModel, UIRuleParametersModel } from '../../api';
 import clsx from 'clsx';
 import { IconButton } from '@material-tailwind/react';
+import Button from "../Button";
 
 interface CheckRuleItemProps {
   parameters?: UIRuleParametersModel;
@@ -41,11 +42,12 @@ const CheckRuleItem = ({
   };
 
   return (
-    <div className="text-left text-gray-700 h-13 flex items-center">
-      <div className="flex space-x-2 items-end">
+    <div className="text-left text-gray-700 h-13 flex items-center justify-center">
+      <div className="flex space-x-2 items-end justify-center">
         {parameters?.configured ? (
           <IconButton
-            className={clsx(classesMap[type], 'rounded-full w-6 h-6 my-1')}
+            className={clsx(classesMap[type], 'rounded-full w-6 h-6 my-1 !shadow-none')}
+            ripple={false}
             onClick={() =>
               onChange({
                 ...parameters,
@@ -56,9 +58,9 @@ const CheckRuleItem = ({
             <SvgIcon name="close" />
           </IconButton>
         ) : (
-          <button
+          <Button
             className={clsx(
-              'px-4 py-1.5 text-sm whitespace-nowrap rounded-full text-white disabled:bg-gray-100 disabled:text-black disabled:cursor-not-allowed',
+              'px-4 whitespace-nowrap text-white disabled:bg-gray-100 disabled:disabled:cursor-not-allowed',
               classesMap[type]
             )}
             onClick={() =>
@@ -68,9 +70,8 @@ const CheckRuleItem = ({
               })
             }
             disabled={disabled}
-          >
-            {buttonLabelMap[type]}
-          </button>
+            label={buttonLabelMap[type]}
+          />
         )}
         {parameters?.configured &&
           parameters?.rule_parameters?.map((item, index) => (

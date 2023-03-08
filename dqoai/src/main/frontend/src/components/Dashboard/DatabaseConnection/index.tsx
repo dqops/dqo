@@ -184,11 +184,11 @@ const DatabaseConnection = ({
 
         <div className="flex space-x-4 justify-end items-center mt-6">
           {isTesting && (
-            <Loader isFull={false} className="w-8 h-8 !text-green-700" />
+            <Loader isFull={false} className="w-8 h-8 !text-primary" />
           )}
           {
             testResult?.connectionStatus === ConnectionRemoteModelConnectionStatusEnum.SUCCESS && (
-              <div className="text-green-700 text-sm">
+              <div className="text-primary text-sm">
                 Connection successful
               </div>
             )

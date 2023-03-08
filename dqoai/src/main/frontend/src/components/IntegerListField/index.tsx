@@ -56,7 +56,7 @@ const IntegerListField = ({
           <NumbersView values={value} onChange={onChange} />
           <div className="flex space-x-4 p-4 justify-end">
             <Button
-              color="error"
+              color="primary"
               variant="outlined"
               label="Cancel"
               className="w-40"

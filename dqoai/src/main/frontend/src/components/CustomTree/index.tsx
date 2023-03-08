@@ -49,7 +49,7 @@ const CustomTree = () => {
     }
     return (
       <SvgIcon
-        className="w-4 min-w-4 text-black cursor-pointer"
+        className="w-4 min-w-4 cursor-pointer"
         name={!props.open ? 'arrow-alt-right' : 'arrow-alt-down'}
         onClick={() => {
           toggleOpenNode(props.node.id);
@@ -91,7 +91,7 @@ const CustomTree = () => {
           <div className="flex flex-1 justify-between items-center">
             <div
               className={clsx(
-                `text-black flex-1 truncate mr-7`,
+                `flex-1 truncate mr-7`,
                 node.hasCheck ? 'font-bold' : ''
               )}
             >

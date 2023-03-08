@@ -13,9 +13,9 @@ const RadioButton = ({ label, onClick, checked }: RadioButtonProps) => {
       className="flex items-center space-x-2 cursor-pointer"
       onClick={onClick}
     >
-      <div className="w-5 h-5 border border-blue-600 rounded-full flex items-center justify-center">
+      <div className="w-5 h-5 border border-primary rounded-full flex items-center justify-center">
         <div
-          className={clsx('w-3 h-3 rounded-full', checked ? 'bg-blue-600' : '')}
+          className={clsx('w-3 h-3 rounded-full', checked ? 'bg-primary' : '')}
         />
       </div>
       {label && <div className="text-sm">{label}</div>}

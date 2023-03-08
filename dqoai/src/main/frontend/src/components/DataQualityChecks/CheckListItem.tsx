@@ -237,7 +237,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                     'w-5 h-5 cursor-pointer',
                     check?.schedule_override
                       ? 'text-gray-700'
-                      : 'text-black font-bold',
+                      : 'font-bold',
                     check?.schedule_override?.disabled ? 'line-through' : ''
                   )}
                   strokeWidth={check?.schedule_override ? 4 : 2}
@@ -254,7 +254,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                   <div>
                     <SvgIcon
                       name="play"
-                      className="text-green-700 h-5 cursor-pointer"
+                      className="text-primary h-5 cursor-pointer"
                       onClick={onRunCheck}
                     />
                   </div>
@@ -363,7 +363,6 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             type="warning"
           />
         </td>
-        <td className="min-w-5 max-w-5 border-b" />
         <td className="py-2 px-4 bg-orange-100">
           <CheckRuleItem
             disabled={isDisabled}

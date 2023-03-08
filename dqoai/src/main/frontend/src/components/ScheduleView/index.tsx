@@ -152,6 +152,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           label="Scheduled check execution not configured for all tables from this connection"
           checked={mode === ''}
           onChange={onChangeMode}
+          color="teal"
         />
         <Radio
           id="minutes"
@@ -160,6 +161,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           label="Run every X minutes"
           checked={mode === 'minutes'}
           onChange={onChangeMode}
+          color="teal"
         />
         {mode === 'minutes' && (
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
@@ -180,6 +182,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           value="hour"
           checked={mode === 'hour'}
           onChange={onChangeMode}
+          color="teal"
         />
         {mode === 'hour' && (
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
@@ -200,6 +203,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           value="day"
           checked={mode === 'day'}
           onChange={onChangeMode}
+          color="teal"
         />
         {mode === 'day' && (
           <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">

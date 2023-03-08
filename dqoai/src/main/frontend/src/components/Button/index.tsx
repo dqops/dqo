@@ -21,19 +21,19 @@ interface IButtonProps {
 
 const colorsMap = {
   primary: {
-    contained: 'bg-indigo-700 text-white disabled:bg-gray-500',
-    outlined: 'bg-white text-indigo-700 border border-indigo-700',
-    text: 'bg-white text-indigo-700'
+    contained: 'bg-primary text-white disabled:bg-gray-500',
+    outlined: 'bg-white text-primary border border-primary',
+    text: 'bg-white text-primary'
   },
   secondary: {
-    contained: 'bg-gray-100 text-black',
+    contained: 'bg-gray-100',
     outlined: 'bg-white text-gray-300 border border-gray-300',
     text: 'bg-white text-gray-300'
   },
   success: {
     contained: 'bg-green-700 text-white',
-    outlined: 'bg-white text-green-700 border border-green-700',
-    text: 'bg-white text-green-700'
+    outlined: 'bg-white text-primary border border-green-700',
+    text: 'bg-white text-primary'
   },
   info: {
     contained: 'bg-green-400 text-white',
