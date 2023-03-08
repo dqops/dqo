@@ -1,5 +1,5 @@
 site_name: Documentation
-site_url: https://docs.dqo.ai/latest/
+site_url: https://dqo.ai/docs/
 
 # Docs navigation
 nav:
@@ -51,7 +51,6 @@ nav:
     - Notifications: 'working-with-dqo/notifications/notifications.md'
     - Initial profiling: 'working-with-dqo/initial-profiling/initial-profiling.md'
   - Examples: 'examples/examples.md'
-  - Security: 'security/security.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
     - dqo: 'command_line_interface/dqo.md'
@@ -270,15 +269,11 @@ extra:
   consent:
     title: Cookie consent
     description: >-
-      We use cookies to recognize your repeated visits and preferences, as well
+      We use cookies to recognize repeat visits and user preferences, as well
       as to measure the effectiveness of our documentation and whether users
-      find what they're searching for. With your consent, you're helping us to
-      make our documentation better.
+      find what they are looking for. With your consent, you help us improve our documentation.
 
 
 
-# TODO Cookie consent https://squidfunk.github.io/mkdocs-material/setup/ensuring-data-privacy/
-# TODO Navigation
 # TODO Tags
-# TODO Versioning
 # TODO Footer

@@ -348,6 +348,22 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             </div>
           </div>
         </td>
+        <td className="py-2 px-4 bg-yellow-100">
+          <CheckRuleItem
+            disabled={isDisabled}
+            parameters={check?.rule?.warning}
+            onChange={(warning) =>
+              handleChange({
+                rule: {
+                  ...check?.rule,
+                  warning
+                }
+              })
+            }
+            type="warning"
+          />
+        </td>
+        <td className="min-w-5 max-w-5 border-b" />
         <td className="py-2 px-4 bg-orange-100">
           <CheckRuleItem
             disabled={isDisabled}
@@ -376,22 +392,6 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
               })
             }
             type="fatal"
-          />
-        </td>
-        <td className="min-w-5 max-w-5 border-b" />
-        <td className="py-2 px-4 bg-yellow-100">
-          <CheckRuleItem
-            disabled={isDisabled}
-            parameters={check?.rule?.warning}
-            onChange={(warning) =>
-              handleChange({
-                rule: {
-                  ...check?.rule,
-                  warning
-                }
-              })
-            }
-            type="warning"
           />
         </td>
       </tr>

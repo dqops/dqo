@@ -57,9 +57,6 @@ public class DqoTablesawParquetWriter extends TablesawParquetWriter {
      */
     public void write(final Table table, final DqoTablesawParquetWriteOptions options) {
         try {
-//            InMemoryFileSystem.RawInMemoryFileSystem inMemoryFileSystem =
-//                    new InMemoryFileSystem.RawInMemoryFileSystem(new URI("file:///"), this.configuration);
-
             DqoInMemoryFileSystem inMemoryFileSystem =
                     new DqoInMemoryFileSystem(new URI("ramfs://inmemory/"), this.configuration);
 

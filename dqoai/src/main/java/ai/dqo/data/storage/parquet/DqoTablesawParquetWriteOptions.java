@@ -50,14 +50,6 @@ public class DqoTablesawParquetWriteOptions extends WriteOptions {
         return new Builder(file.getAbsolutePath());
     }
 
-//    public static Builder dqoBuilder(final String outputFile) {
-//        return new Builder(outputFile);
-//    }
-//
-//    public static Builder dqoBuilder(final OutputFile hadoopOutputFile) {
-//        return new Builder(hadoopOutputFile);
-//    }
-
     private final String outputFile;
     private final OutputFile hadoopOutputFile;
     private final TablesawParquetWriteOptions.CompressionCodec compressionCodec;

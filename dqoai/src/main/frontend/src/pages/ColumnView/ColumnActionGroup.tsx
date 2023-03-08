@@ -40,7 +40,7 @@ const ColumnActionGroup = ({
         <Button
           variant="text"
           color="info"
-          label="Delete"
+          label="Delete Column"
           onClick={() => setIsOpen(true)}
         />
       )}

@@ -961,6 +961,39 @@ function TreeProvider(props: any) {
     return unlisten;
   }, [history]);
 
+  const deleteData = (identify: string) => {
+    const newTabMaps = {...tabMaps};
+
+    for (const key of Object.keys(tabMaps)) {
+      const valueTabs = tabMaps[key];
+      newTabMaps[key] = valueTabs.filter((item) => item.value.toString().indexOf(identify) === -1);
+    }
+
+    if (!newTabMaps[sourceRoute].length) {
+      const arr = tabs
+        .filter((item) => item.type === 'editor')
+        .map((item) => parseInt(item.value, 10));
+      const maxEditor = Math.max(...arr, 0);
+
+      const newTab = {
+        label: `New Tab`,
+        value: `${maxEditor + 1}`,
+        type: 'editor'
+      };
+
+      newTabMaps[sourceRoute] = [newTab];
+    }
+
+    setActiveTabMaps(prev => ({
+      ...prev,
+      [sourceRoute]: newTabMaps[sourceRoute][0].value
+    }));
+
+    setTabMaps(newTabMaps);
+
+    setTreeData(treeData.filter((item) => item.id.toString().indexOf(identify) === -1));
+  };
+
   return (
     <TreeContext.Provider
       value={{
@@ -975,6 +1008,7 @@ function TreeProvider(props: any) {
         openNodes,
         toggleOpenNode,
         tabMap: subTabMap,
+        tabMaps,
         setTabMap: setSubTabMap,
         changeActiveTab,
         sidebarWidth,
@@ -990,6 +1024,7 @@ function TreeProvider(props: any) {
         setSourceRoute,
         deleteStoredData,
         sourceRoute,
+        deleteData,
       }}
       {...props}
     />
