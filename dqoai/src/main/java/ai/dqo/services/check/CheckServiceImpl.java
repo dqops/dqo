@@ -104,6 +104,10 @@ public class CheckServiceImpl implements CheckService {
         }
 
         List<UIAllChecksModel> patches = this.uiAllChecksPatchFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
+
         // TODO: Dalej bierzemy co nam wyszło w tych patchach i chodzimy po drzewku, poprawiając co trzeba.
+
+
+        return patches;
     }
 }

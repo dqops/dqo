@@ -33,6 +33,8 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
+import ai.dqo.services.check.mapping.models.column.UIColumnChecksModel;
+import ai.dqo.services.check.mapping.models.column.UITableColumnChecksModel;
 import ai.dqo.services.check.mapping.models.table.UIAllTableChecksModel;
 import ai.dqo.services.check.mapping.models.table.UISchemaTableChecksModel;
 import ai.dqo.services.check.mapping.models.table.UITableChecksModel;
@@ -109,8 +111,11 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
                     connectionSpec, checkSearchFilters, executionContext);
             uiAllChecksModel.setTableChecksModel(uiAllTableChecksModel);
         }
-        UIAllColumnChecksModel columnChecksModel = new UIAllColumnChecksModel();
+        UIAllColumnChecksModel columnChecksModel = this.getAllColumnChecksForConnection(
+                connectionSpec, checkSearchFilters, executionContext);
+        uiAllChecksModel.setColumnChecksModel(columnChecksModel);
 
+        return uiAllChecksModel;
     }
 
     protected UIAllTableChecksModel getAllTableChecksForConnection(ConnectionSpec connectionSpec,
@@ -163,20 +168,9 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
         // TODO: Add templates
 
         TableSpec tableSpec = tableWrapper.getSpec();
-        CheckType checkTypeFilter = checkSearchFilters.getCheckType();
-        CheckTimeScale timeScaleFilter = checkSearchFilters.getTimeScale();
 
-        Stream<CheckType> checkTypesStream = Arrays.stream(CheckType.values());
-        if (checkTypeFilter != null) {
-            checkTypesStream = checkTypesStream.filter(ct -> ct == checkTypeFilter);
-        }
-        List<CheckType> checkTypes = checkTypesStream.collect(Collectors.toList());
-
-        Stream<CheckTimeScale> timeScalesStream = Arrays.stream(CheckTimeScale.values());
-        if (timeScaleFilter != null) {
-            timeScalesStream = timeScalesStream.filter(ts -> ts == timeScaleFilter);
-        }
-        List<CheckTimeScale> timeScales = timeScalesStream.collect(Collectors.toList());
+        List<CheckType> checkTypes = this.getPossibleCheckTypes(checkSearchFilters.getCheckType());
+        List<CheckTimeScale> timeScales = this.getPossibleCheckTimeScales(checkSearchFilters.getTimeScale());
 
         List<AbstractRootChecksContainerSpec> checkContainers = new ArrayList<>();
         for (CheckType checkType : checkTypes) {
@@ -203,5 +197,103 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
                 )).collect(Collectors.toList());
         tableChecksModel.setCheckContainers(checkContainerModelList);
         return tableChecksModel;
+    }
+
+    protected UIAllColumnChecksModel getAllColumnChecksForConnection(ConnectionSpec connectionSpec,
+                                                                     CheckSearchFilters checkSearchFilters,
+                                                                     ExecutionContext executionContext) {
+        UIAllColumnChecksModel allColumnChecksModel = new UIAllColumnChecksModel();
+        Collection<TableWrapper> tableWrappers = this.hierarchyNodeTreeSearcher
+                .findTables(connectionSpec, checkSearchFilters);
+
+        // TODO: Add templates
+
+        List<UITableColumnChecksModel> tableColumnChecksModels = tableWrappers.stream()
+                .map(table -> this.getTableColumnCheckModelForTable(
+                        connectionSpec, table, checkSearchFilters, executionContext))
+                .collect(Collectors.toList());
+
+        allColumnChecksModel.setUiTableColumnChecksModels(tableColumnChecksModels);
+        return allColumnChecksModel;
+    }
+
+    protected UITableColumnChecksModel getTableColumnCheckModelForTable(ConnectionSpec connectionSpec,
+                                                                        TableWrapper tableWrapper,
+                                                                        CheckSearchFilters checkSearchFilters,
+                                                                        ExecutionContext executionContext) {
+        PhysicalTableName schemaTableName = tableWrapper.getPhysicalTableName();
+        UITableColumnChecksModel tableColumnChecksModel = new UITableColumnChecksModel();
+        tableColumnChecksModel.setSchemaTableName(schemaTableName);
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+
+        // TODO: Add templates.
+
+        List<UIColumnChecksModel> uiColumnChecksModels = tableSpec.getColumns().entrySet().stream()
+                .map(columnNameToSpec -> getColumnChecksModelForColumn(
+                        connectionSpec,
+                        tableSpec,
+                        columnNameToSpec.getKey(),
+                        columnNameToSpec.getValue(),
+                        checkSearchFilters,
+                        executionContext))
+                .collect(Collectors.toList());
+        tableColumnChecksModel.setUiColumnChecksModels(uiColumnChecksModels);
+        return tableColumnChecksModel;
+    }
+
+    protected UIColumnChecksModel getColumnChecksModelForColumn(ConnectionSpec connectionSpec,
+                                                                TableSpec tableSpec,
+                                                                String columnName,
+                                                                ColumnSpec columnSpec,
+                                                                CheckSearchFilters checkSearchFilters,
+                                                                ExecutionContext executionContext) {
+        UIColumnChecksModel uiColumnChecksModel = new UIColumnChecksModel();
+        uiColumnChecksModel.setColumnName(columnName);
+
+        // TODO: Add templates
+
+        List<CheckType> checkTypes = this.getPossibleCheckTypes(checkSearchFilters.getCheckType());
+        List<CheckTimeScale> timeScales = this.getPossibleCheckTimeScales(checkSearchFilters.getTimeScale());
+
+        List<AbstractRootChecksContainerSpec> checkContainers = new ArrayList<>();
+        for (CheckType checkType : checkTypes) {
+            if (checkType == CheckType.ADHOC) {
+                AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, null);
+                checkContainers.add(checkContainer);
+            }
+            else {
+                for (CheckTimeScale timeScale : timeScales) {
+                    AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, timeScale);
+                    checkContainers.add(checkContainer);
+                }
+            }
+        }
+
+        List<UICheckContainerModel> checkContainerModelList = checkContainers.stream()
+                .map(checkContainer -> this.specToUiCheckMappingService.createUiModel(
+                        checkContainer,
+                        checkSearchFilters,
+                        connectionSpec,
+                        tableSpec,
+                        executionContext,
+                        connectionSpec.getProviderType()
+                )).collect(Collectors.toList());
+        uiColumnChecksModel.setCheckContainers(checkContainerModelList);
+        return uiColumnChecksModel;
+    }
+
+    protected List<CheckType> getPossibleCheckTypes(CheckType filterValue) {
+        if (filterValue != null) {
+            return List.of(filterValue);
+        }
+        return List.of(CheckType.values());
+    }
+
+    protected List<CheckTimeScale> getPossibleCheckTimeScales(CheckTimeScale filterValue) {
+        if (filterValue != null) {
+            return List.of(filterValue);
+        }
+        return List.of(CheckTimeScale.values());
     }
 }
