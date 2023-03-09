@@ -83,7 +83,7 @@ public class SchemaModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(schemaName + ".*");
-                setCheckType(CheckType.ADHOC);
+                setCheckType(CheckType.PROFILING);
                 setEnabled(true);
             }});
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()
