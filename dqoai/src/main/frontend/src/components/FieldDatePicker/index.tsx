@@ -47,6 +47,7 @@ const FieldDatePicker = ({
     toggleMenu();
   };
 
+  console.log('value', value);
   return (
     <div>
       <div className="flex space-x-1">
@@ -84,7 +85,7 @@ const FieldDatePicker = ({
             )}
             onClick={onClick}
           >
-            {moment(value).format("YYYY-MM-DD")}
+            {value ? moment(value).format("YYYY-MM-DD") : ''}
           </div>
           {isOpen && (
             <div className="absolute z-10 bg-white">
