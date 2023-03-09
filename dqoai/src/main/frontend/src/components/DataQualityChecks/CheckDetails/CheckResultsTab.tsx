@@ -28,7 +28,7 @@ const CheckResultsTab = ({ results, dataStreamName, month, onChangeMonth, onChan
     {
       label: 'Id',
       value: 'id',
-      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700 text-right',
+      className: 'text-sm px-4 !py-2 whitespace-nowrap text-gray-700',
     },
     {
       label: 'Check Name',
