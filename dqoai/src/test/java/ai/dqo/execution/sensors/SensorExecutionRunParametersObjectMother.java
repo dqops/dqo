@@ -82,17 +82,17 @@ public class SensorExecutionRunParametersObjectMother {
      * @param checkSpec Check specification.
      * @return Sensor execution run parameters.
      */
-     public static SensorExecutionRunParameters createForTableForAdHocCheck(
+     public static SensorExecutionRunParameters createForTableForProfilingCheck(
              SampleTableMetadata sampleTableMetadata,
              AbstractCheckSpec<?,?,?,?> checkSpec) {
          ConnectionSpec connectionSpec = sampleTableMetadata.getConnectionSpec();
          ProviderDialectSettings dialectSettings = ProviderDialectSettingsObjectMother.getDialectForProvider(connectionSpec.getProviderType());
          TableSpec tableSpec = sampleTableMetadata.getTableSpec();
          SensorExecutionRunParametersFactory factory = getFactory();
-         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc();
+         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForProfiling();
 
          SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, CheckType.ADHOC, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, CheckType.PROFILING, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -183,13 +183,13 @@ public class SensorExecutionRunParametersObjectMother {
     }
 
     /**
-     * Creates a sensor run parameters object to run an adhoc check on a given sample table, when a column is selected.
+     * Creates a sensor run parameters object to run an profiling check on a given sample table, when a column is selected.
      * @param sampleTableMetadata Sample table metadata.
      * @param columnName Target column name.
      * @param checkSpec Check specification.
      * @return Sensor execution run parameters.
      */
-    public static SensorExecutionRunParameters createForTableColumnForAdHocCheck(
+    public static SensorExecutionRunParameters createForTableColumnForProfilingCheck(
             SampleTableMetadata sampleTableMetadata,
             String columnName,
             AbstractCheckSpec<?,?,?,?> checkSpec) {
@@ -198,10 +198,10 @@ public class SensorExecutionRunParametersObjectMother {
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
         ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         SensorExecutionRunParametersFactory factory = getFactory();
-        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForAdhoc();
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForProfiling();
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, CheckType.ADHOC, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, CheckType.PROFILING, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 

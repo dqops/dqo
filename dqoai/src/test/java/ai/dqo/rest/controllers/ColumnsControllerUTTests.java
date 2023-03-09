@@ -17,8 +17,8 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
-import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.nulls.ColumnNullsDailyCheckpointsSpec;
@@ -137,11 +137,11 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getColumnAdHocChecksUI_whenColumnFromSampleTableRequested_thenReturnsAdHocChecksUi() {
+    void getColumnProfilingChecksUI_whenColumnFromSampleTableRequested_thenReturnsProfilingChecksUi() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnAdHocChecksUI(
+        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getColumnProfilingChecksUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
@@ -189,11 +189,11 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getColumnAdHocChecksUIBasic_whenColumnFromSampleTableRequested_thenReturnsAdHocChecksUiBasic() {
+    void getColumnProfilingChecksUIBasic_whenColumnFromSampleTableRequested_thenReturnsProfilingChecksUiBasic() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
-        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getColumnAdHocChecksUIBasic(
+        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getColumnProfilingChecksUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
@@ -241,7 +241,7 @@ public class ColumnsControllerUTTests extends BaseTest {
     }
 
     @Test
-    void updateColumnAdHocChecks_whenColumnAndAdHocChecksRequested_updatesAdHocChecks() {
+    void updateColumnProfilingChecks_whenColumnAndProfilingChecksRequested_updatesProfilingChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         ColumnSpec columnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
 
@@ -257,21 +257,21 @@ public class ColumnsControllerUTTests extends BaseTest {
         nullsChecksSpec.setError(maxCountRule2);
         nullsChecksSpec.setFatal(maxCountRule3);
 
-        ColumnAdHocNullsChecksSpec nullChecks = new ColumnAdHocNullsChecksSpec();
+        ColumnProfilingNullsChecksSpec nullChecks = new ColumnProfilingNullsChecksSpec();
         nullChecks.setNullsCount(nullsChecksSpec);
-        ColumnAdHocCheckCategoriesSpec sampleAdHocCheck = new ColumnAdHocCheckCategoriesSpec();
-        sampleAdHocCheck.setNulls(nullChecks);
+        ColumnProfilingCheckCategoriesSpec sampleProfilingCheck = new ColumnProfilingCheckCategoriesSpec();
+        sampleProfilingCheck.setNulls(nullChecks);
         
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnAdHocChecks(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnProfilingChecks(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(sampleAdHocCheck));
+                Optional.of(sampleProfilingCheck));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getChecks(), sampleAdHocCheck);
+        Assertions.assertSame(columnSpec.getChecks(), sampleProfilingCheck);
     }
 
     @Test
@@ -348,5 +348,5 @@ public class ColumnsControllerUTTests extends BaseTest {
         Assertions.assertNull(columnSpec.getPartitionedChecks().getDaily());
     }
 
-    // TODO: updateTableAdHocChecksUI, and the following check types.
+    // TODO: updateTableProfilingChecksUI, and the following check types.
 }

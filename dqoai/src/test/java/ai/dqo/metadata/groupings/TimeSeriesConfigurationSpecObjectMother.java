@@ -48,10 +48,10 @@ public class TimeSeriesConfigurationSpecObjectMother {
     }
 
     /**
-     * Creates a current time time series for an adhoc check.
+     * Creates a current time time series for an profiling check.
      * @return Time series.
      */
-    public static TimeSeriesConfigurationSpec createTimeSeriesForAdhoc() {
+    public static TimeSeriesConfigurationSpec createTimeSeriesForProfiling() {
         TimeSeriesConfigurationSpec timeSeries = new TimeSeriesConfigurationSpec();
         timeSeries.setMode(TimeSeriesMode.current_time);
         timeSeries.setTimeGradient(TimeSeriesGradient.millisecond);

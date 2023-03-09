@@ -71,7 +71,7 @@ public class SensorReadoutsController {
      * @return View of the recent sensor readouts.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/readouts")
-    @ApiOperation(value = "getTableAdHocSensorReadouts", notes = "Returns the complete results of the most recent check executions for all table level data quality ad-hoc checks on a table",
+    @ApiOperation(value = "getTableProfilingSensorReadouts", notes = "Returns the complete results of the most recent check executions for all table level data quality ad-hoc checks on a table",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -80,7 +80,7 @@ public class SensorReadoutsController {
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getTableAdHocSensorReadouts(
+    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getTableProfilingSensorReadouts(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -107,7 +107,7 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.ADHOC, null);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
         SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
@@ -249,7 +249,7 @@ public class SensorReadoutsController {
      * @return View of the recent sensor readouts.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/readouts")
-    @ApiOperation(value = "getColumnAdHocSensorReadouts", notes = "Returns sensor results of the recent check executions for all column level data quality ad-hoc checks on a column",
+    @ApiOperation(value = "getColumnProfilingSensorReadouts", notes = "Returns sensor results of the recent check executions for all column level data quality ad-hoc checks on a column",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -258,7 +258,7 @@ public class SensorReadoutsController {
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getColumnAdHocSensorReadouts(
+    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getColumnProfilingSensorReadouts(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -291,7 +291,7 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.ADHOC, null);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
         SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
