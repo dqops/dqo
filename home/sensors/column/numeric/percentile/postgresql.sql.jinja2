@@ -5,55 +5,42 @@
 {%- endmacro -%}
 
 {%- macro render_local_date_range_filters(prefix_to_render = none, table_alias_prefix = 'analyzed_table', indentation = '      ') -%}
-    {%- if lib.time_window_filter is not none -%}
-        {%- if (lib.time_series.timestamp_column | default(none, true)) is not none -%}
-            {%- if lib.time_window_filter.from_date_time_offset | default(none, true) is not none -%}
-                 {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) }} >= {{ make_text_constant(lib.time_window_filter.from_date_time_offset) -}}
-                 {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
-            {%- elif lib.time_window_filter.from_date_time | default(none, true) is not none -%}
-                {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) }} >= {{ make_text_constant(lib.time_window_filter.from_date_time) -}}
-                {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
-            {%- elif lib.time_window_filter.from_date | default(none, true) is not none -%}
-                {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) }} >= {{ make_text_constant(lib.time_window_filter.from_date) -}}
-                {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
-            {%- elif lib.time_window_filter.daily_partitioning_recent_days | default(none, true) is not none -%}
-                {{ prefix_to_render -}}
-                {%- if lib.timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
-                     {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST(CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}} AS TIMESTAMP WITH TIME ZONE)
-                {%- elif lib.timestamp_column_data_type == 'DATE' -%}
-                     {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}}
-                {%- elif lib.timestamp_column_data_type == 'TIMESTAMP WITHOUT TIME ZONE' -%}
-                     {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST(CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}} AS TIMESTAMP WITHOUT TIME ZONE)
-                {%- else -%}
-                     CAST({{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
-                     CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}}
-                {%- endif -%}
-                {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
-                GROUP BY {{ lib.render_grouping_column_names() }}
-            {%- elif lib.time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
-                {{ prefix_to_render -}}
-                {%- if lib.timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
-                     {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITH TIME ZONE)
-                {%- elif lib.timestamp_column_data_type == 'DATE' -%}
-                     {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
-                {%- elif lib.timestamp_column_data_type == 'TIMESTAMP WITHOUT TIME ZONE' -%}
-                     {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-                     CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITHOUT TIME ZONE)
-                {%- else -%}
-                     CAST({{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
-                     CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
-                {%- endif -%}
-                {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
-                GROUP BY {{ lib.render_grouping_column_names() }}
-            {%- else -%}
-                {{- lib.render_end_date_filter(prefix_to_render, table_alias_prefix) -}}
-            {%- endif -%}
+    {%- if lib.time_window_filter.daily_partitioning_recent_days | default(none, true) is not none -%}
+        {{ prefix_to_render -}}
+        {%- if lib.timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
+            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
+            CAST(CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}} AS TIMESTAMP WITH TIME ZONE)
+        {%- elif lib.timestamp_column_data_type == 'DATE' -%}
+            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
+            CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}}
+        {%- elif lib.timestamp_column_data_type == 'TIMESTAMP WITHOUT TIME ZONE' -%}
+            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
+            CAST(CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}} AS TIMESTAMP WITHOUT TIME ZONE)
+        {%- else -%}
+            CAST({{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
+            CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}}
         {%- endif -%}
+            {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
+            GROUP BY {{ lib.render_grouping_column_names() }}
+    {%- elif lib.time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
+        {{ prefix_to_render -}}
+        {%- if lib.timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
+            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
+            CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITH TIME ZONE)
+        {%- elif lib.timestamp_column_data_type == 'DATE' -%}
+            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
+            CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
+        {%- elif lib.timestamp_column_data_type == 'TIMESTAMP WITHOUT TIME ZONE' -%}
+            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
+            CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITHOUT TIME ZONE)
+        {%- else -%}
+            CAST({{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
+            CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
+        {%- endif -%}
+            {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
+            GROUP BY {{ lib.render_grouping_column_names() }}
+    {%- else -%}
+        {{- lib.render_end_date_filter(prefix_to_render, table_alias_prefix) -}}
     {%- endif -%}
 {%- endmacro -%}
 
@@ -61,11 +48,11 @@ SELECT
     MAX(actual_value) AS actual_value,
     nested_table.time_period AS time_period,
     nested_table.time_period_utc AS time_period_utc
+    {{- lib.render_data_stream_projections('analyzed_table') }}
 FROM(
     SELECT
         PERCENTILE_CONT({{ parameters.percentile_value }})
         WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- render_local_where_clause(indentation = '    ') -}}) AS nested_table

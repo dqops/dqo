@@ -243,14 +243,14 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
             SELECT 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                nested_table.`time_period_utc` AS time_period_utc,
+                analyzed_table.`length_string` AS stream_level_1
             FROM(
                 SELECT
                     PERCENTILE_CONT(
                     (%s), 
                     0.25) 
-                    OVER (PARTITION BY) AS actual_value,
-                analyzed_table.`length_string` AS stream_level_1
+                    OVER (PARTITION BY) AS actual_value
                 FROM `%s`.`%s`.`%s` AS analyzed_table
                 WHERE %s) AS nested_table
             GROUP BY stream_level_1
@@ -278,7 +278,8 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
             SELECT 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                nested_table.`time_period_utc` AS time_period_utc,
+                analyzed_table.`length_string` AS stream_level_1
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -286,7 +287,6 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
                     0.25) 
                     OVER (PARTITION BY
                     (DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))) AS actual_value,
-                analyzed_table.`length_string` AS stream_level_1,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -316,7 +316,8 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
             SELECT 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                nested_table.`time_period_utc` AS time_period_utc,                
+                analyzed_table.`length_string` AS stream_level_1
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -324,7 +325,6 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
                     0.25) 
                     OVER (PARTITION BY
                     (analyzed_table.`date`)) AS actual_value,
-                analyzed_table.`length_string` AS stream_level_1,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -364,7 +364,10 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
             SELECT 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                nested_table.`time_period_utc` AS time_period_utc,                
+                analyzed_table.`strings_with_numbers` AS stream_level_1,
+                analyzed_table.`mix_of_values` AS stream_level_2,
+                analyzed_table.`length_string` AS stream_level_3
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -372,9 +375,6 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
                     0.25) 
                     OVER (PARTITION BY
                     (analyzed_table.`date`)) AS actual_value,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -406,7 +406,10 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
             SELECT 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                nested_table.`time_period_utc` AS time_period_utc,
+                analyzed_table.`strings_with_numbers` AS stream_level_1,
+                analyzed_table.`mix_of_values` AS stream_level_2,
+                analyzed_table.`length_string` AS stream_level_3
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -414,9 +417,6 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
                     0.25) 
                     OVER (PARTITION BY
                     (DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH))) AS actual_value,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3,
                 DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
                 TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table
@@ -448,7 +448,10 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
             SELECT 
                 MAX(nested_table.actual_value) AS actual_value,
                 nested_table.`time_period` AS time_period,
-                nested_table.`time_period_utc` AS time_period_utc
+                nested_table.`time_period_utc` AS time_period_utc,
+                analyzed_table.`strings_with_numbers` AS stream_level_1,
+                analyzed_table.`mix_of_values` AS stream_level_2,
+                analyzed_table.`length_string` AS stream_level_3
             FROM(
                 SELECT
                     PERCENTILE_CONT(
@@ -456,9 +459,6 @@ public class ColumnNumericPercentile25InRangeSensorParametersSpecBigQueryTests e
                     0.25) 
                     OVER (PARTITION BY
                     (analyzed_table.`date`)) AS actual_value,
-                analyzed_table.`strings_with_numbers` AS stream_level_1,
-                analyzed_table.`mix_of_values` AS stream_level_2,
-                analyzed_table.`length_string` AS stream_level_3,
                 analyzed_table.`date` AS time_period,
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                 FROM `%s`.`%s`.`%s` AS analyzed_table

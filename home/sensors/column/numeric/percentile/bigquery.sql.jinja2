@@ -11,13 +11,13 @@ SELECT
     MAX(nested_table.actual_value) AS actual_value,
     nested_table.`time_period` AS time_period,
     nested_table.`time_period_utc` AS time_period_utc
+    {{- lib.render_data_stream_projections('analyzed_table') }}
 FROM(
     SELECT
         PERCENTILE_CONT(
         ({{ lib.render_target_column('analyzed_table')}}),
         {{ parameters.percentile_value }})
         OVER (PARTITION BY{{render_local_time_dimension_projection('analyzed_table') }}) AS actual_value
-        {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
