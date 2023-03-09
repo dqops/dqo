@@ -15,7 +15,7 @@ import { CheckResultOverviewApi } from "../../services/apiClient";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import { useParams } from "react-router-dom";
 
-const TableProfilingView = () => {
+const TableProfilingsView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
 
   const { checksUI, isUpdating, loading } = useSelector(
@@ -93,4 +93,4 @@ const TableProfilingView = () => {
   );
 };
 
-export default TableProfilingView;
+export default TableProfilingsView;
