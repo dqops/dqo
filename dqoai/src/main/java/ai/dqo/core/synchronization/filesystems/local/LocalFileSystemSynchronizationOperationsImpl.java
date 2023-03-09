@@ -187,10 +187,10 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
      * @param relativeFilePath Relative file path inside the remote root.
      */
     @Override
-    public Mono<Path> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath) {
-        Mono<Path> deleteFileMono = Mono.fromRunnable(() -> {
+    public Mono<FileMetadata> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath) {
+        Mono<FileMetadata> deleteFileMono = Mono.fromRunnable(() -> {
             deleteFile(fileSystemRoot, relativeFilePath);
-        }).thenReturn(relativeFilePath);
+        }).thenReturn(FileMetadata.createDeleted(relativeFilePath));
 
         return deleteFileMono;
     }
@@ -326,10 +326,10 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
      * @return Mono returned when the file was fully uploaded.
      */
     @Override
-    public Mono<Path> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot,
+    public Mono<FileMetadata> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot,
                                       Path relativeFilePath,
                                       Mono<DownloadFileResponse> downloadFileResponseMono) {
-        Mono<Path> uploadFinishMono = downloadFileResponseMono
+        Mono<FileMetadata> uploadFinishMono = downloadFileResponseMono
                 .flatMap((DownloadFileResponse downloadResponse) -> {
                     ByteBufFlux bytesFlux = downloadResponse.getByteBufFlux();
                     FileMetadata fileMetadata = downloadResponse.getMetadata();
@@ -391,7 +391,21 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                                     break;
                                 }
                             }
-                        }).then(Mono.just(relativeFilePath));
+                        }).then(Mono.fromCallable(() -> {
+                            try {
+                                File file = fullPathToFile.toFile();
+                                if (!file.exists()) {
+                                    return null;
+                                }
+
+                                long lastModifiedMillis = file.lastModified();
+                                long now = Instant.now().toEpochMilli();
+                                return new FileMetadata(relativeFilePath, lastModifiedMillis, fileMetadata.getMd5(), now, fileMetadata.getFileLength());
+                            }
+                            catch (Exception ex) {
+                                throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                            }
+                        }));
                     } catch (Exception ex) {
                         throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
                     }

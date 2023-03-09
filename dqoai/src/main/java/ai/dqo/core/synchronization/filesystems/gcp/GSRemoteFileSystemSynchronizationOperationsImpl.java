@@ -29,11 +29,9 @@ import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
 import com.google.cloud.storage.BlobInfo;
 import com.google.cloud.storage.Storage;
-import com.google.common.io.BaseEncoding;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -380,22 +378,23 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
      * @param relativeFilePath Relative file path inside the remote root.
      */
     @Override
-    public Mono<Path> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath) {
+    public Mono<FileMetadata> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath) {
         GSFileSystemSynchronizationRoot gsFileSystemRoot = (GSFileSystemSynchronizationRoot) fileSystemRoot;
         Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                 (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                 relativeFilePath;
         String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
 
-        Mono<Path> deleteFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
+        Mono<FileMetadata> deleteFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
-                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache
+                                .getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
                         .add(HttpHeaderNames.CONTENT_LENGTH, 0)
                 )
                 .delete()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
                 .response()
-                .thenReturn(relativeFilePath);
+                .thenReturn(FileMetadata.createDeleted(relativeFilePath));
 
         return deleteFileMono;
     }
@@ -466,7 +465,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
 
         Mono<DownloadFileResponse> downloadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
-                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache
+                                .getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
                 )
                 .get()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
@@ -504,10 +504,10 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
      * @return Mono returned when the file was fully uploaded.
      */
     @Override
-    public Mono<Path> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot,
+    public Mono<FileMetadata> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot,
                                       Path relativeFilePath,
                                       Mono<DownloadFileResponse> downloadFileResponseMono) {
-        Mono<Path> uploadFinishMono = downloadFileResponseMono
+        Mono<FileMetadata> uploadFinishMono = downloadFileResponseMono
                 .flatMap((DownloadFileResponse downloadResponse) -> {
                     ByteBufFlux bytesFlux = downloadResponse.getByteBufFlux();
                     FileMetadata fileMetadata = downloadResponse.getMetadata();
@@ -523,9 +523,10 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                             fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
                                     "application/octet-stream";
 
-                    Mono<HttpClientResponse> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
+                    Mono<FileMetadata> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                             .headers(httpHeaders -> httpHeaders
-                                    .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                                    .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache
+                                            .getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
                                     .add(HttpHeaderNames.CONTENT_TYPE, contentType)
                                     .add(HttpHeaderNames.CONTENT_LENGTH, fileMetadata.getFileLength())
                                     .add("x-goog-hash", "md5=" + fileMetadata.getMd5()))
@@ -535,7 +536,12 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                             .response()
                             .flatMap(httpClientResponse -> {
                                 if (httpClientResponse.status() == HttpResponseStatus.OK) {
-                                    return Mono.just(httpClientResponse);
+                                    HttpHeaders responseHeaders = httpClientResponse.responseHeaders();
+                                    Long lastModifiedAfterUpload = responseHeaders.getTimeMillis(HttpHeaderNames.DATE);
+                                    long now = Instant.now().toEpochMilli();
+                                    FileMetadata fileMetadataAfterUpload = new FileMetadata(relativeFilePath, lastModifiedAfterUpload,
+                                            fileMetadata.getMd5(), now, fileMetadata.getFileLength());
+                                    return Mono.just(fileMetadataAfterUpload);
                                 }
                                 else {
                                     return Mono.error(new FileSystemChangeException(relativeFilePath,
@@ -543,7 +549,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                                 }
                             });
 
-                    return uploadFileMono.thenReturn(relativeFilePath);
+                    return uploadFileMono;
                 }
                 catch (Exception ex) {
                     throw new FileSystemChangeException(relativeFilePath, ex.getMessage(), ex);

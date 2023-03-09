@@ -28,6 +28,7 @@ import com.google.common.hash.Hashing;
 
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
@@ -51,6 +52,9 @@ public class FileMetadata implements Cloneable {
 
     @JsonProperty("l")
     private long fileLength;
+
+    @JsonIgnore
+    private boolean deleted;
 
     /**
      * Default constructor - to be used by the deserializer.
@@ -76,6 +80,17 @@ public class FileMetadata implements Cloneable {
         this.md5 = md5;
         this.statusCheckedAt = statusCheckedAt;
         this.fileLength = fileLength;
+    }
+
+    /**
+     * Creates a file metadata for a deleted file. Stores only the file path and the deleted flag as true.
+     * @param relativePath Relative path to the file.
+     * @return File metadata for a deleted file.
+     */
+    public static FileMetadata createDeleted(Path relativePath) {
+        FileMetadata fileMetadata = new FileMetadata(relativePath, 0L, null, Instant.now().toEpochMilli(), 0L);
+        fileMetadata.deleted = true;
+        return fileMetadata;
     }
 
     /**
@@ -165,6 +180,22 @@ public class FileMetadata implements Cloneable {
      */
     private void setFileLength(long fileLength) {
         this.fileLength = fileLength;
+    }
+
+    /**
+     * Returns true if the file is deleted.
+     * @return True when the file is deleted.
+     */
+    public boolean isDeleted() {
+        return deleted;
+    }
+
+    /**
+     * Sets the flag to mark the file as deleted.
+     * @param deleted True - deleted, false - not deleted.
+     */
+    public void setDeleted(boolean deleted) {
+        this.deleted = deleted;
     }
 
     /**

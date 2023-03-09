@@ -79,7 +79,7 @@ public interface FileSystemSynchronizationOperations {
      * @param fileSystemRoot File system root (with credentials).
      * @param relativeFilePath Relative file path inside the remote root.
      */
-    Mono<Path> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath);
+    Mono<FileMetadata> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath);
 
     /**
      * Deletes a folder.
@@ -132,5 +132,5 @@ public interface FileSystemSynchronizationOperations {
      * @param downloadFileResponseMono Mono that has a response with a downloaded file
      * @return Mono returned when the file was fully uploaded.
      */
-    Mono<Path> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, Mono<DownloadFileResponse> downloadFileResponseMono);
+    Mono<FileMetadata> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, Mono<DownloadFileResponse> downloadFileResponseMono);
 }
