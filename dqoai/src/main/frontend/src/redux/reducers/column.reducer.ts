@@ -407,12 +407,12 @@ const columnReducer = (state = initialState, action: any) => {
         isUpdatedMonthlyPartitionedChecks: true,
         monthlyPartitionedChecks: action.checksUI
       };
-    case COLUMN_ACTION.GET_COLUMN_ADHOCS_CHECKS_UI_FILTER:
+    case COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER:
       return {
         ...state,
         loading: true
       };
-    case COLUMN_ACTION.GET_COLUMN_ADHOCS_CHECKS_UI_FILTER_SUCCESS:
+    case COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -420,7 +420,7 @@ const columnReducer = (state = initialState, action: any) => {
         isUpdatedChecksUIFilter: false,
         error: null
       };
-    case COLUMN_ACTION.GET_COLUMN_ADHOCS_CHECKS_UI_FILTER_ERROR:
+    case COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_ERROR:
       return {
         ...state,
         loading: false,
