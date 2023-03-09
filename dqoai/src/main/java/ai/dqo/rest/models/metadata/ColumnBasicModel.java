@@ -61,9 +61,9 @@ public class ColumnBasicModel {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredProfilingChecks;
 
-    @JsonPropertyDescription("True when the column has any whole table checks configured.")
+    @JsonPropertyDescription("True when the column has any recurring checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean hasAnyConfiguredWholeTableChecks;
+    private boolean hasAnyConfiguredRecurringChecks;
 
     @JsonPropertyDescription("True when the column has any time period checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -79,8 +79,8 @@ public class ColumnBasicModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this column.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run whole table checks within this column.")
-    private CheckSearchFilters runWholeTableChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this column.")
+    private CheckSearchFilters runRecurringChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run time period partitioned checks within this column.")
     private CheckSearchFilters runTimePeriodChecksJobTemplate;
@@ -113,7 +113,7 @@ public class ColumnBasicModel {
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.ADHOC));
-            setHasAnyConfiguredWholeTableChecks(columnSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredRecurringChecks(columnSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
             setHasAnyConfiguredTimePeriodChecks(columnSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
@@ -130,7 +130,7 @@ public class ColumnBasicModel {
                 setCheckType(CheckType.ADHOC);
                 setEnabled(true);
             }});
-            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
+            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(physicalTableName.toTableSearchFilter());
@@ -191,7 +191,7 @@ public class ColumnBasicModel {
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.ADHOC));
-            setHasAnyConfiguredWholeTableChecks(columnSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredRecurringChecks(columnSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
             setHasAnyConfiguredTimePeriodChecks(columnSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
         }};
     }
