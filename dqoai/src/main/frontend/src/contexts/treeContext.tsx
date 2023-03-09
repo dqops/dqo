@@ -348,7 +348,7 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, node.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await TableApiClient.getTableAdHocChecksUIBasic(
+    const res = await TableApiClient.getTableProfilingChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? ''
@@ -390,7 +390,7 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await ColumnApiClient.getColumnAdHocChecksUIBasic(
+    const res = await ColumnApiClient.getColumnProfilingChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
@@ -653,7 +653,7 @@ function TreeProvider(props: any) {
     }
 
     if (node.level === TREE_LEVEL.TABLE_CHECKS) {
-      const res = await TableApiClient.getTableAdHocChecksUI(
+      const res = await TableApiClient.getTableProfilingChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
@@ -713,7 +713,7 @@ function TreeProvider(props: any) {
     }
 
     if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
-      const res = await ColumnApiClient.getColumnAdHocChecksUI(
+      const res = await ColumnApiClient.getColumnProfilingChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -793,7 +793,7 @@ function TreeProvider(props: any) {
           checkType = 'checkpoint';
           break;
         case CheckTypes.PROFILING:
-          checkType = 'adhoc';
+          checkType = 'profiling';
           break;
         case CheckTypes.TIME_PARTITIONED:
           checkType = 'partitioned';
