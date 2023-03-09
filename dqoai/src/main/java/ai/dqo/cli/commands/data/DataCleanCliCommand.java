@@ -107,7 +107,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
             required = true)
     private String connection;
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table)",
+    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'",
             completionCandidates = FullTableNameCompleter.class,
             required = true)
     private String table;

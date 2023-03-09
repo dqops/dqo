@@ -59,7 +59,7 @@ public class TableEditCliCommand extends BaseCommand implements ICommand, IConne
         this.tableEditService = tableEditService;
     }
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table)", completionCandidates = FullTableNameCompleter.class)
+    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", completionCandidates = FullTableNameCompleter.class)
     private String table;
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection Name", completionCandidates = ConnectionNameCompleter.class)
@@ -113,7 +113,7 @@ public class TableEditCliCommand extends BaseCommand implements ICommand, IConne
 
         if (Strings.isNullOrEmpty(this.table)) {
 			throwRequiredParameterMissingIfHeadless("--table");
-			this.table = this.terminalReader.prompt("Full table name e.g. schemaname.tablename (--table)", null, false);
+			this.table = this.terminalReader.prompt("Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", null, false);
         }
 
         return this.tableEditService.launchEditorForTable(this.connection, this.table);
