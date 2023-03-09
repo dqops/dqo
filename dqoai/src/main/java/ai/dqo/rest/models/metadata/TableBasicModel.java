@@ -70,13 +70,13 @@ public class TableBasicModel {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredProfilingChecks;
 
-    @JsonPropertyDescription("True when the table has any whole table checks configured.")
+    @JsonPropertyDescription("True when the table has any recurring checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean hasAnyConfiguredWholeTableChecks;
+    private boolean hasAnyConfiguredRecurringChecks;
 
-    @JsonPropertyDescription("True when the table has any time period checks configured.")
+    @JsonPropertyDescription("True when the table has any partition checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean hasAnyConfiguredTimePeriodChecks;
+    private boolean hasAnyConfiguredPartitionChecks;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this table.")
     private CheckSearchFilters runChecksJobTemplate;
@@ -84,11 +84,11 @@ public class TableBasicModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this table.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run whole table checks within this table.")
-    private CheckSearchFilters runWholeTableChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this table.")
+    private CheckSearchFilters runRecurringChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run time period partitioned checks within this table.")
-    private CheckSearchFilters runTimePeriodChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run partition partitioned checks within this table.")
+    private CheckSearchFilters runPartitionChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this table.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
@@ -111,8 +111,8 @@ public class TableBasicModel {
             setDisabled(tableSpec.isDisabled());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.ADHOC));
-            setHasAnyConfiguredWholeTableChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
-            setHasAnyConfiguredTimePeriodChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
+            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -126,14 +126,14 @@ public class TableBasicModel {
                 setCheckType(CheckType.ADHOC);
                 setEnabled(true);
             }});
-            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
+            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
                 setCheckType(CheckType.CHECKPOINT);
                 setEnabled(true);
             }});
-            setRunTimePeriodChecksJobTemplate(new CheckSearchFilters()
+            setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
@@ -167,8 +167,8 @@ public class TableBasicModel {
             setOwner(tableSpec.getOwner());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.ADHOC));
-            setHasAnyConfiguredWholeTableChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
-            setHasAnyConfiguredTimePeriodChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
+            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -182,14 +182,14 @@ public class TableBasicModel {
                 setCheckType(CheckType.ADHOC);
                 setEnabled(true);
             }});
-            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
+            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
                 setCheckType(CheckType.CHECKPOINT);
                 setEnabled(true);
             }});
-            setRunTimePeriodChecksJobTemplate(new CheckSearchFilters()
+            setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
