@@ -88,7 +88,7 @@ const CommentsView = ({
           <Input className="h-10 focus:!ring-0 focus:!border" value={text} onChange={onChangeText} />
         </div>
         <IconButton size="sm" className="w-10 h-10" color="teal" onClick={onAdd}>
-          <SvgIcon name="add" className="w-5" />
+          <SvgIcon name="add" className="w-5 text-white" />
         </IconButton>
       </div>
     </div>

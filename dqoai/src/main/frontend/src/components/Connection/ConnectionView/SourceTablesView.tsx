@@ -118,7 +118,7 @@ const SourceSchemasView = ({
                   <SvgIcon
                     name={item.alreadyImported ? 'check' : 'close'}
                     className={
-                      item.alreadyImported ? 'text-green-700' : 'text-red-700'
+                      item.alreadyImported ? 'text-primary' : 'text-red-700'
                     }
                     width={30}
                     height={22}

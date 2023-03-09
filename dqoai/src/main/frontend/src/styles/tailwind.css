@@ -64,3 +64,7 @@ input::-webkit-inner-spin-button {
 .react-datepicker__day--selected, .react-datepicker__day--selected:hover {
     @apply bg-teal-500;
 }
+
+body {
+    color: #2F2F2F;
+}

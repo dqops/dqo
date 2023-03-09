@@ -59,7 +59,7 @@ const Tree = () => {
     }
     return (
       <SvgIcon
-        className="w-4 min-w-4 text-black cursor-pointer shrink-0"
+        className="w-4 min-w-4 cursor-pointer shrink-0"
         name={!node.open ? 'arrow-alt-right' : 'arrow-alt-down'}
         onClick={() => {
           toggleOpenNode(node.id);
@@ -94,7 +94,7 @@ const Tree = () => {
               <div className="flex flex-1 justify-between items-center">
                 <div
                   className={clsx(
-                    `text-black flex-1 truncate mr-7`,
+                    `flex-1 truncate mr-7`,
                     node.hasCheck ? 'font-bold' : ''
                   )}
                 >

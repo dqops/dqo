@@ -97,7 +97,7 @@ const CheckSettings = ({
             />
           )}
           {activeTab === 'comments' && (
-            <div className="max-w-160 overflow-auto">
+            <div className="overflow-auto">
               <CommentsView
                 text={text}
                 setText={setText}
