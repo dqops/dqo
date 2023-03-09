@@ -143,7 +143,7 @@ public class PythonCallerServiceImpl implements PythonCallerService {
     }
 
     /**
-     * Executes a python script in the DQO_HOME folder in an ad-hoc mode. A new process is started, inputs sent, outputs received and the process finishes.
+     * Executes a python script in the DQO_HOME folder in an profiling mode. A new process is started, inputs sent, outputs received and the process finishes.
      * @param inputs List of input objects to serialize to JSON and feed to the standard input of the python script.
      * @param pythonFilePathInHome Path to the python module (.py file) that is relative to the DQO_HOME folder.
      * @param outputType Output type to parse the returned json objects.

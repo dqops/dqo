@@ -53,11 +53,11 @@ public class CheckResultsOverviewController {
      * @return Overview of the most recent check results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/overview")
-    @ApiOperation(value = "getTableProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all table level data quality ad-hoc checks on a table",
+    @ApiOperation(value = "getTableProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all table level data quality profiling checks on a table",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Overview of the most recent check runs for table level data quality ad-hoc checks on a table returned",
+            @ApiResponse(code = 200, message = "Overview of the most recent check runs for table level data quality profiling checks on a table returned",
                     response = CheckResultsOverviewDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
@@ -208,11 +208,11 @@ public class CheckResultsOverviewController {
      * @return Overview of the most recent check results.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/overview")
-    @ApiOperation(value = "getColumnProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all column level data quality ad-hoc checks on a column",
+    @ApiOperation(value = "getColumnProfilingChecksOverview", notes = "Returns an overview of the most recent check executions for all column level data quality profiling checks on a column",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Overview of the most recent check runs for column level data quality ad-hoc checks on a column returned",
+            @ApiResponse(code = 200, message = "Overview of the most recent check runs for column level data quality profiling checks on a column returned",
                     response = CheckResultsOverviewDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)

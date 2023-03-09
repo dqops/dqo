@@ -380,18 +380,18 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves the configuration of column level data quality ad-hoc checks on a column given a connection, table name, and column name.
+     * Retrieves the configuration of column level data quality profiling checks on a column given a connection, table name, and column name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @return Data quality ad-hoc checks on a requested column of the table.
+     * @return Data quality profiling checks on a requested column of the table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks")
-    @ApiOperation(value = "getColumnProfilingChecks", notes = "Return the configuration of column level data quality ad-hoc checks on a column", response = ColumnProfilingCheckCategoriesSpec.class)
+    @ApiOperation(value = "getColumnProfilingChecks", notes = "Return the configuration of column level data quality profiling checks on a column", response = ColumnProfilingCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of column level data quality ad-hoc checks on a column returned", response = ColumnProfilingCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of column level data quality profiling checks on a column returned", response = ColumnProfilingCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -556,18 +556,18 @@ public class ColumnsController {
 
 
     /**
-     * Retrieves a UI friendly model of column level data quality ad-hoc checks on a column given a connection, table name, and column name.
+     * Retrieves a UI friendly model of column level data quality profiling checks on a column given a connection, table name, and column name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @return UI friendly model of data quality ad-hoc checks on a requested column.
+     * @return UI friendly model of data quality profiling checks on a requested column.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui")
-    @ApiOperation(value = "getColumnProfilingChecksUI", notes = "Return a UI friendly model of data quality ad-hoc checks on a column", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksUI", notes = "Return a UI friendly model of data quality profiling checks on a column", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "UI model of column level data quality ad-hoc checks on a column returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "UI model of column level data quality profiling checks on a column returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal iServer Error", response = SpringErrorPayload.class)
     })
@@ -752,18 +752,18 @@ public class ColumnsController {
 
 
     /**
-     * Retrieves a simplistic UI friendly model of column level data quality ad-hoc checks on a column given a connection, table name, and column name.
+     * Retrieves a simplistic UI friendly model of column level data quality profiling checks on a column given a connection, table name, and column name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @return Simplistic UI friendly data quality ad-hoc check list on a requested column.
+     * @return Simplistic UI friendly data quality profiling check list on a requested column.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/basic")
-    @ApiOperation(value = "getColumnProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality ad-hoc checks on a column", response = UIAllChecksBasicModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of column level data quality profiling checks on a column", response = UIAllChecksBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality ad-hoc checks on a column returned", response = UIAllChecksBasicModel.class),
+            @ApiResponse(code = 200, message = "Simplistic UI model of column level data quality profiling checks on a column returned", response = UIAllChecksBasicModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -900,20 +900,20 @@ public class ColumnsController {
     }
 
     /**
-     * Retrieves a UI friendly model of column level data quality ad-hoc checks on a column given a connection, table name, and column name, filtered by category and check name.
+     * Retrieves a UI friendly model of column level data quality profiling checks on a column given a connection, table name, and column name, filtered by category and check name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param checkCategory  Check category.
      * @param checkName      Check name.
-     * @return UI friendly model of data quality ad-hoc checks on a requested column.
+     * @return UI friendly model of data quality profiling checks on a requested column.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui/filter/{checkCategory}/{checkName}")
-    @ApiOperation(value = "getColumnProfilingChecksUIFilter", notes = "Return a UI friendly model of data quality ad-hoc checks on a column filtered by category and check name", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getColumnProfilingChecksUIFilter", notes = "Return a UI friendly model of data quality profiling checks on a column filtered by category and check name", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "UI model of column level data quality ad-hoc checks on a column returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "UI model of column level data quality profiling checks on a column returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection, table or column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -1372,19 +1372,19 @@ public class ColumnsController {
     }
 
     /**
-     * Updates the configuration of column level data quality ad-hoc checks configured on a column.
+     * Updates the configuration of column level data quality profiling checks configured on a column.
      * @param connectionName            Connection name.
      * @param schemaName                Schema name.
      * @param tableName                 Table name.
      * @param columnName                Column name.
-     * @param columnCheckCategoriesSpec New configuration of the column level data quality ad-hoc checks to configure on a column or an empty optional to clear the list of ad-hoc checks.
+     * @param columnCheckCategoriesSpec New configuration of the column level data quality profiling checks to configure on a column or an empty optional to clear the list of profiling checks.
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks")
-    @ApiOperation(value = "updateColumnProfilingChecks", notes = "Updates configuration of column level data quality ad-hoc checks on a column.")
+    @ApiOperation(value = "updateColumnProfilingChecks", notes = "Updates configuration of column level data quality profiling checks on a column.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column level data quality ad-hoc checks successfully updated"),
+            @ApiResponse(code = 204, message = "Column level data quality profiling checks successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
@@ -1395,7 +1395,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("Configuration of column level data quality ad-hoc checks to configure on a column or an empty object to clear the list of assigned data quality ad-hoc checks on the column")
+            @ApiParam("Configuration of column level data quality profiling checks to configure on a column or an empty object to clear the list of assigned data quality profiling checks on the column")
             @RequestBody Optional<ColumnProfilingCheckCategoriesSpec> columnCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1650,19 +1650,19 @@ public class ColumnsController {
 
 
     /**
-     * Updates the configuration of column level data quality ad-hoc checks configured on a column from a UI friendly model.
+     * Updates the configuration of column level data quality profiling checks configured on a column from a UI friendly model.
      * @param connectionName            Connection name.
      * @param schemaName                Schema name.
      * @param tableName                 Table name.
      * @param columnName                Column name.
-     * @param uiAllChecksModel          UI model of the column level data quality checks to be applied on the configuration of the data quality ad-hoc checks on a column. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
+     * @param uiAllChecksModel          UI model of the column level data quality checks to be applied on the configuration of the data quality profiling checks on a column. Only data quality dimensions and data quality checks that are present in the UI model are updated (patched).
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/ui")
-    @ApiOperation(value = "updateColumnProfilingChecksUI", notes = "Updates configuration of column level data quality ad-hoc checks on a column from a UI friendly model.")
+    @ApiOperation(value = "updateColumnProfilingChecksUI", notes = "Updates configuration of column level data quality profiling checks on a column from a UI friendly model.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column level data quality ad-hoc checks successfully updated"),
+            @ApiResponse(code = 204, message = "Column level data quality profiling checks successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table or column not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
@@ -1673,7 +1673,7 @@ public class ColumnsController {
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
             @ApiParam("Column name") @PathVariable String columnName,
-            @ApiParam("UI model with the changes to be applied to the data quality ad-hoc checks configuration")
+            @ApiParam("UI model with the changes to be applied to the data quality profiling checks configuration")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||

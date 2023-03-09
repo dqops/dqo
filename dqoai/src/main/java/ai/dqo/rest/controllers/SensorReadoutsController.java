@@ -71,11 +71,11 @@ public class SensorReadoutsController {
      * @return View of the recent sensor readouts.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/readouts")
-    @ApiOperation(value = "getTableProfilingSensorReadouts", notes = "Returns the complete results of the most recent check executions for all table level data quality ad-hoc checks on a table",
+    @ApiOperation(value = "getTableProfilingSensorReadouts", notes = "Returns the complete results of the most recent check executions for all table level data quality profiling checks on a table",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Complete view sensor readouts of recent check runs for table level data quality ad-hoc checks on a table returned",
+            @ApiResponse(code = 200, message = "Complete view sensor readouts of recent check runs for table level data quality profiling checks on a table returned",
                     response = SensorReadoutsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
@@ -249,11 +249,11 @@ public class SensorReadoutsController {
      * @return View of the recent sensor readouts.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checks/readouts")
-    @ApiOperation(value = "getColumnProfilingSensorReadouts", notes = "Returns sensor results of the recent check executions for all column level data quality ad-hoc checks on a column",
+    @ApiOperation(value = "getColumnProfilingSensorReadouts", notes = "Returns sensor results of the recent check executions for all column level data quality profiling checks on a column",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Complete view sensor readouts of recent check runs for column level data quality ad-hoc checks on a column returned",
+            @ApiResponse(code = 200, message = "Complete view sensor readouts of recent check runs for column level data quality profiling checks on a column returned",
                     response = SensorReadoutsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)

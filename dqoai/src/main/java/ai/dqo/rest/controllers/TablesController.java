@@ -641,17 +641,17 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name.
+     * Retrieves the configuration of data quality profiling checks as a UI friendly model on a table given a connection name and a table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return UI friendly data quality ad-hoc check configuration list on a requested table.
+     * @return UI friendly data quality profiling check configuration list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
-    @ApiOperation(value = "getTableProfilingChecksUI", notes = "Return a UI friendly model of configurations for all table level data quality ad-hoc checks on a table", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTableProfilingChecksUI", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality ad-hoc checks on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality profiling checks on a table returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -821,17 +821,17 @@ public class TablesController {
 
 
     /**
-     * Retrieves a simplistic list of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name.
+     * Retrieves a simplistic list of data quality profiling checks as a UI friendly model on a table given a connection name and a table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Simplistic UI friendly data quality ad-hoc checks list on a requested table.
+     * @return Simplistic UI friendly data quality profiling checks list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui/basic")
-    @ApiOperation(value = "getTableProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of all table level data quality ad-hoc checks on a table", response = UIAllChecksBasicModel.class)
+    @ApiOperation(value = "getTableProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of all table level data quality profiling checks on a table", response = UIAllChecksBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of table level data quality ad-hoc checks on a table returned", response = UIAllChecksBasicModel.class),
+            @ApiResponse(code = 200, message = "List of table level data quality profiling checks on a table returned", response = UIAllChecksBasicModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -960,19 +960,19 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name, filtered by category and check name.
+     * Retrieves the configuration of data quality profiling checks as a UI friendly model on a table given a connection name and a table name, filtered by category and check name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param checkCategory  Check category.
      * @param checkName      Check name.
-     * @return UI friendly data quality ad-hoc check configuration list on a requested table, filtered by category and check name.
+     * @return UI friendly data quality profiling check configuration list on a requested table, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui/filter/{checkCategory}/{checkName}")
-    @ApiOperation(value = "getTableProfilingChecksUIFilter", notes = "Return a UI friendly model of configurations for all table level data quality ad-hoc checks on a table passing a filter", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTableProfilingChecksUIFilter", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality ad-hoc checks on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality profiling checks on a table returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
@@ -1669,18 +1669,18 @@ public class TablesController {
     }
 
     /**
-     * Updates the configuration of table level data quality ad-hoc checks of an existing table.
+     * Updates the configuration of table level data quality profiling checks of an existing table.
      * @param connectionName                Connection name.
      * @param schemaName                    Schema name.
      * @param tableName                     Table name.
-     * @param tableProfilingCheckCategoriesSpec New configuration of the data quality ad-hoc checks on the table level.
+     * @param tableProfilingCheckCategoriesSpec New configuration of the data quality profiling checks on the table level.
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks")
-    @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality ad-hoc checks on an existing table.")
+    @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality profiling checks on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality ad-hoc checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
@@ -1690,7 +1690,7 @@ public class TablesController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Configuration of table level data quality ad-hoc checks to store or an empty object to remove all data quality ad-hoc checks on the table level (column level ad-hoc checks are preserved).")
+            @ApiParam("Configuration of table level data quality profiling checks to store or an empty object to remove all data quality profiling checks on the table level (column level profiling checks are preserved).")
             @RequestBody Optional<TableProfilingCheckCategoriesSpec> tableProfilingCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
@@ -1965,18 +1965,18 @@ public class TablesController {
     }
 
     /**
-     * Updates the data quality ad-hoc check specification on an existing table from a check UI model with a patch of changes.
+     * Updates the data quality profiling check specification on an existing table from a check UI model with a patch of changes.
      * @param connectionName           Connection name.
      * @param schemaName               Schema name.
      * @param tableName                Table name.
-     * @param uiAllChecksModel         New configuration of the data quality checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those ad-hoc checks that are present in the UI model are updated, the others are preserved without any changes.
+     * @param uiAllChecksModel         New configuration of the data quality checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those profiling checks that are present in the UI model are updated, the others are preserved without any changes.
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
-    @ApiOperation(value = "updateTableProfilingChecksUI", notes = "Updates the data quality ad-hoc checks from an UI model that contains a patch with changes.")
+    @ApiOperation(value = "updateTableProfilingChecksUI", notes = "Updates the data quality profiling checks from an UI model that contains a patch with changes.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality ad-hoc checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
@@ -1986,7 +1986,7 @@ public class TablesController {
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("UI model with the changes to be applied to the data quality ad-hoc checks configuration.")
+            @ApiParam("UI model with the changes to be applied to the data quality profiling checks configuration.")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
