@@ -698,18 +698,18 @@ export const setUpdatedMonthlyPartitionedChecks = (
 });
 
 export const getColumnProfilingChecksUIFilterRequest = () => ({
-  type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER
+  type: COLUMN_ACTION.GET_COLUMN_PROFILING_CHECKS_UI_FILTER
 });
 
 export const getColumnProfilingChecksUIFilterSuccess = (
   data: UIAllChecksModel
 ) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
+  type: COLUMN_ACTION.GET_COLUMN_PROFILING_CHECKS_UI_FILTER_SUCCESS,
   data
 });
 
 export const getColumnProfilingChecksUIFilterFailed = (error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_ERROR,
+  type: COLUMN_ACTION.GET_COLUMN_PROFILING_CHECKS_UI_FILTER_ERROR,
   error
 });
 
