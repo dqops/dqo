@@ -12,19 +12,19 @@ import {
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 
-interface IAdhocViewProps {
+interface IProfilingViewProps {
   connectionName: string;
   schemaName: string;
   tableName: string;
   columnName: string;
 }
 
-const AdhocView = ({
+const ProfilingView = ({
   connectionName,
   schemaName,
   tableName,
   columnName
-}: IAdhocViewProps) => {
+}: IProfilingViewProps) => {
   const { columnBasic, checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(
     (state: IRootState) => state.column
   );
@@ -32,7 +32,7 @@ const AdhocView = ({
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnAdHocChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
+    CheckResultOverviewApi.getColumnProfilingChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -93,4 +93,4 @@ const AdhocView = ({
   );
 };
 
-export default AdhocView;
+export default ProfilingView;

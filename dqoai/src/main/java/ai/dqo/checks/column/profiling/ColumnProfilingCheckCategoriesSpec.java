@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.adhoc;
+package ai.dqo.checks.column.profiling;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
@@ -45,8 +45,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
+public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("nulls", o -> o.nulls);
             put("numeric", o -> o.numeric);
@@ -65,53 +65,53 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     @JsonPropertyDescription("Configuration of column level checks that verify nulls and blanks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocNullsChecksSpec nulls;
+    private ColumnProfilingNullsChecksSpec nulls;
 
     @JsonPropertyDescription("Configuration of column level checks that verify negative values.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocNumericChecksSpec numeric;
+    private ColumnProfilingNumericChecksSpec numeric;
 
     @JsonPropertyDescription("Configuration of strings checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocStringsChecksSpec strings;
+    private ColumnProfilingStringsChecksSpec strings;
 
     @JsonPropertyDescription("Configuration of uniqueness checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocUniquenessChecksSpec uniqueness;
+    private ColumnProfilingUniquenessChecksSpec uniqueness;
 
     @JsonPropertyDescription("Configuration of datetime checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocDatetimeChecksSpec datetime;
+    private ColumnProfilingDatetimeChecksSpec datetime;
 
     @JsonPropertyDescription("Configuration of Personal Identifiable Information (PII) checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocPiiChecksSpec pii;
+    private ColumnProfilingPiiChecksSpec pii;
 
     @JsonPropertyDescription("Configuration of SQL checks that use custom SQL aggregated expressions and SQL conditions in data quality checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocSqlChecksSpec sql;
+    private ColumnProfilingSqlChecksSpec sql;
 
     @JsonPropertyDescription("Configuration of booleans checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocBoolChecksSpec bool;
+    private ColumnProfilingBoolChecksSpec bool;
 
     @JsonPropertyDescription("Configuration of integrity checks on a column level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAdHocIntegrityChecksSpec integrity;
+    private ColumnProfilingIntegrityChecksSpec integrity;
 
     /**
      * Returns the nulls check configuration on a column level.
      * @return Nulls check configuration.
      */
-    public ColumnAdHocNullsChecksSpec getNulls() {
+    public ColumnProfilingNullsChecksSpec getNulls() {
         return nulls;
     }
 
@@ -119,7 +119,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Sets the nulls check configuration on a column level.
      * @param nulls New nulls checks configuration.
      */
-    public void setNulls(ColumnAdHocNullsChecksSpec nulls) {
+    public void setNulls(ColumnProfilingNullsChecksSpec nulls) {
         this.setDirtyIf(!Objects.equals(this.nulls, nulls));
         this.nulls = nulls;
         this.propagateHierarchyIdToField(nulls, "nulls");
@@ -129,7 +129,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Returns the negative values check configuration on a column level.
      * @return Negative values check configuration.
      */
-    public ColumnAdHocNumericChecksSpec getNumeric() {
+    public ColumnProfilingNumericChecksSpec getNumeric() {
         return numeric;
     }
 
@@ -137,7 +137,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Sets the negative values check configuration on a column level.
      * @param numeric New negative values checks configuration.
      */
-    public void setNumeric(ColumnAdHocNumericChecksSpec numeric) {
+    public void setNumeric(ColumnProfilingNumericChecksSpec numeric) {
         this.setDirtyIf(!Objects.equals(this.numeric, numeric));
         this.numeric = numeric;
         this.propagateHierarchyIdToField(numeric, "numeric");
@@ -147,7 +147,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Returns the strings check configuration on a column level.
      * @return Strings check configuration.
      */
-    public ColumnAdHocStringsChecksSpec getStrings() {
+    public ColumnProfilingStringsChecksSpec getStrings() {
         return strings;
     }
 
@@ -155,7 +155,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Sets the string check configuration on a column level.
      * @param strings New string checks configuration.
      */
-    public void setStrings(ColumnAdHocStringsChecksSpec strings) {
+    public void setStrings(ColumnProfilingStringsChecksSpec strings) {
         this.setDirtyIf(!Objects.equals(this.strings, strings));
         this.strings = strings;
         this.propagateHierarchyIdToField(strings, "strings");
@@ -165,7 +165,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Returns the uniqueness check configuration on a column level.
      * @return Uniqueness check configuration.
      */
-    public ColumnAdHocUniquenessChecksSpec getUniqueness() {
+    public ColumnProfilingUniquenessChecksSpec getUniqueness() {
         return uniqueness;
     }
 
@@ -173,7 +173,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Sets the uniqueness check configuration on a column level.
      * @param uniqueness New uniqueness checks configuration.
      */
-    public void setUniqueness(ColumnAdHocUniquenessChecksSpec uniqueness) {
+    public void setUniqueness(ColumnProfilingUniquenessChecksSpec uniqueness) {
         this.setDirtyIf(!Objects.equals(this.uniqueness, uniqueness));
         this.uniqueness = uniqueness;
         this.propagateHierarchyIdToField(uniqueness, "uniqueness");
@@ -183,7 +183,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Returns the datetime check configuration on a column level.
      * @return Datetime check configuration.
      */
-    public ColumnAdHocDatetimeChecksSpec getDatetime() {
+    public ColumnProfilingDatetimeChecksSpec getDatetime() {
         return datetime;
     }
 
@@ -191,7 +191,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Sets the datetime check configuration on a column level.
      * @param datetime New datetime checks configuration.
      */
-    public void setDatetime(ColumnAdHocDatetimeChecksSpec datetime) {
+    public void setDatetime(ColumnProfilingDatetimeChecksSpec datetime) {
         this.setDirtyIf(!Objects.equals(this.datetime, datetime));
         this.datetime = datetime;
         this.propagateHierarchyIdToField(datetime, "datetime");
@@ -201,7 +201,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Returns the Personal Identifiable Information (PII) check configuration on a column level.
      * @return Personal Identifiable Information (PII) check configuration.
      */
-    public ColumnAdHocPiiChecksSpec getPii() {
+    public ColumnProfilingPiiChecksSpec getPii() {
         return pii;
     }
 
@@ -209,7 +209,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Sets the Personal Identifiable Information (PII) check configuration on a column level.
      * @param pii New Personal Identifiable Information (PII) checks configuration.
      */
-    public void setPii(ColumnAdHocPiiChecksSpec pii) {
+    public void setPii(ColumnProfilingPiiChecksSpec pii) {
         this.setDirtyIf(!Objects.equals(this.pii, pii));
         this.pii = pii;
         this.propagateHierarchyIdToField(pii, "pii");
@@ -219,7 +219,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Returns the configuration of custom SQL checks.
      * @return Configuration of custom sql checks.
      */
-    public ColumnAdHocSqlChecksSpec getSql() {
+    public ColumnProfilingSqlChecksSpec getSql() {
         return sql;
     }
 
@@ -227,7 +227,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Sets a reference to the configuration of custom SQL checks.
      * @param sql Custom sql checks.
      */
-    public void setSql(ColumnAdHocSqlChecksSpec sql) {
+    public void setSql(ColumnProfilingSqlChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
@@ -237,7 +237,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Returns the booleans check configuration on a column level.
      * @return Boolean check configuration.
      */
-    public ColumnAdHocBoolChecksSpec getBool() {
+    public ColumnProfilingBoolChecksSpec getBool() {
         return bool;
     }
 
@@ -245,7 +245,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Sets the boolean check configuration on a column level.
      * @param bool New boolean checks configuration.
      */
-    public void setBool(ColumnAdHocBoolChecksSpec bool) {
+    public void setBool(ColumnProfilingBoolChecksSpec bool) {
         this.setDirtyIf(!Objects.equals(this.bool, bool));
         this.bool = bool;
         this.propagateHierarchyIdToField(bool, "bool");
@@ -255,7 +255,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Returns the integrity check configuration on a column level.
      * @return Integrity check configuration.
      */
-    public ColumnAdHocIntegrityChecksSpec getIntegrity() {
+    public ColumnProfilingIntegrityChecksSpec getIntegrity() {
         return integrity;
     }
 
@@ -263,7 +263,7 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
      * Sets the integrity check configuration on a column level.
      * @param integrity New integrity checks configuration.
      */
-    public void setIntegrity(ColumnAdHocIntegrityChecksSpec integrity) {
+    public void setIntegrity(ColumnProfilingIntegrityChecksSpec integrity) {
         this.setDirtyIf(!Objects.equals(this.integrity, integrity));
         this.integrity = integrity;
         this.propagateHierarchyIdToField(integrity, "integrity");
@@ -306,19 +306,19 @@ public class ColumnAdHocCheckCategoriesSpec extends AbstractRootChecksContainerS
     }
 
     /**
-     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     * Returns the type of checks (profiling, checkpoint, partitioned).
      *
      * @return Check type.
      */
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.ADHOC;
+        return CheckType.PROFILING;
     }
 
     /**
      * Returns the time range for checkpoint and partitioned checks (daily, monthly, etc.).
-     * Adhoc checks do not have a time range and return null.
+     * Profiling checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
      */

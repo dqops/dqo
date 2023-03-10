@@ -93,7 +93,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     /**
      * Creates a UI friendly model of the whole checks container on table level or column level data quality checks, divided into categories.
      *
-     * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
+     * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, checkpoint or partitioned check (for a specific timescale).
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations. Also determines which checks will be included in the ui model.
      * @param connectionSpec Connection specification for the connection to which the table belongs to.
      * @param tableSpec Table specification with the configuration of the parent table.
@@ -186,7 +186,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     /**
      * Creates a simplistic UI friendly model of every data quality check on table level or column level, divided into categories.
      *
-     * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
+     * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, checkpoint or partitioned check (for a specific timescale).
      * @return Simplistic UI friendly model of data quality checks' container.
      */
     @Override

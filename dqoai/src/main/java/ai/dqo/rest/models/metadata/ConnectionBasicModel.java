@@ -102,7 +102,7 @@ public class ConnectionBasicModel {
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setCheckType(CheckType.ADHOC);
+                setCheckType(CheckType.PROFILING);
                 setEnabled(true);
             }});
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()

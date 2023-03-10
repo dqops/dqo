@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.table.adhoc;
+package ai.dqo.checks.table.profiling;
 
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
@@ -44,8 +44,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
-    public static final ChildHierarchyNodeFieldMapImpl<TableAdHocCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
+public class TableProfilingCheckCategoriesSpec extends AbstractRootChecksContainerSpec implements TimeSeriesConfigurationProvider {
+    public static final ChildHierarchyNodeFieldMapImpl<TableProfilingCheckCategoriesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRootChecksContainerSpec.FIELDS) {
         {
             put("standard", o -> o.standard);
             put("timeliness", o -> o.timeliness);
@@ -59,29 +59,29 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     @JsonPropertyDescription("Configuration of standard data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAdHocStandardChecksSpec standard;
+    private TableProfilingStandardChecksSpec standard;
 
     @JsonPropertyDescription("Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAdHocTimelinessChecksSpec timeliness;
+    private TableProfilingTimelinessChecksSpec timeliness;
 
     @JsonPropertyDescription("Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAdHocSqlChecksSpec sql;
+    private TableProfilingSqlChecksSpec sql;
 
     @JsonPropertyDescription("Configuration of standard data quality checks on a table level.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAdHocAvailabilityChecksSpec availability;
+    private TableProfilingAvailabilityChecksSpec availability;
 
 
     /**
      * Returns a container of standard check configuration on a table level.
      * @return Standard checks configuration.
      */
-    public TableAdHocStandardChecksSpec getStandard() {
+    public TableProfilingStandardChecksSpec getStandard() {
         return standard;
     }
 
@@ -89,7 +89,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
      * Sets a reference to a standard checks container.
      * @param standard New standard checks configuration.
      */
-    public void setStandard(TableAdHocStandardChecksSpec standard) {
+    public void setStandard(TableProfilingStandardChecksSpec standard) {
         this.setDirtyIf(!Objects.equals(this.standard, standard));
         this.standard = standard;
         this.propagateHierarchyIdToField(standard, "standard");
@@ -99,7 +99,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
      * Returns a container of timeliness checks.
      * @return Timeliness data quality checks on a table level configuration.
      */
-    public TableAdHocTimelinessChecksSpec getTimeliness() {
+    public TableProfilingTimelinessChecksSpec getTimeliness() {
         return timeliness;
     }
 
@@ -107,7 +107,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
      * Sets a reference to a timeliness table level checks container.
      * @param timeliness New timeliness checks.
      */
-    public void setTimeliness(TableAdHocTimelinessChecksSpec timeliness) {
+    public void setTimeliness(TableProfilingTimelinessChecksSpec timeliness) {
         this.setDirtyIf(!Objects.equals(this.timeliness, timeliness));
         this.timeliness = timeliness;
         this.propagateHierarchyIdToField(timeliness, "timeliness");
@@ -117,7 +117,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
      * Returns a container of custom sql checks.
      * @return Custom sql checks.
      */
-    public TableAdHocSqlChecksSpec getSql() {
+    public TableProfilingSqlChecksSpec getSql() {
         return sql;
     }
 
@@ -125,7 +125,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
      * Sets a reference to a custom sql checks container.
      * @param sql Custom sql checks.
      */
-    public void setSql(TableAdHocSqlChecksSpec sql) {
+    public void setSql(TableProfilingSqlChecksSpec sql) {
         this.setDirtyIf(!Objects.equals(this.sql, sql));
         this.sql = sql;
         this.propagateHierarchyIdToField(sql, "sql");
@@ -135,7 +135,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
      * Returns a container of custom sql checks.
      * @return Custom sql checks.
      */
-    public TableAdHocAvailabilityChecksSpec getAvailability() {
+    public TableProfilingAvailabilityChecksSpec getAvailability() {
         return availability;
     }
 
@@ -143,7 +143,7 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
      * Sets a reference to a custom sql checks container.
      * @param availability Custom sql checks.
      */
-    public void setAvailability(TableAdHocAvailabilityChecksSpec availability) {
+    public void setAvailability(TableProfilingAvailabilityChecksSpec availability) {
         this.setDirtyIf(!Objects.equals(this.availability, availability));
         this.availability = availability;
         this.propagateHierarchyIdToField(availability, "availability");
@@ -175,19 +175,19 @@ public class TableAdHocCheckCategoriesSpec extends AbstractRootChecksContainerSp
     }
 
     /**
-     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     * Returns the type of checks (profiling, checkpoint, partitioned).
      *
      * @return Check type.
      */
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.ADHOC;
+        return CheckType.PROFILING;
     }
 
     /**
      * Returns the time range for checkpoint and partitioned checks (daily, monthly, etc.).
-     * Adhoc checks do not have a time range and return null.
+     * Profiling checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
      */

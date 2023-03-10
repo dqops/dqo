@@ -17,8 +17,8 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
@@ -135,11 +135,11 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getTableAdHocChecks_whenTableRequested_thenReturnsAdHocChecks() {
+    void getTableProfilingChecks_whenTableRequested_thenReturnsProfilingChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableAdHocChecksUI(
+        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableProfilingChecksUI(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getTarget().getSchemaName(),
                 tableSpec.getTarget().getTableName());
@@ -210,11 +210,11 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getTableAdHocChecksUI_whenTableRequested_thenReturnsAdHocChecksUi() {
+    void getTableProfilingChecksUI_whenTableRequested_thenReturnsProfilingChecksUi() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableAdHocChecksUI(
+        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableProfilingChecksUI(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getTarget().getSchemaName(),
                 tableSpec.getTarget().getTableName());
@@ -257,11 +257,11 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getTableAdHocChecksUIBasic_whenTableRequested_thenReturnsAdHocChecksUiBasic() {
+    void getTableProfilingChecksUIBasic_whenTableRequested_thenReturnsProfilingChecksUiBasic() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         TableSpec tableSpec = this.sampleTable.getTableSpec();
 
-        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getTableAdHocChecksUIBasic(
+        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getTableProfilingChecksUIBasic(
                 this.sampleTable.getConnectionName(),
                 tableSpec.getTarget().getSchemaName(),
                 tableSpec.getTarget().getTableName());
@@ -304,7 +304,7 @@ public class TablesControllerUTTests extends BaseTest {
     }
     
     @Test
-    void updateTableAdHocChecks_whenTableAndAdHocChecksRequested_updatesAdHocChecks() {
+    void updateTableProfilingChecks_whenTableAndProfilingChecksRequested_updatesProfilingChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
@@ -315,20 +315,20 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
-        TableAdHocStandardChecksSpec standardChecksSpec = new TableAdHocStandardChecksSpec();
+        TableProfilingStandardChecksSpec standardChecksSpec = new TableProfilingStandardChecksSpec();
         standardChecksSpec.setRowCount(minRowCountSpec);
-        TableAdHocCheckCategoriesSpec sampleAdHocCheck = new TableAdHocCheckCategoriesSpec();
-        sampleAdHocCheck.setStandard(standardChecksSpec);
+        TableProfilingCheckCategoriesSpec sampleProfilingCheck = new TableProfilingCheckCategoriesSpec();
+        sampleProfilingCheck.setStandard(standardChecksSpec);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableAdHocChecks(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableProfilingChecks(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
-                Optional.of(sampleAdHocCheck));
+                Optional.of(sampleProfilingCheck));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(this.sampleTable.getTableSpec().getChecks(), sampleAdHocCheck);
+        Assertions.assertSame(this.sampleTable.getTableSpec().getChecks(), sampleProfilingCheck);
     }
 
     @Test
@@ -395,5 +395,5 @@ public class TablesControllerUTTests extends BaseTest {
                 samplePartitionedCheck.getDaily());
     }
 
-    // TODO: updateTableAdHocChecksUI, and the following check types.
+    // TODO: updateTableProfilingChecksUI, and the following check types.
 }

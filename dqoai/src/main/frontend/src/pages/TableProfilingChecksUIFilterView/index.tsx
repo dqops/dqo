@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableAdHockChecksUIFilter, setTableUpdatedCheckUiFilter,
+  getTableProfilingChecksUIFilter, setTableUpdatedCheckUiFilter,
 } from '../../redux/actions/table.actions';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
@@ -13,7 +13,7 @@ import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import Button from "../../components/Button";
 
-const TableAdHockChecksUIFilterView = () => {
+const TableProfilingChecksUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, category, checkName }: { connection: string, schema: string, table: string, category: string, checkName: string } = useParams();
   const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(
     (state: IRootState) => state.table
@@ -23,27 +23,27 @@ const TableAdHockChecksUIFilterView = () => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableAdHocChecksOverview(connectionName, schemaName, tableName).then((res) => {
+    CheckResultOverviewApi.getTableProfilingChecksOverview(connectionName, schemaName, tableName).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
     dispatch(
-      getTableAdHockChecksUIFilter(connectionName, schemaName, tableName, category, checkName)
+      getTableProfilingChecksUIFilter(connectionName, schemaName, tableName, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
   const onUpdate = async () => {
     setIsUpdating(true);
-    await TableApiClient.updateTableAdHocChecksUI(
+    await TableApiClient.updateTableProfilingChecksUI(
       connectionName,
       schemaName,
       tableName,
       checksUIFilter
     );
     dispatch(
-      getTableAdHockChecksUIFilter(connectionName, schemaName, tableName, category, checkName)
+      getTableProfilingChecksUIFilter(connectionName, schemaName, tableName, category, checkName)
     );
     setIsUpdating(false);
   };
@@ -83,4 +83,4 @@ const TableAdHockChecksUIFilterView = () => {
   );
 };
 
-export default TableAdHockChecksUIFilterView;
+export default TableProfilingChecksUIFilterView;

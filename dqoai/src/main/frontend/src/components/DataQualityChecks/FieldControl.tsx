@@ -155,7 +155,7 @@ const FieldControl = ({
             })) || []
           }
           tooltipText={tooltip}
-          className={clsx("!h-8", className ? className : "!min-w-40 !max-w-40")}
+          triggerClassName={clsx("!h-8", className ? className : "!min-w-40 !max-w-40")}
           onChange={(value) => handleChange({ enum_value: value })}
           disabled={disabled}
           error={isInvalid}

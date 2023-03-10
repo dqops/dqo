@@ -60,7 +60,7 @@ public class SnowflakeColumnStringsStringMostPopularValuesSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -68,7 +68,7 @@ public class SnowflakeColumnStringsStringMostPopularValuesSensorParametersSpecIn
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -80,7 +80,7 @@ public class SnowflakeColumnStringsStringMostPopularValuesSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHocOneDataStream_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfilingOneDataStream_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -95,7 +95,7 @@ public class SnowflakeColumnStringsStringMostPopularValuesSensorParametersSpecIn
         }});
         this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

@@ -16,7 +16,7 @@
 package ai.dqo.snowflake.sensors.table.standard;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
@@ -52,14 +52,14 @@ public class TableStandardRowCountSensorParametersSpecIntegrationTest extends Ba
         this.sut = new TableStandardRowCountSensorParametersSpec();
         this.checkSpec = new TableRowCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        TableAdHocStandardChecksSpec category = new TableAdHocStandardChecksSpec();
+        TableProfilingStandardChecksSpec category = new TableProfilingStandardChecksSpec();
         this.sampleTableMetadata.getTableSpec().getChecks().setStandard(category);
         category.setRowCount(this.checkSpec);
     }
 
     @Test
     void runSensor_whenSensorExecuted_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
