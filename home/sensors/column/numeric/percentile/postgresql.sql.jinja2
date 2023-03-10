@@ -1,47 +1,8 @@
 {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
 
 {%- macro render_local_where_clause(extra_filter = none, table_alias_prefix = 'analyzed_table', indentation = '') -%}
-    {{ render_local_date_range_filters(lib.eol() ~ indentation ~ 'WHERE ', table_alias_prefix, indentation ~ '      ') }}
-{%- endmacro -%}
-
-{%- macro render_local_date_range_filters(prefix_to_render = none, table_alias_prefix = 'analyzed_table', indentation = '      ') -%}
-    {%- if lib.time_window_filter.daily_partitioning_recent_days | default(none, true) is not none -%}
-        {{ prefix_to_render -}}
-        {%- if lib.timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
-            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-            CAST(CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}} AS TIMESTAMP WITH TIME ZONE)
-        {%- elif lib.timestamp_column_data_type == 'DATE' -%}
-            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-            CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}}
-        {%- elif lib.timestamp_column_data_type == 'TIMESTAMP WITHOUT TIME ZONE' -%}
-            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-            CAST(CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}} AS TIMESTAMP WITHOUT TIME ZONE)
-        {%- else -%}
-            CAST({{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
-            CAST(LOCALTIMESTAMP AS DATE) -{{lib.time_window_filter.daily_partitioning_recent_days}}
-        {%- endif -%}
-            {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
-            GROUP BY {{ lib.render_grouping_column_names() }}
-    {%- elif lib.time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
-        {{ prefix_to_render -}}
-        {%- if lib.timestamp_column_data_type == 'TIMESTAMP WITH TIME ZONE' -%}
-            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-            CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITH TIME ZONE)
-        {%- elif lib.timestamp_column_data_type == 'DATE' -%}
-            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-            CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
-        {%- elif lib.timestamp_column_data_type == 'TIMESTAMP WITHOUT TIME ZONE' -%}
-            {{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) -}}{{- ' >= ' -}}
-            CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS TIMESTAMP WITHOUT TIME ZONE)
-        {%- else -%}
-            CAST({{ table_alias_prefix ~ '.' ~ lib.quote_identifier(lib.time_series.timestamp_column) }} AS DATE){{- ' >= ' -}}
-            CAST({{ lib.date_trunc('LOCALTIMESTAMP', 'month', lib.timestamp_column_data_type) }} - interval '{{lib.time_window_filter.monthly_partitioning_recent_months}} months' AS DATE)
-        {%- endif -%}
-            {{- lib.render_end_date_filter(lib.eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
-            GROUP BY {{ lib.render_grouping_column_names() }}
-    {%- else -%}
-        {{- lib.render_end_date_filter(prefix_to_render, table_alias_prefix) -}}
-    {%- endif -%}
+    {{ lib.render_date_range_filters(lib.eol() ~ indentation ~ 'WHERE ', table_alias_prefix, indentation ~ '      ') }}
+    GROUP BY {{ lib.render_grouping_column_names() }}
 {%- endmacro -%}
 
 SELECT
