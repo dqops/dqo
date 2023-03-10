@@ -74,9 +74,6 @@ public class UICheckModel implements Cloneable {
     @JsonPropertyDescription("Threshold (alerting) rules defined for a check.")
     private UIRuleThresholdsModel rule;
 
-    @JsonPropertyDescription("The data quality check supports a custom time series configuration.")
-    private boolean supportsTimeSeries;
-
     @JsonPropertyDescription("The data quality check supports a custom data stream mapping configuration.")
     private boolean supportsDataStreams;
 

@@ -860,7 +860,10 @@ public class TablesController {
         }
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+                checks,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
 
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
@@ -907,7 +910,10 @@ public class TablesController {
         }
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.CHECKPOINT, timeScale);
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+                checks,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
 
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
@@ -954,7 +960,9 @@ public class TablesController {
         }
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+                checks, new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
 
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }

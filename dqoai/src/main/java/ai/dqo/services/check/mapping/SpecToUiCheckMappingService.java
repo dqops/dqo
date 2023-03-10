@@ -55,9 +55,13 @@ public interface SpecToUiCheckMappingService {
      * Creates a simplistic UI friendly model of every data quality check on table level or column level, divided into categories.
      *
      * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, checkpoint or partitioned check (for a specific timescale).
+     * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
+     * @param providerType Provider type from the parent connection.
      * @return Simplistic UI friendly model of data quality checks' container.
      */
-    UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec);
+    UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                             ExecutionContext executionContext,
+                                             ProviderType providerType);
 
     /**
      * Creates a list of fields to edit all values in the sensor parameters specification.

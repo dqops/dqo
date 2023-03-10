@@ -794,7 +794,10 @@ public class ColumnsController {
         }
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+                checks,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
 
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
@@ -844,7 +847,10 @@ public class ColumnsController {
         }
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.CHECKPOINT, timeScale);
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+                checks,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
 
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
@@ -894,7 +900,10 @@ public class ColumnsController {
         }
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+                checks,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
 
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
