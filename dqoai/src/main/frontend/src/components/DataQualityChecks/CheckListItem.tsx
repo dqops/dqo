@@ -72,14 +72,6 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
           label: 'Schedule override',
           value: 'schedule'
         },
-        ...(check?.supports_time_series
-          ? [
-              {
-                label: 'Time series override',
-                value: 'time'
-              }
-            ]
-          : []),
         {
           label: 'Comments',
           value: 'comments'
