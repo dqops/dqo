@@ -65,7 +65,6 @@ module.exports = withMT({
         },
         teal: {
           500: '#029A80',
-          550: '#029A80',
         }
       },
       fontSize: {
