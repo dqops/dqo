@@ -65,7 +65,8 @@ const StringListField = ({
             <Button
               variant="contained"
               label="Save"
-              className="w-40 bg-blue-500 text-white"
+              color="primary"
+              className="w-40"
               onClick={() => setOpen(false)}
             />
           </div>
