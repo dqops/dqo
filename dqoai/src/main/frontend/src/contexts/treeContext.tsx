@@ -27,15 +27,15 @@ const TreeContext = React.createContext({} as any);
 const checkTypesToJobTemplateKey= {
   [CheckTypes.SOURCES]: 'run_checks_job_template',
   [CheckTypes.PROFILING]: 'run_profiling_checks_job_template',
-  [CheckTypes.CHECKS]: 'run_whole_table_checks_job_template',
-  [CheckTypes.TIME_PARTITIONED]: 'run_time_period_checks_job_template'
+  [CheckTypes.CHECKS]: 'run_recurring_checks_job_template',
+  [CheckTypes.PARTITION]: 'run_partition_checks_job_template'
 };
 
 const checkTypesToHasConfiguredCheckKey = {
   [CheckTypes.SOURCES]: 'has_any_configured_checks',
   [CheckTypes.PROFILING]: 'has_any_configured_profiling_checks',
-  [CheckTypes.TIME_PARTITIONED]: 'has_any_configured_time_period_checks',
-  [CheckTypes.CHECKS]: 'has_any_configured_whole_table_checks'
+  [CheckTypes.CHECKS]: 'has_any_configured_recurring_checks',
+  [CheckTypes.PARTITION]: 'has_any_configured_partition_checks'
 };
 
 function TreeProvider(props: any) {
