@@ -31,7 +31,20 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
   return (
     <thead>
       <tr>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400" rowSpan={2}>
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400" />
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400" />
+        <td className="text-center whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400">
+          Passing check
+        </td>
+        <td
+          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400"
+          colSpan={2}
+        >
+          Failing check
+        </td>
+      </tr>
+      <tr>
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400">
           <div className="flex space-x-1 items-center">
             <span className="mr-1">Data quality check</span>
             {(!job ||
@@ -63,27 +76,16 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
             />
           </div>
         </td>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400" rowSpan={2}>
+        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400">
           Sensor parameters
         </td>
-        <td className="text-center whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400">
-          Passing check
-        </td>
-        <td
-          className="text-center whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400"
-          colSpan={2}
-        >
-          Failing check
-        </td>
-      </tr>
-      <tr>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-yellow-100">
+        <td className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-yellow-100">
           Warning threshold
         </td>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-orange-100">
+        <td className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-orange-100">
           Error threshold
         </td>
-        <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-red-100">
+        <td className="text-center whitespace-nowrap text-gray-700 py-3 px-4 border-b font-semibold bg-red-100">
           Fatal threshold
         </td>
       </tr>
