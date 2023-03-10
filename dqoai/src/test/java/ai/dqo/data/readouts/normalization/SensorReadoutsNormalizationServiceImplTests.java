@@ -76,7 +76,7 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,
-                CheckType.ADHOC,
+                CheckType.PROFILING,
                 null, // time series
                 new TimeWindowFilterParameters(),
                 null, // data stream mapping

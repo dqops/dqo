@@ -90,7 +90,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,
-                CheckType.ADHOC,
+                CheckType.PROFILING,
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new TimeWindowFilterParameters(),
                 new DataStreamMappingSpec(),
