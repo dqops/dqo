@@ -37,7 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
 @SpringBootTest
-public class PostgresqlColumnNullsNullsCountSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
+public class 
+PostgresqlColumnNullsNullsCountSensorParametersSpecIntegrationTest extends BasePostgresqlIntegrationTest {
     private ColumnNullsNullsCountSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
     private ColumnNullsCountCheckSpec checkSpec;
@@ -54,8 +55,8 @@ public class PostgresqlColumnNullsNullsCountSensorParametersSpecIntegrationTest 
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "nulls", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

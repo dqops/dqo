@@ -18,11 +18,11 @@ package ai.dqo.checks;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Enumeration of data quality check types: adhoc, checkpoint, partitioned.
+ * Enumeration of data quality check types: profiling, checkpoint, partitioned.
  */
 public enum CheckType {
-    @JsonProperty("adhoc")
-    ADHOC("adhoc"),
+    @JsonProperty("profiling")
+    PROFILING("profiling"),
 
     @JsonProperty("checkpoint")
     CHECKPOINT("checkpoint"),

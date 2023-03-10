@@ -5,15 +5,15 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
 import {
-  getTableAdHocChecksUI,
+  getTableProfilingChecksUI,
   setUpdatedChecksUi,
-  updateTableAdHocChecksUI
+  updateTableProfilingChecksUI
 } from '../../../redux/actions/table.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { useParams } from "react-router-dom";
 
-const AdhocView = () => {
+const ProfilingView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
   const { checksUI, loading, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
     (state: IRootState) => state.table
@@ -28,7 +28,7 @@ const AdhocView = () => {
       tableBasic?.target?.schema_name !== schemaName ||
       tableBasic?.target?.table_name !== tableName
     ) {
-      dispatch(getTableAdHocChecksUI(connectionName, schemaName, tableName));
+      dispatch(getTableProfilingChecksUI(connectionName, schemaName, tableName));
     }
   }, [connectionName, schemaName, tableName, tableBasic]);
 
@@ -37,10 +37,10 @@ const AdhocView = () => {
       return;
     }
     await dispatch(
-      updateTableAdHocChecksUI(connectionName, schemaName, tableName, checksUI)
+      updateTableProfilingChecksUI(connectionName, schemaName, tableName, checksUI)
     );
     await dispatch(
-      getTableAdHocChecksUI(connectionName, schemaName, tableName)
+      getTableProfilingChecksUI(connectionName, schemaName, tableName)
     );
   };
 
@@ -49,7 +49,7 @@ const AdhocView = () => {
   };
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableAdHocChecksOverview(connectionName, schemaName, tableName).then((res) => {
+    CheckResultOverviewApi.getTableProfilingChecksOverview(connectionName, schemaName, tableName).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -74,4 +74,4 @@ const AdhocView = () => {
   );
 };
 
-export default AdhocView;
+export default ProfilingView;
