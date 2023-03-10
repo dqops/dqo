@@ -46,7 +46,7 @@ const ColumnView = () => {
     isUpdatedMonthlyPartitionedChecks
   } = useSelector((state: IRootState) => state.column);
   const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
-  const isPartitionCheckOnly = useMemo(() => checkTypes === CheckTypes.TIME_PARTITIONED, [checkTypes]);
+  const isPartitionCheckOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
   const isProfilingCheckOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
     () => !isCheckpointOnly && !isPartitionCheckOnly && !isProfilingCheckOnly,

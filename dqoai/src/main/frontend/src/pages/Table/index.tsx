@@ -63,7 +63,7 @@ const TablePage = () => {
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
   const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
-  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.TIME_PARTITIONED, [checkTypes]);
+  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
   const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
     () => !isCheckpointOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
