@@ -42,8 +42,8 @@ const Header = () => {
             Recurring Checks
           </div>
           <div
-            className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.TIME_PARTITIONED}`) ? 'font-bold' : '' )}
-            onClick={onClick(`/${CheckTypes.TIME_PARTITIONED}`)}
+            className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.PARTITION}`) ? 'font-bold' : '' )}
+            onClick={onClick(`/${CheckTypes.PARTITION}`)}
           >
             Partition Checks
           </div>

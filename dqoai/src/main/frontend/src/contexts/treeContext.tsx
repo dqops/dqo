@@ -85,7 +85,7 @@ function TreeProvider(props: any) {
       CheckTypes.CHECKS,
       CheckTypes.SOURCES,
       CheckTypes.PROFILING,
-      CheckTypes.TIME_PARTITIONED,
+      CheckTypes.PARTITION,
     ].reduce((acc, cur) => ({
       ...acc,
       [cur]: mappedConnectionsToTreeData
@@ -228,7 +228,7 @@ function TreeProvider(props: any) {
         }
       )
     }
-    if (sourceRoute === CheckTypes.TIME_PARTITIONED) {
+    if (sourceRoute === CheckTypes.PARTITION) {
       items.push(
         {
           id: `${node.id}.dailyPartitionedChecks`,
@@ -293,7 +293,7 @@ function TreeProvider(props: any) {
         }
       );
     }
-    if (sourceRoute === CheckTypes.TIME_PARTITIONED) {
+    if (sourceRoute === CheckTypes.PARTITION) {
       items.push(
         {
           id: `${node.id}.dailyPartitionedChecks`,
@@ -795,7 +795,7 @@ function TreeProvider(props: any) {
         case CheckTypes.PROFILING:
           checkType = 'profiling';
           break;
-        case CheckTypes.TIME_PARTITIONED:
+        case CheckTypes.PARTITION:
           checkType = 'partitioned';
           break;
         default:
@@ -836,7 +836,7 @@ function TreeProvider(props: any) {
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       let tab = subTabMap[node.id];
-      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.TIME_PARTITIONED) {
+      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.PARTITION) {
         tab = tab || 'daily';
       } else {
         tab = tab || 'detail'
@@ -927,7 +927,7 @@ function TreeProvider(props: any) {
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       let tab = subTabMap[node.id];
-      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.TIME_PARTITIONED) {
+      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.PARTITION) {
         tab = tab || 'daily';
       } else {
         tab = tab || 'detail'
