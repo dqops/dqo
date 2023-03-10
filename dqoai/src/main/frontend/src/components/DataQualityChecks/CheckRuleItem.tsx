@@ -82,7 +82,7 @@ const CheckRuleItem = ({
                   handleRuleParameterChange(field, index)
                 }
                 disabled={disabled}
-                className="!max-w-30 !min-w-30"
+                className="!max-w-25 !min-w-25"
               />
             </div>
           ))}
