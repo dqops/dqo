@@ -1,19 +1,19 @@
 {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
 
 {% macro render_current_event_diff() -%}
-    {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) -%}
+    {%- if lib.is_instant(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
     TIMESTAMP_DIFF(
         CURRENT_TIMESTAMP(),
         MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
         MILLISECOND
     ) / 24.0 / 3600.0 / 1000.0
-    {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) -%}
+    {%- elif lib.is_local_date(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
     DATE_DIFF(
         CURRENT_DATE(),
         MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
         DAY
     )
-    {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) -%}
+    {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.event_timestamp_column].type_snapshot.column_type) == 'true' -%}
     DATETIME_DIFF(
         CURRENT_DATETIME(),
         MAX({{ lib.render_column(table.timestamp_columns.event_timestamp_column, 'analyzed_table') }}),
