@@ -57,24 +57,24 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date_iso", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_iso", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHocWithMonthDayYearDateType() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date_mdy", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfilingWithMonthDayYearDateType() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_mdy", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHocWithDayMonthYearDateType() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date_dmy", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfilingWithDayMonthYearDateType() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_dmy", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHocWithYearMonthDayDateType() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date_ymd", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfilingWithYearMonthDayDateType() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_ymd", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHocWithMonthNameDayYearDateType() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date_bdy", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfilingWithMonthNameDayYearDateType() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_bdy", this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
@@ -108,9 +108,9 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
     }
 
     @Test
-    void renderSensorWithDateType_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -140,9 +140,9 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
     }
 
     @Test
-    void renderSensorWithMonthDayYearDateType_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithMonthDayYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.MonthDayYear);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHocWithMonthDayYearDateType();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithMonthDayYearDateType();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -172,9 +172,9 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
     }
 
     @Test
-    void renderSensorWithDayMonthYearDateType_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithDayMonthYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.DayMonthYear);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHocWithDayMonthYearDateType();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithDayMonthYearDateType();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -204,9 +204,9 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
     }
 
     @Test
-    void renderSensorWithYearMonthDayDateType_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithYearMonthDayDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.YearMonthDay);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHocWithYearMonthDayDateType();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithYearMonthDayDateType();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -236,9 +236,9 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
     }
 
     @Test
-    void renderSensorWithMonthNameDayYearDateType_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithMonthNameDayYearDateType_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.MonthNameDayYear);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHocWithMonthNameDayYearDateType();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfilingWithMonthNameDayYearDateType();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -268,9 +268,9 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
     }
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -381,9 +381,9 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -500,9 +500,9 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);

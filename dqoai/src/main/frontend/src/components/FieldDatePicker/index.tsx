@@ -47,7 +47,6 @@ const FieldDatePicker = ({
     toggleMenu();
   };
 
-  console.log('value', value);
   return (
     <div>
       <div className="flex space-x-1">

@@ -110,7 +110,7 @@ public class TableBasicModel {
             setTarget(tableSpec.getTarget());
             setDisabled(tableSpec.isDisabled());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
-            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.ADHOC));
+            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
             setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
             setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
@@ -123,7 +123,7 @@ public class TableBasicModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
-                setCheckType(CheckType.ADHOC);
+                setCheckType(CheckType.PROFILING);
                 setEnabled(true);
             }});
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()
@@ -166,7 +166,7 @@ public class TableBasicModel {
             setFilter(tableSpec.getFilter());
             setOwner(tableSpec.getOwner());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
-            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.ADHOC));
+            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
             setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
             setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
@@ -179,7 +179,7 @@ public class TableBasicModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
-                setCheckType(CheckType.ADHOC);
+                setCheckType(CheckType.PROFILING);
                 setEnabled(true);
             }});
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()

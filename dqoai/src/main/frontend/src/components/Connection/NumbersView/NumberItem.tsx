@@ -43,7 +43,7 @@ const NumberItem = ({
           </IconButton>
         ) : (
           <IconButton
-            className="bg-red-500"
+            className="bg-teal-500"
             size="sm"
             onClick={() => onRemove(idx)}
           >

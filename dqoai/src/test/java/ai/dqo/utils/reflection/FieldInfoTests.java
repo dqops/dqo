@@ -16,8 +16,8 @@
 package ai.dqo.utils.reflection;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import org.junit.jupiter.api.Assertions;
@@ -110,11 +110,11 @@ public class FieldInfoTests extends BaseTest {
 
     @Test
     void getFieldValueOrNewObject_whenFieldValueIsSpecObjectAndIsFilled_thenReturnsExistingValue() throws Exception {
-        Field field = TableAdHocCheckCategoriesSpec.class.getDeclaredField("standard");
+        Field field = TableProfilingCheckCategoriesSpec.class.getDeclaredField("standard");
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
-        TableAdHocCheckCategoriesSpec target = new TableAdHocCheckCategoriesSpec();
-        TableAdHocStandardChecksSpec expected = new TableAdHocStandardChecksSpec();
+        TableProfilingCheckCategoriesSpec target = new TableProfilingCheckCategoriesSpec();
+        TableProfilingStandardChecksSpec expected = new TableProfilingStandardChecksSpec();
         target.setStandard(expected);
 
         Object result = sut.getFieldValueOrNewObject(target);
@@ -124,15 +124,15 @@ public class FieldInfoTests extends BaseTest {
 
     @Test
     void getFieldValueOrNewObject_whenFieldValueIsSpecObjectAndIsNull_thenCreatesNewObjectThatIsNotStored() throws Exception {
-        Field field = TableAdHocCheckCategoriesSpec.class.getDeclaredField("standard");
+        Field field = TableProfilingCheckCategoriesSpec.class.getDeclaredField("standard");
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
-        TableAdHocCheckCategoriesSpec target = new TableAdHocCheckCategoriesSpec();
+        TableProfilingCheckCategoriesSpec target = new TableProfilingCheckCategoriesSpec();
         target.setStandard(null);
-        TableAdHocStandardChecksSpec result = (TableAdHocStandardChecksSpec)sut.getFieldValueOrNewObject(target);
+        TableProfilingStandardChecksSpec result = (TableProfilingStandardChecksSpec)sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result);
 
-        TableAdHocStandardChecksSpec result2 = (TableAdHocStandardChecksSpec)sut.getFieldValueOrNewObject(target);
+        TableProfilingStandardChecksSpec result2 = (TableProfilingStandardChecksSpec)sut.getFieldValueOrNewObject(target);
         Assertions.assertNotNull(result2);
         Assertions.assertNotSame(result, result2);
     }

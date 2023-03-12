@@ -39,7 +39,7 @@ const PageTabs = ({
         ))}
       </div>
       <IconButton
-        className="bg-primary hover:bg-opacity-80 w-8 h-8 m-1"
+        className="bg-primary hover:bg-opacity-80 w-7 h-7 m-1 !rounded-md"
         onClick={onAddTab}
       >
         <SvgIcon name="add" className="w-5 text-white" />
