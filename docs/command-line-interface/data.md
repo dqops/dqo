@@ -26,7 +26,7 @@ dqo.ai> data clean [-h] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin> -c=<conne
 |`-b`<br/>`--begin`<br/>|Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD|Yes||
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |ADHOC<br/>CHECKPOINT<br/>PARTITIONED<br/>|
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |PROFILING<br/>CHECKPOINT<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name| ||
 |`-c`<br/>`--connection`<br/>|Connection name|Yes||
 |`-ds`<br/>`--data-stream`<br/>|Data stream hierarchy level filter (tag)| ||

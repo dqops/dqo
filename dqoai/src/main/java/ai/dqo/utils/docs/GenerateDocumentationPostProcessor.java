@@ -160,7 +160,7 @@ public class GenerateDocumentationPostProcessor {
      * @param projectRoot Path to the project root.
      */
     public static void generateDocumentationForCliCommands(Path projectRoot) {
-        Path cliDocPath = projectRoot.resolve("../docs/command_line_interface").toAbsolutePath().normalize();
+        Path cliDocPath = projectRoot.resolve("../docs/command-line-interface").toAbsolutePath().normalize();
         DocumentationFolder currentCliDocFiles = DocumentationFolderFactory.loadCurrentFiles(cliDocPath);
         CliCommandDocumentationGenerator cliCommandDocumentationGenerator = new CliCommandDocumentationGeneratorImpl(new CliCommandDocumentationModelFactoryImpl());
 

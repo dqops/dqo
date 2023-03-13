@@ -53,19 +53,19 @@ nav:
   - Examples: 'examples/examples.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
-    - dqo: 'command_line_interface/dqo.md'
-    - cls: 'command_line_interface/cls.md'
-    - connection: 'command_line_interface/connection.md'
-    - table: 'command_line_interface/table.md'
-    - check: 'command_line_interface/check.md'
-    - column: 'command_line_interface/column.md'
-    - settings: 'command_line_interface/settings.md'
-    - cloud: 'command_line_interface/cloud.md'
-    - sensor: 'command_line_interface/sensor.md'
-    - scheduler: 'command_line_interface/scheduler.md'
-    - data: 'command_line_interface/data.md'
-    - run: 'command_line_interface/run.md'
-    - rule: 'command_line_interface/rule.md'
+    - dqo: 'command-line-interface/dqo.md'
+    - cls: 'command-line-interface/cls.md'
+    - connection: 'command-line-interface/connection.md'
+    - table: 'command-line-interface/table.md'
+    - check: 'command-line-interface/check.md'
+    - column: 'command-line-interface/column.md'
+    - settings: 'command-line-interface/settings.md'
+    - cloud: 'command-line-interface/cloud.md'
+    - sensor: 'command-line-interface/sensor.md'
+    - scheduler: 'command-line-interface/scheduler.md'
+    - data: 'command-line-interface/data.md'
+    - run: 'command-line-interface/run.md'
+    - rule: 'command-line-interface/rule.md'
 ########## END INCLUDE CLI COMMANDS
 ########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY
   - Checks:
