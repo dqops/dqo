@@ -3,9 +3,11 @@
 ___
 ### **dqo scheduler start**
 
+Starts a background job scheduler
+
 **Description**
 
-Starts a background job scheduler. This operation should be called only from the shell mode. When the dqo is started as &#x27;dqo scheduler start&#x27; from the operating system, it will stop immediately.
+This operation should be called only from the shell mode. When the DQO is started as &#x27;dqo scheduler start&#x27; from the operating system, it will stop immediately.
 
 
 **Command-line synopsis**
@@ -38,9 +40,11 @@ dqo.ai> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputForma
 ___
 ### **dqo scheduler stop**
 
+Stops a background job scheduler
+
 **Description**
 
-Stops a background job scheduler. This operation should be called only from the shell mode after the scheduler was started.
+This operation should be called only from the shell mode after the scheduler was started.
 
 
 **Command-line synopsis**

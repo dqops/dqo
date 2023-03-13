@@ -50,7 +50,7 @@ import java.time.LocalDate;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "clean", description = "Delete stored data data matching specified filters")
+@CommandLine.Command(name = "clean", header = "Delete stored data that matches a given condition", description = "Delete stored data that matches certain conditions.It is important to use caution when using this command, as it will permanently delete the selected data and cannot be undone.")
 public class DataCleanCliCommand extends BaseCommand implements ICommand {
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;

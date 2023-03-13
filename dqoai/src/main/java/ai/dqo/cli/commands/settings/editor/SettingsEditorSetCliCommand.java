@@ -36,7 +36,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "set", description = "Set editor settings")
+@CommandLine.Command(name = "set", header = "Set editor settings", description = "Set the settings for the editor. It allows user to set the editor to use a specific output format.")
 public class SettingsEditorSetCliCommand extends BaseCommand implements ICommand, IEditorNameCommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;

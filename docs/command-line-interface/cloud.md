@@ -3,9 +3,11 @@
 ___
 ### **dqo cloud login**
 
+Log in or register an account at the DQO Cloud
+
 **Description**
 
-Logs in or registers an account at DQO Cloud
+Allow user to provide login credentials if the user already has an account.
 
 
 **Command-line synopsis**
@@ -34,9 +36,11 @@ dqo.ai> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 ___
 ### **dqo cloud sync data**
 
+Synchronize local &quot;data&quot; folder with sensor readouts and rule results with DQO Cloud
+
 **Description**
 
-Synchronize local &quot;data&quot; folder with sensor readouts and rule results with DQO Cloud
+Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;data&quot; folder.
 
 
 **Command-line synopsis**
@@ -69,9 +73,11 @@ dqo.ai> cloud sync data [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 ___
 ### **dqo cloud sync sources**
 
+Synchronize local &quot;sources&quot; connection and table level quality definitions with DQO Cloud
+
 **Description**
 
-Synchronize local &quot;sources&quot; connection and table level quality definitions with DQO Cloud
+Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sources&quot; folder.
 
 
 **Command-line synopsis**
@@ -104,9 +110,11 @@ dqo.ai> cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 ___
 ### **dqo cloud sync sensors**
 
+Synchronize local &quot;sensors&quot; folder with custom sensor definitions with DQO Cloud
+
 **Description**
 
-Synchronize local &quot;sensors&quot; folder with custom sensor definitions with DQO Cloud
+Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;sensors&quot; folder.
 
 
 **Command-line synopsis**
@@ -139,9 +147,11 @@ dqo.ai> cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 ___
 ### **dqo cloud sync rules**
 
+Synchronize local &quot;rules&quot; folder with custom rule definitions with DQO Cloud
+
 **Description**
 
-Synchronize local &quot;rules&quot; folder with custom rule definitions with DQO Cloud
+Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;rules&quot; folder.
 
 
 **Command-line synopsis**
@@ -174,9 +184,11 @@ dqo.ai> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 ___
 ### **dqo cloud sync all**
 
+Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)
+
 **Description**
 
-Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)
+Uploads any local changes to the cloud and downloads any changes made to the cloud versions of the folders.
 
 
 **Command-line synopsis**

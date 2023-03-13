@@ -3,9 +3,11 @@
 ___
 ### **dqo sensor edit**
 
+Edit sensor that matches a given condition
+
 **Description**
 
-Edit sensor that match filters
+Allows you to modify the properties of a custom sensor that matches certain condition.
 
 
 **Command-line synopsis**

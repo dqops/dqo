@@ -3,9 +3,11 @@
 ___
 ### **dqo settings editor set**
 
+Set editor settings
+
 **Description**
 
-Set editor settings
+Set the settings for the editor. It allows user to set the editor to use a specific output format.
 
 
 **Command-line synopsis**
@@ -38,9 +40,11 @@ dqo.ai> settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputForma
 ___
 ### **dqo settings editor remove**
 
+Remove editor settings
+
 **Description**
 
-Remove editor settings
+Remove the editor settings from your configuration. This will revert the editor to its default settings.
 
 
 **Command-line synopsis**
@@ -69,9 +73,11 @@ dqo.ai> settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 ___
 ### **dqo settings editor show**
 
+Show editor settings
+
 **Description**
 
-Show editor settings
+Display the current editor settings.
 
 
 **Command-line synopsis**
@@ -100,9 +106,11 @@ dqo.ai> settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 ___
 ### **dqo settings init**
 
+Initialize settings file in UserHome directory
+
 **Description**
 
-Init settings file in user home
+Settings file in your UserHome directory. This file stores configuration options for the DQO.
 
 
 **Command-line synopsis**
@@ -131,9 +139,11 @@ dqo.ai> settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 ___
 ### **dqo settings remove**
 
+Remove settings file from UserHome directory
+
 **Description**
 
-Remove settings file from user home
+Removes the settings file from your UserHome directory.
 
 
 **Command-line synopsis**
@@ -162,9 +172,11 @@ dqo.ai> settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 ___
 ### **dqo settings apikey set**
 
+Set API key
+
 **Description**
 
-Set api key
+Set the API key used for accessing external services. This key is used to authenticate requests to the service.
 
 
 **Command-line synopsis**
@@ -193,9 +205,11 @@ dqo.ai> settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 ___
 ### **dqo settings apikey remove**
 
+Remove API key
+
 **Description**
 
-Remove api key
+Remove the API key used for accessing external services.
 
 
 **Command-line synopsis**
@@ -224,9 +238,11 @@ dqo.ai> settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 ___
 ### **dqo settings apikey show**
 
+Show API key
+
 **Description**
 
-Show api key
+Display the current API key used for accessing external services.
 
 
 **Command-line synopsis**
@@ -255,9 +271,11 @@ dqo.ai> settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 ___
 ### **dqo settings timezone set**
 
+Set the default time zone
+
 **Description**
 
-Set the default time zone
+Set the default time zone used by the DQO.
 
 
 **Command-line synopsis**
@@ -286,9 +304,11 @@ dqo.ai> settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 ___
 ### **dqo settings timezone remove**
 
+Remove time zone
+
 **Description**
 
-Remove time zone
+Remove the custom time zone from your settings. Once removed, the time zone for your account will be set to the system default.
 
 
 **Command-line synopsis**
@@ -317,9 +337,11 @@ dqo.ai> settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 ___
 ### **dqo settings timezone show**
 
+Show the default time zone
+
 **Description**
 
-Show the default time zone
+Displays the default time zone that is currently set in your settings. This time zone will be used to display all date and time values in the application.
 
 
 **Command-line synopsis**

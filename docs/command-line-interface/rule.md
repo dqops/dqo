@@ -3,9 +3,11 @@
 ___
 ### **dqo rule edit**
 
+Edit rule that matches a given condition
+
 **Description**
 
-Edit rule that match filters
+This command can be used to update the rule. It is important to use caution when using this command, as it can impact the execution of data quality checks.
 
 
 **Command-line synopsis**

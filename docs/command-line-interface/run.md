@@ -3,9 +3,11 @@
 ___
 ### **dqo run**
 
+Starts DQO in a server mode, continuously running a job scheduler that runs the data quality checks
+
 **Description**
 
-Starts DQO in a server mode, continuously running a job scheduler that runs the data quality checks.
+This command is useful when you want to continuously monitor the quality of your data in real-time. The job scheduler runs in the background, allowing you to perform other tasks while the DQO is running.
 
 
 **Command-line synopsis**

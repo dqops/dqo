@@ -3,9 +3,11 @@
 ___
 ### **dqo data clean**
 
+Delete stored data that matches a given condition
+
 **Description**
 
-Delete stored data data matching specified filters
+Delete stored data that matches certain conditions.It is important to use caution when using this command, as it will permanently delete the selected data and cannot be undone.
 
 
 **Command-line synopsis**

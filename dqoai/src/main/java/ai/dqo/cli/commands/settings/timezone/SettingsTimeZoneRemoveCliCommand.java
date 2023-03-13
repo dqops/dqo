@@ -32,7 +32,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "remove", description = "Remove time zone")
+@CommandLine.Command(name = "remove", header = "Remove time zone", description = "Remove the custom time zone from your settings. Once removed, the time zone for your account will be set to the system default.")
 public class SettingsTimeZoneRemoveCliCommand extends BaseCommand implements ICommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;
