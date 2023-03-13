@@ -2,7 +2,7 @@ export enum CheckTypes {
   CHECKS = 'checks',
   SOURCES = 'sources',
   PROFILING = 'profiling',
-  TIME_PARTITIONED = 'time-partitioned',
+  PARTITION = 'partition',
 }
 export const ROUTES = {
   CONNECTION_DETAIL: (checkTypes: string, connection: string, tab: string) => `/${checkTypes}/connection/${connection}/${tab}`,

@@ -27,15 +27,15 @@ const TreeContext = React.createContext({} as any);
 const checkTypesToJobTemplateKey= {
   [CheckTypes.SOURCES]: 'run_checks_job_template',
   [CheckTypes.PROFILING]: 'run_profiling_checks_job_template',
-  [CheckTypes.CHECKS]: 'run_whole_table_checks_job_template',
-  [CheckTypes.TIME_PARTITIONED]: 'run_time_period_checks_job_template'
+  [CheckTypes.CHECKS]: 'run_recurring_checks_job_template',
+  [CheckTypes.PARTITION]: 'run_partition_checks_job_template'
 };
 
 const checkTypesToHasConfiguredCheckKey = {
   [CheckTypes.SOURCES]: 'has_any_configured_checks',
   [CheckTypes.PROFILING]: 'has_any_configured_profiling_checks',
-  [CheckTypes.TIME_PARTITIONED]: 'has_any_configured_time_period_checks',
-  [CheckTypes.CHECKS]: 'has_any_configured_whole_table_checks'
+  [CheckTypes.CHECKS]: 'has_any_configured_recurring_checks',
+  [CheckTypes.PARTITION]: 'has_any_configured_partition_checks'
 };
 
 function TreeProvider(props: any) {
@@ -85,7 +85,7 @@ function TreeProvider(props: any) {
       CheckTypes.CHECKS,
       CheckTypes.SOURCES,
       CheckTypes.PROFILING,
-      CheckTypes.TIME_PARTITIONED,
+      CheckTypes.PARTITION,
     ].reduce((acc, cur) => ({
       ...acc,
       [cur]: mappedConnectionsToTreeData
@@ -228,7 +228,7 @@ function TreeProvider(props: any) {
         }
       )
     }
-    if (sourceRoute === CheckTypes.TIME_PARTITIONED) {
+    if (sourceRoute === CheckTypes.PARTITION) {
       items.push(
         {
           id: `${node.id}.dailyPartitionedChecks`,
@@ -293,7 +293,7 @@ function TreeProvider(props: any) {
         }
       );
     }
-    if (sourceRoute === CheckTypes.TIME_PARTITIONED) {
+    if (sourceRoute === CheckTypes.PARTITION) {
       items.push(
         {
           id: `${node.id}.dailyPartitionedChecks`,
@@ -795,7 +795,7 @@ function TreeProvider(props: any) {
         case CheckTypes.PROFILING:
           checkType = 'profiling';
           break;
-        case CheckTypes.TIME_PARTITIONED:
+        case CheckTypes.PARTITION:
           checkType = 'partitioned';
           break;
         default:
@@ -836,7 +836,7 @@ function TreeProvider(props: any) {
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       let tab = subTabMap[node.id];
-      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.TIME_PARTITIONED) {
+      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.PARTITION) {
         tab = tab || 'daily';
       } else {
         tab = tab || 'detail'
@@ -927,7 +927,7 @@ function TreeProvider(props: any) {
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       let tab = subTabMap[node.id];
-      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.TIME_PARTITIONED) {
+      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.PARTITION) {
         tab = tab || 'daily';
       } else {
         tab = tab || 'detail'

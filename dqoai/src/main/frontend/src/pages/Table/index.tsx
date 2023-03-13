@@ -63,7 +63,7 @@ const TablePage = () => {
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
   const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
-  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.TIME_PARTITIONED, [checkTypes]);
+  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
   const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
     () => !isCheckpointOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
@@ -172,7 +172,7 @@ const TablePage = () => {
         <div />
       ) : (
         <div className="relative h-full flex flex-col">
-          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-13 items-center flex-shrink-0">
+          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0">
             <div className="flex items-center space-x-2">
               <SvgIcon name="database" className="w-5 h-5" />
               <div className="text-xl font-semibold">{`${connection}.${schema}.${table}`}</div>
