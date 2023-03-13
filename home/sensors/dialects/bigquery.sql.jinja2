@@ -35,6 +35,70 @@
     {%- endif -%}
 {%- endmacro %}
 
+{%- macro is_local_date(data_type) -%}
+    {#-
+    Check if a given parameter is a date.
+
+    :param param: The parameter to check
+    :type param: str
+    :return: True if the parameter is a valid date, False otherwise
+    :rtype: bool
+    -#}
+    {%- if data_type == 'DATE' -%}
+        {{ 'true' }}
+    {%- else -%}
+        {{ 'false' }}
+    {%- endif -%}
+{% endmacro %}
+
+{% macro is_local_time(data_type) -%}
+  {#-
+  Check if a given parameter is a local-time.
+
+  :param param: The parameter to check
+  :type param: str
+  :return: True if the parameter is a valid local-time, False otherwise
+  :rtype: bool
+  -#}
+   {% if data_type == 'TIME' -%}
+       {{- 'true' -}}
+   {%- else -%}
+       {{- 'false' -}}
+   {%- endif -%}
+{% endmacro %}
+
+{% macro is_local_date_time(data_type) -%}
+  {#-
+  Check if a given parameter is a local-date-time.
+
+  :param param: The parameter to check
+  :type param: str
+  :return: True if the parameter is a valid local-date-time, False otherwise
+  :rtype: bool
+  -#}
+   {% if data_type == 'DATETIME' -%}
+       {{- 'true' -}}
+   {%- else -%}
+       {{- 'false' -}}
+   {%- endif -%}
+{% endmacro %}
+
+{% macro is_instant(data_type) -%}
+  {#-
+  Check if a given parameter is a instant.
+
+  :param param: The parameter to check
+  :type param: str
+  :return: True if the parameter is a valid instant, False otherwise
+  :rtype: bool
+  -#}
+   {% if data_type == 'TIMESTAMP' -%}
+       {{- 'true' -}}
+   {%- else -%}
+       {{- 'false' -}}
+   {%- endif -%}
+{% endmacro %}
+
 {% macro date_trunc(value, part='day', datatype=none) %}
     {%- if part == 'year' -%}
         DATE_TRUNC(CAST({{value}} AS DATE), YEAR)
@@ -102,19 +166,19 @@
     {%- if time_window_filter is not none -%}
         {%- if time_window_filter.to_date_time_offset | default(none, true) is not none -%}
             {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date_time_offset) -}}
-        {%- elif time_window_filter.to_date_time | default(none, true) is not none -%}
+        {%- elif time_window_filter.to_date_time is defined and is_local_time(time_window_filter.to_date_time) -%}
             {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date_time) -}}
-        {%- elif time_window_filter.to_date | default(none, true) is not none -%}
+        {%- elif time_window_filter.to_date is defined and is_local_date(time_window_filter.to_date) -%}
             {{ prefix_to_render -}}{{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) }} < {{ make_text_constant(time_window_filter.to_date) -}}
         {%- elif time_window_filter.daily_partitioning_include_today is false -%}
             {{ prefix_to_render -}}
-            {%- if timestamp_column_data_type == 'TIMESTAMP' -%}
+            {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 CAST(CURRENT_DATE() AS TIMESTAMP)
-            {%- elif timestamp_column_data_type == 'DATE' -%}
+            {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 CURRENT_DATE()
-            {%- elif timestamp_column_data_type == 'DATETIME' -%}
+            {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 CAST(CURRENT_DATE() AS DATETIME)
             {%- else -%}
@@ -123,13 +187,13 @@
             {%- endif -%}
         {%- elif time_window_filter.monthly_partitioning_include_current_month is false -%}
             {{ prefix_to_render -}}
-            {%- if timestamp_column_data_type == 'TIMESTAMP' -%}
+            {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 CAST({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }} AS TIMESTAMP)
-            {%- elif timestamp_column_data_type == 'DATE' -%}
+            {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 {{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}
-            {%- elif timestamp_column_data_type == 'DATETIME' -%}
+            {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                 {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' < ' -}}
                 CAST({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }} AS DATETIME)
             {%- else -%}
@@ -154,13 +218,13 @@
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- elif time_window_filter.daily_partitioning_recent_days | default(none, true) is not none -%}
                 {{ prefix_to_render -}}
-                {%- if timestamp_column_data_type == 'TIMESTAMP' -%}
+                {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAY) AS TIMESTAMP)
-                {%- elif timestamp_column_data_type == 'DATE' -%}
+                {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAY)
-                {%- elif timestamp_column_data_type == 'DATETIME' -%}
+                {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -{{time_window_filter.daily_partitioning_recent_days}} DAY) AS DATETIME)
                 {%- else -%}
@@ -170,13 +234,13 @@
                 {{- render_end_date_filter(eol() ~ indentation ~ 'AND ', table_alias_prefix) -}}
             {%- elif time_window_filter.monthly_partitioning_recent_months | default(none, true) is not none -%}
                 {{ prefix_to_render -}}
-                {%- if timestamp_column_data_type == 'TIMESTAMP' -%}
+                {%- if is_instant(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      CAST(DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS TIMESTAMP)
-                {%- elif timestamp_column_data_type == 'DATE' -%}
+                {%- elif is_local_date(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH)
-                {%- elif timestamp_column_data_type == 'DATETIME' -%}
+                {%- elif is_local_date_time(timestamp_column_data_type) == 'true' -%}
                      {{ table_alias_prefix ~ '.' ~ quote_identifier(time_series.timestamp_column) -}}{{- ' >= ' -}}
                      CAST(DATE_ADD({{ date_trunc('CURRENT_DATE()', 'month', timestamp_column_data_type) }}, INTERVAL -{{time_window_filter.monthly_partitioning_recent_months}} MONTH) AS DATETIME)
                 {%- else -%}
