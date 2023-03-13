@@ -27,32 +27,32 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that finds the percentile 50 in a given column.
+ * Column level sensor that finds the median in a given column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnNumericPercentile50InRangeSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericPercentile50InRangeSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnNumericMedianInRangeSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnNumericMedianInRangeSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
 
 
-    @JsonPropertyDescription("50th percentile, must equals to 0.5")
+    @JsonPropertyDescription("Median (50th percentile), must equals to 0.5")
     private Double percentileValue = 0.5;
 
     /**
-     * Returns the percentile 50 value of the range.
-     * @return Percentile 50 value of the range.
+     * Returns the median value of the range.
+     * @return median value of the range.
      */
     public Double getPercentileValue() {
         return percentileValue;
     }
 
     /**
-     * Sets the percentile 50 value of the range.
-     * @param percentileValue Percentile 50 value of the range.
+     * Sets the median value of the range.
+     * @param percentileValue median value of the range.
      */
     public final void setPercentileValue(Double percentileValue) {
         this.setDirtyIf(!Objects.equals(this.percentileValue, percentileValue));
