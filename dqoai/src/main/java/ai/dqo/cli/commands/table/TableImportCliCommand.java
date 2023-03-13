@@ -40,7 +40,7 @@ import tech.tablesaw.api.Table;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "import", description = "Import tables from a specified database")
+@CommandLine.Command(name = "import", header = "Import tables from a specified database", description = "Import the tables from the specified database into the application. It allows the user to import the tables from the database into the application for performing various database operations.")
 public class TableImportCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;

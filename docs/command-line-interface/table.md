@@ -3,9 +3,11 @@
 ___
 ### **dqo table import**
 
+Import tables from a specified database
+
 **Description**
 
-Import tables from a specified database
+Import the tables from the specified database into the application. It allows the user to import the tables from the database into the application for performing various database operations.
 
 
 **Command-line synopsis**
@@ -39,9 +41,11 @@ dqo.ai> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 ___
 ### **dqo table edit**
 
+Edit table that matches a given condition
+
 **Description**
 
-Edit table which match filters
+Edit the table or tables that match the filter conditions specified in the options. It allows the user to modify the details of an existing table in the application.
 
 
 **Command-line synopsis**
@@ -72,9 +76,11 @@ dqo.ai> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<
 ___
 ### **dqo table add**
 
+Add table with specified name
+
 **Description**
 
-Add table with specified name
+Add a new table with the specified name to the database. It allows the user to create a new table in the application for performing various operations.
 
 
 **Command-line synopsis**
@@ -107,9 +113,11 @@ dqo.ai> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 ___
 ### **dqo table remove**
 
+Remove tables that match a given condition
+
 **Description**
 
-Remove tables which match filters
+Remove one or more tables that match a given condition. It allows user to use various filters, such as table names to narrow down the set of tables to remove.
 
 
 **Command-line synopsis**
@@ -142,9 +150,11 @@ dqo.ai> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 ___
 ### **dqo table update**
 
+Update tables that match a given condition
+
 **Description**
 
-Update tables which match filters
+Update the structure of one or more tables that match a given condition. It allows user to use various filters, such as table names  to narrow down the set of tables to update.
 
 
 **Command-line synopsis**
@@ -178,9 +188,11 @@ dqo.ai> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
 ___
 ### **dqo table list**
 
+List tables filtered by the given conditions
+
 **Description**
 
-List tables which match filters
+List all the tables that match a given condition. It allows the user to use various filters, such as table name or schema names to list filtered tables.
 
 
 **Command-line synopsis**

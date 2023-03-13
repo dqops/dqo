@@ -35,7 +35,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "edit", description = "Edit table which match filters")
+@CommandLine.Command(name = "edit", header = "Edit table that matches a given condition", description = "Edit the table or tables that match the filter conditions specified in the options. It allows the user to modify the details of an existing table in the application.")
 public class TableEditCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
