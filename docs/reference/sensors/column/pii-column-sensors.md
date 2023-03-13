@@ -86,7 +86,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}")
+                    WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }},'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$')
                         THEN 1
                     ELSE 0
                 END
@@ -189,11 +189,19 @@ Column level sensor that calculates the percent of values that contains a USA ph
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                CASE
-                    WHEN REGEXP_CONTAINS(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                        r"((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))"
-                    ) THEN 1
+                CASE WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$[0-9]{3}-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$[0-9]{3}\.[0-9]{3}\.[0-9]{4}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{4} \d{4} \d{4}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+?1?\-?\d{3}\-?\d{3}\-?\d{4}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{4}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(\+1\)\d{10,11}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\(1\)\d{10,11}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\+1\([0-9]{3}\)[0-9]{7}$$) IS NOT NULL THEN 1
+                    WHEN REGEXP_SUBSTR({{ lib.render_target_column('analyzed_table') }},$$\d{10,11}$$) IS NOT NULL THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -296,10 +304,8 @@ Column level sensor that calculates the percent of values that contain a USA zip
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                        r"[0-9]{5}(?:-[0-9]{4})?"
-                    ) THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
+                            THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -400,7 +406,7 @@ Column level sensor that calculates the percentage of rows with a valid email va
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^[A-Za-z_]+[A-Za-z0-9._]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$")
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[A-Za-z]+[A-Za-z0-9.]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,4}$'
                         THEN 1
                     ELSE 0
                 END
@@ -502,7 +508,7 @@ Column level sensor that calculates the percentage of rows with a valid IP4 addr
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST({{ lib.render_target_column('analyzed_table') }} AS STRING), r"^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$")
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])[.]){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[0-9][0-9]|[0-9])$'
                         THEN 1
                     ELSE 0
                 END
@@ -604,7 +610,7 @@ Column level sensor that calculates the percentage of rows with a valid IP6 addr
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(CAST( {{ lib.render_target_column('analyzed_table') }} AS STRING), r"^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$")
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$'
                         THEN 1
                     ELSE 0
                 END
@@ -707,11 +713,19 @@ Column level sensor that calculates the percent of values that fit to a USA phon
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
-                CASE
-                    WHEN REGEXP_CONTAINS(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                        r"^((((\(\+1\)|(\+1)|(\([0][0][1]\)|([0][0][1]))|\(1\)|(1))[\s.-]?)?(\(?\d{3}\)?[\s.-]?)(\d{3}[\s.-]?)(\d{4})))$"
-                    ) THEN 1
+                CASE WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$\+1\([0-9]{3}\)[0-9]{4}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$[0-9]{3}\.[0-9]{3}\.[0-9]{4}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$\+1-[0-9]{3}-[0-9]{3}-[0-9]{4}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$\d{4} \d{4} \d{4}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$[0-9]{3}-[0-9]{3}-[0-9]{4}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$\+?1?\-?\d{3}\-?\d{3}\-?\d{4}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$\+1\([0-9]{3}\)[0-9]{4}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$\([0-9]{3}\)[0-9]{7}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$\(\+1\)\d{10,11}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$\(1\)\d{10,11}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$1\([0-9]{3}\)-[0-9]{3}-[0-9]{4}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$\+1\([0-9]{3}\)[0-9]{7}}$$ THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP $$\d{10,11}$$ THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)
@@ -814,10 +828,8 @@ Column level sensor that calculates the percent of values that fit to a USA ZIP 
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN REGEXP_CONTAINS(
-                        CAST({{ lib.render_target_column('analyzed_table') }} AS STRING),
-                        r"^[0-9]{5}(?:-[0-9]{4})?$"
-                    ) THEN 1
+                    WHEN {{ lib.render_target_column('analyzed_table') }} REGEXP '^[0-9]{5}(/.D/:-[0-9]{4})?$'
+                    THEN 1
                     ELSE 0
                 END
             ) / COUNT(*)

@@ -117,11 +117,54 @@ Column level sensor that calculates the number of rows with an empty string colu
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                AND {{ render_column_cast_to_string('analyzed_table')}} = ''
                     THEN 1
                 ELSE 0
             END
@@ -141,7 +184,7 @@ Column level sensor that calculates the number of rows with an empty string colu
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('analyzed_table')}} = ''
+                AND LENGTH({{ lib.render_target_column('analyzed_table')}}) = 0
                     THEN 1
                 ELSE 0
             END
@@ -161,7 +204,7 @@ Column level sensor that calculates the number of rows with an empty string colu
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('analyzed_table')}} = ''
+                AND LENGTH({{ lib.render_target_column('analyzed_table')}}) = 0
                     THEN 1
                 ELSE 0
             END
@@ -181,7 +224,7 @@ Column level sensor that calculates the number of rows with an empty string colu
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('analyzed_table')}} = ''
+                AND LENGTH({{ lib.render_target_column('analyzed_table')}}) = 0
                     THEN 1
                 ELSE 0
             END
@@ -211,13 +254,56 @@ Column level sensor that calculates the percentage of rows with an empty string 
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                    AND {{ render_column_cast_to_string('analyzed_table')}} = ''
                         THEN 1
                     ELSE 0
                 END
@@ -240,7 +326,7 @@ Column level sensor that calculates the percentage of rows with an empty string 
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                    AND LENGTH({{ lib.render_target_column('analyzed_table')}}) = 0
                         THEN 1
                     ELSE 0
                 END
@@ -263,7 +349,7 @@ Column level sensor that calculates the percentage of rows with an empty string 
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                    AND LENGTH({{ lib.render_target_column('analyzed_table')}}) = 0
                         THEN 1
                     ELSE 0
                 END
@@ -286,7 +372,7 @@ Column level sensor that calculates the percentage of rows with an empty string 
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} = ''
+                    AND LENGTH({{ lib.render_target_column('analyzed_table')}}) = 0
                         THEN 1
                     ELSE 0
                 END
@@ -1048,10 +1134,52 @@ Column level sensor that calculates the count of values that are longer than a g
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -1146,12 +1274,54 @@ Column level sensor that calculates the percentage of values that are longer tha
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) >= {{(parameters.max_length)}}
+                    WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) >= {{(parameters.max_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -1256,10 +1426,52 @@ Column level sensor that calculates the count of values that are shorter than a 
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         SUM(
             CASE
-                WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) <= {{(parameters.min_length)}}
                     THEN 1
                 ELSE 0
             END
@@ -1354,12 +1566,54 @@ Column level sensor that calculates the percentage of values that are shorter th
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LENGTH(CAST({{ lib.render_target_column('analyzed_table')}} AS STRING)) <= {{(parameters.min_length)}}
+                    WHEN LENGTH({{ render_column_cast_to_string('analyzed_table')}}) <= {{(parameters.min_length)}}
                         THEN 1
                     ELSE 0
                 END
@@ -1464,13 +1718,46 @@ Column level sensor that calculates the percent of non-negative values in a colu
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1508,13 +1795,14 @@ Column level sensor that calculates the percent of non-negative values in a colu
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1530,13 +1818,14 @@ Column level sensor that calculates the percent of non-negative values in a colu
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
     SELECT
         CASE
             WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
             ELSE
                 100.0 * SUM(
                     CASE
-                        WHEN LENGTH( {{ lib.render_column_cast_to_string('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
+                        WHEN LENGTH( {{ lib.render_target_column('analyzed_table') }} ) BETWEEN {{parameters.min_length}} AND {{parameters.max_length}} THEN 1
                         ELSE 0
                     END
             ) / COUNT({{ lib.render_target_column('analyzed_table') }})
@@ -1978,9 +2267,52 @@ Column level sensor that calculates the number of rows with a null column value.
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         MAX(
-            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+            LENGTH({{render_column_cast_to_string('analyzed_table')}})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2052,9 +2384,52 @@ Column level sensor that calculates the number of rows with a null column value.
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         AVG(
-            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+            LENGTH({{render_column_cast_to_string('analyzed_table')}})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2126,9 +2501,52 @@ Column level sensor that calculates the number of rows with a null column value.
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         MIN(
-            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+            LENGTH({{render_column_cast_to_string('analyzed_table')}})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2173,7 +2591,7 @@ Column level sensor that calculates the number of rows with a null column value.
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     SELECT
         MIN(
-            LENGTH({{lib.render_column_cast_to_string('analyzed_table')}})
+            LENGTH({{lib.render_target_column('analyzed_table')}})
         ) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
@@ -2843,10 +3261,53 @@ Column level sensor that calculates the number of rows with a null placeholder s
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         SUM(
             CASE
-                WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER({{ render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
@@ -2862,10 +3323,11 @@ Column level sensor that calculates the number of rows with a null placeholder s
       
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
     SELECT
         SUM(
             CASE
-                WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\''\''', '-', '')
+                WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\''\''', '-', '')
                     THEN 1
                 ELSE 0
             END
@@ -2881,10 +3343,11 @@ Column level sensor that calculates the number of rows with a null placeholder s
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     SELECT
         SUM(
             CASE
-                WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '-', '')
+                WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '-', '')
                     THEN 1
                 ELSE 0
             END
@@ -2900,10 +3363,11 @@ Column level sensor that calculates the number of rows with a null placeholder s
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
     SELECT
         SUM(
             CASE
-                WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                WHEN LOWER({{ lib.render_target_column('analyzed_table') }}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                     THEN 1
                 ELSE 0
             END
@@ -2933,12 +3397,55 @@ Column level sensor that calculates the number of rows with a null placeholder s
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER({{ render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
@@ -2955,12 +3462,13 @@ Column level sensor that calculates the number of rows with a null placeholder s
       
     ```
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\''\''', '-', '')
+                    WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\''\''', '-', '')
                         THEN 1
                     ELSE 0
                 END
@@ -2983,7 +3491,7 @@ Column level sensor that calculates the number of rows with a null placeholder s
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '-', '')
+                    WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '-', '')
                         THEN 1
                     ELSE 0
                 END
@@ -3000,12 +3508,13 @@ Column level sensor that calculates the number of rows with a null placeholder s
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN LOWER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
+                    WHEN LOWER({{ lib.render_target_column('analyzed_table')}}) IN ('null', 'undefined', 'missing', 'nan', 'none', 'na', 'n/a', 'empty', '#n/d', 'blank', '""', '\'\'', '-', '')
                         THEN 1
                     ELSE 0
                 END
@@ -3212,12 +3721,55 @@ Column level sensor that calculates the number of rows with string surrounded by
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         SUM(
             CASE
                 WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
-                AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+                AND TRIM({{ render_column_cast_to_string('analyzed_table')}}) <> ''
+                AND ({{ render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ render_column_cast_to_string('analyzed_table')}})
                     THEN 1
                 ELSE 0
             END
@@ -3275,12 +3827,13 @@ Column level sensor that calculates the number of rows with string surrounded by
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
     SELECT
         SUM(
             CASE
                 WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
-                AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+                AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
+                AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
                     THEN 1
                 ELSE 0
             END
@@ -3310,14 +3863,57 @@ Column level sensor that calculates the number of rows with string surrounded by
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
-                    AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+                    AND TRIM({{ render_column_cast_to_string('analyzed_table')}}) <> ''
+                    AND ({{ render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ render_column_cast_to_string('analyzed_table')}})
                         THEN 1
                     ELSE 0
                 END
@@ -3382,14 +3978,15 @@ Column level sensor that calculates the number of rows with string surrounded by
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN ({{ lib.render_target_column('analyzed_table')}}) IS NOT NULL
-                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) <> ''
-                    AND ({{ lib.render_column_cast_to_string('analyzed_table')}}) <> TRIM({{ lib.render_column_cast_to_string('analyzed_table')}})
+                    AND TRIM({{ lib.render_target_column('analyzed_table')}}) <> ''
+                    AND ({{ lib.render_target_column('analyzed_table')}}) <> TRIM({{ lib.render_target_column('analyzed_table')}})
                         THEN 1
                     ELSE 0
                 END
@@ -3522,12 +4119,55 @@ Column level sensor that calculates the number of rows with a valid currency cod
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN UPPER({{ lib.render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
+                    WHEN UPPER({{ render_column_cast_to_string('analyzed_table')}}) IN ('ALL',	'AFN',	'ARS',	'AWG',	'AUD',	'AZN',	'BSD',	'BBD',	'BYN',	'BZD',	'BMD',	'BOB',	'BAM',	'BWP',	'BGN',	'BRL',	'BND',	'KHR',	'CAD',	'KYD',	'CLP',	'CNY',	'COP',	'CRC',	'HRK',	'CUP',	'CZK',	'DKK',	'DOP',	'XCD',	'EGP',	'SVC',	'EUR',	'FKP',	'FJD',	'GHS',	'GIP',	'GTQ',	'GGP',	'GYD',	'HNL',	'HKD',	'HUF',	'ISK',	'INR',	'IDR',	'IRR',	'IMP',	'ILS',	'JMD',	'JPY',	'JEP',	'KZT',	'KPW',	'KRW',	'KGS',	'LAK',	'LBP',	'LRD',	'MKD',	'MYR',	'MUR',	'MXN',	'MNT',	'MZN',	'NAD',	'NPR',	'ANG',	'NZD',	'NIO',	'NGN',	'NOK',	'OMR',	'PKR',	'PAB',	'PYG',	'PEN',	'PHP',	'PLN',	'QAR',	'RON',	'RUB',	'SHP',	'SAR',	'RSD',	'SCR',	'SGD',	'SBD',	'SOS',	'ZAR',	'LKR',	'SEK',	'CHF',	'SRD',	'SYP',	'TWD',	'THB',	'TTD',	'TRY',	'TVD',	'UAH',	'AED',	'GBP',	'USD',	'UYU',	'UZS',	'VEF',	'VND',	'YER',	'ZWD',	'LEK',	'؋',	'$',	'Ƒ',	'₼',	'BR',	'BZ$',	'$B',	'KM',	'P',	'ЛВ',	'R$',	'៛',	'¥',	'₡',	'KN',	'₱',	'KČ',	'KR',	'RD$', '£',	'€',	'¢',	'Q',	'L',	'FT',	'₹',	'RP',	'﷼',	'₪',	'J$',	'₩',	'₭',	'ДЕН',	'RM',	'₨',	'₮',	'د.إ',	'MT',	'C$',	'₦',	'B/.',	'GS',	'S/.', 'ZŁ',	'LEI',	'ДИН.',	'S',	'R',	'NT$',	'฿',	'TT$',	'₺',	'₴',	'$U',	'BS',	'₫', 'Z$')
                         THEN 1
                     ELSE 0
                 END
@@ -3624,12 +4264,55 @@ Column level sensor that calculates the number of rows with a null column value.
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN SAFE_CAST({{lib.render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
+                    WHEN SAFE_CAST({{render_column_cast_to_string('analyzed_table')}} AS DATE) IS NOT NULL
                         THEN 1
                     ELSE 0
                 END
@@ -3668,14 +4351,15 @@ Column level sensor that calculates the number of rows with a null column value.
       
     ```
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
-                    WHEN {{lib.render_column_cast_to_string('analyzed_table')}} SIMILAR TO '\\d{4}-\\d{2}-\\d{2}'
-                        OR {{lib.render_column_cast_to_string('analyzed_table')}} SIMILAR TO '\\d{2}-\\d{2}-\\d{4}'
-                        OR {{lib.render_column_cast_to_string('analyzed_table')}} SIMILAR TO '\\d{2}/\\d{2}/\\d{4}'
+                    WHEN {{lib.render_target_column('analyzed_table')}} SIMILAR TO '\\d{4}-\\d{2}-\\d{2}'
+                        OR {{lib.render_target_column('analyzed_table')}} SIMILAR TO '\\d{2}-\\d{2}-\\d{4}'
+                        OR {{lib.render_target_column('analyzed_table')}} SIMILAR TO '\\d{2}/\\d{2}/\\d{4}'
                         THEN 1
                     ELSE 0
                 END
@@ -3830,12 +4514,55 @@ Column level sensor that calculates the number of rows with an whitespace string
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                AND {{ render_column_cast_to_string('analyzed_table')}} <> ''
+                AND TRIM({{ render_column_cast_to_string('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
             END
@@ -3855,7 +4582,7 @@ Column level sensor that calculates the number of rows with an whitespace string
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                AND LENGTH({{ lib.render_target_column('analyzed_table')}}) <> 0
                 AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
@@ -3876,7 +4603,7 @@ Column level sensor that calculates the number of rows with an whitespace string
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                AND LENGTH({{ lib.render_target_column('analyzed_table')}}) <> 0
                 AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
@@ -3897,7 +4624,7 @@ Column level sensor that calculates the number of rows with an whitespace string
         SUM(
             CASE
                 WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                AND LENGTH({{ lib.render_target_column('analyzed_table')}}) <> 0
                 AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                     THEN 1
                 ELSE 0
@@ -3928,14 +4655,57 @@ Column level sensor that calculates the number of rows with a whitespace string 
       
     ```
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+    
+    {% macro render_column_cast_to_string(analyzed_table_to_render) -%}
+        {%- if (lib.target_column_data_type == 'STRING') -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- elif (lib.target_column_data_type == 'BIGNUMERIC') -%}
+            SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGDECIMAL') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'FLOAT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT64') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'NUMERIC') -%}
+                SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'SMALLINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'INTEGER') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BIGINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TINYINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BYTEINT') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATE') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'DATETIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIME') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'TIMESTAMP') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- elif (lib.target_column_data_type == 'BOOLEAN') -%}
+                    SAFE_CAST({{ lib.render_target_column(analyzed_table_to_render) }} AS STRING)
+        {%- else -%}
+            {{ lib.render_target_column(analyzed_table_to_render) }}
+        {%- endif -%}
+    {% endmacro -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                    AND {{ render_column_cast_to_string('analyzed_table')}} <> ''
+                    AND TRIM({{ render_column_cast_to_string('analyzed_table')}}) = ''
                         THEN 1
                     ELSE 0
                 END
@@ -3958,7 +4728,7 @@ Column level sensor that calculates the number of rows with a whitespace string 
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                    AND LENGTH({{ lib.render_target_column('analyzed_table')}}) <> 0
                     AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                         THEN 1
                     ELSE 0
@@ -3982,7 +4752,7 @@ Column level sensor that calculates the number of rows with a whitespace string 
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_target_column('analyzed_table')}} <> ''
+                    AND LENGTH({{ lib.render_target_column('analyzed_table')}}) <> 0
                     AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                         THEN 1
                     ELSE 0
@@ -4000,14 +4770,15 @@ Column level sensor that calculates the number of rows with a whitespace string 
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    
     SELECT
         CASE
             WHEN COUNT(*) = 0 THEN 100.0
             ELSE 100.0 * SUM(
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table')}} IS NOT NULL
-                    AND {{ lib.render_column_cast_to_string('analyzed_table')}} <> ''
-                    AND TRIM({{ lib.render_column_cast_to_string('analyzed_table')}}) = ''
+                    AND LENGTH({{ lib.render_target_column('analyzed_table')}}) <> 0
+                    AND TRIM({{ lib.render_target_column('analyzed_table')}}) = ''
                         THEN 1
                     ELSE 0
                 END

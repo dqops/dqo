@@ -954,8 +954,8 @@ Column level sensor that finds the percentile 90 in a given column.
         AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table)
-    {{- lib.render_where_clause() -}}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1041,8 +1041,8 @@ Column level sensor that finds the percentile 25 in a given column.
         AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table)
-    {{- lib.render_where_clause() -}}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1128,8 +1128,8 @@ Column level sensor that finds the percentile 50 in a given column.
         AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table)
-    {{- lib.render_where_clause() -}}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1215,8 +1215,8 @@ Column level sensor that finds the percentile in a given column. The percentile 
         AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table)
-    {{- lib.render_where_clause() -}}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1302,8 +1302,8 @@ Column level sensor that finds the percentile 10 in a given column.
         AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table)
-    {{- lib.render_where_clause() -}}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
@@ -1389,8 +1389,8 @@ Column level sensor that finds the percentile 75 in a given column.
         AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
         {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table)
-    {{- lib.render_where_clause() -}}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {{- lib.render_where_clause(indentation = '    ') -}}) AS nested_table
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
