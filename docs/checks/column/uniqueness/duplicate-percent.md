@@ -12,7 +12,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|duplicate_percent|profiling| |[duplicate_percent](../../../../reference/sensors/column/uniqueness%20column%20sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|duplicate_percent|profiling| |[duplicate_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -429,7 +429,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_duplicate_percent|checkpoint|daily|[duplicate_percent](../../../../reference/sensors/column/uniqueness%20column%20sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_checkpoint_duplicate_percent|checkpoint|daily|[duplicate_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -849,7 +849,7 @@ Verifies that the percentage of duplicate values in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_duplicate_percent|checkpoint|monthly|[duplicate_percent](../../../../reference/sensors/column/uniqueness%20column%20sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_checkpoint_duplicate_percent|checkpoint|monthly|[duplicate_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1269,7 +1269,7 @@ Verifies that the percent of duplicate values in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_duplicate_percent|partitioned|daily|[duplicate_percent](../../../../reference/sensors/column/uniqueness%20column%20sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_duplicate_percent|partitioned|daily|[duplicate_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1689,7 +1689,7 @@ Verifies that the percent of duplicate values in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_duplicate_percent|partitioned|monthly|[duplicate_percent](../../../../reference/sensors/column/uniqueness%20column%20sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_duplicate_percent|partitioned|monthly|[duplicate_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#duplicate-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

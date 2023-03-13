@@ -12,7 +12,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -398,7 +398,7 @@ Verifies that the percentile 50 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile_50_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_50_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -790,7 +790,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile_10_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_10_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1182,7 +1182,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile_25_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_25_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1574,7 +1574,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile_75_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_75_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1966,7 +1966,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|percentile_90_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|percentile_90_in_range|profiling| |[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2358,7 +2358,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2747,7 +2747,7 @@ Verifies that the percentile 50 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile_50_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_50_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -3142,7 +3142,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile_10_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_10_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -3537,7 +3537,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile_25_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_25_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -3932,7 +3932,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile_75_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_75_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -4327,7 +4327,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_percentile_90_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_percentile_90_in_range|checkpoint|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -4722,7 +4722,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -5111,7 +5111,7 @@ Verifies that the percentile 50 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile_50_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_50_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -5506,7 +5506,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile_10_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_10_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -5901,7 +5901,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile_25_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_25_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -6296,7 +6296,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile_75_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_75_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -6691,7 +6691,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_percentile_90_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_percentile_90_in_range|checkpoint|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -7086,7 +7086,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -7475,7 +7475,7 @@ Verifies that the percentile 50 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_50_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_50_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -7870,7 +7870,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_10_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_10_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -8265,7 +8265,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_25_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_25_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -8660,7 +8660,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_75_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_75_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -9055,7 +9055,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_percentile_90_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_percentile_90_in_range|partitioned|daily|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -9450,7 +9450,7 @@ Verifies that the percentile of all values in a column is not outside the set ra
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -9839,7 +9839,7 @@ Verifies that the percentile 50 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_50_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_50_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -10234,7 +10234,7 @@ Verifies that the percentile 10 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_10_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_10_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -10629,7 +10629,7 @@ Verifies that the percentile 25 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_25_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_25_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -11024,7 +11024,7 @@ Verifies that the percentile 75 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_75_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_75_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -11419,7 +11419,7 @@ Verifies that the percentile 90 of all values in a column is not outside the set
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_percentile_90_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric%20column%20sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_percentile_90_in_range|partitioned|monthly|[percentile](../../../../reference/sensors/column/numeric-column-sensors/#percentile)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

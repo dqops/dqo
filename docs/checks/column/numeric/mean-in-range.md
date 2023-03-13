@@ -12,7 +12,7 @@ Verifies that the average (mean) of all values in a column is not outside the se
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|mean_in_range|profiling| |[mean](../../../../reference/sensors/column/numeric%20column%20sensors/#mean)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|mean_in_range|profiling| |[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -358,7 +358,7 @@ Verifies that the average (mean) of all values in a column is not outside the se
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_mean_in_range|checkpoint|daily|[mean](../../../../reference/sensors/column/numeric%20column%20sensors/#mean)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_mean_in_range|checkpoint|daily|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -707,7 +707,7 @@ Verifies that the average (mean) of all values in a column does not exceed the s
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_mean_in_range|checkpoint|monthly|[mean](../../../../reference/sensors/column/numeric%20column%20sensors/#mean)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_mean_in_range|checkpoint|monthly|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1056,7 +1056,7 @@ Verifies that the average (mean) of all values in a column is not outside the se
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_mean_in_range|partitioned|daily|[mean](../../../../reference/sensors/column/numeric%20column%20sensors/#mean)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_mean_in_range|partitioned|daily|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1405,7 +1405,7 @@ Verifies that the average (mean) of all values in a column is not outside the se
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_mean_in_range|partitioned|monthly|[mean](../../../../reference/sensors/column/numeric%20column%20sensors/#mean)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_mean_in_range|partitioned|monthly|[mean](../../../../reference/sensors/column/numeric-column-sensors/#mean)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

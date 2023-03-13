@@ -12,7 +12,7 @@ Verifies that the population variance of all values in a column is not outside t
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|population_variance_in_range|profiling| |[population_variance](../../../../reference/sensors/column/numeric%20column%20sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|population_variance_in_range|profiling| |[population_variance](../../../../reference/sensors/column/numeric-column-sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -358,7 +358,7 @@ Verifies that the population variance of all values in a column is not outside t
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_population_variance_in_range|checkpoint|daily|[population_variance](../../../../reference/sensors/column/numeric%20column%20sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_population_variance_in_range|checkpoint|daily|[population_variance](../../../../reference/sensors/column/numeric-column-sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -707,7 +707,7 @@ Verifies that the population variance of all values in a column is not outside t
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_population_variance_in_range|checkpoint|monthly|[population_variance](../../../../reference/sensors/column/numeric%20column%20sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_population_variance_in_range|checkpoint|monthly|[population_variance](../../../../reference/sensors/column/numeric-column-sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1056,7 +1056,7 @@ Verifies that the population Variance of all values in a column is not outside t
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_population_variance_in_range|partitioned|daily|[population_variance](../../../../reference/sensors/column/numeric%20column%20sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_population_variance_in_range|partitioned|daily|[population_variance](../../../../reference/sensors/column/numeric-column-sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1405,7 +1405,7 @@ Verifies that the population variance of all values in a column is not outside t
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_population_variance_in_range|partitioned|monthly|[population_variance](../../../../reference/sensors/column/numeric%20column%20sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_population_variance_in_range|partitioned|monthly|[population_variance](../../../../reference/sensors/column/numeric-column-sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

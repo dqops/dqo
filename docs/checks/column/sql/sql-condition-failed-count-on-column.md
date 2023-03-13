@@ -12,7 +12,7 @@ Verifies that a maximum number of rows failed a custom SQL condition (expression
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|sql_condition_failed_count_on_column|profiling| |[sql_condition_failed_count](../../../../reference/sensors/column/sql%20column%20sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|sql_condition_failed_count_on_column|profiling| |[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -475,7 +475,7 @@ Verifies that a maximum number of rows failed a custom SQL condition (expression
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_sql_condition_failed_count_on_column|checkpoint|daily|[sql_condition_failed_count](../../../../reference/sensors/column/sql%20column%20sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_sql_condition_failed_count_on_column|checkpoint|daily|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -941,7 +941,7 @@ Verifies that a maximum number of rows failed a custom SQL condition (expression
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_sql_condition_failed_count_on_column|checkpoint|monthly|[sql_condition_failed_count](../../../../reference/sensors/column/sql%20column%20sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_sql_condition_failed_count_on_column|checkpoint|monthly|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1407,7 +1407,7 @@ Verifies that a maximum number of rows failed a custom SQL condition (expression
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sql_condition_failed_count_on_column|partitioned|daily|[sql_condition_failed_count](../../../../reference/sensors/column/sql%20column%20sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_sql_condition_failed_count_on_column|partitioned|daily|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1873,7 +1873,7 @@ Verifies that a maximum number of rows failed a custom SQL condition (expression
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sql_condition_failed_count_on_column|partitioned|monthly|[sql_condition_failed_count](../../../../reference/sensors/column/sql%20column%20sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_sql_condition_failed_count_on_column|partitioned|monthly|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

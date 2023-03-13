@@ -12,7 +12,7 @@ Verifies that the sample variance of all values in a column is not outside the s
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|sample_variance_in_range|profiling| |[sample_variance](../../../../reference/sensors/column/numeric%20column%20sensors/#sample-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|sample_variance_in_range|profiling| |[sample_variance](../../../../reference/sensors/column/numeric-column-sensors/#sample-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -358,7 +358,7 @@ Verifies that the sample variance of all values in a column is not outside the s
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_sample_variance_in_range|checkpoint|daily|[sample_variance](../../../../reference/sensors/column/numeric%20column%20sensors/#sample-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_sample_variance_in_range|checkpoint|daily|[sample_variance](../../../../reference/sensors/column/numeric-column-sensors/#sample-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -707,7 +707,7 @@ Verifies that the sample variance of all values in a column is not outside the s
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_sample_variance_in_range|checkpoint|monthly|[sample_variance](../../../../reference/sensors/column/numeric%20column%20sensors/#sample-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_sample_variance_in_range|checkpoint|monthly|[sample_variance](../../../../reference/sensors/column/numeric-column-sensors/#sample-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1056,7 +1056,7 @@ Verifies that the sample Variance of all values in a column is not outside the s
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sample_variance_in_range|partitioned|daily|[sample_variance](../../../../reference/sensors/column/numeric%20column%20sensors/#sample-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_sample_variance_in_range|partitioned|daily|[sample_variance](../../../../reference/sensors/column/numeric-column-sensors/#sample-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1405,7 +1405,7 @@ Verifies that the sample variance of all values in a column is not outside the s
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sample_variance_in_range|partitioned|monthly|[sample_variance](../../../../reference/sensors/column/numeric%20column%20sensors/#sample-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_sample_variance_in_range|partitioned|monthly|[sample_variance](../../../../reference/sensors/column/numeric-column-sensors/#sample-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

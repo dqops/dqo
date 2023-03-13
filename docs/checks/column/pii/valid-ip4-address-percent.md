@@ -12,7 +12,7 @@ Verifies that the percentage of valid IP4 address in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|valid_ip4_address_percent|profiling| |[valid_ip4_address_percent](../../../../reference/sensors/column/pii%20column%20sensors/#valid-ip4-address-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|valid_ip4_address_percent|profiling| |[valid_ip4_address_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-ip4-address-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -493,7 +493,7 @@ Verifies that the percentage of valid IP4 address in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_valid_ip4_address_percent|checkpoint|daily|[valid_ip4_address_percent](../../../../reference/sensors/column/pii%20column%20sensors/#valid-ip4-address-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_valid_ip4_address_percent|checkpoint|daily|[valid_ip4_address_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-ip4-address-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -977,7 +977,7 @@ Verifies that the percentage of valid IP4 address in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_valid_ip4_address_percent|checkpoint|monthly|[valid_ip4_address_percent](../../../../reference/sensors/column/pii%20column%20sensors/#valid-ip4-address-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_valid_ip4_address_percent|checkpoint|monthly|[valid_ip4_address_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-ip4-address-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1461,7 +1461,7 @@ Verifies that the percentage of valid IP4 address in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_valid_ip4_address_percent|partitioned|daily|[valid_ip4_address_percent](../../../../reference/sensors/column/pii%20column%20sensors/#valid-ip4-address-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_valid_ip4_address_percent|partitioned|daily|[valid_ip4_address_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-ip4-address-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1945,7 +1945,7 @@ Verifies that the percentage of valid IP4 address in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_valid_ip4_address_percent|partitioned|monthly|[valid_ip4_address_percent](../../../../reference/sensors/column/pii%20column%20sensors/#valid-ip4-address-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_valid_ip4_address_percent|partitioned|monthly|[valid_ip4_address_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-ip4-address-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

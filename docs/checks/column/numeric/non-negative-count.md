@@ -12,7 +12,7 @@ Verifies that the number of non-negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|non_negative_count|profiling| |[non_negative_count](../../../../reference/sensors/column/numeric%20column%20sensors/#non-negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|non_negative_count|profiling| |[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -429,7 +429,7 @@ Verifies that the number of non-negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_non_negative_count|checkpoint|daily|[non_negative_count](../../../../reference/sensors/column/numeric%20column%20sensors/#non-negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_non_negative_count|checkpoint|daily|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -849,7 +849,7 @@ Verifies that the number of non-negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_non_negative_count|checkpoint|monthly|[non_negative_count](../../../../reference/sensors/column/numeric%20column%20sensors/#non-negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_non_negative_count|checkpoint|monthly|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1269,7 +1269,7 @@ Verifies that the number of non-negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_non_negative_count|partitioned|daily|[non_negative_count](../../../../reference/sensors/column/numeric%20column%20sensors/#non-negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_non_negative_count|partitioned|daily|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1689,7 +1689,7 @@ Verifies that the number of non-negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_non_negative_count|partitioned|monthly|[non_negative_count](../../../../reference/sensors/column/numeric%20column%20sensors/#non-negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_non_negative_count|partitioned|monthly|[non_negative_count](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

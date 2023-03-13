@@ -12,7 +12,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|sql_aggregate_expr_column|profiling| |[sql_aggregated_expression](../../../../reference/sensors/column/sql%20column%20sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|sql_aggregate_expr_column|profiling| |[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -372,7 +372,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_sql_aggregate_expr_column|checkpoint|daily|[sql_aggregated_expression](../../../../reference/sensors/column/sql%20column%20sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_sql_aggregate_expr_column|checkpoint|daily|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -735,7 +735,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_sql_aggregate_expr_column|checkpoint|monthly|[sql_aggregated_expression](../../../../reference/sensors/column/sql%20column%20sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_sql_aggregate_expr_column|checkpoint|monthly|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1098,7 +1098,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sql_aggregate_expr_column|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/column/sql%20column%20sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_sql_aggregate_expr_column|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1461,7 +1461,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sql_aggregate_expr_column|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/column/sql%20column%20sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_sql_aggregate_expr_column|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

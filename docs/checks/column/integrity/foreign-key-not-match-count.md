@@ -12,7 +12,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|foreign_key_not_match_count|profiling| |[foreign_key_not_match_count](../../../../reference/sensors/column/integrity%20column%20sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|foreign_key_not_match_count|profiling| |[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -562,7 +562,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_foreign_key_not_match_count|checkpoint|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity%20column%20sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_foreign_key_not_match_count|checkpoint|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1115,7 +1115,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_foreign_key_not_match_count|checkpoint|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity%20column%20sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_foreign_key_not_match_count|checkpoint|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1668,7 +1668,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_foreign_key_not_match_count|partitioned|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity%20column%20sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_foreign_key_not_match_count|partitioned|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2221,7 +2221,7 @@ Verifies that the number of values in a column that does not match values in ano
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_foreign_key_not_match_count|partitioned|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity%20column%20sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_foreign_key_not_match_count|partitioned|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

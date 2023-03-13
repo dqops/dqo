@@ -12,7 +12,7 @@ Verifies that the number of invalid latitude values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|invalid_latitude_count|profiling| |[invalid_latitude_count](../../../../reference/sensors/column/numeric%20column%20sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|invalid_latitude_count|profiling| |[invalid_latitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -429,7 +429,7 @@ Verifies that the number of invalid latitude values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_invalid_latitude_count|checkpoint|daily|[invalid_latitude_count](../../../../reference/sensors/column/numeric%20column%20sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_invalid_latitude_count|checkpoint|daily|[invalid_latitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -849,7 +849,7 @@ Verifies that the number of invalid latitude values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_invalid_latitude_count|checkpoint|monthly|[invalid_latitude_count](../../../../reference/sensors/column/numeric%20column%20sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_invalid_latitude_count|checkpoint|monthly|[invalid_latitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1269,7 +1269,7 @@ Verifies that the number of invalid latitude values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_invalid_latitude_count|partitioned|daily|[invalid_latitude_count](../../../../reference/sensors/column/numeric%20column%20sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_invalid_latitude_count|partitioned|daily|[invalid_latitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1689,7 +1689,7 @@ Verifies that the number of invalid latitude values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_invalid_latitude_count|partitioned|monthly|[invalid_latitude_count](../../../../reference/sensors/column/numeric%20column%20sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_invalid_latitude_count|partitioned|monthly|[invalid_latitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-latitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

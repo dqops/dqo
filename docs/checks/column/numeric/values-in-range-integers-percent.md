@@ -12,7 +12,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|values_in_range_integers_percent|profiling| |[values_in_range_integers_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|values_in_range_integers_percent|profiling| |[values_in_range_integers_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -441,7 +441,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_values_in_range_integers_percent|checkpoint|daily|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_values_in_range_integers_percent|checkpoint|daily|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -873,7 +873,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_values_in_range_integers_percent|checkpoint|monthly|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_values_in_range_integers_percent|checkpoint|monthly|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1305,7 +1305,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_values_in_range_integers_percent|partitioned|daily|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_values_in_range_integers_percent|partitioned|daily|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1737,7 +1737,7 @@ Verifies that the percentage of values from range in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_values_in_range_integers_percent|partitioned|monthly|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_values_in_range_integers_percent|partitioned|monthly|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

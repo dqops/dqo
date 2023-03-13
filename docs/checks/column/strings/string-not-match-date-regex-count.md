@@ -12,7 +12,7 @@ Verifies that the number of strings not matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_not_match_date_regex_count|profiling| |[string_not_match_date_regex_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|string_not_match_date_regex_count|profiling| |[string_not_match_date_regex_count](../../../../reference/sensors/column/strings-column-sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -615,7 +615,7 @@ Verifies that the number of strings not matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_not_match_date_regex_count|checkpoint|daily|[string_not_match_date_regex_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_string_not_match_date_regex_count|checkpoint|daily|[string_not_match_date_regex_count](../../../../reference/sensors/column/strings-column-sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1221,7 +1221,7 @@ Verifies that the number of strings not matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_not_match_date_regex_count|checkpoint|monthly|[string_not_match_date_regex_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_string_not_match_date_regex_count|checkpoint|monthly|[string_not_match_date_regex_count](../../../../reference/sensors/column/strings-column-sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1827,7 +1827,7 @@ Verifies that the number of strings not matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_not_match_date_regex_count|partitioned|daily|[string_not_match_date_regex_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_string_not_match_date_regex_count|partitioned|daily|[string_not_match_date_regex_count](../../../../reference/sensors/column/strings-column-sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2433,7 +2433,7 @@ Verifies that the number of strings not matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_not_match_date_regex_count|partitioned|monthly|[string_not_match_date_regex_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_string_not_match_date_regex_count|partitioned|monthly|[string_not_match_date_regex_count](../../../../reference/sensors/column/strings-column-sensors/#string-not-match-date-regex-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

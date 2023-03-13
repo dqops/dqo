@@ -12,7 +12,7 @@ The check counts those strings with length above the one provided by the user in
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_length_above_max_length_count|profiling| |[string_length_above_max_length_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|string_length_above_max_length_count|profiling| |[string_length_above_max_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -539,7 +539,7 @@ The check counts those strings with length above the one provided by the user in
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_length_above_max_length_count|checkpoint|daily|[string_length_above_max_length_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_string_length_above_max_length_count|checkpoint|daily|[string_length_above_max_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1069,7 +1069,7 @@ The check counts those strings with length above the one provided by the user in
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_length_above_max_length_count|checkpoint|monthly|[string_length_above_max_length_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_string_length_above_max_length_count|checkpoint|monthly|[string_length_above_max_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1599,7 +1599,7 @@ The check counts those strings with length above the one provided by the user in
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_length_above_max_length_count|partitioned|daily|[string_length_above_max_length_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_string_length_above_max_length_count|partitioned|daily|[string_length_above_max_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2129,7 +2129,7 @@ The check counts those strings with length above the one provided by the user in
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_length_above_max_length_count|partitioned|monthly|[string_length_above_max_length_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_string_length_above_max_length_count|partitioned|monthly|[string_length_above_max_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

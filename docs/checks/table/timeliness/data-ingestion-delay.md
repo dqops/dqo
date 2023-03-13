@@ -12,7 +12,7 @@ Calculates the time difference in days between the most recent event timestamp a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|data_ingestion_delay|profiling| |[data_ingestion_delay](../../../../reference/sensors/table/timeliness%20table%20sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|data_ingestion_delay|profiling| |[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -599,7 +599,7 @@ Daily checkpoint calculating the time difference in days between the most recent
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_data_ingestion_delay|checkpoint|daily|[data_ingestion_delay](../../../../reference/sensors/table/timeliness%20table%20sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|daily_checkpoint_data_ingestion_delay|checkpoint|daily|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1189,7 +1189,7 @@ Monthly checkpoint calculating the time difference in days between the most rece
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_data_ingestion_delay|checkpoint|monthly|[data_ingestion_delay](../../../../reference/sensors/table/timeliness%20table%20sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|monthly_checkpoint_data_ingestion_delay|checkpoint|monthly|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1779,7 +1779,7 @@ Daily partition checkpoint calculating the time difference in days between the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_data_ingestion_delay|partitioned|daily|[data_ingestion_delay](../../../../reference/sensors/table/timeliness%20table%20sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|daily_partition_data_ingestion_delay|partitioned|daily|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2369,7 +2369,7 @@ Monthly partition checkpoint calculating the time difference in days between the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_data_ingestion_delay|partitioned|monthly|[data_ingestion_delay](../../../../reference/sensors/table/timeliness%20table%20sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|monthly_partition_data_ingestion_delay|partitioned|monthly|[data_ingestion_delay](../../../../reference/sensors/table/timeliness-table-sensors/#data-ingestion-delay)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

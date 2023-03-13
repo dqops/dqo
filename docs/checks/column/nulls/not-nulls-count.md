@@ -12,7 +12,7 @@ Verifies that the number of not null values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|not_nulls_count|profiling| |[not_null_count](../../../../reference/sensors/column/nulls%20column%20sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|not_nulls_count|profiling| |[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -357,7 +357,7 @@ Verifies that the number of not null values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_not_nulls_count|checkpoint|daily|[not_null_count](../../../../reference/sensors/column/nulls%20column%20sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_not_nulls_count|checkpoint|daily|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -705,7 +705,7 @@ Verifies that the number of not null values in a column does not exceed the maxi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_not_nulls_count|checkpoint|monthly|[not_null_count](../../../../reference/sensors/column/nulls%20column%20sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_not_nulls_count|checkpoint|monthly|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1053,7 +1053,7 @@ Verifies that the number of not null values in a column does not exceed the set 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_not_nulls_count|partitioned|daily|[not_null_count](../../../../reference/sensors/column/nulls%20column%20sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_not_nulls_count|partitioned|daily|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1401,7 +1401,7 @@ Verifies that the number of not null values in a column does not exceed the set 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_not_nulls_count|partitioned|monthly|[not_null_count](../../../../reference/sensors/column/nulls%20column%20sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_not_nulls_count|partitioned|monthly|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

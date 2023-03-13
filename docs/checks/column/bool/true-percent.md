@@ -12,7 +12,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|true_percent|profiling| |[true_percent](../../../../reference/sensors/column/bool%20column%20sensors/#true-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|true_percent|profiling| |[true_percent](../../../../reference/sensors/column/bool-column-sensors/#true-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -493,7 +493,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_true_percent|checkpoint|daily|[true_percent](../../../../reference/sensors/column/bool%20column%20sensors/#true-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_true_percent|checkpoint|daily|[true_percent](../../../../reference/sensors/column/bool-column-sensors/#true-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -977,7 +977,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_true_percent|checkpoint|monthly|[true_percent](../../../../reference/sensors/column/bool%20column%20sensors/#true-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_true_percent|checkpoint|monthly|[true_percent](../../../../reference/sensors/column/bool-column-sensors/#true-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1461,7 +1461,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_true_percent|partitioned|daily|[true_percent](../../../../reference/sensors/column/bool%20column%20sensors/#true-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_true_percent|partitioned|daily|[true_percent](../../../../reference/sensors/column/bool-column-sensors/#true-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1945,7 +1945,7 @@ Verifies that the percentage of true values in a column does not exceed the mini
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_true_percent|partitioned|monthly|[true_percent](../../../../reference/sensors/column/bool%20column%20sensors/#true-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_true_percent|partitioned|monthly|[true_percent](../../../../reference/sensors/column/bool-column-sensors/#true-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

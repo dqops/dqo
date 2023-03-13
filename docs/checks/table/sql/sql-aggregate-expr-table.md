@@ -12,7 +12,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|sql_aggregate_expr_table|profiling| |[sql_aggregated_expression](../../../../reference/sensors/table/sql%20table%20sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|sql_aggregate_expr_table|profiling| |[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -357,7 +357,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_sql_aggregate_expr_table|checkpoint|daily|[sql_aggregated_expression](../../../../reference/sensors/table/sql%20table%20sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|daily_checkpoint_sql_aggregate_expr_table|checkpoint|daily|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -705,7 +705,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a give
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_sql_aggregate_expr_table|checkpoint|monthly|[sql_aggregated_expression](../../../../reference/sensors/table/sql%20table%20sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|monthly_checkpoint_sql_aggregate_expr_table|checkpoint|monthly|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1053,7 +1053,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sql_aggregate_expr_table|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/table/sql%20table%20sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|daily_partition_sql_aggregate_expr_table|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1401,7 +1401,7 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sql_aggregate_expr_table|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/table/sql%20table%20sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|monthly_partition_sql_aggregate_expr_table|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/table/sql-table-sensors/#sql-aggregated-expression)|[max_value](../../../../reference/rules/comparison/#max-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

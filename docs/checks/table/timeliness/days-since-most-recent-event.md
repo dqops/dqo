@@ -12,7 +12,7 @@ Calculates the number of days since the most recent event timestamp (freshness)
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|days_since_most_recent_event|profiling| |[days_since_most_recent_event](../../../../reference/sensors/table/timeliness%20table%20sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|days_since_most_recent_event|profiling| |[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -573,7 +573,7 @@ Daily checkpoint calculating the number of days since the most recent event time
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_days_since_most_recent_event|checkpoint|daily|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness%20table%20sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|daily_checkpoint_days_since_most_recent_event|checkpoint|daily|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1137,7 +1137,7 @@ Monthly checkpoint calculating the number of days since the most recent event ti
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_days_since_most_recent_event|checkpoint|monthly|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness%20table%20sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|monthly_checkpoint_days_since_most_recent_event|checkpoint|monthly|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1701,7 +1701,7 @@ Daily partition checkpoint calculating the number of days since the most recent 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_days_since_most_recent_event|partitioned|daily|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness%20table%20sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|daily_partition_days_since_most_recent_event|partitioned|daily|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2265,7 +2265,7 @@ Monthly partition checkpoint calculating the number of days since the most recen
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_days_since_most_recent_event|partitioned|monthly|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness%20table%20sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|monthly_partition_days_since_most_recent_event|partitioned|monthly|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

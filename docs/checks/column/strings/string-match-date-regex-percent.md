@@ -12,7 +12,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_match_date_regex_percent|profiling| |[string_match_date_regex_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|string_match_date_regex_percent|profiling| |[string_match_date_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -615,7 +615,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_match_date_regex_percent|checkpoint|daily|[string_match_date_regex_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_string_match_date_regex_percent|checkpoint|daily|[string_match_date_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1221,7 +1221,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_match_date_regex_percent|checkpoint|monthly|[string_match_date_regex_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_string_match_date_regex_percent|checkpoint|monthly|[string_match_date_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1827,7 +1827,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_match_date_regex_percent|partitioned|daily|[string_match_date_regex_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_string_match_date_regex_percent|partitioned|daily|[string_match_date_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2433,7 +2433,7 @@ Verifies that the percentage of strings matching the date format regex in a colu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_match_date_regex_percent|partitioned|monthly|[string_match_date_regex_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_string_match_date_regex_percent|partitioned|monthly|[string_match_date_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-date-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

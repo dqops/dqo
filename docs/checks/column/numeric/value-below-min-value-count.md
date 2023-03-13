@@ -12,7 +12,7 @@ The check counts those values with value below the one provided by the user in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|value_below_min_value_count|profiling| |[value_below_min_value_count](../../../../reference/sensors/column/numeric%20column%20sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|value_below_min_value_count|profiling| |[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -437,7 +437,7 @@ The check counts those values with value below the one provided by the user in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_value_below_min_value_count|checkpoint|daily|[value_below_min_value_count](../../../../reference/sensors/column/numeric%20column%20sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_value_below_min_value_count|checkpoint|daily|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -865,7 +865,7 @@ The check counts those values with value below the one provided by the user in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_value_below_min_value_count|checkpoint|monthly|[value_below_min_value_count](../../../../reference/sensors/column/numeric%20column%20sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_value_below_min_value_count|checkpoint|monthly|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1293,7 +1293,7 @@ The check counts those values with value below the one provided by the user in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_value_below_min_value_count|partitioned|daily|[value_below_min_value_count](../../../../reference/sensors/column/numeric%20column%20sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_value_below_min_value_count|partitioned|daily|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1721,7 +1721,7 @@ The check counts those values with value below the one provided by the user in a
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_value_below_min_value_count|partitioned|monthly|[value_below_min_value_count](../../../../reference/sensors/column/numeric%20column%20sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_value_below_min_value_count|partitioned|monthly|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

@@ -12,7 +12,7 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_invalid_email_count|profiling| |[string_invalid_email_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|string_invalid_email_count|profiling| |[string_invalid_email_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -445,7 +445,7 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_invalid_email_count|checkpoint|daily|[string_invalid_email_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_string_invalid_email_count|checkpoint|daily|[string_invalid_email_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -881,7 +881,7 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_invalid_email_count|checkpoint|monthly|[string_invalid_email_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_string_invalid_email_count|checkpoint|monthly|[string_invalid_email_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1317,7 +1317,7 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_invalid_email_count|partitioned|daily|[string_invalid_email_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_string_invalid_email_count|partitioned|daily|[string_invalid_email_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1753,7 +1753,7 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_invalid_email_count|partitioned|monthly|[string_invalid_email_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_string_invalid_email_count|partitioned|monthly|[string_invalid_email_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

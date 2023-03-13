@@ -12,7 +12,7 @@ Verifies that the percentage of parsable to float string in a column does not ex
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_parsable_to_float_percent|profiling| |[string_parsable_to_float_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|string_parsable_to_float_percent|profiling| |[string_parsable_to_float_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -433,7 +433,7 @@ Verifies that the percentage of parsable to float string in a column does not ex
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_parsable_to_float_percent|checkpoint|daily|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_string_parsable_to_float_percent|checkpoint|daily|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -857,7 +857,7 @@ Verifies that the percentage of parsable to float string in a column does not ex
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_parsable_to_float_percent|checkpoint|monthly|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_string_parsable_to_float_percent|checkpoint|monthly|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1281,7 +1281,7 @@ Verifies that the percentage of parsable to float string in a column does not ex
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_parsable_to_float_percent|partitioned|daily|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_string_parsable_to_float_percent|partitioned|daily|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1705,7 +1705,7 @@ Verifies that the percentage of parsable to float string in a column does not ex
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_parsable_to_float_percent|partitioned|monthly|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_string_parsable_to_float_percent|partitioned|monthly|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

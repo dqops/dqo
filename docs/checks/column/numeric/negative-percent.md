@@ -12,7 +12,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|negative_percent|profiling| |[negative_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|negative_percent|profiling| |[negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -477,7 +477,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_negative_percent|checkpoint|daily|[negative_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_checkpoint_negative_percent|checkpoint|daily|[negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -945,7 +945,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_negative_percent|checkpoint|monthly|[negative_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_checkpoint_negative_percent|checkpoint|monthly|[negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1413,7 +1413,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_negative_percent|partitioned|daily|[negative_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_negative_percent|partitioned|daily|[negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1881,7 +1881,7 @@ Verifies that the percentage of negative values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_negative_percent|partitioned|monthly|[negative_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_negative_percent|partitioned|monthly|[negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

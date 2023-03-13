@@ -12,7 +12,7 @@ Verifies that the percentage of valid USA phone in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|valid_usa_phone_percent|profiling| |[valid_usa_phone_percent](../../../../reference/sensors/column/pii%20column%20sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|valid_usa_phone_percent|profiling| |[valid_usa_phone_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -541,7 +541,7 @@ Verifies that the percentage of valid USA phone in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_valid_usa_phone_percent|checkpoint|daily|[valid_usa_phone_percent](../../../../reference/sensors/column/pii%20column%20sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_valid_usa_phone_percent|checkpoint|daily|[valid_usa_phone_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1073,7 +1073,7 @@ Verifies that the percentage of valid USA phone in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_valid_usa_phone_percent|checkpoint|monthly|[valid_usa_phone_percent](../../../../reference/sensors/column/pii%20column%20sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_valid_usa_phone_percent|checkpoint|monthly|[valid_usa_phone_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1605,7 +1605,7 @@ Verifies that the percentage of valid USA phone in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_valid_usa_phone_percent|partitioned|daily|[valid_usa_phone_percent](../../../../reference/sensors/column/pii%20column%20sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_valid_usa_phone_percent|partitioned|daily|[valid_usa_phone_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2137,7 +2137,7 @@ Verifies that the percentage of valid USA phone in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_valid_usa_phone_percent|partitioned|monthly|[valid_usa_phone_percent](../../../../reference/sensors/column/pii%20column%20sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_valid_usa_phone_percent|partitioned|monthly|[valid_usa_phone_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-usa-phone-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

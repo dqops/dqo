@@ -12,7 +12,7 @@ Verifies that the percent of not null values in a column does not exceed the max
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/column/nulls%20column%20sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -397,7 +397,7 @@ Verifies that the percentage of not nulls in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_not_nulls_percent|checkpoint|daily|[not_null_percent](../../../../reference/sensors/column/nulls%20column%20sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_checkpoint_not_nulls_percent|checkpoint|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -785,7 +785,7 @@ Verifies that the percentage of not nulls in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_not_nulls_percent|checkpoint|monthly|[not_null_percent](../../../../reference/sensors/column/nulls%20column%20sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_checkpoint_not_nulls_percent|checkpoint|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1173,7 +1173,7 @@ Verifies that the percentage of not null values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/column/nulls%20column%20sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1561,7 +1561,7 @@ Verifies that the percentage of not null values in a column does not exceed the 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/column/nulls%20column%20sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

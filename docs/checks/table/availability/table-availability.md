@@ -12,7 +12,7 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|table_availability|profiling| |[table_availability](../../../../reference/sensors/table/availability%20table%20sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|table_availability|profiling| |[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -503,7 +503,7 @@ Verifies availability on table in database using simple row count
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_table_availability|checkpoint|daily|[table_availability](../../../../reference/sensors/table/availability%20table%20sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|daily_checkpoint_table_availability|checkpoint|daily|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -997,7 +997,7 @@ Verifies availability on table in database using simple row count
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_table_availability|checkpoint|monthly|[table_availability](../../../../reference/sensors/table/availability%20table%20sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|monthly_partition_table_availability|checkpoint|monthly|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

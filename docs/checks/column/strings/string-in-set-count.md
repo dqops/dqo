@@ -12,7 +12,7 @@ Verifies that the number of strings from a set in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_in_set_count|profiling| |[string_in_set_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|string_in_set_count|profiling| |[string_in_set_count](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -646,7 +646,7 @@ Verifies that the number of strings from set in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_in_set_count|checkpoint|daily|[string_in_set_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_checkpoint_string_in_set_count|checkpoint|daily|[string_in_set_count](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1283,7 +1283,7 @@ Verifies that the number of strings from set in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_in_set_count|checkpoint|monthly|[string_in_set_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_checkpoint_string_in_set_count|checkpoint|monthly|[string_in_set_count](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1920,7 +1920,7 @@ Verifies that the number of strings from set in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_in_set_count|partitioned|daily|[string_in_set_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_partition_string_in_set_count|partitioned|daily|[string_in_set_count](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2557,7 +2557,7 @@ Verifies that the number of strings from set in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_in_set_count|partitioned|monthly|[string_in_set_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_partition_string_in_set_count|partitioned|monthly|[string_in_set_count](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

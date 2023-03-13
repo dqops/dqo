@@ -12,7 +12,7 @@ Verifies that the percentage of valid currency code in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_valid_currency_code_percent|profiling| |[string_valid_currency_code_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|string_valid_currency_code_percent|profiling| |[string_valid_currency_code_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -579,7 +579,7 @@ Verifies that the percentage of valid currency code in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_valid_currency_code_percent|checkpoint|daily|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_string_valid_currency_code_percent|checkpoint|daily|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1149,7 +1149,7 @@ Verifies that the percentage of valid currency code in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_valid_currency_code_percent|checkpoint|monthly|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_string_valid_currency_code_percent|checkpoint|monthly|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1719,7 +1719,7 @@ Verifies that the percentage of valid currency code in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_valid_currency_code_percent|partitioned|daily|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_string_valid_currency_code_percent|partitioned|daily|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2289,7 +2289,7 @@ Verifies that the percentage of valid currency code in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_valid_currency_code_percent|partitioned|monthly|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_string_valid_currency_code_percent|partitioned|monthly|[string_valid_currency_code_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-currency-code-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

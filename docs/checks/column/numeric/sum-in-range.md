@@ -12,7 +12,7 @@ Verifies that the sum of all values in a column is not outside the set range.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|sum_in_range|profiling| |[sum](../../../../reference/sensors/column/numeric%20column%20sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|sum_in_range|profiling| |[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -358,7 +358,7 @@ Verifies that the sum of all values in a column is not outside the set range. St
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_sum_in_range|checkpoint|daily|[sum](../../../../reference/sensors/column/numeric%20column%20sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_sum_in_range|checkpoint|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -707,7 +707,7 @@ Verifies that the sum of all values in a column does not exceed the set range. S
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_sum_in_range|checkpoint|monthly|[sum](../../../../reference/sensors/column/numeric%20column%20sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_sum_in_range|checkpoint|monthly|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1056,7 +1056,7 @@ Verifies that the sum of all values in a column is not outside the set range. Cr
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_sum_in_range|partitioned|daily|[sum](../../../../reference/sensors/column/numeric%20column%20sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_sum_in_range|partitioned|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1405,7 +1405,7 @@ Verifies that the sum of all values in a column is not outside the set range. Cr
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_sum_in_range|partitioned|monthly|[sum](../../../../reference/sensors/column/numeric%20column%20sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_sum_in_range|partitioned|monthly|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

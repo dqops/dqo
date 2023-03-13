@@ -12,7 +12,7 @@ Verifies that the population standard deviation of all values in a column is not
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|population_stddev_in_range|profiling| |[population_stddev](../../../../reference/sensors/column/numeric%20column%20sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|population_stddev_in_range|profiling| |[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -358,7 +358,7 @@ Verifies that the population standard deviation of all values in a column is not
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_population_stddev_in_range|checkpoint|daily|[population_stddev](../../../../reference/sensors/column/numeric%20column%20sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_population_stddev_in_range|checkpoint|daily|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -707,7 +707,7 @@ Verifies that the population standard deviation of all values in a column is not
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_population_stddev_in_range|checkpoint|monthly|[population_stddev](../../../../reference/sensors/column/numeric%20column%20sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_population_stddev_in_range|checkpoint|monthly|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1056,7 +1056,7 @@ Verifies that the population standard deviation of all values in a column is not
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_population_stddev_in_range|partitioned|daily|[population_stddev](../../../../reference/sensors/column/numeric%20column%20sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_population_stddev_in_range|partitioned|daily|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1405,7 +1405,7 @@ Verifies that the population standard deviation of all values in a column is not
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_population_stddev_in_range|partitioned|monthly|[population_stddev](../../../../reference/sensors/column/numeric%20column%20sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_population_stddev_in_range|partitioned|monthly|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

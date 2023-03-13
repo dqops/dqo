@@ -12,7 +12,7 @@ The check percentage of those values with value above the one provided by the us
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|value_above_max_value_percent|profiling| |[value_above_max_value_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|value_above_max_value_percent|profiling| |[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -445,7 +445,7 @@ The check percentage of those values with value below the one provided by the us
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_value_above_max_value_percent|checkpoint|daily|[value_above_max_value_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_value_above_max_value_percent|checkpoint|daily|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -881,7 +881,7 @@ The check percentage of those values with value below the one provided by the us
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_value_above_max_value_percent|checkpoint|monthly|[value_above_max_value_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_value_above_max_value_percent|checkpoint|monthly|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1317,7 +1317,7 @@ The check percentage of those values with value above the one provided by the us
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_value_above_max_value_percent|partitioned|daily|[value_above_max_value_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_value_above_max_value_percent|partitioned|daily|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1753,7 +1753,7 @@ The check percentage of those values with value above the one provided by the us
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_value_above_max_value_percent|partitioned|monthly|[value_above_max_value_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_value_above_max_value_percent|partitioned|monthly|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

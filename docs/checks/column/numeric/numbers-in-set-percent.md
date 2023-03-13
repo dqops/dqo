@@ -12,7 +12,7 @@ Verifies that the percentage of numbers from set in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|numbers_in_set_percent|profiling| |[numbers_in_set_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#numbers-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|numbers_in_set_percent|profiling| |[numbers_in_set_percent](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -615,7 +615,7 @@ Verifies that the percentage of Numbers from set in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_numbers_in_set_percent|checkpoint|daily|[numbers_in_set_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#numbers-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_numbers_in_set_percent|checkpoint|daily|[numbers_in_set_percent](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1221,7 +1221,7 @@ Verifies that the percentage of Numbers from set in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_numbers_in_set_percent|checkpoint|monthly|[numbers_in_set_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#numbers-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_numbers_in_set_percent|checkpoint|monthly|[numbers_in_set_percent](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1827,7 +1827,7 @@ Verifies that the percentage of Numbers from set in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_numbers_in_set_percent|partitioned|daily|[numbers_in_set_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#numbers-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_numbers_in_set_percent|partitioned|daily|[numbers_in_set_percent](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2433,7 +2433,7 @@ Verifies that the percentage of Numbers from set in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_numbers_in_set_percent|partitioned|monthly|[numbers_in_set_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#numbers-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_numbers_in_set_percent|partitioned|monthly|[numbers_in_set_percent](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

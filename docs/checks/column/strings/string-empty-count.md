@@ -12,7 +12,7 @@ Verifies that empty strings in a column does not exceed the maximum accepted cou
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_empty_count|profiling| |[string_empty_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-empty-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|string_empty_count|profiling| |[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -547,7 +547,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_empty_count|checkpoint|daily|[string_empty_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-empty-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_string_empty_count|checkpoint|daily|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1085,7 +1085,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_empty_count|checkpoint|monthly|[string_empty_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-empty-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_string_empty_count|checkpoint|monthly|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1623,7 +1623,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_empty_count|partitioned|daily|[string_empty_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-empty-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_string_empty_count|partitioned|daily|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2161,7 +2161,7 @@ Verifies that the number of empty strings in a column does not exceed the maximu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_empty_count|partitioned|monthly|[string_empty_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-empty-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_string_empty_count|partitioned|monthly|[string_empty_count](../../../../reference/sensors/column/strings-column-sensors/#string-empty-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

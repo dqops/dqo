@@ -12,7 +12,7 @@ Verifies that the percentage of valid latitude values in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|valid_latitude_percent|profiling| |[valid_latitude_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|valid_latitude_percent|profiling| |[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -429,7 +429,7 @@ Verifies that the percentage of valid latitude values in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_valid_latitude_percent|checkpoint|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_checkpoint_valid_latitude_percent|checkpoint|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -849,7 +849,7 @@ Verifies that the percentage of valid latitude values in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_valid_latitude_percent|checkpoint|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_checkpoint_valid_latitude_percent|checkpoint|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1269,7 +1269,7 @@ Verifies that the percentage of valid latitude values in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_valid_latitude_percent|partitioned|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_valid_latitude_percent|partitioned|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1689,7 +1689,7 @@ Verifies that the percentage of valid latitude values in a column does not excee
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_valid_latitude_percent|partitioned|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_valid_latitude_percent|partitioned|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

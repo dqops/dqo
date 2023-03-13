@@ -12,7 +12,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_max_length|profiling| |[string_max_length](../../../../reference/sensors/column/strings%20column%20sensors/#string-max-length)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|string_max_length|profiling| |[string_max_length](../../../../reference/sensors/column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/comparison/#max-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -467,7 +467,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_max_length|checkpoint|daily|[string_max_length](../../../../reference/sensors/column/strings%20column%20sensors/#string-max-length)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|daily_checkpoint_string_max_length|checkpoint|daily|[string_max_length](../../../../reference/sensors/column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/comparison/#max-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -925,7 +925,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_max_length|checkpoint|monthly|[string_max_length](../../../../reference/sensors/column/strings%20column%20sensors/#string-max-length)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|monthly_checkpoint_string_max_length|checkpoint|monthly|[string_max_length](../../../../reference/sensors/column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/comparison/#max-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1383,7 +1383,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_max_length|partitioned|daily|[string_max_length](../../../../reference/sensors/column/strings%20column%20sensors/#string-max-length)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|daily_partition_string_max_length|partitioned|daily|[string_max_length](../../../../reference/sensors/column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/comparison/#max-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1841,7 +1841,7 @@ Verifies that the length of string in a column does not exceed the maximum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_max_length|partitioned|monthly|[string_max_length](../../../../reference/sensors/column/strings%20column%20sensors/#string-max-length)|[max_value](../../../../reference/rules/comparison/#max-value)|
+|monthly_partition_string_max_length|partitioned|monthly|[string_max_length](../../../../reference/sensors/column/strings-column-sensors/#string-max-length)|[max_value](../../../../reference/rules/comparison/#max-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

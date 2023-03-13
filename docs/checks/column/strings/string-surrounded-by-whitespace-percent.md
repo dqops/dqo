@@ -12,7 +12,7 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_surrounded_by_whitespace_percent|profiling| |[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|string_surrounded_by_whitespace_percent|profiling| |[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -613,7 +613,7 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_surrounded_by_whitespace_percent|checkpoint|daily|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_checkpoint_string_surrounded_by_whitespace_percent|checkpoint|daily|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1217,7 +1217,7 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_surrounded_by_whitespace_percent|checkpoint|monthly|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_checkpoint_string_surrounded_by_whitespace_percent|checkpoint|monthly|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1821,7 +1821,7 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_surrounded_by_whitespace_percent|partitioned|daily|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_string_surrounded_by_whitespace_percent|partitioned|daily|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2425,7 +2425,7 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_surrounded_by_whitespace_percent|partitioned|monthly|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_string_surrounded_by_whitespace_percent|partitioned|monthly|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

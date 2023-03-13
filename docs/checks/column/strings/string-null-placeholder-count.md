@@ -12,7 +12,7 @@ Verifies that the number of null placeholders in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_null_placeholder_count|profiling| |[string_null_placeholder_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|string_null_placeholder_count|profiling| |[string_null_placeholder_count](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -537,7 +537,7 @@ Verifies that the number of null placeholders in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_null_placeholder_count|checkpoint|daily|[string_null_placeholder_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_string_null_placeholder_count|checkpoint|daily|[string_null_placeholder_count](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1065,7 +1065,7 @@ Verifies that the number of null placeholders in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_null_placeholder_count|checkpoint|monthly|[string_null_placeholder_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_string_null_placeholder_count|checkpoint|monthly|[string_null_placeholder_count](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1593,7 +1593,7 @@ Verifies that the number of null placeholders in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_null_placeholder_count|partitioned|daily|[string_null_placeholder_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_string_null_placeholder_count|partitioned|daily|[string_null_placeholder_count](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2121,7 +2121,7 @@ Verifies that the number of null placeholders in a column does not exceed the ma
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_null_placeholder_count|partitioned|monthly|[string_null_placeholder_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_string_null_placeholder_count|partitioned|monthly|[string_null_placeholder_count](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

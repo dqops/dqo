@@ -12,7 +12,7 @@ Verifies that the number of numbers from set in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|numbers_in_set_count|profiling| |[numbers_in_set_count](../../../../reference/sensors/column/numeric%20column%20sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|numbers_in_set_count|profiling| |[numbers_in_set_count](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -627,7 +627,7 @@ Verifies that the number of Numbers from set in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_numbers_in_set_count|checkpoint|daily|[numbers_in_set_count](../../../../reference/sensors/column/numeric%20column%20sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_checkpoint_numbers_in_set_count|checkpoint|daily|[numbers_in_set_count](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1245,7 +1245,7 @@ Verifies that the number of Numbers from set in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_numbers_in_set_count|checkpoint|monthly|[numbers_in_set_count](../../../../reference/sensors/column/numeric%20column%20sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_checkpoint_numbers_in_set_count|checkpoint|monthly|[numbers_in_set_count](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1863,7 +1863,7 @@ Verifies that the number of Numbers from set in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_numbers_in_set_count|partitioned|daily|[numbers_in_set_count](../../../../reference/sensors/column/numeric%20column%20sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_partition_numbers_in_set_count|partitioned|daily|[numbers_in_set_count](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2481,7 +2481,7 @@ Verifies that the number of Numbers from set in a column does not exceed the min
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_numbers_in_set_count|partitioned|monthly|[numbers_in_set_count](../../../../reference/sensors/column/numeric%20column%20sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_partition_numbers_in_set_count|partitioned|monthly|[numbers_in_set_count](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

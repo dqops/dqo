@@ -12,7 +12,7 @@ Verifies that the percentage of strings from a set in a column does not exceed t
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_in_set_percent|profiling| |[string_in_set_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|string_in_set_percent|profiling| |[string_in_set_percent](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -660,7 +660,7 @@ Verifies that the percentage of strings from a set in a column does not exceed t
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_in_set_percent|checkpoint|daily|[string_in_set_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_string_in_set_percent|checkpoint|daily|[string_in_set_percent](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1311,7 +1311,7 @@ Verifies that the percentage of strings from set in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_in_set_percent|checkpoint|monthly|[string_in_set_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_string_in_set_percent|checkpoint|monthly|[string_in_set_percent](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1962,7 +1962,7 @@ Verifies that the percentage of strings from set in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_in_set_percent|partitioned|daily|[string_in_set_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_string_in_set_percent|partitioned|daily|[string_in_set_percent](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2613,7 +2613,7 @@ Verifies that the percentage of strings from set in a column does not exceed the
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_in_set_percent|partitioned|monthly|[string_in_set_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_string_in_set_percent|partitioned|monthly|[string_in_set_percent](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

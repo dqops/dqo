@@ -12,7 +12,7 @@ The check counts percentage of those strings with length below the one provided 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_length_below_min_length_percent|profiling| |[string_length_below_min_length_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|string_length_below_min_length_percent|profiling| |[string_length_below_min_length_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -587,7 +587,7 @@ The check counts percentage of those strings with length below the one provided 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_length_below_min_length_percent|checkpoint|daily|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_string_length_below_min_length_percent|checkpoint|daily|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1165,7 +1165,7 @@ The check counts percentage of those strings with length below the one provided 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_length_below_min_length_percent|checkpoint|monthly|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_string_length_below_min_length_percent|checkpoint|monthly|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1743,7 +1743,7 @@ The check counts percentage of those strings with length below the one provided 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_length_below_min_length_percent|partitioned|daily|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_string_length_below_min_length_percent|partitioned|daily|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2321,7 +2321,7 @@ The check counts percentage of those strings with length below the one provided 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_length_below_min_length_percent|partitioned|monthly|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings%20column%20sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_string_length_below_min_length_percent|partitioned|monthly|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

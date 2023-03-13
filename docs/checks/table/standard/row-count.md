@@ -12,7 +12,7 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|row_count|profiling| |[row_count](../../../../reference/sensors/table/standard%20table%20sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|row_count|profiling| |[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -343,7 +343,7 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_row_count|checkpoint|daily|[row_count](../../../../reference/sensors/table/standard%20table%20sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_checkpoint_row_count|checkpoint|daily|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -677,7 +677,7 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_row_count|checkpoint|monthly|[row_count](../../../../reference/sensors/table/standard%20table%20sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_checkpoint_row_count|checkpoint|monthly|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1011,7 +1011,7 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_row_count|partitioned|daily|[row_count](../../../../reference/sensors/table/standard%20table%20sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_partition_row_count|partitioned|daily|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1345,7 +1345,7 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_min_row_count|partitioned|monthly|[row_count](../../../../reference/sensors/table/standard%20table%20sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_partition_min_row_count|partitioned|monthly|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

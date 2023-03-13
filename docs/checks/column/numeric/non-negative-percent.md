@@ -12,7 +12,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|non_negative_percent|profiling| |[non_negative_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|non_negative_percent|profiling| |[non_negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -429,7 +429,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_non_negative_percent|checkpoint|daily|[non_negative_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_checkpoint_non_negative_percent|checkpoint|daily|[non_negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -849,7 +849,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_non_negative_percent|checkpoint|monthly|[non_negative_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_checkpoint_non_negative_percent|checkpoint|monthly|[non_negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1269,7 +1269,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_non_negative_percent|partitioned|daily|[non_negative_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_non_negative_percent|partitioned|daily|[non_negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1689,7 +1689,7 @@ Verifies that the percentage of non-negative values in a column does not exceed 
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_non_negative_percent|partitioned|monthly|[non_negative_percent](../../../../reference/sensors/column/numeric%20column%20sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_non_negative_percent|partitioned|monthly|[non_negative_percent](../../../../reference/sensors/column/numeric-column-sensors/#non-negative-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

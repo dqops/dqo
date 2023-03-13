@@ -12,7 +12,7 @@ Verifies that the number of unique values in a column does not exceed the minimu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|unique_count|profiling| |[unique_count](../../../../reference/sensors/column/uniqueness%20column%20sensors/#unique-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|unique_count|profiling| |[unique_count](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -381,7 +381,7 @@ Verifies that the number of unique values in a column does not exceed the minimu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_unique_count|checkpoint|daily|[unique_count](../../../../reference/sensors/column/uniqueness%20column%20sensors/#unique-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_checkpoint_unique_count|checkpoint|daily|[unique_count](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -753,7 +753,7 @@ Verifies that the number of unique values in a column does not exceed the minimu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_unique_count|checkpoint|monthly|[unique_count](../../../../reference/sensors/column/uniqueness%20column%20sensors/#unique-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_checkpoint_unique_count|checkpoint|monthly|[unique_count](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1125,7 +1125,7 @@ Verifies that the number of unique values in a column does not exceed the minimu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_unique_count|partitioned|daily|[unique_count](../../../../reference/sensors/column/uniqueness%20column%20sensors/#unique-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_partition_unique_count|partitioned|daily|[unique_count](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1497,7 +1497,7 @@ Verifies that the number of unique values in a column does not exceed the minimu
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_unique_count|partitioned|monthly|[unique_count](../../../../reference/sensors/column/uniqueness%20column%20sensors/#unique-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_partition_unique_count|partitioned|monthly|[unique_count](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

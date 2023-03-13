@@ -12,7 +12,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_whitespace_count|profiling| |[string_whitespace_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|string_whitespace_count|profiling| |[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -563,7 +563,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_whitespace_count|checkpoint|daily|[string_whitespace_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_checkpoint_string_whitespace_count|checkpoint|daily|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1117,7 +1117,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_whitespace_count|checkpoint|monthly|[string_whitespace_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_checkpoint_string_whitespace_count|checkpoint|monthly|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1671,7 +1671,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_whitespace_count|partitioned|daily|[string_whitespace_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_partition_string_whitespace_count|partitioned|daily|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2225,7 +2225,7 @@ Verifies that the number of whitespace strings in a column does not exceed the m
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_whitespace_count|partitioned|monthly|[string_whitespace_count](../../../../reference/sensors/column/strings%20column%20sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_partition_string_whitespace_count|partitioned|monthly|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

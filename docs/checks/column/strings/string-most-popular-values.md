@@ -12,7 +12,7 @@ Verifies that the number of top values from a set in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_most_popular_values|profiling| |[string_most_popular_values](../../../../reference/sensors/column/strings%20column%20sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|string_most_popular_values|profiling| |[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1052,7 +1052,7 @@ Verifies that the number of top values from a set in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_most_popular_values|checkpoint|daily|[string_most_popular_values](../../../../reference/sensors/column/strings%20column%20sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_checkpoint_string_most_popular_values|checkpoint|daily|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -2095,7 +2095,7 @@ Verifies that the number of top values from a set in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_most_popular_values|checkpoint|monthly|[string_most_popular_values](../../../../reference/sensors/column/strings%20column%20sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_checkpoint_string_most_popular_values|checkpoint|monthly|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -3138,7 +3138,7 @@ Verifies that the number of top values from a set in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_most_popular_values|partitioned|daily|[string_most_popular_values](../../../../reference/sensors/column/strings%20column%20sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_partition_string_most_popular_values|partitioned|daily|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -4181,7 +4181,7 @@ Verifies that the number of top values from a set in a column does not exceed th
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_most_popular_values|partitioned|monthly|[string_most_popular_values](../../../../reference/sensors/column/strings%20column%20sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_partition_string_most_popular_values|partitioned|monthly|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

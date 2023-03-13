@@ -12,7 +12,7 @@ Verifies that the percentage of rows that contains USA zip code in a column does
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|contains_usa_zipcode_percent|profiling| |[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii%20column%20sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|contains_usa_zipcode_percent|profiling| |[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -501,7 +501,7 @@ Verifies that the percentage of rows that contains a USA zip code in a column do
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_contains_usa_zipcode_percent|checkpoint|daily|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii%20column%20sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_checkpoint_contains_usa_zipcode_percent|checkpoint|daily|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -993,7 +993,7 @@ Verifies that the percentage of rows that contains a USA zip code in a column do
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_contains_usa_zipcode_percent|checkpoint|monthly|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii%20column%20sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_checkpoint_contains_usa_zipcode_percent|checkpoint|monthly|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1485,7 +1485,7 @@ Verifies that the percentage of rows that contains USA zip code in a column does
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_contains_usa_zipcode_percent|partitioned|daily|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii%20column%20sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_contains_usa_zipcode_percent|partitioned|daily|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1977,7 +1977,7 @@ Verifies that the percentage of rows that contains USA zip code in a column does
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_contains_usa_zipcode_percent|partitioned|monthly|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii%20column%20sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_contains_usa_zipcode_percent|partitioned|monthly|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

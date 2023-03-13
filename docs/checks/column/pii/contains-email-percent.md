@@ -12,7 +12,7 @@ Verifies that the percentage of rows that contains valid emails in a column does
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|contains_email_percent|profiling| |[contains_email_percent](../../../../reference/sensors/column/pii%20column%20sensors/#contains-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|contains_email_percent|profiling| |[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -493,7 +493,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_contains_email_percent|checkpoint|daily|[contains_email_percent](../../../../reference/sensors/column/pii%20column%20sensors/#contains-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_checkpoint_contains_email_percent|checkpoint|daily|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -977,7 +977,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_contains_email_percent|checkpoint|monthly|[contains_email_percent](../../../../reference/sensors/column/pii%20column%20sensors/#contains-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_checkpoint_contains_email_percent|checkpoint|monthly|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1461,7 +1461,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_contains_email_percent|partitioned|daily|[contains_email_percent](../../../../reference/sensors/column/pii%20column%20sensors/#contains-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|daily_partition_contains_email_percent|partitioned|daily|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1945,7 +1945,7 @@ Verifies that the percentage of rows that contains emails in a column does not e
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_contains_email_percent|partitioned|monthly|[contains_email_percent](../../../../reference/sensors/column/pii%20column%20sensors/#contains-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
+|monthly_partition_contains_email_percent|partitioned|monthly|[contains_email_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

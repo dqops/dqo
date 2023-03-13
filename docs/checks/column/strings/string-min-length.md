@@ -12,7 +12,7 @@ Verifies that the length of string in a column does not exceed the minimum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|string_min_length|profiling| |[string_min_length](../../../../reference/sensors/column/strings%20column%20sensors/#string-min-length)|[min_value](../../../../reference/rules/comparison/#min-value)|
+|string_min_length|profiling| |[string_min_length](../../../../reference/sensors/column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/comparison/#min-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -467,7 +467,7 @@ Verifies that the length of string in a column does not exceed the minimum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_min_length|checkpoint|daily|[string_min_length](../../../../reference/sensors/column/strings%20column%20sensors/#string-min-length)|[min_value](../../../../reference/rules/comparison/#min-value)|
+|daily_checkpoint_string_min_length|checkpoint|daily|[string_min_length](../../../../reference/sensors/column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/comparison/#min-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -925,7 +925,7 @@ Verifies that the length of string in a column does not exceed the minimum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_min_length|checkpoint|monthly|[string_min_length](../../../../reference/sensors/column/strings%20column%20sensors/#string-min-length)|[min_value](../../../../reference/rules/comparison/#min-value)|
+|monthly_checkpoint_string_min_length|checkpoint|monthly|[string_min_length](../../../../reference/sensors/column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/comparison/#min-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1383,7 +1383,7 @@ Verifies that the length of string in a column does not exceed the minimum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_string_min_length|partitioned|daily|[string_min_length](../../../../reference/sensors/column/strings%20column%20sensors/#string-min-length)|[min_value](../../../../reference/rules/comparison/#min-value)|
+|daily_partition_string_min_length|partitioned|daily|[string_min_length](../../../../reference/sensors/column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/comparison/#min-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1841,7 +1841,7 @@ Verifies that the length of string in a column does not exceed the minimum accep
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_string_min_length|partitioned|monthly|[string_min_length](../../../../reference/sensors/column/strings%20column%20sensors/#string-min-length)|[min_value](../../../../reference/rules/comparison/#min-value)|
+|monthly_partition_string_min_length|partitioned|monthly|[string_min_length](../../../../reference/sensors/column/strings-column-sensors/#string-min-length)|[min_value](../../../../reference/rules/comparison/#min-value)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

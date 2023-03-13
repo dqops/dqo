@@ -12,7 +12,7 @@ Verifies that the percentage of unique values in a column does not exceed the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|unique_percent|profiling| |[unique_percent](../../../../reference/sensors/column/uniqueness%20column%20sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|unique_percent|profiling| |[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -413,7 +413,7 @@ Verifies that the percentage of unique values in a column does not exceed the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_unique_percent|checkpoint|daily|[unique_percent](../../../../reference/sensors/column/uniqueness%20column%20sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_checkpoint_unique_percent|checkpoint|daily|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -817,7 +817,7 @@ Verifies that the percentage of unique values in a column does not exceed the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_unique_percent|checkpoint|monthly|[unique_percent](../../../../reference/sensors/column/uniqueness%20column%20sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_checkpoint_unique_percent|checkpoint|monthly|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1221,7 +1221,7 @@ Verifies that the percentage of unique values in a column does not exceed the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_unique_percent|partitioned|daily|[unique_percent](../../../../reference/sensors/column/uniqueness%20column%20sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|daily_partition_unique_percent|partitioned|daily|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1625,7 +1625,7 @@ Verifies that the percentage of unique values in a column does not exceed the mi
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_unique_percent|partitioned|monthly|[unique_percent](../../../../reference/sensors/column/uniqueness%20column%20sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
+|monthly_partition_unique_percent|partitioned|monthly|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

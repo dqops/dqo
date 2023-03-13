@@ -12,7 +12,7 @@ Verifies that the maximal value in a column is not outside the set range.
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|max_in_range|profiling| |[max_value](../../../../reference/sensors/column/range%20column%20sensors/#max-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|max_in_range|profiling| |[max_value](../../../../reference/sensors/column/range-column-sensors/#max-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -358,7 +358,7 @@ Verifies that the maximal value in a column is not outside the set range. Stores
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_max_in_range|checkpoint|daily|[max_value](../../../../reference/sensors/column/range%20column%20sensors/#max-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_checkpoint_max_in_range|checkpoint|daily|[max_value](../../../../reference/sensors/column/range-column-sensors/#max-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -707,7 +707,7 @@ Verifies that the maximal value in a column does not exceed the set range. Store
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_max_in_range|checkpoint|monthly|[max_value](../../../../reference/sensors/column/range%20column%20sensors/#max-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_checkpoint_max_in_range|checkpoint|monthly|[max_value](../../../../reference/sensors/column/range-column-sensors/#max-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1056,7 +1056,7 @@ Verifies that the maximal value in a column is not outside the set range. Create
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_max_in_range|partitioned|daily|[max_value](../../../../reference/sensors/column/range%20column%20sensors/#max-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|daily_partition_max_in_range|partitioned|daily|[max_value](../../../../reference/sensors/column/range-column-sensors/#max-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -1405,7 +1405,7 @@ Verifies that the maximal value in a column is not outside the set range. Create
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_max_in_range|partitioned|monthly|[max_value](../../../../reference/sensors/column/range%20column%20sensors/#max-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
+|monthly_partition_max_in_range|partitioned|monthly|[max_value](../../../../reference/sensors/column/range-column-sensors/#max-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)

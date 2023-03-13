@@ -12,7 +12,7 @@ Daily partition checkpoint calculating the longest time a row waited to be load
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_partition_reload_lag|partitioned|daily|[partition_reload_lag](../../../../reference/sensors/table/timeliness%20table%20sensors/#partition-reload-lag)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|daily_partition_reload_lag|partitioned|daily|[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors/#partition-reload-lag)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
@@ -668,7 +668,7 @@ Monthly partition checkpoint calculating the longest time a row waited to be loa
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_reload_lag|partitioned|monthly|[partition_reload_lag](../../../../reference/sensors/table/timeliness%20table%20sensors/#partition-reload-lag)|[max_days](../../../../reference/rules/comparison/#max-days)|
+|monthly_partition_reload_lag|partitioned|monthly|[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors/#partition-reload-lag)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
