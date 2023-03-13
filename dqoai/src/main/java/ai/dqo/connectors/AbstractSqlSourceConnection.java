@@ -191,7 +191,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             tech.tablesaw.api.Table tableResult = this.executeQuery(sql);
             Column<?>[] columns = tableResult.columnArray();
             for (Column<?> column : columns) {
-                column.setName(column.name().toLowerCase(Locale.ENGLISH));
+                column.setName(column.name().toLowerCase(Locale.ROOT));
             }
 
             HashMap<String, TableSpec> tablesByTableName = new HashMap<>();

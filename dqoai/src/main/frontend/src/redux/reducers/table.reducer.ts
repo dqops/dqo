@@ -19,7 +19,7 @@ import {
   TableBasicModel,
   TableModel,
   RecurringScheduleSpec,
-  TableAdHocCheckCategoriesSpec,
+  TableProfilingCheckCategoriesSpec,
   UIAllChecksModel,
   DataStreamMappingSpec
 } from '../../api';
@@ -56,7 +56,7 @@ export interface ITableState {
   isUpdatedComments?: boolean;
   labels: string[];
   isUpdatedLabels?: boolean;
-  checks?: TableAdHocCheckCategoriesSpec;
+  checks?: TableProfilingCheckCategoriesSpec;
   checksUI?: UIAllChecksModel;
   isUpdatedChecksUi?: boolean;
   dataStreamsMapping?: DataStreamMappingSpec;
@@ -479,12 +479,12 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdating: false,
         error: action.error
       };
-    case TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER:
+    case TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER:
       return {
         ...state,
         loading: true
       };
-    case TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_SUCCESS:
+    case TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_SUCCESS:
       return {
         ...state,
         loading: false,
@@ -492,7 +492,7 @@ const tableReducer = (state = initialState, action: any) => {
         isUpdatedChecksUIFilter: false,
         error: null
       };
-    case TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_ERROR:
+    case TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_ERROR:
       return {
         ...state,
         loading: false,

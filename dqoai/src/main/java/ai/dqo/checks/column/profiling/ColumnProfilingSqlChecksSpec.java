@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.adhoc;
+package ai.dqo.checks.column.profiling;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.sql.ColumnSqlAggregateExprCheckSpec;
@@ -35,8 +35,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAdHocSqlChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocSqlChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class ColumnProfilingSqlChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingSqlChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("sql_condition_passed_percent_on_column", o -> o.sqlConditionPassedPercentOnColumn);
             put("sql_condition_failed_count_on_column", o -> o.sqlConditionFailedCountOnColumn);

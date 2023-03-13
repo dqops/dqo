@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.column.adhoc;
+package ai.dqo.checks.column.profiling;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.column.checkspecs.uniqueness.*;
@@ -33,8 +33,8 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAdHocUniquenessChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAdHocUniquenessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class ColumnProfilingUniquenessChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingUniquenessChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("unique_count", o -> o.uniqueCount);
             put("unique_percent", o -> o.uniquePercent);

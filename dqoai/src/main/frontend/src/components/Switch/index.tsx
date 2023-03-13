@@ -12,7 +12,7 @@ const Switch: React.FC<SwitchProps> = ({ checked, onChange }) => {
       data-testid="switch"
       className={clsx(
         'relative cursor-pointer h-4 w-7 rounded-full',
-        checked ? 'bg-green-400' : 'bg-gray-150'
+        checked ? 'bg-primary' : 'bg-gray-150'
       )}
       onClick={() => onChange && onChange(!checked)}
     >

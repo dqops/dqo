@@ -50,8 +50,8 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
               if (
                 match.path === ROUTES.PATTERNS.TABLE_COLUMNS ||
                 match.path === ROUTES.PATTERNS.COLUMN ||
-                match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS ||
-                match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS_FILTER ||
+                match.path === ROUTES.PATTERNS.COLUMN_PROFILINGS ||
+                match.path === ROUTES.PATTERNS.COLUMN_PROFILINGS_FILTER ||
                 match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_DAILY ||
                 match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_MONTHLY ||
                 match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_DAILY ||
@@ -71,14 +71,14 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
                   } else if (!columnNode?.open) {
                     await refreshNode(columnNode);
                   } else {
-                    if (match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS || match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS_FILTER) {
+                    if (match.path === ROUTES.PATTERNS.COLUMN_PROFILINGS || match.path === ROUTES.PATTERNS.COLUMN_PROFILINGS_FILTER) {
                       const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.checks`);
 
-                      if (match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS) {
+                      if (match.path === ROUTES.PATTERNS.COLUMN_PROFILINGS) {
                         changeActiveTab(node);
                       } else if (!node?.open) {
                         await refreshNode(node);
-                      } else if (match.path === ROUTES.PATTERNS.COLUMN_AD_HOCS_FILTER) {
+                      } else if (match.path === ROUTES.PATTERNS.COLUMN_PROFILINGS_FILTER) {
                         const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.checks.${category}_${checkName}`);
                         changeActiveTab(node);
                       }
@@ -133,13 +133,13 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
                   }
                 }
               }
-              if (match.path === ROUTES.PATTERNS.TABLE_AD_HOCS || match.path === ROUTES.PATTERNS.TABLE_AD_HOCS_FILTER) {
+              if (match.path === ROUTES.PATTERNS.TABLE_PROFILINGS || match.path === ROUTES.PATTERNS.TABLE_PROFILINGS_FILTER) {
                 const node = findTreeNode(treeData, `${connection}.${schema}.${table}.checks`);
-                if (match.path === ROUTES.PATTERNS.TABLE_AD_HOCS) {
+                if (match.path === ROUTES.PATTERNS.TABLE_PROFILINGS) {
                   changeActiveTab(node);
                 } else if (!node?.open) {
                   await refreshNode(node);
-                } else if (match.path === ROUTES.PATTERNS.TABLE_AD_HOCS_FILTER) {
+                } else if (match.path === ROUTES.PATTERNS.TABLE_PROFILINGS_FILTER) {
                   const node = findTreeNode(treeData, `${connection}.${schema}.${table}.checks.${category}_${checkName}`);
                   changeActiveTab(node);
                 }

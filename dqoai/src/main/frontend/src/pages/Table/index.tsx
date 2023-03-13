@@ -9,7 +9,7 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import TableDetails from "../../components/Connection/TableView/TableDetails";
 import ScheduleDetail from "../../components/Connection/TableView/ScheduleDetail";
-import AdhocView from "../../components/Connection/TableView/AdhocView";
+import ProfilingView from "../../components/Connection/TableView/ProfilingView";
 import CheckpointsView from "../../components/Connection/TableView/CheckpointsView";
 import PartitionedChecks from "../../components/Connection/TableView/PartitionedChecks";
 import TableCommentView from "../../components/Connection/TableView/TableCommentView";
@@ -63,11 +63,11 @@ const TablePage = () => {
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
   const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
-  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.TIME_PARTITIONED, [checkTypes]);
-  const isAdHocChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
+  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
+  const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
-    () => !isCheckpointOnly && !isPartitionChecksOnly && !isAdHocChecksOnly,
-    [isCheckpointOnly, isPartitionChecksOnly, isAdHocChecksOnly]
+    () => !isCheckpointOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
+    [isCheckpointOnly, isPartitionChecksOnly, isProfilingChecksOnly]
   );
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab));
@@ -166,21 +166,20 @@ const TablePage = () => {
 
   const activeNode = findTreeNode(treeData, pageTab);
 
-  console.log('activeTab', activeTab, pageTab, activeNode);
   return (
     <ConnectionLayout>
       {!activeNode ? (
         <div />
       ) : (
         <div className="relative h-full flex flex-col">
-          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-13 items-center flex-shrink-0">
+          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0">
             <div className="flex items-center space-x-2">
               <SvgIcon name="database" className="w-5 h-5" />
               <div className="text-xl font-semibold">{`${connection}.${schema}.${table}`}</div>
             </div>
           </div>
-          {isAdHocChecksOnly && (
-            <AdhocView />
+          {isProfilingChecksOnly && (
+            <ProfilingView />
           )}
           {isCheckpointOnly && (
             <CheckpointsView />

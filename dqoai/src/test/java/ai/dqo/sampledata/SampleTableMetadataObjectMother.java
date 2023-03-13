@@ -111,8 +111,17 @@ public class SampleTableMetadataObjectMother {
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(providerType);
 
         for (Column<?> dataColumn : sampleTable.getTable().columns()) {
-            ColumnTypeSnapshotSpec columnTypeSnapshotSpec = connectionProvider.proposePhysicalColumnType(dataColumn);
-            ColumnSpec columnSpec = new ColumnSpec(columnTypeSnapshotSpec);
+            ColumnSpec columnSpec = new ColumnSpec();
+            String userProposedDataType = sampleTable.getPhysicalColumnTypes().get(dataColumn.name());
+            if (userProposedDataType != null) {
+                ColumnTypeSnapshotSpec userProposedType = ColumnTypeSnapshotSpec.fromType(userProposedDataType);
+                columnSpec.setTypeSnapshot(userProposedType);
+            }
+            else {
+                ColumnTypeSnapshotSpec providerProposedTypeSnapshot = connectionProvider.proposePhysicalColumnType(dataColumn);
+                columnSpec.setTypeSnapshot(providerProposedTypeSnapshot);
+            }
+
             tableSpec.getColumns().put(dataColumn.name(), columnSpec);
         }
 

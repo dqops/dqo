@@ -106,7 +106,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Returns a check type (adhoc, checkpoint, partitioned) filter.
+     * Returns a check type (profiling, checkpoint, partitioned) filter.
      * @return Check type filter.
      */
     public CheckType getCheckType() {
@@ -114,7 +114,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Sets a check type (adhoc, checkpoint, partitioned) filter.
+     * Sets a check type (profiling, checkpoint, partitioned) filter.
      * @param checkType Check type filter.
      */
     public void setCheckType(CheckType checkType) {

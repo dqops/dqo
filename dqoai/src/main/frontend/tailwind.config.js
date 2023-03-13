@@ -28,13 +28,24 @@ module.exports = withMT({
   theme: {
     extend: {
       colors: {
+        primary: '#029A80',
         'sidebar': '#111827',
+        "text-main": "#2F2F2F",
+        orange: {
+          100: "#FFEFD6",
+          900: "#FF9900",
+        },
+        yellow: {
+          100: "#FDFDED",
+          900: "#FFEFD6",
+        },
         gray: {
-          50: '#f3f4f6',
+          50: '#F5F5F5',
           100: '#E1E5E9',
           150: '#BCBCBC',
           200: '#9CA3AF',
           250: '#989898',
+          400: "#DEDEDE",
           500: '#617280',
           600: '#4c4c4c',
           700: '#2D3748'
@@ -46,13 +57,14 @@ module.exports = withMT({
         },
         red: {
           50: '#F9FAFC',
+          100: '#FEEDEC',
+          900: "#E3170A",
         },
         purple: {
           500: '#5048E5',
         },
         teal: {
-          500: '#02A88C',
-          550: '#029A80',
+          500: '#029A80',
         }
       },
       fontSize: {

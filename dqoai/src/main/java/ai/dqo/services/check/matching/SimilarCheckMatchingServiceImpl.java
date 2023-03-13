@@ -15,14 +15,14 @@
  */
 package ai.dqo.services.check.matching;
 
-import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
 import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.column.checkpoints.ColumnMonthlyCheckpointCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
@@ -65,7 +65,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
             // TODO: we could add additional filters on teh connection name and table name, extracted from the hierarchyId in the tableSpec
         }};
 
-        TableAdHocCheckCategoriesSpec adHocChecks = tableSpec.getChecks();
+        TableProfilingCheckCategoriesSpec adHocChecks = tableSpec.getChecks();
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(adHocChecks,
                 checkSearchFilters, null, tableSpec, null, null),
                 adHocChecks.getCheckTarget(), adHocChecks.getCheckType(), adHocChecks.getCheckTimeScale());
@@ -107,7 +107,7 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
             // TODO: we could add additional filters on teh connection name and table name, extracted from the hierarchyId in the tableSpec
         }};
 
-        ColumnAdHocCheckCategoriesSpec adHocChecks = Objects.requireNonNullElseGet(columnSpec.getChecks(), ColumnAdHocCheckCategoriesSpec::new);
+        ColumnProfilingCheckCategoriesSpec adHocChecks = Objects.requireNonNullElseGet(columnSpec.getChecks(), ColumnProfilingCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(adHocChecks,
                         checkSearchFilters, null, tableSpec,null, null),
                 adHocChecks.getCheckTarget(), adHocChecks.getCheckType(), adHocChecks.getCheckTimeScale());

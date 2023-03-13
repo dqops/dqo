@@ -55,12 +55,12 @@ public class ErrorsTableFactoryImplTests extends BaseTest {
             Files.createDirectories(parquetSamplesFolder);
         }
 
-        File targetParquetFile = parquetSamplesFolder.resolve("errors-empty.snappy.parquet").toFile();
+        File targetParquetFile = parquetSamplesFolder.resolve("errors-empty.parquet").toFile();
 
         TablesawParquetWriteOptions writeOptions = TablesawParquetWriteOptions
                 .builder(targetParquetFile)
                 .withOverwrite(true)
-                .withCompressionCode(TablesawParquetWriteOptions.CompressionCodec.SNAPPY)
+                .withCompressionCode(TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED)
                 .build();
 
         new TablesawParquetWriter().write(table, writeOptions);

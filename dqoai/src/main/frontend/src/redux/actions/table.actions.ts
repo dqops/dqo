@@ -23,7 +23,7 @@ import {
   CommentSpec,
   DataStreamMappingSpec,
   RecurringScheduleSpec,
-  TableAdHocCheckCategoriesSpec,
+  TableProfilingCheckCategoriesSpec,
   TableBasicModel,
   UIAllChecksModel
 } from '../../api';
@@ -323,12 +323,12 @@ export const updateTableLabels =
       dispatch(updateTableLabelsFailed(err));
     }
   };
-// TODO: getTableChecks -> getTableAdHocChecks. Also getTableCheckpoints and getTablePartitionedChecks for CheckTimePartition
+// TODO: getTableChecks -> getTableProfilingChecks. Also getTableCheckpoints and getTablePartitionedChecks for CheckTimePartition
 export const getTableChecksRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS
 });
 
-export const getTableChecksSuccess = (data: TableAdHocCheckCategoriesSpec) => ({
+export const getTableChecksSuccess = (data: TableProfilingCheckCategoriesSpec) => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_SUCCESS,
   data
 });
@@ -338,12 +338,12 @@ export const getTableChecksFailed = (error: unknown) => ({
   error
 });
 
-export const getTableAdHocChecks =
+export const getTableProfilingChecks =
   (connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
     dispatch(getTableChecksRequest());
     try {
-      const res = await TableApiClient.getTableAdHocChecks(
+      const res = await TableApiClient.getTableProfilingChecks(
         connectionName,
         schemaName,
         tableName
@@ -368,12 +368,12 @@ export const getTableChecksUiFailed = (error: unknown) => ({
   error
 });
 
-export const getTableAdHocChecksUI =
+export const getTableProfilingChecksUI =
   (connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
     dispatch(getTableChecksUiRequest());
     try {
-      const res = await TableApiClient.getTableAdHocChecksUI(
+      const res = await TableApiClient.getTableProfilingChecksUI(
         connectionName,
         schemaName,
         tableName
@@ -397,7 +397,7 @@ export const updateTableChecksUIFailed = (error: unknown) => ({
   error
 });
 
-export const updateTableAdHocChecksUI =
+export const updateTableProfilingChecksUI =
   (
     connectionName: string,
     schemaName: string,
@@ -407,7 +407,7 @@ export const updateTableAdHocChecksUI =
   async (dispatch: Dispatch) => {
     dispatch(updateTableChecksUIRequest());
     try {
-      await TableApiClient.updateTableAdHocChecksUI(
+      await TableApiClient.updateTableProfilingChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -829,37 +829,37 @@ export const setUpdatedTableDataStreamsMapping = (
   dataStreamsMapping
 });
 
-export const getTableAdHockChecksUIFilterRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER
+export const getTableProfilingChecksUIFilterRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER
 });
 
-export const getTableAdHockChecksUIFilterSuccess = (
+export const getTableProfilingChecksUIFilterSuccess = (
   data: UIAllChecksModel
 ) => ({
-  type: TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_SUCCESS,
+  type: TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
   data
 });
 
-export const getTableAdHockChecksUIFilterFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_ADHOCS_CHECKS_UI_FILTER_ERROR,
+export const getTableProfilingChecksUIFilterFailed = (error: unknown) => ({
+  type: TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_ERROR,
   error
 });
 
-export const getTableAdHockChecksUIFilter =
+export const getTableProfilingChecksUIFilter =
   (connectionName: string, schemaName: string, tableName: string, category: string, checkName: string) =>
     async (dispatch: Dispatch) => {
-      dispatch(getTableAdHockChecksUIFilterRequest());
+      dispatch(getTableProfilingChecksUIFilterRequest());
       try {
-        const res = await TableApiClient.getTableAdHocChecksUIFilter(
+        const res = await TableApiClient.getTableProfilingChecksUIFilter(
           connectionName,
           schemaName,
           tableName,
           category,
           checkName
         );
-        dispatch(getTableAdHockChecksUIFilterSuccess(res.data));
+        dispatch(getTableProfilingChecksUIFilterSuccess(res.data));
       } catch (err) {
-        dispatch(getTableAdHockChecksUIFilterFailed(err));
+        dispatch(getTableProfilingChecksUIFilterFailed(err));
       }
     };
 

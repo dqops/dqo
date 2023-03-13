@@ -32,7 +32,7 @@ import com.google.cloud.storage.Storage;
 import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponseStatus;
-import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
@@ -54,7 +54,6 @@ import java.util.concurrent.CompletableFuture;
  */
 @Component
 public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemoteFileSystemSynchronizationOperations {
-    public static final String HEADER_FILE_HASH = "Hash";
     private final DqoStorageGcpConfigurationProperties gcpConfigurationProperties;
     private final SharedHttpClientProvider sharedHttpClientProvider;
     private final DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
@@ -108,17 +107,11 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             String linuxStyleFilePath = pathToFileInsideBlob.toString().replace('\\', '/');
             BlobId blobId = BlobId.of(gsFileSystemRoot.getBucketName(), linuxStyleFilePath);
             Blob blob = storage.get(blobId);
-            Map<String, String> metadata = blob.getMetadata();
-            String hashString = metadata.get(HEADER_FILE_HASH);
-            if (hashString == null) {
-                hashString = metadata.get(HEADER_FILE_HASH.toLowerCase(Locale.ENGLISH));
-            }
-            byte[] hashBytes = hashString != null ? Hex.decodeHex(hashString) : null;
-
+            String md5Base64 = blob.getMd5();
             long updatedAt = blob.getUpdateTime();
 
             long statusCheckedAt = Instant.now().toEpochMilli();
-            FileMetadata fileMetadata = new FileMetadata(relativeFilePath, updatedAt, hashBytes, statusCheckedAt, blob.getSize());
+            FileMetadata fileMetadata = new FileMetadata(relativeFilePath, updatedAt, md5Base64, statusCheckedAt, blob.getSize());
             return fileMetadata;
         }
         catch (Exception ex) {
@@ -156,14 +149,20 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                         HttpHeaders headers = httpClientResponse.responseHeaders();
                         Integer fileLength = headers.getInt(HttpHeaderNames.CONTENT_LENGTH);
                         Long lastModified = headers.getTimeMillis(HttpHeaderNames.LAST_MODIFIED);
-                        String fileHashHex = headers.getAsString("x-goog-meta-" + HEADER_FILE_HASH);
-                        if (fileHashHex == null) {
-                            fileHashHex = headers.getAsString("x-goog-meta-" + HEADER_FILE_HASH.toLowerCase(Locale.ENGLISH));
+                        List<String> googleHashHeaderValues = headers.getAllAsString("x-goog-hash");
+                        String md5Base64 = null;
+                        for (String googleHashHeaderValue :  googleHashHeaderValues) {
+                            String[] hashEntries = StringUtils.split(googleHashHeaderValue, ',');
+                            for (String hashEntry : hashEntries) {
+                                if (hashEntry.startsWith("md5=")) {
+                                    md5Base64 = hashEntry.substring("md5=".length());
+                                    break;
+                                }
+                            }
                         }
-                        byte[] hashBytes = fileHashHex != null ? Hex.decodeHex(fileHashHex) : null;
 
                         long statusCheckedAt = Instant.now().toEpochMilli();
-                        FileMetadata fileMetadata = new FileMetadata(relativeFilePath, lastModified, hashBytes, statusCheckedAt, fileLength);
+                        FileMetadata fileMetadata = new FileMetadata(relativeFilePath, lastModified, md5Base64, statusCheckedAt, fileLength);
                         return byteBufMono.then(Mono.just(fileMetadata));
                     }
                     catch (Exception ex) {
@@ -213,23 +212,20 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                 String blobFileName = blob.getName();
                 Path fullBlobFilePathInsideBucket = Path.of(blobFileName);
                 Map<String, String> metadata = blob.getMetadata();
-                if (Objects.equals(metadata.get("DQOFileType"), "empty-parquet")) {
+                if (metadata != null && Objects.equals(metadata.get("DQOFileType"), "empty-parquet")) {
                     // ignoring because it is a special empty file to ensure that the schema of an external table could be detected from a parquet file
                     continue;
                 }
 
-                String hash = metadata.get(HEADER_FILE_HASH);
-                if (hash == null) {
-                    hash = metadata.get(HEADER_FILE_HASH.toLowerCase(Locale.ENGLISH));
-                }
-                byte[] hashBytes = hash != null ? Hex.decodeHex(hash) : null;
+                String md5Base64 = blob.getMd5();
+
                 long updatedAt = blob.getUpdateTime();
                 Path blobPathRelativeToRoot = fullBlobFilePathInsideBucket;
                 if (fileSystemRoot.getRootPath() != null) {
                     blobPathRelativeToRoot = fileSystemRoot.getRootPath().relativize(blobPathRelativeToRoot);
                 }
 
-                FileMetadata fileMetadata = new FileMetadata(blobPathRelativeToRoot, updatedAt, hashBytes, now, blob.getSize());
+                FileMetadata fileMetadata = new FileMetadata(blobPathRelativeToRoot, updatedAt, md5Base64, now, blob.getSize());
                 folderMetadata.addFile(fileMetadata);
             }
 
@@ -289,13 +285,13 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
     /**
      * Uploads a stream to the file system.
      *
-     * @param fileSystemRoot   File system root (with credentials).
-     * @param relativeFilePath Relative file path inside the root file system.
-     * @param sourceStream     Source stream that will be uploaded. The method should close this stream after the upload finishes.
-     * @param fileHash         File hash that is expected.
+     * @param fileSystemRoot    File system root (with credentials).
+     * @param relativeFilePath  Relative file path inside the root file system.
+     * @param sourceStream      Source stream that will be uploaded. The method should close this stream after the upload finishes.
+     * @param fileHashMd5Base64 MD5 file hash that is expected.
      */
     @Override
-    public void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, byte[] fileHash) {
+    public void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, String fileHashMd5Base64) {
         try {
             Storage storage = null;
             BlobInfo blobInfo = null;
@@ -311,14 +307,11 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
             String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
                     fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
                             "application/octet-stream";
-            String fileHashHex = Hex.encodeHexString(fileHash);
 
             BlobId blobId = BlobId.of(gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket);
             blobInfo = BlobInfo.newBuilder(blobId)
                     .setContentType(contentType)
-                    .setMetadata(new HashMap<>() {{
-                        put(HEADER_FILE_HASH, fileHashHex);
-                    }})
+                    .setMd5(fileHashMd5Base64)
                     .build();
 
             int firstBlockSize = this.gcpConfigurationProperties.getUploadBufferSize();
@@ -385,22 +378,23 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
      * @param relativeFilePath Relative file path inside the remote root.
      */
     @Override
-    public Mono<Path> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath) {
+    public Mono<FileMetadata> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath) {
         GSFileSystemSynchronizationRoot gsFileSystemRoot = (GSFileSystemSynchronizationRoot) fileSystemRoot;
         Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
                 (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
                 relativeFilePath;
         String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
 
-        Mono<Path> deleteFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
+        Mono<FileMetadata> deleteFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
-                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache
+                                .getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
                         .add(HttpHeaderNames.CONTENT_LENGTH, 0)
                 )
                 .delete()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
                 .response()
-                .thenReturn(relativeFilePath);
+                .thenReturn(FileMetadata.createDeleted(relativeFilePath));
 
         return deleteFileMono;
     }
@@ -471,7 +465,8 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
 
         Mono<DownloadFileResponse> downloadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
                 .headers(httpHeaders -> httpHeaders
-                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                        .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache
+                                .getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
                 )
                 .get()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
@@ -503,54 +498,64 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
     /**
      * Uploads a file to the file system as an asynchronous operation using Flux.
      *
-     * @param fileSystemRoot   File system root.
-     * @param relativeFilePath Relative path to the uploaded file.
-     * @param bytesFlux        Source flux with byte buffers to be uploaded.
-     * @param fileMetadata     File metadata with the file length and file content hash.
+     * @param fileSystemRoot           File system root.
+     * @param relativeFilePath         Relative path to the uploaded file.
+     * @param downloadFileResponseMono Mono that has a response with a downloaded file
      * @return Mono returned when the file was fully uploaded.
      */
     @Override
-    public Mono<Path> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot,
+    public Mono<FileMetadata> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot,
                                       Path relativeFilePath,
-                                      ByteBufFlux bytesFlux,
-                                      FileMetadata fileMetadata) {
-        try {
-            GSFileSystemSynchronizationRoot gsFileSystemRoot = (GSFileSystemSynchronizationRoot) fileSystemRoot;
-            Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
-                    (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
-                    relativeFilePath;
-            String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
+                                      Mono<DownloadFileResponse> downloadFileResponseMono) {
+        Mono<FileMetadata> uploadFinishMono = downloadFileResponseMono
+                .flatMap((DownloadFileResponse downloadResponse) -> {
+                    ByteBufFlux bytesFlux = downloadResponse.getByteBufFlux();
+                    FileMetadata fileMetadata = downloadResponse.getMetadata();
+                    try {
+                    GSFileSystemSynchronizationRoot gsFileSystemRoot = (GSFileSystemSynchronizationRoot) fileSystemRoot;
+                    Path fullPathToFileInsideBucket = fileSystemRoot.getRootPath() != null ?
+                            (relativeFilePath != null ? fileSystemRoot.getRootPath().resolve(relativeFilePath) : fileSystemRoot.getRootPath()) :
+                            relativeFilePath;
+                    String linuxStyleFullFileInBucket = fullPathToFileInsideBucket.toString().replace('\\', '/');
 
-            Path fileName = relativeFilePath.getFileName();
-            String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
-                    fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
-                            "application/octet-stream";
-            String fileHashHex = Hex.encodeHexString(fileMetadata.getFileHash());
+                    Path fileName = relativeFilePath.getFileName();
+                    String contentType = fileName.endsWith(".yaml") ? "application/vnd.dqo.spec.yml" :
+                            fileName.endsWith(".parquet") ? "application/vnd.apache.parquet" :
+                                    "application/octet-stream";
 
-            Mono<HttpClientResponse> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
-                    .headers(httpHeaders -> httpHeaders
-                            .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache.getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
-                            .add(HttpHeaderNames.CONTENT_TYPE, contentType)
-                            .add(HttpHeaderNames.CONTENT_LENGTH, fileMetadata.getFileLength())
-                            .add("x-goog-meta-" + HEADER_FILE_HASH, fileHashHex))
-                    .put()
-                    .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
-                    .send(bytesFlux)
-                    .response()
-                    .flatMap(httpClientResponse -> {
-                        if (httpClientResponse.status() == HttpResponseStatus.OK) {
-                            return Mono.just(httpClientResponse);
-                        }
-                        else {
-                            return Mono.error(new FileSystemChangeException(relativeFilePath,
-                                    "Failed to upload a file to DQO Cloud, http error code: " + httpClientResponse.status().code()));
-                        }
-                    });
+                    Mono<FileMetadata> uploadFileMono = this.sharedHttpClientProvider.getHttpClientGcpStorage()
+                            .headers(httpHeaders -> httpHeaders
+                                    .add(HttpHeaderNames.AUTHORIZATION, "Bearer " + this.dqoCloudAccessTokenCache
+                                            .getCredentials(gsFileSystemRoot.getRootType()).getAccessToken().getTokenValue())
+                                    .add(HttpHeaderNames.CONTENT_TYPE, contentType)
+                                    .add(HttpHeaderNames.CONTENT_LENGTH, fileMetadata.getFileLength())
+                                    .add("x-goog-hash", "md5=" + fileMetadata.getMd5()))
+                            .put()
+                            .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
+                            .send(bytesFlux)
+                            .response()
+                            .flatMap(httpClientResponse -> {
+                                if (httpClientResponse.status() == HttpResponseStatus.OK) {
+                                    HttpHeaders responseHeaders = httpClientResponse.responseHeaders();
+                                    Long lastModifiedAfterUpload = responseHeaders.getTimeMillis(HttpHeaderNames.DATE);
+                                    long now = Instant.now().toEpochMilli();
+                                    FileMetadata fileMetadataAfterUpload = new FileMetadata(relativeFilePath, lastModifiedAfterUpload,
+                                            fileMetadata.getMd5(), now, fileMetadata.getFileLength());
+                                    return Mono.just(fileMetadataAfterUpload);
+                                }
+                                else {
+                                    return Mono.error(new FileSystemChangeException(relativeFilePath,
+                                            "Failed to upload a file to DQO Cloud, http error code: " + httpClientResponse.status().code()));
+                                }
+                            });
 
-            return uploadFileMono.thenReturn(relativeFilePath);
-        }
-        catch (Exception ex) {
-            throw new FileSystemChangeException(relativeFilePath, ex.getMessage(), ex);
-        }
+                    return uploadFileMono;
+                }
+                catch (Exception ex) {
+                    throw new FileSystemChangeException(relativeFilePath, ex.getMessage(), ex);
+                }
+            });
+
+        return uploadFinishMono;
     }
 }

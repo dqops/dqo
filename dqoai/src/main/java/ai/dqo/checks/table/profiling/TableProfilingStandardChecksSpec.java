@@ -13,10 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.checks.table.adhoc;
+package ai.dqo.checks.table.profiling;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.table.checkspecs.availability.TableAvailabilityCheckSpec;
+import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,32 +33,32 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableAdHocAvailabilityChecksSpec extends AbstractCheckCategorySpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableAdHocAvailabilityChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
+public class TableProfilingStandardChecksSpec extends AbstractCheckCategorySpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableProfilingStandardChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("table_availability", o -> o.tableAvailability);
+            put("row_count", o -> o.rowCount);
         }
     };
 
     @JsonPropertyDescription("Verifies that the number of rows in a table does not exceed the minimum accepted count.")
-    private TableAvailabilityCheckSpec tableAvailability;
+    private TableRowCountCheckSpec rowCount;
 
     /**
      * Returns a row count check.
      * @return Row count check.
      */
-    public TableAvailabilityCheckSpec getTableAvailability() {
-        return tableAvailability;
+    public TableRowCountCheckSpec getRowCount() {
+        return rowCount;
     }
 
     /**
      * Sets a new definition of a row count check.
-     * @param tableAvailability Row count check.
+     * @param rowCount Row count check.
      */
-    public void setTableAvailability(TableAvailabilityCheckSpec tableAvailability) {
-        this.setDirtyIf(!Objects.equals(this.tableAvailability, tableAvailability));
-        this.tableAvailability = tableAvailability;
-        propagateHierarchyIdToField(tableAvailability, "table_availability");
+    public void setRowCount(TableRowCountCheckSpec rowCount) {
+        this.setDirtyIf(!Objects.equals(this.rowCount, rowCount));
+        this.rowCount = rowCount;
+        propagateHierarchyIdToField(rowCount, "row_count");
     }
 
     /**

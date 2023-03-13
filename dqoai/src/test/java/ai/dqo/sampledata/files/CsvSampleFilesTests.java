@@ -30,7 +30,8 @@ import tech.tablesaw.api.Table;
 public class CsvSampleFilesTests extends BaseTest {
     @Test
     void loadTableCsv_whenLoaded_continuous_days_one_row_per_day_thenFileParsed() {
-        Table table = CsvSampleFilesObjectMother.loadTableCsv(SampleCsvFileNames.continuous_days_one_row_per_day);
+        CsvSampleFileContent csvSampleFileContent = CsvSampleFilesObjectMother.loadTableCsv(SampleCsvFileNames.continuous_days_one_row_per_day);
+        Table table = csvSampleFileContent.getTable();
         Assertions.assertEquals("continuous_days_one_row_per_day", table.name());
         Assertions.assertEquals(24, table.rowCount());
 

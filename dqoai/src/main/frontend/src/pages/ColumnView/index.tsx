@@ -7,7 +7,7 @@ import { useTree } from '../../contexts/treeContext';
 import ColumnCommentsView from './ColumnCommentsView';
 import ColumnLabelsView from './ColumnLabelsView';
 import CheckpointsView from './CheckpointsView';
-import ColumnAdhocView from './ColumnAdhocView';
+import ColumnProfilingView from './ColumnProfilingView';
 import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
@@ -46,10 +46,10 @@ const ColumnView = () => {
     isUpdatedMonthlyPartitionedChecks
   } = useSelector((state: IRootState) => state.column);
   const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
-  const isPartitionCheckOnly = useMemo(() => checkTypes === CheckTypes.TIME_PARTITIONED, [checkTypes]);
-  const isAdHocCheckOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
+  const isPartitionCheckOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
+  const isProfilingCheckOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
-    () => !isCheckpointOnly && !isPartitionCheckOnly && !isAdHocCheckOnly,
+    () => !isCheckpointOnly && !isPartitionCheckOnly && !isProfilingCheckOnly,
     [isCheckpointOnly]
   ); // will update more in next tasks
   // useEffect(() => {
@@ -150,8 +150,8 @@ const ColumnView = () => {
         {isPartitionCheckOnly && (
           <ColumnPartitionedChecksView />
         )}
-        {isAdHocCheckOnly && (
-          <ColumnAdhocView
+        {isProfilingCheckOnly && (
+          <ColumnProfilingView
             connectionName={connectionName}
             schemaName={schemaName}
             tableName={tableName}

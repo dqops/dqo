@@ -5,13 +5,13 @@ import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
-import { getColumnAdHockChecksUIFilter, setColumnUpdatedCheckUiFilter } from '../../redux/actions/column.actions';
+import { getColumnProfilingChecksUIFilter, setColumnUpdatedCheckUiFilter } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import Button from "../../components/Button";
 
-const ColumnAdHockChecksUIFilterView = () => {
+const ColumnProfilingChecksUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, category, checkName }: { connection: string, schema: string, table: string, column: string, category: string, checkName: string } = useParams();
   const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(
     (state: IRootState) => state.column
@@ -21,14 +21,14 @@ const ColumnAdHockChecksUIFilterView = () => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnAdHocChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
+    CheckResultOverviewApi.getColumnProfilingChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   const onUpdate = async () => {
     setIsUpdating(true);
-    await ColumnApiClient.updateColumnAdHocChecksUI(
+    await ColumnApiClient.updateColumnProfilingChecksUI(
       connectionName,
       schemaName,
       tableName,
@@ -36,14 +36,14 @@ const ColumnAdHockChecksUIFilterView = () => {
       checksUIFilter
     );
     await dispatch(
-      getColumnAdHockChecksUIFilter(connectionName, schemaName, tableName, columnName, category, checkName)
+      getColumnProfilingChecksUIFilter(connectionName, schemaName, tableName, columnName, category, checkName)
     );
     setIsUpdating(false);
   };
 
   useEffect(() => {
     dispatch(
-      getColumnAdHockChecksUIFilter(connectionName, schemaName, tableName, columnName, category, checkName)
+      getColumnProfilingChecksUIFilter(connectionName, schemaName, tableName, columnName, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
@@ -82,4 +82,4 @@ const ColumnAdHockChecksUIFilterView = () => {
   );
 };
 
-export default ColumnAdHockChecksUIFilterView;
+export default ColumnProfilingChecksUIFilterView;

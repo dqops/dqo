@@ -18,7 +18,7 @@ package ai.dqo.metadata.sources;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
@@ -123,7 +123,7 @@ public class TableSpec extends AbstractSpec {
     @JsonPropertyDescription("Configuration of data quality checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableAdHocCheckCategoriesSpec checks = new TableAdHocCheckCategoriesSpec();
+    private TableProfilingCheckCategoriesSpec checks = new TableProfilingCheckCategoriesSpec();
 
     @JsonPropertyDescription("Configuration of table level checkpoints. Checkpoints are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -305,7 +305,7 @@ public class TableSpec extends AbstractSpec {
      * Returns configuration of enabled table level data quality checks.
      * @return Table level data quality checks.
      */
-    public TableAdHocCheckCategoriesSpec getChecks() {
+    public TableProfilingCheckCategoriesSpec getChecks() {
         return checks;
     }
 
@@ -313,7 +313,7 @@ public class TableSpec extends AbstractSpec {
      * Sets a new configuration of table level data quality checks.
      * @param checks New checks configuration.
      */
-    public void setChecks(TableAdHocCheckCategoriesSpec checks) {
+    public void setChecks(TableProfilingCheckCategoriesSpec checks) {
 		setDirtyIf(!Objects.equals(this.checks, checks));
         this.checks = checks;
 		propagateHierarchyIdToField(checks, "checks");
@@ -466,20 +466,20 @@ public class TableSpec extends AbstractSpec {
      * Creates a new check root container object if there was no such object configured and referenced
      * from the table specification.
      * @param checkType Check type.
-     * @param checkTimeScale Time scale. Null value is accepted for adhoc checks, for other time scale aware checks, the proper time scale is required.
+     * @param checkTimeScale Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
      * @return Newly created container root.
      */
     public AbstractRootChecksContainerSpec getTableCheckRootContainer(CheckType checkType,
                                                                       CheckTimeScale checkTimeScale) {
         switch (checkType) {
-            case ADHOC: {
+            case PROFILING: {
                 if (this.checks != null) {
                     return this.checks;
                 }
 
-                TableAdHocCheckCategoriesSpec tableAdHocCheckCategoriesSpec = new TableAdHocCheckCategoriesSpec();
-                tableAdHocCheckCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checks"));
-                return tableAdHocCheckCategoriesSpec;
+                TableProfilingCheckCategoriesSpec tableProfilingCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
+                tableProfilingCheckCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checks"));
+                return tableProfilingCheckCategoriesSpec;
             }
 
             case CHECKPOINT: {
@@ -552,7 +552,7 @@ public class TableSpec extends AbstractSpec {
 
     /**
      * Sets the given container of checks at a proper level of the check hierarchy.
-     * The object could be an adhoc check container, one of checkpoint containers or one of partitioned checks container.
+     * The object could be an profiling check container, one of checkpoint containers or one of partitioned checks container.
      * @param checkRootContainer Root check container to store.
      */
     @JsonIgnore
@@ -561,8 +561,8 @@ public class TableSpec extends AbstractSpec {
             throw new NullPointerException("Root check container cannot be null");
         }
 
-        if (checkRootContainer instanceof TableAdHocCheckCategoriesSpec) {
-            this.setChecks((TableAdHocCheckCategoriesSpec)checkRootContainer);
+        if (checkRootContainer instanceof TableProfilingCheckCategoriesSpec) {
+            this.setChecks((TableProfilingCheckCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof TableDailyCheckpointCategoriesSpec) {
             if (this.checkpoints == null) {
@@ -644,7 +644,7 @@ public class TableSpec extends AbstractSpec {
      */
     public boolean hasAnyChecksConfigured(CheckType checkType) {
         switch (checkType) {
-            case ADHOC:
+            case PROFILING:
                 return this.checks != null && this.checks.hasAnyConfiguredChecks();
 
             case CHECKPOINT:

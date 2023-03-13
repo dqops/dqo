@@ -72,14 +72,6 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
           label: 'Schedule override',
           value: 'schedule'
         },
-        ...(check?.supports_time_series
-          ? [
-              {
-                label: 'Time series override',
-                value: 'time'
-              }
-            ]
-          : []),
         {
           label: 'Comments',
           value: 'comments'
@@ -183,7 +175,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
           check?.disabled ? 'line-through' : ''
         )}
       >
-        <td className="py-2 pr-4">
+        <td className="py-2 pl-4 pr-4">
           <div className="flex space-x-1 items-center min-w-60">
             {/*<div className="w-5">*/}
             {/*  <Checkbox checked={checked} onChange={setChecked} />*/}
@@ -237,7 +229,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                     'w-5 h-5 cursor-pointer',
                     check?.schedule_override
                       ? 'text-gray-700'
-                      : 'text-black font-bold',
+                      : 'font-bold',
                     check?.schedule_override?.disabled ? 'line-through' : ''
                   )}
                   strokeWidth={check?.schedule_override ? 4 : 2}
@@ -254,7 +246,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                   <div>
                     <SvgIcon
                       name="play"
-                      className="text-green-700 h-5 cursor-pointer"
+                      className="text-primary h-5 cursor-pointer"
                       onClick={onRunCheck}
                     />
                   </div>
@@ -363,7 +355,6 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             type="warning"
           />
         </td>
-        <td className="min-w-5 max-w-5 border-b" />
         <td className="py-2 px-4 bg-orange-100">
           <CheckRuleItem
             disabled={isDisabled}

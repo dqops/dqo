@@ -38,8 +38,9 @@ const ColumnActionGroup = ({
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {shouldDelete && (
         <Button
-          variant="text"
-          color="info"
+          className="!h-10"
+          color="primary"
+          variant="outlined"
           label="Delete Column"
           onClick={() => setIsOpen(true)}
         />
@@ -49,7 +50,7 @@ const ColumnActionGroup = ({
         color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
         variant="contained"
         label="Save"
-        className="w-40"
+        className="w-40 !h-10"
         onClick={onUpdate}
         loading={isUpdating}
         disabled={isDisabled}

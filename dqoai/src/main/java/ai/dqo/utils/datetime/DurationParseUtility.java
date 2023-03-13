@@ -36,7 +36,7 @@ public final class DurationParseUtility {
             return null;
         }
 
-        String lowerText = text.toLowerCase(Locale.ENGLISH);
+        String lowerText = text.toLowerCase(Locale.ROOT);
         char lastChar = lowerText.charAt(lowerText.length() - 1);
         TemporalUnit temporalUnit = null;
         String numberText = lowerText;

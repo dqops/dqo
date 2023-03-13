@@ -316,7 +316,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                     RuleDefinitionFindResult ruleDefinitionFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
                     RuleDefinitionSpec ruleDefinitionSpec = ruleDefinitionFindResult.getRuleDefinitionSpec();
                     RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleDefinitionSpec.getTimeWindow();
-                    TimeSeriesGradient timeGradientForRuleScope = sensorRunParameters.getCheckType() == CheckType.ADHOC ? TimeSeriesGradient.day : timeGradient;
+                    TimeSeriesGradient timeGradientForRuleScope = sensorRunParameters.getCheckType() == CheckType.PROFILING ? TimeSeriesGradient.day : timeGradient;
                     LocalDateTime earliestRequiredReadout = ruleTimeWindowSettings == null ? minTimePeriod :
                             LocalDateTimePeriodUtility.calculateLocalDateTimeMinusTimePeriods(
                                     minTimePeriod, ruleTimeWindowSettings.getPredictionTimeWindow(), timeGradientForRuleScope);

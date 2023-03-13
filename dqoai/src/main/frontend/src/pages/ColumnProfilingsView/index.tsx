@@ -15,7 +15,7 @@ import { CheckResultOverviewApi } from '../../services/apiClient';
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 
-const ColumnAdhocsView = () => {
+const ColumnProfilingsView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { connection: string, schema: string, table: string, column: string } = useParams();
   const { checksUI, isUpdating, loading } = useSelector(
     (state: IRootState) => state.column
@@ -25,7 +25,7 @@ const ColumnAdhocsView = () => {
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnAdHocChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
+    CheckResultOverviewApi.getColumnProfilingChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -94,4 +94,4 @@ const ColumnAdhocsView = () => {
   );
 };
 
-export default ColumnAdhocsView;
+export default ColumnProfilingsView;

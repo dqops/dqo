@@ -295,7 +295,7 @@ export const getColumnChecksUi =
   async (dispatch: Dispatch) => {
     dispatch(getColumnChecksUIRequest());
     try {
-      const res = await ColumnApiClient.getColumnAdHocChecksUI(
+      const res = await ColumnApiClient.getColumnProfilingChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -331,7 +331,7 @@ export const updateColumnCheckUI =
   async (dispatch: Dispatch) => {
     dispatch(updateColumnCheckUIRequest());
     try {
-      await ColumnApiClient.updateColumnAdHocChecksUI(
+      await ColumnApiClient.updateColumnProfilingChecksUI(
         connectionName,
         schemaName,
         tableName,
@@ -697,28 +697,28 @@ export const setUpdatedMonthlyPartitionedChecks = (
   checksUI
 });
 
-export const getColumnAdHockChecksUIFilterRequest = () => ({
-  type: COLUMN_ACTION.GET_COLUMN_ADHOCS_CHECKS_UI_FILTER
+export const getColumnProfilingChecksUIFilterRequest = () => ({
+  type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER
 });
 
-export const getColumnAdHockChecksUIFilterSuccess = (
+export const getColumnProfilingChecksUIFilterSuccess = (
   data: UIAllChecksModel
 ) => ({
-  type: COLUMN_ACTION.GET_COLUMN_ADHOCS_CHECKS_UI_FILTER_SUCCESS,
+  type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
   data
 });
 
-export const getColumnAdHockChecksUIFilterFailed = (error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_ADHOCS_CHECKS_UI_FILTER_ERROR,
+export const getColumnProfilingChecksUIFilterFailed = (error: unknown) => ({
+  type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_ERROR,
   error
 });
 
-export const getColumnAdHockChecksUIFilter =
+export const getColumnProfilingChecksUIFilter =
   (connectionName: string, schemaName: string, tableName: string, columnName: string, category: string, checkName: string) =>
     async (dispatch: Dispatch) => {
-      dispatch(getColumnAdHockChecksUIFilterRequest());
+      dispatch(getColumnProfilingChecksUIFilterRequest());
       try {
-        const res = await ColumnApiClient.getColumnAdHocChecksUIFilter(
+        const res = await ColumnApiClient.getColumnProfilingChecksUIFilter(
           connectionName,
           schemaName,
           tableName,
@@ -726,9 +726,9 @@ export const getColumnAdHockChecksUIFilter =
           category,
           checkName
         );
-        dispatch(getColumnAdHockChecksUIFilterSuccess(res.data));
+        dispatch(getColumnProfilingChecksUIFilterSuccess(res.data));
       } catch (err) {
-        dispatch(getColumnAdHockChecksUIFilterFailed(err));
+        dispatch(getColumnProfilingChecksUIFilterFailed(err));
       }
     };
 

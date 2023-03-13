@@ -16,8 +16,8 @@
 package ai.dqo.metadata.sources;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
@@ -140,24 +140,24 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void isDirty_whenDefaultChecksSpecSet_thenIsDirtyIsTrue() {
-        TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
-        adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
-        adhocChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
-		this.sut.setChecks(adhocChecks);
-        Assertions.assertEquals(this.sut.getChecks(), adhocChecks);
+        TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
+        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
+        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+		this.sut.setChecks(profilingChecks);
+        Assertions.assertEquals(this.sut.getChecks(), profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
     }
 
     @Test
     void isDirty_whenSameDefaultChecksSpecObjectAsCurrentSet_thenIsDirtyIsFalse() {
-        TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
-        adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
-        adhocChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
-		this.sut.setChecks(adhocChecks);
+        TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
+        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
+        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+		this.sut.setChecks(profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setChecks(adhocChecks);
+		this.sut.setChecks(profilingChecks);
         Assertions.assertFalse(this.sut.isDirty());
     }
 
@@ -167,11 +167,11 @@ public class TableSpecTests extends BaseTest {
     }
 
     @Test
-    void hasAnyChecksConfigured_whenOneAdhocCheckConfigured_thenReturnsTrue() {
-        TableAdHocCheckCategoriesSpec adhocChecks = new TableAdHocCheckCategoriesSpec();
-        adhocChecks.setStandard(new TableAdHocStandardChecksSpec());
-        adhocChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
-        this.sut.setChecks(adhocChecks);
+    void hasAnyChecksConfigured_whenOneProfilingCheckConfigured_thenReturnsTrue() {
+        TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
+        profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
+        profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
+        this.sut.setChecks(profilingChecks);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 

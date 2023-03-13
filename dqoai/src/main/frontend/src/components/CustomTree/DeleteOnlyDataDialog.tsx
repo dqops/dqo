@@ -119,7 +119,8 @@ const DeleteOnlyDataDialog = ({ open, onClose, onDelete }: DeleteOnlyDataDialogP
       </DialogBody>
       <DialogFooter className="flex gap-6 items-center mt-10">
         <Button
-          color="secondary"
+          color="primary"
+          variant="outlined"
           className="px-8"
           onClick={onClose}
           label="Cancel"
