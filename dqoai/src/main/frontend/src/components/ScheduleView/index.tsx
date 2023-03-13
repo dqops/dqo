@@ -4,6 +4,7 @@ import Checkbox from "../Checkbox";
 import { Radio } from "@material-tailwind/react";
 import NumberInput from "../NumberInput";
 import { RecurringScheduleSpec } from "../../api";
+import clsx from "clsx";
 
 interface IScheduleViewProps {
   schedule?: RecurringScheduleSpec;
@@ -153,6 +154,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           checked={mode === ''}
           onChange={onChangeMode}
           color="teal"
+          ripple={false}
         />
         <Radio
           id="minutes"
@@ -162,19 +164,18 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           checked={mode === 'minutes'}
           onChange={onChangeMode}
           color="teal"
+          ripple={false}
         />
-        {mode === 'minutes' && (
-          <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
-            <div>Run every</div>
-            <NumberInput
-              min={0}
-              max={60}
-              value={minutes}
-              onChange={onChangeMinutes}
-            />
-            <div>minutes</div>
-          </div>
-        )}
+        <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "minutes" && "opacity-60")}>
+          <div>Run every</div>
+          <NumberInput
+            min={0}
+            max={60}
+            value={minutes}
+            onChange={onChangeMinutes}
+          />
+          <div>minutes</div>
+        </div>
         <Radio
           id="hour"
           name="mode"
@@ -183,19 +184,18 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           checked={mode === 'hour'}
           onChange={onChangeMode}
           color="teal"
+          ripple={false}
         />
-        {mode === 'hour' && (
-          <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
-            <div>At</div>
-            <NumberInput
-              min={0}
-              max={60}
-              value={minutes}
-              onChange={onChangeMinutes}
-            />
-            <div>minutes past hour</div>
-          </div>
-        )}
+        <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "hour" && "opacity-60")}>
+          <div>At</div>
+          <NumberInput
+            min={0}
+            max={60}
+            value={minutes}
+            onChange={onChangeMinutes}
+          />
+          <div>minutes past hour</div>
+        </div>
         <Radio
           id="day"
           name="mode"
@@ -204,25 +204,24 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           checked={mode === 'day'}
           onChange={onChangeMode}
           color="teal"
+          ripple={false}
         />
-        {mode === 'day' && (
-          <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
-            <div>At</div>
-            <NumberInput
-              min={0}
-              max={60}
-              value={hour}
-              onChange={onChangeHour}
-            />
-            <div>:</div>
-            <NumberInput
-              min={0}
-              max={60}
-              value={minutes}
-              onChange={onChangeMinutes}
-            />
-          </div>
-        )}
+        <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "day" && "opacity-60")}>
+          <div>At</div>
+          <NumberInput
+            min={0}
+            max={60}
+            value={hour}
+            onChange={onChangeHour}
+          />
+          <div>:</div>
+          <NumberInput
+            min={0}
+            max={60}
+            value={minutes}
+            onChange={onChangeMinutes}
+          />
+        </div>
       </div>
     </div>
   );
