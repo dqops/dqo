@@ -37,7 +37,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "disable", description = "Disable column or columns which match filters")
+@CommandLine.Command(name = "disable", header = "Disable the column(s)filtered by the given conditions", description = "Disable one or more columns in a table based on a specified condition. Disabling a column will prevent it from being queried or updated until it is enabled again.")
 public class ColumnDisableCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
 	private ColumnService columnService;
 	private TerminalReader terminalReader;

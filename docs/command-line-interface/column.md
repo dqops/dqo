@@ -3,9 +3,11 @@
 ___
 ### **dqo column add**
 
+Add a column with specified details
+
 **Description**
 
-Add a column with specified details
+Add a new column to a table with specific details. The new column is added to the YAML configuration file.
 
 
 **Command-line synopsis**
@@ -40,9 +42,11 @@ dqo.ai> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 ___
 ### **dqo column remove**
 
+Remove the column(s) that match a given condition
+
 **Description**
 
-Remove column or columns which match filters
+Remove one or more columns from a table that match a specified condition. Users can filter the column.
 
 
 **Command-line synopsis**
@@ -76,9 +80,11 @@ dqo.ai> column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 ___
 ### **dqo column update**
 
+Update the column(s) that match a given condition
+
 **Description**
 
-Update column or columns which match filters
+Update one or more columns in a table that match a specified condition.
 
 
 **Command-line synopsis**
@@ -113,9 +119,11 @@ dqo.ai> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 ___
 ### **dqo column list**
 
+List the columns that match a given condition
+
 **Description**
 
-List columns which match filters
+List all the columns in a table or filter them based on a specified condition.
 
 
 **Command-line synopsis**
@@ -153,9 +161,11 @@ dqo.ai> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 ___
 ### **dqo column enable**
 
+Enable the column(s) filtered by the given conditions
+
 **Description**
 
-Enable column or columns which match filters
+Enable one or more columns in a table based on a specified condition. This command will restore the data in the previously disabled columns.
 
 
 **Command-line synopsis**
@@ -189,9 +199,11 @@ dqo.ai> column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 ___
 ### **dqo column disable**
 
+Disable the column(s)filtered by the given conditions
+
 **Description**
 
-Disable column or columns which match filters
+Disable one or more columns in a table based on a specified condition. Disabling a column will prevent it from being queried or updated until it is enabled again.
 
 
 **Command-line synopsis**
@@ -225,9 +237,11 @@ dqo.ai> column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
 ___
 ### **dqo column rename**
 
+Rename the column filtered by the given conditions
+
 **Description**
 
-Rename column which match filters
+Rename one or more columns in a table based on a specified condition.
 
 
 **Command-line synopsis**

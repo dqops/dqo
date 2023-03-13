@@ -3,9 +3,11 @@
 ___
 ### **dqo check run**
 
+Run data quality checks that match a given condition
+
 **Description**
 
-Run data quality checks matching specified filters
+Run data quality checks on your dataset that match a given condition. The command output is a table with the results that provides insight into the data quality.
 
 
 **Command-line synopsis**
