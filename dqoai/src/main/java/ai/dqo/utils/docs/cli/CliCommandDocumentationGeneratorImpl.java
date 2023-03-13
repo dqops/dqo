@@ -80,7 +80,8 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
         CliRootCommandDocumentationModel rootDqoCommandModel = new CliRootCommandDocumentationModel();
         rootDqoCommandModel.setRootCommandName("dqo");
         CliCommandDocumentationModel myCommandModel = this.commandDocumentationModelFactory.makeDocumentationForCommand(commandLine);
-        myCommandModel.setDescription(new String[]{"Root command that permit control on CLI mode."});
+        myCommandModel.setHeader(new String[]{"Root command that permit control on CLI mode"});
+        myCommandModel.setDescription(new String[]{"A root command that allows the user to access all the features and functionalities of the application from the command-line interface (CLI) level. It is the first command to be used before accessing any other commands of the application."});
         rootDqoCommandModel.getCommands().add(myCommandModel);
 
         return rootDqoCommandModel;

@@ -3,18 +3,20 @@
 ___
 ### **dqo **
 
+Root command that permit control on CLI mode
+
 **Description**
 
-Root command that permit control on CLI mode.
+A root command that allows the user to access all the features and functionalities of the application from the command-line interface (CLI) level. It is the first command to be used before accessing any other commands of the application.
 
 
 **Summary (CLI)**
 ```
-bash prompt> dqo [root_level_parameter] [command]
+$ dqo [root_level_parameter] [command]
 ```
 **Example**
 ```
-bash prompt> dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
+$ dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 ```
 
 **Options**  

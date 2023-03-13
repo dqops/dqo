@@ -8,7 +8,24 @@ ___
 Run data quality checks matching specified filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
+           [--monthly-partitioning-include-current-month] [-c=<connection>]
+           [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
+           [-ct=<checkType>]
+           [--daily-partitioning-recent-days=<dailyPartitioningRecentDays>]
+           [-f=<failAt>] [--from-date=<fromDate>]
+           [--from-date-time=<fromDateTime>]
+           [--from-date-time-offset=<fromDateTimeOffset>] [-m=<mode>]
+           [--monthly-partitioning-recent-months=<monthlyPartitioningRecentMonth
+           s>] [-of=<outputFormat>] [-s=<sensor>] [-t=<table>]
+           [--to-date=<toDate>] [--to-date-time=<toDateTime>]
+           [--to-date-time-offset=<toDateTimeOffset>] [-ts=<timeScale>]
+           [-l=<labels>]... [-tag=<tags>]...
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
            [--monthly-partitioning-include-current-month] [-c=<connection>]

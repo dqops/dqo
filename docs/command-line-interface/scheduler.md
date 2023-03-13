@@ -8,7 +8,13 @@ ___
 Starts a background job scheduler. This operation should be called only from the shell mode. When the dqo is started as &#x27;dqo scheduler start&#x27; from the operating system, it will stop immediately.
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
+                 [-sm=<synchronizationMode>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> scheduler start [-h] [-fw] [-hl] [-crm=<checkRunMode>] [-of=<outputFormat>]
                  [-sm=<synchronizationMode>]
@@ -37,7 +43,12 @@ ___
 Stops a background job scheduler. This operation should be called only from the shell mode after the scheduler was started.
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> scheduler stop [-h] [-fw] [-hl] [-of=<outputFormat>]
 

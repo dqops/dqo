@@ -8,7 +8,12 @@ ___
 Edit rule that match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> rule edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-r=<name>]
 

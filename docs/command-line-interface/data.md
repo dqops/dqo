@@ -8,7 +8,17 @@ ___
 Delete stored data data matching specified filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] data clean [-h] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin> -c=<connection>
+            [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
+            [-ct=<checkType>] [-ds=<dataStream>] -e=<end> [-of=<outputFormat>]
+            [-qd=<qualityDimension>] [-s=<sensor>] [-sc=<statisticsCollector>]
+            [-stc=<statisticsCategory>] [-stt=<statisticsTarget>] -t=<table>
+            [-tg=<timeGradient>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> data clean [-h] [-er] [-fw] [-hl] [-rr] [-sr] [-st] -b=<begin> -c=<connection>
             [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]

@@ -3,12 +3,20 @@
 ___
 ### **dqo connection list**
 
+List connections that match a given condition
+
 **Description**
 
-List connections which match filters
+Lists all the created connections for the logged-in user that match the conditions specified in the options. It allows the user to filter connections based on various parameters.
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
+                 [-d=<dimensions>]... [-l=<labels>]...
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                  [-d=<dimensions>]... [-l=<labels>]...
@@ -33,12 +41,37 @@ dqo.ai> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 ___
 ### **dqo connection add**
 
+Add a connection with specified details
+
 **Description**
 
-Add connection with specified details
+Creates a new connection to the database with the specified details such as connection name, database type, hostname, username, and password. It allows the user to connect to the database from the application to perform various operations on the database.
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+                [--bigquery-authentication-mode=<authenticationMode>]
+                [--bigquery-billing-project-id=<billingProjectId>]
+                [--bigquery-json-key-content=<jsonKeyContent>]
+                [--bigquery-json-key-path=<jsonKeyPath>]
+                [--bigquery-quota-project-id=<quotaProjectId>]
+                [--bigquery-source-project-id=<sourceProjectId>] [-n=<name>]
+                [-of=<outputFormat>] [--postgresql-database=<database>]
+                [--postgresql-host=<host>] [--postgresql-options=<options>]
+                [--postgresql-password=<password>] [--postgresql-port=<port>]
+                [--postgresql-user=<user>] [--redshift-database=<database>]
+                [--redshift-host=<host>] [--redshift-options=<options>]
+                [--redshift-password=<password>] [--redshift-port=<port>]
+                [--redshift-user=<user>] [--snowflake-account=<account>]
+                [--snowflake-database=<database>]
+                [--snowflake-password=<password>] [--snowflake-role=<role>]
+                [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
+                [-t=<providerType>] [-F=<String=String>]...
+                [-P=<String=String>]... [-R=<String=String>]...
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
                 [--bigquery-authentication-mode=<authenticationMode>]
@@ -108,12 +141,19 @@ dqo.ai> connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
 ___
 ### **dqo connection remove**
 
+Remove the connection(s) that match a given condition
+
 **Description**
 
-Remove connection or connections which match filters
+Removes the connection or connections that match the conditions specified in the options. It allows the user to remove any unwanted connections that are no longer needed.
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
@@ -135,12 +175,38 @@ dqo.ai> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 ___
 ### **dqo connection update**
 
+Update the connection(s) that match a given condition
+
 **Description**
 
-Update connection or connections which match filters
+Update the connection or connections that match the conditions specified in the options with new details. It allows the user to modify existing connections in the application.
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+                   [--bigquery-authentication-mode=<authenticationMode>]
+                   [--bigquery-billing-project-id=<billingProjectId>]
+                   [--bigquery-json-key-content=<jsonKeyContent>]
+                   [--bigquery-json-key-path=<jsonKeyPath>]
+                   [--bigquery-quota-project-id=<quotaProjectId>]
+                   [--bigquery-source-project-id=<sourceProjectId>] [-n=<name>]
+                   [-of=<outputFormat>] [--postgresql-database=<database>]
+                   [--postgresql-host=<host>] [--postgresql-options=<options>]
+                   [--postgresql-password=<password>]
+                   [--postgresql-port=<port>] [--postgresql-user=<user>]
+                   [--redshift-database=<database>] [--redshift-host=<host>]
+                   [--redshift-options=<options>]
+                   [--redshift-password=<password>] [--redshift-port=<port>]
+                   [--redshift-user=<user>] [--snowflake-account=<account>]
+                   [--snowflake-database=<database>]
+                   [--snowflake-password=<password>] [--snowflake-role=<role>]
+                   [--snowflake-user=<user>]
+                   [--snowflake-warehouse=<warehouse>] [-F=<String=String>]...
+                   [-P=<String=String>]... [-R=<String=String>]...
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
                    [--bigquery-authentication-mode=<authenticationMode>]
@@ -210,12 +276,20 @@ dqo.ai> connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
 ___
 ### **dqo connection schema list**
 
+List schemas in the specified connection
+
 **Description**
 
-List schemas in source connection
+It allows the user to view the summary of all schemas in a selected connection.
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
+                        [-d=<dimensions>]... [-l=<labels>]...
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
                         [-d=<dimensions>]... [-l=<labels>]...
@@ -240,12 +314,21 @@ dqo.ai> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 ___
 ### **dqo connection table list**
 
+List tables for the specified connection and schema name.
+
 **Description**
 
-List tables for connection
+List all the tables available in the database for the specified connection and schema. It allows the user to view all the tables in the database.
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+                       [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
+                       [-l=<labels>]...
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-s=<schema>] [-t=<table>] [-d=<dimensions>]...
@@ -273,12 +356,20 @@ dqo.ai> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFor
 ___
 ### **dqo connection table show**
 
-**Description**
-
 Show table for connection
 
+**Description**
 
-**Summary (Shell)**
+Show the details of the specified table in the database for the specified connection. It allows the user to view the details of a specific table in the database.
+
+
+**Command-line synopsis**
+```
+$ dqo [dqo options...] connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+                       [-t=<table>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
                        [-t=<table>]
@@ -302,12 +393,19 @@ dqo.ai> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFor
 ___
 ### **dqo connection edit**
 
+Edit connection that matches a given condition
+
 **Description**
 
-Edit connection which match filters
+Edit the connection or connections that match the filter conditions specified in the options. It allows the user to modify the details of an existing connection in the application.
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] connection edit [-h] [-fw] [-hl] [-n=<connection>] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> connection edit [-h] [-fw] [-hl] [-n=<connection>] [-of=<outputFormat>]
 

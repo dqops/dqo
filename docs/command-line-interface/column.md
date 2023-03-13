@@ -8,7 +8,13 @@ ___
 Add a column with specified details
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+            [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> column add [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
             [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
@@ -39,7 +45,13 @@ ___
 Remove column or columns which match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+               [-of=<outputFormat>] [-t=<fullTableName>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> column remove [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-of=<outputFormat>] [-t=<fullTableName>]
@@ -69,7 +81,13 @@ ___
 Update column or columns which match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+               [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> column update [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-d=<dataType>] [-of=<outputFormat>] [-t=<fullTableName>]
@@ -100,7 +118,14 @@ ___
 List columns which match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+             [-of=<outputFormat>] [-t=<fullTableName>] [-l=<labels>]...
+             [-tg=<tags>]...
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> column list [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
              [-of=<outputFormat>] [-t=<fullTableName>] [-l=<labels>]...
@@ -133,7 +158,13 @@ ___
 Enable column or columns which match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+               [-of=<outputFormat>] [-t=<fullTableName>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> column enable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-of=<outputFormat>] [-t=<fullTableName>]
@@ -163,7 +194,13 @@ ___
 Disable column or columns which match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+                [-of=<outputFormat>] [-t=<fullTableName>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> column disable [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                 [-of=<outputFormat>] [-t=<fullTableName>]
@@ -193,7 +230,13 @@ ___
 Rename column which match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
+               [-n=<newColumnName>] [-of=<outputFormat>] [-t=<fullTableName>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> column rename [-h] [-fw] [-hl] [-c=<connectionName>] [-C=<columnName>]
                [-n=<newColumnName>] [-of=<outputFormat>] [-t=<fullTableName>]

@@ -8,7 +8,13 @@ ___
 Starts DQO in a server mode, continuously running a job scheduler that runs the data quality checks.
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] run [-h] [-fw] [-hl] [-m=<checkRunMode>] [-of=<outputFormat>]
+     [-s=<synchronizationMode>] [-t=<timeLimit>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> run [-h] [-fw] [-hl] [-m=<checkRunMode>] [-of=<outputFormat>]
      [-s=<synchronizationMode>] [-t=<timeLimit>]

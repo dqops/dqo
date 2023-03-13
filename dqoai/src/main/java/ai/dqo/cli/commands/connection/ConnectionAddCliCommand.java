@@ -39,7 +39,7 @@ import java.util.LinkedHashMap;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "add", description = "Add connection with specified details")
+@CommandLine.Command(name = "add", header = "Add a connection with specified details", description = "Creates a new connection to the database with the specified details such as connection name, database type, hostname, username, and password. It allows the user to connect to the database from the application to perform various operations on the database.")
 public class ConnectionAddCliCommand extends BaseCommand implements ICommand {
     private ConnectionService connectionService;
     private TerminalFactory terminalFactory;

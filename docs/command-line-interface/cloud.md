@@ -8,7 +8,12 @@ ___
 Logs in or registers an account at DQO Cloud
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> cloud login [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -34,7 +39,13 @@ ___
 Synchronize local &quot;data&quot; folder with sensor readouts and rule results with DQO Cloud
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] cloud sync data [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                 [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> cloud sync data [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                  [-of=<outputFormat>]
@@ -63,7 +74,13 @@ ___
 Synchronize local &quot;sources&quot; connection and table level quality definitions with DQO Cloud
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                    [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> cloud sync sources [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                     [-of=<outputFormat>]
@@ -92,7 +109,13 @@ ___
 Synchronize local &quot;sensors&quot; folder with custom sensor definitions with DQO Cloud
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                    [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> cloud sync sensors [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                     [-of=<outputFormat>]
@@ -121,7 +144,13 @@ ___
 Synchronize local &quot;rules&quot; folder with custom rule definitions with DQO Cloud
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                  [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                   [-of=<outputFormat>]
@@ -150,7 +179,13 @@ ___
 Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] cloud sync all [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> cloud sync all [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                 [-of=<outputFormat>]

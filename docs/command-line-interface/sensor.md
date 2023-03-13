@@ -8,7 +8,13 @@ ___
 Edit sensor that match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] sensor edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-p=<provider>]
+             [-s=<name>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> sensor edit [-h] [-fw] [-hl] [-f=<ext>] [-of=<outputFormat>] [-p=<provider>]
              [-s=<name>]

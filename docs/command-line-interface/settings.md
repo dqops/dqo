@@ -8,7 +8,13 @@ ___
 Set editor settings
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
+                     [-p=<editorPath>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings editor set [-h] [-fw] [-hl] [-n=<editorName>] [-of=<outputFormat>]
                      [-p=<editorPath>]
@@ -37,7 +43,12 @@ ___
 Remove editor settings
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings editor remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -63,7 +74,12 @@ ___
 Show editor settings
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings editor show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -89,7 +105,12 @@ ___
 Init settings file in user home
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings init [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -115,7 +136,12 @@ ___
 Remove settings file from user home
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -141,7 +167,12 @@ ___
 Set api key
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings apikey set [-h] [-fw] [-hl] [-of=<outputFormat>] <key>
 
@@ -167,7 +198,12 @@ ___
 Remove api key
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings apikey remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -193,7 +229,12 @@ ___
 Show api key
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings apikey show [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -219,7 +260,12 @@ ___
 Set the default time zone
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings timezone set [-h] [-fw] [-hl] [-of=<outputFormat>] <timeZone>
 
@@ -245,7 +291,12 @@ ___
 Remove time zone
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings timezone remove [-h] [-fw] [-hl] [-of=<outputFormat>]
 
@@ -271,7 +322,12 @@ ___
 Show the default time zone
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> settings timezone show [-h] [-fw] [-hl] [-of=<outputFormat>]
 

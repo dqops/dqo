@@ -41,7 +41,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "list", description = "List connections which match filters")
+@CommandLine.Command(name = "list", header = "List connections that match a given condition", description = "Lists all the created connections for the logged-in user that match the conditions specified in the options. It allows the user to filter connections based on various parameters.")
 public class ConnectionListCliCommand extends BaseCommand implements ICommand {
     private ConnectionService connectionService;
     private TerminalWriter terminalWriter;

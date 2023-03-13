@@ -8,7 +8,13 @@ ___
 Import tables from a specified database
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
+              [-s=<schema>] [-t=<table>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
               [-s=<schema>] [-t=<table>]
@@ -38,7 +44,12 @@ ___
 Edit table which match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<table>]
 
@@ -66,7 +77,13 @@ ___
 Add table with specified name
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+           [-t=<fullTableName>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
            [-t=<fullTableName>]
@@ -95,7 +112,13 @@ ___
 Remove tables which match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+              [-t=<fullTableName>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
               [-t=<fullTableName>]
@@ -124,7 +147,13 @@ ___
 Update tables which match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
+              [-of=<outputFormat>] [-t=<fullTableName>]
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
               [-of=<outputFormat>] [-t=<fullTableName>]
@@ -154,7 +183,13 @@ ___
 List tables which match filters
 
 
-**Summary (Shell)**
+**Command-line synopsis**
+```
+$ dqo [dqo options...] table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
+            [-t=<tableName>] [-d=<dimensions>]... [-l=<labels>]...
+
+```
+**DQO Shell synopsis**
 ```
 dqo.ai> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
             [-t=<tableName>] [-d=<dimensions>]... [-l=<labels>]...
