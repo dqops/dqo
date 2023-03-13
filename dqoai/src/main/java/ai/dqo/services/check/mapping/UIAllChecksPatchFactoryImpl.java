@@ -84,20 +84,18 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
         }
 
         List<UIAllChecksModel> uiConnectionPatches = connectionSpecs.stream()
-                .map(connectionSpec -> this.getAllChecksForConnection(connectionSpec, checkSearchFilters, executionContext))
+                .map(connectionSpec -> userHome.getConnections().getByObjectName(connectionSpec.getConnectionName(), true))
+                .map(connectionWrapper -> this.getAllChecksForConnection(connectionWrapper, checkSearchFilters, executionContext))
                 .collect(Collectors.toList());
-        for (ConnectionSpec connectionSpec : connectionSpecs) {
 
-        }
-
-        return null;
+        return uiConnectionPatches;
     }
 
-    protected UIAllChecksModel getAllChecksForConnection(ConnectionSpec connectionSpec,
+    protected UIAllChecksModel getAllChecksForConnection(ConnectionWrapper connectionWrapper,
                                                          CheckSearchFilters checkSearchFilters,
                                                          ExecutionContext executionContext) {
         UIAllChecksModel uiAllChecksModel = new UIAllChecksModel();
-        uiAllChecksModel.setConnectionName(connectionSpec.getConnectionName());
+        uiAllChecksModel.setConnectionName(connectionWrapper.getName());
         uiAllChecksModel.setChecksType(checkSearchFilters.getCheckType());
         uiAllChecksModel.setChecksTimeScale(checkSearchFilters.getTimeScale());
 
@@ -108,22 +106,22 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
                 && checkSearchFilters.getColumnDataType() == null) {
             // No info specifying columns, we include whole table checks.
             UIAllTableChecksModel uiAllTableChecksModel = this.getAllTableChecksForConnection(
-                    connectionSpec, checkSearchFilters, executionContext);
+                    connectionWrapper, checkSearchFilters, executionContext);
             uiAllChecksModel.setTableChecksModel(uiAllTableChecksModel);
         }
         UIAllColumnChecksModel columnChecksModel = this.getAllColumnChecksForConnection(
-                connectionSpec, checkSearchFilters, executionContext);
+                connectionWrapper, checkSearchFilters, executionContext);
         uiAllChecksModel.setColumnChecksModel(columnChecksModel);
 
         return uiAllChecksModel;
     }
 
-    protected UIAllTableChecksModel getAllTableChecksForConnection(ConnectionSpec connectionSpec,
+    protected UIAllTableChecksModel getAllTableChecksForConnection(ConnectionWrapper connectionWrapper,
                                                                    CheckSearchFilters checkSearchFilters,
                                                                    ExecutionContext executionContext) {
         UIAllTableChecksModel allTableChecksModel = new UIAllTableChecksModel();
         Collection<TableWrapper> tableWrappers = this.hierarchyNodeTreeSearcher
-                .findTables(connectionSpec, checkSearchFilters);
+                .findTables(connectionWrapper, checkSearchFilters);
 
         // TODO: Add templates
 
@@ -133,7 +131,8 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
                 .map(schemaName -> tableWrappers.stream()
                         .filter(tableWrapper -> tableWrapper.getPhysicalTableName().getSchemaName().equals(schemaName))
                         .collect(Collectors.toList()))
-                .map(tables -> this.getSchemaTableCheckModelForTables(connectionSpec, tables, checkSearchFilters, executionContext))
+                .map(tables -> this.getSchemaTableCheckModelForTables(connectionWrapper.getSpec(),
+                        tables, checkSearchFilters, executionContext))
                 .collect(Collectors.toList());
 
         allTableChecksModel.setUiSchemaTableChecksModels(schemasChecks);
@@ -199,18 +198,18 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
         return tableChecksModel;
     }
 
-    protected UIAllColumnChecksModel getAllColumnChecksForConnection(ConnectionSpec connectionSpec,
+    protected UIAllColumnChecksModel getAllColumnChecksForConnection(ConnectionWrapper connectionWrapper,
                                                                      CheckSearchFilters checkSearchFilters,
                                                                      ExecutionContext executionContext) {
         UIAllColumnChecksModel allColumnChecksModel = new UIAllColumnChecksModel();
         Collection<TableWrapper> tableWrappers = this.hierarchyNodeTreeSearcher
-                .findTables(connectionSpec, checkSearchFilters);
+                .findTables(connectionWrapper, checkSearchFilters);
 
         // TODO: Add templates
 
         List<UITableColumnChecksModel> tableColumnChecksModels = tableWrappers.stream()
-                .map(table -> this.getTableColumnCheckModelForTable(
-                        connectionSpec, table, checkSearchFilters, executionContext))
+                .map(table -> this.getTableColumnCheckModelForTable(connectionWrapper.getSpec(),
+                        table, checkSearchFilters, executionContext))
                 .collect(Collectors.toList());
 
         allColumnChecksModel.setUiTableColumnChecksModels(tableColumnChecksModels);
