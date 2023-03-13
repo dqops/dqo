@@ -59,7 +59,9 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
             allChecksDocumentationModels.addAll(check.getCheckGroups());
         }
         for (SimilarChecksDocumentationModel similarCheck : allChecksDocumentationModels){
-            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(similarCheck.getTarget() + "/" + similarCheck.getCategory() + "/" + similarCheck.getPrimaryCheckName() + ".md");
+            DocumentationMarkdownFile documentationMarkdownFile = rulesFolder.addNestedFile(similarCheck.getTarget() +
+                    "/" + similarCheck.getCategory() + "/" + similarCheck.getPrimaryCheckName().
+                    replace(' ', '-') + ".md");
             documentationMarkdownFile.setRenderContext(similarCheck);
 
             String renderedDocument = HandlebarsDocumentationUtilities.renderTemplate(template, similarCheck);
