@@ -68,3 +68,7 @@ input::-webkit-inner-spin-button {
 body {
     color: #2F2F2F;
 }
+
+input[type="radio"]::before {
+    opacity: 0 !important;
+}
