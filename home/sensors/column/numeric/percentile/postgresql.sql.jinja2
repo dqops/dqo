@@ -1,21 +1,11 @@
 {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
 
-{%- macro render_local_where_clause(extra_filter = none, table_alias_prefix = 'analyzed_table', indentation = '') -%}
-    {{ lib.render_date_range_filters(lib.eol() ~ indentation ~ 'WHERE ', table_alias_prefix, indentation ~ '      ') }}
-    GROUP BY {{ lib.render_grouping_column_names() }}
-{%- endmacro -%}
-
 SELECT
-    MAX(actual_value) AS actual_value,
-    nested_table.time_period AS time_period,
-    nested_table.time_period_utc AS time_period_utc
+    PERCENTILE_CONT({{ parameters.percentile_value }})
+    WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
     {{- lib.render_data_stream_projections('analyzed_table') }}
-FROM(
-    SELECT
-        PERCENTILE_CONT({{ parameters.percentile_value }})
-        WITHIN GROUP (ORDER BY {{ lib.render_target_column('analyzed_table')}}) AS actual_value
-        {{- lib.render_time_dimension_projection('analyzed_table') }}
-    FROM {{ lib.render_target_table() }} AS analyzed_table
-    {{- render_local_where_clause(indentation = '    ') -}}) AS nested_table
+    {{- lib.render_time_dimension_projection('analyzed_table') }}
+FROM {{ lib.render_target_table() }} AS analyzed_table
+{{- lib.render_where_clause() -}}
 {{- lib.render_group_by() -}}
 {{- lib.render_order_by() -}}
