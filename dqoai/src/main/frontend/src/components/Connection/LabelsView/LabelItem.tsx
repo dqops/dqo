@@ -37,6 +37,7 @@ const LabelItem = ({
               color="teal"
               size="sm"
               onClick={() => onRemove(idx)}
+              className="!shadow-none"
             >
               <SvgIcon name="delete" className="w-4" />
             </IconButton>
