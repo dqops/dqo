@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import CommentItem from './CommentItem';
 import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
@@ -87,7 +87,7 @@ const CommentsView = ({
         <div className="flex-1">
           <Input className="h-10 focus:!ring-0 focus:!border" value={text} onChange={onChangeText} />
         </div>
-        <IconButton size="sm" className="w-10 h-10" color="teal" onClick={onAdd}>
+        <IconButton size="sm" className="w-10 h-10 !shadow-none" color="teal" onClick={onAdd}>
           <SvgIcon name="add" className="w-5 text-white" />
         </IconButton>
       </div>
