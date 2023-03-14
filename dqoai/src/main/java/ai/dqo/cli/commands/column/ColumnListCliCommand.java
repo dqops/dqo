@@ -42,7 +42,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "list", description = "List columns which match filters")
+@CommandLine.Command(name = "list", header = "List the columns that match a given condition", description = "List all the columns in a table or filter them based on a specified condition.")
 public class ColumnListCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
 	private ColumnService columnService;
 	private TerminalWriter terminalWriter;

@@ -36,7 +36,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "edit", description = "Edit rule that match filters")
+@CommandLine.Command(name = "edit", header = "Edit rule that matches a given condition", description = "This command can be used to update the rule. It is important to use caution when using this command, as it can impact the execution of data quality checks.")
 public class RuleEditCliCommand extends BaseCommand implements ICommand {
 	private RuleService ruleService;
 	private TerminalReader terminalReader;

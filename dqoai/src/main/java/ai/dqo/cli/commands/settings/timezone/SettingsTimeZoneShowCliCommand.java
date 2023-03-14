@@ -32,7 +32,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "show", description = "Show the default time zone")
+@CommandLine.Command(name = "show", header = "Show the default time zone", description = "Displays the default time zone that is currently set in your settings. This time zone will be used to display all date and time values in the application.")
 public class SettingsTimeZoneShowCliCommand extends BaseCommand implements ICommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;

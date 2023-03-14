@@ -41,7 +41,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "list", description = "List tables which match filters")
+@CommandLine.Command(name = "list", header = "List tables filtered by the given conditions", description = "List all the tables that match a given condition. It allows the user to use various filters, such as table name or schema names to list filtered tables.")
 public class TableListCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private TableService tableImportService;
     private TerminalWriter terminalWriter;

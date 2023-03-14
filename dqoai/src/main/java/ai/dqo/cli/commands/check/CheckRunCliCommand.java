@@ -50,7 +50,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "run", description = "Run data quality checks matching specified filters")
+@CommandLine.Command(name = "run", header = "Run data quality checks that match a given condition", description = "Run data quality checks on your dataset that match a given condition. The command output is a table with the results that provides insight into the data quality.")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;

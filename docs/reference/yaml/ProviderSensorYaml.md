@@ -17,6 +17,7 @@ ___
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |type|Sensor implementation type|enum|sql_template<br/>java_class<br/>| | |
 |java_class_name|Java class name for a sensor runner that will execute the sensor. The &quot;type&quot; must be &quot;java_class&quot;.|string| | | |
+|supports_grouping|The sensor supports grouping (the GROUP BY clause in SQL), allowing to use the sensor for partition checks (to group each day of data and calculate a separate metric) or to use data streams segregation to group the results by additional columns. The default value is true, because most of the data quality sensor support grouping.|boolean| | | |
 
 ___  
 

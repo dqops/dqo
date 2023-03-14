@@ -131,7 +131,7 @@ public class DocumentationFolder {
             fileLineBuilder.append(indent); // base indent
             fileLineBuilder.append("  "); // file indent
             fileLineBuilder.append("- ");
-            fileLineBuilder.append(markdownFile.getLinkName());
+            fileLineBuilder.append(markdownFile.getLinkName().replace('-', ' '));
             fileLineBuilder.append(": '");
             fileLineBuilder.append(folderNamePrefix);
             fileLineBuilder.append(this.folderName);

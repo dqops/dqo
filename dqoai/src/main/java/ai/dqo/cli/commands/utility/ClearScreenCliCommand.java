@@ -28,7 +28,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "cls", description = "Clears the screen")
+@CommandLine.Command(name = "cls", header = "Clear the screen", description = "Clear the terminal screen or console, removing all the previous commands and outputs of the commands that were executed on the console. It allows the user to start with a clean slate for the next set of commands or outputs.")
 public class ClearScreenCliCommand implements ICommand {
     private TerminalWriter terminalWriter;
 
