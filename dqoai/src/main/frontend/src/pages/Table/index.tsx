@@ -10,7 +10,7 @@ import { IRootState } from "../../redux/reducers";
 import TableDetails from "../../components/Connection/TableView/TableDetails";
 import ScheduleDetail from "../../components/Connection/TableView/ScheduleDetail";
 import ProfilingView from "../../components/Connection/TableView/ProfilingView";
-import CheckpointsView from "../../components/Connection/TableView/CheckpointsView";
+import RecurringView from "../../components/Connection/TableView/RecurringView";
 import PartitionedChecks from "../../components/Connection/TableView/PartitionedChecks";
 import TableCommentView from "../../components/Connection/TableView/TableCommentView";
 import TableLabelsView from "../../components/Connection/TableView/TableLabelsView";
@@ -55,8 +55,8 @@ const TablePage = () => {
     isUpdatedComments,
     isUpdatedLabels,
     isUpdatedChecksUi,
-    isUpdatedDailyCheckpoints,
-    isUpdatedMonthlyCheckpoints,
+    isUpdatedDailyRecurring,
+    isUpdatedMonthlyRecurring,
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks,
     isUpdatedSchedule,
@@ -138,16 +138,16 @@ const TablePage = () => {
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
-        item.value === 'checkpoints'
+        item.value === 'recurring'
           ? {
             ...item,
             isUpdated:
-              isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints
+              isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
           }
           : item
       )
     );
-  }, [isUpdatedDailyCheckpoints, isUpdatedMonthlyCheckpoints]);
+  }, [isUpdatedDailyRecurring, isUpdatedMonthlyRecurring]);
 
   useEffect(() => {
     setTabs(
@@ -207,7 +207,7 @@ const TablePage = () => {
             <ProfilingView />
           )}
           {isCheckpointOnly && (
-            <CheckpointsView />
+            <RecurringView />
           )}
           {isPartitionChecksOnly && (
             <PartitionedChecks />
