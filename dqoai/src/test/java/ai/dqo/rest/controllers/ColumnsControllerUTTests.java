@@ -292,22 +292,22 @@ public class ColumnsControllerUTTests extends BaseTest {
         nullsChecksSpec.setFatal(maxCountRule3);
 
         ColumnNullsDailyRecurringSpec nullDailyRecurring = new ColumnNullsDailyRecurringSpec();
-        nullDailyRecurring.setDailyCheckpointNullsCount(nullsChecksSpec);
-        ColumnDailyRecurringCategoriesSpec dailyCheckpoint = new ColumnDailyRecurringCategoriesSpec();
-        dailyCheckpoint.setNulls(nullDailyRecurring);
-        ColumnRecurringSpec sampleCheckpoint = new ColumnRecurringSpec();
-        sampleCheckpoint.setDaily(dailyCheckpoint);
+        nullDailyRecurring.setDailyNullsCount(nullsChecksSpec);
+        ColumnDailyRecurringCategoriesSpec dailyRecurring = new ColumnDailyRecurringCategoriesSpec();
+        dailyRecurring.setNulls(nullDailyRecurring);
+        ColumnRecurringSpec sampleRecurring = new ColumnRecurringSpec();
+        sampleRecurring.setDaily(dailyRecurring);
         
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateColumnRecurringDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
                 columnSpec.getColumnName(),
-                Optional.of(sampleCheckpoint.getDaily()));
+                Optional.of(sampleRecurring.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getRecurring().getDaily(), sampleCheckpoint.getDaily());
+        Assertions.assertSame(columnSpec.getRecurring().getDaily(), sampleRecurring.getDaily());
         Assertions.assertNull(columnSpec.getRecurring().getMonthly());
     }
 

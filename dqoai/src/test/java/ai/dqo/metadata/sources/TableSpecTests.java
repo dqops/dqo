@@ -176,11 +176,11 @@ public class TableSpecTests extends BaseTest {
     }
 
     @Test
-    void hasAnyChecksConfigured_whenOneDailyCheckpointCheckConfigured_thenReturnsTrue() {
+    void hasAnyChecksConfigured_whenOneDailyRecurringCheckConfigured_thenReturnsTrue() {
         TableRecurringSpec recurring = new TableRecurringSpec();
         TableDailyRecurringCategoriesSpec daily = new TableDailyRecurringCategoriesSpec();
         TableStandardDailyRecurringSpec standard = new TableStandardDailyRecurringSpec();
-        standard.setDailyRecurringRowCount(new TableRowCountCheckSpec());
+        standard.setDailyRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
         recurring.setDaily(daily);
         this.sut.setRecurring(recurring);
@@ -188,11 +188,11 @@ public class TableSpecTests extends BaseTest {
     }
 
     @Test
-    void hasAnyChecksConfigured_whenOneMonthlyCheckpointCheckConfigured_thenReturnsTrue() {
+    void hasAnyChecksConfigured_whenOneMonthlyRecurringCheckConfigured_thenReturnsTrue() {
         TableRecurringSpec recurring = new TableRecurringSpec();
         TableMonthlyRecurringCategoriesSpec daily = new TableMonthlyRecurringCategoriesSpec();
         TableStandardMonthlyRecurringSpec standard = new TableStandardMonthlyRecurringSpec();
-        standard.setMonthlyRecurringRowCount(new TableRowCountCheckSpec());
+        standard.setMonthlyRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
         recurring.setMonthly(daily);
         this.sut.setRecurring(recurring);

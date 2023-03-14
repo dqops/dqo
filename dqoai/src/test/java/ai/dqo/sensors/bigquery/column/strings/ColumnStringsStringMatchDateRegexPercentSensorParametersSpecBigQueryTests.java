@@ -77,8 +77,8 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
         return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date_bdy", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "date_iso", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, "date_iso", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -309,9 +309,9 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
@@ -420,9 +420,9 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("length_int")));
@@ -549,9 +549,9 @@ public class ColumnStringsStringMatchDateRegexPercentSensorParametersSpecBigQuer
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),
