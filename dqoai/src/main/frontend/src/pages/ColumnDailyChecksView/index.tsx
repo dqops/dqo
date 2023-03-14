@@ -7,8 +7,8 @@ import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
-  getColumnDailyCheckpoints,
-  updateColumnDailyCheckpoints
+  getColumnDailyRecurring,
+  updateColumnDailyRecurring
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { useParams } from "react-router-dom";
@@ -17,7 +17,7 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 const ColumnDailyChecksView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { connection: string, schema: string, table: string, column: string } = useParams();
 
-  const { dailyCheckpoints, isUpdating, loading } = useSelector(
+  const { dailyRecurring, isUpdating, loading } = useSelector(
     (state: IRootState) => state.column
   );
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
@@ -26,18 +26,18 @@ const ColumnDailyChecksView = () => {
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnCheckpointsOverview(connectionName, schemaName, tableName, columnName, 'daily').then((res) => {
+    CheckResultOverviewApi.getColumnRecurringOverview(connectionName, schemaName, tableName, columnName, 'daily').then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
-    setUpdatedChecksUI(dailyCheckpoints);
-  }, [dailyCheckpoints]);
+    setUpdatedChecksUI(dailyRecurring);
+  }, [dailyRecurring]);
 
   useEffect(() => {
     dispatch(
-      getColumnDailyCheckpoints(
+      getColumnDailyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -50,7 +50,7 @@ const ColumnDailyChecksView = () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateColumnDailyCheckpoints(
+      updateColumnDailyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -59,7 +59,7 @@ const ColumnDailyChecksView = () => {
       )
     );
     await dispatch(
-      getColumnDailyCheckpoints(
+      getColumnDailyRecurring(
         connectionName,
         schemaName,
         tableName,

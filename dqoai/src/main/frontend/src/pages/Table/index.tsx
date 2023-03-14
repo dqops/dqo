@@ -62,12 +62,12 @@ const TablePage = () => {
     isUpdatedSchedule,
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
-  const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
+  const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
   const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
   const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
-    () => !isCheckpointOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
-    [isCheckpointOnly, isPartitionChecksOnly, isProfilingChecksOnly]
+    () => !isRecurringOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
+    [isRecurringOnly, isPartitionChecksOnly, isProfilingChecksOnly]
   );
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab));
@@ -170,7 +170,7 @@ const TablePage = () => {
     if (isProfilingChecksOnly) {
       return 'Advanced profiling for ';
     }
-    if (isCheckpointOnly) {
+    if (isRecurringOnly) {
       if (activeTab === 'monthly') {
         return 'Monthly recurring checks for ';
       } else {
@@ -189,7 +189,7 @@ const TablePage = () => {
       return 'Data source configuration for ';
     }
     return ''
-  }, [isProfilingChecksOnly, isCheckpointOnly, isPartitionChecksOnly, activeTab]);
+  }, [isProfilingChecksOnly, isRecurringOnly, isPartitionChecksOnly, activeTab]);
 
   return (
     <ConnectionLayout>
@@ -206,7 +206,7 @@ const TablePage = () => {
           {isProfilingChecksOnly && (
             <ProfilingView />
           )}
-          {isCheckpointOnly && (
+          {isRecurringOnly && (
             <RecurringView />
           )}
           {isPartitionChecksOnly && (
