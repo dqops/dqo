@@ -1,5 +1,7 @@
 site_name: Documentation
 site_url: https://dqo.ai/docs/
+repo_url: https://github.com/dqoai/dqo
+edit_uri: edit/main/docs/
 
 # Docs navigation
 nav:
@@ -18,7 +20,7 @@ nav:
     - Checks:
       - 'dqo-concepts/checks/index.md'
       - Advanced profiling: 'dqo-concepts/checks/advanced-profiling/advanced-profiling.md'
-      - Checks: 'dqo-concepts/checks/checks/checks.md'
+      - Recurring checks: 'dqo-concepts/checks/recurring-checks/recurring-checks.md'
       - Partition checks: 'dqo-concepts/checks/partition-checks/partition-checks.md'
     - Sensors: 'dqo-concepts/sensors/sensors.md'
     - Rules: 'dqo-concepts/rules/rules.md'
@@ -50,6 +52,8 @@ nav:
       - Timezone configuration: 'working-with-dqo/scheduler/timezone_configuration.md'
     - Notifications: 'working-with-dqo/notifications/notifications.md'
     - Initial profiling: 'working-with-dqo/initial-profiling/initial-profiling.md'
+    - Adding new data quality check: 'working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md'
+    - Removing data quality results: 'working-with-dqo/removing-data-quality-results/removing-data-quality-results.md'
   - Examples: 'examples/examples.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
@@ -224,8 +228,12 @@ theme:
     - content.tabs.link
     - content.code.copy
     - content.code.annotate
+    - content.action.edit
   logo: assets/logo.svg
   favicon: images/favicon.ico
+  icon:
+    repo: fontawesome/brands/github
+
   palette:
     - media: "(prefers-color-scheme: light)"
       scheme: default
@@ -261,7 +269,9 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-
+  - pymdownx.emoji:
+      emoji_index: !!python/name:materialx.emoji.twemoji
+      emoji_generator: !!python/name:materialx.emoji.to_svg
 extra:
   analytics:
     provider: google
@@ -272,8 +282,6 @@ extra:
       We use cookies to recognize repeat visits and user preferences, as well
       as to measure the effectiveness of our documentation and whether users
       find what they are looking for. With your consent, you help us improve our documentation.
-
-
 
 # TODO Tags
 # TODO Footer

@@ -62,7 +62,7 @@ public class ConnectionTableShowCliCommand extends BaseCommand implements IComma
 	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name", required = false)
 	private String connection;
 
-	@CommandLine.Option(names = {"-t", "--table"}, description = "Full table name", required = false)
+	@CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", required = false)
 	private String table;
 
 	/**
@@ -80,7 +80,7 @@ public class ConnectionTableShowCliCommand extends BaseCommand implements IComma
 
 		if (Strings.isNullOrEmpty(this.table)) {
 			throwRequiredParameterMissingIfHeadless("--table");
-			this.table = this.terminalReader.prompt("Full table name (--schema)", null, false);
+			this.table = this.terminalReader.prompt("Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", null, false);
 		}
 
 		CliOperationStatus cliOperationStatus = this.connectionService.showTableForConnection(connection, table, this.getOutputFormat());

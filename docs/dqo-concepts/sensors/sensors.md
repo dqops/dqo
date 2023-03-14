@@ -100,3 +100,10 @@ A full list of sensors within each category is available at the link.
 | [sql column sensors](../../../reference/sensors/column/sql-column-sensors/)                | Verifies custom SQL queries at the column level.                                                                                                                                                           |
 | [strings column sensors](../../../reference/sensors/column/strings-column-sensors/)        | Detects issues in columns with string-type data.                                                                                                                                                           |
 | [uniqueness column sensors](../../../reference/sensors/column/uniqueness-column-sensors/)  | Detect uniqueness and duplications.                                                                                                                                                                        |
+
+## Storing sensor data
+
+DQO stores a copy of the sensor data locally on the monitoring agent. The data files are stored as Apache Parquet files
+in an Apache Hive compatible folder tree, partitioned by the data source, monitored table name, and the month. A local 
+copy of the sensor data enables a true multi-cloud data collection, without accessing any sensitive data by an external 
+cloud or SaaS solution.

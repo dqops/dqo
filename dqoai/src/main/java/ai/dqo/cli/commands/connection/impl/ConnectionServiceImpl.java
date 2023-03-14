@@ -300,7 +300,7 @@ public class ConnectionServiceImpl implements ConnectionService {
             Collection<TableWrapper> tableWrappers = hierarchyNodeTreeSearcher.findTables(userHome, tableSearchFilters);
 
             Table resultTable = Table.create().addColumns(
-                    StringColumn.create("Source schema name name"),
+                    StringColumn.create("Source schema name"),
                     StringColumn.create("Is imported"),
                     IntColumn.create("Imported tables count"));
 
