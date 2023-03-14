@@ -3,12 +3,12 @@ import Tabs from '../../Tabs';
 import DataQualityChecks from '../../DataQualityChecks';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
-  getTableDailyCheckpoints,
-  getTableMonthlyCheckpoints,
-  setUpdatedDailyCheckPoints,
-  setUpdatedMonthlyCheckPoints,
-  updateTableDailyCheckpoints,
-  updateTableMonthlyCheckpoints
+  getTableDailyRecurring,
+  getTableMonthlyRecurring,
+  setUpdatedDailyRecurring,
+  setUpdatedMonthlyRecurring,
+  updateTableDailyRecurring,
+  updateTableMonthlyRecurring
 } from '../../../redux/actions/table.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
@@ -29,7 +29,7 @@ const initTabs = [
   }
 ];
 
-const CheckpointsView = () => {
+const RecurringView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, tab, checkTypes }: { checkTypes: string, connection: string, schema: string, table: string, tab: string } = useParams();
   const [tabs, setTabs] = useState(initTabs);
   const dispatch = useActionDispatch();
@@ -39,103 +39,103 @@ const CheckpointsView = () => {
 
   const {
     tableBasic,
-    dailyCheckpoints,
-    monthlyCheckpoints,
-    isUpdatedDailyCheckpoints,
-    isUpdatedMonthlyCheckpoints,
+    dailyRecurring,
+    monthlyRecurring,
+    isUpdatedDailyRecurring,
+    isUpdatedMonthlyRecurring,
     isUpdating,
     loading,
   } = useSelector((state: IRootState) => state.table);
 
   useEffect(() => {
     if (
-      !dailyCheckpoints ||
+      !dailyRecurring ||
       tableBasic?.connection_name !== connectionName ||
       tableBasic?.target?.schema_name !== schemaName ||
       tableBasic?.target?.table_name !== tableName
     ) {
-      dispatch(getTableDailyCheckpoints(connectionName, schemaName, tableName));
+      dispatch(getTableDailyRecurring(connectionName, schemaName, tableName));
     }
     if (
-      !monthlyCheckpoints ||
+      !monthlyRecurring ||
       tableBasic?.connection_name !== connectionName ||
       tableBasic?.target?.schema_name !== schemaName ||
       tableBasic?.target?.table_name !== tableName
     ) {
       dispatch(
-        getTableMonthlyCheckpoints(connectionName, schemaName, tableName)
+        getTableMonthlyRecurring(connectionName, schemaName, tableName)
       );
     }
   }, [connectionName, schemaName, tableName, tableBasic]);
 
   const onUpdate = async () => {
     if (tab === 'daily') {
-      if (!dailyCheckpoints) return;
+      if (!dailyRecurring) return;
 
       await dispatch(
-        updateTableDailyCheckpoints(
+        updateTableDailyRecurring(
           connectionName,
           schemaName,
           tableName,
-          dailyCheckpoints
+          dailyRecurring
         )
       );
       await dispatch(
-        getTableDailyCheckpoints(connectionName, schemaName, tableName)
+        getTableDailyRecurring(connectionName, schemaName, tableName)
       );
     } else {
-      if (!monthlyCheckpoints) return;
+      if (!monthlyRecurring) return;
 
       await dispatch(
-        updateTableMonthlyCheckpoints(
+        updateTableMonthlyRecurring(
           connectionName,
           schemaName,
           tableName,
-          monthlyCheckpoints
+          monthlyRecurring
         )
       );
       await dispatch(
-        getTableMonthlyCheckpoints(connectionName, schemaName, tableName)
+        getTableMonthlyRecurring(connectionName, schemaName, tableName)
       );
     }
   };
 
-  const onDailyCheckpointsChange = (ui: UIAllChecksModel) => {
-    dispatch(setUpdatedDailyCheckPoints(ui));
+  const onDailyRecurringChange = (ui: UIAllChecksModel) => {
+    dispatch(setUpdatedDailyRecurring(ui));
   };
 
-  const onMonthlyCheckpointsChange = (ui: UIAllChecksModel) => {
-    dispatch(setUpdatedMonthlyCheckPoints(ui));
+  const onMonthlyRecurringChange = (ui: UIAllChecksModel) => {
+    dispatch(setUpdatedMonthlyRecurring(ui));
   };
 
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
         item.value === 'daily'
-          ? { ...item, isUpdated: isUpdatedDailyCheckpoints }
+          ? { ...item, isUpdated: isUpdatedDailyRecurring }
           : item
       )
     );
-  }, [isUpdatedDailyCheckpoints]);
+  }, [isUpdatedDailyRecurring]);
 
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
         item.value === 'monthly'
-          ? { ...item, isUpdated: isUpdatedMonthlyCheckpoints }
+          ? { ...item, isUpdated: isUpdatedMonthlyRecurring }
           : item
       )
     );
-  }, [isUpdatedMonthlyCheckpoints]);
+  }, [isUpdatedMonthlyRecurring]);
   
   const getDailyCheckOverview = () => {
-    CheckResultOverviewApi.getTableCheckpointsOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
+    CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
       setDailyCheckResultsOverview(res.data);
     });
   };
   
   const getMonthlyCheckOverview = () => {
-    CheckResultOverviewApi.getTableCheckpointsOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
+    CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
       setMonthlyCheckResultsOverview(res.data);
     });
   };
@@ -149,7 +149,7 @@ const CheckpointsView = () => {
       <TableActionGroup
         shouldDelete={false}
         onUpdate={onUpdate}
-        isUpdated={isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints}
+        isUpdated={isUpdatedDailyRecurring || isUpdatedMonthlyRecurring}
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
@@ -158,8 +158,8 @@ const CheckpointsView = () => {
       {tab === 'daily' && (
         <DataQualityChecks
           onUpdate={onUpdate}
-          checksUI={dailyCheckpoints}
-          onChange={onDailyCheckpointsChange}
+          checksUI={dailyRecurring}
+          onChange={onDailyRecurringChange}
           checkResultsOverview={dailyCheckResultsOverview}
           getCheckOverview={getDailyCheckOverview}
           loading={loading}
@@ -168,8 +168,8 @@ const CheckpointsView = () => {
       {tab === 'monthly' && (
         <DataQualityChecks
           onUpdate={onUpdate}
-          checksUI={monthlyCheckpoints}
-          onChange={onMonthlyCheckpointsChange}
+          checksUI={monthlyRecurring}
+          onChange={onMonthlyRecurringChange}
           checkResultsOverview={monthlyCheckResultsOverview}
           getCheckOverview={getMonthlyCheckOverview}
           loading={loading}
@@ -179,4 +179,4 @@ const CheckpointsView = () => {
   );
 };
 
-export default CheckpointsView;
+export default RecurringView;
