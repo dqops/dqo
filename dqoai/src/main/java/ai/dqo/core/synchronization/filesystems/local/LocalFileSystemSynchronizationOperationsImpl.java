@@ -21,6 +21,7 @@ import ai.dqo.core.synchronization.contract.*;
 import ai.dqo.utils.exceptions.CloseableHelper;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
+import com.google.common.io.BaseEncoding;
 import io.netty.buffer.ByteBuf;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
@@ -74,31 +75,18 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
             }
 
             long lastModifiedMillis = file.lastModified();
-            String fileName = file.getName();
-            byte[] fileHash = null;
+            String fileHashMd5Base64 = null;
 
             if (lastKnownFileMetadata != null && lastModifiedMillis == lastKnownFileMetadata.getLastModifiedAt()) {
-                fileHash = lastKnownFileMetadata.getFileHash();
-            }
-            else {
-                if (fileName.endsWith(".parquet")) {
-                    Path crcFilePath = fullPathToFile.getParent().resolve("." + fileName + ".crc");
-                    File crcFile = crcFilePath.toFile();
-                    if (crcFile.exists()) {
-                        fileHash = Files.readAllBytes(crcFilePath);
-                    }
-                }
-
-                if (fileHash == null) {
-                    HashCode fileHashCode = com.google.common.io.Files.asByteSource(file).hash(Hashing.sha256());
-                    fileHash = fileHashCode.asBytes();
-                }
+                fileHashMd5Base64 = lastKnownFileMetadata.getMd5();
+            } else {
+                HashCode fileHashCode = com.google.common.io.Files.asByteSource(file).hash(Hashing.md5());
+                fileHashMd5Base64 = BaseEncoding.base64().encode(fileHashCode.asBytes());
             }
 
             long now = Instant.now().toEpochMilli();
-            return new FileMetadata(relativeFilePath, lastModifiedMillis, fileHash, now, file.length());
-        }
-        catch (IOException ex) {
+            return new FileMetadata(relativeFilePath, lastModifiedMillis, fileHashMd5Base64, now, file.length());
+        } catch (IOException ex) {
             throw new FileMetadataReadException(fullPathToFile, ex.getMessage(), ex);
         }
     }
@@ -165,14 +153,12 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                                     resultFolderMetadata.getFiles().add(fileMetadata);
                                 }
                             });
-                }
-                finally {
+                } finally {
                     fileListStream.close(); // file descriptor leak in Java, file stream must be closed
                 }
             }
             return resultFolderMetadata;
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             throw new FileMetadataReadException(fullPathToFolder, ex.getMessage(), ex);
         }
     }
@@ -201,10 +187,10 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
      * @param relativeFilePath Relative file path inside the remote root.
      */
     @Override
-    public Mono<Path> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath) {
-        Mono<Path> deleteFileMono = Mono.fromRunnable(() -> {
+    public Mono<FileMetadata> deleteFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath) {
+        Mono<FileMetadata> deleteFileMono = Mono.fromRunnable(() -> {
             deleteFile(fileSystemRoot, relativeFilePath);
-        }).thenReturn(relativeFilePath);
+        }).thenReturn(FileMetadata.createDeleted(relativeFilePath));
 
         return deleteFileMono;
     }
@@ -230,8 +216,7 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
         try {
             FileUtils.deleteDirectory(file);
             return true;
-        }
-        catch (IOException ex) {
+        } catch (IOException ex) {
             throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
         }
     }
@@ -256,7 +241,7 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
     /**
      * Downloads a file and opens an input stream to the file.
      *
-     * @param fileSystemRoot File system root (with credentials).
+     * @param fileSystemRoot   File system root (with credentials).
      * @param relativeFilePath Relative file path inside the remote root.
      * @return Input stream to get the file content.
      */
@@ -267,8 +252,7 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
         try {
             FileInputStream fileInputStream = new FileInputStream(fullPathToFile.toFile());
             return fileInputStream;
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new FileSystemReadException(fullPathToFile, ex.getMessage(), ex);
         }
     }
@@ -299,13 +283,13 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
     /**
      * Uploads a stream to the file system.
      *
-     * @param fileSystemRoot   File system root (with credentials).
-     * @param relativeFilePath Relative file path inside the root file system.
-     * @param sourceStream     Source stream that will be uploaded. The method should close this stream after the upload finishes.
-     * @param fileHash         File hash that is expected.
+     * @param fileSystemRoot    File system root (with credentials).
+     * @param relativeFilePath  Relative file path inside the root file system.
+     * @param sourceStream      Source stream that will be uploaded. The method should close this stream after the upload finishes.
+     * @param fileHashMd5Base64 MD5 file hash that is expected.
      */
     @Override
-    public void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, byte[] fileHash) {
+    public void uploadFile(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, InputStream sourceStream, String fileHashMd5Base64) {
         Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
 
         try {
@@ -313,8 +297,7 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
             if (!Files.exists(parentFolderPath)) {
                 try {
                     Files.createDirectories(parentFolderPath);
-                }
-                catch (Exception ex) {
+                } catch (Exception ex) {
                     // ignore, probably a race condition
                 }
             }
@@ -327,17 +310,9 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
             }
 
             assert fullPathToFile.toFile().length() > 0;
-
-            Path fileName = relativeFilePath.getFileName();
-            if (fileName.getFileName().toString().endsWith(".parquet")) {
-                Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
-                Files.write(crcFilePath, fileHash);
-            }
-        }
-        catch (Exception ex) {
+        } catch (Exception ex) {
             throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
-        }
-        finally {
+        } finally {
             CloseableHelper.closeSilently(sourceStream);
         }
     }
@@ -345,84 +320,97 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
     /**
      * Uploads a file to the file system as an asynchronous operation using Flux.
      *
-     * @param fileSystemRoot   File system root.
-     * @param relativeFilePath Relative path to the uploaded file.
-     * @param bytesFlux        Source flux with byte buffers to be uploaded.
-     * @param fileMetadata     File metadata with the file length and file content hash.
+     * @param fileSystemRoot           File system root.
+     * @param relativeFilePath         Relative path to the uploaded file.
+     * @param downloadFileResponseMono Mono that has a response with a downloaded file
      * @return Mono returned when the file was fully uploaded.
      */
     @Override
-    public Mono<Path> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot, Path relativeFilePath, ByteBufFlux bytesFlux, FileMetadata fileMetadata) {
-        Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
+    public Mono<FileMetadata> uploadFileAsync(FileSystemSynchronizationRoot fileSystemRoot,
+                                      Path relativeFilePath,
+                                      Mono<DownloadFileResponse> downloadFileResponseMono) {
+        Mono<FileMetadata> uploadFinishMono = downloadFileResponseMono
+                .flatMap((DownloadFileResponse downloadResponse) -> {
+                    ByteBufFlux bytesFlux = downloadResponse.getByteBufFlux();
+                    FileMetadata fileMetadata = downloadResponse.getMetadata();
 
-        try {
-            Path parentFolderPath = fullPathToFile.getParent();
-            if (!Files.exists(parentFolderPath)) {
-                try {
-                    Files.createDirectories(parentFolderPath);
-                }
-                catch (IOException ex) {
-                    // ignore, this could be just a race condition that another thread is trying to create the same folder
-                }
-            }
+                    Path fullPathToFile = fileSystemRoot.getRootPath().resolve(relativeFilePath);
 
-            final FileOutputStream fileOutputStream = new FileOutputStream(fullPathToFile.toFile());
-            final ByteChannel outputByteChannel = fileOutputStream.getChannel();
-            return bytesFlux.doOnEach(byteBufSignal -> {
-                switch (byteBufSignal.getType()) {
-                    case ON_NEXT: {
-                        try {
-                            ByteBuf byteBuf = byteBufSignal.get();
-                            outputByteChannel.write(byteBuf.nioBuffer());
+                    try {
+                        Path parentFolderPath = fullPathToFile.getParent();
+                        if (!Files.exists(parentFolderPath)) {
+                            try {
+                                Files.createDirectories(parentFolderPath);
+                            } catch (IOException ex) {
+                                // ignore, this could be just a race condition that another thread is trying to create the same folder
+                            }
                         }
-                        catch (Exception ex) {
-                            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
-                        }
-                        break;
-                    }
 
-                    case ON_ERROR: {
-                        try {
-                            outputByteChannel.close();
-                            fileOutputStream.close();
-                            Files.delete(fullPathToFile);
+                        final FileOutputStream fileOutputStream = new FileOutputStream(fullPathToFile.toFile());
+                        final ByteChannel outputByteChannel = fileOutputStream.getChannel();
+                        return bytesFlux.doOnEach(byteBufSignal -> {
+                            switch (byteBufSignal.getType()) {
+                                case ON_NEXT: {
+                                    try {
+                                        ByteBuf byteBuf = byteBufSignal.get();
+                                        outputByteChannel.write(byteBuf.nioBuffer());
+                                    } catch (Exception ex) {
+                                        throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                                    }
+                                    break;
+                                }
 
-                            Path fileName = relativeFilePath.getFileName();
-                            if (fileName.getFileName().toString().endsWith(".parquet")) {
-                                Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
-                                if (Files.exists(crcFilePath)) {
-                                    Files.delete(crcFilePath);
+                                case ON_ERROR: {
+                                    try {
+                                        outputByteChannel.close();
+                                        fileOutputStream.close();
+                                        Files.delete(fullPathToFile);
+
+                                        // cleans old parquet-mr .crc files, to be deleted... it is here only for cleaning
+                                        Path fileName = relativeFilePath.getFileName();
+                                        if (fileName.getFileName().toString().endsWith(".parquet")) {
+                                            Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
+                                            if (Files.exists(crcFilePath)) {
+                                                Files.delete(crcFilePath);
+                                            }
+                                        }
+                                    } catch (Exception ex) {
+                                        throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                                    }
+
+                                    break;
+                                }
+
+                                case ON_COMPLETE: {
+                                    try {
+                                        outputByteChannel.close();
+                                        fileOutputStream.close();
+                                    } catch (Exception ex) {
+                                        throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                                    }
+                                    break;
                                 }
                             }
-                        }
-                        catch (Exception ex) {
-                            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
-                        }
+                        }).then(Mono.fromCallable(() -> {
+                            try {
+                                File file = fullPathToFile.toFile();
+                                if (!file.exists()) {
+                                    return null;
+                                }
 
-                        break;
-                    }
-
-                    case ON_COMPLETE: {
-                        try {
-                            outputByteChannel.close();
-                            fileOutputStream.close();
-
-                            Path fileName = relativeFilePath.getFileName();
-                            if (fileName.getFileName().toString().endsWith(".parquet")) {
-                                Path crcFilePath = parentFolderPath.resolve("." + fileName + ".crc");
-                                Files.write(crcFilePath, fileMetadata.getFileHash());
+                                long lastModifiedMillis = file.lastModified();
+                                long now = Instant.now().toEpochMilli();
+                                return new FileMetadata(relativeFilePath, lastModifiedMillis, fileMetadata.getMd5(), now, fileMetadata.getFileLength());
                             }
-                        }
-                        catch (Exception ex) {
-                            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
-                        }
-                        break;
+                            catch (Exception ex) {
+                                throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
+                            }
+                        }));
+                    } catch (Exception ex) {
+                        throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
                     }
-                }
-            }).then(Mono.just(relativeFilePath));
-        }
-        catch (Exception ex) {
-            throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
-        }
+                });
+
+        return uploadFinishMono;
     }
 }

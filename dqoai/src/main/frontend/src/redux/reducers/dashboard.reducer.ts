@@ -23,12 +23,14 @@ export interface IDashboardState {
   dashboardFolders: DashboardsFolderSpec[];
   loading: boolean;
   error: any;
+  dashboardState: Record<string, boolean>
 }
 
 const initialState: IDashboardState = {
   dashboardFolders: [],
   loading: false,
   error: null,
+  dashboardState: {}
 };
 
 const dashboardReducer = (state = initialState, action: any) => {
@@ -51,6 +53,13 @@ const dashboardReducer = (state = initialState, action: any) => {
         loading: false,
         error: action.error
       };
+    case DASHBOARD_ACTION.TOGGLE_DASHBOARD_FOLDER:
+      return {
+        ...state,
+        dashboardState: {
+          ...state.dashboardState,
+        }
+      }
     default:
       return state;
   }

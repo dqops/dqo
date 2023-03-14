@@ -54,8 +54,8 @@ public class BigQueryColumnDatetimeDateValuesInFuturePercentSensorParametersSpec
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "date", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

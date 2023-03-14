@@ -18,6 +18,7 @@ import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
+import ai.dqo.utils.tables.TableRowUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
@@ -170,14 +171,15 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
         }
 
         for (Row row : workingTable) {
-            Double actualValue = row.getDouble(SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-            Double expectedValue = row.getDouble(SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
-            Double warningLowerBound = row.getDouble(RuleResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
-            Double warningUpperBound = row.getDouble(RuleResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
-            Double errorLowerBound = row.getDouble(RuleResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
-            Double errorUpperBound = row.getDouble(RuleResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
-            Double fatalLowerBound = row.getDouble(RuleResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
-            Double fatalUpperBound = row.getDouble(RuleResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
+            String id = row.getString(SensorReadoutsColumnNames.ID_COLUMN_NAME);
+            Double actualValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+            Double expectedValue = TableRowUtility.getSanitizedDoubleValue(row, SensorReadoutsColumnNames.EXPECTED_VALUE_COLUMN_NAME);
+            Double warningLowerBound = TableRowUtility.getSanitizedDoubleValue(row, RuleResultsColumnNames.WARNING_LOWER_BOUND_COLUMN_NAME);
+            Double warningUpperBound = TableRowUtility.getSanitizedDoubleValue(row, RuleResultsColumnNames.WARNING_UPPER_BOUND_COLUMN_NAME);
+            Double errorLowerBound = TableRowUtility.getSanitizedDoubleValue(row, RuleResultsColumnNames.ERROR_LOWER_BOUND_COLUMN_NAME);
+            Double errorUpperBound = TableRowUtility.getSanitizedDoubleValue(row, RuleResultsColumnNames.ERROR_UPPER_BOUND_COLUMN_NAME);
+            Double fatalLowerBound = TableRowUtility.getSanitizedDoubleValue(row, RuleResultsColumnNames.FATAL_LOWER_BOUND_COLUMN_NAME);
+            Double fatalUpperBound = TableRowUtility.getSanitizedDoubleValue(row, RuleResultsColumnNames.FATAL_UPPER_BOUND_COLUMN_NAME);
             Integer severity = row.getInt(RuleResultsColumnNames.SEVERITY_COLUMN_NAME);
 
             String checkCategory = row.getString(SensorReadoutsColumnNames.CHECK_CATEGORY_COLUMN_NAME);
@@ -186,7 +188,7 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
             String checkName = row.getString(SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
             String checkType = row.getString(SensorReadoutsColumnNames.CHECK_TYPE_COLUMN_NAME);
 
-            String columnName = row.getString(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+            String columnName = TableRowUtility.getSanitizedStringValue(row, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
             String dataStream = row.getString(SensorReadoutsColumnNames.DATA_STREAM_NAME_COLUMN_NAME);
 
             Integer durationMs = row.getInt(SensorReadoutsColumnNames.DURATION_MS_COLUMN_NAME);
@@ -201,6 +203,7 @@ public class RuleResultsDataServiceImpl implements RuleResultsDataService {
             String sensorName = row.getString(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME);
 
             CheckResultDetailedSingleModel singleModel = new CheckResultDetailedSingleModel() {{
+                setId(id);
                 setActualValue(actualValue);
                 setExpectedValue(expectedValue);
                 setWarningLowerBound(warningLowerBound);

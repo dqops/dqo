@@ -16,7 +16,7 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 
 const TableMonthlyPartitionedChecksView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
-  const { monthlyPartitionedChecks, isUpdating } = useSelector(
+  const { monthlyPartitionedChecks, isUpdating, loading } = useSelector(
     (state: IRootState) => state.table
   );
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
@@ -65,8 +65,8 @@ const TableMonthlyPartitionedChecksView = () => {
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2">
-          <SvgIcon name="database" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{`Monthly Partitioned checks for ${connectionName}.${schemaName}.${tableName}`}</div>
+          <SvgIcon name="table-check" className="w-5 h-5" />
+          <div className="text-xl font-semibold">{`Monthly partition checks for ${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
         <Button
           color={isUpdated ? 'primary' : 'secondary'}
@@ -85,6 +85,7 @@ const TableMonthlyPartitionedChecksView = () => {
           onChange={onChangeUI}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>

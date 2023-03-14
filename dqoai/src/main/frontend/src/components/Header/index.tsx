@@ -27,7 +27,7 @@ const Header = () => {
             className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.SOURCES}`) ? 'font-bold' : '' )}
             onClick={onClick(`/${CheckTypes.SOURCES}`)}
           >
-            Source
+            Data Sources
           </div>
           <div
             className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.PROFILING}`) ? 'font-bold' : '' )}
@@ -39,13 +39,13 @@ const Header = () => {
             className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.CHECKS}`) ? 'font-bold' : '' )}
             onClick={onClick(`/${CheckTypes.CHECKS}`)}
           >
-            Whole table checks
+            Recurring Checks
           </div>
           <div
-            className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.TIME_PARTITIONED}`) ? 'font-bold' : '' )}
-            onClick={onClick(`/${CheckTypes.TIME_PARTITIONED}`)}
+            className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.PARTITION}`) ? 'font-bold' : '' )}
+            onClick={onClick(`/${CheckTypes.PARTITION}`)}
           >
-            Time period checks
+            Partition Checks
           </div>
           <div
             className={clsx("px-4 cursor-pointer", location.pathname === '/dashboards' ? 'font-bold' : '' )}

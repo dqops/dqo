@@ -39,7 +39,7 @@ export const Table: React.FC<TableProps> = ({
             {columns.map((column) => (
               <th
                 key={column.value}
-                className={`text-left px-2 pt-2 pb-2 text-black-200 text-base font-semibold min-w-20 pr-4 ${column.className}`}
+                className={`text-left px-2 pt-2 pb-2 text-base font-semibold min-w-20 pr-4 ${column.className}`}
               >
                 {column.header ? (
                   <>{column.header(column.label)}</>

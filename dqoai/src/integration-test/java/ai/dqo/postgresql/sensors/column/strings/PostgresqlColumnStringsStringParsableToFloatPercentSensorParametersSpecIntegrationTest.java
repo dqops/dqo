@@ -55,8 +55,8 @@ public class PostgresqlColumnStringsStringParsableToFloatPercentSensorParameters
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "mix_of_values", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

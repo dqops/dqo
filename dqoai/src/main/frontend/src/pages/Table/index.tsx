@@ -9,13 +9,14 @@ import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import TableDetails from "../../components/Connection/TableView/TableDetails";
 import ScheduleDetail from "../../components/Connection/TableView/ScheduleDetail";
-import AdhocView from "../../components/Connection/TableView/AdhocView";
+import ProfilingView from "../../components/Connection/TableView/ProfilingView";
 import CheckpointsView from "../../components/Connection/TableView/CheckpointsView";
 import PartitionedChecks from "../../components/Connection/TableView/PartitionedChecks";
 import TableCommentView from "../../components/Connection/TableView/TableCommentView";
 import TableLabelsView from "../../components/Connection/TableView/TableLabelsView";
 import TableDataStream from "../../components/Connection/TableView/TableDataStream";
 import TimestampsView from "../../components/Connection/TableView/TimestampsView";
+import { findTreeNode } from "../../utils/tree";
 
 const initTabs = [
   {
@@ -39,14 +40,14 @@ const initTabs = [
     value: 'data-streams'
   },
   {
-    label: 'Timestamps',
+    label: 'Date and time columns',
     value: 'timestamps'
   }
 ];
 
 const TablePage = () => {
   const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: string } = useParams();
-  const { activeTab: pageTab, tabMap, setTabMap } = useTree();
+  const { activeTab: pageTab, tabMap, setTabMap, treeData } = useTree();
   const history = useHistory();
   const [tabs, setTabs] = useState(initTabs);
   const {
@@ -62,11 +63,11 @@ const TablePage = () => {
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
   const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
-  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.TIME_PARTITIONED, [checkTypes]);
-  const isAdHocChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
+  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
+  const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
-    () => !isCheckpointOnly && !isPartitionChecksOnly && !isAdHocChecksOnly,
-    [isCheckpointOnly, isPartitionChecksOnly, isAdHocChecksOnly]
+    () => !isCheckpointOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
+    [isCheckpointOnly, isPartitionChecksOnly, isProfilingChecksOnly]
   );
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab));
@@ -163,50 +164,81 @@ const TablePage = () => {
     );
   }, [isUpdatedDailyPartitionedChecks, isUpdatedMonthlyPartitionedChecks]);
 
+  const activeNode = findTreeNode(treeData, pageTab);
+
+  const description = useMemo(() => {
+    if (isProfilingChecksOnly) {
+      return 'Advanced profiling for ';
+    }
+    if (isCheckpointOnly) {
+      if (activeTab === 'monthly') {
+        return 'Monthly recurring checks for ';
+      } else {
+        return 'Daily recurring checks for ';
+      }
+    }
+    if (isPartitionChecksOnly) {
+      if (activeTab === 'monthly') {
+        return 'Monthly partition checks for ';
+      } else {
+        return 'Daily partition checks for ';
+      }
+    }
+
+    if (activeTab === 'detail') {
+      return 'Data source configuration for ';
+    }
+    return ''
+  }, [isProfilingChecksOnly, isCheckpointOnly, isPartitionChecksOnly, activeTab]);
+
   return (
     <ConnectionLayout>
-      <div className="relative h-full flex flex-col">
-        <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-13 items-center flex-shrink-0">
-          <div className="flex items-center space-x-2">
-            <SvgIcon name="database" className="w-5 h-5" />
-            <div className="text-xl font-semibold">{`${connection}.${schema}.${table}`}</div>
+      {!activeNode ? (
+        <div />
+      ) : (
+        <div className="relative h-full flex flex-col">
+          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0">
+            <div className="flex items-center space-x-2">
+              <SvgIcon name="table" className="w-5 h-5" />
+              <div className="text-xl font-semibold">{`${description}${connection}.${schema}.${table}`}</div>
+            </div>
           </div>
+          {isProfilingChecksOnly && (
+            <ProfilingView />
+          )}
+          {isCheckpointOnly && (
+            <CheckpointsView />
+          )}
+          {isPartitionChecksOnly && (
+            <PartitionedChecks />
+          )}
+          {showAllSubTabs && (
+            <>
+              <div className="border-b border-gray-300">
+                <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+              </div>
+              <div>
+                {activeTab === 'detail' && <TableDetails />}
+              </div>
+              <div>
+                {activeTab === 'schedule' && <ScheduleDetail />}
+              </div>
+              <div>
+                {activeTab === 'comments' && <TableCommentView />}
+              </div>
+              <div>
+                {activeTab === 'labels' && <TableLabelsView />}
+              </div>
+              <div>
+                {activeTab === 'data-streams' && <TableDataStream />}
+              </div>
+              <div>
+                {activeTab === 'timestamps' && <TimestampsView />}
+              </div>
+            </>
+          )}
         </div>
-        {isAdHocChecksOnly && (
-          <AdhocView />
-        )}
-        {isCheckpointOnly && (
-          <CheckpointsView />
-        )}
-        {isPartitionChecksOnly && (
-          <PartitionedChecks />
-        )}
-        {showAllSubTabs && (
-          <>
-            <div className="border-b border-gray-300">
-              <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
-            </div>
-            <div>
-              {activeTab === 'detail' && <TableDetails />}
-            </div>
-            <div>
-              {activeTab === 'schedule' && <ScheduleDetail />}
-            </div>
-            <div>
-              {activeTab === 'comments' && <TableCommentView />}
-            </div>
-            <div>
-              {activeTab === 'labels' && <TableLabelsView />}
-            </div>
-            <div>
-              {activeTab === 'data-streams' && <TableDataStream />}
-            </div>
-            <div>
-              {activeTab === 'timestamps' && <TimestampsView />}
-            </div>
-          </>
-        )}
-      </div>
+      )}
     </ConnectionLayout>
   );
 };

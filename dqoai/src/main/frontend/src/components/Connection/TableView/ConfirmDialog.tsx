@@ -33,7 +33,8 @@ const ConfirmDialog = ({
         </DialogBody>
         <DialogFooter className="justify-center space-x-6 pb-8">
           <Button
-            color="error"
+            color="primary"
+            variant="outlined"
             className="px-8"
             onClick={onClose}
             label="Cancel"

@@ -38,7 +38,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "update", description = "Update connection or connections which match filters")
+@CommandLine.Command(name = "update", header = "Update the connection(s) that match a given condition", description = "Update the connection or connections that match the conditions specified in the options with new details. It allows the user to modify existing connections in the application.")
 public class ConnectionUpdateCliCommand extends BaseCommand implements ICommand {
     private ConnectionService connectionService;
     private TerminalFactory terminalFactory;

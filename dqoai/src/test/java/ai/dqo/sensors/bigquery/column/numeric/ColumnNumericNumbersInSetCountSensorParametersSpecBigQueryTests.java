@@ -52,7 +52,7 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnNumericNumbersInSetCountSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
         ColumnNumericNumbersInSetCountSensorParametersSpec altSut = (ColumnNumericNumbersInSetCountSensorParametersSpec) this.sut.deepClone();
         this.sut.setValues(new ArrayList<>(){{
             add(12345L); add(123456L); add(1234567L);
@@ -67,12 +67,12 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
         this.altCheckSpec.setParameters(altSut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "length_int", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "length_int", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHocAlt() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "length_int", this.altCheckSpec);
+    private SensorExecutionRunParameters getRunParametersProfilingAlt() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "length_int", this.altCheckSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
@@ -88,8 +88,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test
@@ -106,8 +106,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -134,8 +134,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStreamNoValuesList_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHocAlt();
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStreamNoValuesList_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfilingAlt();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -155,8 +155,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -239,6 +239,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -254,8 +256,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -344,6 +346,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
@@ -359,8 +363,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -467,6 +471,8 @@ public class ColumnNumericNumbersInSetCountSensorParametersSpecBigQueryTests ext
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 

@@ -505,7 +505,7 @@ public class FolderMetadata implements Cloneable {
             String fileName = myFile.getFileName();
             FileMetadata otherFile = otherFolderMetadata.files.get(fileName);
 
-            if (otherFile == null || !Arrays.equals(myFile.getFileHash(), otherFile.getFileHash())) {
+            if (otherFile == null || !Objects.equals(myFile.getMd5(), otherFile.getMd5())) {
                 if (differences == null) {
                     differences = new ArrayList<>();
                 }
@@ -584,7 +584,15 @@ public class FolderMetadata implements Cloneable {
         ArrayList<FolderMetadata> emptyFolders = null;
 
         if (!this.folders.isEmpty()) {
+            if (this.folders.isFrozen() && hasEmptyNestedFolders()) {
+                this.getMutableFolders(); // make the folder list unfrozen and mutable
+            }
+
             for (FolderMetadata childFolder : new ArrayList<>(this.folders)) {
+                if (childFolder.isFrozen() && childFolder.hasEmptyNestedFolders()) {
+                    childFolder = this.folders.getMutable(childFolder.getFolderName());
+                }
+
                 Collection<FolderMetadata> childEmptyFolders = childFolder.detachEmptyFolders();
                 if (childEmptyFolders != null) {
                     if (emptyFolders == null) {
@@ -604,5 +612,27 @@ public class FolderMetadata implements Cloneable {
         }
 
         return emptyFolders;
+    }
+
+    /**
+     * Checks if the folder has any empty nested folders. It must be called to decide that we have to unfreeze it to make changes to the index.
+     * @return True when there is at least one subfolder that is empty, false when all folders are unfrozen.
+     */
+    public boolean hasEmptyNestedFolders() {
+        if (this.files.isEmpty()) {
+            return true;
+        }
+
+        if (this.folders.isEmpty()) {
+            return false;
+        }
+
+        for (FolderMetadata nestedFolder : this.folders) {
+            if (nestedFolder.hasEmptyNestedFolders()) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

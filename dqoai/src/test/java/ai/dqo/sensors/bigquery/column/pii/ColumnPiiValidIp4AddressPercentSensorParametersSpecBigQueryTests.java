@@ -46,7 +46,7 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
     @BeforeEach
     void setUp() {
         this.sut = new ColumnPiiValidIp4AddressPercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -54,8 +54,8 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "ip4", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "ip4", this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
@@ -71,7 +71,8 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
     }
 
     private String getSubstitutedFilter(String tableName) {
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test
@@ -88,8 +89,8 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -119,8 +120,8 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -210,6 +211,8 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -224,8 +227,8 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -321,6 +324,8 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
@@ -335,8 +340,8 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -450,6 +455,8 @@ public class ColumnPiiValidIp4AddressPercentSensorParametersSpecBigQueryTests ex
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 

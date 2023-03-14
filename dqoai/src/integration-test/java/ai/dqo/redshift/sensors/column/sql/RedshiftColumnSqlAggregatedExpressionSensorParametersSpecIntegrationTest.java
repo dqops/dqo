@@ -54,10 +54,10 @@ public class RedshiftColumnSqlAggregatedExpressionSensorParametersSpecIntegratio
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         this.sut.setSqlExpression("max(length({column}))");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "surrounded_by_whitespace", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

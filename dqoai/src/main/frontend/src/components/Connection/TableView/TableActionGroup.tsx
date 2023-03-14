@@ -4,6 +4,7 @@ import ConfirmDialog from './ConfirmDialog';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import { TableApiClient } from '../../../services/apiClient';
+import { useTree } from "../../../contexts/treeContext";
 
 interface ITableActionGroupProps {
   isDisabled?: boolean;
@@ -22,6 +23,7 @@ const TableActionGroup = ({
 }: ITableActionGroupProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const { tableBasic } = useSelector((state: IRootState) => state.table);
+  const { deleteData } = useTree();
 
   const removeTable = async () => {
     if (tableBasic) {
@@ -30,6 +32,9 @@ const TableActionGroup = ({
         tableBasic.target?.schema_name ?? '',
         tableBasic.target?.table_name ?? ''
       );
+
+      const identify = `${tableBasic?.connection_name}.${tableBasic?.target?.schema_name}.${tableBasic?.target?.table_name}`;
+      deleteData(identify);
     }
   };
 
@@ -37,9 +42,10 @@ const TableActionGroup = ({
     <div className="flex space-x-4 items-center absolute right-2 top-2">
       {shouldDelete && (
         <Button
-          variant="text"
-          color="info"
-          label="Delete"
+          className="!h-10"
+          color="primary"
+          variant="outlined"
+          label="Delete Table"
           onClick={() => setIsOpen(true)}
         />
       )}
@@ -47,7 +53,7 @@ const TableActionGroup = ({
         color={isUpdated && !isDisabled ? 'primary' : 'secondary'}
         variant="contained"
         label="Save"
-        className="w-40"
+        className="w-40 !h-10"
         onClick={onUpdate}
         loading={isUpdating}
         disabled={isDisabled}

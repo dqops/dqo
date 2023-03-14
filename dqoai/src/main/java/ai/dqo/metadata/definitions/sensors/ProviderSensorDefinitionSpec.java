@@ -50,6 +50,10 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     @JsonPropertyDescription("Java class name for a sensor runner that will execute the sensor. The \"type\" must be \"java_class\".")
     private String javaClassName = JinjaSqlTemplateSensorRunner.CLASS_NAME;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @JsonPropertyDescription("The sensor supports grouping (the GROUP BY clause in SQL), allowing to use the sensor for partition checks (to group each day of data and calculate a separate metric) or to use data streams segregation to group the results by additional columns. The default value is true, because most of the data quality sensor support grouping.")
+    private boolean supportsGrouping = true;
+
     @JsonPropertyDescription("Additional provider specific sensor parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> parameters;
@@ -103,6 +107,23 @@ public class ProviderSensorDefinitionSpec extends AbstractSpec {
     public void setJavaClassName(String javaClassName) {
 		this.setDirtyIf(!Objects.equals(this.javaClassName, javaClassName));
         this.javaClassName = javaClassName;
+    }
+
+    /**
+     * Returns true if the sensor supports grouping.
+     * @return True when the sensor supports grouping.
+     */
+    public boolean isSupportsGrouping() {
+        return supportsGrouping;
+    }
+
+    /**
+     * Sets the flag if the sensor supports grouping.
+     * @param supportsGrouping True when the sensor supports grouping, false otherwise.
+     */
+    public void setSupportsGrouping(boolean supportsGrouping) {
+        this.setDirtyIf(this.supportsGrouping != supportsGrouping);
+        this.supportsGrouping = supportsGrouping;
     }
 
     /**

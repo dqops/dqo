@@ -18,11 +18,11 @@ package ai.dqo.execution.checks.progress;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
-import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.sql.TableSqlDailyCheckpointSpec;
@@ -30,7 +30,6 @@ import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpe
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
 import ai.dqo.connectors.ProviderType;
-import ai.dqo.core.locks.UserHomeLockManagerObjectMother;
 import ai.dqo.core.notifications.NotificationService;
 import ai.dqo.core.notifications.NotificationServiceImpl;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationService;
@@ -91,8 +90,8 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         TableSpec tableSpec = this.tableWrapper.getSpec();
 
         // Table level checks
-        tableSpec.setChecks(new TableAdHocCheckCategoriesSpec());
-        tableSpec.getChecks().setStandard(new TableAdHocStandardChecksSpec());
+        tableSpec.setChecks(new TableProfilingCheckCategoriesSpec());
+        tableSpec.getChecks().setStandard(new TableProfilingStandardChecksSpec());
         tableSpec.getChecks().getStandard().setRowCount(new TableRowCountCheckSpec());
         tableSpec.getChecks().getStandard().getRowCount().setError(new MinCountRule0ParametersSpec(5L));
 
@@ -106,13 +105,13 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         // Column level checks
         ColumnSpec columnSpec = new ColumnSpec(ColumnTypeSnapshotSpec.fromType("INTEGER"));
-        ColumnAdHocCheckCategoriesSpec columnAdHocCheckCategoriesSpec = new ColumnAdHocCheckCategoriesSpec();
-        ColumnAdHocNullsChecksSpec columnAdHocNullsChecksSpec = new ColumnAdHocNullsChecksSpec();
+        ColumnProfilingCheckCategoriesSpec columnProfilingCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
+        ColumnProfilingNullsChecksSpec columnProfilingNullsChecksSpec = new ColumnProfilingNullsChecksSpec();
         ColumnNullsCountCheckSpec columnNullsCountCheckSpec = new ColumnNullsCountCheckSpec();
         columnNullsCountCheckSpec.setError(new MaxCountRule0ParametersSpec());
-        columnAdHocNullsChecksSpec.setNullsCount(columnNullsCountCheckSpec);
-        columnAdHocCheckCategoriesSpec.setNulls(columnAdHocNullsChecksSpec);
-        columnSpec.setChecks(columnAdHocCheckCategoriesSpec);
+        columnProfilingNullsChecksSpec.setNullsCount(columnNullsCountCheckSpec);
+        columnProfilingCheckCategoriesSpec.setNulls(columnProfilingNullsChecksSpec);
+        columnSpec.setChecks(columnProfilingCheckCategoriesSpec);
         tableWrapper.getSpec().getColumns().put("col1", columnSpec);
 
         // Sut
@@ -162,8 +161,8 @@ public class CheckExecutionServiceImplTests extends BaseTest {
             setConnectionName(connectionWrapper.getName());
         }};
 
-        CheckSearchFilters adHocFilters = allFilters.clone();
-        adHocFilters.setCheckType(CheckType.ADHOC);
+        CheckSearchFilters profilingFilters = allFilters.clone();
+        profilingFilters.setCheckType(CheckType.PROFILING);
 
         CheckSearchFilters checkpointFilters = allFilters.clone();
         checkpointFilters.setCheckType(CheckType.CHECKPOINT);
@@ -171,39 +170,39 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         CheckSearchFilters partitionedFilters = allFilters.clone();
         partitionedFilters.setCheckType(CheckType.PARTITIONED);
 
-        CheckExecutionSummary adHocSummary = this.sut.executeChecks(
-                this.executionContext, adHocFilters, this.progressListener, true);
+        CheckExecutionSummary profilingSummary = this.sut.executeChecks(
+                this.executionContext, profilingFilters, null, this.progressListener, true);
         CheckExecutionSummary checkpointSummary = this.sut.executeChecks(
-                this.executionContext, checkpointFilters, this.progressListener, true);
+                this.executionContext, checkpointFilters, null, this.progressListener, true);
         CheckExecutionSummary partitionedSummary = this.sut.executeChecks(
-                this.executionContext, partitionedFilters, this.progressListener, true);
+                this.executionContext, partitionedFilters, null, this.progressListener, true);
 
         CheckExecutionSummary allSummary = this.sut.executeChecks(
-                this.executionContext, allFilters, this.progressListener, true);
+                this.executionContext, allFilters, null, this.progressListener, true);
 
         Assertions.assertEquals(0, partitionedSummary.getTotalChecksExecutedCount());
-        Assertions.assertEquals(2, adHocSummary.getTotalChecksExecutedCount());
+        Assertions.assertEquals(2, profilingSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(1, checkpointSummary.getTotalChecksExecutedCount());
 
 
-        Assertions.assertEquals(1.0, adHocSummary.getValidResultsColumn().sum());
+        Assertions.assertEquals(1.0, profilingSummary.getValidResultsColumn().sum());
         Assertions.assertEquals(0.0, checkpointSummary.getValidResultsColumn().sum());
         Assertions.assertEquals(0.0, partitionedSummary.getValidResultsColumn().sum());
 
-        Assertions.assertEquals(1, adHocSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(1, profilingSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(1, checkpointSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, partitionedSummary.getErrorSeverityIssuesCount());
 
         Assertions.assertEquals(allSummary.getTotalChecksExecutedCount(),
-                adHocSummary.getTotalChecksExecutedCount() +
+                profilingSummary.getTotalChecksExecutedCount() +
                         checkpointSummary.getTotalChecksExecutedCount() +
                         partitionedSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(allSummary.getErrorSeverityIssuesCount(),
-                adHocSummary.getErrorSeverityIssuesCount() +
+                profilingSummary.getErrorSeverityIssuesCount() +
                         checkpointSummary.getErrorSeverityIssuesCount() +
                         partitionedSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(allSummary.getValidResultsColumn().sum(),
-                adHocSummary.getValidResultsColumn().sum() +
+                profilingSummary.getValidResultsColumn().sum() +
                         checkpointSummary.getValidResultsColumn().sum() +
                         partitionedSummary.getValidResultsColumn().sum());
     }

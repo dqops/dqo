@@ -28,9 +28,7 @@ import com.github.therapi.runtimejavadoc.CommentFormatter;
 import com.github.therapi.runtimejavadoc.RuntimeJavadoc;
 import org.apache.commons.lang3.StringUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Sensor documentation model factory that creates a sensor documentation.
@@ -104,6 +102,11 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
         for (ProviderSensorDefinitionWrapper providerSensor : sensorDefinition.getProviderSensors()) {
             sqlTemplates.put(providerSensor.getProvider().toString(), List.of(providerSensor.getSqlTemplate().split("\\r?\\n|\\r")));
         }
-        return sqlTemplates;
+
+        Comparator<String> comparator = String::compareTo;
+        Map<String, List<String>> sortedSqlTemplates = new TreeMap<>(comparator);
+        sortedSqlTemplates.putAll(sqlTemplates);
+
+        return sortedSqlTemplates;
     }
 }

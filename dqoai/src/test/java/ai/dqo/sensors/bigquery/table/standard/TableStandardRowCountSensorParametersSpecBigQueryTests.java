@@ -46,7 +46,7 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
     @BeforeEach
     void setUp() {
 		this.sut = new TableStandardRowCountSensorParametersSpec();
-        this.sut.setFilter("{table}.correct = 0");
+        this.sut.setFilter("{alias}.correct = 0");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -54,8 +54,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(this.sampleTableMetadata, this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(this.sampleTableMetadata, this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
@@ -67,8 +67,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test
@@ -85,8 +85,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -106,8 +106,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -168,6 +168,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -181,8 +183,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -234,7 +236,7 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
     }
 
     @Test
-    void renderSensor_whenPartitionedDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenPartitionedDailyDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.daily, "date");
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -249,6 +251,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
@@ -260,10 +264,38 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
         ), renderedTemplate);
     }
 
+    @Test
+    void renderSensor_whenPartitionedMonthlyDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersPartitioned(CheckTimeScale.monthly, "date");
+        runParameters.setDataStreams(
+                DataStreamMappingSpecObjectMother.create(
+                        DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers")));
+
+        String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
+        String target_query = """
+            SELECT
+                COUNT(*) AS actual_value,
+                analyzed_table.`strings_with_numbers` AS stream_level_1,
+                DATE_TRUNC(CAST(analyzed_table.`date` AS DATE), MONTH) AS time_period,
+                TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`date` AS DATE), MONTH)) AS time_period_utc
+            FROM `%s`.`%s`.`%s` AS analyzed_table
+            WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(DATE_TRUNC(CAST(CURRENT_DATE() AS DATE), MONTH), INTERVAL -120 MONTH)
+                  AND analyzed_table.`date` < DATE_TRUNC(CAST(CURRENT_DATE() AS DATE), MONTH)
+            GROUP BY stream_level_1, time_period, time_period_utc
+            ORDER BY stream_level_1, time_period, time_period_utc""";
+
+        Assertions.assertEquals(String.format(target_query,
+                runParameters.getConnection().getBigquery().getSourceProjectId(),
+                runParameters.getTable().getTarget().getSchemaName(),
+                runParameters.getTable().getTarget().getTableName(),
+                this.getSubstitutedFilter("analyzed_table")
+        ), renderedTemplate);
+    }
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -348,6 +380,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 

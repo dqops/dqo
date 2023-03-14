@@ -20,28 +20,30 @@ const LabelItem = ({
 }: ILabelItemProps) => {
   return (
     <tr>
-      <td className="pr-4 min-w-40 py-2">
-        <Input
-          value={label}
-          onChange={(e) => onChange(idx, e.target.value)}
-          error={!isLast && label === ''}
-        />
+      <td className="pr-4 min-w-40 py-2" colSpan={isLast ? 2 : 1}>
+        <div className={isLast ? "mr-8" : ""}>
+          <Input
+            className="focus:!ring-0 focus:!border"
+            value={label}
+            onChange={(e) => onChange(idx, e.target.value)}
+            error={!isLast && label === ''}
+          />
+        </div>
       </td>
-      <td className="px-8 min-w-20 py-2">
-        {isLast ? (
-          <IconButton size="sm">
-            <SvgIcon name="add" className="w-4" />
-          </IconButton>
-        ) : (
-          <IconButton
-            className="bg-red-500"
-            size="sm"
-            onClick={() => onRemove(idx)}
-          >
-            <SvgIcon name="delete" className="w-4" />
-          </IconButton>
-        )}
-      </td>
+      {!isLast && (
+        <td className="px-8 max-w-34 min-w-34 py-2">
+          <div className="flex justify-center">
+            <IconButton
+              color="teal"
+              size="sm"
+              onClick={() => onRemove(idx)}
+              className="!shadow-none"
+            >
+              <SvgIcon name="delete" className="w-4" />
+            </IconButton>
+          </div>
+        </td>
+      )}
     </tr>
   );
 };

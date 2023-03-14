@@ -57,25 +57,25 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
     const startDate = month ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD') : '';
     const endDate = month ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD') : '';
 
-    if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.adhoc) {
+    if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.profiling) {
       if (column) {
-        CheckResultApi.getColumnAdHocChecksResults(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
+        CheckResultApi.getColumnProfilingChecksResults(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(getCheckResult(res.data));
         });
-        SensorReadoutsApi.getColumnAdHocSensorReadouts(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
+        SensorReadoutsApi.getColumnProfilingSensorReadouts(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getColumnAdHocErrors(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
+        ErrorsApi.getColumnProfilingErrors(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       } else {
-        CheckResultApi.getTableAdHocChecksResults(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
+        CheckResultApi.getTableProfilingChecksResults(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(getCheckResult(res.data));
         });
-        SensorReadoutsApi.getTableAdHocSensorReadouts(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
+        SensorReadoutsApi.getTableProfilingSensorReadouts(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setSensorReadouts(res.data);
         });
-        ErrorsApi.getTableAdHocErrors(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
+        ErrorsApi.getTableProfilingErrors(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setErrors(res.data);
         });
       }
@@ -137,7 +137,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
   }
 
   return (
-    <div className="my-4" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 80}px` }}>
+    <div className="my-4" style={{ maxWidth: `calc(100vw - ${sidebarWidth + 85}px` }}>
       <div className="bg-white px-4 py-6 border border-gray-200 relative">
         <IconButton
           className="absolute right-4 top-4 bg-gray-50 hover:bg-gray-100 text-gray-700"

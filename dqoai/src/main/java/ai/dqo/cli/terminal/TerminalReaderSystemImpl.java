@@ -20,6 +20,9 @@ import java.io.Console;
 import java.time.Duration;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
 
@@ -113,6 +116,16 @@ public class TerminalReaderSystemImpl extends TerminalReaderAbstract {
      */
     @Override
     public boolean waitForExitWithTimeLimit(String startMessage, Duration waitDuration) {
-        return false;
+        this.getWriter().writeLine(startMessage);
+        this.getWriter().writeLine("Press any key to stop the application.");
+
+        CompletableFuture<Boolean> booleanCompletableFuture = this.waitForConsoleInput(waitDuration.plusSeconds(10L));
+        try {
+            Boolean wasExitedByUser = booleanCompletableFuture.get(waitDuration.toMillis(), TimeUnit.MILLISECONDS);
+            return wasExitedByUser;
+        }
+        catch (InterruptedException | ExecutionException | TimeoutException e) {
+            return false;
+        }
     }
 }

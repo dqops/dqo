@@ -55,10 +55,10 @@ public class BigQueryTableSqlConditionPassedPercentSensorParametersSpecIntegrati
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is not null");
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        this.sut.setSqlCondition("{alias}.id is not null");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -71,7 +71,7 @@ public class BigQueryTableSqlConditionPassedPercentSensorParametersSpecIntegrati
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is not null");
+        this.sut.setSqlCondition("{alias}.id is not null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
@@ -86,7 +86,7 @@ public class BigQueryTableSqlConditionPassedPercentSensorParametersSpecIntegrati
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        this.sut.setSqlCondition("{table} is not null");
+        this.sut.setSqlCondition("{alias}.id is not null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
@@ -101,7 +101,7 @@ public class BigQueryTableSqlConditionPassedPercentSensorParametersSpecIntegrati
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
-        this.sut.setSqlCondition("{table} is not null");
+        this.sut.setSqlCondition("{alias}.id is not null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date2");
@@ -116,7 +116,7 @@ public class BigQueryTableSqlConditionPassedPercentSensorParametersSpecIntegrati
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
-        this.sut.setSqlCondition("{table} is not null");
+        this.sut.setSqlCondition("{alias}.id is not null");
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date2");

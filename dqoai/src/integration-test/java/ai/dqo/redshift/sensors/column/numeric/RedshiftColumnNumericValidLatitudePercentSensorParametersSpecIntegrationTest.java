@@ -55,8 +55,8 @@ public class RedshiftColumnNumericValidLatitudePercentSensorParametersSpecIntegr
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "gcs", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -103,7 +103,7 @@ public class RedshiftColumnNumericValidLatitudePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(4, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class RedshiftColumnNumericValidLatitudePercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(4, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(40.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 }

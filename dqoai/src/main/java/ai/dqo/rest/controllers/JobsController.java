@@ -106,7 +106,7 @@ public class JobsController {
 
     /**
      * Starts a new background job that will run selected data quality checks.
-     * @param checkSearchFilters Data quality checks filters.
+     * @param runChecksParameters Run checks parameters with a check filter and an optional time range.
      * @return Job summary response with the identity of the started job.
      */
     @PostMapping("/runchecks")
@@ -118,15 +118,14 @@ public class JobsController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<DqoQueueJobId>> runChecks(
-            @ApiParam("Data quality checks filter") @RequestBody CheckSearchFilters checkSearchFilters) {
+            @ApiParam("Data quality check run configuration (target checks and an optional time range)")
+            @RequestBody RunChecksQueueJobParameters runChecksParameters) {
         RunChecksQueueJob runChecksJob = this.dqoQueueJobFactory.createRunChecksJob();
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(
                 CheckRunReportingMode.silent, false);
-        RunChecksQueueJobParameters runChecksQueueJobParameters = new RunChecksQueueJobParameters(
-                checkSearchFilters,
-                progressListener,
-                false);
-        runChecksJob.setParameters(runChecksQueueJobParameters);
+        runChecksParameters.setProgressListener(progressListener);
+
+        runChecksJob.setParameters(runChecksParameters);
 
         PushJobResult<CheckExecutionSummary> pushJobResult = this.dqoJobQueue.pushJob(runChecksJob);
         return new ResponseEntity<>(Mono.just(pushJobResult.getJobId()), HttpStatus.CREATED); // 201

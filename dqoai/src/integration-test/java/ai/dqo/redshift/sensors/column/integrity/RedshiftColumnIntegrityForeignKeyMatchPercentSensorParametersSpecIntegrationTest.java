@@ -40,15 +40,14 @@ public class RedshiftColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIn
     private UserHomeContext userHomeContext;
     private ColumnIntegrityForeignKeyMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
-    
-    private SampleTableMetadataForeign sampleTableMetadataForeign;
+    private SampleTableMetadata sampleTableMetadataForeign;
 
     @BeforeEach
     void setUp() {
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_right_table, ProviderType.redshift);
-        this.sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.bigquery);
-        IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
-        IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
+        this.sampleTableMetadataForeign = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.redshift);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
+        IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataForeign);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec();
         this.checkSpec = new ColumnIntegrityForeignKeyMatchPercentCheckSpec();
@@ -56,11 +55,11 @@ public class RedshiftColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -116,7 +115,7 @@ public class RedshiftColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -132,6 +131,6 @@ public class RedshiftColumnIntegrityForeignKeyMatchPercentSensorParametersSpecIn
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 }

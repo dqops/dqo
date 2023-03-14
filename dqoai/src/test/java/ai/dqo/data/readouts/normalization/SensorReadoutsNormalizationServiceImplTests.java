@@ -17,7 +17,7 @@ package ai.dqo.data.readouts.normalization;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
@@ -25,6 +25,7 @@ import ai.dqo.data.normalization.CommonTableNormalizationServiceImpl;
 import ai.dqo.data.readouts.factory.SensorReadoutsTableFactoryImpl;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -70,13 +71,14 @@ public class SensorReadoutsNormalizationServiceImplTests extends BaseTest {
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
 		checkSpec = new TableRowCountCheckSpec();
-        tableSpec.getChecks().setStandard(new TableAdHocStandardChecksSpec());
+        tableSpec.getChecks().setStandard(new TableProfilingStandardChecksSpec());
 		tableSpec.getChecks().getStandard().setRowCount(checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,
-                CheckType.ADHOC,
+                CheckType.PROFILING,
                 null, // time series
+                new TimeWindowFilterParameters(),
                 null, // data stream mapping
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));

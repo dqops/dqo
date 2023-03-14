@@ -18,7 +18,7 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
 import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
 import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
@@ -37,6 +37,7 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rest.models.metadata.TablePartitioningModel;
 import ai.dqo.services.check.mapping.models.UIAllChecksModel;
 import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
@@ -177,7 +178,7 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the basic table details given a connection name and a table names.
+     * Retrieves the basic table details given a connection name and a table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -214,6 +215,46 @@ public class TablesController {
         TableBasicModel tableBasicModel = TableBasicModel.fromTableSpecification(connectionWrapper.getName(), tableSpec);
 
         return new ResponseEntity<>(Mono.just(tableBasicModel), HttpStatus.OK); // 200
+    }
+
+    /**
+     * Retrieves the table partitioning details given a connection name and a table name.
+     * @param connectionName Connection name.
+     * @param schemaName     Schema name.
+     * @param tableName      Table name.
+     * @return Table partitioning information for the requested table.
+     */
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioning")
+    @ApiOperation(value = "getTablePartitioning", notes = "Return the table partitioning information", response = TablePartitioningModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Table partitioning information returned", response = TablePartitioningModel.class),
+            @ApiResponse(code = 404, message = "Connection or table not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<TablePartitioningModel>> getTablePartitioning(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableWrapper tableWrapper = connectionWrapper.getTables().getByObjectName(
+                new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
+        }
+
+        TableSpec tableSpec = tableWrapper.getSpec();
+        TablePartitioningModel tablePartitioningModel = TablePartitioningModel.fromTableSpecification(connectionWrapper.getName(), tableSpec);
+
+        return new ResponseEntity<>(Mono.just(tablePartitioningModel), HttpStatus.OK); // 200
     }
 
     /**
@@ -392,14 +433,14 @@ public class TablesController {
      * @return Data quality checks on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks")
-    @ApiOperation(value = "getTableAdHocChecks", notes = "Return the configuration of table level data quality checks on a table", response = TableAdHocCheckCategoriesSpec.class)
+    @ApiOperation(value = "getTableProfilingChecks", notes = "Return the configuration of table level data quality checks on a table", response = TableProfilingCheckCategoriesSpec.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = TableAdHocCheckCategoriesSpec.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality checks on a table returned", response = TableProfilingCheckCategoriesSpec.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<TableAdHocCheckCategoriesSpec>> getTableAdHocChecks(
+    public ResponseEntity<Mono<TableProfilingCheckCategoriesSpec>> getTableProfilingChecks(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -423,7 +464,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        TableAdHocCheckCategoriesSpec checks = tableSpec.getChecks();
+        TableProfilingCheckCategoriesSpec checks = tableSpec.getChecks();
         return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
     }
 
@@ -600,21 +641,21 @@ public class TablesController {
     }
 
     /**
-     * Retrieves the configuration of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name.
+     * Retrieves the configuration of data quality profiling checks as a UI friendly model on a table given a connection name and a table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return UI friendly data quality ad-hoc check configuration list on a requested table.
+     * @return UI friendly data quality profiling check configuration list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
-    @ApiOperation(value = "getTableAdHocChecksUI", notes = "Return a UI friendly model of configurations for all table level data quality ad-hoc checks on a table", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTableProfilingChecksUI", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality ad-hoc checks on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality profiling checks on a table returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UIAllChecksModel>> getTableAdHocChecksUI(
+    public ResponseEntity<Mono<UIAllChecksModel>> getTableProfilingChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -638,7 +679,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.ADHOC, null);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
@@ -780,21 +821,21 @@ public class TablesController {
 
 
     /**
-     * Retrieves a simplistic list of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name.
+     * Retrieves a simplistic list of data quality profiling checks as a UI friendly model on a table given a connection name and a table name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
-     * @return Simplistic UI friendly data quality ad-hoc checks list on a requested table.
+     * @return Simplistic UI friendly data quality profiling checks list on a requested table.
      */
     @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui/basic")
-    @ApiOperation(value = "getTableAdHocChecksUIBasic", notes = "Return a simplistic UI friendly model of all table level data quality ad-hoc checks on a table", response = UIAllChecksBasicModel.class)
+    @ApiOperation(value = "getTableProfilingChecksUIBasic", notes = "Return a simplistic UI friendly model of all table level data quality profiling checks on a table", response = UIAllChecksBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "List of table level data quality ad-hoc checks on a table returned", response = UIAllChecksBasicModel.class),
+            @ApiResponse(code = 200, message = "List of table level data quality profiling checks on a table returned", response = UIAllChecksBasicModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UIAllChecksBasicModel>> getTableAdHocChecksUIBasic(
+    public ResponseEntity<Mono<UIAllChecksBasicModel>> getTableProfilingChecksUIBasic(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName) {
@@ -818,8 +859,11 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.ADHOC, null);
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+                checks,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
 
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
@@ -866,7 +910,10 @@ public class TablesController {
         }
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.CHECKPOINT, timeScale);
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+                checks,
+                new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
 
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
@@ -913,29 +960,31 @@ public class TablesController {
         }
 
         AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
-        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(checks);
+        UIAllChecksBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
+                checks, new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
+                connectionWrapper.getSpec().getProviderType());
 
         return new ResponseEntity<>(Mono.just(checksUiBasicModel), HttpStatus.OK); // 200
     }
 
     /**
-     * Retrieves the configuration of data quality ad-hoc checks as a UI friendly model on a table given a connection name and a table name, filtered by category and check name.
+     * Retrieves the configuration of data quality profiling checks as a UI friendly model on a table given a connection name and a table name, filtered by category and check name.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param checkCategory  Check category.
      * @param checkName      Check name.
-     * @return UI friendly data quality ad-hoc check configuration list on a requested table, filtered by category and check name.
+     * @return UI friendly data quality profiling check configuration list on a requested table, filtered by category and check name.
      */
     @GetMapping(value = "/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui/filter/{checkCategory}/{checkName}")
-    @ApiOperation(value = "getTableAdHocChecksUIFilter", notes = "Return a UI friendly model of configurations for all table level data quality ad-hoc checks on a table passing a filter", response = UIAllChecksModel.class)
+    @ApiOperation(value = "getTableProfilingChecksUIFilter", notes = "Return a UI friendly model of configurations for all table level data quality profiling checks on a table passing a filter", response = UIAllChecksModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Configuration of table level data quality ad-hoc checks on a table returned", response = UIAllChecksModel.class),
+            @ApiResponse(code = 200, message = "Configuration of table level data quality profiling checks on a table returned", response = UIAllChecksModel.class),
             @ApiResponse(code = 404, message = "Connection or table not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<UIAllChecksModel>> getTableAdHocChecksUIFilter(
+    public ResponseEntity<Mono<UIAllChecksModel>> getTableProfilingChecksUIFilter(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -961,7 +1010,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.ADHOC, null);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
@@ -1294,6 +1343,65 @@ public class TablesController {
     }
 
     /**
+     * Updates the partitioning fields of an existing table.
+     * @param connectionName  Connection name.
+     * @param schemaName      Schema name.
+     * @param tableName       Table name.
+     * @param tablePartitioningModel Table partitioning model with the new values.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/partitioning")
+    @ApiOperation(value = "updateTablePartitioning", notes = "Updates the table partitioning configuration of an existing table.")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Table partitioning successfully updated"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
+            @ApiResponse(code = 404, message = "Table not found"),
+            @ApiResponse(code = 406, message = "Rejected, missing required fields"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> updateTablePartitioning(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Schema name") @PathVariable String schemaName,
+            @ApiParam("Table name") @PathVariable String tableName,
+            @ApiParam("Table partitioning model with the updated settings") @RequestBody TablePartitioningModel tablePartitioningModel) {
+        if (Strings.isNullOrEmpty(connectionName) ||
+                Strings.isNullOrEmpty(schemaName) ||
+                Strings.isNullOrEmpty(tableName)) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
+        }
+
+        if (tablePartitioningModel.getTarget() == null ||
+                !Objects.equals(schemaName, tablePartitioningModel.getTarget().getSchemaName()) ||
+                !Objects.equals(tableName, tablePartitioningModel.getTarget().getTableName())) {
+            return new ResponseEntity<>(Mono.justOrEmpty("Target schema and table name in the table model must match the schema and table name in the url"),
+                    HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        TableList tables = connectionWrapper.getTables();
+        TableWrapper tableWrapper = tables.getByObjectName(new PhysicalTableName(schemaName, tableName), true);
+        if (tableWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
+        }
+
+        // TODO: validate the tableSpec
+        TableSpec tableSpec = tableWrapper.getSpec();
+        tablePartitioningModel.copyToTableSpecification(tableSpec);
+        userHomeContext.flush();
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
      * Updates the default (first) data streams mapping of an existing table.
      * @param connectionName         Connection name.
      * @param schemaName             Schema name.
@@ -1569,29 +1677,29 @@ public class TablesController {
     }
 
     /**
-     * Updates the configuration of table level data quality ad-hoc checks of an existing table.
+     * Updates the configuration of table level data quality profiling checks of an existing table.
      * @param connectionName                Connection name.
      * @param schemaName                    Schema name.
      * @param tableName                     Table name.
-     * @param tableAdHocCheckCategoriesSpec New configuration of the data quality ad-hoc checks on the table level.
+     * @param tableProfilingCheckCategoriesSpec New configuration of the data quality profiling checks on the table level.
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks")
-    @ApiOperation(value = "updateTableAdHocChecks", notes = "Updates the list of table level data quality ad-hoc checks on an existing table.")
+    @ApiOperation(value = "updateTableProfilingChecks", notes = "Updates the list of table level data quality profiling checks on an existing table.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality ad-hoc checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableAdHocChecks(
+    public ResponseEntity<Mono<?>> updateTableProfilingChecks(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("Configuration of table level data quality ad-hoc checks to store or an empty object to remove all data quality ad-hoc checks on the table level (column level ad-hoc checks are preserved).")
-            @RequestBody Optional<TableAdHocCheckCategoriesSpec> tableAdHocCheckCategoriesSpec) {
+            @ApiParam("Configuration of table level data quality profiling checks to store or an empty object to remove all data quality profiling checks on the table level (column level profiling checks are preserved).")
+            @RequestBody Optional<TableProfilingCheckCategoriesSpec> tableProfilingCheckCategoriesSpec) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
@@ -1600,10 +1708,10 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    if (tableAdHocCheckCategoriesSpec.isPresent()) {
-                        spec.setTableCheckRootContainer(tableAdHocCheckCategoriesSpec.get());
+                    if (tableProfilingCheckCategoriesSpec.isPresent()) {
+                        spec.setTableCheckRootContainer(tableProfilingCheckCategoriesSpec.get());
                     } else {
-                        spec.setChecks(new TableAdHocCheckCategoriesSpec()); // it is never empty...
+                        spec.setChecks(new TableProfilingCheckCategoriesSpec()); // it is never empty...
                     }
                 },
                 connectionName,
@@ -1865,28 +1973,28 @@ public class TablesController {
     }
 
     /**
-     * Updates the data quality ad-hoc check specification on an existing table from a check UI model with a patch of changes.
+     * Updates the data quality profiling check specification on an existing table from a check UI model with a patch of changes.
      * @param connectionName           Connection name.
      * @param schemaName               Schema name.
      * @param tableName                Table name.
-     * @param uiAllChecksModel         New configuration of the data quality checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those ad-hoc checks that are present in the UI model are updated, the others are preserved without any changes.
+     * @param uiAllChecksModel         New configuration of the data quality checks on the table level provided as a UI model. The UI model may contain only a subset of data quality dimensions or checks. Only those profiling checks that are present in the UI model are updated, the others are preserved without any changes.
      * @return Empty response.
      */
     @PutMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checks/ui")
-    @ApiOperation(value = "updateTableAdHocChecksUI", notes = "Updates the data quality ad-hoc checks from an UI model that contains a patch with changes.")
+    @ApiOperation(value = "updateTableProfilingChecksUI", notes = "Updates the data quality profiling checks from an UI model that contains a patch with changes.")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Table level data quality ad-hoc checks successfully updated"),
+            @ApiResponse(code = 204, message = "Table level data quality profiling checks successfully updated"),
             @ApiResponse(code = 400, message = "Bad request, adjust before retrying", response = String.class),
             @ApiResponse(code = 404, message = "Table not found"),
             @ApiResponse(code = 406, message = "Rejected, missing required fields"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateTableAdHocChecksUI(
+    public ResponseEntity<Mono<?>> updateTableProfilingChecksUI(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
-            @ApiParam("UI model with the changes to be applied to the data quality ad-hoc checks configuration.")
+            @ApiParam("UI model with the changes to be applied to the data quality profiling checks configuration.")
             @RequestBody Optional<UIAllChecksModel> uiAllChecksModel) {
         if (Strings.isNullOrEmpty(connectionName) ||
                 Strings.isNullOrEmpty(schemaName) ||

@@ -3,11 +3,10 @@ package ai.dqo.utils.docs.sensors;
 import lombok.Data;
 
 import java.util.List;
-import java.util.Map;
 
 /**
- * Sensor groups model. Contains the sensor target ('table' or 'column') and map contain all information
- * about the sensor grouped by sensor category.
+ * Sensor groups model. Contains the sensor target ('table' or 'column'), sensor category and list contain
+ * all information about the grouped sensors.
  */
 @Data
 public class SensorGroupedDocumentationModel {
@@ -17,7 +16,12 @@ public class SensorGroupedDocumentationModel {
     private String target;
 
     /**
-     * Map contain all information about the sensors grouped by sensor category (eg. bool, completeness etc.).
+     * Sensor category.
      */
-    private Map<String, List<SensorDocumentationModel>> groupedSensors;
+    private String category;
+
+    /**
+     * List contain all information about the grouped sensors.
+     */
+    List<SensorDocumentationModel> collectedSensors;
 }

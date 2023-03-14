@@ -35,7 +35,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "set", description = "Set api key")
+@CommandLine.Command(name = "set", header = "Set API key", description = "Set the API key used for accessing external services. This key is used to authenticate requests to the service.")
 public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;

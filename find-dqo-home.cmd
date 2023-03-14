@@ -24,6 +24,10 @@ if "x%DQO_USER_HOME%"=="x" (
     set DQO_USER_HOME=.
 )
 
+if "x%DQO_JAVA_OPTS%"=="x" (
+    set DQO_JAVA_OPTS=-Xmx1024m
+)
+
 if not exist "%DQO_USER_HOME%" (
     mkdir "%DQO_USER_HOME%"
 )

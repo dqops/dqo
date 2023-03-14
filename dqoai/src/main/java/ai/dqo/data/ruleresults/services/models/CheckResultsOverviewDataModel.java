@@ -23,7 +23,7 @@ import java.util.Locale;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class CheckResultsOverviewDataModel {
-    private static final DateTimeFormatter MONTH_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM X", Locale.ENGLISH);
+    private static final DateTimeFormatter MONTH_FORMATTER = DateTimeFormatter.ofPattern("yyyy-MM X", Locale.ROOT);
 
     @JsonPropertyDescription("Check hash.")
     private long checkHash;

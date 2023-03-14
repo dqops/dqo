@@ -46,7 +46,7 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
     @BeforeEach
     void setUp() {
         this.sut = new ColumnNullsNotNullsPercentSensorParametersSpec();
-        this.sut.setFilter("{table}.`id` <> 4");
+        this.sut.setFilter("{alias}.`id` <> 4");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -54,8 +54,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "date3", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "date3", this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
@@ -71,8 +71,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test
@@ -89,8 +89,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -114,8 +114,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -187,6 +187,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                  AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -201,8 +203,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -280,6 +282,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                  AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
@@ -294,8 +298,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesTwoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesTwoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -385,6 +389,8 @@ public class ColumnNullsNotNullsPercentSensorParametersSpecBigQueryTests extends
                 TIMESTAMP(CAST(analyzed_table.`date1` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date1` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                  AND analyzed_table.`date1` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc""";
 

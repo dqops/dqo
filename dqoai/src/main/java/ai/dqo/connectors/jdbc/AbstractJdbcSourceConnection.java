@@ -117,16 +117,13 @@ public abstract class AbstractJdbcSourceConnection extends AbstractSqlSourceConn
         try {
             try (Statement statement = this.jdbcConnection.createStatement()) {
                 try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
-                    SqlResultSetReader.mapJdbcTypeToColumnType(-155, ColumnType.INSTANT);
-                    try (SqlServerResultSet sqlServerResultSet = new SqlServerResultSet(results)) {
-                        Table resultTable = Table.read().db(sqlServerResultSet, "query_result");
-                        for (Column<?> column : resultTable.columns()) {
-                            if (column.name() != null) {
-                                column.setName(column.name().toLowerCase(Locale.ENGLISH));
-                            }
+                    Table resultTable = Table.read().db(results, "query_result");
+                    for (Column<?> column : resultTable.columns()) {
+                        if (column.name() != null) {
+                            column.setName(column.name().toLowerCase(Locale.ROOT));
                         }
-                        return resultTable;
                     }
+                    return resultTable;
                 }
             }
         }

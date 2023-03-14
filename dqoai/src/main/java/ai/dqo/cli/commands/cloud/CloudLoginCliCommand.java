@@ -29,7 +29,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "login", description = "Logs in or registers an account at DQO Cloud")
+@CommandLine.Command(name = "login", header = "Log in or register an account at the DQO Cloud", description = "Allow user to provide login credentials if the user already has an account.")
 public class CloudLoginCliCommand extends BaseCommand implements ICommand {
     private CloudLoginService cloudLoginService;
 

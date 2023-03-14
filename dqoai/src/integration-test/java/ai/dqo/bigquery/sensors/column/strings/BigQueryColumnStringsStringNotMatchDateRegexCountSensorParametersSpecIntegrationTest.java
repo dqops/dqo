@@ -47,7 +47,7 @@ public class BigQueryColumnStringsStringNotMatchDateRegexCountSensorParametersSp
 
     @BeforeEach
     void setUp() {
-		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
+		this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
 		this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.sut = new ColumnStringsStringNotMatchDateRegexCountSensorParametersSpec();
@@ -56,10 +56,10 @@ public class BigQueryColumnStringsStringNotMatchDateRegexCountSensorParametersSp
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
-                sampleTableMetadata, "date", this.checkSpec);
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
+                sampleTableMetadata, "date_iso", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -73,7 +73,7 @@ public class BigQueryColumnStringsStringNotMatchDateRegexCountSensorParametersSp
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -87,7 +87,7 @@ public class BigQueryColumnStringsStringNotMatchDateRegexCountSensorParametersSp
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
@@ -101,12 +101,12 @@ public class BigQueryColumnStringsStringNotMatchDateRegexCountSensorParametersSp
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(10, resultTable.rowCount());
+        Assertions.assertEquals(25, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
@@ -115,12 +115,12 @@ public class BigQueryColumnStringsStringNotMatchDateRegexCountSensorParametersSp
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         this.sut.setDateFormats(StringsBuiltInDateFormats.ISO8601);
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "date", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "date_iso", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(2, resultTable.rowCount());
+        Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
         Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }

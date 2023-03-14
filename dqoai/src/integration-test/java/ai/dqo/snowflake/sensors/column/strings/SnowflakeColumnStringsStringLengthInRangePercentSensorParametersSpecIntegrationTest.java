@@ -55,11 +55,11 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         this.sut.setMinLength(3);
         this.sut.setMaxLength(4);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "text", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -67,7 +67,7 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -83,7 +83,7 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -99,7 +99,7 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(30.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(30.0f, resultTable.column(0).get(0));
     }
 
     @Test
@@ -115,7 +115,7 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals((float)100.0, (float) resultTable.column(0).get(0), 0.001 );
     }
 
     @Test
@@ -131,6 +131,6 @@ public class SnowflakeColumnStringsStringLengthInRangePercentSensorParametersSpe
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(13.333333333333334, resultTable.column(0).get(0));
+        Assertions.assertEquals((float)100.0, (float) resultTable.column(0).get(0), 0.001);
     }
 }

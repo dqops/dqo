@@ -46,15 +46,15 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
     @BeforeEach
     void setUp() {
 		this.sut = new TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpec();
-        this.sut.setFilter("{table}.correct = 0");
+        this.sut.setFilter("{alias}.correct = 0");
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_timeliness_sensors, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.checkSpec = new TableDaysSinceMostRecentIngestionCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(this.sampleTableMetadata, this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(this.sampleTableMetadata, this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
@@ -66,8 +66,8 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     private String getIngestionTimestampColumn() {
@@ -89,10 +89,10 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
     }
 
     @Test
-    void renderSensorWithTimestampInput_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithTimestampInput_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
         
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -116,10 +116,10 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
     }
 
     @Test
-    void renderSensorWithDateInput_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithDateInput_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_date");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -143,10 +143,10 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
     }
 
     @Test
-    void renderSensorWithDatetimeInput_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithDatetimeInput_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_datetime");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -170,10 +170,10 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
     }
 
     @Test
-    void renderSensorWithStringInput_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithStringInput_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_string");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -199,10 +199,10 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
     }
 
     @Test
-    void renderSensorWithTimestampInput_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensorWithTimestampInput_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -281,6 +281,8 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                 TIMESTAMP(CAST(analyzed_table.`earlier_datetime` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`earlier_datetime` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                  AND analyzed_table.`earlier_datetime` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -295,10 +297,10 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
 
 
     @Test
-    void renderSensorWithTimestampInput_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensorWithTimestampInput_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("later_timestamp");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -383,6 +385,8 @@ public class TableTimelinessDaysSinceMostRecentIngestionSensorParametersSpecBigQ
                 TIMESTAMP(CAST(analyzed_table.`earlier_datetime` AS DATE)) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`earlier_datetime` >= CAST(DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY) AS DATETIME)
+                  AND analyzed_table.`earlier_datetime` < CAST(CURRENT_DATE() AS DATETIME)
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 

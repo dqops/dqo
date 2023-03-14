@@ -46,7 +46,7 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecBigQueryTests
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnStringsStringWhitespaceCountSensorParametersSpec();
-        this.sut.setFilter("{table}.`correct` = 1");
+        this.sut.setFilter("{alias}.`correct` = 1");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -54,8 +54,8 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecBigQueryTests
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "length_string", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "length_string", this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
@@ -71,8 +71,8 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecBigQueryTests
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     @Test
@@ -89,8 +89,8 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecBigQueryTests
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -121,8 +121,8 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecBigQueryTests
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -213,6 +213,8 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecBigQueryTests
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -229,8 +231,8 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecBigQueryTests
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -327,6 +329,8 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecBigQueryTests
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
@@ -343,8 +347,8 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecBigQueryTests
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -459,6 +463,8 @@ public class ColumnStringsStringWhitespaceCountSensorParametersSpecBigQueryTests
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%s`.`%s`.`%s` AS analyzed_table
             WHERE %s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 

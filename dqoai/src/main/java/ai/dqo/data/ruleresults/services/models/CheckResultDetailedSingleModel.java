@@ -32,6 +32,9 @@ import java.time.LocalDateTime;
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 @Data
 public class CheckResultDetailedSingleModel {
+    @JsonPropertyDescription("Check result ID.")
+    String id;
+
     @JsonPropertyDescription("Actual value.")
     Double actualValue;
     @JsonPropertyDescription("Expected value.")

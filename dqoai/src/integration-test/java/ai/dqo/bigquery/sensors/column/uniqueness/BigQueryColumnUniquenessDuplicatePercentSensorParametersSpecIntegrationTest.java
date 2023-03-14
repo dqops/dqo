@@ -54,8 +54,8 @@ public class BigQueryColumnUniquenessDuplicatePercentSensorParametersSpecIntegra
     }
 
     @Test
-    void runSensor_whenSensorExecutedAndAllValuesAreUniqueAdHoc_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+    void runSensor_whenSensorExecutedAndAllValuesAreUniqueProfiling_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "id", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -67,8 +67,8 @@ public class BigQueryColumnUniquenessDuplicatePercentSensorParametersSpecIntegra
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "length_string", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

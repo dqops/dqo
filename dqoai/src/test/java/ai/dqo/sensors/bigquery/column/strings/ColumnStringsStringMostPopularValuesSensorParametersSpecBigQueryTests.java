@@ -57,8 +57,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "strings_with_numbers", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "strings_with_numbers", this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
@@ -91,7 +91,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -99,7 +99,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -139,7 +139,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -147,7 +147,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -282,6 +282,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()
                 GROUP BY time_period, time_period_utc, top_values
                 ORDER BY time_period, time_period_utc, total_values
                     ) top_col_values
@@ -301,7 +303,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -309,7 +311,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -450,6 +452,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()
                 GROUP BY stream_level_1, time_period, time_period_utc, top_values
                 ORDER BY stream_level_1, time_period, time_period_utc, total_values
                     ) top_col_values
@@ -469,7 +473,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -477,7 +481,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -637,6 +641,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
                     TIMESTAMP(analyzed_table.`date`) AS time_period_utc
                         FROM `%2$s`.`%3$s`.`%4$s` AS analyzed_table
                 WHERE %5$s
+                      AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                      AND analyzed_table.`date` < CURRENT_DATE()
                 GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, top_values
                 ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc, total_values
                     ) top_col_values

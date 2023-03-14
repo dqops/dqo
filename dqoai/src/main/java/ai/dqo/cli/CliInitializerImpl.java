@@ -17,14 +17,19 @@ package ai.dqo.cli;
 
 import ai.dqo.cli.commands.cloud.impl.CloudLoginService;
 import ai.dqo.cli.terminal.TerminalReader;
+import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
+import ai.dqo.rest.server.LocalUrlAddresses;
+import ai.dqo.rest.server.SwaggerConfiguration;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -43,6 +48,8 @@ public class CliInitializerImpl implements CliInitializer {
     private DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties;
     private JobSchedulerService jobSchedulerService;
     private DefaultTimeZoneProvider defaultTimeZoneProvider;
+    private TerminalWriter terminalWriter;
+    private LocalUrlAddresses localUrlAddresses;
 
     /**
      * Called by the dependency injection container to provide dependencies.
@@ -52,7 +59,9 @@ public class CliInitializerImpl implements CliInitializer {
      * @param cloudLoginService Cloud login service - used to log the user to dqo cloud.
      * @param dqoSchedulerConfigurationProperties Scheduler configuration parameters, decide if the scheduler should be started instantly.
      * @param jobSchedulerService Job scheduler service, may be started when the dqo.scheduler.start property is true.
-     * @param defaultTimeZoneProvider Default time zone provider, used to configure the defautl time zone.
+     * @param defaultTimeZoneProvider Default time zone provider, used to configure the default time zone.
+     * @param terminalWriter Terminal writer - used for displaying additional handy information during the init process.
+     * @param localUrlAddresses Local URL addresses - used to store centralized information regarding URLs.
      */
     @Autowired
     public CliInitializerImpl(LocalUserHomeCreator localUserHomeCreator,
@@ -61,7 +70,9 @@ public class CliInitializerImpl implements CliInitializer {
                               CloudLoginService cloudLoginService,
                               DqoSchedulerConfigurationProperties dqoSchedulerConfigurationProperties,
                               JobSchedulerService jobSchedulerService,
-                              DefaultTimeZoneProvider defaultTimeZoneProvider) {
+                              DefaultTimeZoneProvider defaultTimeZoneProvider,
+                              TerminalWriter terminalWriter,
+                              LocalUrlAddresses localUrlAddresses) {
         this.localUserHomeCreator = localUserHomeCreator;
         this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
         this.terminalReader = terminalReader;
@@ -69,6 +80,42 @@ public class CliInitializerImpl implements CliInitializer {
         this.dqoSchedulerConfigurationProperties = dqoSchedulerConfigurationProperties;
         this.jobSchedulerService = jobSchedulerService;
         this.defaultTimeZoneProvider = defaultTimeZoneProvider;
+        this.terminalWriter = terminalWriter;
+        this.localUrlAddresses = localUrlAddresses;
+    }
+
+    /**
+     * Attempts to log in to DQO Cloud. Retrieves the ApiKey for future use.
+     * @param headless Is application running in headless mode.
+     */
+    protected void tryLoginToDqoCloud(boolean headless) {
+        try {
+            DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
+            if (apiKey != null) {
+                return; // api key is provided somehow (by an environment variable or in the local settings)
+            }
+        } catch (Exception ex) {
+            System.err.println("Cannot retrieve the API Key, the key is probably invalid: " + ex.getMessage());
+//            ex.printStackTrace(System.err);
+        }
+
+        if (headless) {
+            return; // we don't have the api key, and we can't ask for it, some commands will simply fail
+        }
+
+        if (!this.terminalReader.promptBoolean("Log in to DQO Cloud?", true)) {
+            return;
+        }
+
+        this.cloudLoginService.logInToDqoCloud();
+    }
+
+    protected void displayUiLinks() {
+        String dqoUiHome = this.localUrlAddresses.getDqoUiUrl();
+        String swaggerUi = this.localUrlAddresses.getSwaggerUiUrl();
+        this.terminalWriter.writeLine("Press CTRL and click the link to open it in the browser:");
+        this.terminalWriter.writeUrl(dqoUiHome, "- DQO.ai User Interface Console (" + dqoUiHome + ")\n");
+        this.terminalWriter.writeUrl(swaggerUi, "- DQO.ai API Reference (" + swaggerUi + ")\n");
     }
 
     /**
@@ -82,25 +129,7 @@ public class CliInitializerImpl implements CliInitializer {
         this.defaultTimeZoneProvider.invalidate();
 
         try {
-            try {
-                DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
-                if (apiKey != null) {
-                    return; // api key is provided somehow (by an environment variable or in the local settings)
-                }
-            } catch (Exception ex) {
-                System.err.println("Cannot retrieve the API Key, the key is probably invalid: " + ex.getMessage());
-//            ex.printStackTrace(System.err);
-            }
-
-            if (isHeadless) {
-                return; // we don't have the api key, and we can't ask for it, some commands will simply fail
-            }
-
-            if (!this.terminalReader.promptBoolean("Log in to DQO Cloud?", true)) {
-                return;
-            }
-
-            this.cloudLoginService.logInToDqoCloud();
+            this.tryLoginToDqoCloud(isHeadless);
         }
         finally {
             if (this.dqoSchedulerConfigurationProperties.getStart() != null &&
@@ -109,6 +138,10 @@ public class CliInitializerImpl implements CliInitializer {
                         this.dqoSchedulerConfigurationProperties.getSynchronizationMode(),
                         this.dqoSchedulerConfigurationProperties.getCheckRunMode());
                 this.jobSchedulerService.triggerMetadataSynchronization();
+            }
+
+            if (CliApplication.isRequiredWebServer()) {
+                this.displayUiLinks();
             }
         }
     }

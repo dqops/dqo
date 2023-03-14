@@ -42,6 +42,9 @@ import ai.dqo.utils.docs.sensors.SensorDocumentationGenerator;
 import ai.dqo.utils.docs.sensors.SensorDocumentationGeneratorImpl;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactory;
 import ai.dqo.utils.docs.sensors.SensorDocumentationModelFactoryImpl;
+import ai.dqo.utils.docs.yaml.YamlDocumentationGenerator;
+import ai.dqo.utils.docs.yaml.YamlDocumentationGeneratorImpl;
+import ai.dqo.utils.docs.yaml.YamlDocumentationModelFactoryImpl;
 import ai.dqo.utils.python.PythonCallerServiceImpl;
 import ai.dqo.utils.python.PythonVirtualEnvServiceImpl;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
@@ -79,6 +82,7 @@ public class GenerateDocumentationPostProcessor {
             generateDocumentationForRules(projectDir, dqoHomeContext);
             generateDocumentationForCliCommands(projectDir);
             generateDocumentationForChecks(projectDir, dqoHomeContext);
+            generateDocumentationForYaml(projectDir);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -156,14 +160,14 @@ public class GenerateDocumentationPostProcessor {
      * @param projectRoot Path to the project root.
      */
     public static void generateDocumentationForCliCommands(Path projectRoot) {
-        Path cliDocPath = projectRoot.resolve("../docs/reference/command_line_interface").toAbsolutePath().normalize();
+        Path cliDocPath = projectRoot.resolve("../docs/command-line-interface").toAbsolutePath().normalize();
         DocumentationFolder currentCliDocFiles = DocumentationFolderFactory.loadCurrentFiles(cliDocPath);
         CliCommandDocumentationGenerator cliCommandDocumentationGenerator = new CliCommandDocumentationGeneratorImpl(new CliCommandDocumentationModelFactoryImpl());
 
         DocumentationFolder renderedDocumentation = cliCommandDocumentationGenerator.generateDocumentationForCliCommands(projectRoot);
         renderedDocumentation.writeModifiedFiles(currentCliDocFiles);
 
-        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
         MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY",
@@ -172,7 +176,7 @@ public class GenerateDocumentationPostProcessor {
 
 
     public static void generateDocumentationForChecks(Path projectRoot, DqoHomeContext dqoHomeContext) {
-        Path checksDocPath = projectRoot.resolve("../docs/reference/checks").toAbsolutePath().normalize();
+        Path checksDocPath = projectRoot.resolve("../docs/checks").toAbsolutePath().normalize();
         DocumentationFolder currentCheckDocFiles = DocumentationFolderFactory.loadCurrentFiles(checksDocPath);
         CheckDocumentationModelFactory checkDocumentationModelFactory = createCheckDocumentationModelFactory(projectRoot, dqoHomeContext);
         CheckDocumentationGenerator checkDocumentationGenerator = new CheckDocumentationGeneratorImpl(checkDocumentationModelFactory);
@@ -180,7 +184,7 @@ public class GenerateDocumentationPostProcessor {
         DocumentationFolder renderedDocumentation = checkDocumentationGenerator.renderCheckDocumentation(projectRoot);
         renderedDocumentation.writeModifiedFiles(currentCheckDocFiles);
 
-        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(2);
         MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
                 renderedIndexYaml,
                 "########## INCLUDE CHECK REFERENCE - DO NOT MODIFY MANUALLY",
@@ -217,5 +221,24 @@ public class GenerateDocumentationPostProcessor {
                 new YamlSerializerImpl(configurationProperties),
                 new JinjaTemplateRenderServiceImpl(pythonCallerService, pythonConfigurationProperties));
         return checkDocumentationModelFactory;
+    }
+
+    /**
+     * Generates documentation for yaml classes.
+     * @param projectRoot Path to the project root.
+     */
+    public static void generateDocumentationForYaml(Path projectRoot) {
+        Path yamlDocPath = projectRoot.resolve("../docs/reference/yaml").toAbsolutePath().normalize();
+        DocumentationFolder currentYamlDocFiles = DocumentationFolderFactory.loadCurrentFiles(yamlDocPath);
+        YamlDocumentationGenerator yamlDocumentationGenerator = new YamlDocumentationGeneratorImpl(new YamlDocumentationModelFactoryImpl());
+
+        DocumentationFolder renderedDocumentation = yamlDocumentationGenerator.renderYamlDocumentation(projectRoot);
+        renderedDocumentation.writeModifiedFiles(currentYamlDocFiles);
+
+        List<String> renderedIndexYaml = renderedDocumentation.generateMkDocsNavigation(4);
+        MkDocsIndexReplaceUtility.replaceContentLines(projectRoot.resolve("../mkdocs.yml"),
+                renderedIndexYaml,
+                "########## INCLUDE YAML REFERENCE - DO NOT MODIFY MANUALLY",
+                "########## END INCLUDE YAML REFERENCE");
     }
 }

@@ -55,10 +55,10 @@ public class PostgresqlColumnMaxValueBelowMinValueCountSensorParametersSpecInteg
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         this.sut.setMinValue(16);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "value", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -111,7 +111,7 @@ public class PostgresqlColumnMaxValueBelowMinValueCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -126,6 +126,6 @@ public class PostgresqlColumnMaxValueBelowMinValueCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 }

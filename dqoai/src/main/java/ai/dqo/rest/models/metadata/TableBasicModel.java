@@ -19,16 +19,14 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
-import ai.dqo.metadata.sources.TableOwnerSpec;
-import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.metadata.sources.TableTargetSpec;
-import ai.dqo.metadata.sources.TimestampColumnsSpec;
+import ai.dqo.metadata.sources.*;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
+import org.apache.http.annotation.Obsolete;
 
 /**
  * Table basic model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
@@ -48,6 +46,7 @@ public class TableBasicModel {
     private TableTargetSpec target;
 
     @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
+    @Deprecated
     private TimestampColumnsSpec timestampColumns;
 
     @JsonPropertyDescription("Disables all data quality checks on the table. Data quality checks will not be executed.")
@@ -71,13 +70,13 @@ public class TableBasicModel {
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean hasAnyConfiguredProfilingChecks;
 
-    @JsonPropertyDescription("True when the table has any whole table checks configured.")
+    @JsonPropertyDescription("True when the table has any recurring checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean hasAnyConfiguredWholeTableChecks;
+    private boolean hasAnyConfiguredRecurringChecks;
 
-    @JsonPropertyDescription("True when the table has any time period checks configured.")
+    @JsonPropertyDescription("True when the table has any partition checks configured.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
-    private boolean hasAnyConfiguredTimePeriodChecks;
+    private boolean hasAnyConfiguredPartitionChecks;
 
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this table.")
     private CheckSearchFilters runChecksJobTemplate;
@@ -85,11 +84,11 @@ public class TableBasicModel {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run profiling checks within this table.")
     private CheckSearchFilters runProfilingChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run whole table checks within this table.")
-    private CheckSearchFilters runWholeTableChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run recurring checks within this table.")
+    private CheckSearchFilters runRecurringChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run time period partitioned checks within this table.")
-    private CheckSearchFilters runTimePeriodChecksJobTemplate;
+    @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run partition partitioned checks within this table.")
+    private CheckSearchFilters runPartitionChecksJobTemplate;
 
     @JsonPropertyDescription("Configured parameters for the \"collect statistics\" job that should be pushed to the job queue in order to run all statistics collectors within this table.")
     private StatisticsCollectorSearchFilters collectStatisticsJobTemplate;
@@ -111,9 +110,9 @@ public class TableBasicModel {
             setTarget(tableSpec.getTarget());
             setDisabled(tableSpec.isDisabled());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
-            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.ADHOC));
-            setHasAnyConfiguredWholeTableChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
-            setHasAnyConfiguredTimePeriodChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
+            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
+            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -124,17 +123,17 @@ public class TableBasicModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
-                setCheckType(CheckType.ADHOC);
+                setCheckType(CheckType.PROFILING);
                 setEnabled(true);
             }});
-            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
+            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
                 setCheckType(CheckType.CHECKPOINT);
                 setEnabled(true);
             }});
-            setRunTimePeriodChecksJobTemplate(new CheckSearchFilters()
+            setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
@@ -167,9 +166,9 @@ public class TableBasicModel {
             setFilter(tableSpec.getFilter());
             setOwner(tableSpec.getOwner());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
-            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.ADHOC));
-            setHasAnyConfiguredWholeTableChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
-            setHasAnyConfiguredTimePeriodChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
+            setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
+            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -180,17 +179,17 @@ public class TableBasicModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
-                setCheckType(CheckType.ADHOC);
+                setCheckType(CheckType.PROFILING);
                 setEnabled(true);
             }});
-            setRunWholeTableChecksJobTemplate(new CheckSearchFilters()
+            setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
                 setCheckType(CheckType.CHECKPOINT);
                 setEnabled(true);
             }});
-            setRunTimePeriodChecksJobTemplate(new CheckSearchFilters()
+            setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
@@ -222,6 +221,7 @@ public class TableBasicModel {
         targetTableSpec.setStage(this.getStage());
         targetTableSpec.setFilter(this.getFilter());
         targetTableSpec.setOwner(this.getOwner());
+
         if (this.getTimestampColumns() != null) {
             targetTableSpec.setTimestampColumns(this.getTimestampColumns());
         }

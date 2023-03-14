@@ -16,7 +16,7 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 
 const ColumnMonthlyChecksView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { connection: string, schema: string, table: string, column: string } = useParams();
-  const { monthlyCheckpoints, isUpdating } = useSelector(
+  const { monthlyCheckpoints, isUpdating, loading } = useSelector(
     (state: IRootState) => state.column
   );
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
@@ -77,8 +77,8 @@ const ColumnMonthlyChecksView = () => {
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2">
-          <SvgIcon name="database" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{`Monthly Checkpoints for ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
+          <SvgIcon name="column-check" className="w-5 h-5" />
+          <div className="text-xl font-semibold">{`Monthly recurring checks ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
         </div>
         <Button
           color={isUpdated ? 'primary' : 'secondary'}
@@ -97,6 +97,7 @@ const ColumnMonthlyChecksView = () => {
           onChange={onChangeUI}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>

@@ -16,7 +16,7 @@ import Button from "../../components/Button";
 
 const TablePartitionedChecksUIFilterView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, timePartitioned, category, checkName }: { connection: string, schema: string, table: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
-  const { partitionedChecksUIFilter, isUpdatedPartitionedChecksUIFilter } = useSelector(
+  const { partitionedChecksUIFilter, isUpdatedPartitionedChecksUIFilter, loading } = useSelector(
     (state: IRootState) => state.table
   );
   const dispatch = useActionDispatch();
@@ -59,7 +59,7 @@ const TablePartitionedChecksUIFilterView = () => {
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2">
-          <SvgIcon name="database" className="w-5 h-5" />
+          <SvgIcon name="search" className="w-5 h-5" />
           <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}.checks.${category} - ${checkName}`}</div>
         </div>
         <Button
@@ -79,6 +79,7 @@ const TablePartitionedChecksUIFilterView = () => {
           onChange={onChange}
           checkResultsOverview={checkResultsOverview}
           getCheckOverview={getCheckOverview}
+          loading={loading}
         />
       </div>
     </ConnectionLayout>

@@ -20,22 +20,22 @@ import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { findTreeNode } from '../utils/tree';
 import { CheckTypes, ROUTES } from "../shared/routes";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
 const TreeContext = React.createContext({} as any);
 
 const checkTypesToJobTemplateKey= {
   [CheckTypes.SOURCES]: 'run_checks_job_template',
   [CheckTypes.PROFILING]: 'run_profiling_checks_job_template',
-  [CheckTypes.CHECKS]: 'run_whole_table_checks_job_template',
-  [CheckTypes.TIME_PARTITIONED]: 'run_time_period_checks_job_template'
+  [CheckTypes.CHECKS]: 'run_recurring_checks_job_template',
+  [CheckTypes.PARTITION]: 'run_partition_checks_job_template'
 };
 
 const checkTypesToHasConfiguredCheckKey = {
   [CheckTypes.SOURCES]: 'has_any_configured_checks',
   [CheckTypes.PROFILING]: 'has_any_configured_profiling_checks',
-  [CheckTypes.TIME_PARTITIONED]: 'has_any_configured_time_period_checks',
-  [CheckTypes.CHECKS]: 'has_any_configured_whole_table_checks'
+  [CheckTypes.CHECKS]: 'has_any_configured_recurring_checks',
+  [CheckTypes.PARTITION]: 'has_any_configured_partition_checks'
 };
 
 function TreeProvider(props: any) {
@@ -65,6 +65,7 @@ function TreeProvider(props: any) {
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const history = useHistory();
+
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
       await ConnectionApiClient.getAllConnections();
@@ -84,7 +85,7 @@ function TreeProvider(props: any) {
       CheckTypes.CHECKS,
       CheckTypes.SOURCES,
       CheckTypes.PROFILING,
-      CheckTypes.TIME_PARTITIONED,
+      CheckTypes.PARTITION,
     ].reduce((acc, cur) => ({
       ...acc,
       [cur]: mappedConnectionsToTreeData
@@ -227,7 +228,7 @@ function TreeProvider(props: any) {
         }
       )
     }
-    if (sourceRoute === CheckTypes.TIME_PARTITIONED) {
+    if (sourceRoute === CheckTypes.PARTITION) {
       items.push(
         {
           id: `${node.id}.dailyPartitionedChecks`,
@@ -292,7 +293,7 @@ function TreeProvider(props: any) {
         }
       );
     }
-    if (sourceRoute === CheckTypes.TIME_PARTITIONED) {
+    if (sourceRoute === CheckTypes.PARTITION) {
       items.push(
         {
           id: `${node.id}.dailyPartitionedChecks`,
@@ -347,7 +348,7 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, node.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await TableApiClient.getTableAdHocChecksUIBasic(
+    const res = await TableApiClient.getTableProfilingChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? ''
@@ -389,7 +390,7 @@ function TreeProvider(props: any) {
     const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await ColumnApiClient.getColumnAdHocChecksUIBasic(
+    const res = await ColumnApiClient.getColumnProfilingChecksUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
@@ -614,7 +615,9 @@ function TreeProvider(props: any) {
 
   const runChecks = async (node: CustomTreeNode) => {
     if (node.run_checks_job_template) {
-      JobApiClient.runChecks(node.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: node.run_checks_job_template
+      });
       return;
     }
 
@@ -650,12 +653,14 @@ function TreeProvider(props: any) {
     }
 
     if (node.level === TREE_LEVEL.TABLE_CHECKS) {
-      const res = await TableApiClient.getTableAdHocChecksUI(
+      const res = await TableApiClient.getTableProfilingChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? ''
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
@@ -665,7 +670,9 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
@@ -675,7 +682,9 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
@@ -685,7 +694,9 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
@@ -695,18 +706,22 @@ function TreeProvider(props: any) {
         tableNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
 
     if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
-      const res = await ColumnApiClient.getColumnAdHocChecksUI(
+      const res = await ColumnApiClient.getColumnProfilingChecksUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
         columnNode?.label ?? ''
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
@@ -717,7 +732,9 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
@@ -728,7 +745,9 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
@@ -739,7 +758,9 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'daily'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
@@ -750,7 +771,9 @@ function TreeProvider(props: any) {
         columnNode?.label ?? '',
         'monthly'
       );
-      JobApiClient.runChecks(res.data.run_checks_job_template);
+      JobApiClient.runChecks({
+        checkSearchFilters: res.data.run_checks_job_template
+      });
       return;
     }
   };
@@ -770,9 +793,9 @@ function TreeProvider(props: any) {
           checkType = 'checkpoint';
           break;
         case CheckTypes.PROFILING:
-          checkType = 'adhoc';
+          checkType = 'profiling';
           break;
-        case CheckTypes.TIME_PARTITIONED:
+        case CheckTypes.PARTITION:
           checkType = 'partitioned';
           break;
         default:
@@ -799,6 +822,7 @@ function TreeProvider(props: any) {
   }
 
   const switchTab = (node: CustomTreeNode) => {
+    console.log('node:', node);
     if (!node) return;
     const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
@@ -811,14 +835,20 @@ function TreeProvider(props: any) {
       const schemaNode = findTreeNode(treeData, node?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-      pushHistory(ROUTES.TABLE_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, subTabMap[node.id] || 'detail'));
+      let tab = subTabMap[node.id];
+      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.PARTITION) {
+        tab = tab || 'daily';
+      } else {
+        tab = tab || 'detail'
+      }
+      pushHistory(ROUTES.TABLE_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', node.label, tab));
     } else if ([TREE_LEVEL.TABLE_CHECKS, TREE_LEVEL.TABLE_DAILY_CHECKS, TREE_LEVEL.TABLE_MONTHLY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS].includes(node.level)) {
       const tableNode = findTreeNode(treeData, node.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       if (node.level === TREE_LEVEL.TABLE_CHECKS) {
-        pushHistory(ROUTES.TABLE_AD_HOCS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? ''));
+        pushHistory(ROUTES.TABLE_PROFILINGS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? ''));
       } else if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
         pushHistory(ROUTES.TABLE_CHECKPOINTS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily'));
       } else if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
@@ -836,7 +866,7 @@ function TreeProvider(props: any) {
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       if (node?.level === TREE_LEVEL.COLUMN_CHECKS) {
-        pushHistory(ROUTES.COLUMN_AD_HOCS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? ''));
+        pushHistory(ROUTES.COLUMN_PROFILINGS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? ''));
       } else if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
         pushHistory(ROUTES.COLUMN_CHECKPOINTS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily'));
       } else if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
@@ -856,7 +886,7 @@ function TreeProvider(props: any) {
         const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
         const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
         if (parentNode?.level === TREE_LEVEL.TABLE_CHECKS) {
-          pushHistory(ROUTES.TABLE_AD_HOCS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.category ?? '', node.label));
+          pushHistory(ROUTES.TABLE_PROFILINGS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
           pushHistory(ROUTES.TABLE_CHECKPOINTS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
@@ -874,7 +904,7 @@ function TreeProvider(props: any) {
         const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
         if (parentNode?.level === TREE_LEVEL.COLUMN_CHECKS) {
-          pushHistory(ROUTES.COLUMN_AD_HOCS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label));
+          pushHistory(ROUTES.COLUMN_PROFILINGS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
           pushHistory(ROUTES.COLUMN_CHECKPOINTS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
@@ -895,7 +925,15 @@ function TreeProvider(props: any) {
       const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-      pushHistory(ROUTES.COLUMN_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, subTabMap[node.id] || 'detail'));
+
+      let tab = subTabMap[node.id];
+      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.PARTITION) {
+        tab = tab || 'daily';
+      } else {
+        tab = tab || 'detail'
+      }
+
+      pushHistory(ROUTES.COLUMN_LEVEL_PAGE(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.label, tab));
     } else {
       pushHistory('/checks');
     }
@@ -923,6 +961,39 @@ function TreeProvider(props: any) {
     return unlisten;
   }, [history]);
 
+  const deleteData = (identify: string) => {
+    const newTabMaps = {...tabMaps};
+
+    for (const key of Object.keys(tabMaps)) {
+      const valueTabs = tabMaps[key];
+      newTabMaps[key] = valueTabs.filter((item) => item.value.toString().indexOf(identify) === -1);
+    }
+
+    if (!newTabMaps[sourceRoute].length) {
+      const arr = tabs
+        .filter((item) => item.type === 'editor')
+        .map((item) => parseInt(item.value, 10));
+      const maxEditor = Math.max(...arr, 0);
+
+      const newTab = {
+        label: `New Tab`,
+        value: `${maxEditor + 1}`,
+        type: 'editor'
+      };
+
+      newTabMaps[sourceRoute] = [newTab];
+    }
+
+    setActiveTabMaps(prev => ({
+      ...prev,
+      [sourceRoute]: newTabMaps[sourceRoute][0].value
+    }));
+
+    setTabMaps(newTabMaps);
+
+    setTreeData(treeData.filter((item) => item.id.toString().indexOf(identify) === -1));
+  };
+
   return (
     <TreeContext.Provider
       value={{
@@ -937,6 +1008,7 @@ function TreeProvider(props: any) {
         openNodes,
         toggleOpenNode,
         tabMap: subTabMap,
+        tabMaps,
         setTabMap: setSubTabMap,
         changeActiveTab,
         sidebarWidth,
@@ -950,7 +1022,9 @@ function TreeProvider(props: any) {
         switchTab,
         activeNode,
         setSourceRoute,
-        deleteStoredData
+        deleteStoredData,
+        sourceRoute,
+        deleteData,
       }}
       {...props}
     />

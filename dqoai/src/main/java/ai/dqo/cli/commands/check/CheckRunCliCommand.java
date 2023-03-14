@@ -20,6 +20,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.services.check.run.CheckService;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
@@ -49,7 +50,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "run", description = "Run data quality checks matching specified filters")
+@CommandLine.Command(name = "run", header = "Run data quality checks that match a given condition", description = "Run data quality checks on your dataset that match a given condition. The command output is a table with the results that provides insight into the data quality.")
 public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWritter;
@@ -130,6 +131,9 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
 
     @CommandLine.Option(names = {"-f", "--fail-at"}, description = "Lowest data quality issue severity level (warning, error, fatal) that will cause the command to return with an error code. Use 'none' to return always a success error code.", defaultValue = "error")
     private CheckRunCommandFailThreshold failAt;
+
+    @CommandLine.Mixin
+    private TimeWindowFilterParameters timeWindowFilterParameters;
 
     /**
      * Gets the connection name.
@@ -340,6 +344,22 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
     }
 
     /**
+     * Returns the time window filter parameters.
+     * @return Time window filter parameters.
+     */
+    public TimeWindowFilterParameters getTimeWindowFilterParameters() {
+        return timeWindowFilterParameters;
+    }
+
+    /**
+     * Sets the time window filter parameters.
+     * @param timeWindowFilterParameters Time window filter parameters.
+     */
+    public void setTimeWindowFilterParameters(TimeWindowFilterParameters timeWindowFilterParameters) {
+        this.timeWindowFilterParameters = timeWindowFilterParameters;
+    }
+
+    /**
      * Computes a result, or throws an exception if unable to do so.
      *
      * @return computed result
@@ -361,7 +381,7 @@ public class CheckRunCliCommand  extends BaseCommand implements ICommand, ITable
         filters.setLabels(this.labels);
 
         CheckExecutionProgressListener progressListener = this.checkExecutionProgressListenerProvider.getProgressListener(this.mode, false);
-        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, progressListener, this.dummyRun);
+        CheckExecutionSummary checkExecutionSummary = this.checkService.runChecks(filters, this.timeWindowFilterParameters, progressListener, this.dummyRun);
 
         if (this.mode != CheckRunReportingMode.silent) {
             TablesawDatasetTableModel tablesawDatasetTableModel = new TablesawDatasetTableModel(checkExecutionSummary.getSummaryTable());

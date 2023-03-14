@@ -15,13 +15,8 @@ import { IRootState } from '../../redux/reducers';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
 import ColumnActionGroup from './ColumnActionGroup';
 import { CheckResultOverviewApi } from "../../services/apiClient";
-
-interface ICheckpointsViewProps {
-  connectionName: string;
-  schemaName: string;
-  tableName: string;
-  columnName: string;
-}
+import { useHistory, useParams } from "react-router-dom";
+import { ROUTES } from "../../shared/routes";
 
 const initTabs = [
   {
@@ -34,15 +29,11 @@ const initTabs = [
   }
 ];
 
-const CheckpointsView = ({
-  connectionName,
-  schemaName,
-  tableName,
-  columnName
-}: ICheckpointsViewProps) => {
-  const [activeTab, setActiveTab] = useState('daily');
+const CheckpointsView = () => {
+  const { connection, schema, table, column, tab, checkTypes }: { checkTypes: string, connection: string, schema: string, table: string, column: string, tab: 'daily' | 'monthly' } = useParams();
   const [tabs, setTabs] = useState(initTabs);
   const dispatch = useActionDispatch();
+  const history = useHistory();
 
   const {
     columnBasic,
@@ -50,13 +41,14 @@ const CheckpointsView = ({
     monthlyCheckpoints,
     isUpdatedDailyCheckpoints,
     isUpdatedMonthlyCheckpoints,
-    isUpdating
+    isUpdating,
+    loading,
   } = useSelector((state: IRootState) => state.column);
 
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnCheckpointsOverview(connectionName, schemaName, tableName, columnName, activeTab as any).then((res) => {
+    CheckResultOverviewApi.getColumnCheckpointsOverview(connection, schema, table, column, tab).then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
@@ -64,57 +56,57 @@ const CheckpointsView = ({
   useEffect(() => {
     if (
       !dailyCheckpoints ||
-      columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schema_name !== schemaName ||
-      columnBasic?.table?.table_name !== tableName ||
-      columnBasic.column_name !== columnName
+      columnBasic?.connection_name !== connection ||
+      columnBasic?.table?.schema_name !== schema ||
+      columnBasic?.table?.table_name !== table ||
+      columnBasic.column_name !== column
     ) {
       dispatch(
         getColumnDailyCheckpoints(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName
+          connection,
+          schema,
+          table,
+          column
         )
       );
     }
     if (
       !monthlyCheckpoints ||
-      columnBasic?.connection_name !== connectionName ||
-      columnBasic?.table?.schema_name !== schemaName ||
-      columnBasic?.table?.table_name !== tableName ||
-      columnBasic.column_name !== columnName
+      columnBasic?.connection_name !== connection ||
+      columnBasic?.table?.schema_name !== schema ||
+      columnBasic?.table?.table_name !== table ||
+      columnBasic.column_name !== column
     ) {
       dispatch(
         getColumnMonthlyCheckpoints(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName
+          connection,
+          schema,
+          table,
+          column
         )
       );
     }
-  }, [connectionName, schemaName, tableName, columnName, columnBasic]);
+  }, [connection, schema, table, column, columnBasic]);
 
   const onUpdate = async () => {
-    if (activeTab === 'daily') {
+    if (tab === 'daily') {
       if (!dailyCheckpoints) return;
 
       await dispatch(
         updateColumnDailyCheckpoints(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName,
+          connection,
+          schema,
+          table,
+          column,
           dailyCheckpoints
         )
       );
       await dispatch(
         getColumnDailyCheckpoints(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName
+          connection,
+          schema,
+          table,
+          column
         )
       );
     } else {
@@ -122,19 +114,19 @@ const CheckpointsView = ({
 
       await dispatch(
         updateColumnMonthlyCheckpoints(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName,
+          connection,
+          schema,
+          table,
+          column,
           monthlyCheckpoints
         )
       );
       await dispatch(
         getColumnMonthlyCheckpoints(
-          connectionName,
-          schemaName,
-          tableName,
-          columnName
+          connection,
+          schema,
+          table,
+          column
         )
       );
     }
@@ -168,6 +160,10 @@ const CheckpointsView = ({
     );
   }, [isUpdatedMonthlyCheckpoints]);
 
+  const onChangeTab = (tab: string) => {
+    history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connection, schema, table, column, tab));
+  };
+
   return (
     <div className="py-2">
       <ColumnActionGroup
@@ -177,10 +173,10 @@ const CheckpointsView = ({
         isUpdating={isUpdating}
       />
       <div className="border-b border-gray-300">
-        <Tabs tabs={tabs} activeTab={activeTab} onChange={setActiveTab} />
+        <Tabs tabs={tabs} activeTab={tab} onChange={onChangeTab} />
       </div>
       <div>
-        {activeTab === 'daily' && (
+        {tab === 'daily' && (
           <DataQualityChecks
             onUpdate={onUpdate}
             checksUI={dailyCheckpoints}
@@ -188,9 +184,10 @@ const CheckpointsView = ({
             className="max-h-checks"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
+            loading={loading}
           />
         )}
-        {activeTab === 'monthly' && (
+        {tab === 'monthly' && (
           <DataQualityChecks
             onUpdate={onUpdate}
             checksUI={monthlyCheckpoints}
@@ -198,6 +195,7 @@ const CheckpointsView = ({
             className="max-h-checks"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
+            loading={loading}
           />
         )}
       </div>

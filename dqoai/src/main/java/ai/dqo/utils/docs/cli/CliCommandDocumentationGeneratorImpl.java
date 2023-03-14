@@ -34,9 +34,9 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
     @Override
     public DocumentationFolder generateDocumentationForCliCommands(Path projectRootPath) {
         DocumentationFolder cliFolder = new DocumentationFolder();
-        cliFolder.setFolderName("reference/command_line_interface");
+        cliFolder.setFolderName("command-line-interface");
         cliFolder.setLinkName("Command-line interface");
-        cliFolder.setDirectPath(projectRootPath.resolve("../docs/reference/command_line_interface").toAbsolutePath().normalize());
+        cliFolder.setDirectPath(projectRootPath.resolve("../docs/command-line-interface").toAbsolutePath().normalize());
 
         Template template = HandlebarsDocumentationUtilities.compileTemplate("cli/cli_documentation");
 
@@ -80,7 +80,8 @@ public class CliCommandDocumentationGeneratorImpl implements CliCommandDocumenta
         CliRootCommandDocumentationModel rootDqoCommandModel = new CliRootCommandDocumentationModel();
         rootDqoCommandModel.setRootCommandName("dqo");
         CliCommandDocumentationModel myCommandModel = this.commandDocumentationModelFactory.makeDocumentationForCommand(commandLine);
-        myCommandModel.setDescription(new String[]{"Root command that permit control on CLI mode."});
+        myCommandModel.setHeader(new String[]{"Root command that permit control on CLI mode"});
+        myCommandModel.setDescription(new String[]{"A root command that allows the user to access all the features and functionalities of the application from the command-line interface (CLI) level. It is the first command to be used before accessing any other commands of the application."});
         rootDqoCommandModel.getCommands().add(myCommandModel);
 
         return rootDqoCommandModel;

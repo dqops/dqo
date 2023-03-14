@@ -56,7 +56,7 @@ const StringListField = ({
           <LabelsView labels={value} onChange={onChange} />
           <div className="flex space-x-4 p-4 justify-end">
             <Button
-              color="error"
+              color="primary"
               variant="outlined"
               label="Cancel"
               className="w-40"
@@ -65,7 +65,8 @@ const StringListField = ({
             <Button
               variant="contained"
               label="Save"
-              className="w-40 bg-blue-500 text-white"
+              color="primary"
+              className="w-40"
               onClick={() => setOpen(false)}
             />
           </div>

@@ -31,7 +31,7 @@ import tech.tablesaw.api.Table;
  * for a single table and selected time ranges.
  */
 public class StatisticsSnapshot extends TableDataSnapshot {
-    public static final String PARQUET_FILE_NAME = "statistics.0.snappy.parquet";
+    public static final String PARQUET_FILE_NAME = "statistics.0.parquet";
 
     /**
      * Default constructor that creates a snapshot.
@@ -73,6 +73,6 @@ public class StatisticsSnapshot extends TableDataSnapshot {
                 PARQUET_FILE_NAME,
                 StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME,
                 StatisticsColumnNames.ID_COLUMN_NAME,
-                TablesawParquetWriteOptions.CompressionCodec.SNAPPY);
+                TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED);
     }
 }

@@ -46,8 +46,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
     @BeforeEach
     void setUp() {
 		this.sut = new ColumnSqlConditionFailedCountSensorParametersSpec();
-        this.sut.setSqlCondition("{table}.{column} > 10000");
-        this.sut.setFilter("{table}.date > DATE(2022, 2, 4)");
+        this.sut.setSqlCondition("{column} > 10000");
+        this.sut.setFilter("{alias}.date > DATE(2022, 2, 4)");
 
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_data_values_in_set, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
@@ -55,8 +55,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
         this.checkSpec.setParameters(this.sut);
     }
 
-    private SensorExecutionRunParameters getRunParametersAdHoc() {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(this.sampleTableMetadata, "length_int", this.checkSpec);
+    private SensorExecutionRunParameters getRunParametersProfiling() {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "length_int", this.checkSpec);
     }
 
     private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
@@ -68,8 +68,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
     }
 
     private String getSubstitutedFilter(String tableName) {
-        // return this.checkSpec.getParameters().getFilter().replace("{table}", tableName);
-        return this.checkSpec.getParameters().getFilter();
+        return this.checkSpec.getParameters().getFilter() != null ?
+               this.checkSpec.getParameters().getFilter().replace("{alias}", "analyzed_table") : null;
     }
 
     private String getSubstitutedSqlCondition(SensorExecutionRunParameters runParameters, String tableName, String columnName) {
@@ -82,7 +82,7 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
         String fullColumnName = String.format("`%s`", columnName);
 
         return this.checkSpec.getParameters().getSqlCondition()
-                .replace("{table}", fullTableName).replace("{column}", fullColumnName);
+                .replace("{alias}", "analyzed_table").replace("{table}", fullTableName).replace("{column}", "analyzed_table." + fullColumnName);
     }
 
     private String getTableColumnName(SensorExecutionRunParameters runParameters) {
@@ -103,8 +103,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
     }
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
@@ -133,8 +133,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -220,6 +220,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY time_period, time_period_utc
             ORDER BY time_period, time_period_utc""";
 
@@ -235,8 +237,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
 
 
     @Test
-    void renderSensor_whenAdHocNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingNoTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(null);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
@@ -328,6 +330,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, time_period, time_period_utc
             ORDER BY stream_level_1, time_period, time_period_utc""";
 
@@ -343,8 +347,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
 
 
     @Test
-    void renderSensor_whenAdHocOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersAdHoc();
+    void renderSensor_whenProfilingOneTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersProfiling();
         runParameters.setTimeSeries(new TimeSeriesConfigurationSpec(){{
             setMode(TimeSeriesMode.timestamp_column);
             setTimeGradient(TimeSeriesGradient.day);
@@ -454,6 +458,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 TIMESTAMP(analyzed_table.`date`) AS time_period_utc
             FROM `%3$s`.`%4$s`.`%5$s` AS analyzed_table
             WHERE %6$s
+                  AND analyzed_table.`date` >= DATE_ADD(CURRENT_DATE(), INTERVAL -3653 DAY)
+                  AND analyzed_table.`date` < CURRENT_DATE()
             GROUP BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc
             ORDER BY stream_level_1, stream_level_2, stream_level_3, time_period, time_period_utc""";
 

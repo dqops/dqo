@@ -37,7 +37,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "enable", description = "Enable column or columns which match filters")
+@CommandLine.Command(name = "enable", header = "Enable the column(s) filtered by the given conditions", description = "Enable one or more columns in a table based on a specified condition. This command will restore the data in the previously disabled columns.")
 public class ColumnEnableCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
 	private ColumnService columnService;
 	private TerminalReader terminalReader;

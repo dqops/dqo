@@ -60,3 +60,15 @@ input::-webkit-inner-spin-button {
 ::-webkit-scrollbar-thumb:hover {
     background: #ACB3BF;
 }
+
+.react-datepicker__day--selected, .react-datepicker__day--selected:hover {
+    @apply bg-teal-500;
+}
+
+body {
+    color: #2F2F2F;
+}
+
+input[type="radio"]::before {
+    opacity: 0 !important;
+}

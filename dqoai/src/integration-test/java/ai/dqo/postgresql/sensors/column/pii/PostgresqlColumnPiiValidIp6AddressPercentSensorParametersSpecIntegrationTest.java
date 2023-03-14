@@ -55,8 +55,8 @@ public class PostgresqlColumnPiiValidIp6AddressPercentSensorParametersSpecIntegr
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "ip6", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -103,7 +103,7 @@ public class PostgresqlColumnPiiValidIp6AddressPercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class PostgresqlColumnPiiValidIp6AddressPercentSensorParametersSpecIntegr
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(100.0, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 }

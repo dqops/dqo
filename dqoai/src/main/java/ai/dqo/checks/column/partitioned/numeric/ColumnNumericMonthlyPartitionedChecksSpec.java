@@ -52,6 +52,11 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_min_in_range", o -> o.monthlyPartitionMinInRange);
             put("monthly_partition_mean_in_range", o -> o.monthlyPartitionMeanInRange);
             put("monthly_partition_percentile_in_range", o -> o.monthlyPartitionPercentileInRange);
+            put("monthly_partition_median_in_range", o -> o.monthlyPartitionMedianInRange);
+            put("monthly_partition_percentile_10_in_range", o -> o.monthlyPartitionPercentile_10InRange);
+            put("monthly_partition_percentile_25_in_range", o -> o.monthlyPartitionPercentile_25InRange);
+            put("monthly_partition_percentile_75_in_range", o -> o.monthlyPartitionPercentile_75InRange);
+            put("monthly_partition_percentile_90_in_range", o -> o.monthlyPartitionPercentile_90InRange);
             put("monthly_partition_sample_stddev_in_range", o -> o.monthlyPartitionSampleStddevInRange);
             put("monthly_partition_population_stddev_in_range", o -> o.monthlyPartitionPopulationStddevInRange);
             put("monthly_partition_sample_variance_in_range", o -> o.monthlyPartitionSampleVarianceInRange);
@@ -112,6 +117,21 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
 
     @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPercentileInRangeCheckSpec monthlyPartitionPercentileInRange;
+
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMedianInRangeCheckSpec monthlyPartitionMedianInRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPercentile10InRangeCheckSpec monthlyPartitionPercentile_10InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 25 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPercentile25InRangeCheckSpec monthlyPartitionPercentile_25InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 75 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPercentile75InRangeCheckSpec monthlyPartitionPercentile_75InRange;
+
+    @JsonPropertyDescription("Verifies that the percentile 90 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPercentile90InRangeCheckSpec monthlyPartitionPercentile_90InRange;
 
     @JsonPropertyDescription("Verifies that the sample standard deviation of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnSampleStddevInRangeCheckSpec monthlyPartitionSampleStddevInRange;
@@ -427,6 +447,96 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentileInRange, monthlyPartitionPercentileInRange));
         this.monthlyPartitionPercentileInRange = monthlyPartitionPercentileInRange;
         propagateHierarchyIdToField(monthlyPartitionPercentileInRange, "monthly_partition_percentile_in_range");
+    }
+
+    /**
+     * Returns a median in range check specification.
+     * @return median in range check specification.
+     */
+    public ColumnMedianInRangeCheckSpec getMonthlyPartitionMedianInRange() {
+        return monthlyPartitionMedianInRange;
+    }
+
+    /**
+     * Sets a new specification of a median in range check.
+     * @param monthlyPartitionMedianInRange median in range check specification.
+     */
+    public void setMonthlyPartitionMedianInRange(ColumnMedianInRangeCheckSpec monthlyPartitionMedianInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMedianInRange, monthlyPartitionMedianInRange));
+        this.monthlyPartitionMedianInRange = monthlyPartitionMedianInRange;
+        propagateHierarchyIdToField(monthlyPartitionMedianInRange, "monthly_partition_median_in_range");
+    }
+
+    /**
+     * Returns a percentile 10 in range check specification.
+     * @return Percentile 10 in range check specification.
+     */
+    public ColumnPercentile10InRangeCheckSpec getMonthlyPartitionPercentile_10InRange() {
+        return monthlyPartitionPercentile_10InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 10 in range check.
+     * @param monthlyPartitionPercentile_10InRange percentile 10 in range check specification.
+     */
+    public void setMonthlyPartitionPercentile_10InRange(ColumnPercentile10InRangeCheckSpec monthlyPartitionPercentile_10InRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentile_10InRange, monthlyPartitionPercentile_10InRange));
+        this.monthlyPartitionPercentile_10InRange = monthlyPartitionPercentile_10InRange;
+        propagateHierarchyIdToField(monthlyPartitionPercentile_10InRange, "monthly_partition_percentile_10_in_range");
+    }
+
+    /**
+     * Returns a percentile 25 in range check specification.
+     * @return Percentile 25 in range check specification.
+     */
+    public ColumnPercentile25InRangeCheckSpec getMonthlyPartitionPercentile_25InRange() {
+        return monthlyPartitionPercentile_25InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 25 in range check.
+     * @param monthlyPartitionPercentile_25InRange percentile 25 in range check specification.
+     */
+    public void setMonthlyPartitionPercentile_25InRange(ColumnPercentile25InRangeCheckSpec monthlyPartitionPercentile_25InRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentile_25InRange, monthlyPartitionPercentile_25InRange));
+        this.monthlyPartitionPercentile_25InRange = monthlyPartitionPercentile_25InRange;
+        propagateHierarchyIdToField(monthlyPartitionPercentile_25InRange, "monthly_partition_percentile_25_in_range");
+    }
+
+    /**
+     * Returns a percentile 75 in range check specification.
+     * @return Percentile 75 in range check specification.
+     */
+    public ColumnPercentile75InRangeCheckSpec getMonthlyPartitionPercentile_75InRange() {
+        return monthlyPartitionPercentile_75InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 75 in range check.
+     * @param monthlyPartitionPercentile_75InRange percentile 75 in range check specification.
+     */
+    public void setMonthlyPartitionPercentile_75InRange(ColumnPercentile75InRangeCheckSpec monthlyPartitionPercentile_75InRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentile_75InRange, monthlyPartitionPercentile_75InRange));
+        this.monthlyPartitionPercentile_75InRange = monthlyPartitionPercentile_75InRange;
+        propagateHierarchyIdToField(monthlyPartitionPercentile_75InRange, "monthly_partition_percentile_75_in_range");
+    }
+
+    /**
+     * Returns a percentile 90 in range check specification.
+     * @return Percentile 90 in range check specification.
+     */
+    public ColumnPercentile90InRangeCheckSpec getMonthlyPartitionPercentile_90InRange() {
+        return monthlyPartitionPercentile_90InRange;
+    }
+
+    /**
+     * Sets a new specification of a percentile 90 in range check.
+     * @param monthlyPartitionPercentile_90InRange percentile 90 in range check specification.
+     */
+    public void setMonthlyPartitionPercentile_90InRange(ColumnPercentile90InRangeCheckSpec monthlyPartitionPercentile_90InRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentile_90InRange, monthlyPartitionPercentile_90InRange));
+        this.monthlyPartitionPercentile_90InRange = monthlyPartitionPercentile_90InRange;
+        propagateHierarchyIdToField(monthlyPartitionPercentile_90InRange, "monthly_partition_percentile_90_in_range");
     }
 
     /**

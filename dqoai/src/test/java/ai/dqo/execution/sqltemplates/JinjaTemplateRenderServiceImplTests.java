@@ -22,6 +22,7 @@ import ai.dqo.core.configuration.DqoConfigurationProperties;
 import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
@@ -60,6 +61,7 @@ public class JinjaTemplateRenderServiceImplTests extends BaseTest {
                 null,
                 new TableStandardRowCountSensorParametersSpec(),
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
+                new TimeWindowFilterParameters(),
                 new DataStreamMappingSpec(),
                 new SensorDefinitionSpec(),
                 new ProviderSensorDefinitionSpec(),

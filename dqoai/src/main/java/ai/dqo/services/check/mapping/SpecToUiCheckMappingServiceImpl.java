@@ -17,6 +17,8 @@ package ai.dqo.services.check.mapping;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.scheduler.quartz.SchedulesUtilityService;
@@ -24,6 +26,7 @@ import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindService;
 import ai.dqo.metadata.basespecs.AbstractSpec;
+import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionSpec;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
@@ -93,7 +96,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     /**
      * Creates a UI friendly model of the whole checks container on table level or column level data quality checks, divided into categories.
      *
-     * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
+     * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, checkpoint or partitioned check (for a specific timescale).
      * @param runChecksTemplate Check search filter for the parent table or column that is used as a template to create more fine grained "run checks" job configurations. Also determines which checks will be included in the ui model.
      * @param connectionSpec Connection specification for the connection to which the table belongs to.
      * @param tableSpec Table specification with the configuration of the parent table.
@@ -150,6 +153,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         Optional<String> categoryNameFilter = Optional.ofNullable(uiAllChecksModel.getRunChecksJobTemplate().getCheckCategory());
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, categoryNameFilter);
+        CheckType checkType = checkCategoriesSpec.getCheckType();
+        CheckTimeScale checkTimeScale = checkCategoriesSpec.getCheckTimeScale();
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
             Object categoryFieldValue = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
@@ -160,6 +165,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                     tableSpec,
                     executionContext,
                     providerType,
+                    checkType,
+                    checkTimeScale,
                     defaultDataStreamName);
             if (categoryModel != null && categoryModel.getChecks().size() > 0) {
                 uiAllChecksModel.getCategories().add(categoryModel);
@@ -186,14 +193,20 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     /**
      * Creates a simplistic UI friendly model of every data quality check on table level or column level, divided into categories.
      *
-     * @param checkCategoriesSpec Table or column level data quality checks container of type ad-hoc, checkpoint or partitioned check (for a specific timescale).
+     * @param checkCategoriesSpec Table or column level data quality checks container of type profiling, checkpoint or partitioned check (for a specific timescale).
+     * @param executionContext Check execution context with access to the check information.
+     * @param providerType Provider type.
      * @return Simplistic UI friendly model of data quality checks' container.
      */
     @Override
-    public UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec) {
+    public UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                                    ExecutionContext executionContext,
+                                                    ProviderType providerType) {
         UIAllChecksBasicModel uiAllChecksBasicModel = new UIAllChecksBasicModel();
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, Optional.empty());
+        CheckType checkType = checkCategoriesSpec.getCheckType();
+        CheckTimeScale checkTimeScale = checkCategoriesSpec.getCheckTimeScale();
 
         for (FieldInfo categoryFieldInfo : categoryFields) {
             Object checkCategoryParentNode = categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
@@ -203,8 +216,9 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
 
             for (FieldInfo checkFieldInfo : checksFields) {
                 boolean checkIsConfigured = checkFieldInfo.getFieldValue(checkCategoryParentNode) != null;
+                AbstractCheckSpec<?,?,?,?> checkSpecObject = (AbstractCheckSpec<?,?,?,?>)checkFieldInfo.getFieldValueOrNewObject(checkCategoryParentNode);
 
-                UICheckBasicModel checkModel = createCheckBasicModel(checkFieldInfo);
+                UICheckBasicModel checkModel = createCheckBasicModel(checkFieldInfo, checkSpecObject, executionContext, providerType, checkType, checkTimeScale);
                 checkModel.setConfigured(checkIsConfigured);
                 checkModel.setCheckCategory(categoryFieldInfo.getYamlFieldName());
                 uiAllChecksBasicModel.getChecks().add(checkModel);
@@ -224,6 +238,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param tableSpec               Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
+     * @param checkType Check type (profiling, recurring, ...).
+     * @param checkTimeScale Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
      * @param defaultDataStreamName   Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
      * @return UI model for a category with all quality checks, filtered by runChecksTemplate.
      */
@@ -234,6 +250,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                                                          TableSpec tableSpec,
                                                          ExecutionContext executionContext,
                                                          ProviderType providerType,
+                                                         CheckType checkType,
+                                                         CheckTimeScale checkTimeScale,
                                                          String defaultDataStreamName) {
         UIQualityCategoryModel categoryModel = new UIQualityCategoryModel();
         categoryModel.setCategory(categoryFieldInfo.getYamlFieldName());
@@ -262,7 +280,9 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                     runChecksCategoryTemplate,
                     tableSpec,
                     executionContext,
-                    providerType);
+                    providerType,
+                    checkType,
+                    checkTimeScale);
             if (checkModel == null) {
                 continue;
             }
@@ -287,6 +307,8 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param tableSpec Table specification with the configuration of the parent table.
      * @param executionContext Execution context with a reference to both the DQO Home (with default sensor implementation) and DQO User (with user specific sensors).
      * @param providerType Provider type from the parent connection.
+     * @param checkType Check type (profiling, recurring, ...).
+     * @param checkTimeScale Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
      * @return Check model.
      */
     protected UICheckModel createCheckModel(FieldInfo checkFieldInfo,
@@ -295,7 +317,9 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                                             CheckSearchFilters runChecksCategoryTemplate,
                                             TableSpec tableSpec,
                                             ExecutionContext executionContext,
-                                            ProviderType providerType) {
+                                            ProviderType providerType,
+                                            CheckType checkType,
+                                            CheckTimeScale checkTimeScale) {
         UICheckModel checkModel = new UICheckModel();
 
         ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
@@ -310,9 +334,16 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
             SensorDefinitionFindResult providerSensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
                     executionContext, sensorDefinitionName, providerType);
 
-            if (providerSensorDefinition.getProviderSensorDefinitionSpec() == null) {
+            ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorDefinition.getProviderSensorDefinitionSpec();
+            if (providerSensorDefinitionSpec == null) {
                 return null; // skip this check
             }
+
+            if (!providerSensorDefinitionSpec.isSupportsGrouping() && checkType == CheckType.PARTITIONED) {
+                return null; // skip this check
+            }
+
+            checkModel.setSupportsDataStreams(providerSensorDefinitionSpec.isSupportsGrouping());
 
             SensorDefinitionSpec sensorDefinitionSpec = providerSensorDefinition.getSensorDefinitionSpec();
             if (sensorDefinitionSpec.isRequiresEventTimestamp() &&
@@ -358,8 +389,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setComments(checkSpec.getComments());
         checkModel.setDisabled(checkSpec.isDisabled());
         checkModel.setExcludeFromKpi(checkSpec.isExcludeFromKpi());
-        checkModel.setSupportsTimeSeries(false);
-        checkModel.setSupportsDataStreams(false);
+        checkModel.setIncludeInSla(checkSpec.isIncludeInSla());
         checkModel.setDataStream(checkSpec.getDataStream());
         checkModel.setCheckSpec(checkSpec);
 
@@ -375,12 +405,42 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
     /**
      * Creates a simplistic UI model for a single data quality check.
      * @param checkFieldInfo Reflection info of the field in the parent object that stores the check specification field value.
+     * @param checkSpec Check specification.
+     * @param executionContext Check execution context.
+     * @param providerType Provider type from the parent connection.
+     * @param checkType Check type (profiling, recurring, ...).
+     * @param checkTimeScale Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
      * @return Check basic model.
      */
-    protected UICheckBasicModel createCheckBasicModel(FieldInfo checkFieldInfo) {
+    protected UICheckBasicModel createCheckBasicModel(FieldInfo checkFieldInfo,
+                                                      AbstractCheckSpec<?,?,?,?> checkSpec,
+                                                      ExecutionContext executionContext,
+                                                      ProviderType providerType,
+                                                      CheckType checkType,
+                                                      CheckTimeScale checkTimeScale) {
         UICheckBasicModel checkModel = new UICheckBasicModel();
         checkModel.setCheckName(checkFieldInfo.getDisplayName());
         checkModel.setHelpText(checkFieldInfo.getHelpText());
+
+        ClassInfo checkClassInfo = reflectionService.getClassInfoForClass(checkSpec.getClass());
+        FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
+
+        AbstractSensorParametersSpec parametersSpec = (AbstractSensorParametersSpec)parametersFieldInfo.getFieldValueOrNewObject(checkSpec);
+        String sensorDefinitionName = parametersSpec.getSensorDefinitionName();
+
+        if (executionContext != null && providerType != null) {
+            SensorDefinitionFindResult providerSensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
+                    executionContext, sensorDefinitionName, providerType);
+
+            ProviderSensorDefinitionSpec providerSensorDefinitionSpec = providerSensorDefinition.getProviderSensorDefinitionSpec();
+            if (providerSensorDefinitionSpec == null) {
+                return null; // skip this check
+            }
+
+            if (!providerSensorDefinitionSpec.isSupportsGrouping() && checkType == CheckType.PARTITIONED) {
+                return null; // skip this check
+            }
+        }
 
         return checkModel;
     }

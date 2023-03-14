@@ -120,7 +120,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 LocalDateTime timePeriodLocal = timePeriodColumn.get(allSensorResultsRowIndex);
                 HistoricDataPoint[] previousDataPoints = null; // combined data points from current readouts and historic sensor readouts
 
-                if (sensorRunParameters.getCheckType() == CheckType.ADHOC) {
+                if (sensorRunParameters.getCheckType() == CheckType.PROFILING) {
                     // these checks do not have real time periods, we just take the last data points, also we don't want the current sensor results
                     // because there should be none (only partitioned checks will have previous results from the most recent query), we will find them only in old data
 

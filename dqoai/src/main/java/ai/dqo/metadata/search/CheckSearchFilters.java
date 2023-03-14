@@ -23,6 +23,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
+import io.swagger.annotations.ApiModel;
 import lombok.EqualsAndHashCode;
 
 import java.util.HashSet;
@@ -36,6 +37,7 @@ import java.util.stream.Collectors;
 @EqualsAndHashCode(callSuper = true)
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
+@ApiModel(value = "CheckSearchFilters", description = "Target data quality checks filter, identifies which checks on which tables and columns should be executed.")
 public class CheckSearchFilters extends TableSearchFilters implements Cloneable {
     private String columnName;
     private CheckType checkType;
@@ -104,7 +106,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Returns a check type (adhoc, checkpoint, partitioned) filter.
+     * Returns a check type (profiling, checkpoint, partitioned) filter.
      * @return Check type filter.
      */
     public CheckType getCheckType() {
@@ -112,7 +114,7 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
     }
 
     /**
-     * Sets a check type (adhoc, checkpoint, partitioned) filter.
+     * Sets a check type (profiling, checkpoint, partitioned) filter.
      * @param checkType Check type filter.
      */
     public void setCheckType(CheckType checkType) {

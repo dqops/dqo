@@ -1,31 +1,31 @@
 {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
 
 {% macro render_current_ingestion_diff() -%}
-    {%- if table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
-    TIMESTAMP_DIFF(
-        CURRENT_TIMESTAMP(),
+    {%- if lib.is_instant(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    TIMESTAMPDIFF(
+        MILLISECOND,
         MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
-        MILLISECOND
+        CURRENT_TIMESTAMP
     ) / 24.0 / 3600.0 / 1000.0
-    {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATE' -%}
-    DATE_DIFF(
-        CURRENT_DATE(),
+    {%- elif lib.is_local_date(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    DATEDIFF(
+        DAY,
         MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
-        DAY
+        CURRENT_DATE
     )
-    {%- elif table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type | upper == 'DATETIME' -%}
-    DATETIME_DIFF(
-        CURRENT_DATETIME(),
+    {%- elif lib.is_local_date_time(table.columns[table.timestamp_columns.ingestion_timestamp_column].type_snapshot.column_type) == 'true' -%}
+    TIMESTAMPDIFF(
+        MILLISECOND,
         MAX({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }}),
-        MILLISECOND
+        CURRENT_TIMESTAMP
     ) / 24.0 / 3600.0 / 1000.0
     {%- else -%}
-    TIMESTAMP_DIFF(
-        CURRENT_TIMESTAMP(),
+    TIMESTAMPDIFF(
+        MILLISECOND,
         MAX(
-            SAFE_CAST({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }} AS TIMESTAMP)
+            TRY_TO_TIMESTAMP({{ lib.render_column(table.timestamp_columns.ingestion_timestamp_column, 'analyzed_table') }})
         ),
-        MILLISECOND
+        CURRENT_TIMESTAMP
     ) / 24.0 / 3600.0 / 1000.0
     {%- endif -%}
 {%- endmacro -%}

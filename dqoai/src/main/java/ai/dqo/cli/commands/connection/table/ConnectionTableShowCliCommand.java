@@ -35,7 +35,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "show", description = "Show table for connection")
+@CommandLine.Command(name = "show", header = "Show table for connection", description = "Show the details of the specified table in the database for the specified connection. It allows the user to view the details of a specific table in the database.")
 public class ConnectionTableShowCliCommand extends BaseCommand implements ICommand {
 	private ConnectionService connectionService;
 	private TerminalReader terminalReader;

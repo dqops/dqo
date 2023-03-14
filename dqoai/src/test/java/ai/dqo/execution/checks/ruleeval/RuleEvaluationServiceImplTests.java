@@ -17,7 +17,7 @@ package ai.dqo.execution.checks.ruleeval;
 
 import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettingsObjectMother;
 import ai.dqo.connectors.ProviderType;
@@ -36,6 +36,7 @@ import ai.dqo.execution.rules.DataQualityRuleRunnerObjectMother;
 import ai.dqo.execution.rules.finder.RuleDefinitionFindServiceImpl;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
+import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -55,8 +56,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.DoubleColumn;
 import tech.tablesaw.api.StringColumn;
 import tech.tablesaw.api.Table;
-
-import java.time.ZoneId;
 
 @SpringBootTest
 public class RuleEvaluationServiceImplTests extends BaseTest {
@@ -86,13 +85,14 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
 		checkSpec = new TableRowCountCheckSpec();
-        tableSpec.getChecks().setStandard(new TableAdHocStandardChecksSpec());
+        tableSpec.getChecks().setStandard(new TableProfilingStandardChecksSpec());
 		tableSpec.getChecks().getStandard().setRowCount(this.checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,
-                CheckType.ADHOC,
+                CheckType.PROFILING,
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
+                new TimeWindowFilterParameters(),
                 new DataStreamMappingSpec(),
                 checkSpec.getParameters(),
                 ProviderDialectSettingsObjectMother.getDialectForProvider(ProviderType.bigquery));

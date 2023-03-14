@@ -72,7 +72,7 @@ public class RedshiftParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Connect to Redshift using SSL. The default value is false.")
     private Boolean ssl;
 
-    @CommandLine.Option(names = {"--redshift-properties"}, description = "Redshift additional properties that are added to the JDBC connection string")
+    @CommandLine.Option(names = {"-R"}, description = "Redshift additional properties that are added to the JDBC connection string")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> properties;
 

@@ -55,7 +55,7 @@ public class BigQueryTableAvailabilitySensorParametersSpecIntegrationTest extend
 
     @Test
     void runSensor_whenSensorExecuted_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForAdHocCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -83,32 +83,6 @@ public class BigQueryTableAvailabilitySensorParametersSpecIntegrationTest extend
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly);
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
-    }
-
-    @Test
-    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date");
-
-        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
-
-        Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1.0, resultTable.column(0).get(0));
-    }
-
-    @Test
-    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly, "date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 

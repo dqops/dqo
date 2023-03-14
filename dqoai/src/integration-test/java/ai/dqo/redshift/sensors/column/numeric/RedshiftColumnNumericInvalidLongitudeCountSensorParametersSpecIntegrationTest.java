@@ -55,8 +55,8 @@ public class RedshiftColumnNumericInvalidLongitudeCountSensorParametersSpecInteg
     }
 
     @Test
-    void runSensor_whenSensorExecutedAdHoc_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForAdHocCheck(
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
                 sampleTableMetadata, "gcs", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -103,7 +103,7 @@ public class RedshiftColumnNumericInvalidLongitudeCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(4, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class RedshiftColumnNumericInvalidLongitudeCountSensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(4, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(3L, resultTable.column(0).get(0));
+        Assertions.assertEquals(0L, resultTable.column(0).get(0));
     }
 }
