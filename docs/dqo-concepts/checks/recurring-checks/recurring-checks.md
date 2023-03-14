@@ -1,23 +1,21 @@
-# Partition checks
+# Recurring checks
 
 In DQO, the check is a data quality test, which consists of a [data quality sensor](../../sensors/sensors.md) and a
 [data quality rule](../../rules/rules.md).
 
-Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score. 
-To run a partition check, you need to select a data column that is the time partitioning key for the table.
+Recurring checks are standard checks that monitor data quality. Recurring checks can be run daily and monthly. 
 
-
-## Setting up date or datetime column name
-In order to enable time partition check, set a column that contains date or datetime or timestamp. 
-You can add it in UI 
+Daily recurring checks stores the most recent sensor readouts for each day when
+the data quality check was run. While monthly recurring checks store the most recent sensor readout for each month
+when the data quality check was run.
 
 ## Checks configuration in YAML file
-Partition data quality checks, like other data quality checks in DQO, are defined as YAML files.
+Recurring data quality checks, like other data quality checks in DQO, are defined as YAML files.
 
-Below is an example of YAML file showing sample configuration of a daily and monthly partition column data quality check
+Below is an example of YAML file showing sample configuration of a daily and monthly recurring column data quality check
 nulls_percent.
 
-=== "Daily partition check"
+=== "Daily recurring check"
     ``` yaml hl_lines="14-23"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -32,10 +30,10 @@ nulls_percent.
         partitioned_checks_timestamp_source: event_timestamp
       columns:
         target_column:
-          partition_checks:
+          recurring_checks:
             daily:
               nulls:
-                daily_partition_checks_nulls_percent:
+                daily_nulls_percent:
                   warning:
                     max_percent: 1.0
                   error:
@@ -51,7 +49,7 @@ nulls_percent.
           labels:
           - optional column that stores the timestamp when row was ingested
     ```
-=== "Monthly partition check"
+=== "Monthly recurring check"
     ``` yaml hl_lines="14-23"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
@@ -66,10 +64,10 @@ nulls_percent.
         partitioned_checks_timestamp_source: event_timestamp
       columns:
         target_column:
-          partotion_checks:
+          recurring_checks:
             monthly:
               nulls:
-                monthly_partition_checks_nulls_percent:
+                monthly_nulls_percent:
                   warning:
                     max_percent: 1.0
                   error:
@@ -86,9 +84,19 @@ nulls_percent.
           - optional column that stores the timestamp when row was ingested
     ```
 
-## Analysis of incrementally partitioned data
+The `spec` section contains the details of the table, including the target schema and table name.
 
+The `timestamp_columns` section specifies the column names for various timestamps in the data.
 
-## What's next
+The `columns` section lists the columns in the table which has configured checks. In this example the column named
+`target_column` has a configured daily or monthly check `nulls_percent`. This means that the sensor reads the percentage of null
+values in `target_column`. If the percentage exceeds a certain threshold, an error, warning, or fatal message will
+be raised. 
 
-- [Explore how to add partition checks](../../../working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md)
+For daily recurring check even if the check is run several times a day, only the last sensor readout for each day
+is stored. For monthly recurring check even if the check is run several in a month, only the last sensor readout for each month
+is stored.
+
+## What's next 
+
+- [Explore how to add recurring checks](../../../working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md)

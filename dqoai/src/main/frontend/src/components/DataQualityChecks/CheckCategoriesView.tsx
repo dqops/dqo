@@ -79,9 +79,9 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
             </div>
           </div>
         </td>
-        <td className="py-2 px-4 bg-gray-50 border-b border-t bg-yellow-100" />
-        <td className="py-2 px-4 bg-gray-50 border-b border-t bg-orange-100" />
-        <td className="py-2 px-4 bg-gray-50 border-b border-t bg-red-100" />
+        <td className="py-2 px-4 bg-gray-50 border-b border-t" />
+        <td className="py-2 px-4 bg-gray-50 border-b border-t" />
+        <td className="py-2 px-4 bg-gray-50 border-b border-t" />
       </tr>
       {category.checks &&
         category.checks.map((check, index) => (

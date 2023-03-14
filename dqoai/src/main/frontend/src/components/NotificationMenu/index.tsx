@@ -69,7 +69,7 @@ const NotificationMenu = () => {
         <IconButton className="!mr-3 !bg-transparent" ripple={false} variant="text">
           <div className="relative">
             <SvgIcon name="bell" className="w-5 h-5 text-gray-500" />
-            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500 text-white px-1 py-0.5 text-xxs">
+            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500 text-white px-1 py-0.5 text-xxs">
               {data.length}
             </span>
           </div>

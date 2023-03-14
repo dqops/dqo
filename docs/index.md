@@ -5,6 +5,8 @@ DQO is an DataOps friendly data quality monitoring tool with customizable data q
 ## DQO features
 - xx
 - xx
+- testing daily and monthly date partitions
+- Data segmentation by data streams
 
 
 ## Supported providers
