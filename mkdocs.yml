@@ -52,6 +52,8 @@ nav:
       - Timezone configuration: 'working-with-dqo/scheduler/timezone_configuration.md'
     - Notifications: 'working-with-dqo/notifications/notifications.md'
     - Initial profiling: 'working-with-dqo/initial-profiling/initial-profiling.md'
+    - Adding new data quality check: 'working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md'
+    - Removing data quality results: 'working-with-dqo/removing-data-quality-results/removing-data-quality-results.md'
   - Examples: 'examples/examples.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
