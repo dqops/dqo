@@ -32,7 +32,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "edit", description = "Edit connection which match filters")
+@CommandLine.Command(name = "edit", header = "Edit connection that matches a given condition", description = "Edit the connection or connections that match the filter conditions specified in the options. It allows the user to modify the details of an existing connection in the application.")
 public class ConnectionEditCliCommand extends BaseCommand implements ICommand {
 	private TerminalReader terminalReader;
 	private ConnectionService connectionService;

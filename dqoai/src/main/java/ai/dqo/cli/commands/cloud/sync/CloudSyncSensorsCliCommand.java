@@ -32,7 +32,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "sensors", description = "Synchronize local \"sensors\" folder with custom sensor definitions with DQO Cloud")
+@CommandLine.Command(name = "sensors", header = "Synchronize local \"sensors\" folder with custom sensor definitions with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"sensors\" folder.")
 public class CloudSyncSensorsCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
 

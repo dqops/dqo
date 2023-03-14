@@ -39,7 +39,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "add", description = "Add a column with specified details")
+@CommandLine.Command(name = "add", header = "Add a column with specified details", description = "Add a new column to a table with specific details. The new column is added to the YAML configuration file.")
 public class ColumnAddCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
 	private ColumnService columnService;
 	private TerminalReader terminalReader;

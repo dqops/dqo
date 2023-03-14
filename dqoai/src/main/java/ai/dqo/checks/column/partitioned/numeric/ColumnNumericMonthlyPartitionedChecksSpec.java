@@ -52,7 +52,7 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_min_in_range", o -> o.monthlyPartitionMinInRange);
             put("monthly_partition_mean_in_range", o -> o.monthlyPartitionMeanInRange);
             put("monthly_partition_percentile_in_range", o -> o.monthlyPartitionPercentileInRange);
-            put("monthly_partition_percentile_50_in_range", o -> o.monthlyPartitionPercentile_50InRange);
+            put("monthly_partition_median_in_range", o -> o.monthlyPartitionMedianInRange);
             put("monthly_partition_percentile_10_in_range", o -> o.monthlyPartitionPercentile_10InRange);
             put("monthly_partition_percentile_25_in_range", o -> o.monthlyPartitionPercentile_25InRange);
             put("monthly_partition_percentile_75_in_range", o -> o.monthlyPartitionPercentile_75InRange);
@@ -118,8 +118,8 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPercentileInRangeCheckSpec monthlyPartitionPercentileInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
-    private ColumnPercentile50InRangeCheckSpec monthlyPartitionPercentile_50InRange;
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnMedianInRangeCheckSpec monthlyPartitionMedianInRange;
 
     @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPercentile10InRangeCheckSpec monthlyPartitionPercentile_10InRange;
@@ -450,21 +450,21 @@ public class ColumnNumericMonthlyPartitionedChecksSpec extends AbstractCheckCate
     }
 
     /**
-     * Returns a percentile 50 in range check specification.
-     * @return Percentile 50 in range check specification.
+     * Returns a median in range check specification.
+     * @return median in range check specification.
      */
-    public ColumnPercentile50InRangeCheckSpec getMonthlyPartitionPercentile_50InRange() {
-        return monthlyPartitionPercentile_50InRange;
+    public ColumnMedianInRangeCheckSpec getMonthlyPartitionMedianInRange() {
+        return monthlyPartitionMedianInRange;
     }
 
     /**
-     * Sets a new specification of a percentile 50 in range check.
-     * @param monthlyPartitionPercentile_50InRange percentile 50 in range check specification.
+     * Sets a new specification of a median in range check.
+     * @param monthlyPartitionMedianInRange median in range check specification.
      */
-    public void setMonthlyPartitionPercentile_50InRange(ColumnPercentile50InRangeCheckSpec monthlyPartitionPercentile_50InRange) {
-        this.setDirtyIf(!Objects.equals(this.monthlyPartitionPercentile_50InRange, monthlyPartitionPercentile_50InRange));
-        this.monthlyPartitionPercentile_50InRange = monthlyPartitionPercentile_50InRange;
-        propagateHierarchyIdToField(monthlyPartitionPercentile_50InRange, "monthly_partition_percentile_50_in_range");
+    public void setMonthlyPartitionMedianInRange(ColumnMedianInRangeCheckSpec monthlyPartitionMedianInRange) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionMedianInRange, monthlyPartitionMedianInRange));
+        this.monthlyPartitionMedianInRange = monthlyPartitionMedianInRange;
+        propagateHierarchyIdToField(monthlyPartitionMedianInRange, "monthly_partition_median_in_range");
     }
 
     /**

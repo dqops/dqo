@@ -166,6 +166,31 @@ const TablePage = () => {
 
   const activeNode = findTreeNode(treeData, pageTab);
 
+  const description = useMemo(() => {
+    if (isProfilingChecksOnly) {
+      return 'Advanced profiling for ';
+    }
+    if (isCheckpointOnly) {
+      if (activeTab === 'monthly') {
+        return 'Monthly recurring checks for ';
+      } else {
+        return 'Daily recurring checks for ';
+      }
+    }
+    if (isPartitionChecksOnly) {
+      if (activeTab === 'monthly') {
+        return 'Monthly partition checks for ';
+      } else {
+        return 'Daily partition checks for ';
+      }
+    }
+
+    if (activeTab === 'detail') {
+      return 'Data source configuration for ';
+    }
+    return ''
+  }, [isProfilingChecksOnly, isCheckpointOnly, isPartitionChecksOnly, activeTab]);
+
   return (
     <ConnectionLayout>
       {!activeNode ? (
@@ -174,8 +199,8 @@ const TablePage = () => {
         <div className="relative h-full flex flex-col">
           <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0">
             <div className="flex items-center space-x-2">
-              <SvgIcon name="database" className="w-5 h-5" />
-              <div className="text-xl font-semibold">{`${connection}.${schema}.${table}`}</div>
+              <SvgIcon name="table" className="w-5 h-5" />
+              <div className="text-xl font-semibold">{`${description}${connection}.${schema}.${table}`}</div>
             </div>
           </div>
           {isProfilingChecksOnly && (

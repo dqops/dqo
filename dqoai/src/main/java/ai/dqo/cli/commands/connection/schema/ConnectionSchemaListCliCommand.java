@@ -35,7 +35,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "list", description = "List schemas in source connection")
+@CommandLine.Command(name = "list", header = "List schemas in the specified connection", description = "It allows the user to view the summary of all schemas in a selected connection.")
 public class ConnectionSchemaListCliCommand extends BaseCommand implements ICommand {
 	private ConnectionService connectionService;
 	private TerminalReader terminalReader;

@@ -37,7 +37,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "update", description = "Update tables which match filters")
+@CommandLine.Command(name = "update", header = "Update tables that match a given condition", description = "Update the structure of one or more tables that match a given condition. It allows user to use various filters, such as table names  to narrow down the set of tables to update.")
 public class TableUpdateCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private TableService tableImportService;
     private TerminalReader terminalReader;

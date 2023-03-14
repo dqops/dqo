@@ -32,7 +32,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "sources", description = "Synchronize local \"sources\" connection and table level quality definitions with DQO Cloud")
+@CommandLine.Command(name = "sources", header = "Synchronize local \"sources\" connection and table level quality definitions with DQO Cloud", description = "Uploads any local changes to the cloud and downloads any changes made to the cloud version of the \"sources\" folder.")
 public class CloudSyncSourcesCliCommand extends BaseCommand implements ICommand {
     private CloudSynchronizationService cloudSynchronizationService;
 

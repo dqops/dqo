@@ -35,7 +35,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "list", description = "List tables for connection")
+@CommandLine.Command(name = "list", header = "List tables for the specified connection and schema name.", description = "List all the tables available in the database for the specified connection and schema. It allows the user to view all the tables in the database.")
 public class ConnectionTableListCliCommand extends BaseCommand implements ICommand {
 	private ConnectionService connectionService;
 	private TerminalReader terminalReader;
