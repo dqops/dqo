@@ -19,7 +19,7 @@ import ai.dqo.metadata.groupings.TimeSeriesGradient;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Enumeration of time scale of checkpoint and partitioned data quality checks (daily, monthly, etc.)
+ * Enumeration of time scale of recurring and partitioned data quality checks (daily, monthly, etc.)
  */
 public enum CheckTimeScale {
     @JsonProperty("daily")

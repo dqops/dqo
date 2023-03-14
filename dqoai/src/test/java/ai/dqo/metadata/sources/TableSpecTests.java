@@ -18,11 +18,11 @@ package ai.dqo.metadata.sources;
 import ai.dqo.BaseTest;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
-import ai.dqo.checks.table.checkpoints.standard.TableStandardMonthlyCheckpointSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardMonthlyRecurringSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.groupings.DataStreamLevelSpecObjectMother;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
@@ -177,25 +177,25 @@ public class TableSpecTests extends BaseTest {
 
     @Test
     void hasAnyChecksConfigured_whenOneDailyCheckpointCheckConfigured_thenReturnsTrue() {
-        TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
-        TableDailyCheckpointCategoriesSpec daily = new TableDailyCheckpointCategoriesSpec();
-        TableStandardDailyCheckpointSpec standard = new TableStandardDailyCheckpointSpec();
-        standard.setDailyCheckpointRowCount(new TableRowCountCheckSpec());
+        TableRecurringSpec recurring = new TableRecurringSpec();
+        TableDailyRecurringCategoriesSpec daily = new TableDailyRecurringCategoriesSpec();
+        TableStandardDailyRecurringSpec standard = new TableStandardDailyRecurringSpec();
+        standard.setDailyRecurringRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
-        checkpoints.setDaily(daily);
-        this.sut.setCheckpoints(checkpoints);
+        recurring.setDaily(daily);
+        this.sut.setRecurring(recurring);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 
     @Test
     void hasAnyChecksConfigured_whenOneMonthlyCheckpointCheckConfigured_thenReturnsTrue() {
-        TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
-        TableMonthlyCheckpointCategoriesSpec daily = new TableMonthlyCheckpointCategoriesSpec();
-        TableStandardMonthlyCheckpointSpec standard = new TableStandardMonthlyCheckpointSpec();
-        standard.setMonthlyCheckpointRowCount(new TableRowCountCheckSpec());
+        TableRecurringSpec recurring = new TableRecurringSpec();
+        TableMonthlyRecurringCategoriesSpec daily = new TableMonthlyRecurringCategoriesSpec();
+        TableStandardMonthlyRecurringSpec standard = new TableStandardMonthlyRecurringSpec();
+        standard.setMonthlyRecurringRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
-        checkpoints.setMonthly(daily);
-        this.sut.setCheckpoints(checkpoints);
+        recurring.setMonthly(daily);
+        this.sut.setRecurring(recurring);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 
