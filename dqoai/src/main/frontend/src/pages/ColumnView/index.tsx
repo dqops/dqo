@@ -135,13 +135,38 @@ const ColumnView = () => {
     );
   }, [isUpdatedDailyPartitionedChecks, isUpdatedMonthlyPartitionedChecks]);
 
+  const description = useMemo(() => {
+    if (isProfilingCheckOnly) {
+      return 'Advanced profiling for ';
+    }
+    if (isCheckpointOnly) {
+      if (activeTab === 'monthly') {
+        return 'Monthly recurring checks for ';
+      } else {
+        return 'Daily recurring checks for ';
+      }
+    }
+    if (isPartitionCheckOnly) {
+      if (activeTab === 'monthly') {
+        return 'Monthly partition checks for ';
+      } else {
+        return 'Daily partition checks for ';
+      }
+    }
+
+    if (activeTab === 'detail') {
+      return 'Data source configuration for ';
+    }
+    return ''
+  }, [isProfilingCheckOnly, isCheckpointOnly, isPartitionCheckOnly, activeTab]);
+
   return (
     <ConnectionLayout>
       <div className="relative">
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2">
             <SvgIcon name="column" className="w-5 h-5" />
-            <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
+            <div className="text-xl font-semibold">{`${description}${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
           </div>
         </div>
         {isCheckpointOnly && (
