@@ -48,7 +48,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of column level monthly checkpoints. Contains categories of monthly checkpoints.
+ * Container of column level monthly recurring. Contains categories of monthly recurring.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -69,61 +69,61 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
         }
     };
 
-    @JsonPropertyDescription("Monthly checkpoints of nulls in the column")
+    @JsonPropertyDescription("Monthly recurring of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsMonthlyRecurringSpec nulls;
 
-    @JsonPropertyDescription("Monthly checkpoints of numeric in the column")
+    @JsonPropertyDescription("Monthly recurring of numeric in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericMonthlyRecurringSpec numeric;
 
-    @JsonPropertyDescription("Monthly checkpoints of strings in the column")
+    @JsonPropertyDescription("Monthly recurring of strings in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsMonthlyRecurringSpec strings;
 
-    @JsonPropertyDescription("Monthly checkpoints of uniqueness in the column")
+    @JsonPropertyDescription("Monthly recurring of uniqueness in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessMonthlyRecurringSpec uniqueness;
 
-    @JsonPropertyDescription("Monthly checkpoints of datetime in the column")
+    @JsonPropertyDescription("Monthly recurring of datetime in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeMonthlyRecurringSpec datetime;
 
-    @JsonPropertyDescription("Monthly checkpoints of Personal Identifiable Information (PII) in the column")
+    @JsonPropertyDescription("Monthly recurring of Personal Identifiable Information (PII) in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiMonthlyRecurringSpec pii;
 
-    @JsonPropertyDescription("Monthly checkpoints of custom SQL checks in the column")
+    @JsonPropertyDescription("Monthly recurring of custom SQL checks in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSqlMonthlyRecurringSpec sql;
 
-    @JsonPropertyDescription("Monthly checkpoints of booleans in the column")
+    @JsonPropertyDescription("Monthly recurring of booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolMonthlyRecurringSpec bool;
 
-    @JsonPropertyDescription("Monthly checkpoints of integrity in the column")
+    @JsonPropertyDescription("Monthly recurring of integrity in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnIntegrityMonthlyRecurringSpec integrity;
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnNullsMonthlyRecurringSpec getNulls() {
         return nulls;
     }
 
     /**
-     * Sets the container of nulls data quality checks (checkpoints).
+     * Sets the container of nulls data quality checks (recurring).
      * @param nulls New nulls checks.
      */
     public void setNulls(ColumnNullsMonthlyRecurringSpec nulls) {
@@ -133,15 +133,15 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnNumericMonthlyRecurringSpec getNumeric() {
         return numeric;
     }
 
     /**
-     * Sets the container of numeric data quality checks (checkpoints).
+     * Sets the container of numeric data quality checks (recurring).
      * @param numeric New numeric checks.
      */
     public void setNumeric(ColumnNumericMonthlyRecurringSpec numeric) {
@@ -151,15 +151,15 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnStringsMonthlyRecurringSpec getStrings() {
         return strings;
     }
 
     /**
-     * Sets the container of strings data quality checks (checkpoints).
+     * Sets the container of strings data quality checks (recurring).
      * @param strings New strings checks.
      */
     public void setStrings(ColumnStringsMonthlyRecurringSpec strings) {
@@ -169,15 +169,15 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnUniquenessMonthlyRecurringSpec getUniqueness() {
         return uniqueness;
     }
 
     /**
-     * Sets the container of uniqueness data quality checks (checkpoints).
+     * Sets the container of uniqueness data quality checks (recurring).
      * @param uniqueness New uniqueness checks.
      */
     public void setUniqueness(ColumnUniquenessMonthlyRecurringSpec uniqueness) {
@@ -187,15 +187,15 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnDatetimeMonthlyRecurringSpec getDatetime() {
         return datetime;
     }
 
     /**
-     * Sets the container of datetime data quality checks (checkpoints).
+     * Sets the container of datetime data quality checks (recurring).
      * @param datetime New datetime checks.
      */
     public void setDatetime(ColumnDatetimeMonthlyRecurringSpec datetime) {
@@ -205,15 +205,15 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnPiiMonthlyRecurringSpec getPii() {
         return pii;
     }
 
     /**
-     * Sets the container of Personal Identifiable Information (PII) data quality checks (checkpoints).
+     * Sets the container of Personal Identifiable Information (PII) data quality checks (recurring).
      * @param pii New Personal Identifiable Information (PII) checks.
      */
     public void setPii(ColumnPiiMonthlyRecurringSpec pii) {
@@ -241,15 +241,15 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnBoolMonthlyRecurringSpec getBool() {
         return bool;
     }
 
     /**
-     * Sets the container of booleans data quality checks (checkpoints).
+     * Sets the container of booleans data quality checks (recurring).
      * @param bool New booleans checks.
      */
     public void setBool(ColumnBoolMonthlyRecurringSpec bool) {
@@ -259,15 +259,15 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnIntegrityMonthlyRecurringSpec getIntegrity() {
         return integrity;
     }
 
     /**
-     * Sets the container of integrity data quality checks (checkpoints).
+     * Sets the container of integrity data quality checks (recurring).
      * @param integrity New integrity checks.
      */
     public void setIntegrity(ColumnIntegrityMonthlyRecurringSpec integrity) {
@@ -302,18 +302,18 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
-     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     * Returns the type of checks (profiling, recurring, partitioned).
      *
      * @return Check type.
      */
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.CHECKPOINT;
+        return CheckType.RECURRING;
     }
 
     /**
-     * Returns the time range for checkpoint and partitioned checks (daily, monthly, etc.).
+     * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
      * Adhoc checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).

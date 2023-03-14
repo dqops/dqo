@@ -48,7 +48,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Container of column level daily checkpoints. Contains categories of daily checkpoints.
+ * Container of column level daily recurring. Contains categories of daily recurring.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -69,61 +69,61 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
         }
     };
 
-    @JsonPropertyDescription("Daily checkpoints of nulls in the column")
+    @JsonPropertyDescription("Daily recurring of nulls in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNullsDailyRecurringSpec nulls;
 
-    @JsonPropertyDescription("Daily checkpoints of numeric in the column")
+    @JsonPropertyDescription("Daily recurring of numeric in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericDailyRecurringSpec numeric;
 
-    @JsonPropertyDescription("Daily checkpoints of strings in the column")
+    @JsonPropertyDescription("Daily recurring of strings in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnStringsDailyRecurringSpec strings;
 
-    @JsonPropertyDescription("Daily checkpoints of uniqueness in the column")
+    @JsonPropertyDescription("Daily recurring of uniqueness in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnUniquenessDailyRecurringSpec uniqueness;
 
-    @JsonPropertyDescription("Daily checkpoints of datetime in the column")
+    @JsonPropertyDescription("Daily recurring of datetime in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnDatetimeDailyRecurringSpec datetime;
 
-    @JsonPropertyDescription("Daily checkpoints of Personal Identifiable Information (PII) in the column")
+    @JsonPropertyDescription("Daily recurring of Personal Identifiable Information (PII) in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiDailyRecurringSpec pii;
 
-    @JsonPropertyDescription("Daily checkpoints of custom SQL checks in the column")
+    @JsonPropertyDescription("Daily recurring of custom SQL checks in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSqlDailyRecurringSpec sql;
 
-    @JsonPropertyDescription("Daily checkpoints of booleans in the column")
+    @JsonPropertyDescription("Daily recurring of booleans in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnBoolDailyRecurringSpec bool;
 
-    @JsonPropertyDescription("Daily checkpoints of integrity in the column")
+    @JsonPropertyDescription("Daily recurring of integrity in the column")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnIntegrityDailyRecurringSpec integrity;
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnNullsDailyRecurringSpec getNulls() {
         return nulls;
     }
 
     /**
-     * Sets the container of nulls data quality checks (checkpoints).
+     * Sets the container of nulls data quality checks (recurring).
      * @param nulls New nulls checks.
      */
     public void setNulls(ColumnNullsDailyRecurringSpec nulls) {
@@ -133,15 +133,15 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnNumericDailyRecurringSpec getNumeric() {
         return numeric;
     }
 
     /**
-     * Sets the container of numeric data quality checks (checkpoints).
+     * Sets the container of numeric data quality checks (recurring).
      * @param numeric New numeric checks.
      */
     public void setNumeric(ColumnNumericDailyRecurringSpec numeric) {
@@ -151,15 +151,15 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnStringsDailyRecurringSpec getStrings() {
         return strings;
     }
 
     /**
-     * Sets the container of strings data quality checks (checkpoints).
+     * Sets the container of strings data quality checks (recurring).
      * @param strings New strings checks.
      */
     public void setStrings(ColumnStringsDailyRecurringSpec strings) {
@@ -169,15 +169,15 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnUniquenessDailyRecurringSpec getUniqueness() {
         return uniqueness;
     }
 
     /**
-     * Sets the container of uniqueness data quality checks (checkpoints).
+     * Sets the container of uniqueness data quality checks (recurring).
      * @param uniqueness New uniqueness checks.
      */
     public void setUniqueness(ColumnUniquenessDailyRecurringSpec uniqueness) {
@@ -187,15 +187,15 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnDatetimeDailyRecurringSpec getDatetime() {
         return datetime;
     }
 
     /**
-     * Sets the container of datetime data quality checks (checkpoints).
+     * Sets the container of datetime data quality checks (recurring).
      * @param datetime New datetime checks.
      */
     public void setDatetime(ColumnDatetimeDailyRecurringSpec datetime) {
@@ -205,15 +205,15 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnPiiDailyRecurringSpec getPii() {
         return pii;
     }
 
     /**
-     * Sets the container of Personal Identifiable Information (PII) data quality checks (checkpoints).
+     * Sets the container of Personal Identifiable Information (PII) data quality checks (recurring).
      * @param pii New Personal Identifiable Information (PII) checks.
      */
     public void setPii(ColumnPiiDailyRecurringSpec pii) {
@@ -241,15 +241,15 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnBoolDailyRecurringSpec getBool() {
         return bool;
     }
 
     /**
-     * Sets the container of booleans data quality checks (checkpoints).
+     * Sets the container of booleans data quality checks (recurring).
      * @param bool New booleans checks.
      */
     public void setBool(ColumnBoolDailyRecurringSpec bool) {
@@ -259,15 +259,15 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the container of checkpoints for standard data quality checks.
-     * @return Container of row standard data quality checkpoints.
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
      */
     public ColumnIntegrityDailyRecurringSpec getIntegrity() {
         return integrity;
     }
 
     /**
-     * Sets the container of integrity data quality checks (checkpoints).
+     * Sets the container of integrity data quality checks (recurring).
      * @param integrity New integrity checks.
      */
     public void setIntegrity(ColumnIntegrityDailyRecurringSpec integrity) {
@@ -302,18 +302,18 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     }
 
     /**
-     * Returns the type of checks (adhoc, checkpoint, partitioned).
+     * Returns the type of checks (profiling, recurring, partitioned).
      *
      * @return Check type.
      */
     @Override
     @JsonIgnore
     public CheckType getCheckType() {
-        return CheckType.CHECKPOINT;
+        return CheckType.RECURRING;
     }
 
     /**
-     * Returns the time range for checkpoint and partitioned checks (daily, monthly, etc.).
+     * Returns the time range for recurring and partitioned checks (daily, monthly, etc.).
      * Adhoc checks do not have a time range and return null.
      *
      * @return Time range (daily, monthly, ...).
