@@ -90,7 +90,7 @@ public class SchemaModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(schemaName + ".*");
-                setCheckType(CheckType.CHECKPOINT);
+                setCheckType(CheckType.RECURRING);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()

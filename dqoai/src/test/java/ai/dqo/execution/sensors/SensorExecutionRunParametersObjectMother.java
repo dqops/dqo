@@ -97,13 +97,13 @@ public class SensorExecutionRunParametersObjectMother {
     }
 
     /**
-     * Creates a sensor run parameters object to run a checkpoint check on a given sample table.
+     * Creates a sensor run parameters object to run a recurring check on a given sample table.
      * @param sampleTableMetadata Sample table metadata.
      * @param checkSpec Check specification.
      * @param timeScale Time scale (daily, monthly).
      * @return Sensor execution run parameters.
      */
-    public static SensorExecutionRunParameters createForTableForCheckpointCheck(
+    public static SensorExecutionRunParameters createForTableForRecurringCheck(
             SampleTableMetadata sampleTableMetadata,
             AbstractCheckSpec<?,?,?,?> checkSpec,
             CheckTimeScale timeScale) {
@@ -112,10 +112,10 @@ public class SensorExecutionRunParametersObjectMother {
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
         SensorExecutionRunParametersFactory factory = getFactory();
         TimeSeriesConfigurationSpec timeSeriesConfigurationSpec =
-                TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForCheckpoint(timeScale);
+                TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForRecurring(timeScale);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, null,
-                checkSpec, CheckType.CHECKPOINT, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, CheckType.RECURRING, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -206,14 +206,14 @@ public class SensorExecutionRunParametersObjectMother {
     }
 
     /**
-     * Creates a sensor run parameters object to run a checkpoint check on a given sample table, when a column is selected.
+     * Creates a sensor run parameters object to run a recurring check on a given sample table, when a column is selected.
      * @param sampleTableMetadata Sample table metadata.
      * @param columnName Target column name.
      * @param checkSpec Check specification.
-     * @param checkTimeScale Checkpoint time scale (daily or monthly).
+     * @param checkTimeScale Recurring time scale (daily or monthly).
      * @return Sensor execution run parameters.
      */
-    public static SensorExecutionRunParameters createForTableColumnForCheckpointCheck(
+    public static SensorExecutionRunParameters createForTableColumnForRecurringCheck(
             SampleTableMetadata sampleTableMetadata,
             String columnName,
             AbstractCheckSpec<?,?,?,?> checkSpec,
@@ -223,10 +223,10 @@ public class SensorExecutionRunParametersObjectMother {
         TableSpec tableSpec = sampleTableMetadata.getTableSpec();
         ColumnSpec columnSpec = tableSpec.getColumns().get(columnName);
         SensorExecutionRunParametersFactory factory = getFactory();
-        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForCheckpoint(checkTimeScale);
+        TimeSeriesConfigurationSpec timeSeriesConfigurationSpec = TimeSeriesConfigurationSpecObjectMother.createTimeSeriesForRecurring(checkTimeScale);
 
         SensorExecutionRunParameters sensorExecutionRunParameters = factory.createSensorParameters(connectionSpec, tableSpec, columnSpec,
-                checkSpec, CheckType.CHECKPOINT, timeSeriesConfigurationSpec, null, dialectSettings);
+                checkSpec, CheckType.RECURRING, timeSeriesConfigurationSpec, null, dialectSettings);
         return sensorExecutionRunParameters;
     }
 
@@ -235,7 +235,7 @@ public class SensorExecutionRunParametersObjectMother {
      * @param sampleTableMetadata Sample table metadata.
      * @param columnName Target column name.
      * @param checkSpec Check specification.
-     * @param checkTimeScale Checkpoint time scale (daily or monthly).
+     * @param checkTimeScale Recurring time scale (daily or monthly).
      * @param timePartitioningColumn The name of a date partitioning column.
      * @return Sensor execution run parameters.
      */

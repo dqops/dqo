@@ -71,11 +71,11 @@ public class RedshiftColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
         this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -87,11 +87,11 @@ public class RedshiftColumnIntegrityForeignKeyNotMatchCountSensorParametersSpecI
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
         this.sut.setForeignTable(this.sampleTableMetadataForeign.getTableData().getHashedTableName());
         this.sut.setForeignColumn("primary_key");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "foreign_key", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

@@ -16,15 +16,15 @@
 package ai.dqo.services.check.matching;
 
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
-import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.column.checkpoints.ColumnMonthlyCheckpointCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
@@ -70,15 +70,15 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
                 checkSearchFilters, null, tableSpec, null, null),
                 adHocChecks.getCheckTarget(), adHocChecks.getCheckType(), adHocChecks.getCheckTimeScale());
 
-        TableDailyCheckpointCategoriesSpec dailyCheckpoints = Objects.requireNonNullElseGet(tableSpec.getCheckpoints().getDaily(), TableDailyCheckpointCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyCheckpoints,
+        TableDailyRecurringCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurring().getDaily(), TableDailyRecurringCategoriesSpec::new);
+        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
-                dailyCheckpoints.getCheckTarget(), dailyCheckpoints.getCheckType(), dailyCheckpoints.getCheckTimeScale());
+                dailyRecurring.getCheckTarget(), dailyRecurring.getCheckType(), dailyRecurring.getCheckTimeScale());
 
-        TableMonthlyCheckpointCategoriesSpec monthlyCheckpoints = Objects.requireNonNullElseGet(tableSpec.getCheckpoints().getMonthly(), TableMonthlyCheckpointCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyCheckpoints,
+        TableMonthlyRecurringCategoriesSpec monthlyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurring().getMonthly(), TableMonthlyRecurringCategoriesSpec::new);
+        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
-                monthlyCheckpoints.getCheckTarget(), monthlyCheckpoints.getCheckType(), monthlyCheckpoints.getCheckTimeScale());
+                monthlyRecurring.getCheckTarget(), monthlyRecurring.getCheckType(), monthlyRecurring.getCheckTimeScale());
 
         TableDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(tableSpec.getPartitionedChecks().getDaily(), TableDailyPartitionedCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyPartitioned,
@@ -112,16 +112,16 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
                         checkSearchFilters, null, tableSpec,null, null),
                 adHocChecks.getCheckTarget(), adHocChecks.getCheckType(), adHocChecks.getCheckTimeScale());
 
-        ColumnCheckpointsSpec checkpoints = Objects.requireNonNullElseGet(columnSpec.getCheckpoints(), ColumnCheckpointsSpec::new);
-        ColumnDailyCheckpointCategoriesSpec dailyCheckpoints = Objects.requireNonNullElseGet(checkpoints.getDaily(), ColumnDailyCheckpointCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyCheckpoints,
+        ColumnRecurringSpec recurring = Objects.requireNonNullElseGet(columnSpec.getRecurring(), ColumnRecurringSpec::new);
+        ColumnDailyRecurringCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(recurring.getDaily(), ColumnDailyRecurringCategoriesSpec::new);
+        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
-                dailyCheckpoints.getCheckTarget(), dailyCheckpoints.getCheckType(), dailyCheckpoints.getCheckTimeScale());
+                dailyRecurring.getCheckTarget(), dailyRecurring.getCheckType(), dailyRecurring.getCheckTimeScale());
 
-        ColumnMonthlyCheckpointCategoriesSpec monthlyCheckpoints = Objects.requireNonNullElseGet(checkpoints.getMonthly(), ColumnMonthlyCheckpointCategoriesSpec::new);
-        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyCheckpoints,
+        ColumnMonthlyRecurringCategoriesSpec monthlyRecurring = Objects.requireNonNullElseGet(recurring.getMonthly(), ColumnMonthlyRecurringCategoriesSpec::new);
+        similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
-                monthlyCheckpoints.getCheckTarget(), monthlyCheckpoints.getCheckType(), monthlyCheckpoints.getCheckTimeScale());
+                monthlyRecurring.getCheckTarget(), monthlyRecurring.getCheckType(), monthlyRecurring.getCheckTimeScale());
 
         ColumnPartitionedChecksRootSpec partitionedChecks = Objects.requireNonNullElseGet(columnSpec.getPartitionedChecks(), ColumnPartitionedChecksRootSpec::new);
         ColumnDailyPartitionedCheckCategoriesSpec dailyPartitioned = Objects.requireNonNullElseGet(partitionedChecks.getDaily(), ColumnDailyPartitionedCheckCategoriesSpec::new);

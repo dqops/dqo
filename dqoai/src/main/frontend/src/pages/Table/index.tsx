@@ -10,7 +10,7 @@ import { IRootState } from "../../redux/reducers";
 import TableDetails from "../../components/Connection/TableView/TableDetails";
 import ScheduleDetail from "../../components/Connection/TableView/ScheduleDetail";
 import ProfilingView from "../../components/Connection/TableView/ProfilingView";
-import CheckpointsView from "../../components/Connection/TableView/CheckpointsView";
+import RecurringView from "../../components/Connection/TableView/RecurringView";
 import PartitionedChecks from "../../components/Connection/TableView/PartitionedChecks";
 import TableCommentView from "../../components/Connection/TableView/TableCommentView";
 import TableLabelsView from "../../components/Connection/TableView/TableLabelsView";
@@ -55,19 +55,19 @@ const TablePage = () => {
     isUpdatedComments,
     isUpdatedLabels,
     isUpdatedChecksUi,
-    isUpdatedDailyCheckpoints,
-    isUpdatedMonthlyCheckpoints,
+    isUpdatedDailyRecurring,
+    isUpdatedMonthlyRecurring,
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks,
     isUpdatedSchedule,
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
-  const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
+  const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
   const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
   const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
-    () => !isCheckpointOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
-    [isCheckpointOnly, isPartitionChecksOnly, isProfilingChecksOnly]
+    () => !isRecurringOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
+    [isRecurringOnly, isPartitionChecksOnly, isProfilingChecksOnly]
   );
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab));
@@ -138,16 +138,16 @@ const TablePage = () => {
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
-        item.value === 'checkpoints'
+        item.value === 'recurring'
           ? {
             ...item,
             isUpdated:
-              isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints
+              isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
           }
           : item
       )
     );
-  }, [isUpdatedDailyCheckpoints, isUpdatedMonthlyCheckpoints]);
+  }, [isUpdatedDailyRecurring, isUpdatedMonthlyRecurring]);
 
   useEffect(() => {
     setTabs(
@@ -170,7 +170,7 @@ const TablePage = () => {
     if (isProfilingChecksOnly) {
       return 'Advanced profiling for ';
     }
-    if (isCheckpointOnly) {
+    if (isRecurringOnly) {
       if (activeTab === 'monthly') {
         return 'Monthly recurring checks for ';
       } else {
@@ -189,7 +189,7 @@ const TablePage = () => {
       return 'Data source configuration for ';
     }
     return ''
-  }, [isProfilingChecksOnly, isCheckpointOnly, isPartitionChecksOnly, activeTab]);
+  }, [isProfilingChecksOnly, isRecurringOnly, isPartitionChecksOnly, activeTab]);
 
   return (
     <ConnectionLayout>
@@ -206,8 +206,8 @@ const TablePage = () => {
           {isProfilingChecksOnly && (
             <ProfilingView />
           )}
-          {isCheckpointOnly && (
-            <CheckpointsView />
+          {isRecurringOnly && (
+            <RecurringView />
           )}
           {isPartitionChecksOnly && (
             <PartitionedChecks />

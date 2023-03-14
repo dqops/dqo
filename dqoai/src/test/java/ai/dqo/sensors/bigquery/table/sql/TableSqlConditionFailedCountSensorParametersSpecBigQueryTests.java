@@ -59,8 +59,8 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
         return SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(this.sampleTableMetadata, this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(this.sampleTableMetadata, this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(this.sampleTableMetadata, this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -153,8 +153,8 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
@@ -249,8 +249,8 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                     DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers")));
@@ -363,8 +363,8 @@ public class TableSqlConditionFailedCountSensorParametersSpecBigQueryTests exten
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+    void renderSensor_whenRecurringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("strings_with_numbers"),

@@ -323,7 +323,7 @@ export const updateTableLabels =
       dispatch(updateTableLabelsFailed(err));
     }
   };
-// TODO: getTableChecks -> getTableProfilingChecks. Also getTableCheckpoints and getTablePartitionedChecks for CheckTimePartition
+// TODO: getTableChecks -> getTableProfilingChecks. Also getTableRecurring and getTablePartitionedChecks for CheckTimePartition
 export const getTableChecksRequest = () => ({
   type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS
 });
@@ -486,51 +486,51 @@ export const updateTableDefaultDataStreamMapping =
     }
   };
 
-export const getTableDailyCheckpointsRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS
+export const getTableDailyRecurringRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_DAILY_RECURRING
 });
 
-export const getTableDailyCheckpointsSuccess = (data: UIAllChecksModel) => ({
-  type: TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_SUCCESS,
+export const getTableDailyRecurringSuccess = (data: UIAllChecksModel) => ({
+  type: TABLE_ACTION.GET_TABLE_DAILY_RECURRING_SUCCESS,
   data
 });
 
-export const getTableDailyCheckpointsFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_DAILY_CHECKPOINTS_ERROR,
+export const getTableDailyRecurringFailed = (error: unknown) => ({
+  type: TABLE_ACTION.GET_TABLE_DAILY_RECURRING_ERROR,
   error
 });
 
-export const getTableDailyCheckpoints =
+export const getTableDailyRecurring =
   (connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableDailyCheckpointsRequest());
+    dispatch(getTableDailyRecurringRequest());
     try {
-      const res = await TableApiClient.getTableCheckpointsUI(
+      const res = await TableApiClient.getTableRecurringUI(
         connectionName,
         schemaName,
         tableName,
         'daily'
       );
-      dispatch(getTableDailyCheckpointsSuccess(res.data));
+      dispatch(getTableDailyRecurringSuccess(res.data));
     } catch (err) {
-      dispatch(getTableDailyCheckpointsFailed(err));
+      dispatch(getTableDailyRecurringFailed(err));
     }
   };
 
-export const updateTableDailyCheckpointsRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS
+export const updateTableDailyRecurringRequest = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DAILY_RECURRING
 });
 
-export const updateTableDailyCheckpointsSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS_SUCCESS
+export const updateTableDailyRecurringSuccess = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DAILY_RECURRING_SUCCESS
 });
 
-export const updateTableDailyCheckpointsFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DAILY_CHECKPOINTS_ERROR,
+export const updateTableDailyRecurringFailed = (error: unknown) => ({
+  type: TABLE_ACTION.UPDATE_TABLE_DAILY_RECURRING_ERROR,
   error
 });
 
-export const updateTableDailyCheckpoints =
+export const updateTableDailyRecurring =
   (
     connectionName: string,
     schemaName: string,
@@ -538,66 +538,66 @@ export const updateTableDailyCheckpoints =
     data: UIAllChecksModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableDailyCheckpointsRequest());
+    dispatch(updateTableDailyRecurringRequest());
     try {
-      await TableApiClient.updateTableCheckpointsUI(
+      await TableApiClient.updateTableRecurringUI(
         connectionName,
         schemaName,
         tableName,
         'daily',
         data
       );
-      dispatch(updateTableDailyCheckpointsSuccess());
+      dispatch(updateTableDailyRecurringSuccess());
     } catch (err) {
-      dispatch(updateTableDailyCheckpointsFailed(err));
+      dispatch(updateTableDailyRecurringFailed(err));
     }
   };
 
-export const getTableMonthlyCheckpointsRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS
+export const getTableMonthlyRecurringRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING
 });
 
-export const getTableMonthlyCheckpointsSuccess = (data: UIAllChecksModel) => ({
-  type: TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_SUCCESS,
+export const getTableMonthlyRecurringSuccess = (data: UIAllChecksModel) => ({
+  type: TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING_SUCCESS,
   data
 });
 
-export const getTableMonthlyCheckpointsFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_MONTHLY_CHECKPOINTS_ERROR,
+export const getTableMonthlyRecurringFailed = (error: unknown) => ({
+  type: TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING_ERROR,
   error
 });
 
-export const getTableMonthlyCheckpoints =
+export const getTableMonthlyRecurring =
   (connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableMonthlyCheckpointsRequest());
+    dispatch(getTableMonthlyRecurringRequest());
     try {
-      const res = await TableApiClient.getTableCheckpointsUI(
+      const res = await TableApiClient.getTableRecurringUI(
         connectionName,
         schemaName,
         tableName,
         'monthly'
       );
-      dispatch(getTableMonthlyCheckpointsSuccess(res.data));
+      dispatch(getTableMonthlyRecurringSuccess(res.data));
     } catch (err) {
-      dispatch(getTableMonthlyCheckpointsFailed(err));
+      dispatch(getTableMonthlyRecurringFailed(err));
     }
   };
 
-export const updateTableMonthlyCheckpointsRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS
+export const updateTableMonthlyRecurringRequest = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING
 });
 
-export const updateTableMonthlyCheckpointsSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS_SUCCESS
+export const updateTableMonthlyRecurringSuccess = () => ({
+  type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_SUCCESS
 });
 
-export const updateTableMonthlyCheckpointsFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_CHECKPOINTS_ERROR,
+export const updateTableMonthlyRecurringFailed = (error: unknown) => ({
+  type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_ERROR,
   error
 });
 
-export const updateTableMonthlyCheckpoints =
+export const updateTableMonthlyRecurring =
   (
     connectionName: string,
     schemaName: string,
@@ -605,18 +605,18 @@ export const updateTableMonthlyCheckpoints =
     data: UIAllChecksModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableMonthlyCheckpointsRequest());
+    dispatch(updateTableMonthlyRecurringRequest());
     try {
-      await TableApiClient.updateTableCheckpointsUI(
+      await TableApiClient.updateTableRecurringUI(
         connectionName,
         schemaName,
         tableName,
         'monthly',
         data
       );
-      dispatch(updateTableMonthlyCheckpointsSuccess());
+      dispatch(updateTableMonthlyRecurringSuccess());
     } catch (err) {
-      dispatch(updateTableMonthlyCheckpointsFailed(err));
+      dispatch(updateTableMonthlyRecurringFailed(err));
     }
   };
 
@@ -798,13 +798,13 @@ export const setUpdatedChecksUi = (checksUI?: UIAllChecksModel) => ({
   checksUI
 });
 
-export const setUpdatedDailyCheckPoints = (checksUI?: UIAllChecksModel) => ({
-  type: TABLE_ACTION.SET_TABLE_DAILY_CHECKPOINTS,
+export const setUpdatedDailyRecurring = (checksUI?: UIAllChecksModel) => ({
+  type: TABLE_ACTION.SET_TABLE_DAILY_RECURRING,
   checksUI
 });
 
-export const setUpdatedMonthlyCheckPoints = (checksUI?: UIAllChecksModel) => ({
-  type: TABLE_ACTION.SET_TABLE_MONTHLY_CHECKPOINTS,
+export const setUpdatedMonthlyRecurring = (checksUI?: UIAllChecksModel) => ({
+  type: TABLE_ACTION.SET_TABLE_MONTHLY_RECURRING,
   checksUI
 });
 
@@ -863,28 +863,28 @@ export const getTableProfilingChecksUIFilter =
       }
     };
 
-export const getTableCheckpointsUIFilterRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER
+export const getTableRecurringUIFilterRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER
 });
 
-export const getTableCheckpointsUIFilterSuccess = (
+export const getTableRecurringUIFilterSuccess = (
   data: UIAllChecksModel
 ) => ({
-  type: TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER_SUCCESS,
+  type: TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER_SUCCESS,
   data
 });
 
-export const getTableCheckpointsUIFilterFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_CHECKPOINTS_UI_FILTER_ERROR,
+export const getTableRecurringUIFilterFailed = (error: unknown) => ({
+  type: TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER_ERROR,
   error
 });
 
-export const getTableCheckpointsUIFilter =
+export const getTableRecurringUIFilter =
   (connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
     async (dispatch: Dispatch) => {
-      dispatch(getTableCheckpointsUIFilterRequest());
+      dispatch(getTableRecurringUIFilterRequest());
       try {
-        const res = await TableApiClient.getTableCheckpointsUIFilter(
+        const res = await TableApiClient.getTableRecurringUIFilter(
           connectionName,
           schemaName,
           tableName,
@@ -892,9 +892,9 @@ export const getTableCheckpointsUIFilter =
           category,
           checkName
         );
-        dispatch(getTableCheckpointsUIFilterSuccess(res.data));
+        dispatch(getTableRecurringUIFilterSuccess(res.data));
       } catch (err) {
-        dispatch(getTableCheckpointsUIFilterFailed(err));
+        dispatch(getTableRecurringUIFilterFailed(err));
       }
     };
 
@@ -938,8 +938,8 @@ export const setTableUpdatedCheckUiFilter = (ui: UIAllChecksModel) => ({
   data: ui
 });
 
-export const setTableUpdatedCheckpointsUIFilter = (ui: UIAllChecksModel) => ({
-  type: TABLE_ACTION.SET_UPDATED_CHECKPOINTS_UI_FILTER,
+export const setTableUpdatedRecurringUIFilter = (ui: UIAllChecksModel) => ({
+  type: TABLE_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
   data: ui
 });
 export const setTableUpdatedPartitionedChecksUiFilter = (ui: UIAllChecksModel) => ({

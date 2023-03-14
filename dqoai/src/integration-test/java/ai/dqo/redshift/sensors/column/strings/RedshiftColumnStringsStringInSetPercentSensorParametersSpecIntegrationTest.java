@@ -73,7 +73,7 @@ public class RedshiftColumnStringsStringInSetPercentSensorParametersSpecIntegrat
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("e55e");
         values.add("a111a");
@@ -82,7 +82,7 @@ public class RedshiftColumnStringsStringInSetPercentSensorParametersSpecIntegrat
         values.add("b22b");
         this.sut.setValues(values);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -94,7 +94,7 @@ public class RedshiftColumnStringsStringInSetPercentSensorParametersSpecIntegrat
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
         List<String> values = new ArrayList<>();
         values.add("e55e");
         values.add("a111a");
@@ -103,7 +103,7 @@ public class RedshiftColumnStringsStringInSetPercentSensorParametersSpecIntegrat
         values.add("b22b");
         this.sut.setValues(values);
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
                 sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

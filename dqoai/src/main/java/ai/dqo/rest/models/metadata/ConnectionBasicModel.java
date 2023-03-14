@@ -108,7 +108,7 @@ public class ConnectionBasicModel {
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setCheckType(CheckType.CHECKPOINT);
+                setCheckType(CheckType.RECURRING);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()

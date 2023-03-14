@@ -7,8 +7,8 @@ import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
-  getColumnMonthlyCheckpoints,
-  updateColumnMonthlyCheckpoints
+  getColumnMonthlyRecurring,
+  updateColumnMonthlyRecurring
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { useParams } from "react-router-dom";
@@ -16,7 +16,7 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 
 const ColumnMonthlyChecksView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { connection: string, schema: string, table: string, column: string } = useParams();
-  const { monthlyCheckpoints, isUpdating, loading } = useSelector(
+  const { monthlyRecurring, isUpdating, loading } = useSelector(
     (state: IRootState) => state.column
   );
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
@@ -25,18 +25,18 @@ const ColumnMonthlyChecksView = () => {
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnCheckpointsOverview(connectionName, schemaName, tableName, columnName, 'monthly').then((res) => {
+    CheckResultOverviewApi.getColumnRecurringOverview(connectionName, schemaName, tableName, columnName, 'monthly').then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
-    setUpdatedChecksUI(monthlyCheckpoints);
-  }, [monthlyCheckpoints]);
+    setUpdatedChecksUI(monthlyRecurring);
+  }, [monthlyRecurring]);
 
   useEffect(() => {
     dispatch(
-      getColumnMonthlyCheckpoints(
+      getColumnMonthlyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -49,7 +49,7 @@ const ColumnMonthlyChecksView = () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateColumnMonthlyCheckpoints(
+      updateColumnMonthlyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -58,7 +58,7 @@ const ColumnMonthlyChecksView = () => {
       )
     );
     await dispatch(
-      getColumnMonthlyCheckpoints(
+      getColumnMonthlyRecurring(
         connectionName,
         schemaName,
         tableName,

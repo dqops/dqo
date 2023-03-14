@@ -61,8 +61,8 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         return SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(this.sampleTableMetadata, "strings_with_numbers", this.checkSpec);
     }
 
-    private SensorExecutionRunParameters getRunParametersCheckpoint(CheckTimeScale timeScale) {
-        return SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(this.sampleTableMetadata, "strings_with_numbers", this.checkSpec, timeScale);
+    private SensorExecutionRunParameters getRunParametersRecurring(CheckTimeScale timeScale) {
+        return SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(this.sampleTableMetadata, "strings_with_numbers", this.checkSpec, timeScale);
     }
 
     private SensorExecutionRunParameters getRunParametersPartitioned(CheckTimeScale timeScale, String timeSeriesColumn) {
@@ -196,7 +196,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesNoDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -204,7 +204,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
 
         String renderedTemplate = JinjaTemplateRenderServiceObjectMother.renderBuiltInTemplate(runParameters);
         String target_query = """
@@ -358,7 +358,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesOneDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -366,7 +366,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("result")));
@@ -539,7 +539,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
     }
 
     @Test
-    void renderSensor_whenCheckpointDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
+    void renderSensor_whenRecurringDefaultTimeSeriesThreeDataStream_thenRendersCorrectSql() {
         List<String> values = new ArrayList<>();
         values.add("a111a");
         values.add("d44d");
@@ -547,7 +547,7 @@ public class ColumnStringsStringMostPopularValuesSensorParametersSpecBigQueryTes
         this.sut.setTopValues(2L);
         this.sut.setFilter("id < 5");
 
-        SensorExecutionRunParameters runParameters = this.getRunParametersCheckpoint(CheckTimeScale.monthly);
+        SensorExecutionRunParameters runParameters = this.getRunParametersRecurring(CheckTimeScale.monthly);
         runParameters.setDataStreams(
                 DataStreamMappingSpecObjectMother.create(
                         DataStreamLevelSpecObjectMother.createColumnMapping("result"),

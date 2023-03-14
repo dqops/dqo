@@ -68,7 +68,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CommentsListSpec comments;
 
-    @JsonPropertyDescription("Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
+    @JsonPropertyDescription("Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
     private boolean disabled;
 
@@ -129,7 +129,7 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     }
 
     /**
-     * Checks if the data quality check (or checkpoint) is disabled.
+     * Checks if the data quality check (or recurring) is disabled.
      * @return True when the check is disabled.
      */
     public boolean isDisabled() {

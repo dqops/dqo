@@ -113,7 +113,7 @@ public class ColumnBasicModel {
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.PROFILING));
-            setHasAnyConfiguredRecurringChecks(columnSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredRecurringChecks(columnSpec.hasAnyChecksConfigured(CheckType.RECURRING));
             setHasAnyConfiguredPartitionChecks(columnSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
@@ -135,7 +135,7 @@ public class ColumnBasicModel {
                 setConnectionName(connectionName);
                 setSchemaTableName(physicalTableName.toTableSearchFilter());
                 setColumnName(columnName);
-                setCheckType(CheckType.CHECKPOINT);
+                setCheckType(CheckType.RECURRING);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
@@ -191,7 +191,7 @@ public class ColumnBasicModel {
             setTypeSnapshot(columnSpec.getTypeSnapshot());
             setHasAnyConfiguredChecks(columnSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(columnSpec.hasAnyChecksConfigured(CheckType.PROFILING));
-            setHasAnyConfiguredRecurringChecks(columnSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredRecurringChecks(columnSpec.hasAnyChecksConfigured(CheckType.RECURRING));
             setHasAnyConfiguredPartitionChecks(columnSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
         }};
     }
