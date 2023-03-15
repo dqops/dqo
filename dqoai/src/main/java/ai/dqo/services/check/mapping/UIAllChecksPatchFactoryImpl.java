@@ -93,8 +93,6 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
                                                          ExecutionContext executionContext) {
         UIAllChecksModel uiAllChecksModel = new UIAllChecksModel();
         uiAllChecksModel.setConnectionName(connectionWrapper.getName());
-        uiAllChecksModel.setChecksType(checkSearchFilters.getCheckType());
-        uiAllChecksModel.setChecksTimeScale(checkSearchFilters.getTimeScale());
 
         // TODO: Add templates.
 
@@ -333,6 +331,8 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
             UIQualityCategoryModel baseModel,
             CheckSearchFilters checkSearchFilters) {
         UIQualityCategoryModel result = new UIQualityCategoryModel();
+        result.setCategory(baseModel.getCategory());
+        result.setHelpText(baseModel.getHelpText());
         for (UICheckModel checkModel: baseModel.getChecks()) {
             if (checkSearchFilters.getCheckName() == null
                     || checkSearchFilters.getCheckName().equals(checkModel.getCheckName())) {

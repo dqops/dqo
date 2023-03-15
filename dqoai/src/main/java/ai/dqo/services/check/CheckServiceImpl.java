@@ -23,6 +23,7 @@ import ai.dqo.execution.checks.RunChecksQueueJob;
 import ai.dqo.execution.checks.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
+import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionList;
@@ -33,10 +34,8 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.services.check.mapping.UIAllChecksPatchApplier;
 import ai.dqo.services.check.mapping.UIAllChecksPatchFactory;
 import ai.dqo.services.check.mapping.models.*;
-import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
-import ai.dqo.services.check.mapping.models.column.UIColumnChecksModel;
-import ai.dqo.services.check.mapping.models.column.UITableColumnChecksModel;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.utils.conversion.StringTypeCaster;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -225,9 +224,9 @@ public class CheckServiceImpl implements CheckService {
         }
 
         for (UIFieldModel patch: patches) {
-            String patchName = patch.getDefinition().getFieldName();
+            String patchName = patch.getDefinition().getDisplayName();
             Optional<UIFieldModel> shouldSubstitute = ruleParameterFields.stream()
-                    .filter(field -> field.getDefinition().getFieldName().equals(patchName))
+                    .filter(field -> field.getDefinition().getDisplayName().equals(patchName))
                     .findAny();
 
             if (shouldSubstitute.isPresent()) {
@@ -245,11 +244,39 @@ public class CheckServiceImpl implements CheckService {
         for (Map.Entry<String, String> option: options.entrySet()) {
             UIFieldModel uiFieldModel = new UIFieldModel();
             ParameterDefinitionSpec parameterDefinition = new ParameterDefinitionSpec();
-            parameterDefinition.setFieldName(option.getKey());
+            parameterDefinition.setDisplayName(option.getKey());
             uiFieldModel.setDefinition(parameterDefinition);
-            uiFieldModel.setValue(option.getValue());
+
+            this.assignUiFieldModelValue(uiFieldModel, option.getValue());
             result.add(uiFieldModel);
         }
         return result;
     }
+
+    protected void assignUiFieldModelValue(UIFieldModel uiFieldModel, String value) {
+        Integer valInt = StringTypeCaster.tryParseInt(value);
+        if (valInt != null) {
+            uiFieldModel.setIntegerValue(valInt);
+            uiFieldModel.getDefinition().setDataType(ParameterDataType.integer_type);
+            return;
+        }
+
+        Long valLong = StringTypeCaster.tryParseLong(value);
+        if (valLong != null) {
+            uiFieldModel.setLongValue(valLong);
+            uiFieldModel.getDefinition().setDataType(ParameterDataType.long_type);
+            return;
+        }
+
+        Double valDouble = StringTypeCaster.tryParseDouble(value);
+        if (valDouble != null) {
+            uiFieldModel.setDoubleValue(valDouble);
+            uiFieldModel.getDefinition().setDataType(ParameterDataType.double_type);
+            return;
+        }
+
+        uiFieldModel.setStringValue(value);
+        uiFieldModel.getDefinition().setDataType(ParameterDataType.string_type);
+    }
+
 }

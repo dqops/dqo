@@ -42,12 +42,6 @@ public class UIAllChecksModel {
     @JsonPropertyDescription("Connection name.")
     private String connectionName;
 
-    @JsonPropertyDescription("Checks' type.")
-    private CheckType checksType;
-
-    @JsonPropertyDescription("Checks' timescale.")
-    private CheckTimeScale checksTimeScale;
-
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
