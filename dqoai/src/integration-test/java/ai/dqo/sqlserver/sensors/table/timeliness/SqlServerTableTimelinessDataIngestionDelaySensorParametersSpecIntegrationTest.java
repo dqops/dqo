@@ -13,11 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sqlserver.sensors.table.standard;
+package ai.dqo.sqlserver.sensors.table.timeliness;
 
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
-import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
+import ai.dqo.checks.table.checkspecs.timeliness.TableDataIngestionDelayCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +28,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.table.standard.TableStandardRowCountSensorParametersSpec;
+import ai.dqo.sensors.table.timeliness.TableTimelinessDataIngestionDelaySensorParametersSpec;
 import ai.dqo.sqlserver.BaseSqlServerIntegrationTest;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,28 +36,29 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tech.tablesaw.api.Table;
 
+
 @SpringBootTest
-public class SqlServerTableStandardRowCountSensorParametersSpecSqlServerIntegrationTest extends BaseSqlServerIntegrationTest {
-    private TableStandardRowCountSensorParametersSpec sut;
+public class SqlServerTableTimelinessDataIngestionDelaySensorParametersSpecIntegrationTest extends BaseSqlServerIntegrationTest {
+    private TableTimelinessDataIngestionDelaySensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private TableRowCountCheckSpec checkSpec;
+    private TableDataIngestionDelayCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.sqlserver);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.test_average_delay, ProviderType.sqlserver);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new TableStandardRowCountSensorParametersSpec();
-        this.checkSpec = new TableRowCountCheckSpec();
+        this.sut = new TableTimelinessDataIngestionDelaySensorParametersSpec();
+        this.checkSpec = new TableDataIngestionDelayCheckSpec();
         this.checkSpec.setParameters(this.sut);
-        TableProfilingStandardChecksSpec category = new TableProfilingStandardChecksSpec();
-        this.sampleTableMetadata.getTableSpec().getChecks().setStandard(category);
-        category.setRowCount(this.checkSpec);
     }
 
     @Test
-    void runSensor_whenSensorExecuted_thenReturnsValues() {
+    void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForProfilingCheck(
                 sampleTableMetadata, this.checkSpec);
 
@@ -67,11 +67,14 @@ public class SqlServerTableStandardRowCountSensorParametersSpecSqlServerIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
 
@@ -80,45 +83,54 @@ public class SqlServerTableStandardRowCountSensorParametersSpecSqlServerIntegrat
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
-                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly);
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues2() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date");
+                sampleTableMetadata, this.checkSpec, CheckTimeScale.daily, "date1");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
-        Assertions.assertEquals(24, resultTable.rowCount());
+        Assertions.assertEquals(10, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(1, resultTable.column(0).get(0));
+        Assertions.assertEquals(10.041, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
-    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues2() {
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
+        this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
+
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForPartitionedCheck(
-                sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly, "date");
+                sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly, "date1");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(24, resultTable.column(0).get(0));
+        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
     }
 }

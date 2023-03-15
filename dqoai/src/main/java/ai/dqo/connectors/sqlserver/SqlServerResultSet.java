@@ -29,7 +29,7 @@ import java.util.Map;
 
 
 /**
- * Custom implementation of ResultSet interface.
+ * Custom implementation of ResultSet interface for SqlServer.
  */
 public class SqlServerResultSet implements ResultSet {
 

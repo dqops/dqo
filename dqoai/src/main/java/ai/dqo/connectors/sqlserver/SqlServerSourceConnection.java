@@ -18,6 +18,7 @@ package ai.dqo.connectors.sqlserver;
 import ai.dqo.connectors.ConnectorOperationFailedException;
 import ai.dqo.connectors.jdbc.AbstractJdbcSourceConnection;
 import ai.dqo.connectors.jdbc.JdbcConnectionPool;
+import ai.dqo.connectors.jdbc.JdbcQueryFailedException;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.zaxxer.hikari.HikariConfig;
@@ -26,7 +27,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import tech.tablesaw.api.ColumnType;
+import tech.tablesaw.api.Table;
+import tech.tablesaw.columns.Column;
+import tech.tablesaw.io.jdbc.SqlResultSetReader;
 
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.Locale;
 import java.util.Properties;
 
 /**
@@ -105,5 +113,36 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
 
         hikariConfig.setDataSourceProperties(dataSourceProperties);
         return hikariConfig;
+    }
+
+    /**
+     * Executes a provider specific SQL that returns a query. For example a SELECT statement or any other SQL text that also returns rows.
+     *
+     * @param sqlQueryStatement SQL statement that returns a row set.
+     * @return Tabular result captured from the query.
+     */
+    @Override
+    public Table executeQuery(String sqlQueryStatement) {
+        try {
+            try (Statement statement = this.getJdbcConnection().createStatement()) {
+                try (ResultSet results = statement.executeQuery(sqlQueryStatement)) {
+                    try (SqlServerResultSet sqlServerResultSet = new SqlServerResultSet(results)) {
+                        Table resultTable = Table.read().db(sqlServerResultSet, "query_result");
+                        for (Column<?> column : resultTable.columns()) {
+                            if (column.name() != null) {
+                                column.setName(column.name().toLowerCase(Locale.ENGLISH));
+                            }
+                        }
+                        return resultTable;
+                    }
+                }
+            }
+        }
+        catch (Exception ex) {
+            String connectionName = this.getConnectionSpec().getConnectionName();
+            throw new JdbcQueryFailedException(
+                    String.format("SQL query failed: %s, connection: %s, SQL: %s", ex.getMessage(), connectionName, sqlQueryStatement),
+                    ex, sqlQueryStatement, connectionName);
+        }
     }
 }

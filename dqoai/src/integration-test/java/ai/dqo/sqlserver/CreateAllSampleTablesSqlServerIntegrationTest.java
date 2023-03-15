@@ -86,11 +86,5 @@ public class CreateAllSampleTablesSqlServerIntegrationTest extends BaseSqlServer
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
     }
 
-    @Test
-    void runTest_whenTestDataFileNamedTest_value_match_left_table_IsCreated_thenPutItInSqlServer() {
-
-        SampleTableMetadataForeign sampleTableMetadataForeign = SampleTableMetadataForeignObjectMother.createSampleTableMetadataForeignForCsvFile(SampleCsvFileNames.value_match_left_table, ProviderType.sqlserver);
-        IntegrationTestSampleDataForeignObjectMother.ensureForeignTableExists(sampleTableMetadataForeign);
-    }
 
 }
