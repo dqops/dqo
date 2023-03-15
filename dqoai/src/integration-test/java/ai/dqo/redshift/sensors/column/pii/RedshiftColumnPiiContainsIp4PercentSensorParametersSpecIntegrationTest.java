@@ -13,10 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.snowflake.sensors.column.pii;
+package ai.dqo.redshift.sensors.column.pii;
 
+import ai.dqo.redshift.BaseRedshiftIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.pii.ColumnPiiValidIp4AddressPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.pii.ColumnPiiContainsIp4PercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -28,8 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.pii.ColumnPiiValidIp4AddressPercentSensorParametersSpec;
-import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
+import ai.dqo.sensors.column.pii.ColumnPiiContainsIp4PercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,19 +38,19 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class SnowflakeColumnPiiValidIp4AddressPercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
-    private ColumnPiiValidIp4AddressPercentSensorParametersSpec sut;
+public class RedshiftColumnPiiContainsIp4PercentSensorParametersSpecIntegrationTest extends BaseRedshiftIntegrationTest {
+    private ColumnPiiContainsIp4PercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnPiiValidIp4AddressPercentCheckSpec checkSpec;
+    private ColumnPiiContainsIp4PercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.snowflake);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.contains_ip4_test, ProviderType.redshift);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnPiiValidIp4AddressPercentSensorParametersSpec();
-        this.checkSpec = new ColumnPiiValidIp4AddressPercentCheckSpec();
+        this.sut = new ColumnPiiContainsIp4PercentSensorParametersSpec();
+        this.checkSpec = new ColumnPiiContainsIp4PercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -64,7 +64,7 @@ public class SnowflakeColumnPiiValidIp4AddressPercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(80.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -77,7 +77,7 @@ public class SnowflakeColumnPiiValidIp4AddressPercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(80.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -90,7 +90,7 @@ public class SnowflakeColumnPiiValidIp4AddressPercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(80.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -103,7 +103,7 @@ public class SnowflakeColumnPiiValidIp4AddressPercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 
     @Test
@@ -116,6 +116,6 @@ public class SnowflakeColumnPiiValidIp4AddressPercentSensorParametersSpecIntegra
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0, resultTable.column(0).get(0));
     }
 }

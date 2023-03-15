@@ -43,7 +43,9 @@ public class ColumnPiiDailyRecurringSpec extends AbstractCheckCategorySpec {
             put("daily_valid_email_percent", o -> o.dailyValidEmailPercent);
             put("daily_contains_email_percent", o -> o.dailyContainsEmailPercent);
             put("daily_valid_ip4_address_percent", o -> o.dailyValidIp4AddressPercent);
+            put("daily_contains_ip4_percent", o -> o.dailyContainsIp4Percent);
             put("daily_valid_ip6_address_percent", o -> o.dailyValidIp6AddressPercent);
+            put("daily_contains_ip6_percent", o -> o.dailyContainsIp6Percent);
         }
     };
 
@@ -68,8 +70,14 @@ public class ColumnPiiDailyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnPiiValidIp4AddressPercentCheckSpec dailyValidIp4AddressPercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains IP4 address in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnPiiContainsIp4PercentCheckSpec dailyContainsIp4Percent;
+
     @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
     private ColumnPiiValidIp6AddressPercentCheckSpec dailyValidIp6AddressPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains IP6 address in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnPiiContainsIp6PercentCheckSpec dailyContainsIp6Percent;
 
     /**
      * Returns a minimum valid USA phone percent check.
@@ -198,6 +206,24 @@ public class ColumnPiiDailyRecurringSpec extends AbstractCheckCategorySpec {
     }
 
     /**
+     * Returns a contains IP4 percent check.
+     * @return Contains IP4 percent check.
+     */
+    public ColumnPiiContainsIp4PercentCheckSpec getDailyContainsIp4Percent() {
+        return dailyContainsIp4Percent;
+    }
+
+    /**
+     * Sets a new definition of a contains IP4 percent check.
+     * @param dailyContainsIp4Percent Contains IP4 percent check.
+     */
+    public void setDailyContainsIp4Percent(ColumnPiiContainsIp4PercentCheckSpec dailyContainsIp4Percent) {
+        this.setDirtyIf(!Objects.equals(this.dailyContainsIp4Percent, dailyContainsIp4Percent));
+        this.dailyContainsIp4Percent = dailyContainsIp4Percent;
+        propagateHierarchyIdToField(dailyContainsIp4Percent, "daily_contains_ip4_percent");
+    }
+
+    /**
      * Returns a minimum valid IP6 address percent check.
      * @return Minimum valid IP6 address percent check.
      */
@@ -213,6 +239,24 @@ public class ColumnPiiDailyRecurringSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.dailyValidIp6AddressPercent, dailyValidIp6AddressPercent));
         this.dailyValidIp6AddressPercent = dailyValidIp6AddressPercent;
         propagateHierarchyIdToField(dailyValidIp6AddressPercent, "daily_valid_ip6_address_percent");
+    }
+
+    /**
+     * Returns a contains IP6 percent check.
+     * @return Contains IP6 percent check.
+     */
+    public ColumnPiiContainsIp6PercentCheckSpec getDailyContainsIp6Percent() {
+        return dailyContainsIp6Percent;
+    }
+
+    /**
+     * Sets a new definition of a contains IP6 percent check.
+     * @param dailyContainsIp6Percent Contains IP6 percent check.
+     */
+    public void setDailyContainsIp6Percent(ColumnPiiContainsIp6PercentCheckSpec dailyContainsIp6Percent) {
+        this.setDirtyIf(!Objects.equals(this.dailyContainsIp6Percent, dailyContainsIp6Percent));
+        this.dailyContainsIp6Percent = dailyContainsIp6Percent;
+        propagateHierarchyIdToField(dailyContainsIp6Percent, "daily_contains_ip6_percent");
     }
 
     /**
