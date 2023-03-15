@@ -19,9 +19,9 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.checkpoints.ColumnCheckpointsSpec;
-import ai.dqo.checks.column.checkpoints.ColumnDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.column.checkpoints.ColumnMonthlyCheckpointCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
@@ -55,7 +55,7 @@ public class ColumnSpec extends AbstractSpec {
         {
 			put("type_snapshot", o -> o.typeSnapshot);
 			put("checks", o -> o.checks);
-            put("checkpoints", o -> o.checkpoints);
+            put("recurring", o -> o.recurring);
             put("partitioned_checks", o -> o.partitionedChecks);
             put("statistics_collector", o -> o.statisticsCollector);
             put("labels", o -> o.labels);
@@ -76,10 +76,10 @@ public class ColumnSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnProfilingCheckCategoriesSpec checks;
 
-    @JsonPropertyDescription("Configuration of column level checkpoints. Checkpoints are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.")
+    @JsonPropertyDescription("Configuration of column level recurring. Recurring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A recurring stores only the most recent data quality check result for each period of time.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnCheckpointsSpec checkpoints;
+    private ColumnRecurringSpec recurring;
 
     @JsonPropertyDescription("Configuration of column level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -167,21 +167,21 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Returns configuration of enabled column level checkpoints.
-     * @return Column level checkpoints.
+     * Returns configuration of enabled column level recurring.
+     * @return Column level recurring.
      */
-    public ColumnCheckpointsSpec getCheckpoints() {
-        return checkpoints;
+    public ColumnRecurringSpec getRecurring() {
+        return recurring;
     }
 
     /**
-     * Sets a new configuration of column level data quality checkpoints.
-     * @param checkpoints New checkpoints configuration.
+     * Sets a new configuration of column level data quality recurring.
+     * @param recurring New recurring configuration.
      */
-    public void setCheckpoints(ColumnCheckpointsSpec checkpoints) {
-        setDirtyIf(!Objects.equals(this.checkpoints, checkpoints));
-        this.checkpoints = checkpoints;
-        propagateHierarchyIdToField(checkpoints, "checkpoints");
+    public void setRecurring(ColumnRecurringSpec recurring) {
+        setDirtyIf(!Objects.equals(this.recurring, recurring));
+        this.recurring = recurring;
+        propagateHierarchyIdToField(recurring, "recurring");
     }
 
     /**
@@ -193,7 +193,7 @@ public class ColumnSpec extends AbstractSpec {
     }
 
     /**
-     * Sets a new configuration of column level date/time partitioned data quality checkpoints.
+     * Sets a new configuration of column level date/time partitioned data quality recurring.
      * @param partitionedChecks New configuration of date/time partitioned checks.
      */
     public void setPartitionedChecks(ColumnPartitionedChecksRootSpec partitionedChecks) {
@@ -277,31 +277,31 @@ public class ColumnSpec extends AbstractSpec {
                 return columnProfilingCheckCategoriesSpec;
             }
 
-            case CHECKPOINT: {
-                ColumnCheckpointsSpec checkpointsSpec = this.checkpoints;
-                if (checkpointsSpec == null) {
-                    checkpointsSpec = new ColumnCheckpointsSpec();
-                    checkpointsSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checkpoints"));
+            case RECURRING: {
+                ColumnRecurringSpec recurringSpec = this.recurring;
+                if (recurringSpec == null) {
+                    recurringSpec = new ColumnRecurringSpec();
+                    recurringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "recurring"));
                 }
 
                 switch (checkTimeScale) {
                     case daily: {
-                        if (checkpointsSpec.getDaily() != null) {
-                            return checkpointsSpec.getDaily();
+                        if (recurringSpec.getDaily() != null) {
+                            return recurringSpec.getDaily();
                         }
 
-                        ColumnDailyCheckpointCategoriesSpec dailyCheckpointCategoriesSpec = new ColumnDailyCheckpointCategoriesSpec();
-                        dailyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(checkpointsSpec.getHierarchyId(), "daily"));
-                        return dailyCheckpointCategoriesSpec;
+                        ColumnDailyRecurringCategoriesSpec dailyRecurringCategoriesSpec = new ColumnDailyRecurringCategoriesSpec();
+                        dailyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
+                        return dailyRecurringCategoriesSpec;
                     }
                     case monthly: {
-                        if (checkpointsSpec.getMonthly() != null) {
-                            return checkpointsSpec.getMonthly();
+                        if (recurringSpec.getMonthly() != null) {
+                            return recurringSpec.getMonthly();
                         }
 
-                        ColumnMonthlyCheckpointCategoriesSpec monthlyCheckpointCategoriesSpec = new ColumnMonthlyCheckpointCategoriesSpec();
-                        monthlyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(checkpointsSpec.getHierarchyId(), "monthly"));
-                        return monthlyCheckpointCategoriesSpec;
+                        ColumnMonthlyRecurringCategoriesSpec monthlyRecurringCategoriesSpec = new ColumnMonthlyRecurringCategoriesSpec();
+                        monthlyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
+                        return monthlyRecurringCategoriesSpec;
                     }
                     default:
                         throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
@@ -347,7 +347,7 @@ public class ColumnSpec extends AbstractSpec {
 
     /**
      * Sets the given container of checks at a proper level of the check hierarchy.
-     * The object could be an profiling check container, one of checkpoint containers or one of partitioned checks container.
+     * The object could be a profiling check container, one of recurring containers or one of partitioned checks container.
      * @param checkRootContainer Root check container to store.
      */
     @JsonIgnore
@@ -359,19 +359,19 @@ public class ColumnSpec extends AbstractSpec {
         if (checkRootContainer instanceof ColumnProfilingCheckCategoriesSpec) {
             this.setChecks((ColumnProfilingCheckCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof ColumnDailyCheckpointCategoriesSpec) {
-            if (this.checkpoints == null) {
-                this.setCheckpoints(new ColumnCheckpointsSpec());
+        else if (checkRootContainer instanceof ColumnDailyRecurringCategoriesSpec) {
+            if (this.recurring == null) {
+                this.setRecurring(new ColumnRecurringSpec());
             }
 
-            this.getCheckpoints().setDaily((ColumnDailyCheckpointCategoriesSpec)checkRootContainer);
+            this.getRecurring().setDaily((ColumnDailyRecurringCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof ColumnMonthlyCheckpointCategoriesSpec) {
-            if (this.checkpoints == null) {
-                this.setCheckpoints(new ColumnCheckpointsSpec());
+        else if (checkRootContainer instanceof ColumnMonthlyRecurringCategoriesSpec) {
+            if (this.recurring == null) {
+                this.setRecurring(new ColumnRecurringSpec());
             }
 
-            this.getCheckpoints().setMonthly((ColumnMonthlyCheckpointCategoriesSpec)checkRootContainer);
+            this.getRecurring().setMonthly((ColumnMonthlyRecurringCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof ColumnDailyPartitionedCheckCategoriesSpec) {
             if (this.partitionedChecks == null) {
@@ -446,7 +446,7 @@ public class ColumnSpec extends AbstractSpec {
             ColumnSpec cloned = (ColumnSpec) super.clone(); // skipping "this" deepClone, we are using an alternative clone concept
             cloned.comments = null;
             cloned.checks = null;
-            cloned.checkpoints = null;
+            cloned.recurring = null;
             cloned.partitionedChecks = null;
             cloned.statisticsCollector = null;
             cloned.labels = null;
@@ -476,7 +476,7 @@ public class ColumnSpec extends AbstractSpec {
             }
             cloned.comments = null;
             cloned.checks = null;
-            cloned.checkpoints = null;
+            cloned.recurring = null;
             cloned.partitionedChecks = null;
             cloned.labels = null;
             cloned.statisticsCollector = null;
@@ -496,7 +496,7 @@ public class ColumnSpec extends AbstractSpec {
             return true;
         }
 
-        if (this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks()) {
+        if (this.recurring != null && this.recurring.hasAnyConfiguredChecks()) {
             return true;
         }
 
@@ -517,8 +517,8 @@ public class ColumnSpec extends AbstractSpec {
             case PROFILING:
                 return this.checks != null && this.checks.hasAnyConfiguredChecks();
 
-            case CHECKPOINT:
-                return this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks();
+            case RECURRING:
+                return this.recurring != null && this.recurring.hasAnyConfiguredChecks();
 
             case PARTITIONED:
                 return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();

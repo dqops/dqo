@@ -6,8 +6,8 @@ import { IRootState } from '../../redux/reducers';
 import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
-  getTableDailyCheckpoints,
-  updateTableDailyCheckpoints
+  getTableDailyRecurring,
+  updateTableDailyRecurring
 } from '../../redux/actions/table.actions';
 import Button from '../../components/Button';
 import { CheckResultOverviewApi } from "../../services/apiClient";
@@ -16,7 +16,7 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 
 const TableDailyChecksView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
-  const { dailyCheckpoints, isUpdating, loading } = useSelector(
+  const { dailyRecurring, isUpdating, loading } = useSelector(
     (state: IRootState) => state.table
   );
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
@@ -25,24 +25,24 @@ const TableDailyChecksView = () => {
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
 
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getTableCheckpointsOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
+    CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
-    setUpdatedChecksUI(dailyCheckpoints);
-  }, [dailyCheckpoints]);
+    setUpdatedChecksUI(dailyRecurring);
+  }, [dailyRecurring]);
 
   useEffect(() => {
-    dispatch(getTableDailyCheckpoints(connectionName, schemaName, tableName));
+    dispatch(getTableDailyRecurring(connectionName, schemaName, tableName));
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateTableDailyCheckpoints(
+      updateTableDailyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -50,7 +50,7 @@ const TableDailyChecksView = () => {
       )
     );
     await dispatch(
-      getTableDailyCheckpoints(connectionName, schemaName, tableName)
+      getTableDailyRecurring(connectionName, schemaName, tableName)
     );
     setIsUpdated(false);
   };

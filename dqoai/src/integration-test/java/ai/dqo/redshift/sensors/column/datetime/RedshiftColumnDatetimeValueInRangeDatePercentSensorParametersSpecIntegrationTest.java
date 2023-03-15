@@ -76,7 +76,7 @@ public class RedshiftColumnDatetimeValueInRangeDatePercentSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();
@@ -97,7 +97,7 @@ public class RedshiftColumnDatetimeValueInRangeDatePercentSensorParametersSpecIn
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
 
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(sampleTableMetadata, "date_type", this.checkSpec);
         this.sut = (ColumnDatetimeValueInRangeDatePercentSensorParametersSpec) runParameters.getSensorParameters();

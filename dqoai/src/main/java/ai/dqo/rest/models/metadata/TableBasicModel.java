@@ -111,7 +111,7 @@ public class TableBasicModel {
             setDisabled(tableSpec.isDisabled());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
-            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.RECURRING));
             setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
@@ -130,7 +130,7 @@ public class TableBasicModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
-                setCheckType(CheckType.CHECKPOINT);
+                setCheckType(CheckType.RECURRING);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
@@ -167,7 +167,7 @@ public class TableBasicModel {
             setOwner(tableSpec.getOwner());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
-            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.CHECKPOINT));
+            setHasAnyConfiguredRecurringChecks(tableSpec.hasAnyChecksConfigured(CheckType.RECURRING));
             setHasAnyConfiguredPartitionChecks(tableSpec.hasAnyChecksConfigured(CheckType.PARTITIONED));
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
@@ -186,7 +186,7 @@ public class TableBasicModel {
             {{
                 setConnectionName(connectionName);
                 setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
-                setCheckType(CheckType.CHECKPOINT);
+                setCheckType(CheckType.RECURRING);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()

@@ -119,7 +119,7 @@ public class SensorReadoutsController {
     }
 
     /**
-     * Retrieves the complete sensor readouts of recent checkpoint executions on a table given a connection name, table name and a time scale.
+     * Retrieves the complete sensor readouts of recent recurring executions on a table given a connection name, table name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -129,17 +129,17 @@ public class SensorReadoutsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent sensor readouts.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timeScale}/readouts")
-    @ApiOperation(value = "getTableCheckpointsSensorReadouts", notes = "Returns the complete results of the most recent table level checkpoint executions for the checkpoints at a requested time scale",
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/readouts")
+    @ApiOperation(value = "getTableRecurringSensorReadouts", notes = "Returns the complete results of the most recent table level recurring executions for the recurring at a requested time scale",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Complete view of the most recent checkpoint executions for the checkpoints at a requested time scale on a table returned",
+            @ApiResponse(code = 200, message = "Complete view of the most recent recurring executions for the recurring at a requested time scale on a table returned",
                     response = SensorReadoutsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getTableCheckpointsSensorReadouts(
+    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getTableRecurringSensorReadouts(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -167,14 +167,14 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkpointPartition = tableSpec.getTableCheckRootContainer(CheckType.CHECKPOINT, timeScale);
+        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale);
         SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
         SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                checkpointPartition, loadParams);
+                recurringPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(sensorReadoutsDetailedDataModels), HttpStatus.OK); // 200
     }
 
@@ -303,7 +303,7 @@ public class SensorReadoutsController {
     }
 
     /**
-     * Retrieves the complete sensor readouts of recent checkpoint executions on a column given a connection name, table name, column name and a time scale.
+     * Retrieves the complete sensor readouts of recent recurring executions on a column given a connection name, table name, column name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
@@ -314,17 +314,17 @@ public class SensorReadoutsController {
      * @param monthEnd       Month end boundary.
      * @return View of the recent sensor readouts.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timeScale}/readouts")
-    @ApiOperation(value = "getColumnCheckpointsSensorReadouts", notes = "Returns a complete view of the sensor readouts for recent column level checkpoint executions for the checkpoints at a requested time scale",
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/readouts")
+    @ApiOperation(value = "getColumnRecurringSensorReadouts", notes = "Returns a complete view of the sensor readouts for recent column level recurring executions for the recurring at a requested time scale",
             response = SensorReadoutsDetailedDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "View of the sensor readouts of recent checkpoint executions for the checkpoints at a requested time scale on a column returned",
+            @ApiResponse(code = 200, message = "View of the sensor readouts of recent recurring executions for the recurring at a requested time scale on a column returned",
                     response = SensorReadoutsDetailedDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getColumnCheckpointsSensorReadouts(
+    public ResponseEntity<Flux<SensorReadoutsDetailedDataModel>> getColumnRecurringSensorReadouts(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -358,14 +358,14 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkpointPartition = columnSpec.getColumnCheckRootContainer(CheckType.CHECKPOINT, timeScale);
+        AbstractRootChecksContainerSpec recurringPartition = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale);
         SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
         SensorReadoutsDetailedDataModel[] sensorReadoutsDetailedDataModels = this.sensorReadoutsDataService.readSensorReadoutsDetailed(
-                checkpointPartition, loadParams);
+                recurringPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(sensorReadoutsDetailedDataModels), HttpStatus.OK); // 200
     }
 

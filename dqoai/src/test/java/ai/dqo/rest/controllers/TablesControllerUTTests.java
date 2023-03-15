@@ -19,9 +19,9 @@ import ai.dqo.BaseTest;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.standard.TableStandardDailyCheckpointSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.standard.TableStandardDailyRecurringSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
@@ -150,7 +150,7 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void getTableCheckpointsDaily_whenTableRequested_thenReturnsCheckpoints() {
+    void getTableRecurringDaily_whenTableRequested_thenReturnsRecurring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
@@ -161,21 +161,21 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
         
-        TableStandardDailyCheckpointSpec standardDailyCheckpointSpec = new TableStandardDailyCheckpointSpec();
-        standardDailyCheckpointSpec.setDailyCheckpointRowCount(minRowCountSpec);
-        TableDailyCheckpointCategoriesSpec dailyCheckpoint = new TableDailyCheckpointCategoriesSpec();
-        dailyCheckpoint.setStandard(standardDailyCheckpointSpec);
-        TableCheckpointsSpec sampleCheckpoint = new TableCheckpointsSpec();
-        sampleCheckpoint.setDaily(dailyCheckpoint);
+        TableStandardDailyRecurringSpec standardDailyRecurringSpec = new TableStandardDailyRecurringSpec();
+        standardDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
+        TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
+        dailyRecurring.setStandard(standardDailyRecurringSpec);
+        TableRecurringSpec sampleRecurring = new TableRecurringSpec();
+        sampleRecurring.setDaily(dailyRecurring);
         
-        this.sampleTable.getTableSpec().setCheckpoints(sampleCheckpoint);
+        this.sampleTable.getTableSpec().setRecurring(sampleRecurring);
 
-        ResponseEntity<Mono<TableDailyCheckpointCategoriesSpec>> responseEntity = this.sut.getTableCheckpointsDaily(
+        ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> responseEntity = this.sut.getTableRecurringDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName());
 
-        TableDailyCheckpointCategoriesSpec result = responseEntity.getBody().block();
+        TableDailyRecurringCategoriesSpec result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
     }
 
@@ -226,10 +226,10 @@ public class TablesControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getTableCheckpointsUI_whenTableRequested_thenReturnsCheckpointsUi(CheckTimeScale timePartition) {
+    void getTableRecurringUI_whenTableRequested_thenReturnsRecurringUi(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableCheckpointsUI(
+        ResponseEntity<Mono<UIAllChecksModel>> responseEntity = this.sut.getTableRecurringUI(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
@@ -273,10 +273,10 @@ public class TablesControllerUTTests extends BaseTest {
 
     @ParameterizedTest
     @EnumSource(CheckTimeScale.class)
-    void getTableCheckpointsUIBasic_whenTableRequested_thenReturnsCheckpointsUiBasic(CheckTimeScale timePartition) {
+    void getTableRecurringUIBasic_whenTableRequested_thenReturnsRecurringUiBasic(CheckTimeScale timePartition) {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getTableCheckpointsUIBasic(
+        ResponseEntity<Mono<UIAllChecksBasicModel>> responseEntity = this.sut.getTableRecurringUIBasic(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
@@ -332,7 +332,7 @@ public class TablesControllerUTTests extends BaseTest {
     }
 
     @Test
-    void updateTableCheckpointsDaily_whenTableAndCheckpointsRequested_updatesCheckpoints() {
+    void updateTableRecurringDaily_whenTableAndRecurringRequested_updatesRecurring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
         MinCountRuleParametersSpec minRule1 = new MinCountRuleParametersSpec(10L);
@@ -343,24 +343,24 @@ public class TablesControllerUTTests extends BaseTest {
         minRowCountSpec.setError(minRule2);
         minRowCountSpec.setFatal(minRule3);
 
-        TableStandardDailyCheckpointSpec standardDailyCheckpointSpec = new TableStandardDailyCheckpointSpec();
-        standardDailyCheckpointSpec.setDailyCheckpointRowCount(minRowCountSpec);
-        TableDailyCheckpointCategoriesSpec dailyCheckpoint = new TableDailyCheckpointCategoriesSpec();
-        dailyCheckpoint.setStandard(standardDailyCheckpointSpec);
-        TableCheckpointsSpec sampleCheckpoint = new TableCheckpointsSpec();
-        sampleCheckpoint.setDaily(dailyCheckpoint);
+        TableStandardDailyRecurringSpec standardDailyRecurringSpec = new TableStandardDailyRecurringSpec();
+        standardDailyRecurringSpec.setDailyRowCount(minRowCountSpec);
+        TableDailyRecurringCategoriesSpec dailyRecurring = new TableDailyRecurringCategoriesSpec();
+        dailyRecurring.setStandard(standardDailyRecurringSpec);
+        TableRecurringSpec sampleRecurring = new TableRecurringSpec();
+        sampleRecurring.setDaily(dailyRecurring);
 
-        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableCheckpointsDaily(
+        ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableRecurringDaily(
                 this.sampleTable.getConnectionName(),
                 this.sampleTable.getTableSpec().getTarget().getSchemaName(),
                 this.sampleTable.getTableSpec().getTarget().getTableName(),
-                Optional.of(sampleCheckpoint.getDaily()));
+                Optional.of(sampleRecurring.getDaily()));
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
         Assertions.assertSame(
-                this.sampleTable.getTableSpec().getCheckpoints().getDaily(),
-                sampleCheckpoint.getDaily());
+                this.sampleTable.getTableSpec().getRecurring().getDaily(),
+                sampleRecurring.getDaily());
     }
 
     @Test

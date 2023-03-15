@@ -210,20 +210,20 @@ function TreeProvider(props: any) {
       items.push(
         {
           id: `${node.id}.dailyCheck`,
-          label: 'Daily checkpoints',
+          label: 'Daily recurring',
           level: TREE_LEVEL.TABLE_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily checkpoints`,
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} daily recurring`,
           open: false
         },
         {
           id: `${node.id}.monthlyCheck`,
-          label: 'Monthly checkpoints',
+          label: 'Monthly recurring',
           level: TREE_LEVEL.TABLE_MONTHLY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly checkpoints`,
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${node?.label} monthly recurring`,
           open: false
         }
       )
@@ -275,20 +275,20 @@ function TreeProvider(props: any) {
       items.push(
         {
           id: `${node.id}.dailyCheck`,
-          label: 'Daily checkpoints',
+          label: 'Daily recurring',
           level: TREE_LEVEL.COLUMN_DAILY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily checkpoints`,
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} daily recurring`,
           open: false
         },
         {
           id: `${node.id}.monthlyCheck`,
-          label: 'Monthly checkpoints',
+          label: 'Monthly recurring',
           level: TREE_LEVEL.COLUMN_MONTHLY_CHECKS,
           parentId: node.id,
           items: [],
-          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly checkpoints`,
+          tooltip: `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node?.label} monthly recurring`,
           open: false
         }
       );
@@ -356,12 +356,12 @@ function TreeProvider(props: any) {
     addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
   };
 
-  const refreshTableCheckpointsNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
+  const refreshTableRecurringNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
     const tableNode = findTreeNode(treeData, node.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
-    const res = await TableApiClient.getTableCheckpointsUIBasic(
+    const res = await TableApiClient.getTableRecurringUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
@@ -370,7 +370,7 @@ function TreeProvider(props: any) {
     addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}`);
   };
   
-  const refreshTablePartitionedCheckpointsNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
+  const refreshTablePartitionedRecurringNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
     const tableNode = findTreeNode(treeData, node.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
@@ -399,13 +399,13 @@ function TreeProvider(props: any) {
     addChecks(res.data.checks || [], node, `${connectionNode?.label}.${schemaNode?.label}.${tableNode?.label}.${node.label}`);
   };
 
-  const refreshColumnCheckpointsNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
+  const refreshColumnRecurringNode = async (node: CustomTreeNode, timePartitioned: 'daily' | 'monthly') => {
     const columnNode = findTreeNode(treeData, node.parentId ?? '');
     const columnsNode = findTreeNode(treeData, columnNode?.parentId ?? '');
     const tableNode = findTreeNode(treeData, columnsNode?.parentId ?? '');
     const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
     const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
-    const res = await ColumnApiClient.getColumnCheckpointsUIBasic(
+    const res = await ColumnApiClient.getColumnRecurringUIBasic(
       connectionNode?.label ?? '',
       schemaNode?.label ?? '',
       tableNode?.label ?? '',
@@ -591,21 +591,21 @@ function TreeProvider(props: any) {
     } else if (node.level === TREE_LEVEL.TABLE_CHECKS) {
       await refreshTableChecksNode(node);
     } else if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-      await refreshTableCheckpointsNode(node, 'daily');
+      await refreshTableRecurringNode(node, 'daily');
     } else if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-      await refreshTableCheckpointsNode(node, 'monthly');
+      await refreshTableRecurringNode(node, 'monthly');
     }  else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
-      await refreshTablePartitionedCheckpointsNode(node, 'daily');
+      await refreshTablePartitionedRecurringNode(node, 'daily');
     } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
-      await refreshTablePartitionedCheckpointsNode(node, 'monthly');
+      await refreshTablePartitionedRecurringNode(node, 'monthly');
     } else if (node.level === TREE_LEVEL.COLUMN) {
       await refreshColumnNode(node);
     } else if (node.level === TREE_LEVEL.COLUMN_CHECKS) {
       await refreshColumnChecksNode(node);
     } else if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-      await refreshColumnCheckpointsNode(node, 'daily');
+      await refreshColumnRecurringNode(node, 'daily');
     } else if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-      await refreshColumnCheckpointsNode(node, 'monthly');
+      await refreshColumnRecurringNode(node, 'monthly');
     } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
       await refreshColumnPartitionedChecksNode(node, 'daily');
     } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
@@ -664,7 +664,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-      const res = await TableApiClient.getTableCheckpointsUI(
+      const res = await TableApiClient.getTableRecurringUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -676,7 +676,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-      const res = await TableApiClient.getTableCheckpointsUI(
+      const res = await TableApiClient.getTableRecurringUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -725,7 +725,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-      const res = await ColumnApiClient.getColumnCheckpointsUI(
+      const res = await ColumnApiClient.getColumnRecurringUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -738,7 +738,7 @@ function TreeProvider(props: any) {
       return;
     }
     if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-      const res = await ColumnApiClient.getColumnCheckpointsUI(
+      const res = await ColumnApiClient.getColumnRecurringUI(
         connectionNode?.label ?? '',
         schemaNode?.label ?? '',
         tableNode?.label ?? '',
@@ -790,7 +790,7 @@ function TreeProvider(props: any) {
       let checkType;
       switch (sourceRoute) {
         case CheckTypes.CHECKS:
-          checkType = 'checkpoint';
+          checkType = 'recurring';
           break;
         case CheckTypes.PROFILING:
           checkType = 'profiling';
@@ -850,9 +850,9 @@ function TreeProvider(props: any) {
       if (node.level === TREE_LEVEL.TABLE_CHECKS) {
         pushHistory(ROUTES.TABLE_PROFILINGS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? ''));
       } else if (node.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-        pushHistory(ROUTES.TABLE_CHECKPOINTS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily'));
+        pushHistory(ROUTES.TABLE_RECURRING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily'));
       } else if (node.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-        pushHistory(ROUTES.TABLE_CHECKPOINTS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly'));
+        pushHistory(ROUTES.TABLE_RECURRING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly'));
       } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
         pushHistory(ROUTES.TABLE_PARTITIONED(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily'));
       } else if (node.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
@@ -868,9 +868,9 @@ function TreeProvider(props: any) {
       if (node?.level === TREE_LEVEL.COLUMN_CHECKS) {
         pushHistory(ROUTES.COLUMN_PROFILINGS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? ''));
       } else if (node.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-        pushHistory(ROUTES.COLUMN_CHECKPOINTS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily'));
+        pushHistory(ROUTES.COLUMN_RECURRING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily'));
       } else if (node.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-        pushHistory(ROUTES.COLUMN_CHECKPOINTS(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly'));
+        pushHistory(ROUTES.COLUMN_RECURRING(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly'));
       } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
         pushHistory(ROUTES.COLUMN_PARTITIONED(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily'));
       } else if (node.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
@@ -888,9 +888,9 @@ function TreeProvider(props: any) {
         if (parentNode?.level === TREE_LEVEL.TABLE_CHECKS) {
           pushHistory(ROUTES.TABLE_PROFILINGS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.TABLE_DAILY_CHECKS) {
-          pushHistory(ROUTES.TABLE_CHECKPOINTS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label));
+          pushHistory(ROUTES.TABLE_RECURRING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.TABLE_MONTHLY_CHECKS) {
-          pushHistory(ROUTES.TABLE_CHECKPOINTS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly', node.category ?? '', node.label));
+          pushHistory(ROUTES.TABLE_RECURRING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'monthly', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS) {
           pushHistory(ROUTES.TABLE_PARTITIONED_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', 'daily', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS) {
@@ -906,9 +906,9 @@ function TreeProvider(props: any) {
         if (parentNode?.level === TREE_LEVEL.COLUMN_CHECKS) {
           pushHistory(ROUTES.COLUMN_PROFILINGS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.COLUMN_DAILY_CHECKS) {
-          pushHistory(ROUTES.COLUMN_CHECKPOINTS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label));
+          pushHistory(ROUTES.COLUMN_RECURRING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.COLUMN_MONTHLY_CHECKS) {
-          pushHistory(ROUTES.COLUMN_CHECKPOINTS_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly', node.category ?? '', node.label));
+          pushHistory(ROUTES.COLUMN_RECURRING_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'monthly', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.COLUMN_PARTITIONED_DAILY_CHECKS) {
           pushHistory(ROUTES.COLUMN_PARTITIONED_UI_FILTER(sourceRoute, connectionNode?.label ?? '', schemaNode?.label ?? '', tableNode?.label ?? '', columnNode?.label ?? '', 'daily', node.category ?? '', node.label));
         } else if (parentNode.level === TREE_LEVEL.COLUMN_PARTITIONED_MONTHLY_CHECKS) {
