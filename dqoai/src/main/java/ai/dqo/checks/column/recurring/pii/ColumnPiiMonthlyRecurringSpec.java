@@ -43,7 +43,9 @@ public class ColumnPiiMonthlyRecurringSpec extends AbstractCheckCategorySpec {
             put("monthly_valid_email_percent", o -> o.monthlyValidEmailPercent);
             put("monthly_contains_email_percent", o -> o.monthlyContainsEmailPercent);
             put("monthly_valid_ip4_address_percent", o -> o.monthlyValidIp4AddressPercent);
+            put("monthly_contains_ip4_percent", o -> o.monthlyContainsIp4Percent);
             put("monthly_valid_ip6_address_percent", o -> o.monthlyValidIp6AddressPercent);
+            put("monthly_contains_ip6_percent", o -> o.monthlyContainsIp6Percent);
         }
     };
 
@@ -68,8 +70,14 @@ public class ColumnPiiMonthlyRecurringSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnPiiValidIp4AddressPercentCheckSpec monthlyValidIp4AddressPercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains IP4 address in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPiiContainsIp4PercentCheckSpec monthlyContainsIp4Percent;
+
     @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the maximum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnPiiValidIp6AddressPercentCheckSpec monthlyValidIp6AddressPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains IP6 address in a column does not exceed the minimum accepted percentage. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnPiiContainsIp6PercentCheckSpec monthlyContainsIp6Percent;    
 
     /**
      * Returns contains USA phone number percent check specification.
@@ -198,6 +206,24 @@ public class ColumnPiiMonthlyRecurringSpec extends AbstractCheckCategorySpec {
     }
 
     /**
+     * Returns a contains IP4 percent check.
+     * @return Contains IP4 percent check.
+     */
+    public ColumnPiiContainsIp4PercentCheckSpec getMonthlyContainsIp4Percent() {
+        return monthlyContainsIp4Percent;
+    }
+
+    /**
+     * Sets a new definition of a contains IP4 percent check.
+     * @param monthlyContainsIp4Percent Contains IP4 percent check.
+     */
+    public void setMonthlyContainsIp4Percent(ColumnPiiContainsIp4PercentCheckSpec monthlyContainsIp4Percent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyContainsIp4Percent, monthlyContainsIp4Percent));
+        this.monthlyContainsIp4Percent = monthlyContainsIp4Percent;
+        propagateHierarchyIdToField(monthlyContainsIp4Percent, "monthly_contains_ip4_percent");
+    }
+
+    /**
      * Returns a minimum valid IP6 address percent check.
      * @return Minimum valid IP6 address percent check.
      */
@@ -213,6 +239,24 @@ public class ColumnPiiMonthlyRecurringSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.monthlyValidIp6AddressPercent, monthlyValidIp6AddressPercent));
         this.monthlyValidIp6AddressPercent = monthlyValidIp6AddressPercent;
         propagateHierarchyIdToField(monthlyValidIp6AddressPercent, "monthly_valid_ip6_address_percent");
+    }
+
+    /**
+     * Returns a contains IP6 percent check.
+     * @return Contains IP6 percent check.
+     */
+    public ColumnPiiContainsIp6PercentCheckSpec getMonthlyContainsIp6Percent() {
+        return monthlyContainsIp6Percent;
+    }
+
+    /**
+     * Sets a new definition of a contains IP6 percent check.
+     * @param monthlyContainsIp6Percent Contains IP6 percent check.
+     */
+    public void setMonthlyContainsIp6Percent(ColumnPiiContainsIp6PercentCheckSpec monthlyContainsIp6Percent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyContainsIp6Percent, monthlyContainsIp6Percent));
+        this.monthlyContainsIp6Percent = monthlyContainsIp6Percent;
+        propagateHierarchyIdToField(monthlyContainsIp6Percent, "monthly_contains_ip6_percent");
     }
 
     /**

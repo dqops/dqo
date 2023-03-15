@@ -43,7 +43,9 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
             put("daily_partition_valid_email_percent", o -> o.dailyPartitionValidEmailPercent);
             put("daily_partition_contains_email_percent", o -> o.dailyPartitionContainsEmailPercent);
             put("daily_partition_valid_ip4_address_percent", o -> o.dailyPartitionValidIp4AddressPercent);
+            put("daily_partition_contains_ip4_percent", o -> o.dailyPartitionContainsIp4Percent);
             put("daily_partition_valid_ip6_address_percent", o -> o.dailyPartitionValidIp6AddressPercent);
+            put("daily_partition_contains_ip6_percent", o -> o.dailyPartitionContainsIp6Percent);
         }
     };
 
@@ -68,8 +70,14 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnPiiValidIp4AddressPercentCheckSpec dailyPartitionValidIp4AddressPercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains IP4 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPiiContainsIp4PercentCheckSpec dailyPartitionContainsIp4Percent;
+
     @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnPiiValidIp6AddressPercentCheckSpec dailyPartitionValidIp6AddressPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains IP6 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnPiiContainsIp6PercentCheckSpec dailyPartitionContainsIp6Percent;
 
     /**
      * Returns a minimum valid USA phone percent check.
@@ -198,6 +206,24 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
     }
 
     /**
+     * Returns a contains IP4 percent check.
+     * @return Contains IP4 percent check.
+     */
+    public ColumnPiiContainsIp4PercentCheckSpec getDailyPartitionContainsIp4Percent() {
+        return dailyPartitionContainsIp4Percent;
+    }
+
+    /**
+     * Sets a new definition of a contains IP4 percent check.
+     * @param dailyPartitionContainsIp4Percent Contains valid IP4 percent check.
+     */
+    public void setDailyPartitionContainsIp4Percent(ColumnPiiContainsIp4PercentCheckSpec dailyPartitionContainsIp4Percent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionContainsIp4Percent, dailyPartitionContainsIp4Percent));
+        this.dailyPartitionContainsIp4Percent = dailyPartitionContainsIp4Percent;
+        propagateHierarchyIdToField(dailyPartitionContainsIp4Percent, "daily_partition_contains_ip4_percent");
+    }
+
+    /**
      * Returns a minimum valid IP6 address percent check.
      * @return Minimum valid IP6 address percent check.
      */
@@ -213,6 +239,24 @@ public class ColumnPiiDailyPartitionedChecksSpec extends AbstractCheckCategorySp
         this.setDirtyIf(!Objects.equals(this.dailyPartitionValidIp6AddressPercent, dailyPartitionValidIp6AddressPercent));
         this.dailyPartitionValidIp6AddressPercent = dailyPartitionValidIp6AddressPercent;
         propagateHierarchyIdToField(dailyPartitionValidIp6AddressPercent, "daily_partition_valid_ip6_address_percent");
+    }
+
+    /**
+     * Returns a contains IP6 percent check.
+     * @return Contains IP6 percent check.
+     */
+    public ColumnPiiContainsIp6PercentCheckSpec getDailyPartitionContainsIp6Percent() {
+        return dailyPartitionContainsIp6Percent;
+    }
+
+    /**
+     * Sets a new definition of a contains IP6 percent check.
+     * @param dailyPartitionContainsIp6Percent Contains valid IP6 percent check.
+     */
+    public void setDailyPartitionContainsIp6Percent(ColumnPiiContainsIp6PercentCheckSpec dailyPartitionContainsIp6Percent) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionContainsIp6Percent, dailyPartitionContainsIp6Percent));
+        this.dailyPartitionContainsIp6Percent = dailyPartitionContainsIp6Percent;
+        propagateHierarchyIdToField(dailyPartitionContainsIp6Percent, "daily_partition_contains_ip6_percent");
     }
 
     /**

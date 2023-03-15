@@ -46,4 +46,10 @@ public class SampleCsvFileNames {
     public static final String value_match_left_table = "value_match_left_table.csv";
     public static final String value_match_right_table = "value_match_right_table.csv";
     public static final String geographic_coordinate_system_test = "geographic_coordinate_system_test.csv";
+
+    public static final String contains_ip4_test = "contains_ip4_test.csv";
+
+    public static final String contains_ip6_test = "contains_ip6_test.csv";
+
+
 }

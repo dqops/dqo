@@ -43,7 +43,9 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
             put("monthly_partition_valid_email_percent", o -> o.monthlyPartitionValidEmailPercent);
             put("monthly_partition_contains_email_percent", o -> o.monthlyPartitionContainsEmailPercent);
             put("monthly_partition_valid_ip4_address_percent", o -> o.monthlyPartitionValidIp4AddressPercent);
+            put("monthly_partition_contains_ip4_percent", o -> o.monthlyPartitionContainsIp4Percent);
             put("monthly_partition_valid_ip6_address_percent", o -> o.monthlyPartitionValidIp6AddressPercent);
+            put("monthly_partition_contains_ip6_percent", o -> o.monthlyPartitionContainsIp6Percent);
             
         }
     };
@@ -57,7 +59,6 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
     @JsonPropertyDescription("Verifies that the percentage of valid USA zip code in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPiiValidUsaZipcodePercentCheckSpec monthlyPartitionValidUsaZipcodePercent;
 
-
     @JsonPropertyDescription("Verifies that the percentage of rows that contains USA zip code in a column does not exceed the maximum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPiiContainsUsaZipcodePercentCheckSpec monthlyPartitionContainsUsaZipcodePercent;
 
@@ -70,8 +71,14 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPiiValidIp4AddressPercentCheckSpec monthlyPartitionValidIp4AddressPercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains IP4 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPiiContainsIp4PercentCheckSpec monthlyPartitionContainsIp4Percent;
+
     @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
     private ColumnPiiValidIp6AddressPercentCheckSpec monthlyPartitionValidIp6AddressPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains IP6 address in a column does not exceed the minimum accepted percentage. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnPiiContainsIp6PercentCheckSpec monthlyPartitionContainsIp6Percent;
 
     /**
      * Returns a minimum valid USA phone percent check.
@@ -200,6 +207,24 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
     }
 
     /**
+     * Returns a contains IP4 percent check.
+     * @return Contains IP4 percent check.
+     */
+    public ColumnPiiContainsIp4PercentCheckSpec getMonthlyPartitionContainsIp4Percent() {
+        return monthlyPartitionContainsIp4Percent;
+    }
+
+    /**
+     * Sets a new definition of a contains IP4 percent check.
+     * @param monthlyPartitionContainsIp4Percent Contains valid IP4 percent check.
+     */
+    public void setMonthlyPartitionContainsIp4Percent(ColumnPiiContainsIp4PercentCheckSpec monthlyPartitionContainsIp4Percent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionContainsIp4Percent, monthlyPartitionContainsIp4Percent));
+        this.monthlyPartitionContainsIp4Percent = monthlyPartitionContainsIp4Percent;
+        propagateHierarchyIdToField(monthlyPartitionContainsIp4Percent, "monthly_partition_contains_ip4_percent");
+    }
+
+    /**
      * Returns a minimum valid IP6 address percent check.
      * @return Minimum valid IP6 address percent check.
      */
@@ -215,6 +240,24 @@ public class ColumnPiiMonthlyPartitionedChecksSpec extends AbstractCheckCategory
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionValidIp6AddressPercent, monthlyPartitionValidIp6AddressPercent));
         this.monthlyPartitionValidIp6AddressPercent = monthlyPartitionValidIp6AddressPercent;
         propagateHierarchyIdToField(monthlyPartitionValidIp6AddressPercent, "monthly_partition_valid_ip6_address_percent");
+    }
+
+    /**
+     * Returns a contains IP6 percent check.
+     * @return Contains IP6 percent check.
+     */
+    public ColumnPiiContainsIp6PercentCheckSpec getMonthlyPartitionContainsIp6Percent() {
+        return monthlyPartitionContainsIp6Percent;
+    }
+
+    /**
+     * Sets a new definition of a contains IP6 percent check.
+     * @param monthlyPartitionContainsIp6Percent Contains valid IP6 percent check.
+     */
+    public void setMonthlyPartitionContainsIp6Percent(ColumnPiiContainsIp6PercentCheckSpec monthlyPartitionContainsIp6Percent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionContainsIp6Percent, monthlyPartitionContainsIp6Percent));
+        this.monthlyPartitionContainsIp6Percent = monthlyPartitionContainsIp6Percent;
+        propagateHierarchyIdToField(monthlyPartitionContainsIp6Percent, "monthly_partition_contains_ip6_percent");
     }
 
     /**

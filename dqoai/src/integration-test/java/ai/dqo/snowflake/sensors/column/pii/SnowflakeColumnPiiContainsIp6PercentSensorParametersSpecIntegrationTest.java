@@ -15,8 +15,9 @@
  */
 package ai.dqo.snowflake.sensors.column.pii;
 
+import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.pii.ColumnPiiValidIp4AddressPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.pii.ColumnPiiContainsIp6PercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -28,8 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.pii.ColumnPiiValidIp4AddressPercentSensorParametersSpec;
-import ai.dqo.snowflake.BaseSnowflakeIntegrationTest;
+import ai.dqo.sensors.column.pii.ColumnPiiContainsIp6PercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,84 +38,84 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class SnowflakeColumnPiiValidIp4AddressPercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
-    private ColumnPiiValidIp4AddressPercentSensorParametersSpec sut;
+public class SnowflakeColumnPiiContainsIp6PercentSensorParametersSpecIntegrationTest extends BaseSnowflakeIntegrationTest {
+    private ColumnPiiContainsIp6PercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnPiiValidIp4AddressPercentCheckSpec checkSpec;
+    private ColumnPiiContainsIp6PercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
 
     @BeforeEach
     void setUp() {
-        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.ip4_test, ProviderType.snowflake);
+        this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.contains_ip6_test, ProviderType.snowflake);
         IntegrationTestSampleDataObjectMother.ensureTableExists(sampleTableMetadata);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnPiiValidIp4AddressPercentSensorParametersSpec();
-        this.checkSpec = new ColumnPiiValidIp4AddressPercentCheckSpec();
+        this.sut = new ColumnPiiContainsIp6PercentSensorParametersSpec();
+        this.checkSpec = new ColumnPiiContainsIp6PercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
     @Test
     void runSensor_whenSensorExecutedProfiling_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForProfilingCheck(
-                sampleTableMetadata, "ip4", this.checkSpec);
+                sampleTableMetadata, "ip6", this.checkSpec);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0F, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "ip4", this.checkSpec, CheckTimeScale.daily);
+                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0F, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
-                sampleTableMetadata, "ip4", this.checkSpec, CheckTimeScale.monthly);
+                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(75.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(75.0F, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedDaily_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "ip4", this.checkSpec, CheckTimeScale.daily,"date");
+                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.daily,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0F, resultTable.column(0).get(0));
     }
 
     @Test
     void runSensor_whenSensorExecutedPartitionedMonthly_thenReturnsValues() {
         SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForPartitionedCheck(
-                sampleTableMetadata, "ip4", this.checkSpec, CheckTimeScale.monthly,"date");
+                sampleTableMetadata, "ip6", this.checkSpec, CheckTimeScale.monthly,"date");
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(6, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0.0f, resultTable.column(0).get(0));
+        Assertions.assertEquals(0.0F, resultTable.column(0).get(0));
     }
 }
