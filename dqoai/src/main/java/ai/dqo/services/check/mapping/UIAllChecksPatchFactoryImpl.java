@@ -30,8 +30,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
+import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
 import ai.dqo.services.check.mapping.models.column.UIColumnChecksModel;
 import ai.dqo.services.check.mapping.models.column.UITableColumnChecksModel;
@@ -86,6 +85,9 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
         List<UIAllChecksModel> uiConnectionPatches = connectionSpecs.stream()
                 .map(connectionSpec -> userHome.getConnections().getByObjectName(connectionSpec.getConnectionName(), true))
                 .map(connectionWrapper -> this.getAllChecksForConnection(connectionWrapper, checkSearchFilters, executionContext))
+                .filter(allChecksModel ->
+                        (allChecksModel.getColumnChecksModel() != null && !allChecksModel.getColumnChecksModel().getUiTableColumnChecksModels().isEmpty())
+                                || (allChecksModel.getTableChecksModel() != null && !allChecksModel.getTableChecksModel().getUiSchemaTableChecksModels().isEmpty()))
                 .collect(Collectors.toList());
 
         return uiConnectionPatches;
@@ -133,6 +135,7 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
                         .collect(Collectors.toList()))
                 .map(tables -> this.getSchemaTableCheckModelForTables(connectionWrapper.getSpec(),
                         tables, checkSearchFilters, executionContext))
+                .filter(schemaTableChecksModel -> !schemaTableChecksModel.getUiTableChecksModels().isEmpty())
                 .collect(Collectors.toList());
 
         allTableChecksModel.setUiSchemaTableChecksModels(schemasChecks);
@@ -151,6 +154,7 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
 
         List<UITableChecksModel> uiTableChecksModels = tableWrappers.stream()
                 .map(tableWrapper -> getTableChecksModelForTable(connectionSpec, tableWrapper, checkSearchFilters, executionContext))
+                .filter(tableChecksModel -> !tableChecksModel.getCheckContainers().isEmpty())
                 .collect(Collectors.toList());
         schemaTableChecks.setUiTableChecksModels(uiTableChecksModels);
         return schemaTableChecks;
@@ -171,30 +175,39 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
         List<CheckType> checkTypes = this.getPossibleCheckTypes(checkSearchFilters.getCheckType());
         List<CheckTimeScale> timeScales = this.getPossibleCheckTimeScales(checkSearchFilters.getTimeScale());
 
-        List<AbstractRootChecksContainerSpec> checkContainers = new ArrayList<>();
+        Map<UICheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
         for (CheckType checkType : checkTypes) {
             if (checkType == CheckType.ADHOC) {
                 AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, null);
-                checkContainers.add(checkContainer);
+                checkContainers.put(new UICheckContainerTypeModel(checkType, null), checkContainer);
             }
             else {
                 for (CheckTimeScale timeScale : timeScales) {
                     AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, timeScale);
-                    checkContainers.add(checkContainer);
+                    checkContainers.put(new UICheckContainerTypeModel(checkType, timeScale), checkContainer);
                 }
             }
         }
 
-        List<UICheckContainerModel> checkContainerModelList = checkContainers.stream()
-                .map(checkContainer -> this.specToUiCheckMappingService.createUiModel(
-                        checkContainer,
-                        checkSearchFilters,
-                        connectionSpec,
-                        tableSpec,
-                        executionContext,
-                        connectionSpec.getProviderType()
-                )).collect(Collectors.toList());
-        tableChecksModel.setCheckContainers(checkContainerModelList);
+        Map<UICheckContainerTypeModel, UICheckContainerModel> checkContainerModels = checkContainers.entrySet().stream()
+                .map(checkContainerPair -> new AbstractMap.SimpleEntry<>(
+                        checkContainerPair.getKey(),
+                        this.specToUiCheckMappingService.createUiModel(
+                                checkContainerPair.getValue(),
+                                checkSearchFilters,
+                                connectionSpec,
+                                tableSpec,
+                                executionContext,
+                                connectionSpec.getProviderType())
+                )).map(uiCheckContainerModelPair -> new AbstractMap.SimpleEntry<>(
+                        uiCheckContainerModelPair.getKey(),
+                        pruneCheckContainerModel(
+                                uiCheckContainerModelPair.getValue(),
+                                checkSearchFilters)
+                )).filter(prunedPair -> prunedPair.getValue() != null)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        tableChecksModel.setCheckContainers(checkContainerModels);
         return tableChecksModel;
     }
 
@@ -210,6 +223,7 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
         List<UITableColumnChecksModel> tableColumnChecksModels = tableWrappers.stream()
                 .map(table -> this.getTableColumnCheckModelForTable(connectionWrapper.getSpec(),
                         table, checkSearchFilters, executionContext))
+                .filter(tableColumnChecksModel -> !tableColumnChecksModel.getUiColumnChecksModels().isEmpty())
                 .collect(Collectors.toList());
 
         allColumnChecksModel.setUiTableColumnChecksModels(tableColumnChecksModels);
@@ -229,13 +243,18 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
         // TODO: Add templates.
 
         List<UIColumnChecksModel> uiColumnChecksModels = tableSpec.getColumns().entrySet().stream()
-                .map(columnNameToSpec -> getColumnChecksModelForColumn(
+                .filter(colToSpec ->
+                        (checkSearchFilters.getColumnName() == null || colToSpec.getKey().equals(checkSearchFilters.getColumnName()))
+                                && (checkSearchFilters.getColumnNullable() == null || colToSpec.getValue().getTypeSnapshot().getNullable() == checkSearchFilters.getColumnNullable())
+                                && (checkSearchFilters.getColumnDataType() == null || colToSpec.getValue().getTypeSnapshot().getColumnType().equals(checkSearchFilters.getColumnDataType()))
+                ).map(columnNameToSpec -> getColumnChecksModelForColumn(
                         connectionSpec,
                         tableSpec,
                         columnNameToSpec.getKey(),
                         columnNameToSpec.getValue(),
                         checkSearchFilters,
                         executionContext))
+                .filter(columnChecksModel -> !columnChecksModel.getCheckContainers().isEmpty())
                 .collect(Collectors.toList());
         tableColumnChecksModel.setUiColumnChecksModels(uiColumnChecksModels);
         return tableColumnChecksModel;
@@ -255,31 +274,80 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
         List<CheckType> checkTypes = this.getPossibleCheckTypes(checkSearchFilters.getCheckType());
         List<CheckTimeScale> timeScales = this.getPossibleCheckTimeScales(checkSearchFilters.getTimeScale());
 
-        List<AbstractRootChecksContainerSpec> checkContainers = new ArrayList<>();
+        Map<UICheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
         for (CheckType checkType : checkTypes) {
             if (checkType == CheckType.ADHOC) {
                 AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, null);
-                checkContainers.add(checkContainer);
+                checkContainers.put(new UICheckContainerTypeModel(checkType, null), checkContainer);
             }
             else {
                 for (CheckTimeScale timeScale : timeScales) {
                     AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, timeScale);
-                    checkContainers.add(checkContainer);
+                    checkContainers.put(new UICheckContainerTypeModel(checkType, timeScale), checkContainer);
                 }
             }
         }
 
-        List<UICheckContainerModel> checkContainerModelList = checkContainers.stream()
-                .map(checkContainer -> this.specToUiCheckMappingService.createUiModel(
-                        checkContainer,
-                        checkSearchFilters,
-                        connectionSpec,
-                        tableSpec,
-                        executionContext,
-                        connectionSpec.getProviderType()
-                )).collect(Collectors.toList());
-        uiColumnChecksModel.setCheckContainers(checkContainerModelList);
+        Map<UICheckContainerTypeModel, UICheckContainerModel> checkContainerModels = checkContainers.entrySet().stream()
+                .map(checkContainerPair -> new AbstractMap.SimpleEntry<>(
+                        checkContainerPair.getKey(),
+                        this.specToUiCheckMappingService.createUiModel(
+                            checkContainerPair.getValue(),
+                            checkSearchFilters,
+                            connectionSpec,
+                            tableSpec,
+                            executionContext,
+                            connectionSpec.getProviderType())
+                )).map(uiCheckContainerModelPair -> new AbstractMap.SimpleEntry<>(
+                        uiCheckContainerModelPair.getKey(),
+                        pruneCheckContainerModel(
+                            uiCheckContainerModelPair.getValue(),
+                            checkSearchFilters)
+                )).filter(prunedPair -> prunedPair.getValue() != null)
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        uiColumnChecksModel.setCheckContainers(checkContainerModels);
         return uiColumnChecksModel;
+    }
+
+    /**
+     * Gets the {@link UICheckContainerModel} containing only the information requested in the {@link CheckSearchFilters}.
+     * TODO: Reconsider the dual model and possibly relocate this snippet to the time of model construction.
+     * @param baseModel          Check container model staged for pruning.
+     * @param checkSearchFilters Filters by which the model tree should be pruned.
+     * @return Check container model comprised of information requested in the filters.
+     */
+    protected UICheckContainerModel pruneCheckContainerModel(
+            UICheckContainerModel baseModel,
+            CheckSearchFilters checkSearchFilters) {
+        UICheckContainerModel result = new UICheckContainerModel();
+        for (UIQualityCategoryModel categoryModel: baseModel.getCategories()) {
+            if (checkSearchFilters.getCheckCategory() == null
+                    || checkSearchFilters.getCheckCategory().equals(categoryModel.getCategory())) {
+                UIQualityCategoryModel partialResult = pruneQualityCategoryModel(categoryModel, checkSearchFilters);
+                result.getCategories().add(partialResult);
+            }
+        }
+        if (result.getCategories().isEmpty()) {
+            return null;
+        }
+        return result;
+    }
+
+    protected UIQualityCategoryModel pruneQualityCategoryModel(
+            UIQualityCategoryModel baseModel,
+            CheckSearchFilters checkSearchFilters) {
+        UIQualityCategoryModel result = new UIQualityCategoryModel();
+        for (UICheckModel checkModel: baseModel.getChecks()) {
+            if (checkSearchFilters.getCheckName() == null
+                    || checkSearchFilters.getCheckName().equals(checkModel.getCheckName())) {
+                result.getChecks().add(checkModel);
+            }
+        }
+        if (result.getChecks().isEmpty()) {
+            return null;
+        }
+        return result;
     }
 
     protected List<CheckType> getPossibleCheckTypes(CheckType filterValue) {

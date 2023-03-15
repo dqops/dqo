@@ -19,7 +19,7 @@ package ai.dqo.services.check.mapping.models.column;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerTypeModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -28,7 +28,8 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * UI model containing information related to checks on a column.
@@ -47,6 +48,6 @@ public class UIColumnChecksModel {
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored column checks results on this column.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
-    @JsonPropertyDescription("List of check containers on this column.")
-    private List<UICheckContainerModel> checkContainers = new ArrayList<>();
+    @JsonPropertyDescription("Mapping of check type and timescale to check container on this column.")
+    private Map<UICheckContainerTypeModel, UICheckContainerModel> checkContainers = new HashMap<>();
 }

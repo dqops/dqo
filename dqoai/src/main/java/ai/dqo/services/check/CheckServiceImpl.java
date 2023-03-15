@@ -15,6 +15,7 @@
  */
 package ai.dqo.services.check;
 
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.execution.checks.CheckExecutionSummary;
@@ -22,12 +23,19 @@ import ai.dqo.execution.checks.RunChecksQueueJob;
 import ai.dqo.execution.checks.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.sensors.TimeWindowFilterParameters;
+import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.sources.ConnectionList;
+import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.services.check.mapping.UIAllChecksPatchApplier;
 import ai.dqo.services.check.mapping.UIAllChecksPatchFactory;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
+import ai.dqo.services.check.mapping.models.*;
+import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
+import ai.dqo.services.check.mapping.models.column.UIColumnChecksModel;
+import ai.dqo.services.check.mapping.models.column.UITableColumnChecksModel;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,6 +43,10 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Service called to run checks or operate on checks.
@@ -42,22 +54,30 @@ import java.util.List;
 @Service
 public class CheckServiceImpl implements CheckService {
     private UIAllChecksPatchFactory uiAllChecksPatchFactory;
+    private UIAllChecksPatchApplier uiAllChecksPatchApplier;
     private DqoQueueJobFactory dqoQueueJobFactory;
     private DqoJobQueue dqoJobQueue;
+    private UserHomeContextFactory userHomeContextFactory;
 
     /**
      * Default injection constructor.
      * @param uiAllChecksPatchFactory UI all checks patch factory for creating patches to be updated.
+     * @param uiAllChecksPatchApplier UI all checks patch applier for affecting the hierarchy tree with changes from the patch.
      * @param dqoQueueJobFactory Job factory used to create a new instance of a job.
      * @param dqoJobQueue DQO job queue to execute the operation.
+     * @param userHomeContextFactory User home context factory.
      */
     @Autowired
     public CheckServiceImpl(UIAllChecksPatchFactory uiAllChecksPatchFactory,
+                            UIAllChecksPatchApplier uiAllChecksPatchApplier,
                             DqoQueueJobFactory dqoQueueJobFactory,
-                            DqoJobQueue dqoJobQueue) {
+                            DqoJobQueue dqoJobQueue,
+                            UserHomeContextFactory userHomeContextFactory) {
         this.uiAllChecksPatchFactory = uiAllChecksPatchFactory;
+        this.uiAllChecksPatchApplier = uiAllChecksPatchApplier;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
+        this.userHomeContextFactory = userHomeContextFactory;
     }
 
     /**
@@ -105,9 +125,131 @@ public class CheckServiceImpl implements CheckService {
 
         List<UIAllChecksModel> patches = this.uiAllChecksPatchFactory.fromCheckSearchFilters(parameters.getCheckSearchFilters());
 
-        // TODO: Dalej bierzemy co nam wyszło w tych patchach i chodzimy po drzewku, poprawiając co trzeba.
+        Stream<UICheckContainerModel> columnCheckContainers = patches.stream()
+                .map(UIAllChecksModel::getColumnChecksModel)
+                .flatMap(model -> model.getUiTableColumnChecksModels().stream())
+                .flatMap(model -> model.getUiColumnChecksModels().stream())
+                .flatMap(model -> model.getCheckContainers().values().stream());
+        Stream<UICheckContainerModel> tableCheckContainers = patches.stream()
+                .map(UIAllChecksModel::getTableChecksModel)
+                .flatMap(model -> model.getUiSchemaTableChecksModels().stream())
+                .flatMap(model -> model.getUiTableChecksModels().stream())
+                .flatMap(model -> model.getCheckContainers().values().stream());
 
+        Iterable<UICheckModel> checks = Stream.concat(columnCheckContainers, tableCheckContainers)
+                .flatMap(model -> model.getCategories().stream())
+                .flatMap(model -> model.getChecks().stream())
+                .collect(Collectors.toList());
+
+        for (UICheckModel check: checks) {
+            patchUICheckModel(check, parameters);
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        ConnectionList connectionList = userHome.getConnections();
+
+        for (UIAllChecksModel patch: patches) {
+            String connectionName = patch.getConnectionName();
+            ConnectionWrapper connectionWrapper = connectionList.getByObjectName(connectionName, true);
+            if (connectionWrapper == null) {
+                continue;
+            }
+
+            this.uiAllChecksPatchApplier.applyPatchOnConnection(patch, connectionWrapper);
+        }
+        userHomeContext.flush();
 
         return patches;
+    }
+
+    protected void patchUICheckModel(UICheckModel model,
+                                     UIAllChecksPatchParameters parameters) {
+        model.setDisabled(false);
+        model.setConfigured(true);
+
+        AbstractCheckSpec checkSpec = model.getCheckSpec();
+        checkSpec.setDisabled(false);
+        UIRuleThresholdsModel ruleThresholdsModel = model.getRule();
+
+        if (ruleThresholdsModel == null) {
+            ruleThresholdsModel = new UIRuleThresholdsModel();
+            model.setRule(ruleThresholdsModel);
+        }
+
+        if (parameters.getWarningLevelOptions() != null) {
+            Map<String, String> options = parameters.getWarningLevelOptions();
+            List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
+
+            UIRuleParametersModel ruleParametersModel = ruleThresholdsModel.getWarning();
+            if (ruleParametersModel == null) {
+                ruleParametersModel = new UIRuleParametersModel();
+                ruleThresholdsModel.setWarning(ruleParametersModel);
+            }
+
+            this.patchRuleParameters(ruleParametersModel, newParameterFields);
+        }
+        if (parameters.getErrorLevelOptions() != null) {
+            Map<String, String> options = parameters.getErrorLevelOptions();
+            List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
+
+            UIRuleParametersModel ruleParametersModel = ruleThresholdsModel.getError();
+            if (ruleParametersModel == null) {
+                ruleParametersModel = new UIRuleParametersModel();
+                ruleThresholdsModel.setError(ruleParametersModel);
+            }
+
+            this.patchRuleParameters(ruleParametersModel, newParameterFields);
+        }
+        if (parameters.getFatalLevelOptions() != null) {
+            Map<String, String> options = parameters.getFatalLevelOptions();
+            List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
+
+            UIRuleParametersModel ruleParametersModel = ruleThresholdsModel.getFatal();
+            if (ruleParametersModel == null) {
+                ruleParametersModel = new UIRuleParametersModel();
+                ruleThresholdsModel.setFatal(ruleParametersModel);
+            }
+
+            this.patchRuleParameters(ruleParametersModel, newParameterFields);
+        }
+    }
+
+    protected void patchRuleParameters(UIRuleParametersModel ruleParametersModel, List<UIFieldModel> patches) {
+        ruleParametersModel.setConfigured(true);
+        ruleParametersModel.setDisabled(false);
+        List<UIFieldModel> ruleParameterFields = ruleParametersModel.getRuleParameters();
+        if (ruleParameterFields == null) {
+            ruleParameterFields = new ArrayList<>();
+            ruleParametersModel.setRuleParameters(ruleParameterFields);
+        }
+
+        for (UIFieldModel patch: patches) {
+            String patchName = patch.getDefinition().getFieldName();
+            Optional<UIFieldModel> shouldSubstitute = ruleParameterFields.stream()
+                    .filter(field -> field.getDefinition().getFieldName().equals(patchName))
+                    .findAny();
+
+            if (shouldSubstitute.isPresent()) {
+                UIFieldModel substitute = shouldSubstitute.get();
+                substitute.setValue(patch.getValue());
+            } else {
+                ruleParameterFields.add(patch);
+            }
+        }
+    }
+
+    protected List<UIFieldModel> optionMapToFields(Map<String, String> options) {
+        List<UIFieldModel> result = new ArrayList<>();
+
+        for (Map.Entry<String, String> option: options.entrySet()) {
+            UIFieldModel uiFieldModel = new UIFieldModel();
+            ParameterDefinitionSpec parameterDefinition = new ParameterDefinitionSpec();
+            parameterDefinition.setFieldName(option.getKey());
+            uiFieldModel.setDefinition(parameterDefinition);
+            uiFieldModel.setValue(option.getValue());
+            result.add(uiFieldModel);
+        }
+        return result;
     }
 }

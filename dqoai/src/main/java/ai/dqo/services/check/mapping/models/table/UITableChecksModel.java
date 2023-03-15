@@ -19,6 +19,7 @@ package ai.dqo.services.check.mapping.models.table;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerTypeModel;
 import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -28,7 +29,9 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * UI model containing information related to table-level checks on a table.
@@ -47,6 +50,6 @@ public class UITableChecksModel {
     @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored table checks results connected with this table.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
-    @JsonPropertyDescription("List of check categories on this table.")
-    private List<UICheckContainerModel> checkContainers = new ArrayList<>();
+    @JsonPropertyDescription("Mapping of check type and timescale to check container on this table.")
+    private Map<UICheckContainerTypeModel, UICheckContainerModel> checkContainers = new HashMap<>();
 }
