@@ -20,11 +20,11 @@ import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
-import ai.dqo.checks.column.adhoc.ColumnAdHocNullsChecksSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocStandardChecksSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNode;
@@ -204,8 +204,8 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 
     private void structure1Setup() {
         // Check attached to table.
-        this.tableSpec.setChecks(new TableAdHocCheckCategoriesSpec() {{
-            setStandard(new TableAdHocStandardChecksSpec() {{
+        this.tableSpec.setChecks(new TableProfilingCheckCategoriesSpec() {{
+            setStandard(new TableProfilingStandardChecksSpec() {{
                 setRowCount(new TableRowCountCheckSpec() {{
                     setError(new MinCountRule0ParametersSpec(10L));
                 }});
@@ -213,8 +213,8 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
         }});
 
         // Check attached to column.
-        this.columnSpec.setChecks(new ColumnAdHocCheckCategoriesSpec() {{
-            setNulls(new ColumnAdHocNullsChecksSpec() {{
+        this.columnSpec.setChecks(new ColumnProfilingCheckCategoriesSpec() {{
+            setNulls(new ColumnProfilingNullsChecksSpec() {{
                 setNullsCount(new ColumnNullsCountCheckSpec() {{
                     setError(new MaxCountRule0ParametersSpec(20L));
                 }});
@@ -234,7 +234,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptAbstractRootCheckContainerSpec_whenCalledForSelectedColumnCheckOnTable_thenSkipChildrenReturnEmpty() {
         this.structure1Setup();
-        AbstractRootChecksContainerSpec tableCheckContainer = this.tableSpec.getTableCheckRootContainer(CheckType.ADHOC, null);
+        AbstractRootChecksContainerSpec tableCheckContainer = this.tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
 
         SearchParameterObject searchParameterObject = new SearchParameterObject();
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(tableCheckContainer, searchParameterObject);
@@ -245,7 +245,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptAbstractRootCheckContainerSpec_whenCalledForSelectedColumnCheckOnColumn_thenTraverseChildren() {
         this.structure1Setup();
-        AbstractRootChecksContainerSpec columnCheckContainer = this.columnSpec.getColumnCheckRootContainer(CheckType.ADHOC, null);
+        AbstractRootChecksContainerSpec columnCheckContainer = this.columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
 
         SearchParameterObject searchParameterObject = new SearchParameterObject();
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(columnCheckContainer, searchParameterObject);

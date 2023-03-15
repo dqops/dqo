@@ -19,16 +19,13 @@ package ai.dqo.services.check.mapping;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
-import ai.dqo.metadata.search.*;
+import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.search.ConnectionSearchFilters;
+import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
-import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
-import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
-import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
@@ -37,13 +34,11 @@ import ai.dqo.services.check.mapping.models.column.UITableColumnChecksModel;
 import ai.dqo.services.check.mapping.models.table.UIAllTableChecksModel;
 import ai.dqo.services.check.mapping.models.table.UISchemaTableChecksModel;
 import ai.dqo.services.check.mapping.models.table.UITableChecksModel;
-import org.checkerframework.checker.units.qual.A;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @Service
 public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
@@ -177,7 +172,7 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
 
         Map<UICheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
         for (CheckType checkType : checkTypes) {
-            if (checkType == CheckType.ADHOC) {
+            if (checkType == CheckType.PROFILING) {
                 AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, null);
                 checkContainers.put(new UICheckContainerTypeModel(checkType, null), checkContainer);
             }
@@ -276,7 +271,7 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
 
         Map<UICheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
         for (CheckType checkType : checkTypes) {
-            if (checkType == CheckType.ADHOC) {
+            if (checkType == CheckType.PROFILING) {
                 AbstractRootChecksContainerSpec checkContainer = columnSpec.getColumnCheckRootContainer(checkType, null);
                 checkContainers.put(new UICheckContainerTypeModel(checkType, null), checkContainer);
             }

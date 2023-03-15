@@ -16,10 +16,6 @@
 package ai.dqo.services.check.mapping;
 
 import ai.dqo.BaseTest;
-import ai.dqo.checks.column.adhoc.ColumnAdHocCheckCategoriesSpec;
-import ai.dqo.checks.table.adhoc.TableAdHocCheckCategoriesSpec;
-import ai.dqo.connectors.ProviderType;
-import ai.dqo.connectors.bigquery.BigQueryConnectionSpecObjectMother;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.ExecutionContextFactory;
@@ -30,17 +26,10 @@ import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactoryObjectMother;
-import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
-import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
-import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.models.UIAllChecksModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.models.UICheckModel;
-import ai.dqo.services.check.mapping.utils.UICheckContainerBasicModelUtility;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
@@ -50,10 +39,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.AbstractMap;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 @SpringBootTest
 public class UIAllChecksPatchFactoryImplTests extends BaseTest {
@@ -108,7 +94,6 @@ public class UIAllChecksPatchFactoryImplTests extends BaseTest {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setConnectionName(this.connectionSpec.getConnectionName());
 
-        // TODO: W setupie poprawić podpięcie connectiona i całego drzewka.
         List<UIAllChecksModel> uiAllChecksModels = this.sut.fromCheckSearchFilters(checkSearchFilters);
         Assertions.assertNotNull(uiAllChecksModels);
         Assertions.assertEquals(1, uiAllChecksModels.size());

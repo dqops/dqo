@@ -24,7 +24,6 @@ import {
   DataStreamMappingSpec
 } from '../../api';
 import { TABLE_ACTION } from '../types';
-import {UICheckContainerModel} from "../../api";
 
 export interface ITableState {
   tables: TableModel[];
