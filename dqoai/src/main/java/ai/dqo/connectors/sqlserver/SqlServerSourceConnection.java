@@ -27,10 +27,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import tech.tablesaw.api.ColumnType;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
-import tech.tablesaw.io.jdbc.SqlResultSetReader;
 
 import java.sql.ResultSet;
 import java.sql.Statement;
@@ -55,9 +53,6 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                                       SqlServerConnectionProvider sqlServerConnectionProvider) {
         super(jdbcConnectionPool, secretValueProvider, sqlServerConnectionProvider);
     }
-
-
-
 
     /**
      * Creates a hikari connection pool config for the connection specification.

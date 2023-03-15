@@ -36,6 +36,7 @@ public class JdbcTypeColumnMapping {
             }
 
             SqlResultSetReader.mapJdbcTypeToColumnType(-155, ColumnType.INSTANT);
+
             isInitializedJdbc = true;
         }
     }
