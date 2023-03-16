@@ -31,8 +31,8 @@ import java.util.List;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "UIAllChecksBasicModel", description = "Simplistic UI model that returns the list of data quality checks, their names, categories and \"configured\" flag.")
-public class UIAllChecksBasicModel {
+@ApiModel(value = "UICheckContainerBasicModel", description = "Simplistic UI model that returns the list of data quality checks, their names, categories and \"configured\" flag.")
+public class UICheckContainerBasicModel {
     @JsonPropertyDescription("Simplistic list of all data quality checks.")
     private List<UICheckBasicModel> checks = new ArrayList<>();
 }

@@ -1,6 +1,6 @@
 import SvgIcon from "../SvgIcon";
 import React, { useState } from "react";
-import { DqoJobHistoryEntryModelStatusEnum, UIAllChecksModel } from "../../api";
+import { DqoJobHistoryEntryModelStatusEnum, UICheckContainerModel } from "../../api";
 import { JobApiClient } from "../../services/apiClient";
 import { isEqual } from "lodash";
 import { useSelector } from "react-redux";
@@ -8,7 +8,7 @@ import { IRootState } from "../../redux/reducers";
 import DeleteOnlyDataDialog from "../CustomTree/DeleteOnlyDataDialog";
 
 interface TableHeaderProps {
-  checksUI: UIAllChecksModel;
+  checksUI: UICheckContainerModel;
 }
 
 const TableHeader = ({ checksUI }: TableHeaderProps) => {

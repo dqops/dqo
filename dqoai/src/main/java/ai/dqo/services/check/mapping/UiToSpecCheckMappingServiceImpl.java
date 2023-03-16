@@ -48,14 +48,14 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
     }
 
     /**
-     * Updates the <code>checkCategoriesSpec</code> with the updates received from the UI in the <code>model</code>.
+     * Updates the <code>checkContainerSpec</code> with the updates received from the UI in the <code>model</code>.
      *
      * @param model               Data quality check UI model with the updates.
-     * @param checkCategoriesSpec The target check categories spec object that will be updated.
+     * @param checkContainerSpec The target check container spec object that will be updated.
      */
     @Override
-    public void updateAllChecksSpecs(UIAllChecksModel model, AbstractRootChecksContainerSpec checkCategoriesSpec) {
-        ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
+    public void updateCheckContainerSpec(UICheckContainerModel model, AbstractRootChecksContainerSpec checkContainerSpec) {
+        ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkContainerSpec.getClass());
         List<UIQualityCategoryModel> categoryModelList = model.getCategories();
         if (categoryModelList == null) {
             return;
@@ -65,17 +65,17 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
             String categoryDisplayName = categoryModel.getCategory();
             FieldInfo categoryFieldInfo = checkCategoriesClassInfo.getFieldByYamlName(categoryDisplayName);
             if (categoryFieldInfo == null) {
-                throw new DqoRuntimeException("Category " + categoryDisplayName + " not found on " + checkCategoriesSpec.getClass().getCanonicalName());
+                throw new DqoRuntimeException("Category " + categoryDisplayName + " not found on " + checkContainerSpec.getClass().getCanonicalName());
             }
 
-            AbstractSpec categorySpec = (AbstractSpec) categoryFieldInfo.getFieldValueOrNewObject(checkCategoriesSpec);
+            AbstractSpec categorySpec = (AbstractSpec) categoryFieldInfo.getFieldValueOrNewObject(checkContainerSpec);
 
             updateCategoryChecksSpec(categoryModel, categorySpec);
 
             if (categorySpec.isDefault()) {
-                categoryFieldInfo.setFieldValue(null, checkCategoriesSpec);
+                categoryFieldInfo.setFieldValue(null, checkContainerSpec);
             } else {
-                categoryFieldInfo.setFieldValue(categorySpec, checkCategoriesSpec);
+                categoryFieldInfo.setFieldValue(categorySpec, checkContainerSpec);
             }
         }
     }

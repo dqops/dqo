@@ -19,6 +19,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
+import org.antlr.runtime.tree.Tree;
 
 /**
  * Visitor for {@link ColumnSearchFilters} that finds the correct nodes.
@@ -168,8 +169,6 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
             if (!enabledFilter && !tableSpec.isDisabled()) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
-
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
         }
 
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
@@ -218,13 +217,20 @@ public class ColumnSearchFiltersVisitor extends AbstractSearchVisitor<SearchPara
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
 
-        if (enabledFilter != null) {
-            if (enabledFilter && columnSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && !columnSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
+        if (enabledFilter != null
+                && (enabledFilter ^ !columnSpec.isDisabled())) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        if (this.filters.getColumnDataType() != null
+                && !this.filters.getColumnDataType().equals(columnSpec.getTypeSnapshot().getColumnType())) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
+        }
+
+        Boolean columnIsNullable = columnSpec.getTypeSnapshot() == null ? null : columnSpec.getTypeSnapshot().getNullable();
+        if (this.filters.getNullable() != null
+                && (columnIsNullable == null || this.filters.getNullable() ^ columnIsNullable)) {
+            return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());

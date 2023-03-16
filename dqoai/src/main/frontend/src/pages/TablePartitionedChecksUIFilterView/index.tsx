@@ -8,7 +8,7 @@ import {
 } from '../../redux/actions/table.actions';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
@@ -51,7 +51,7 @@ const TablePartitionedChecksUIFilterView = () => {
     setIsUpdating(false);
   };
 
-  const onChange = (ui: UIAllChecksModel) => {
+  const onChange = (ui: UICheckContainerModel) => {
     dispatch(setTableUpdatedPartitionedChecksUiFilter(ui));
   };
 

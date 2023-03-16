@@ -12,7 +12,7 @@ import {
 } from '../../redux/actions/column.actions';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import ColumnActionGroup from './ColumnActionGroup';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 import { useHistory, useParams } from "react-router-dom";
@@ -132,11 +132,11 @@ const RecurringView = () => {
     }
   };
 
-  const onDailyRecurringChange = (ui: UIAllChecksModel) => {
+  const onDailyRecurringChange = (ui: UICheckContainerModel) => {
     dispatch(setUpdatedDailyRecurring(ui));
   };
 
-  const onMonthlyRecurringChange = (ui: UIAllChecksModel) => {
+  const onMonthlyRecurringChange = (ui: UICheckContainerModel) => {
     dispatch(setUpdatedMonthlyRecurring(ui));
   };
 
