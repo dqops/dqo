@@ -16,22 +16,22 @@
 
 package ai.dqo.services.check.mapping.utils;
 
-import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Utility class for operations connected with {@link UIAllChecksBasicModel}.
+ * Utility class for operations related to {@link UICheckContainerBasicModel}.
  */
-public class UIAllChecksBasicModelUtility {
+public class UICheckContainerBasicModelUtility {
     /**
      * Get all categories to which the checks from the model belong.
-     * @param model UIAllChecksBasicModel from which to extract.
+     * @param model {@link UICheckContainerBasicModel} from which to extract.
      * @return Distinct list of category names in the checks of the model, sorted ascending.
      */
-    public static List<String> getCheckCategoryNames(UIAllChecksBasicModel model) {
+    public static List<String> getCheckCategoryNames(UICheckContainerBasicModel model) {
         return model.getChecks().stream()
                 .map(UICheckBasicModel::getCheckCategory)
                 .distinct()

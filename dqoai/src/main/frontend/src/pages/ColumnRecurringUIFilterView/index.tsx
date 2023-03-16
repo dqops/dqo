@@ -4,7 +4,7 @@ import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import {
   getColumnRecurringUIFilter, setColumnUpdatedRecurringUIFilter,
 } from '../../redux/actions/column.actions';
@@ -49,7 +49,7 @@ const ColumnRecurringUIFilterView = () => {
     );
   }, [connectionName, schemaName, tableName, columnName, category, checkName]);
 
-  const onChange = (ui: UIAllChecksModel) => {
+  const onChange = (ui: UICheckContainerModel) => {
     dispatch(setColumnUpdatedRecurringUIFilter(ui));
   };
 

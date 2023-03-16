@@ -19,7 +19,7 @@ import { Dispatch } from 'redux';
 import { ColumnApiClient } from '../../services/apiClient';
 import { COLUMN_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { ColumnBasicModel, CommentSpec, UIAllChecksModel } from '../../api';
+import { ColumnBasicModel, CommentSpec, UICheckContainerModel } from '../../api';
 
 export const getColumnsRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMNS
@@ -275,7 +275,7 @@ export const getColumnChecksUIRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI
 });
 
-export const getColumnChecksUISuccess = (data: UIAllChecksModel) => ({
+export const getColumnChecksUISuccess = (data: UICheckContainerModel) => ({
   type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI_SUCCESS,
   data
 });
@@ -326,7 +326,7 @@ export const updateColumnCheckUI =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnCheckUIRequest());
@@ -348,7 +348,7 @@ export const getColumnDailyRecurringRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING
 });
 
-export const getColumnDailyRecurringSuccess = (data: UIAllChecksModel) => ({
+export const getColumnDailyRecurringSuccess = (data: UICheckContainerModel) => ({
   type: COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING_SUCCESS,
   data
 });
@@ -400,7 +400,7 @@ export const updateColumnDailyRecurring =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnDailyRecurringRequest());
@@ -423,7 +423,7 @@ export const getColumnMonthlyRecurringRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING
 });
 
-export const getColumnMonthlyRecurringSuccess = (data: UIAllChecksModel) => ({
+export const getColumnMonthlyRecurringSuccess = (data: UICheckContainerModel) => ({
   type: COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING_SUCCESS,
   data
 });
@@ -475,7 +475,7 @@ export const updateColumnMonthlyRecurring =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnMonthlyRecurringRequest());
@@ -499,7 +499,7 @@ export const getColumnDailyPartitionedChecksRequest = () => ({
 });
 
 export const getColumnDailyPartitionedChecksSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS,
   data
@@ -552,7 +552,7 @@ export const updateColumnDailyPartitionedChecks =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnDailyPartitionedChecksRequest());
@@ -576,7 +576,7 @@ export const getColumnMonthlyPartitionedChecksRequest = () => ({
 });
 
 export const getColumnMonthlyPartitionedChecksSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
   data
@@ -629,7 +629,7 @@ export const updateColumnMonthlyPartitionedChecks =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnMonthlyPartitionedChecksRequest());
@@ -668,30 +668,30 @@ export const setUpdatedLabels = (labels?: string[]) => ({
   labels
 });
 
-export const setUpdatedChecksUi = (checksUI?: UIAllChecksModel) => ({
+export const setUpdatedChecksUi = (checksUI?: UICheckContainerModel) => ({
   type: COLUMN_ACTION.SET_UPDATED_CHECKS_UI,
   checksUI
 });
 
-export const setUpdatedDailyRecurring = (checksUI?: UIAllChecksModel) => ({
+export const setUpdatedDailyRecurring = (checksUI?: UICheckContainerModel) => ({
   type: COLUMN_ACTION.SET_COLUMN_DAILY_RECURRING,
   checksUI
 });
 
-export const setUpdatedMonthlyRecurring = (checksUI?: UIAllChecksModel) => ({
+export const setUpdatedMonthlyRecurring = (checksUI?: UICheckContainerModel) => ({
   type: COLUMN_ACTION.SET_COLUMN_MONTHLY_RECURRING,
   checksUI
 });
 
 export const setUpdatedDailyPartitionedChecks = (
-  checksUI?: UIAllChecksModel
+  checksUI?: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.SET_COLUMN_PARTITIONED_DAILY_CHECKS,
   checksUI
 });
 
 export const setUpdatedMonthlyPartitionedChecks = (
-  checksUI?: UIAllChecksModel
+  checksUI?: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.SET_COLUMN_PARTITIONED_MONTHLY_CHECKS,
   checksUI
@@ -702,7 +702,7 @@ export const getColumnProfilingChecksUIFilterRequest = () => ({
 });
 
 export const getColumnProfilingChecksUIFilterSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
   data
@@ -737,7 +737,7 @@ export const getColumnRecurringUIFilterRequest = () => ({
 });
 
 export const getColumnRecurringUIFilterSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER_SUCCESS,
   data
@@ -773,7 +773,7 @@ export const getColumnPartitionedChecksUIFilterRequest = () => ({
 });
 
 export const getColumnPartitionedChecksUIFilterSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_SUCCESS,
   data
@@ -804,16 +804,16 @@ export const getColumnPartitionedChecksUIFilter =
       }
     };
 
-export const setColumnUpdatedCheckUiFilter = (ui: UIAllChecksModel) => ({
+export const setColumnUpdatedCheckUiFilter = (ui: UICheckContainerModel) => ({
   type: COLUMN_ACTION.SET_UPDATED_CHECKS_UI_FILTER,
   data: ui
 });
 
-export const setColumnUpdatedRecurringUIFilter = (ui: UIAllChecksModel) => ({
+export const setColumnUpdatedRecurringUIFilter = (ui: UICheckContainerModel) => ({
   type: COLUMN_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
   data: ui
 });
-export const setColumnUpdatedPartitionedChecksUiFilter = (ui: UIAllChecksModel) => ({
+export const setColumnUpdatedPartitionedChecksUiFilter = (ui: UICheckContainerModel) => ({
   type: COLUMN_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
   data: ui
 });

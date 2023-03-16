@@ -4,9 +4,8 @@ import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import {
-
   getColumnPartitionedChecksUIFilter, setColumnUpdatedPartitionedChecksUiFilter,
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
@@ -52,7 +51,7 @@ const ColumnPartitionedChecksUIFilterView = () => {
     );
   }, [connectionName, schemaName, tableName, columnName, category, checkName]);
 
-  const onChange = (ui: UIAllChecksModel) => {
+  const onChange = (ui: UICheckContainerModel) => {
     dispatch(setColumnUpdatedPartitionedChecksUiFilter(ui));
   };
 

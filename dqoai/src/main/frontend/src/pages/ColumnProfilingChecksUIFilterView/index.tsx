@@ -4,7 +4,7 @@ import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { getColumnProfilingChecksUIFilter, setColumnUpdatedCheckUiFilter } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
@@ -47,7 +47,7 @@ const ColumnProfilingChecksUIFilterView = () => {
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
-  const onChange = (ui: UIAllChecksModel) => {
+  const onChange = (ui: UICheckContainerModel) => {
     dispatch(setColumnUpdatedCheckUiFilter(ui));
   };
 
