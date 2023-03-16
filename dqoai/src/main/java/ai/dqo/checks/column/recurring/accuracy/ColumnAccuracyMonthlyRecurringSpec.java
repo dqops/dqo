@@ -36,9 +36,31 @@ import java.util.Objects;
 public class ColumnAccuracyMonthlyRecurringSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyMonthlyRecurringSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("monthly_total_sum_not_match_count", o -> o.monthlyTotalSumNotMatchCount);
 
         }
     };
+
+    @JsonPropertyDescription("Verifies that the difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnAccuracyTotalSumNotMatchCountCheckSpec monthlyTotalSumNotMatchCount;
+
+    /**
+     * Returns an accuracy total sum not match count check specification.
+     * @return Accuracy total sum not match count check specification.
+     */
+    public ColumnAccuracyTotalSumNotMatchCountCheckSpec getMonthlyTotalSumNotMatchCount() {
+        return monthlyTotalSumNotMatchCount;
+    }
+
+    /**
+     * Sets a new definition of an accuracy total sum not match count check.
+     * @param monthlyTotalSumNotMatchCount Accuracy total sum not match count check specification.
+     */
+    public void setMonthlyTotalSumNotMatchCount(ColumnAccuracyTotalSumNotMatchCountCheckSpec monthlyTotalSumNotMatchCount) {
+        this.setDirtyIf(!Objects.equals(this.monthlyTotalSumNotMatchCount, monthlyTotalSumNotMatchCount));
+        this.monthlyTotalSumNotMatchCount = monthlyTotalSumNotMatchCount;
+        propagateHierarchyIdToField(monthlyTotalSumNotMatchCount, "monthly_total_sum_not_match_count");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

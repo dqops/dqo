@@ -36,10 +36,31 @@ import java.util.Objects;
 public class ColumnAccuracyDailyRecurringSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyDailyRecurringSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
+            put("daily_total_sum_not_match_count", o -> o.dailyTotalSumNotMatchCount);
 
         }
     };
 
+    @JsonPropertyDescription("Verifies that the difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnAccuracyTotalSumNotMatchCountCheckSpec dailyTotalSumNotMatchCount;
+
+    /**
+     * Returns an accuracy total sum not match count check specification.
+     * @return Accuracy total sum not match count check specification.
+     */
+    public ColumnAccuracyTotalSumNotMatchCountCheckSpec getDailyTotalSumNotMatchCount() {
+        return dailyTotalSumNotMatchCount;
+    }
+
+    /**
+     * Sets a new definition of an accuracy total sum not match count check.
+     * @param dailyTotalSumNotMatchCount Accuracy total sum not match count check specification.
+     */
+    public void setDailyTotalSumNotMatchCount(ColumnAccuracyTotalSumNotMatchCountCheckSpec dailyTotalSumNotMatchCount) {
+        this.setDirtyIf(!Objects.equals(this.dailyTotalSumNotMatchCount, dailyTotalSumNotMatchCount));
+        this.dailyTotalSumNotMatchCount = dailyTotalSumNotMatchCount;
+        propagateHierarchyIdToField(dailyTotalSumNotMatchCount, "daily_total_sum_not_match_count");
+    }
 
     /**
      * Returns the child map on the spec class with all fields.

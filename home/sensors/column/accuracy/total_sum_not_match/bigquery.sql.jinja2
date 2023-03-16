@@ -1,0 +1,21 @@
+{% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
+
+{%- macro render_referenced_table(referenced_table) -%}
+    {{ lib.quote_identifier(connection.bigquery.source_project_id) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+{%- endmacro %}
+
+SELECT
+    SUM(expected_value - current_value) AS actual_value
+{{- lib.render_data_stream_projections('analyzed_table') }}
+{{- lib.render_time_dimension_projection('analyzed_table') }}
+FROM
+  (SELECT
+    (SELECT
+        SUM(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+    FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
+    ) AS expected_value,
+    SUM({{ lib.render_target_column('analyzed_table')}}) AS current_value
+    FROM {{ lib.render_target_table() }} AS analyzed_table) AS nested_table
+{{- lib.render_where_clause() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}
