@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.partitioned.accuracy.ColumnAccuracyMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.bool.ColumnBoolMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
@@ -65,6 +66,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("sql", o -> o.sql);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
+            put("accuracy", o -> o.accuracy);
 
         }
     };
@@ -113,6 +115,11 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnIntegrityMonthlyPartitionedChecksSpec integrity;
+
+    @JsonPropertyDescription("Monthly partitioned checks for accuracy in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAccuracyMonthlyPartitionedChecksSpec accuracy;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -274,6 +281,24 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.integrity, integrity));
         this.integrity = integrity;
         propagateHierarchyIdToField(integrity, "integrity");
+    }
+
+    /**
+     * Returns a container of custom accuracy checks on a column.
+     * @return Custom accuracy checks.
+     */
+    public ColumnAccuracyMonthlyPartitionedChecksSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets a reference to a container of custom accuracy checks.
+     * @param accuracy Custom accuracy checks.
+     */
+    public void setAccuracy(ColumnAccuracyMonthlyPartitionedChecksSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        propagateHierarchyIdToField(accuracy, "accuracy");
     }
 
 
