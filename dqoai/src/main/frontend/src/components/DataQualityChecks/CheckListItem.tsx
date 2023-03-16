@@ -125,13 +125,13 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
   const getColor = (status: CheckResultsOverviewDataModelStatusesEnum) => {
     switch (status) {
       case 'valid':
-        return 'bg-green-500';
+        return 'bg-teal-900';
       case 'warning':
-        return 'bg-yellow-500';
+        return 'bg-yellow-900';
       case 'error':
-        return 'bg-orange-500';
+        return 'bg-orange-900';
       case 'fatal':
-        return 'bg-red-500';
+        return 'bg-red-900';
       case 'execution_error':
         return 'bg-black';
       default:
