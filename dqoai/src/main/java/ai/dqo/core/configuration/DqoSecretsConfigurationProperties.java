@@ -28,6 +28,7 @@ import org.springframework.context.annotation.Configuration;
 public class DqoSecretsConfigurationProperties implements Cloneable {
     private String gcpProjectId;
     private boolean enableGcpSecretManager;
+    private String sqlServerPassword;
 
     /**
      * GCP project ID used to access the GCP Secret Manager.
@@ -59,6 +60,22 @@ public class DqoSecretsConfigurationProperties implements Cloneable {
      */
     public void setEnableGcpSecretManager(boolean enableGcpSecretManager) {
         this.enableGcpSecretManager = enableGcpSecretManager;
+    }
+
+    /**
+     * get a Sql Server secret password.
+     * @return Sql Server password.
+     */
+    public String getSqlServerPassword() {
+        return sqlServerPassword;
+    }
+
+    /**
+     * Sets a Sql Server secret password
+     * @param sqlServerPassword Sql Server password.
+     */
+    public void setSqlServerPassword(String sqlServerPassword) {
+        this.sqlServerPassword = sqlServerPassword;
     }
 
     /**

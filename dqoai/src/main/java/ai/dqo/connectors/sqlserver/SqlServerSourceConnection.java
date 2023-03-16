@@ -91,6 +91,11 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
         hikariConfig.setJdbcUrl(jdbcUrl);
 
         Properties dataSourceProperties = new Properties();
+
+        if(sqlserverSpec.getSsl() != null){
+            dataSourceProperties.put("encrypt", "false");
+        }
+
         if (sqlserverSpec.getProperties() != null) {
             dataSourceProperties.putAll(sqlserverSpec.getProperties());
         }
@@ -125,7 +130,7 @@ public class SqlServerSourceConnection extends AbstractJdbcSourceConnection {
                         Table resultTable = Table.read().db(sqlServerResultSet, "query_result");
                         for (Column<?> column : resultTable.columns()) {
                             if (column.name() != null) {
-                                column.setName(column.name().toLowerCase(Locale.ENGLISH));
+                                column.setName(column.name().toLowerCase(Locale.ROOT));
                             }
                         }
                         return resultTable;

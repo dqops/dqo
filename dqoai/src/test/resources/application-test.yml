@@ -14,5 +14,6 @@ dqo:
   secrets:
     enable-gcp-secret-manager: true
     gcp-project-id: dqo-ai-testing
+    sqlserver-password: Te$t_sqlserver1
   logging:
     enable-user-home-logging: false

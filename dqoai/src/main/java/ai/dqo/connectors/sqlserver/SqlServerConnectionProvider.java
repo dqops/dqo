@@ -138,13 +138,6 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
         }
     }
 
-    /**
-     * Formats a constant for the target database.
-     *
-     * @param constant   Constant to be formatted.
-     * @param columnType Column type snapshot.
-     * @return Formatted constant.
-     */
 
     /**
      * Proposes a physical (provider specific) column type that is able to store the data of the given Tablesaw column.
@@ -172,10 +165,10 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("bit");
         }
         else if (columnType == ColumnType.STRING) {
-            return new ColumnTypeSnapshotSpec("varchar", 255);
+            return new ColumnTypeSnapshotSpec("nvarchar", 255);
         }
         else if (columnType == ColumnType.DOUBLE) {
-            return new ColumnTypeSnapshotSpec("real");
+            return new ColumnTypeSnapshotSpec("float");
         }
         else if (columnType == ColumnType.LOCAL_DATE) {
             return new ColumnTypeSnapshotSpec("date");
@@ -190,7 +183,7 @@ public class SqlServerConnectionProvider extends AbstractSqlConnectionProvider {
             return new ColumnTypeSnapshotSpec("datetimeoffset");
         }
         else if (columnType == ColumnType.TEXT) {
-            return new ColumnTypeSnapshotSpec("text");
+            return new ColumnTypeSnapshotSpec("ntext");
         }
         else {
             throw new NoSuchElementException("Unsupported column type: " + columnType.name());

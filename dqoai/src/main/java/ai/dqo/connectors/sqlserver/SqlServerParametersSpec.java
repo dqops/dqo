@@ -68,8 +68,8 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.")
     private String options;
 
-    @CommandLine.Option(names = {"--sqlserver-ssl"}, description = "Connect to SQL Server using SSL", defaultValue = "false")
-    @JsonPropertyDescription("Connect to SQL Server using SSL. The default value is false.")
+    @CommandLine.Option(names = {"--sqlserver-ssl"}, description = "Connecting to SQL Server with SSL disabled", defaultValue = "false")
+    @JsonPropertyDescription("Connecting to SQL Server with SSL disabled. The default value is false.")
     private Boolean ssl;
 
     @CommandLine.Option(names = {"--sqlserver-properties"}, description = "SQL Server additional properties that are added to the JDBC connection string")

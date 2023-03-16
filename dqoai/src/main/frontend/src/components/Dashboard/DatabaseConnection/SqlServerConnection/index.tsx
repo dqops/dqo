@@ -61,7 +61,7 @@ const SqlServerConnection = ({
       <Checkbox
         checked={sqlserver?.ssl}
         onChange={(checked) => handleChange({ ssl: checked })}
-        label="Use SSL"
+        label="Disable SSL"
         labelPosition="left"
       />
       <SnowflakePropertiesView
