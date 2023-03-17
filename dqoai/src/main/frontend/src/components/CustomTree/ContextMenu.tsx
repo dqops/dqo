@@ -121,14 +121,28 @@ const ContextMenu = ({ node, openConfirm }: ContextMenuProps) => {
           >
             Refresh
           </div>
-          {[TREE_LEVEL.DATABASE, TREE_LEVEL.TABLE, TREE_LEVEL.COLUMN].includes(
-            node.level
-          ) && (
+          {node.level === TREE_LEVEL.DATABASE && (
             <div
               className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
               onClick={() => openConfirm(node)}
             >
-              Delete
+              Delete connection
+            </div>
+          )}
+          {node.level === TREE_LEVEL.TABLE && (
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => openConfirm(node)}
+            >
+              Delete table
+            </div>
+          )}
+          {node.level === TREE_LEVEL.COLUMN && (
+            <div
+              className="text-gray-900 cursor-pointer hover:bg-gray-100 px-4 py-2 rounded"
+              onClick={() => openConfirm(node)}
+            >
+              Delete column
             </div>
           )}
           {(node.level === TREE_LEVEL.DATABASE ||

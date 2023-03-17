@@ -34,13 +34,13 @@ nav:
     - Data storage: 'dqo-concepts\data-storage\data-storage.md'
   - Working with DQO:
     - 'working-with-dqo/index.md'
-    - Connections:
-      - 'working-with-dqo/connections/index.md'
-      - BigQuery: 'working-with-dqo/connections/bigquery.md'
-      - Snowflake: 'working-with-dqo/connections/snowflake.md'
-      - Redshift: 'working-with-dqo/connections/redshift.md'
-      - PostgreSQL: 'working-with-dqo/connections/postgresql.md'
-      - SQL Server: 'working-with-dqo/connections/sql-server.md'
+    - Adding connections:
+      - 'working-with-dqo/adding-connections/index.md'
+      - BigQuery: 'working-with-dqo/adding-connections/bigquery.md'
+      - Snowflake: 'working-with-dqo/adding-connections/snowflake.md'
+      - Redshift: 'working-with-dqo/adding-connections/redshift.md'
+      - PostgreSQL: 'working-with-dqo/adding-connections/postgresql.md'
+      - SQL Server: 'working-with-dqo/adding-connections/sql-server.md'
     - DQO Shell:
       - 'working-with-dqo/dqo-shell/index.md'
       - Run modes: 'working-with-dqo/dqo-shell/run-modes.md'
@@ -54,6 +54,7 @@ nav:
     - Initial profiling: 'working-with-dqo/initial-profiling/initial-profiling.md'
     - Adding new data quality check: 'working-with-dqo/adding-data-quality-checks/adding-data-quality-checks.md'
     - Removing data quality results: 'working-with-dqo/removing-data-quality-results/removing-data-quality-results.md'
+    - Setting up data streams: 'working-with-dqo/setting-up-data-stream/index.md'
   - Examples: 'examples/examples.md'
 ########## INCLUDE CLI COMMANDS - DO NOT MODIFY MANUALLY
   - Command-line interface:
