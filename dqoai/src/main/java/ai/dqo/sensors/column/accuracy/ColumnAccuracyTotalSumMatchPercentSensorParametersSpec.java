@@ -29,13 +29,13 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level sensor that calculates the difference in sum of a column in a table and sum of a column of another table.
+ * Column level sensor that calculates percentage of the difference in sum of a column in a table and sum of a column of another table.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnAccuracyTotalSumMatchPercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyTotalSumMatchPercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
         {
         }
     };
@@ -99,7 +99,7 @@ public class ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec extends Abs
      */
     @Override
     public String getSensorDefinitionName() {
-        return "column/accuracy/total_sum_not_match";
+        return "column/accuracy/total_sum_match_percent";
     }
 
 }

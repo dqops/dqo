@@ -19,8 +19,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
+import ai.dqo.rules.comparison.MaxDiffPercentRule1ParametersSpec;
+import ai.dqo.rules.comparison.MaxDiffPercentRule2ParametersSpec;
+import ai.dqo.rules.comparison.MaxDiffPercentRule5ParametersSpec;
 import ai.dqo.sensors.column.accuracy.*;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,14 +34,14 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Column level check that ensures that there are no more than a maximum number of difference of sum of a table column and of a sum of another table column.
+ * Column level check that ensures that there are no more than a maximum percentage of difference of sum of a table column and of a sum of another table column.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAccuracyTotalSumNotMatchCountCheckSpec
-        extends AbstractCheckSpec<ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyTotalSumNotMatchCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
+public class ColumnAccuracyTotalSumMatchPercentCheckSpec
+        extends AbstractCheckSpec<ColumnAccuracyTotalSumMatchPercentSensorParametersSpec, MaxDiffPercentRule2ParametersSpec, MaxDiffPercentRule1ParametersSpec, MaxDiffPercentRule5ParametersSpec> {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyTotalSumMatchPercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
     };
@@ -48,29 +49,29 @@ public class ColumnAccuracyTotalSumNotMatchCountCheckSpec
     @JsonPropertyDescription("Data quality check parameters")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec parameters = new ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec();
+    private ColumnAccuracyTotalSumMatchPercentSensorParametersSpec parameters = new ColumnAccuracyTotalSumMatchPercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a maximum number of difference of sum of a table column and of a sum of another table column that raises a data quality error (alert).")
+    @JsonPropertyDescription("Default alerting threshold for a maximum percentage of difference of sum of a table column and of a sum of another table column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec error;
+    private MaxDiffPercentRule2ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule10ParametersSpec warning;
+    private MaxDiffPercentRule1ParametersSpec warning;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec fatal;
+    private MaxDiffPercentRule5ParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
      * @return Sensor parameters.
      */
     @Override
-    public ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec getParameters() {
+    public ColumnAccuracyTotalSumMatchPercentSensorParametersSpec getParameters() {
         return parameters;
     }
 
@@ -78,7 +79,7 @@ public class ColumnAccuracyTotalSumNotMatchCountCheckSpec
      * Sets a new row count sensor parameter object.
      * @param parameters Row count parameters.
      */
-    public void setParameters(ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec parameters) {
+    public void setParameters(ColumnAccuracyTotalSumMatchPercentSensorParametersSpec parameters) {
         this.setDirtyIf(!Objects.equals(this.parameters, parameters));
         this.parameters = parameters;
         this.propagateHierarchyIdToField(parameters, "parameters");
@@ -90,7 +91,7 @@ public class ColumnAccuracyTotalSumNotMatchCountCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRule0ParametersSpec getError() {
+    public MaxDiffPercentRule2ParametersSpec getError() {
         return this.error;
     }
 
@@ -98,7 +99,7 @@ public class ColumnAccuracyTotalSumNotMatchCountCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRule0ParametersSpec error) {
+    public void setError(MaxDiffPercentRule2ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
@@ -110,7 +111,7 @@ public class ColumnAccuracyTotalSumNotMatchCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule10ParametersSpec getWarning() {
+    public MaxDiffPercentRule1ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -118,7 +119,7 @@ public class ColumnAccuracyTotalSumNotMatchCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule10ParametersSpec warning) {
+    public void setWarning(MaxDiffPercentRule1ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -130,7 +131,7 @@ public class ColumnAccuracyTotalSumNotMatchCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MaxCountRule0ParametersSpec getFatal() {
+    public MaxDiffPercentRule5ParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -138,7 +139,7 @@ public class ColumnAccuracyTotalSumNotMatchCountCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MaxCountRule0ParametersSpec fatal) {
+    public void setFatal(MaxDiffPercentRule5ParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

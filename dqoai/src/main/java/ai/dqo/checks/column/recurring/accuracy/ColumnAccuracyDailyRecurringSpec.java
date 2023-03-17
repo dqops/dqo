@@ -36,30 +36,30 @@ import java.util.Objects;
 public class ColumnAccuracyDailyRecurringSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyDailyRecurringSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("daily_total_sum_not_match_count", o -> o.dailyTotalSumNotMatchCount);
+            put("daily_total_sum_match_percent", o -> o.dailyTotalSumMatchPercent);
 
         }
     };
 
-    @JsonPropertyDescription("Verifies that the difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.")
-    private ColumnAccuracyTotalSumNotMatchCountCheckSpec dailyTotalSumNotMatchCount;
+    @JsonPropertyDescription("Verifies that the percentage of difference in sum of a column in a table and sum of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnAccuracyTotalSumMatchPercentCheckSpec dailyTotalSumMatchPercent;
 
     /**
-     * Returns an accuracy total sum not match count check specification.
-     * @return Accuracy total sum not match count check specification.
+     * Returns an accuracy total sum match percent check specification.
+     * @return Accuracy total sum match percent check specification.
      */
-    public ColumnAccuracyTotalSumNotMatchCountCheckSpec getDailyTotalSumNotMatchCount() {
-        return dailyTotalSumNotMatchCount;
+    public ColumnAccuracyTotalSumMatchPercentCheckSpec getDailyTotalSumMatchPercent() {
+        return dailyTotalSumMatchPercent;
     }
 
     /**
-     * Sets a new definition of an accuracy total sum not match count check.
-     * @param dailyTotalSumNotMatchCount Accuracy total sum not match count check specification.
+     * Sets a new definition of an accuracy total sum match percent check.
+     * @param dailyTotalSumMatchPercent Accuracy total sum match percent check specification.
      */
-    public void setDailyTotalSumNotMatchCount(ColumnAccuracyTotalSumNotMatchCountCheckSpec dailyTotalSumNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.dailyTotalSumNotMatchCount, dailyTotalSumNotMatchCount));
-        this.dailyTotalSumNotMatchCount = dailyTotalSumNotMatchCount;
-        propagateHierarchyIdToField(dailyTotalSumNotMatchCount, "daily_total_sum_not_match_count");
+    public void setDailyTotalSumMatchPercent(ColumnAccuracyTotalSumMatchPercentCheckSpec dailyTotalSumMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.dailyTotalSumMatchPercent, dailyTotalSumMatchPercent));
+        this.dailyTotalSumMatchPercent = dailyTotalSumMatchPercent;
+        propagateHierarchyIdToField(dailyTotalSumMatchPercent, "daily_total_sum_match_percent");
     }
 
     /**

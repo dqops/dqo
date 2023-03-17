@@ -17,7 +17,7 @@ package ai.dqo.bigquery.sensors.column.accuracy;
 
 import ai.dqo.bigquery.BaseBigQueryIntegrationTest;
 import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyTotalSumNotMatchCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyTotalSumMatchPercentCheckSpec;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.execution.sensors.DataQualitySensorRunnerObjectMother;
 import ai.dqo.execution.sensors.SensorExecutionResult;
@@ -29,7 +29,7 @@ import ai.dqo.sampledata.IntegrationTestSampleDataObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
-import ai.dqo.sensors.column.accuracy.ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec;
+import ai.dqo.sensors.column.accuracy.ColumnAccuracyTotalSumMatchPercentSensorParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,10 +38,10 @@ import tech.tablesaw.api.Table;
 
 
 @SpringBootTest
-public class BigQueryColumnAccuracyTotalSumNotMatchCountSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
-    private ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec sut;
+public class BigQueryColumnAccuracyTotalSumMatchPercentSensorParametersSpecIntegrationTest extends BaseBigQueryIntegrationTest {
+    private ColumnAccuracyTotalSumMatchPercentSensorParametersSpec sut;
     private UserHomeContext userHomeContext;
-    private ColumnAccuracyTotalSumNotMatchCountCheckSpec checkSpec;
+    private ColumnAccuracyTotalSumMatchPercentCheckSpec checkSpec;
     private SampleTableMetadata sampleTableMetadata;
     private SampleTableMetadata sampleTableMetadataReferenced;
 
@@ -52,8 +52,8 @@ public class BigQueryColumnAccuracyTotalSumNotMatchCountSensorParametersSpecInte
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadata);
         IntegrationTestSampleDataObjectMother.ensureTableExists(this.sampleTableMetadataReferenced);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
-        this.sut = new ColumnAccuracyTotalSumNotMatchCountSensorParametersSpec();
-        this.checkSpec = new ColumnAccuracyTotalSumNotMatchCountCheckSpec();
+        this.sut = new ColumnAccuracyTotalSumMatchPercentSensorParametersSpec();
+        this.checkSpec = new ColumnAccuracyTotalSumMatchPercentCheckSpec();
         this.checkSpec.setParameters(this.sut);
     }
 
@@ -69,8 +69,10 @@ public class BigQueryColumnAccuracyTotalSumNotMatchCountSensorParametersSpecInte
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals("expected_value", resultTable.column(0).name());
+        Assertions.assertEquals("actual_value", resultTable.column(1).name());
+        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(15L, resultTable.column(1).get(0));
     }
 
     @Test
@@ -85,8 +87,10 @@ public class BigQueryColumnAccuracyTotalSumNotMatchCountSensorParametersSpecInte
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals("expected_value", resultTable.column(0).name());
+        Assertions.assertEquals("actual_value", resultTable.column(1).name());
+        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(15L, resultTable.column(1).get(0));
     }
 
     @Test
@@ -101,7 +105,9 @@ public class BigQueryColumnAccuracyTotalSumNotMatchCountSensorParametersSpecInte
 
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
-        Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(0L, resultTable.column(0).get(0));
+        Assertions.assertEquals("expected_value", resultTable.column(0).name());
+        Assertions.assertEquals("actual_value", resultTable.column(1).name());
+        Assertions.assertEquals(15L, resultTable.column(0).get(0));
+        Assertions.assertEquals(15L, resultTable.column(1).get(0));
     }
 }

@@ -36,31 +36,30 @@ import java.util.Objects;
 public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingAccuracyChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
-            put("total_sum_not_match_count", o -> o.totalSumNotMatchCount);
+            put("total_sum_match_percent", o -> o.totalSumMatchPercent);
         }
     };
 
-    @JsonPropertyDescription("Verifies that the difference in sum of a column in a table and sum of a column of another table does not exceed the set number.")
-    private ColumnAccuracyTotalSumNotMatchCountCheckSpec totalSumNotMatchCount;
+    @JsonPropertyDescription("Verifies that percentage of the difference in sum of a column in a table and sum of a column of another table does not exceed the set number.")
+    private ColumnAccuracyTotalSumMatchPercentCheckSpec totalSumMatchPercent;
 
     /**
-     * Returns an accuracy total sum not match count check specification.
-     * @return Accuracy total sum not match count check specification.
+     * Returns an accuracy total sum match percent check specification.
+     * @return Accuracy total sum match percent check specification.
      */
-    public ColumnAccuracyTotalSumNotMatchCountCheckSpec getTotalSumNotMatchCount() {
-        return totalSumNotMatchCount;
+    public ColumnAccuracyTotalSumMatchPercentCheckSpec getTotalSumMatchPercent() {
+        return totalSumMatchPercent;
     }
 
     /**
-     * Sets a new definition of an Accuracy total sum not match count check.
-     * @param totalSumNotMatchCount accuracy total sum not match count check specification.
+     * Sets a new definition of an Accuracy total sum match percent check.
+     * @param totalSumMatchPercent accuracy total sum match percent check specification.
      */
-    public void setTotalSumNotMatchCount(ColumnAccuracyTotalSumNotMatchCountCheckSpec totalSumNotMatchCount) {
-        this.setDirtyIf(!Objects.equals(this.totalSumNotMatchCount, totalSumNotMatchCount));
-        this.totalSumNotMatchCount = totalSumNotMatchCount;
-        propagateHierarchyIdToField(totalSumNotMatchCount, "total_sum_not_match_count");
+    public void setTotalSumMatchPercent(ColumnAccuracyTotalSumMatchPercentCheckSpec totalSumMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.totalSumMatchPercent, totalSumMatchPercent));
+        this.totalSumMatchPercent = totalSumMatchPercent;
+        propagateHierarchyIdToField(totalSumMatchPercent, "total_sum_match_percent");
     }
-
 
     /**
      * Returns the child map on the spec class with all fields.
