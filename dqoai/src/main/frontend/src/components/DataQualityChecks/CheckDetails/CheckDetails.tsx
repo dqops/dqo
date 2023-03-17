@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Tabs from "../../Tabs";
 import { useParams } from "react-router-dom";
 import {
   CheckResultsDetailedDataModel,
-  CheckSearchFiltersCheckTypeEnum, ErrorsDetailedDataModel,
+  CheckSearchFiltersCheckTypeEnum,
+  DqoJobHistoryEntryModel,
+  DqoJobHistoryEntryModelStatusEnum,
+  ErrorsDetailedDataModel,
   SensorReadoutsDetailedDataModel,
   UICheckModel
 } from "../../../api";
@@ -35,9 +38,10 @@ const tabs = [
 interface CheckDetailsProps {
   check: UICheckModel;
   onClose: () => void;
+  job?: DqoJobHistoryEntryModel;
 }
 
-const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
+const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
   const { connection, schema, table, column }: { connection: string, schema: string, table: string, column: string } = useParams();
   const [checkResults, setCheckResults] = useState<CheckResultsDetailedDataModel[]>([]);
@@ -61,7 +65,7 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
     return data.filter((item) => item.checkName === check.check_name);
   };
 
-  useEffect(() => {
+  const fetchCheckDetails = useCallback(() => {
     const startDate = month ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD') : '';
     const endDate = month ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD') : '';
 
@@ -135,6 +139,16 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
       }
     }
   }, [check, dataStreamName, connection, schema, table, column, month]);
+
+  useEffect(() => {
+    fetchCheckDetails();
+  }, []);
+
+  useEffect(() => {
+    if(job && (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded || job.status === DqoJobHistoryEntryModelStatusEnum.failed)) {
+      fetchCheckDetails();
+    }
+  }, [job]);
 
   const openDeleteDialog = () => {
     setDeleteDataDialogOpened(true);
