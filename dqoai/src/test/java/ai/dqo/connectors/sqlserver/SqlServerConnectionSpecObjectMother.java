@@ -17,7 +17,6 @@ package ai.dqo.connectors.sqlserver;
 
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.testcontainers.TestContainersObjectMother;
-import ai.dqo.core.configuration.DqoSecretsConfigurationPropertiesObjectMother;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import org.testcontainers.containers.MSSQLServerContainer;
 
@@ -26,7 +25,7 @@ public class SqlServerConnectionSpecObjectMother {
 
     private static MSSQLServerContainer<?> sharedContainer;
     private static final int PORT = 1433;
-    private static final String SQLSERVERPASSWORD = DqoSecretsConfigurationPropertiesObjectMother.getDefaultCloned().getSqlServerPassword();
+    private static final String SQLSERVERPASSWORD = "Te$t_sqlserver1";
     /**
      * Creates a shared MSSQL Server container using Testcontainers. The container will be stopped when the unit/integration session will finish.
      * @return Shared container with a started postgresql instance.

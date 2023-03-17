@@ -87,7 +87,6 @@ dqo:
   secrets:
     enable-gcp-secret-manager: true
     gcp-project-id: ${GOOGLE_CLOUD_PROJECT}
-    sqlserver-password: ${SQLSERVER_PASSWORD}
   core:
     print-stack-trace: true
     lock-wait-timeout-seconds: 900
