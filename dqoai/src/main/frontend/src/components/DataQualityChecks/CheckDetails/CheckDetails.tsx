@@ -57,6 +57,14 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
     return data.filter((item) => item.checkName === check.check_name);
   };
 
+  const getSensorReadout = (data: SensorReadoutsDetailedDataModel[]): SensorReadoutsDetailedDataModel[] => {
+    return data.filter((item) => item.singleSensorReadouts && item.singleSensorReadouts[0]?.checkName === check.check_name);
+  };
+
+  const getErrorItem = (data: ErrorsDetailedDataModel[]): ErrorsDetailedDataModel[] => {
+    return data.filter((item) => item.checkName === check.check_name);
+  };
+
   const fetchCheckDetails = useCallback(() => {
     const startDate = month ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD') : '';
     const endDate = month ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD') : '';
@@ -67,20 +75,20 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
           setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getColumnProfilingSensorReadouts(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+          setSensorReadouts(getSensorReadout(res.data));
         });
         ErrorsApi.getColumnProfilingErrors(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+          setErrors(getErrorItem(res.data));
         });
       } else {
         CheckResultApi.getTableProfilingChecksResults(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getTableProfilingSensorReadouts(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+          setSensorReadouts(getSensorReadout(res.data));
         });
         ErrorsApi.getTableProfilingErrors(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+          setErrors(getErrorItem(res.data));
         });
       }
     }
@@ -90,20 +98,20 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
           setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getColumnRecurringSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+          setSensorReadouts(getSensorReadout(res.data));
         });
         ErrorsApi.getColumnRecurringErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+          setErrors(getErrorItem(res.data));
         });
       } else {
         CheckResultApi.getTableRecurringResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getTableRecurringSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+          setSensorReadouts(getSensorReadout(res.data));
         });
         ErrorsApi.getTableRecurringErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+          setErrors(getErrorItem(res.data));
         });
       }
     }
@@ -113,20 +121,20 @@ const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
           setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getColumnPartitionedSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+          setSensorReadouts(getSensorReadout(res.data));
         });
         ErrorsApi.getColumnPartitionedErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+          setErrors(getErrorItem(res.data));
         });
       } else {
         CheckResultApi.getTablePartitionedChecksResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getTablePartitionedSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+          setSensorReadouts(getSensorReadout(res.data));
         });
         ErrorsApi.getTablePartitionedErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+          setErrors(getErrorItem(res.data));
         });
       }
     }
