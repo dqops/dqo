@@ -47,7 +47,7 @@ const ColumnSelect = ({
 
   useEffect(() => {
     if (connection && scope === 'connection') {
-      ConnectionApiClient.getConnectionCommonColumns(connection).then(
+      ConnectionApiClient.getConnectionColumns(connection).then(
         setColumns
       );
     } else if (table) {
