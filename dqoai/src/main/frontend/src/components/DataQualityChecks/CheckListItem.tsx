@@ -406,6 +406,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             <CheckDetails
               check={check}
               onClose={closeCheckDetails}
+              job={job}
             />
           </td>
         </tr>
