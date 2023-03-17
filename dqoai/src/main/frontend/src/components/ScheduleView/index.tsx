@@ -1,10 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Input from "../Input";
 import Checkbox from "../Checkbox";
-import { Radio } from "@material-tailwind/react";
 import NumberInput from "../NumberInput";
 import { RecurringScheduleSpec } from "../../api";
 import clsx from "clsx";
+import RadioButton from "../RadioButton";
 
 interface IScheduleViewProps {
   schedule?: RecurringScheduleSpec;
@@ -15,19 +15,19 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
-  const onChangeMode = (e: any) => {
-    setMode(e.target.value);
+  const onChangeMode = (value: string) => {
+    setMode(value);
 
-    if (e.target.value === 'minutes') {
+    if (value === 'minutes') {
       handleChange({ cron_expression: `*/${minutes} * * * *` });
     }
-    if (e.target.value === 'hour') {
+    if (value === 'hour') {
       handleChange({ cron_expression: `${minutes} * * * *` });
     }
-    if (e.target.value === 'day') {
+    if (value === 'day') {
       handleChange({ cron_expression: `${minutes} ${hour} * * *` });
     }
-    if (!e.target.value) {
+    if (value) {
       handleChange({ cron_expression: '' });
     }
   };
@@ -56,7 +56,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   };
 
   useEffect(() => {
-    // if (!schedule?.cron_expression) return;
+    if (!schedule?.cron_expression) return;
     const cron_expression = schedule?.cron_expression ?? "";
     if (!cron_expression) {
       setMode("");
@@ -146,25 +146,16 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
         </tbody>
       </table>
       <div className="flex flex-col">
-        <Radio
-          id="unconfigured"
-          name="mode"
-          value=""
+        <RadioButton
           label="Scheduled check execution not configured for all tables from this connection"
           checked={mode === ''}
-          onChange={onChangeMode}
-          color="teal"
-          ripple={false}
+          onClick={() => onChangeMode('')}
+          className="mb-4"
         />
-        <Radio
-          id="minutes"
-          name="mode"
-          value="minutes"
+        <RadioButton
           label="Run every X minutes"
           checked={mode === 'minutes'}
-          onChange={onChangeMode}
-          color="teal"
-          ripple={false}
+          onClick={() => onChangeMode('minutes')}
         />
         <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "minutes" && "opacity-60")}>
           <div>Run every</div>
@@ -176,15 +167,10 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           />
           <div>minutes</div>
         </div>
-        <Radio
-          id="hour"
-          name="mode"
+        <RadioButton
           label="Run every hour"
-          value="hour"
           checked={mode === 'hour'}
-          onChange={onChangeMode}
-          color="teal"
-          ripple={false}
+          onClick={() => onChangeMode('hour')}
         />
         <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "hour" && "opacity-60")}>
           <div>At</div>
@@ -196,15 +182,10 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           />
           <div>minutes past hour</div>
         </div>
-        <Radio
-          id="day"
-          name="mode"
+        <RadioButton
           label="Run every day"
-          value="day"
           checked={mode === 'day'}
-          onChange={onChangeMode}
-          color="teal"
-          ripple={false}
+          onClick={() => onChangeMode('day')}
         />
         <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "day" && "opacity-60")}>
           <div>At</div>
