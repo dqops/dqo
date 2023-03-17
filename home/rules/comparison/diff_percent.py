@@ -37,6 +37,7 @@ class RuleTimeWindowSettingsSpec:
 
 # rule execution parameters, contains the sensor value (expected_value, actual_value) and the rule parameters
 class RuleExecutionRunParameters:
+    expected_value: float
     actual_value: float
     parameters: DiffPercentRuleParametersSpec
     time_period_local: datetime
@@ -61,7 +62,7 @@ class RuleExecutionResult:
 
 # rule evaluation method that should be modified for each type of rule
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-    if not hasattr(rule_parameters, 'actual_value'):
+    if not hasattr(rule_parameters, 'expected_value') and hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
     expected_value = None
