@@ -3,12 +3,12 @@ import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
-  getColumnMonthlyCheckpoints,
-  updateColumnMonthlyCheckpoints
+  getColumnMonthlyRecurring,
+  updateColumnMonthlyRecurring
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { useParams } from "react-router-dom";
@@ -16,27 +16,27 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 
 const ColumnMonthlyChecksView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { connection: string, schema: string, table: string, column: string } = useParams();
-  const { monthlyCheckpoints, isUpdating, loading } = useSelector(
+  const { monthlyRecurring, isUpdating, loading } = useSelector(
     (state: IRootState) => state.column
   );
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnCheckpointsOverview(connectionName, schemaName, tableName, columnName, 'monthly').then((res) => {
+    CheckResultOverviewApi.getColumnRecurringOverview(connectionName, schemaName, tableName, columnName, 'monthly').then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
-    setUpdatedChecksUI(monthlyCheckpoints);
-  }, [monthlyCheckpoints]);
+    setUpdatedChecksUI(monthlyRecurring);
+  }, [monthlyRecurring]);
 
   useEffect(() => {
     dispatch(
-      getColumnMonthlyCheckpoints(
+      getColumnMonthlyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -49,7 +49,7 @@ const ColumnMonthlyChecksView = () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateColumnMonthlyCheckpoints(
+      updateColumnMonthlyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -58,7 +58,7 @@ const ColumnMonthlyChecksView = () => {
       )
     );
     await dispatch(
-      getColumnMonthlyCheckpoints(
+      getColumnMonthlyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -68,7 +68,7 @@ const ColumnMonthlyChecksView = () => {
     setIsUpdated(false);
   };
 
-  const onChangeUI = (ui: UIAllChecksModel) => {
+  const onChangeUI = (ui: UICheckContainerModel) => {
     setUpdatedChecksUI(ui);
     setIsUpdated(true);
   };

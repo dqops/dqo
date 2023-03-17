@@ -3,12 +3,12 @@ import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
-  getColumnDailyCheckpoints,
-  updateColumnDailyCheckpoints
+  getColumnDailyRecurring,
+  updateColumnDailyRecurring
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { useParams } from "react-router-dom";
@@ -17,27 +17,27 @@ import ConnectionLayout from "../../components/ConnectionLayout";
 const ColumnDailyChecksView = () => {
   const { connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { connection: string, schema: string, table: string, column: string } = useParams();
 
-  const { dailyCheckpoints, isUpdating, loading } = useSelector(
+  const { dailyRecurring, isUpdating, loading } = useSelector(
     (state: IRootState) => state.column
   );
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   
   const getCheckOverview = () => {
-    CheckResultOverviewApi.getColumnCheckpointsOverview(connectionName, schemaName, tableName, columnName, 'daily').then((res) => {
+    CheckResultOverviewApi.getColumnRecurringOverview(connectionName, schemaName, tableName, columnName, 'daily').then((res) => {
       setCheckResultsOverview(res.data);
     });
   };
 
   useEffect(() => {
-    setUpdatedChecksUI(dailyCheckpoints);
-  }, [dailyCheckpoints]);
+    setUpdatedChecksUI(dailyRecurring);
+  }, [dailyRecurring]);
 
   useEffect(() => {
     dispatch(
-      getColumnDailyCheckpoints(
+      getColumnDailyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -50,7 +50,7 @@ const ColumnDailyChecksView = () => {
     if (!updatedChecksUI) return;
 
     await dispatch(
-      updateColumnDailyCheckpoints(
+      updateColumnDailyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -59,7 +59,7 @@ const ColumnDailyChecksView = () => {
       )
     );
     await dispatch(
-      getColumnDailyCheckpoints(
+      getColumnDailyRecurring(
         connectionName,
         schemaName,
         tableName,
@@ -69,7 +69,7 @@ const ColumnDailyChecksView = () => {
     setIsUpdated(false);
   };
 
-  const onChangeUI = (ui: UIAllChecksModel) => {
+  const onChangeUI = (ui: UICheckContainerModel) => {
     setUpdatedChecksUI(ui);
     setIsUpdated(true);
   };

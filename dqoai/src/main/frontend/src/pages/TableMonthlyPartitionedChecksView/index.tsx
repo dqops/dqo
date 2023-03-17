@@ -3,7 +3,7 @@ import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTableMonthlyPartitionedChecks,
@@ -19,7 +19,7 @@ const TableMonthlyPartitionedChecksView = () => {
   const { monthlyPartitionedChecks, isUpdating, loading } = useSelector(
     (state: IRootState) => state.table
   );
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
@@ -56,7 +56,7 @@ const TableMonthlyPartitionedChecksView = () => {
     setIsUpdated(false);
   };
 
-  const onChangeUI = (ui: UIAllChecksModel) => {
+  const onChangeUI = (ui: UICheckContainerModel) => {
     setUpdatedChecksUI(ui);
     setIsUpdated(true);
   };

@@ -60,9 +60,11 @@ const CheckRuleItem = ({
         ) : (
           <Button
             className={clsx(
-              'px-4 text-sm py-2 whitespace-nowrap text-white disabled:bg-gray-100 disabled:disabled:cursor-not-allowed',
-              classesMap[type]
+              'px-4 py-2 whitespace-nowrap disabled:bg-gray-100 disabled:disabled:cursor-not-allowed',
+              classesMap[type],
+              disabled ? 'text-gray-500 ' : 'text-white',
             )}
+            textSize="sm"
             onClick={() =>
               onChange({
                 ...parameters,

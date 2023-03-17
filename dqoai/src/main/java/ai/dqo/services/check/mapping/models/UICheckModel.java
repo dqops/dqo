@@ -85,6 +85,7 @@ public class UICheckModel implements Cloneable {
 
     @JsonPropertyDescription("Model of configured schedule enabled on the check level.")
     private UIEffectiveScheduleModel effectiveSchedule;
+
     @JsonPropertyDescription("State of the scheduling override for this check.")
     private UIScheduleEnabledStatus scheduleEnabledStatus;
 
@@ -109,11 +110,14 @@ public class UICheckModel implements Cloneable {
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to start the job.")
     private CheckSearchFilters runChecksJobTemplate;
 
-    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check")
+    @JsonPropertyDescription("Configured parameters for the \"data clean\" job that after being supplied with a time range should be pushed to the job queue in order to remove stored results connected with this check.")
     private DeleteStoredDataQueueJobParameters dataCleanJobTemplate;
 
     @JsonPropertyDescription("Name of a data stream mapping defined at a table that should be used for this check.")
     private String dataStream;
+
+    @JsonPropertyDescription("Type of the check's target (column, table, target).")
+    private UICheckTarget checkTarget;
 
     @JsonPropertyDescription("List of configuration errors that must be fixed before the data quality check could be executed.")
     private List<CheckConfigurationRequirementsError> configurationRequirementsErrors;

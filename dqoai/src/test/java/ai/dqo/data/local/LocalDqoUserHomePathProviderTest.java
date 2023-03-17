@@ -16,8 +16,6 @@
 package ai.dqo.data.local;
 
 import ai.dqo.BaseTest;
-import ai.dqo.core.configuration.DqoConfigurationProperties;
-import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationPropertiesObjectMother;
 import ai.dqo.utils.BeanFactoryObjectMother;

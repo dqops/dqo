@@ -16,7 +16,7 @@
 package ai.dqo.utils.conversion;
 
 /**
- * Static classes to cast or convert objects to a desired numeric type.
+ * Static class to cast or convert objects to a desired numeric type.
  */
 public class NumericTypeConverter {
     /**

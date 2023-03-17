@@ -100,24 +100,24 @@ public class CheckResultsOverviewController {
     }
 
     /**
-     * Retrieves the overview of the most recent checkpoint executions on a table given a connection name, table name and a time scale.
+     * Retrieves the overview of the most recent recurring executions on a table given a connection name, table name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param timeScale      Time scale.
-     * @return Overview of the most recent checkpoint results.
+     * @return Overview of the most recent recurring results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/checkpoints/{timeScale}/overview")
-    @ApiOperation(value = "getTableCheckpointsOverview", notes = "Returns an overview of the most recent table level checkpoint executions for the checkpoints at a requested time scale",
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/recurring/{timeScale}/overview")
+    @ApiOperation(value = "getTableRecurringOverview", notes = "Returns an overview of the most recent table level recurring executions for the recurring at a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "An overview of the most recent checkpoint executions for the checkpoints at a requested time scale on a table returned",
+            @ApiResponse(code = 200, message = "An overview of the most recent recurring executions for the recurring at a requested time scale on a table returned",
                     response = CheckResultsOverviewDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableCheckpointsOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getTableRecurringOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -142,7 +142,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.CHECKPOINT, timeScale);
+        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
@@ -255,25 +255,25 @@ public class CheckResultsOverviewController {
     }
 
     /**
-     * Retrieves the overview of the most recent checkpoint executions on a column given a connection name, table name, column name and a time scale.
+     * Retrieves the overview of the most recent recurring executions on a column given a connection name, table name, column name and a time scale.
      * @param connectionName Connection name.
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
      * @param timeScale      Time scale.
-     * @return Overview of the most recent checkpoint results.
+     * @return Overview of the most recent recurring results.
      */
-    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/checkpoints/{timeScale}/overview")
-    @ApiOperation(value = "getColumnCheckpointsOverview", notes = "Returns an overview of the most recent column level checkpoint executions for the checkpoints at a requested time scale",
+    @GetMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}/recurring/{timeScale}/overview")
+    @ApiOperation(value = "getColumnRecurringOverview", notes = "Returns an overview of the most recent column level recurring executions for the recurring at a requested time scale",
             response = CheckResultsOverviewDataModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "An overview of the most recent checkpoint executions for the checkpoints at a requested time scale on a column returned",
+            @ApiResponse(code = 200, message = "An overview of the most recent recurring executions for the recurring at a requested time scale on a column returned",
                     response = CheckResultsOverviewDataModel[].class),
             @ApiResponse(code = 404, message = "Connection or table not found or time scale invalid"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnCheckpointsOverview(
+    public ResponseEntity<Flux<CheckResultsOverviewDataModel>> getColumnRecurringOverview(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -304,7 +304,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.CHECKPOINT, timeScale);
+        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());

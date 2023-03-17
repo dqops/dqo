@@ -63,7 +63,7 @@ public class SensorExecutionRunParameters {
      * @param column Column specification.
      * @param check Check specification (when a quality check is executed).
      * @param profiler Profiler specification (when a profiler is executed).
-     * @param checkType Check type (adhoc, checkpoint, partitioned).
+     * @param checkType Check type (profiling, recurring, partitioned).
      * @param timeSeries Effective time series configuration.
      * @param timeWindowFilter Time window filter (optional), configures the absolute time range of data to analyze and/or the time window (recent days/months) for incremental partition checks.
      * @param dataStreams Effective data streams configuration.
@@ -176,7 +176,7 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Returns the check type (adhoc, checkpoint, partitioned).
+     * Returns the check type (profiling, recurring, partitioned).
      * @return Check type.
      */
     public CheckType getCheckType() {
@@ -184,7 +184,7 @@ public class SensorExecutionRunParameters {
     }
 
     /**
-     * Sets the check type (adhoc, checkpoint, partitioned).
+     * Sets the check type (profiling, recurring, partitioned).
      * @param checkType Check type.
      */
     public void setCheckType(CheckType checkType) {

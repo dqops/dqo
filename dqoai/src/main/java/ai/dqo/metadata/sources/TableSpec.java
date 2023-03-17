@@ -19,9 +19,9 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.TableMonthlyCheckpointCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
@@ -64,7 +64,7 @@ public class TableSpec extends AbstractSpec {
 			put("owner", o -> o.owner);
 			put("columns", o -> o.columns);
 			put("checks", o -> o.checks);
-            put("checkpoints", o -> o.checkpoints);
+            put("recurring", o -> o.recurring);
             put("partitioned_checks", o -> o.partitionedChecks);
             put("statistics_collector", o -> o.statisticsCollector);
             put("schedules_override", o -> o.schedulesOverride);
@@ -125,10 +125,10 @@ public class TableSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableProfilingCheckCategoriesSpec checks = new TableProfilingCheckCategoriesSpec();
 
-    @JsonPropertyDescription("Configuration of table level checkpoints. Checkpoints are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.")
+    @JsonPropertyDescription("Configuration of table level recurring. Recurring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private TableCheckpointsSpec checkpoints = new TableCheckpointsSpec();
+    private TableRecurringSpec recurring = new TableRecurringSpec();
 
     @JsonPropertyDescription("Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -320,21 +320,21 @@ public class TableSpec extends AbstractSpec {
     }
 
     /**
-     * Returns configuration of enabled table level checkpoints.
-     * @return Table level checkpoints.
+     * Returns configuration of enabled table level recurring.
+     * @return Table level recurring.
      */
-    public TableCheckpointsSpec getCheckpoints() {
-        return checkpoints;
+    public TableRecurringSpec getRecurring() {
+        return recurring;
     }
 
     /**
-     * Sets a new configuration of table level data quality checkpoints.
-     * @param checkpoints New checkpoints configuration.
+     * Sets a new configuration of table level data quality recurring.
+     * @param recurring New recurring configuration.
      */
-    public void setCheckpoints(TableCheckpointsSpec checkpoints) {
-        setDirtyIf(!Objects.equals(this.checkpoints, checkpoints));
-        this.checkpoints = checkpoints;
-        propagateHierarchyIdToField(checkpoints, "checkpoints");
+    public void setRecurring(TableRecurringSpec recurring) {
+        setDirtyIf(!Objects.equals(this.recurring, recurring));
+        this.recurring = recurring;
+        propagateHierarchyIdToField(recurring, "recurring");
     }
 
     /**
@@ -346,7 +346,7 @@ public class TableSpec extends AbstractSpec {
     }
 
     /**
-     * Sets a new configuration of table level date/time partitioned data quality checkpoints.
+     * Sets a new configuration of table level date/time partitioned data quality recurring.
      * @param partitionedChecks New configuration of date/time partitioned checks.
      */
     public void setPartitionedChecks(TablePartitionedChecksRootSpec partitionedChecks) {
@@ -482,30 +482,30 @@ public class TableSpec extends AbstractSpec {
                 return tableProfilingCheckCategoriesSpec;
             }
 
-            case CHECKPOINT: {
-                TableCheckpointsSpec checkpointsSpec = this.checkpoints;
-                if (checkpointsSpec == null) {
-                    checkpointsSpec = new TableCheckpointsSpec();
-                    checkpointsSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checkpoints"));
+            case RECURRING: {
+                TableRecurringSpec recurringSpec = this.recurring;
+                if (recurringSpec == null) {
+                    recurringSpec = new TableRecurringSpec();
+                    recurringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "recurring"));
                 }
 
                 switch (checkTimeScale) {
                     case daily: {
-                        if (checkpointsSpec.getDaily() != null) {
-                            return checkpointsSpec.getDaily();
+                        if (recurringSpec.getDaily() != null) {
+                            return recurringSpec.getDaily();
                         }
 
-                        TableDailyCheckpointCategoriesSpec dailyCheckpointCategoriesSpec = new TableDailyCheckpointCategoriesSpec();
-                        dailyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(checkpointsSpec.getHierarchyId(), "daily"));
+                        TableDailyRecurringCategoriesSpec dailyCheckpointCategoriesSpec = new TableDailyRecurringCategoriesSpec();
+                        dailyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
                         return dailyCheckpointCategoriesSpec;
                     }
                     case monthly: {
-                        if (checkpointsSpec.getMonthly() != null) {
-                            return checkpointsSpec.getMonthly();
+                        if (recurringSpec.getMonthly() != null) {
+                            return recurringSpec.getMonthly();
                         }
 
-                        TableMonthlyCheckpointCategoriesSpec monthlyCheckpointCategoriesSpec = new TableMonthlyCheckpointCategoriesSpec();
-                        monthlyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(checkpointsSpec.getHierarchyId(), "monthly"));
+                        TableMonthlyRecurringCategoriesSpec monthlyCheckpointCategoriesSpec = new TableMonthlyRecurringCategoriesSpec();
+                        monthlyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
                         return monthlyCheckpointCategoriesSpec;
                     }
                     default:
@@ -564,19 +564,19 @@ public class TableSpec extends AbstractSpec {
         if (checkRootContainer instanceof TableProfilingCheckCategoriesSpec) {
             this.setChecks((TableProfilingCheckCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof TableDailyCheckpointCategoriesSpec) {
-            if (this.checkpoints == null) {
-                this.setCheckpoints(new TableCheckpointsSpec());
+        else if (checkRootContainer instanceof TableDailyRecurringCategoriesSpec) {
+            if (this.recurring == null) {
+                this.setRecurring(new TableRecurringSpec());
             }
 
-            this.getCheckpoints().setDaily((TableDailyCheckpointCategoriesSpec)checkRootContainer);
+            this.getRecurring().setDaily((TableDailyRecurringCategoriesSpec)checkRootContainer);
         }
-        else if (checkRootContainer instanceof TableMonthlyCheckpointCategoriesSpec) {
-            if (this.checkpoints == null) {
-                this.setCheckpoints(new TableCheckpointsSpec());
+        else if (checkRootContainer instanceof TableMonthlyRecurringCategoriesSpec) {
+            if (this.recurring == null) {
+                this.setRecurring(new TableRecurringSpec());
             }
 
-            this.getCheckpoints().setMonthly((TableMonthlyCheckpointCategoriesSpec)checkRootContainer);
+            this.getRecurring().setMonthly((TableMonthlyRecurringCategoriesSpec)checkRootContainer);
         }
         else if (checkRootContainer instanceof TableDailyPartitionedCheckCategoriesSpec) {
             if (this.partitionedChecks == null) {
@@ -626,7 +626,7 @@ public class TableSpec extends AbstractSpec {
             return true;
         }
 
-        if (this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks()) {
+        if (this.recurring != null && this.recurring.hasAnyConfiguredChecks()) {
             return true;
         }
 
@@ -647,8 +647,8 @@ public class TableSpec extends AbstractSpec {
             case PROFILING:
                 return this.checks != null && this.checks.hasAnyConfiguredChecks();
 
-            case CHECKPOINT:
-                return this.checkpoints != null && this.checkpoints.hasAnyConfiguredChecks();
+            case RECURRING:
+                return this.recurring != null && this.recurring.hasAnyConfiguredChecks();
 
             case PARTITIONED:
                 return this.partitionedChecks != null && this.partitionedChecks.hasAnyConfiguredChecks();
@@ -667,7 +667,7 @@ public class TableSpec extends AbstractSpec {
         try {
             TableSpec cloned = (TableSpec) this.clone();
             cloned.checks = null;
-            cloned.checkpoints = null;
+            cloned.recurring = null;
             cloned.partitionedChecks = null;
             cloned.labels = null;
             cloned.owner = null;
@@ -711,7 +711,7 @@ public class TableSpec extends AbstractSpec {
                 cloned.incrementalTimeWindow = cloned.incrementalTimeWindow.deepClone();
             }
             cloned.checks = null;
-            cloned.checkpoints = null;
+            cloned.recurring = null;
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.dataStreams = null;
@@ -738,7 +738,7 @@ public class TableSpec extends AbstractSpec {
                 cloned.target = cloned.target.deepClone();
             }
             cloned.checks = null;
-            cloned.checkpoints = null;
+            cloned.recurring = null;
             cloned.partitionedChecks = null;
             cloned.owner = null;
             cloned.timestampColumns = null;

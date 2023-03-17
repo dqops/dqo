@@ -3,7 +3,7 @@ import DataQualityChecks from '../../DataQualityChecks';
 import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../../api';
 import {
   getTableProfilingChecksUI,
   setUpdatedChecksUi,
@@ -44,7 +44,7 @@ const ProfilingView = () => {
     );
   };
 
-  const handleChange = (value: UIAllChecksModel) => {
+  const handleChange = (value: UICheckContainerModel) => {
     dispatch(setUpdatedChecksUi(value));
   };
 

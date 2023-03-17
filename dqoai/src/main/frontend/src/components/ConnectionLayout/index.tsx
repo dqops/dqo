@@ -52,11 +52,11 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
                 match.path === ROUTES.PATTERNS.COLUMN ||
                 match.path === ROUTES.PATTERNS.COLUMN_PROFILINGS ||
                 match.path === ROUTES.PATTERNS.COLUMN_PROFILINGS_FILTER ||
-                match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_DAILY ||
-                match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_MONTHLY ||
+                match.path === ROUTES.PATTERNS.COLUMN_RECURRING_DAILY ||
+                match.path === ROUTES.PATTERNS.COLUMN_RECURRING_MONTHLY ||
                 match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_DAILY ||
                 match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_MONTHLY ||
-                match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_FILTER ||
+                match.path === ROUTES.PATTERNS.COLUMN_RECURRING_FILTER ||
                 match.path === ROUTES.PATTERNS.COLUMN_PARTITIONED_FILTER
               ) {
                 const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns`);
@@ -83,26 +83,26 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
                         changeActiveTab(node);
                       }
                     }
-                    if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_DAILY || (timePartitioned === 'daily' && match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_FILTER)) {
+                    if (match.path === ROUTES.PATTERNS.COLUMN_RECURRING_DAILY || (timePartitioned === 'daily' && match.path === ROUTES.PATTERNS.COLUMN_RECURRING_FILTER)) {
                       const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.dailyCheck`);
 
-                      if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_DAILY) {
+                      if (match.path === ROUTES.PATTERNS.COLUMN_RECURRING_DAILY) {
                         changeActiveTab(node);
                       } else if (!node?.open) {
                         await refreshNode(node);
-                      } else if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_FILTER) {
+                      } else if (match.path === ROUTES.PATTERNS.COLUMN_RECURRING_FILTER) {
                         const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.dailyCheck.${category}_${checkName}`);
                         changeActiveTab(node);
                       }
                     }
-                    if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_MONTHLY || (timePartitioned === 'monthly' && match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_FILTER)) {
+                    if (match.path === ROUTES.PATTERNS.COLUMN_RECURRING_MONTHLY || (timePartitioned === 'monthly' && match.path === ROUTES.PATTERNS.COLUMN_RECURRING_FILTER)) {
                       const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.monthlyCheck`);
 
-                      if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_MONTHLY) {
+                      if (match.path === ROUTES.PATTERNS.COLUMN_RECURRING_MONTHLY) {
                         changeActiveTab(node);
                       } else if (!node?.open) {
                         await refreshNode(node);
-                      } else if (match.path === ROUTES.PATTERNS.COLUMN_CHECKPOINTS_FILTER) {
+                      } else if (match.path === ROUTES.PATTERNS.COLUMN_RECURRING_FILTER) {
                         const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.monthlyCheck.${category}_${checkName}`);
                         changeActiveTab(node);
                       }
@@ -144,25 +144,25 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
                   changeActiveTab(node);
                 }
               }
-              if (match.path === ROUTES.PATTERNS.TABLE_CHECKPOINTS_DAILY || (timePartitioned === 'daily' && match.path === ROUTES.PATTERNS.TABLE_CHECKPOINTS_FILTER)) {
+              if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_DAILY || (timePartitioned === 'daily' && match.path === ROUTES.PATTERNS.TABLE_RECURRING_FILTER)) {
                 const node = findTreeNode(treeData, `${connection}.${schema}.${table}.dailyCheck`);
-                if (match.path === ROUTES.PATTERNS.TABLE_CHECKPOINTS_DAILY) {
+                if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_DAILY) {
                   changeActiveTab(node);
                 } else if (!node?.open) {
                   await refreshNode(node);
-                } else if (match.path === ROUTES.PATTERNS.TABLE_CHECKPOINTS_FILTER) {
+                } else if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_FILTER) {
                   const node = findTreeNode(treeData, `${connection}.${schema}.${table}.dailyCheck.${category}_${checkName}`);
                   changeActiveTab(node);
                 }
               }
 
-              if (match.path === ROUTES.PATTERNS.TABLE_CHECKPOINTS_MONTHLY || (timePartitioned === 'monthly' && match.path === ROUTES.PATTERNS.TABLE_CHECKPOINTS_FILTER)) {
+              if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_MONTHLY || (timePartitioned === 'monthly' && match.path === ROUTES.PATTERNS.TABLE_RECURRING_FILTER)) {
                 const node = findTreeNode(treeData, `${connection}.${schema}.${table}.monthlyCheck`);
-                if (match.path === ROUTES.PATTERNS.TABLE_CHECKPOINTS_DAILY) {
+                if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_DAILY) {
                   changeActiveTab(node);
                 } else if (!node?.open) {
                   await refreshNode(node);
-                } else if (match.path === ROUTES.PATTERNS.TABLE_CHECKPOINTS_FILTER) {
+                } else if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_FILTER) {
                   const node = findTreeNode(treeData, `${connection}.${schema}.${table}.monthlyCheck.${category}_${checkName}`);
                   changeActiveTab(node);
                 }
@@ -170,7 +170,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
 
               if (match.path === ROUTES.PATTERNS.TABLE_PARTITIONED_DAILY || (timePartitioned === 'daily' && match.path === ROUTES.PATTERNS.TABLE_PARTITIONED_FILTER)) {
                 const node = findTreeNode(treeData, `${connection}.${schema}.${table}.dailyPartitionedChecks`);
-                if (match.path === ROUTES.PATTERNS.TABLE_CHECKPOINTS_DAILY) {
+                if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_DAILY) {
                   changeActiveTab(node);
                 } else if (!node?.open) {
                   await refreshNode(node);
@@ -182,7 +182,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
 
               if (match.path === ROUTES.PATTERNS.TABLE_PARTITIONED_MONTHLY || (timePartitioned === 'monthly' && match.path === ROUTES.PATTERNS.TABLE_PARTITIONED_FILTER)) {
                 const node = findTreeNode(treeData, `${connection}.${schema}.${table}.monthlyPartitionedChecks`);
-                if (match.path === ROUTES.PATTERNS.TABLE_CHECKPOINTS_DAILY) {
+                if (match.path === ROUTES.PATTERNS.TABLE_RECURRING_DAILY) {
                   changeActiveTab(node);
                 } else if (!node?.open) {
                   await refreshNode(node);

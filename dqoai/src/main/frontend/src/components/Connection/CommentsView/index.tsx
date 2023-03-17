@@ -83,13 +83,15 @@ const CommentsView = ({
             ))}
         </tbody>
       </table>
-      <div className="flex items-center space-x-4 mr-8">
-        <div className="flex-1">
+      <div className="flex items-center">
+        <div className="flex-1 pr-4">
           <Input className="h-10 focus:!ring-0 focus:!border" value={text} onChange={onChangeText} />
         </div>
-        <IconButton size="sm" className="w-10 h-10 !shadow-none" color="teal" onClick={onAdd}>
-          <SvgIcon name="add" className="w-5 text-white" />
-        </IconButton>
+        <div className="max-w-34 min-w-34 flex px-8">
+          <IconButton size="sm" className="w-10 h-10 !shadow-none" color="teal" onClick={onAdd}>
+            <SvgIcon name="add" className="w-5 text-white" />
+          </IconButton>
+        </div>
       </div>
     </div>
   );

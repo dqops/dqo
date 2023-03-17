@@ -18,7 +18,7 @@ import {
   CommentSpec,
   ColumnBasicModel,
   ColumnModel,
-  UIAllChecksModel
+  UICheckContainerModel
 } from '../../api';
 import { COLUMN_ACTION } from '../types';
 
@@ -34,21 +34,21 @@ export interface IColumnState {
   isUpdatedComments?: boolean;
   labels: string[];
   isUpdatedLabels?: boolean;
-  checksUI?: UIAllChecksModel;
+  checksUI?: UICheckContainerModel;
   isUpdatedChecksUi?: boolean;
-  dailyCheckpoints?: UIAllChecksModel;
-  isUpdatedDailyCheckpoints?: boolean;
-  monthlyCheckpoints?: UIAllChecksModel;
-  isUpdatedMonthlyCheckpoints?: boolean;
-  dailyPartitionedChecks?: UIAllChecksModel;
+  dailyRecurring?: UICheckContainerModel;
+  isUpdatedDailyRecurring?: boolean;
+  monthlyRecurring?: UICheckContainerModel;
+  isUpdatedMonthlyRecurring?: boolean;
+  dailyPartitionedChecks?: UICheckContainerModel;
   isUpdatedDailyPartitionedChecks?: boolean;
-  monthlyPartitionedChecks?: UIAllChecksModel;
+  monthlyPartitionedChecks?: UICheckContainerModel;
   isUpdatedMonthlyPartitionedChecks?: boolean;
-  checksUIFilter?: UIAllChecksModel;
+  checksUIFilter?: UICheckContainerModel;
   isUpdatedChecksUIFilter?: boolean;
-  checkpointsUIFilter?: UIAllChecksModel;
-  isUpdatedCheckpointsUIFilter?: boolean;
-  partitionedChecksUIFilter?: UIAllChecksModel;
+  recurringUIFilter?: UICheckContainerModel;
+  isUpdatedRecurringUIFilter?: boolean;
+  partitionedChecksUIFilter?: UICheckContainerModel;
   isUpdatedPartitionedChecksUIFilter?: boolean;
 }
 
@@ -210,39 +210,39 @@ const columnReducer = (state = initialState, action: any) => {
         loading: false,
         error: action.error
       };
-    case COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS:
+    case COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING:
       return {
         ...state,
         loading: true
       };
-    case COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_SUCCESS:
+    case COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING_SUCCESS:
       return {
         ...state,
         loading: false,
-        dailyCheckpoints: action.data,
-        isUpdatedDailyCheckpoints: false,
+        dailyRecurring: action.data,
+        isUpdatedDailyRecurring: false,
         error: null
       };
-    case COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_ERROR:
+    case COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING_ERROR:
       return {
         ...state,
         loading: false,
         error: action.error
       };
-    case COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS:
+    case COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING:
       return {
         ...state,
         loading: true
       };
-    case COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_SUCCESS:
+    case COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING_SUCCESS:
       return {
         ...state,
         loading: false,
-        monthlyCheckpoints: action.data,
-        isUpdatedMonthlyCheckpoints: false,
+        monthlyRecurring: action.data,
+        isUpdatedMonthlyRecurring: false,
         error: null
       };
-    case COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_ERROR:
+    case COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING_ERROR:
       return {
         ...state,
         loading: false,
@@ -286,35 +286,35 @@ const columnReducer = (state = initialState, action: any) => {
         loading: false,
         error: action.error
       };
-    case COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS:
+    case COLUMN_ACTION.UPDATE_COLUMN_DAILY_RECURRING:
       return {
         ...state,
         isUpdating: true
       };
-    case COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS_SUCCESS:
+    case COLUMN_ACTION.UPDATE_COLUMN_DAILY_RECURRING_SUCCESS:
       return {
         ...state,
         isUpdating: false,
         error: null
       };
-    case COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS_ERROR:
+    case COLUMN_ACTION.UPDATE_COLUMN_DAILY_RECURRING_ERROR:
       return {
         ...state,
         isUpdating: false,
         error: action.error
       };
-    case COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS:
+    case COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING:
       return {
         ...state,
         isUpdating: true
       };
-    case COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS_SUCCESS:
+    case COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_SUCCESS:
       return {
         ...state,
         isUpdating: false,
         error: null
       };
-    case COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS_ERROR:
+    case COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_ERROR:
       return {
         ...state,
         isUpdating: false,
@@ -383,17 +383,17 @@ const columnReducer = (state = initialState, action: any) => {
         isUpdatedChecksUi: true,
         checksUI: action.checksUI
       };
-    case COLUMN_ACTION.SET_COLUMN_DAILY_CHECKPOINTS:
+    case COLUMN_ACTION.SET_COLUMN_DAILY_RECURRING:
       return {
         ...state,
-        isUpdatedDailyCheckpoints: true,
-        dailyCheckpoints: action.checksUI
+        isUpdatedDailyRecurring: true,
+        dailyRecurring: action.checksUI
       };
-    case COLUMN_ACTION.SET_COLUMN_MONTHLY_CHECKPOINTS:
+    case COLUMN_ACTION.SET_COLUMN_MONTHLY_RECURRING:
       return {
         ...state,
-        isUpdatedMonthlyCheckpoints: true,
-        monthlyCheckpoints: action.checksUI
+        isUpdatedMonthlyRecurring: true,
+        monthlyRecurring: action.checksUI
       };
     case COLUMN_ACTION.SET_COLUMN_PARTITIONED_DAILY_CHECKS:
       return {
@@ -426,20 +426,20 @@ const columnReducer = (state = initialState, action: any) => {
         loading: false,
         error: action.error
       };
-    case COLUMN_ACTION.GET_COLUMN_CHECKPOINTS_UI_FILTER:
+    case COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER:
       return {
         ...state,
         loading: true
       };
-    case COLUMN_ACTION.GET_COLUMN_CHECKPOINTS_UI_FILTER_SUCCESS:
+    case COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER_SUCCESS:
       return {
         ...state,
         loading: false,
-        checkpointsUIFilter: action.data,
-        isUpdatedCheckpointsUIFilter: false,
+        RecurringUIFilter: action.data,
+        isUpdatedRecurringUIFilter: false,
         error: null
       };
-    case COLUMN_ACTION.GET_COLUMN_CHECKPOINTS_UI_FILTER_ERROR:
+    case COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER_ERROR:
       return {
         ...state,
         loading: false,
@@ -470,11 +470,11 @@ const columnReducer = (state = initialState, action: any) => {
         isUpdatedChecksUIFilter: true,
         checksUIFilter: action.data,
       };
-    case COLUMN_ACTION.SET_UPDATED_CHECKPOINTS_UI_FILTER:
+    case COLUMN_ACTION.SET_UPDATED_RECURRING_UI_FILTER:
       return {
         ...state,
-        isUpdatedCheckpointsUIFilter: true,
-        checkpointsUIFilter: action.data,
+        isUpdatedRecurringUIFilter: true,
+        RecurringUIFilter: action.data,
       };
     case COLUMN_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER:
       return {

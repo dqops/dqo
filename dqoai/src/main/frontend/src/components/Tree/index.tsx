@@ -8,9 +8,10 @@ import clsx from 'clsx';
 import { Tooltip } from '@material-tailwind/react';
 import ContextMenu from '../CustomTree/ContextMenu';
 import ConfirmDialog from '../CustomTree/ConfirmDialog';
+import { CheckTypes } from "../../shared/routes";
 
 const Tree = () => {
-  const { changeActiveTab, treeData, toggleOpenNode, activeTab, switchTab } = useTree();
+  const { changeActiveTab, treeData, toggleOpenNode, activeTab, switchTab, sourceRoute } = useTree();
   const [isOpen, setIsOpen] = useState(false);
   const { removeNode } = useTree();
   const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
@@ -54,7 +55,8 @@ const Tree = () => {
   };
 
   const renderIcon = (node: CustomTreeNode) => {
-    if (node.level === TREE_LEVEL.CHECK) {
+    console.log('node.level', node.level, node.label);
+    if (node.level === TREE_LEVEL.CHECK || (node.level === TREE_LEVEL.COLUMN && sourceRoute === CheckTypes.SOURCES)) {
       return <div className="w-0 shrink-0" />;
     }
     return (
