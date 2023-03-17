@@ -37,7 +37,6 @@ class RuleTimeWindowSettingsSpec:
 
 # rule execution parameters, contains the sensor value (expected_value, actual_value) and the rule parameters
 class RuleExecutionRunParameters:
-    expected_value: float
     actual_value: float
     parameters: DiffPercentRuleParametersSpec
     time_period_local: datetime
