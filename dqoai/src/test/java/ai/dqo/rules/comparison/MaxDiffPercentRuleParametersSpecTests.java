@@ -34,7 +34,7 @@ public class MaxDiffPercentRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsAboveMinValue_thenReturnsPassed() {
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0, this.sut);
+        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.999,1.00, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
