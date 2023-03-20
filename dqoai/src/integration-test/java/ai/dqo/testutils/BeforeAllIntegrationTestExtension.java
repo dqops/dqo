@@ -1,5 +1,6 @@
 package ai.dqo.testutils;
 
+import ai.dqo.connectors.jdbc.JdbcTypeColumnMapping;
 import ai.dqo.core.configuration.DqoCloudConfigurationPropertiesObjectMother;
 import ai.dqo.data.storage.TablesawParquetSupportFix;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreatorObjectMother;
@@ -23,6 +24,7 @@ public class BeforeAllIntegrationTestExtension implements BeforeAllCallback, Ext
         BeanFactory beanFactory = SpringExtension.getApplicationContext(extensionContext);
         BeanFactoryObjectMother.setBeanFactory(beanFactory); // let object mothers use the bean factory without propagating too many object instances
         TablesawParquetSupportFix.ensureInitialized();
+        JdbcTypeColumnMapping.ensureInitializedJdbc();
         LocalUserHomeCreatorObjectMother.initializeDefaultDqoUserHomeSilentlyOnce();
         DqoCloudConfigurationPropertiesObjectMother.configureTestableApiKey();
         // to be extended in the future when the need appears
