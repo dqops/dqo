@@ -106,8 +106,18 @@ function TreeProvider(props: any) {
       data_clean_job_template: connection.data_clean_job_template,
       open: false
     };
-    setTreeData([...treeData, newNode]);
-    await changeActiveTab(newNode);
+
+    const newTreeDataMaps = [
+      CheckTypes.CHECKS,
+      CheckTypes.SOURCES,
+      CheckTypes.PROFILING,
+      CheckTypes.PARTITION,
+    ].reduce((acc, cur) => ({
+      ...acc,
+      [cur]: [...treeDataMaps[cur], newNode]
+    }), {});
+
+    setTreeDataMaps(newTreeDataMaps);
   };
 
   useEffect(() => {
