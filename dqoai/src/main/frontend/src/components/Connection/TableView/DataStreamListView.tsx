@@ -64,7 +64,7 @@ const DataStreamListView = ({
       <table className="mb-4">
         <thead>
           <tr>
-            <th className="px-2 py-1">Data stream configuration name</th>
+            <th className="pr-2 py-1">Data stream configuration name</th>
             <th className="px-2 py-1" />
             <th className="px-2 py-1" />
             <th className="px-2 py-1" />
@@ -73,7 +73,7 @@ const DataStreamListView = ({
         <tbody>
           {dataStreams.map((stream, index) => (
             <tr key={index}>
-              <td className="px-2 py-1 relative flex items-center gap-2">
+              <td className="pr-2 py-1 relative flex items-center gap-2">
                 {stream.default_data_stream && (
                   <div className="w-5 h-5 bg-primary rounded flex items-center justify-center">
                     <SvgIcon name="check" className="text-white" />
