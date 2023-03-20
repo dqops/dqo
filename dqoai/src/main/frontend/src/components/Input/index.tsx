@@ -97,7 +97,7 @@ const Input = ({
         </div>
       )}
     </div>
-    {error && <div className="text-red-500 text-sm ml-2">{helperText}</div>}
+    {error && <div className="text-red-500 text-xs ml-2">{helperText}</div>}
   </div>
 );
 
