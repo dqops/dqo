@@ -59,8 +59,10 @@ const DatabaseConnection = ({
     setShowConfirm(false);
   };
 
+  const isError = useMemo(() => !/^([A-Za-z0-9])*$/.test(database.connection_name as string), [database?.connection_name]);
+
   const onSave = async () => {
-    if (!database.connection_name) {
+    if (!database.connection_name || isError) {
       return;
     }
 
@@ -171,11 +173,12 @@ const DatabaseConnection = ({
       <div className="bg-white rounded-lg px-4 py-6 border border-gray-100">
         <Input
           label="Connection Name"
-          className="mb-4"
           value={database.connection_name}
           onChange={(e) =>
             onChange({ ...database, connection_name: e.target.value })
           }
+          error={isError}
+          helperText={isError ? 'Database name should be alphanumeric characters' : ''}
         />
 
         <div className="mt-6">
