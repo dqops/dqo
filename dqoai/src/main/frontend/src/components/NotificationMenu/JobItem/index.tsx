@@ -38,7 +38,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
   return (
     <Accordion open={open}>
       <AccordionHeader onClick={() => setOpen(!open)}>
-        <div className="flex justify-between items-center text-sm w-full">
+        <div className="flex justify-between items-center text-sm w-full text-gray-700">
           <div className="flex space-x-1 items-center">
             <div>{job.jobType}</div>
             {renderStatus()}
@@ -49,7 +49,7 @@ const JobItem = ({ job }: { job: DqoJobHistoryEntryModel }) => {
         </div>
       </AccordionHeader>
       <AccordionBody>
-        <table>
+        <table className="text-gray-700">
           <tbody>
           <tr>
             <td className="px-2 capitalize">Status</td>
