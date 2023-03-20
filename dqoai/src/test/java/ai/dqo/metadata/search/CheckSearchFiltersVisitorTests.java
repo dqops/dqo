@@ -245,7 +245,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptAbstractRootCheckContainerSpec_whenCalledForSelectedColumnCheckOnColumn_thenTraverseChildren() {
         this.structure1Setup();
-        AbstractRootChecksContainerSpec columnCheckContainer = this.columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec columnCheckContainer = this.columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
 
         SearchParameterObject searchParameterObject = new SearchParameterObject();
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(columnCheckContainer, searchParameterObject);

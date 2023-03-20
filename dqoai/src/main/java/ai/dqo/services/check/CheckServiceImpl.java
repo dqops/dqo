@@ -114,8 +114,9 @@ public class CheckServiceImpl implements CheckService {
         Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, filters);
 
         for (AbstractCheckSpec<?,?,?,?> check: checks) {
-            check.setDisabled(false);
+            check.setDisabled(true);
         }
+        userHomeContext.flush();
     }
 
     /**

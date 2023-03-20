@@ -597,7 +597,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
@@ -663,7 +663,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -728,7 +728,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
@@ -793,7 +793,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
         UICheckContainerBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
@@ -846,7 +846,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
         UICheckContainerBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
@@ -899,7 +899,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         UICheckContainerBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
@@ -954,7 +954,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
@@ -1026,7 +1026,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1097,7 +1097,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1698,7 +1698,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, true);
 
         if (uiCheckContainerModel.isPresent()) {
             this.uiToSpecCheckMappingService.updateCheckContainerSpec(uiCheckContainerModel.get(), checksToUpdate);
@@ -1755,7 +1755,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, true);
 
         if (uiCheckContainerModel.isPresent()) {
             this.uiToSpecCheckMappingService.updateCheckContainerSpec(uiCheckContainerModel.get(), checksToUpdate);
@@ -1812,7 +1812,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checksToUpdate = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, true);
 
         if (uiAllChecksModel.isPresent()) {
             this.uiToSpecCheckMappingService.updateCheckContainerSpec(uiAllChecksModel.get(), checksToUpdate);
