@@ -67,11 +67,11 @@ public class SqlServerTableTimelinessDataIngestionDelaySensorParametersSpecInteg
         Table resultTable = sensorResult.getResultTable();
         Assertions.assertEquals(1, resultTable.rowCount());
         Assertions.assertEquals("actual_value", resultTable.column(0).name());
-        Assertions.assertEquals(9.083, (double) resultTable.column(0).get(0), 0.001);
+        Assertions.assertEquals(9.0833, (double) resultTable.column(0).get(0), 0.001);
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
 
@@ -87,7 +87,7 @@ public class SqlServerTableTimelinessDataIngestionDelaySensorParametersSpecInteg
     }
 
     @Test
-    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
 
