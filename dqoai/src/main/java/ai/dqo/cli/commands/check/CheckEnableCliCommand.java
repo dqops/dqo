@@ -43,7 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * "check enable" 2nd level CLI command that executes data quality checks.
+ * "check enable" 2nd level CLI command that enables data quality checks.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
@@ -343,6 +343,15 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
             setErrorLevelOptions(errorLevelOptions);
             setFatalLevelOptions(fatalLevelOptions);
         }};
+        if (this.warningLevelOptions != null) {
+            patchParameters.setDisableWarningLevel(false);
+        }
+        if (this.errorLevelOptions != null) {
+            patchParameters.setDisableErrorLevel(false);
+        }
+        if (this.fatalLevelOptions != null) {
+            patchParameters.setDisableFatalLevel(false);
+        }
 
         this.checkService.updateAllChecksPatch(patchParameters);
 

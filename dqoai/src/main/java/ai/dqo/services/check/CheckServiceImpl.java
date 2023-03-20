@@ -164,11 +164,6 @@ public class CheckServiceImpl implements CheckService {
 
     protected void patchUICheckModel(UICheckModel model,
                                      UIAllChecksPatchParameters parameters) {
-        model.setDisabled(false);
-        model.setConfigured(true);
-
-        AbstractCheckSpec checkSpec = model.getCheckSpec();
-        checkSpec.setDisabled(false);
         UIRuleThresholdsModel ruleThresholdsModel = model.getRule();
 
         if (ruleThresholdsModel == null) {
@@ -212,11 +207,32 @@ public class CheckServiceImpl implements CheckService {
 
             this.patchRuleParameters(ruleParametersModel, newParameterFields);
         }
+
+        model.setConfigured(ruleThresholdsModel.getWarning().isConfigured()
+                || ruleThresholdsModel.getError().isConfigured()
+                || ruleThresholdsModel.getFatal().isConfigured());
+
+        boolean wholeCheckDisabled = true;
+        if (parameters.getDisableWarningLevel() != null && ruleThresholdsModel.getWarning() != null) {
+            wholeCheckDisabled &= parameters.getDisableWarningLevel();
+            ruleThresholdsModel.getWarning().setDisabled(parameters.getDisableWarningLevel());
+        }
+        if (parameters.getDisableErrorLevel() != null && ruleThresholdsModel.getError() != null) {
+            wholeCheckDisabled &= parameters.getDisableErrorLevel();
+            ruleThresholdsModel.getError().setDisabled(parameters.getDisableErrorLevel());
+        }
+        if (parameters.getDisableFatalLevel() != null && ruleThresholdsModel.getFatal() != null) {
+            wholeCheckDisabled &= parameters.getDisableFatalLevel();
+            ruleThresholdsModel.getFatal().setDisabled(parameters.getDisableFatalLevel());
+        }
+
+        model.setDisabled(wholeCheckDisabled);
+
+        AbstractCheckSpec checkSpec = model.getCheckSpec();
+        checkSpec.setDisabled(model.isDisabled());
     }
 
     protected void patchRuleParameters(UIRuleParametersModel ruleParametersModel, List<UIFieldModel> patches) {
-        ruleParametersModel.setConfigured(true);
-        ruleParametersModel.setDisabled(false);
         List<UIFieldModel> ruleParameterFields = ruleParametersModel.getRuleParameters();
         if (ruleParameterFields == null) {
             ruleParameterFields = new ArrayList<>();
@@ -236,6 +252,8 @@ public class CheckServiceImpl implements CheckService {
                 ruleParameterFields.add(patch);
             }
         }
+
+        ruleParametersModel.setConfigured(!ruleParameterFields.isEmpty());
     }
 
     protected List<UIFieldModel> optionMapToFields(Map<String, String> options) {
