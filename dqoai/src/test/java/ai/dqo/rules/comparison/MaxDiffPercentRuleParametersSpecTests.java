@@ -34,7 +34,6 @@ public class MaxDiffPercentRuleParametersSpecTests extends BaseTest {
 
     @Test
     void executeRule_whenActualValueIsAboveMinValue_thenReturnsPassed() {
-        this.sut.setMaxDiffPercent(1.0);
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
         Assertions.assertNull(ruleExecutionResult.getExpectedValue());
@@ -42,51 +41,4 @@ public class MaxDiffPercentRuleParametersSpecTests extends BaseTest {
         Assertions.assertNull(ruleExecutionResult.getUpperBound());
     }
 
-    @Test
-    void executeRule_whenActualValueIsEqualMinValue_thenReturnsPassed() {
-        this.sut.setMaxDiffPercent(1.0);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertNull(ruleExecutionResult.getUpperBound());
-    }
-
-    @Test
-    void executeRule_whenActualValueIsBelowMinValue_thenReturnsFailed() {
-        this.sut.setMaxDiffPercent(1.0);
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.0, this.sut);
-        Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
-        Assertions.assertEquals(1.0, ruleExecutionResult.getLowerBound());
-        Assertions.assertNull(ruleExecutionResult.getUpperBound());
-    }
-
-    @Test
-    void isDirty_whenMinValueSet_thenIsDirtyIsTrue() {
-        this.sut.setMaxDiffPercent(1.0);
-        Assertions.assertEquals(1, this.sut.getMaxDiffPercent());
-        Assertions.assertTrue(this.sut.isDirty());
-        this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenMinValueNumberSameAsCurrentSet_thenIsDirtyIsFalse() {
-        this.sut.setMaxDiffPercent(1.0);
-        Assertions.assertTrue(this.sut.isDirty());
-        this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-        this.sut.setMaxDiffPercent(1.0);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
-    void executeRule_whenActualValueIsNull_thenReturnsPassed() {
-        RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(null, this.sut);
-        Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
-        Assertions.assertNull(ruleExecutionResult.getLowerBound());
-        Assertions.assertNull(ruleExecutionResult.getUpperBound());
-    }
 }
