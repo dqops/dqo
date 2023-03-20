@@ -72,7 +72,7 @@ public class SqlServerTableStandardRowCountSensorParametersSpecSqlServerIntegrat
 
     @Test
     void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -85,7 +85,7 @@ public class SqlServerTableStandardRowCountSensorParametersSpecSqlServerIntegrat
 
     @Test
     void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec,CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

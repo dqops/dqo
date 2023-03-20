@@ -75,7 +75,7 @@ public class SqlServerTableTimelinessDataIngestionDelaySensorParametersSpecInteg
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.daily);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -91,7 +91,7 @@ public class SqlServerTableTimelinessDataIngestionDelaySensorParametersSpecInteg
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setEventTimestampColumn("date1");
         this.sampleTableMetadata.getTableSpec().getTimestampColumns().setIngestionTimestampColumn("date2");
 
-        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForCheckpointCheck(
+        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableForRecurringCheck(
                 sampleTableMetadata, this.checkSpec, CheckTimeScale.monthly);
 
         SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
