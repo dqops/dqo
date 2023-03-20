@@ -292,7 +292,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
         AbstractRootChecksContainerSpec checkRootContainer =
             (similarCheckModel.getCheckTarget() == CheckTarget.table) ?
                 trimmedTableSpec.getTableCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale()) :
-                columnSpec.getColumnCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale());
+                columnSpec.getColumnCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), false);
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
             trimmedTableSpec.setTableCheckRootContainer(checkRootContainer);
         }

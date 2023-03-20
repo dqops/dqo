@@ -42,6 +42,13 @@ public interface CheckService {
                                     boolean dummyRun);
 
     /**
+     * Disable existing checks matching the provided filters.
+     *
+     * @param filters Check search filters to find checks to disable.
+     */
+    void disableChecks(CheckSearchFilters filters);
+
+    /**
      * Update checks configuration based on provided parameters.
      * @param parameters Parameters for creating the patches and updating.
      * @return List of patches (by connections) of the updated configuration of all checks.

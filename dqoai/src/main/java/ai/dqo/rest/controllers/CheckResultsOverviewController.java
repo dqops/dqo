@@ -247,7 +247,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
                 checks, new CheckResultsOverviewParameters());
@@ -304,7 +304,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
@@ -361,7 +361,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
