@@ -54,12 +54,12 @@ public class StatisticsResultsTableFactoryImplTests extends BaseTest {
             Files.createDirectories(parquetSamplesFolder);
         }
 
-        File targetParquetFile = parquetSamplesFolder.resolve("statistics-empty.snappy.parquet").toFile();
+        File targetParquetFile = parquetSamplesFolder.resolve("statistics-empty.parquet").toFile();
 
         TablesawParquetWriteOptions writeOptions = TablesawParquetWriteOptions
                 .builder(targetParquetFile)
                 .withOverwrite(true)
-                .withCompressionCode(TablesawParquetWriteOptions.CompressionCodec.SNAPPY)
+                .withCompressionCode(TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED)
                 .build();
 
         new TablesawParquetWriter().write(table, writeOptions);

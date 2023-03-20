@@ -6,7 +6,7 @@ import ColumnDetails from './ColumnDetails';
 import { useTree } from '../../contexts/treeContext';
 import ColumnCommentsView from './ColumnCommentsView';
 import ColumnLabelsView from './ColumnLabelsView';
-import CheckpointsView from './CheckpointsView';
+import RecurringView from './RecurringView';
 import ColumnProfilingView from './ColumnProfilingView';
 import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
 import { useSelector } from 'react-redux';
@@ -40,17 +40,17 @@ const ColumnView = () => {
     isUpdatedComments,
     isUpdatedLabels,
     isUpdatedChecksUi,
-    isUpdatedDailyCheckpoints,
-    isUpdatedMonthlyCheckpoints,
+    isUpdatedDailyRecurring,
+    isUpdatedMonthlyRecurring,
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks
   } = useSelector((state: IRootState) => state.column);
-  const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
-  const isPartitionCheckOnly = useMemo(() => checkTypes === CheckTypes.TIME_PARTITIONED, [checkTypes]);
+  const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
+  const isPartitionCheckOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
   const isProfilingCheckOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
-    () => !isCheckpointOnly && !isPartitionCheckOnly && !isProfilingCheckOnly,
-    [isCheckpointOnly]
+    () => !isRecurringOnly && !isPartitionCheckOnly && !isProfilingCheckOnly,
+    [isRecurringOnly]
   ); // will update more in next tasks
   // useEffect(() => {
   //   if (tabMap[pageTab]) {
@@ -109,16 +109,16 @@ const ColumnView = () => {
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
-        item.value === 'checkpoints'
+        item.value === 'recurring'
           ? {
               ...item,
               isUpdated:
-                isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints
+                isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
             }
           : item
       )
     );
-  }, [isUpdatedDailyCheckpoints, isUpdatedMonthlyCheckpoints]);
+  }, [isUpdatedDailyRecurring, isUpdatedMonthlyRecurring]);
 
   useEffect(() => {
     setTabs(
@@ -135,17 +135,42 @@ const ColumnView = () => {
     );
   }, [isUpdatedDailyPartitionedChecks, isUpdatedMonthlyPartitionedChecks]);
 
+  const description = useMemo(() => {
+    if (isProfilingCheckOnly) {
+      return 'Advanced profiling for ';
+    }
+    if (isRecurringOnly) {
+      if (activeTab === 'monthly') {
+        return 'Monthly recurring checks for ';
+      } else {
+        return 'Daily recurring checks for ';
+      }
+    }
+    if (isPartitionCheckOnly) {
+      if (activeTab === 'monthly') {
+        return 'Monthly partition checks for ';
+      } else {
+        return 'Daily partition checks for ';
+      }
+    }
+
+    if (activeTab === 'detail') {
+      return 'Data source configuration for ';
+    }
+    return ''
+  }, [isProfilingCheckOnly, isRecurringOnly, isPartitionCheckOnly, activeTab]);
+
   return (
     <ConnectionLayout>
       <div className="relative">
         <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14">
           <div className="flex items-center space-x-2">
             <SvgIcon name="column" className="w-5 h-5" />
-            <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
+            <div className="text-xl font-semibold">{`${description}${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
           </div>
         </div>
-        {isCheckpointOnly && (
-          <CheckpointsView />
+        {isRecurringOnly && (
+          <RecurringView />
         )}
         {isPartitionCheckOnly && (
           <ColumnPartitionedChecksView />

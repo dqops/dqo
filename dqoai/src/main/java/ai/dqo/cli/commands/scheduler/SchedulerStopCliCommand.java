@@ -29,7 +29,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "stop", description = "Stops a background job scheduler. This operation should be called only from the shell mode after the scheduler was started.")
+@CommandLine.Command(name = "stop", header = "Stops a background job scheduler", description = "This operation should be called only from the shell mode after the scheduler was started.")
 public class SchedulerStopCliCommand extends BaseCommand implements ICommand {
     private JobSchedulerService jobSchedulerService;
 

@@ -10,7 +10,7 @@ import { IRootState } from "../../redux/reducers";
 import TableDetails from "../../components/Connection/TableView/TableDetails";
 import ScheduleDetail from "../../components/Connection/TableView/ScheduleDetail";
 import ProfilingView from "../../components/Connection/TableView/ProfilingView";
-import CheckpointsView from "../../components/Connection/TableView/CheckpointsView";
+import RecurringView from "../../components/Connection/TableView/RecurringView";
 import PartitionedChecks from "../../components/Connection/TableView/PartitionedChecks";
 import TableCommentView from "../../components/Connection/TableView/TableCommentView";
 import TableLabelsView from "../../components/Connection/TableView/TableLabelsView";
@@ -55,19 +55,19 @@ const TablePage = () => {
     isUpdatedComments,
     isUpdatedLabels,
     isUpdatedChecksUi,
-    isUpdatedDailyCheckpoints,
-    isUpdatedMonthlyCheckpoints,
+    isUpdatedDailyRecurring,
+    isUpdatedMonthlyRecurring,
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks,
     isUpdatedSchedule,
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
-  const isCheckpointOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
-  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.TIME_PARTITIONED, [checkTypes]);
+  const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
+  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
   const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
-    () => !isCheckpointOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
-    [isCheckpointOnly, isPartitionChecksOnly, isProfilingChecksOnly]
+    () => !isRecurringOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
+    [isRecurringOnly, isPartitionChecksOnly, isProfilingChecksOnly]
   );
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab));
@@ -138,16 +138,16 @@ const TablePage = () => {
   useEffect(() => {
     setTabs(
       tabs.map((item) =>
-        item.value === 'checkpoints'
+        item.value === 'recurring'
           ? {
             ...item,
             isUpdated:
-              isUpdatedDailyCheckpoints || isUpdatedMonthlyCheckpoints
+              isUpdatedDailyRecurring || isUpdatedMonthlyRecurring
           }
           : item
       )
     );
-  }, [isUpdatedDailyCheckpoints, isUpdatedMonthlyCheckpoints]);
+  }, [isUpdatedDailyRecurring, isUpdatedMonthlyRecurring]);
 
   useEffect(() => {
     setTabs(
@@ -166,23 +166,48 @@ const TablePage = () => {
 
   const activeNode = findTreeNode(treeData, pageTab);
 
+  const description = useMemo(() => {
+    if (isProfilingChecksOnly) {
+      return 'Advanced profiling for ';
+    }
+    if (isRecurringOnly) {
+      if (activeTab === 'monthly') {
+        return 'Monthly recurring checks for ';
+      } else {
+        return 'Daily recurring checks for ';
+      }
+    }
+    if (isPartitionChecksOnly) {
+      if (activeTab === 'monthly') {
+        return 'Monthly partition checks for ';
+      } else {
+        return 'Daily partition checks for ';
+      }
+    }
+
+    if (activeTab === 'detail') {
+      return 'Data source configuration for ';
+    }
+    return ''
+  }, [isProfilingChecksOnly, isRecurringOnly, isPartitionChecksOnly, activeTab]);
+
   return (
     <ConnectionLayout>
       {!activeNode ? (
         <div />
       ) : (
         <div className="relative h-full flex flex-col">
-          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-13 items-center flex-shrink-0">
+          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0">
             <div className="flex items-center space-x-2">
-              <SvgIcon name="database" className="w-5 h-5" />
-              <div className="text-xl font-semibold">{`${connection}.${schema}.${table}`}</div>
+              <SvgIcon name="table" className="w-5 h-5" />
+              <div className="text-xl font-semibold">{`${description}${connection}.${schema}.${table}`}</div>
             </div>
           </div>
           {isProfilingChecksOnly && (
             <ProfilingView />
           )}
-          {isCheckpointOnly && (
-            <CheckpointsView />
+          {isRecurringOnly && (
+            <RecurringView />
           )}
           {isPartitionChecksOnly && (
             <PartitionedChecks />

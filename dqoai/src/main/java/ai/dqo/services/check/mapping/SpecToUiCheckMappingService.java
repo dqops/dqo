@@ -21,9 +21,9 @@ import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.services.check.mapping.models.UIAllChecksModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.check.mapping.models.UIFieldModel;
-import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 
@@ -44,12 +44,12 @@ public interface SpecToUiCheckMappingService {
      * @param providerType Provider type from the parent connection.
      * @return UI friendly model of data quality checks' container.
      */
-    UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
-                                   CheckSearchFilters runChecksTemplate,
-                                   ConnectionSpec connectionSpec,
-                                   TableSpec tableSpec,
-                                   ExecutionContext executionContext,
-                                   ProviderType providerType);
+    UICheckContainerModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                        CheckSearchFilters runChecksTemplate,
+                                        ConnectionSpec connectionSpec,
+                                        TableSpec tableSpec,
+                                        ExecutionContext executionContext,
+                                        ProviderType providerType);
 
     /**
      * Creates a simplistic UI friendly model of every data quality check on table level or column level, divided into categories.
@@ -59,7 +59,7 @@ public interface SpecToUiCheckMappingService {
      * @param providerType Provider type from the parent connection.
      * @return Simplistic UI friendly model of data quality checks' container.
      */
-    UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+    UICheckContainerBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
                                              ExecutionContext executionContext,
                                              ProviderType providerType);
 

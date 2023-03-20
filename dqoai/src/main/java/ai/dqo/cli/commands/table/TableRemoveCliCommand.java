@@ -35,7 +35,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "remove", description = "Remove tables which match filters")
+@CommandLine.Command(name = "remove", header = "Remove tables that match a given condition", description = "Remove one or more tables that match a given condition. It allows user to use various filters, such as table names to narrow down the set of tables to remove.")
 public class TableRemoveCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private TableService tableImportService;
     private TerminalReader terminalReader;

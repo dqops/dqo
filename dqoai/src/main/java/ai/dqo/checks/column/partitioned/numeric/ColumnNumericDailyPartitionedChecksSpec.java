@@ -52,7 +52,7 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
             put("daily_partition_min_in_range", o -> o.dailyPartitionMinInRange);
             put("daily_partition_mean_in_range", o -> o.dailyPartitionMeanInRange);
             put("daily_partition_percentile_in_range", o -> o.dailyPartitionPercentileInRange);
-            put("daily_partition_percentile_50_in_range", o -> o.dailyPartitionPercentile_50InRange);
+            put("daily_partition_median_in_range", o -> o.dailyPartitionMedianInRange);
             put("daily_partition_percentile_10_in_range", o -> o.dailyPartitionPercentile_10InRange);
             put("daily_partition_percentile_25_in_range", o -> o.dailyPartitionPercentile_25InRange);
             put("daily_partition_percentile_75_in_range", o -> o.dailyPartitionPercentile_75InRange);
@@ -118,8 +118,8 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     @JsonPropertyDescription("Verifies that the percentile of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnPercentileInRangeCheckSpec dailyPartitionPercentileInRange;
 
-    @JsonPropertyDescription("Verifies that the percentile 50 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
-    private ColumnPercentile50InRangeCheckSpec dailyPartitionPercentile_50InRange;
+    @JsonPropertyDescription("Verifies that the median of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
+    private ColumnMedianInRangeCheckSpec dailyPartitionMedianInRange;
 
     @JsonPropertyDescription("Verifies that the percentile 10 of all values in a column is not outside the set range. Creates a separate data quality check (and an alert) for each daily partition.")
     private ColumnPercentile10InRangeCheckSpec dailyPartitionPercentile_10InRange;
@@ -451,21 +451,21 @@ public class ColumnNumericDailyPartitionedChecksSpec extends AbstractCheckCatego
     }
 
     /**
-     * Returns a percentile 50 in range check specification.
-     * @return Percentile 50 in range check specification.
+     * Returns a median in range check specification.
+     * @return median in range check specification.
      */
-    public ColumnPercentile50InRangeCheckSpec getDailyPartitionPercentile_50InRange() {
-        return dailyPartitionPercentile_50InRange;
+    public ColumnMedianInRangeCheckSpec getDailyPartitionMedianInRange() {
+        return dailyPartitionMedianInRange;
     }
 
     /**
-     * Sets a new specification of a percentile 50 in range check.
-     * @param dailyPartitionPercentile_50InRange percentile 50 in range check specification.
+     * Sets a new specification of a median in range check.
+     * @param dailyPartitionMedianInRange median in range check specification.
      */
-    public void setDailyPartitionPercentile_50InRange(ColumnPercentile50InRangeCheckSpec dailyPartitionPercentile_50InRange) {
-        this.setDirtyIf(!Objects.equals(this.dailyPartitionPercentile_50InRange, dailyPartitionPercentile_50InRange));
-        this.dailyPartitionPercentile_50InRange = dailyPartitionPercentile_50InRange;
-        propagateHierarchyIdToField(dailyPartitionPercentile_50InRange, "daily_partition_percentile_50_in_range");
+    public void setDailyPartitionMedianInRange(ColumnMedianInRangeCheckSpec dailyPartitionMedianInRange) {
+        this.setDirtyIf(!Objects.equals(this.dailyPartitionMedianInRange, dailyPartitionMedianInRange));
+        this.dailyPartitionMedianInRange = dailyPartitionMedianInRange;
+        propagateHierarchyIdToField(dailyPartitionMedianInRange, "daily_partition_median_in_range");
     }
 
     /**

@@ -23,9 +23,9 @@ import ai.dqo.checks.column.profiling.ColumnProfilingNullsChecksSpec;
 import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingStandardChecksSpec;
-import ai.dqo.checks.table.checkpoints.TableCheckpointsSpec;
-import ai.dqo.checks.table.checkpoints.TableDailyCheckpointCategoriesSpec;
-import ai.dqo.checks.table.checkpoints.sql.TableSqlDailyCheckpointSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.sql.TableSqlDailyRecurringSpec;
 import ai.dqo.checks.table.checkspecs.sql.TableSqlConditionPassedPercentCheckSpec;
 import ai.dqo.checks.table.checkspecs.standard.TableRowCountCheckSpec;
 import ai.dqo.connectors.ConnectionProviderRegistryObjectMother;
@@ -95,13 +95,13 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         tableSpec.getChecks().getStandard().setRowCount(new TableRowCountCheckSpec());
         tableSpec.getChecks().getStandard().getRowCount().setError(new MinCountRule0ParametersSpec(5L));
 
-        tableSpec.setCheckpoints(new TableCheckpointsSpec());
-        tableSpec.getCheckpoints().setDaily(new TableDailyCheckpointCategoriesSpec());
-        tableSpec.getCheckpoints().getDaily().setSql(new TableSqlDailyCheckpointSpec());
+        tableSpec.setRecurring(new TableRecurringSpec());
+        tableSpec.getRecurring().setDaily(new TableDailyRecurringCategoriesSpec());
+        tableSpec.getRecurring().getDaily().setSql(new TableSqlDailyRecurringSpec());
         TableSqlConditionPassedPercentCheckSpec sqlCheckSpec = new TableSqlConditionPassedPercentCheckSpec();
         sqlCheckSpec.setError(new MinPercentRule99ParametersSpec(99.5));
         sqlCheckSpec.getParameters().setSqlCondition("nonexistent_column = 42");
-        tableSpec.getCheckpoints().getDaily().getSql().setDailyCheckpointSqlConditionPassedPercentOnTable(sqlCheckSpec);
+        tableSpec.getRecurring().getDaily().getSql().setDailySqlConditionPassedPercentOnTable(sqlCheckSpec);
 
         // Column level checks
         ColumnSpec columnSpec = new ColumnSpec(ColumnTypeSnapshotSpec.fromType("INTEGER"));
@@ -164,16 +164,16 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         CheckSearchFilters profilingFilters = allFilters.clone();
         profilingFilters.setCheckType(CheckType.PROFILING);
 
-        CheckSearchFilters checkpointFilters = allFilters.clone();
-        checkpointFilters.setCheckType(CheckType.CHECKPOINT);
+        CheckSearchFilters recurringFilters = allFilters.clone();
+        recurringFilters.setCheckType(CheckType.RECURRING);
 
         CheckSearchFilters partitionedFilters = allFilters.clone();
         partitionedFilters.setCheckType(CheckType.PARTITIONED);
 
         CheckExecutionSummary profilingSummary = this.sut.executeChecks(
                 this.executionContext, profilingFilters, null, this.progressListener, true);
-        CheckExecutionSummary checkpointSummary = this.sut.executeChecks(
-                this.executionContext, checkpointFilters, null, this.progressListener, true);
+        CheckExecutionSummary recurringSummary = this.sut.executeChecks(
+                this.executionContext, recurringFilters, null, this.progressListener, true);
         CheckExecutionSummary partitionedSummary = this.sut.executeChecks(
                 this.executionContext, partitionedFilters, null, this.progressListener, true);
 
@@ -182,28 +182,28 @@ public class CheckExecutionServiceImplTests extends BaseTest {
 
         Assertions.assertEquals(0, partitionedSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(2, profilingSummary.getTotalChecksExecutedCount());
-        Assertions.assertEquals(1, checkpointSummary.getTotalChecksExecutedCount());
+        Assertions.assertEquals(1, recurringSummary.getTotalChecksExecutedCount());
 
 
         Assertions.assertEquals(1.0, profilingSummary.getValidResultsColumn().sum());
-        Assertions.assertEquals(0.0, checkpointSummary.getValidResultsColumn().sum());
+        Assertions.assertEquals(0.0, recurringSummary.getValidResultsColumn().sum());
         Assertions.assertEquals(0.0, partitionedSummary.getValidResultsColumn().sum());
 
         Assertions.assertEquals(1, profilingSummary.getErrorSeverityIssuesCount());
-        Assertions.assertEquals(1, checkpointSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(1, recurringSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, partitionedSummary.getErrorSeverityIssuesCount());
 
         Assertions.assertEquals(allSummary.getTotalChecksExecutedCount(),
                 profilingSummary.getTotalChecksExecutedCount() +
-                        checkpointSummary.getTotalChecksExecutedCount() +
+                        recurringSummary.getTotalChecksExecutedCount() +
                         partitionedSummary.getTotalChecksExecutedCount());
         Assertions.assertEquals(allSummary.getErrorSeverityIssuesCount(),
                 profilingSummary.getErrorSeverityIssuesCount() +
-                        checkpointSummary.getErrorSeverityIssuesCount() +
+                        recurringSummary.getErrorSeverityIssuesCount() +
                         partitionedSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(allSummary.getValidResultsColumn().sum(),
                 profilingSummary.getValidResultsColumn().sum() +
-                        checkpointSummary.getValidResultsColumn().sum() +
+                        recurringSummary.getValidResultsColumn().sum() +
                         partitionedSummary.getValidResultsColumn().sum());
     }
 }

@@ -3,7 +3,7 @@ import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTableProfilingChecksUI,
@@ -21,7 +21,7 @@ const TableProfilingsView = () => {
   const { checksUI, isUpdating, loading } = useSelector(
     (state: IRootState) => state.table
   );
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
 
@@ -66,8 +66,8 @@ const TableProfilingsView = () => {
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2">
-          <SvgIcon name="database" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{`Data quality checks for ${connectionName}.${schemaName}.${tableName}`}</div>
+          <SvgIcon name="table-check" className="w-5 h-5" />
+          <div className="text-xl font-semibold">{`Advanced profiling for ${connectionName}.${schemaName}.${tableName}`}</div>
         </div>
         <Button
           color={isUpdated ? 'primary' : 'secondary'}

@@ -1,9 +1,10 @@
 import React, { ChangeEvent, useEffect, useState } from "react";
 import Input from "../Input";
 import Checkbox from "../Checkbox";
-import { Radio } from "@material-tailwind/react";
 import NumberInput from "../NumberInput";
 import { RecurringScheduleSpec } from "../../api";
+import clsx from "clsx";
+import RadioButton from "../RadioButton";
 
 interface IScheduleViewProps {
   schedule?: RecurringScheduleSpec;
@@ -14,19 +15,19 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
-  const onChangeMode = (e: any) => {
-    setMode(e.target.value);
+  const onChangeMode = (value: string) => {
+    setMode(value);
 
-    if (e.target.value === 'minutes') {
+    if (value === 'minutes') {
       handleChange({ cron_expression: `*/${minutes} * * * *` });
     }
-    if (e.target.value === 'hour') {
+    if (value === 'hour') {
       handleChange({ cron_expression: `${minutes} * * * *` });
     }
-    if (e.target.value === 'day') {
+    if (value === 'day') {
       handleChange({ cron_expression: `${minutes} ${hour} * * *` });
     }
-    if (!e.target.value) {
+    if (value) {
       handleChange({ cron_expression: '' });
     }
   };
@@ -55,7 +56,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   };
 
   useEffect(() => {
-    // if (!schedule?.cron_expression) return;
+    if (!schedule?.cron_expression) return;
     const cron_expression = schedule?.cron_expression ?? "";
     if (!cron_expression) {
       setMode("");
@@ -121,7 +122,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
       <table className="mb-6">
         <tbody>
           <tr>
-            <td className="px-4 py-2">
+            <td className="pr-4 py-2">
               <div>Unix cron expression:</div>
             </td>
             <td className="px-4 py-2">
@@ -132,7 +133,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">
+            <td className="pr-4 py-2">
               <div>Disable schedule:</div>
             </td>
             <td className="px-4 py-2">
@@ -145,84 +146,63 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
         </tbody>
       </table>
       <div className="flex flex-col">
-        <Radio
-          id="unconfigured"
-          name="mode"
-          value=""
+        <RadioButton
           label="Scheduled check execution not configured for all tables from this connection"
           checked={mode === ''}
-          onChange={onChangeMode}
-          color="teal"
+          onClick={() => onChangeMode('')}
+          className="mb-4"
         />
-        <Radio
-          id="minutes"
-          name="mode"
-          value="minutes"
+        <RadioButton
           label="Run every X minutes"
           checked={mode === 'minutes'}
-          onChange={onChangeMode}
-          color="teal"
+          onClick={() => onChangeMode('minutes')}
         />
-        {mode === 'minutes' && (
-          <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
-            <div>Run every</div>
-            <NumberInput
-              min={0}
-              max={60}
-              value={minutes}
-              onChange={onChangeMinutes}
-            />
-            <div>minutes</div>
-          </div>
-        )}
-        <Radio
-          id="hour"
-          name="mode"
+        <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "minutes" && "opacity-60")}>
+          <div>Run every</div>
+          <NumberInput
+            min={0}
+            max={60}
+            value={minutes}
+            onChange={onChangeMinutes}
+          />
+          <div>minutes</div>
+        </div>
+        <RadioButton
           label="Run every hour"
-          value="hour"
           checked={mode === 'hour'}
-          onChange={onChangeMode}
-          color="teal"
+          onClick={() => onChangeMode('hour')}
         />
-        {mode === 'hour' && (
-          <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
-            <div>At</div>
-            <NumberInput
-              min={0}
-              max={60}
-              value={minutes}
-              onChange={onChangeMinutes}
-            />
-            <div>minutes past hour</div>
-          </div>
-        )}
-        <Radio
-          id="day"
-          name="mode"
+        <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "hour" && "opacity-60")}>
+          <div>At</div>
+          <NumberInput
+            min={0}
+            max={60}
+            value={minutes}
+            onChange={onChangeMinutes}
+          />
+          <div>minutes past hour</div>
+        </div>
+        <RadioButton
           label="Run every day"
-          value="day"
           checked={mode === 'day'}
-          onChange={onChangeMode}
-          color="teal"
+          onClick={() => onChangeMode('day')}
         />
-        {mode === 'day' && (
-          <div className="flex px-4 my-4 items-center space-x-3 text-gray-700">
-            <div>At</div>
-            <NumberInput
-              min={0}
-              max={60}
-              value={hour}
-              onChange={onChangeHour}
-            />
-            <div>:</div>
-            <NumberInput
-              min={0}
-              max={60}
-              value={minutes}
-              onChange={onChangeMinutes}
-            />
-          </div>
-        )}
+        <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "day" && "opacity-60")}>
+          <div>At</div>
+          <NumberInput
+            min={0}
+            max={60}
+            value={hour}
+            onChange={onChangeHour}
+          />
+          <div>:</div>
+          <NumberInput
+            min={0}
+            max={60}
+            value={minutes}
+            onChange={onChangeMinutes}
+          />
+        </div>
       </div>
     </div>
   );

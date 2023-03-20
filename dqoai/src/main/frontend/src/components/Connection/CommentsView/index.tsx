@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent } from 'react';
 import CommentItem from './CommentItem';
 import Input from '../../Input';
 import { IconButton } from '@material-tailwind/react';
@@ -63,7 +63,7 @@ const CommentsView = ({
 
   return (
     <div className="p-4">
-      <table className={clsx('my-6 w-full', className)}>
+      <table className={clsx('w-full', className)}>
         <thead>
           <th className="text-left w-full pr-4 py-2">Comment</th>
           <th className="text-left px-8 py-2">Author</th>
@@ -83,13 +83,15 @@ const CommentsView = ({
             ))}
         </tbody>
       </table>
-      <div className="flex items-center space-x-4 mr-8">
-        <div className="flex-1">
+      <div className="flex items-center">
+        <div className="flex-1 pr-4">
           <Input className="h-10 focus:!ring-0 focus:!border" value={text} onChange={onChangeText} />
         </div>
-        <IconButton size="sm" className="w-10 h-10" color="teal" onClick={onAdd}>
-          <SvgIcon name="add" className="w-5 text-white" />
-        </IconButton>
+        <div className="max-w-34 min-w-34 flex px-8">
+          <IconButton size="sm" className="w-10 h-10 !shadow-none" color="teal" onClick={onAdd}>
+            <SvgIcon name="add" className="w-5 text-white" />
+          </IconButton>
+        </div>
       </div>
     </div>
   );

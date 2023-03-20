@@ -3,7 +3,7 @@ import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
 import {
@@ -19,7 +19,7 @@ const ColumnMonthlyPartitionedChecksView = () => {
   const { monthlyPartitionedChecks, isUpdating, loading } = useSelector(
     (state: IRootState) => state.column
   );
-  const [updatedChecksUI, setUpdatedChecksUI] = useState<UIAllChecksModel>();
+  const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
@@ -68,7 +68,7 @@ const ColumnMonthlyPartitionedChecksView = () => {
     setIsUpdated(false);
   };
 
-  const onChangeUI = (ui: UIAllChecksModel) => {
+  const onChangeUI = (ui: UICheckContainerModel) => {
     setUpdatedChecksUI(ui);
     setIsUpdated(true);
   };
@@ -77,8 +77,8 @@ const ColumnMonthlyPartitionedChecksView = () => {
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
         <div className="flex items-center space-x-2">
-          <SvgIcon name="database" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{`Monthly Partitioned Checks for ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
+          <SvgIcon name="column-check" className="w-5 h-5" />
+          <div className="text-xl font-semibold">{`Monthly partition checks for  ${connectionName}.${schemaName}.${tableName}.${columnName}`}</div>
         </div>
         <Button
           color={isUpdated ? 'primary' : 'secondary'}

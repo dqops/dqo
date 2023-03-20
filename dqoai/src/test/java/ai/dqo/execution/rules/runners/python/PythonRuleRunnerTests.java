@@ -16,8 +16,6 @@
 package ai.dqo.execution.rules.runners.python;
 
 import ai.dqo.BaseTest;
-import ai.dqo.core.configuration.DqoConfigurationProperties;
-import ai.dqo.core.configuration.DqoConfigurationPropertiesObjectMother;
 import ai.dqo.core.configuration.DqoPythonConfigurationProperties;
 import ai.dqo.core.configuration.DqoPythonConfigurationPropertiesObjectMother;
 import ai.dqo.core.filesystem.localfiles.HomeLocationFindServiceImpl;

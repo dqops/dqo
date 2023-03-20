@@ -21,6 +21,7 @@ import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
+import ai.dqo.connectors.sqlserver.SqlServerParametersSpec;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
@@ -61,6 +62,9 @@ public class ConnectionBasicModel {
     @JsonPropertyDescription("Redshift connection parameters.")
     private RedshiftParametersSpec redshift;
 
+    @JsonPropertyDescription("SqlServer connection parameters.")
+    private SqlServerParametersSpec sqlserver;
+
     @JsonPropertyDescription("Configured parameters for the \"check run\" job that should be pushed to the job queue in order to run all checks within this connection.")
     private CheckSearchFilters runChecksJobTemplate;
 
@@ -94,6 +98,7 @@ public class ConnectionBasicModel {
             setSnowflake(connectionSpec.getSnowflake());
             setPostgresql(connectionSpec.getPostgresql());
             setRedshift(connectionSpec.getRedshift());
+            setSqlserver(connectionSpec.getSqlserver());
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
@@ -108,7 +113,7 @@ public class ConnectionBasicModel {
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setCheckType(CheckType.CHECKPOINT);
+                setCheckType(CheckType.RECURRING);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
@@ -147,5 +152,6 @@ public class ConnectionBasicModel {
         targetConnectionSpec.setSnowflake(this.getSnowflake());
         targetConnectionSpec.setPostgresql(this.getPostgresql());
         targetConnectionSpec.setRedshift(this.getRedshift());
+        targetConnectionSpec.setSqlserver(this.getSqlserver());
     }
 }

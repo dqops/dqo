@@ -43,10 +43,10 @@ const CommentItem = ({
       </td>
       <td className="px-8 min-w-34 max-w-34 py-2">
         <div className="flex space-x-2 items-center justify-end">
-          <IconButton size="sm" onClick={isEditing ? onSave : onEdit} color="teal">
+          <IconButton size="sm" onClick={isEditing ? onSave : onEdit} color="teal" className="!shadow-none">
             <SvgIcon name={isEditing ? 'save' : 'edit'} className="w-4" />
           </IconButton>
-          <IconButton size="sm" onClick={() => onRemove(idx)} color="teal">
+          <IconButton size="sm" onClick={() => onRemove(idx)} color="teal" className="!shadow-none">
             <SvgIcon name="delete" className="w-4" />
           </IconButton>
         </div>

@@ -73,7 +73,7 @@
 //    }
 //
 //    @Test
-//    void runSensor_whenSensorExecutedCheckpointDaily_thenReturnsValues() {
+//    void runSensor_whenSensorExecutedRecurringDaily_thenReturnsValues() {
 //        List<String> values = new ArrayList<>();
 //        values.add("a111a");
 //        values.add("d44d");
@@ -87,7 +87,7 @@
 //        }});
 //        this.sampleTableMetadata.getTableSpec().getDataStreams().setFirstDataStreamMapping(dataStreamMapping);
 //
-//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
 //                sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.daily);
 //
 //        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);
@@ -99,14 +99,14 @@
 //    }
 //
 //    @Test
-//    void runSensor_whenSensorExecutedCheckpointMonthly_thenReturnsValues() {
+//    void runSensor_whenSensorExecutedRecurringMonthly_thenReturnsValues() {
 //        List<String> values = new ArrayList<>();
 //        values.add("a111a");
 //        values.add("d44d");
 //        this.sut.setExpectedValues(values);
 //        this.sut.setTopValues(5L);
 //
-//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForCheckpointCheck(
+//        SensorExecutionRunParameters runParameters = SensorExecutionRunParametersObjectMother.createForTableColumnForRecurringCheck(
 //                sampleTableMetadata, "strings_with_numbers", this.checkSpec, CheckTimeScale.monthly);
 //
 //        SensorExecutionResult sensorResult = DataQualitySensorRunnerObjectMother.executeSensor(this.userHomeContext, runParameters);

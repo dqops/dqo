@@ -40,6 +40,8 @@ import java.util.stream.Collectors;
 @ApiModel(value = "CheckSearchFilters", description = "Target data quality checks filter, identifies which checks on which tables and columns should be executed.")
 public class CheckSearchFilters extends TableSearchFilters implements Cloneable {
     private String columnName;
+    private String columnDataType;
+    private Boolean columnNullable;
     private CheckType checkType;
     private CheckTimeScale timeScale;
     private String checkCategory;
@@ -71,6 +73,38 @@ public class CheckSearchFilters extends TableSearchFilters implements Cloneable 
      */
     public void setColumnName(String columnName) {
         this.columnName = columnName;
+    }
+
+    /**
+     * Gets a column data type.
+     * @return Column data type.
+     */
+    public String getColumnDataType() {
+        return columnDataType;
+    }
+
+    /**
+     * Sets a column data type.
+     * @param columnDataType New column data type.
+     */
+    public void setColumnDataType(String columnDataType) {
+        this.columnDataType = columnDataType;
+    }
+
+    /**
+     * Gets a flag should the column be nullable.
+     * @return Column nullable flag.
+     */
+    public Boolean getColumnNullable() {
+        return columnNullable;
+    }
+
+    /**
+     * Gets a flag should the column be nullable.
+     * @param columnNullable New column nullable flag.
+     */
+    public void setColumnNullable(Boolean columnNullable) {
+        this.columnNullable = columnNullable;
     }
 
     /**

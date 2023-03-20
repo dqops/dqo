@@ -35,7 +35,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "set", description = "Set the default time zone")
+@CommandLine.Command(name = "set", header = "Set the default time zone", description = "Set the default time zone used by the DQO.")
 public class SettingsTimeZoneSetCliCommand extends BaseCommand implements ICommand {
 	private SettingsService settingsService;
 	private TerminalReader terminalReader;

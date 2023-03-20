@@ -19,7 +19,7 @@ import { Dispatch } from 'redux';
 import { ColumnApiClient } from '../../services/apiClient';
 import { COLUMN_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
-import { ColumnBasicModel, CommentSpec, UIAllChecksModel } from '../../api';
+import { ColumnBasicModel, CommentSpec, UICheckContainerModel } from '../../api';
 
 export const getColumnsRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMNS
@@ -275,7 +275,7 @@ export const getColumnChecksUIRequest = () => ({
   type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI
 });
 
-export const getColumnChecksUISuccess = (data: UIAllChecksModel) => ({
+export const getColumnChecksUISuccess = (data: UICheckContainerModel) => ({
   type: COLUMN_ACTION.GET_COLUMN_CHECKS_UI_SUCCESS,
   data
 });
@@ -326,7 +326,7 @@ export const updateColumnCheckUI =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnCheckUIRequest());
@@ -344,21 +344,21 @@ export const updateColumnCheckUI =
     }
   };
 
-export const getColumnDailyCheckpointsRequest = () => ({
-  type: COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS
+export const getColumnDailyRecurringRequest = () => ({
+  type: COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING
 });
 
-export const getColumnDailyCheckpointsSuccess = (data: UIAllChecksModel) => ({
-  type: COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_SUCCESS,
+export const getColumnDailyRecurringSuccess = (data: UICheckContainerModel) => ({
+  type: COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING_SUCCESS,
   data
 });
 
-export const getColumnDailyCheckpointsFailed = (error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_DAILY_CHECKPOINTS_ERROR,
+export const getColumnDailyRecurringFailed = (error: unknown) => ({
+  type: COLUMN_ACTION.GET_COLUMN_DAILY_RECURRING_ERROR,
   error
 });
 
-export const getColumnDailyCheckpoints =
+export const getColumnDailyRecurring =
   (
     connectionName: string,
     schemaName: string,
@@ -366,46 +366,46 @@ export const getColumnDailyCheckpoints =
     columnName: string
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(getColumnDailyCheckpointsRequest());
+    dispatch(getColumnDailyRecurringRequest());
     try {
-      const res = await ColumnApiClient.getColumnCheckpointsUI(
+      const res = await ColumnApiClient.getColumnRecurringUI(
         connectionName,
         schemaName,
         tableName,
         columnName,
         'daily'
       );
-      dispatch(getColumnDailyCheckpointsSuccess(res.data));
+      dispatch(getColumnDailyRecurringSuccess(res.data));
     } catch (err) {
-      dispatch(getColumnDailyCheckpointsFailed(err));
+      dispatch(getColumnDailyRecurringFailed(err));
     }
   };
 
-export const updateColumnDailyCheckpointsRequest = () => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS
+export const updateColumnDailyRecurringRequest = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_RECURRING
 });
 
-export const updateColumnDailyCheckpointsSuccess = () => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS_SUCCESS
+export const updateColumnDailyRecurringSuccess = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_RECURRING_SUCCESS
 });
 
-export const updateColumnDailyCheckpointsFailed = (error: unknown) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_CHECKPOINTS_ERROR,
+export const updateColumnDailyRecurringFailed = (error: unknown) => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_DAILY_RECURRING_ERROR,
   error
 });
 
-export const updateColumnDailyCheckpoints =
+export const updateColumnDailyRecurring =
   (
     connectionName: string,
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateColumnDailyCheckpointsRequest());
+    dispatch(updateColumnDailyRecurringRequest());
     try {
-      await ColumnApiClient.updateColumnCheckpointsUI(
+      await ColumnApiClient.updateColumnRecurringUI(
         connectionName,
         schemaName,
         tableName,
@@ -413,27 +413,27 @@ export const updateColumnDailyCheckpoints =
         'daily',
         data
       );
-      dispatch(updateColumnDailyCheckpointsSuccess());
+      dispatch(updateColumnDailyRecurringSuccess());
     } catch (err) {
-      dispatch(updateColumnDailyCheckpointsFailed(err));
+      dispatch(updateColumnDailyRecurringFailed(err));
     }
   };
 
-export const getColumnMonthlyCheckpointsRequest = () => ({
-  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS
+export const getColumnMonthlyRecurringRequest = () => ({
+  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING
 });
 
-export const getColumnMonthlyCheckpointsSuccess = (data: UIAllChecksModel) => ({
-  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_SUCCESS,
+export const getColumnMonthlyRecurringSuccess = (data: UICheckContainerModel) => ({
+  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING_SUCCESS,
   data
 });
 
-export const getColumnMonthlyCheckpointsFailed = (error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_CHECKPOINTS_ERROR,
+export const getColumnMonthlyRecurringFailed = (error: unknown) => ({
+  type: COLUMN_ACTION.GET_COLUMN_MONTHLY_RECURRING_ERROR,
   error
 });
 
-export const getColumnMonthlyCheckpoints =
+export const getColumnMonthlyRecurring =
   (
     connectionName: string,
     schemaName: string,
@@ -441,46 +441,46 @@ export const getColumnMonthlyCheckpoints =
     columnName: string
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(getColumnMonthlyCheckpointsRequest());
+    dispatch(getColumnMonthlyRecurringRequest());
     try {
-      const res = await ColumnApiClient.getColumnCheckpointsUI(
+      const res = await ColumnApiClient.getColumnRecurringUI(
         connectionName,
         schemaName,
         tableName,
         columnName,
         'monthly'
       );
-      dispatch(getColumnMonthlyCheckpointsSuccess(res.data));
+      dispatch(getColumnMonthlyRecurringSuccess(res.data));
     } catch (err) {
-      dispatch(getColumnMonthlyCheckpointsFailed(err));
+      dispatch(getColumnMonthlyRecurringFailed(err));
     }
   };
 
-export const updateColumnMonthlyCheckpointsRequest = () => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS
+export const updateColumnMonthlyRecurringRequest = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING
 });
 
-export const updateColumnMonthlyCheckpointsSuccess = () => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS_SUCCESS
+export const updateColumnMonthlyRecurringSuccess = () => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_SUCCESS
 });
 
-export const updateColumnMonthlyCheckpointsFailed = (error: unknown) => ({
-  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_CHECKPOINTS_ERROR,
+export const updateColumnMonthlyRecurringFailed = (error: unknown) => ({
+  type: COLUMN_ACTION.UPDATE_COLUMN_MONTHLY_RECURRING_ERROR,
   error
 });
 
-export const updateColumnMonthlyCheckpoints =
+export const updateColumnMonthlyRecurring =
   (
     connectionName: string,
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateColumnMonthlyCheckpointsRequest());
+    dispatch(updateColumnMonthlyRecurringRequest());
     try {
-      await ColumnApiClient.updateColumnCheckpointsUI(
+      await ColumnApiClient.updateColumnRecurringUI(
         connectionName,
         schemaName,
         tableName,
@@ -488,9 +488,9 @@ export const updateColumnMonthlyCheckpoints =
         'monthly',
         data
       );
-      dispatch(updateColumnMonthlyCheckpointsSuccess());
+      dispatch(updateColumnMonthlyRecurringSuccess());
     } catch (err) {
-      dispatch(updateColumnMonthlyCheckpointsFailed(err));
+      dispatch(updateColumnMonthlyRecurringFailed(err));
     }
   };
 
@@ -499,7 +499,7 @@ export const getColumnDailyPartitionedChecksRequest = () => ({
 });
 
 export const getColumnDailyPartitionedChecksSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_DAILY_CHECKS_SUCCESS,
   data
@@ -552,7 +552,7 @@ export const updateColumnDailyPartitionedChecks =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnDailyPartitionedChecksRequest());
@@ -576,7 +576,7 @@ export const getColumnMonthlyPartitionedChecksRequest = () => ({
 });
 
 export const getColumnMonthlyPartitionedChecksSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
   data
@@ -629,7 +629,7 @@ export const updateColumnMonthlyPartitionedChecks =
     schemaName: string,
     tableName: string,
     columnName: string,
-    data: UIAllChecksModel
+    data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
     dispatch(updateColumnMonthlyPartitionedChecksRequest());
@@ -668,30 +668,30 @@ export const setUpdatedLabels = (labels?: string[]) => ({
   labels
 });
 
-export const setUpdatedChecksUi = (checksUI?: UIAllChecksModel) => ({
+export const setUpdatedChecksUi = (checksUI?: UICheckContainerModel) => ({
   type: COLUMN_ACTION.SET_UPDATED_CHECKS_UI,
   checksUI
 });
 
-export const setUpdatedDailyCheckPoints = (checksUI?: UIAllChecksModel) => ({
-  type: COLUMN_ACTION.SET_COLUMN_DAILY_CHECKPOINTS,
+export const setUpdatedDailyRecurring = (checksUI?: UICheckContainerModel) => ({
+  type: COLUMN_ACTION.SET_COLUMN_DAILY_RECURRING,
   checksUI
 });
 
-export const setUpdatedMonthlyCheckPoints = (checksUI?: UIAllChecksModel) => ({
-  type: COLUMN_ACTION.SET_COLUMN_MONTHLY_CHECKPOINTS,
+export const setUpdatedMonthlyRecurring = (checksUI?: UICheckContainerModel) => ({
+  type: COLUMN_ACTION.SET_COLUMN_MONTHLY_RECURRING,
   checksUI
 });
 
 export const setUpdatedDailyPartitionedChecks = (
-  checksUI?: UIAllChecksModel
+  checksUI?: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.SET_COLUMN_PARTITIONED_DAILY_CHECKS,
   checksUI
 });
 
 export const setUpdatedMonthlyPartitionedChecks = (
-  checksUI?: UIAllChecksModel
+  checksUI?: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.SET_COLUMN_PARTITIONED_MONTHLY_CHECKS,
   checksUI
@@ -702,7 +702,7 @@ export const getColumnProfilingChecksUIFilterRequest = () => ({
 });
 
 export const getColumnProfilingChecksUIFilterSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.GET_COLUMN_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
   data
@@ -732,28 +732,28 @@ export const getColumnProfilingChecksUIFilter =
       }
     };
 
-export const getColumnCheckpointsUIFilterRequest = () => ({
-  type: COLUMN_ACTION.GET_COLUMN_CHECKPOINTS_UI_FILTER
+export const getColumnRecurringUIFilterRequest = () => ({
+  type: COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER
 });
 
-export const getColumnCheckpointsUIFilterSuccess = (
-  data: UIAllChecksModel
+export const getColumnRecurringUIFilterSuccess = (
+  data: UICheckContainerModel
 ) => ({
-  type: COLUMN_ACTION.GET_COLUMN_CHECKPOINTS_UI_FILTER_SUCCESS,
+  type: COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER_SUCCESS,
   data
 });
 
-export const getColumnCheckpointsUIFilterFailed = (error: unknown) => ({
-  type: COLUMN_ACTION.GET_COLUMN_CHECKPOINTS_UI_FILTER_ERROR,
+export const getColumnRecurringUIFilterFailed = (error: unknown) => ({
+  type: COLUMN_ACTION.GET_COLUMN_RECURRING_UI_FILTER_ERROR,
   error
 });
 
-export const getColumnCheckpointsUIFilter =
+export const getColumnRecurringUIFilter =
   (connectionName: string, schemaName: string, tableName: string, columnName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
     async (dispatch: Dispatch) => {
-      dispatch(getColumnCheckpointsUIFilterRequest());
+      dispatch(getColumnRecurringUIFilterRequest());
       try {
-        const res = await ColumnApiClient.getColumnCheckpointsUIFilter(
+        const res = await ColumnApiClient.getColumnRecurringUIFilter(
           connectionName,
           schemaName,
           tableName,
@@ -762,9 +762,9 @@ export const getColumnCheckpointsUIFilter =
           category,
           checkName
         );
-        dispatch(getColumnCheckpointsUIFilterSuccess(res.data));
+        dispatch(getColumnRecurringUIFilterSuccess(res.data));
       } catch (err) {
-        dispatch(getColumnCheckpointsUIFilterFailed(err));
+        dispatch(getColumnRecurringUIFilterFailed(err));
       }
     };
 
@@ -773,7 +773,7 @@ export const getColumnPartitionedChecksUIFilterRequest = () => ({
 });
 
 export const getColumnPartitionedChecksUIFilterSuccess = (
-  data: UIAllChecksModel
+  data: UICheckContainerModel
 ) => ({
   type: COLUMN_ACTION.GET_COLUMN_PARTITIONED_CHECKS_UI_FILTER_SUCCESS,
   data
@@ -804,16 +804,16 @@ export const getColumnPartitionedChecksUIFilter =
       }
     };
 
-export const setColumnUpdatedCheckUiFilter = (ui: UIAllChecksModel) => ({
+export const setColumnUpdatedCheckUiFilter = (ui: UICheckContainerModel) => ({
   type: COLUMN_ACTION.SET_UPDATED_CHECKS_UI_FILTER,
   data: ui
 });
 
-export const setColumnUpdatedCheckpointsUIFilter = (ui: UIAllChecksModel) => ({
-  type: COLUMN_ACTION.SET_UPDATED_CHECKPOINTS_UI_FILTER,
+export const setColumnUpdatedRecurringUIFilter = (ui: UICheckContainerModel) => ({
+  type: COLUMN_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
   data: ui
 });
-export const setColumnUpdatedPartitionedChecksUiFilter = (ui: UIAllChecksModel) => ({
+export const setColumnUpdatedPartitionedChecksUiFilter = (ui: UICheckContainerModel) => ({
   type: COLUMN_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
   data: ui
 });

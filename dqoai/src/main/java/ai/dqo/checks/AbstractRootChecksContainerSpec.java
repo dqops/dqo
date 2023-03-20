@@ -51,14 +51,14 @@ public abstract class AbstractRootChecksContainerSpec extends AbstractSpec {
     }
 
     /**
-     * Returns the type of checks (profiling, checkpoint, partitioned).
+     * Returns the type of checks (profiling, recurring, partitioned).
      * @return Check type.
      */
     @JsonIgnore
     public abstract CheckType getCheckType();
 
     /**
-     * Returns the time scale for checkpoint and partitioned checks (daily, monthly, etc.).
+     * Returns the time scale for recurring and partitioned checks (daily, monthly, etc.).
      * Profiling checks do not have a time scale and return null.
      * @return Time scale (daily, monthly, ...).
      */

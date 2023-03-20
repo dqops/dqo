@@ -43,7 +43,9 @@ public class ColumnProfilingPiiChecksSpec extends AbstractCheckCategorySpec {
             put("valid_email_percent", o -> o.validEmailPercent);
             put("contains_email_percent", o -> o.containsEmailPercent);
             put("valid_ip4_address_percent", o -> o.validIp4AddressPercent);
+            put("contains_ip4_percent", o -> o.containsIp4Percent);
             put("valid_ip6_address_percent", o -> o.validIp6AddressPercent);
+            put("contains_ip6_percent", o -> o.containsIp6Percent);
         }
     };
 
@@ -68,8 +70,14 @@ public class ColumnProfilingPiiChecksSpec extends AbstractCheckCategorySpec {
     @JsonPropertyDescription("Verifies that the percentage of valid IP4 address in a column does not exceed the maximum accepted percentage.")
     private ColumnPiiValidIp4AddressPercentCheckSpec validIp4AddressPercent;
 
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP4 address in a column does not exceed the minimum accepted percentage.")
+    private ColumnPiiContainsIp4PercentCheckSpec containsIp4Percent;
+
     @JsonPropertyDescription("Verifies that the percentage of valid IP6 address in a column does not exceed the maximum accepted percentage.")
     private ColumnPiiValidIp6AddressPercentCheckSpec validIp6AddressPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of rows that contains valid IP6 address in a column does not exceed the minimum accepted percentage.")
+    private ColumnPiiContainsIp6PercentCheckSpec containsIp6Percent;
 
 
     /**
@@ -199,6 +207,24 @@ public class ColumnProfilingPiiChecksSpec extends AbstractCheckCategorySpec {
     }
 
     /**
+     * Returns a contains IP4 percent check.
+     * @return Contains IP4 percent check.
+     */
+    public ColumnPiiContainsIp4PercentCheckSpec getContainsIp4Percent() {
+        return containsIp4Percent;
+    }
+
+    /**
+     * Sets a new definition of a contains IP4 percent check.
+     * @param containsIp4Percent Contains IP4 percent check.
+     */
+    public void setContainsIp4Percent(ColumnPiiContainsIp4PercentCheckSpec containsIp4Percent) {
+        this.setDirtyIf(!Objects.equals(this.containsIp4Percent, containsIp4Percent));
+        this.containsIp4Percent = containsIp4Percent;
+        propagateHierarchyIdToField(containsIp4Percent, "contains_ip4_percent");
+    }
+
+    /**
      * Returns a minimum valid IP6 address percent check.
      * @return Minimum valid IP6 address percent check.
      */
@@ -214,6 +240,24 @@ public class ColumnProfilingPiiChecksSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.validIp6AddressPercent, validIp6AddressPercent));
         this.validIp6AddressPercent = validIp6AddressPercent;
         propagateHierarchyIdToField(validIp6AddressPercent, "valid_ip6_address_percent");
+    }
+
+    /**
+     * Returns a contains IP6 percent check.
+     * @return Contains IP6 percent check.
+     */
+    public ColumnPiiContainsIp6PercentCheckSpec getContainsIp6Percent() {
+        return containsIp6Percent;
+    }
+
+    /**
+     * Sets a new definition of a contains IP6 percent check.
+     * @param containsIp6Percent Contains IP6 percent check.
+     */
+    public void setContainsIp6Percent(ColumnPiiContainsIp6PercentCheckSpec containsIp6Percent) {
+        this.setDirtyIf(!Objects.equals(this.containsIp6Percent, containsIp6Percent));
+        this.containsIp6Percent = containsIp6Percent;
+        propagateHierarchyIdToField(containsIp6Percent, "contains_ip6_percent");
     }
 
     /**

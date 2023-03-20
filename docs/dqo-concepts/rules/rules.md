@@ -3,49 +3,54 @@
 In DQO, the data quality rule and the [data quality sensor](./sensors/sensors.md) form the [data quality check](./checks/index.md).
 
 Rule is a set of conditions against which sensor readouts are verified, described by a list of thresholds.
-A basic rule can simply score the most recent data quality result if the value is within the expected range. 
+A basic rule can simply score the most recent data quality result if the value is above or below particular value or
+within the expected range. 
 
-A standard data quality check on a table that counts the number of rows uses a simple "greater than 10" rule to 
-instantly raise data quality alerts when the table has fewer than 10 rows.
-
-## Example of comparison max rule 
-
-
-``` py title="max.py"
-
-# rule specific parameters object, contains values received from the quality check threshold configuration
-class MaxRuleParametersSpec:
-max_value: float
+Rules evaluate sensors results and assigns them severity levels. There are 3 severity levels in DQO: warning, error and
+fatal
 
 
+## Example of rule 
+
+A standard data quality check on a table that counts the number of rows uses a simple "min_count" rule. For example when
+the error severity level is set to 10 and the table has fewer than 10 rows the data quality error will be raised. 
+
+Below is an example of Phyton script that defines classes and methods for min_count threshold rule.
+
+``` py title="min_count.py"
+
+# Class that specifies the minimum count parameter for the rule. 
+class MinCountRuleParametersSpec:
+    min_count: float
+
+# Class that represents a historical data point from the sensor.
 class HistoricDataPoint:
-timestamp_utc: datetime
-local_datetime: datetime
-back_periods_index: int
-sensor_readout: float
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
 
-
+# Class that specifies the time window settings for the rule.
 class RuleTimeWindowSettingsSpec:
-prediction_time_window: int
-max_periods_with_readouts: int
+    prediction_time_window: int
+    min_periods_with_readouts: int
 
 
-# rule execution parameters, contains the sensor value (actual_value) and the rule parameters
+# Class Rthat specifies the parameters for running the rule. 
 class RuleExecutionRunParameters:
-actual_value: float
-parameters: MaxRuleParametersSpec
-time_period_local: datetime
-previous_readouts: Sequence[HistoricDataPoint]
-time_window: RuleTimeWindowSettingsSpec
+    actual_value: float
+    parameters: MinCountRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
 
 
-# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
-# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+# Class that specifies the result of running the rule.
 class RuleExecutionResult:
-passed: bool
-expected_value: float
-lower_bound: float
-upper_bound: float
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
 
     def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
         self.passed = passed
@@ -54,15 +59,15 @@ upper_bound: float
         self.upper_bound = upper_bound
 
 
-# rule evaluation method that should be modified for each type of rule
+# A method that evaluates the rule based on the parameters specified in the RuleExecutionRunParameters class.
 def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
-if not hasattr(rule_parameters, 'actual_value'):
-return RuleExecutionResult()
+    if not hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
 
     expected_value = None
-    lower_bound = None
-    upper_bound = rule_parameters.parameters.max_value
-    passed = rule_parameters.actual_value <= upper_bound
+    lower_bound = rule_parameters.parameters.min_count
+    upper_bound = None
+    passed = rule_parameters.actual_value >= lower_bound
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
 ```

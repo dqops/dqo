@@ -38,7 +38,12 @@ public class MaxCountRule0ParametersSpec extends AbstractRuleParametersSpec {
         }
     };
 
-    // TODO: Constructor setting maxCount, like in MinCountRuleParametersSpec
+    public MaxCountRule0ParametersSpec() {
+    }
+
+    public MaxCountRule0ParametersSpec(long maxCount) {
+        this.maxCount = maxCount;
+    }
 
     @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
     private Long maxCount = 0L;

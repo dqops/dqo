@@ -35,7 +35,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "show", description = "Show table for connection")
+@CommandLine.Command(name = "show", header = "Show table for connection", description = "Show the details of the specified table in the database for the specified connection. It allows the user to view the details of a specific table in the database.")
 public class ConnectionTableShowCliCommand extends BaseCommand implements ICommand {
 	private ConnectionService connectionService;
 	private TerminalReader terminalReader;
@@ -62,7 +62,7 @@ public class ConnectionTableShowCliCommand extends BaseCommand implements IComma
 	@CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name", required = false)
 	private String connection;
 
-	@CommandLine.Option(names = {"-t", "--table"}, description = "Full table name", required = false)
+	@CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", required = false)
 	private String table;
 
 	/**
@@ -80,7 +80,7 @@ public class ConnectionTableShowCliCommand extends BaseCommand implements IComma
 
 		if (Strings.isNullOrEmpty(this.table)) {
 			throwRequiredParameterMissingIfHeadless("--table");
-			this.table = this.terminalReader.prompt("Full table name (--schema)", null, false);
+			this.table = this.terminalReader.prompt("Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", null, false);
 		}
 
 		CliOperationStatus cliOperationStatus = this.connectionService.showTableForConnection(connection, table, this.getOutputFormat());

@@ -1,9 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Tabs from "../../Tabs";
 import { useParams } from "react-router-dom";
 import {
   CheckResultsDetailedDataModel,
-  CheckSearchFiltersCheckTypeEnum, ErrorsDetailedDataModel,
+  CheckSearchFiltersCheckTypeEnum,
+  DqoJobHistoryEntryModel,
+  DqoJobHistoryEntryModelStatusEnum,
+  ErrorsDetailedDataModel,
   SensorReadoutsDetailedDataModel,
   UICheckModel
 } from "../../../api";
@@ -35,9 +38,10 @@ const tabs = [
 interface CheckDetailsProps {
   check: UICheckModel;
   onClose: () => void;
+  job?: DqoJobHistoryEntryModel;
 }
 
-const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
+const CheckDetails = ({ check, onClose, job }: CheckDetailsProps) => {
   const [activeTab, setActiveTab] = useState('check_results');
   const { connection, schema, table, column }: { connection: string, schema: string, table: string, column: string } = useParams();
   const [checkResults, setCheckResults] = useState<CheckResultsDetailedDataModel[]>([]);
@@ -53,7 +57,15 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
     return data.filter((item) => item.checkName === check.check_name);
   };
 
-  useEffect(() => {
+  const getSensorReadout = (data: SensorReadoutsDetailedDataModel[]): SensorReadoutsDetailedDataModel[] => {
+    return data.filter((item) => item.singleSensorReadouts && item.singleSensorReadouts[0]?.checkName === check.check_name);
+  };
+
+  const getErrorItem = (data: ErrorsDetailedDataModel[]): ErrorsDetailedDataModel[] => {
+    return data.filter((item) => item.checkName === check.check_name);
+  };
+
+  const fetchCheckDetails = useCallback(() => {
     const startDate = month ? moment(month, 'MMMM YYYY').startOf('month').format('YYYY-MM-DD') : '';
     const endDate = month ? moment(month, 'MMMM YYYY').endOf('month').format('YYYY-MM-DD') : '';
 
@@ -63,43 +75,43 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
           setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getColumnProfilingSensorReadouts(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+          setSensorReadouts(getSensorReadout(res.data));
         });
         ErrorsApi.getColumnProfilingErrors(connection, schema, table, column, dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+          setErrors(getErrorItem(res.data));
         });
       } else {
         CheckResultApi.getTableProfilingChecksResults(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getTableProfilingSensorReadouts(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+          setSensorReadouts(getSensorReadout(res.data));
         });
         ErrorsApi.getTableProfilingErrors(connection, schema, table, dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+          setErrors(getErrorItem(res.data));
         });
       }
     }
-    if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.checkpoint) {
+    if (check.run_checks_job_template?.checkType === CheckSearchFiltersCheckTypeEnum.recurring) {
       if (column) {
-        CheckResultApi.getColumnCheckpointsResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+        CheckResultApi.getColumnRecurringResults(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(getCheckResult(res.data));
         });
-        SensorReadoutsApi.getColumnCheckpointsSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+        SensorReadoutsApi.getColumnRecurringSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+          setSensorReadouts(getSensorReadout(res.data));
         });
-        ErrorsApi.getColumnCheckpointsErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+        ErrorsApi.getColumnRecurringErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+          setErrors(getErrorItem(res.data));
         });
       } else {
-        CheckResultApi.getTableCheckpointsResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+        CheckResultApi.getTableRecurringResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(getCheckResult(res.data));
         });
-        SensorReadoutsApi.getTableCheckpointsSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+        SensorReadoutsApi.getTableRecurringSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+          setSensorReadouts(getSensorReadout(res.data));
         });
-        ErrorsApi.getTableCheckpointsErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+        ErrorsApi.getTableRecurringErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
+          setErrors(getErrorItem(res.data));
         });
       }
     }
@@ -109,24 +121,34 @@ const CheckDetails = ({ check, onClose }: CheckDetailsProps) => {
           setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getColumnPartitionedSensorReadouts(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+          setSensorReadouts(getSensorReadout(res.data));
         });
         ErrorsApi.getColumnPartitionedErrors(connection, schema, table, column, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+          setErrors(getErrorItem(res.data));
         });
       } else {
         CheckResultApi.getTablePartitionedChecksResults(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
           setCheckResults(getCheckResult(res.data));
         });
         SensorReadoutsApi.getTablePartitionedSensorReadouts(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setSensorReadouts(res.data);
+          setSensorReadouts(getSensorReadout(res.data));
         });
         ErrorsApi.getTablePartitionedErrors(connection, schema, table, check.run_checks_job_template?.timeScale || 'daily', dataStreamName, startDate, endDate).then((res) => {
-          setErrors(res.data);
+          setErrors(getErrorItem(res.data));
         });
       }
     }
   }, [check, dataStreamName, connection, schema, table, column, month]);
+
+  useEffect(() => {
+    fetchCheckDetails();
+  }, []);
+
+  useEffect(() => {
+    if(job && (job.status === DqoJobHistoryEntryModelStatusEnum.succeeded || job.status === DqoJobHistoryEntryModelStatusEnum.failed)) {
+      fetchCheckDetails();
+    }
+  }, [job]);
 
   const openDeleteDialog = () => {
     setDeleteDataDialogOpened(true);

@@ -37,7 +37,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "remove", description = "Remove column or columns which match filters")
+@CommandLine.Command(name = "remove", header = "Remove the column(s) that match a given condition", description = "Remove one or more columns from a table that match a specified condition. Users can filter the column.")
 public class ColumnRemoveCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
 	private ColumnService columnService;
 	private TerminalReader terminalReader;

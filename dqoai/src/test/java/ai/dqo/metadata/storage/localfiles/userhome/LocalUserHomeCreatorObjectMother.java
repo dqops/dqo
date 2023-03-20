@@ -17,8 +17,6 @@ package ai.dqo.metadata.storage.localfiles.userhome;
 
 import ai.dqo.cli.terminal.TerminalFactory;
 import ai.dqo.cli.terminal.TerminalFactoryObjectMother;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
 import ai.dqo.core.configuration.DqoLoggingConfigurationPropertiesObjectMother;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;

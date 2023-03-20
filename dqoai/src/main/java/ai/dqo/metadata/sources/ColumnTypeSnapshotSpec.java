@@ -35,7 +35,6 @@ import java.util.Objects;
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@EqualsAndHashCode(callSuper = true)
 public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
     private static final ChildHierarchyNodeFieldMapImpl<ColumnTypeSnapshotSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
@@ -279,7 +278,20 @@ public class ColumnTypeSnapshotSpec extends AbstractSpec implements Cloneable {
      */
     public ColumnTypeSnapshotSpec expandAndTrim(SecretValueProvider secretValueProvider) {
         ColumnTypeSnapshotSpec cloned = this.deepClone();
+        if (cloned.columnType != null) {
+            cloned.columnType = cloned.columnType.toUpperCase(Locale.ROOT);
+        }
         cloned.columnType = secretValueProvider.expandValue(cloned.columnType);
         return cloned;
+    }
+
+    @Override
+    public ColumnTypeSnapshotSpec clone() {
+        try {
+            ColumnTypeSnapshotSpec clone = (ColumnTypeSnapshotSpec) super.clone();
+            return clone;
+        } catch (CloneNotSupportedException e) {
+            throw new AssertionError();
+        }
     }
 }

@@ -3,7 +3,7 @@ import DataQualityChecks from '../../components/DataQualityChecks';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
 import { IRootState } from '../../redux/reducers';
-import { CheckResultsOverviewDataModel, UIAllChecksModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getColumnChecksUi,
@@ -69,7 +69,7 @@ const ProfilingView = ({
     );
   };
 
-  const handleChange = (value: UIAllChecksModel) => {
+  const handleChange = (value: UICheckContainerModel) => {
     dispatch(setUpdatedChecksUi(value));
   };
 

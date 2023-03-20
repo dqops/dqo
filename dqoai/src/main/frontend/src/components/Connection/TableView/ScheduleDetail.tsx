@@ -80,7 +80,7 @@ const ScheduleDetail = () => {
   }, [connectionName, schemaName, tableName])
 
   return (
-    <div className="p-4">
+    <div className="py-4 px-8">
       <ActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedSchedule}

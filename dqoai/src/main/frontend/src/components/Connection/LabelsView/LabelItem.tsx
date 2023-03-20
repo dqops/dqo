@@ -20,8 +20,8 @@ const LabelItem = ({
 }: ILabelItemProps) => {
   return (
     <tr>
-      <td className="pr-4 min-w-40 py-2" colSpan={isLast ? 2 : 1}>
-        <div className={isLast ? "mr-8" : ""}>
+      <td className="pr-4 min-w-40 py-2">
+        <div>
           <Input
             className="focus:!ring-0 focus:!border"
             value={label}
@@ -37,6 +37,7 @@ const LabelItem = ({
               color="teal"
               size="sm"
               onClick={() => onRemove(idx)}
+              className="!shadow-none"
             >
               <SvgIcon name="delete" className="w-4" />
             </IconButton>

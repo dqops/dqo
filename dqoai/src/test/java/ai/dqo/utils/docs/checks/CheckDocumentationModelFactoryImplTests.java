@@ -18,12 +18,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.OpenOption;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @SpringBootTest
 public class CheckDocumentationModelFactoryImplTests extends BaseTest {
     private CheckDocumentationModelFactoryImpl sut;
+    private Path checklistFolder;
 
     @BeforeEach
     void setUp() {
@@ -43,6 +49,17 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
                 YamlSerializerObjectMother.getDefault(),
                 JinjaTemplateRenderServiceObjectMother.getDefault()
         );
+
+        try {
+            String mavenTargetFolderPath = System.getenv("DQO_TEST_TEMPORARY_FOLDER");
+            checklistFolder = Path.of(mavenTargetFolderPath).resolve("checklist");
+            if (!checklistFolder.toFile().exists()) {
+                Files.createDirectories(checklistFolder);
+            }
+        }
+        catch (Exception ex) {
+            throw new RuntimeException(ex);
+        }
     }
 
     @Test
@@ -55,5 +72,31 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
     void makeDocumentationForColumnChecks_whenCalled_thenGeneratesColumnLevelSensorDocumentation() {
         List<CheckCategoryDocumentationModel> documentationModels = this.sut.makeDocumentationForColumnChecks();
         Assertions.assertTrue(documentationModels.size() > 1);
+    }
+
+    @Test
+    void makeDocumentationForTableChecks_whenCalledDuringTesting_thenGeneratesFileWithCheckNames() throws Exception {
+        List<CheckCategoryDocumentationModel> documentationModels = this.sut.makeDocumentationForTableChecks();
+        List<String> listOfAllCheckNames = documentationModels.stream()
+                .flatMap(category -> category.getCheckGroups().stream())
+                .flatMap(checkGroup -> checkGroup.getAllChecks().stream())
+                .map(checkModel -> checkModel.getCheckName())
+                .collect(Collectors.toList());
+
+        Path targetFilePath = checklistFolder.resolve("table_checks.csv");
+        Files.write(targetFilePath, listOfAllCheckNames, StandardCharsets.UTF_8);
+    }
+
+    @Test
+    void makeDocumentationForColumnChecks_whenCalledDuringTesting_thenGeneratesFileWithCheckNames() throws Exception {
+        List<CheckCategoryDocumentationModel> documentationModels = this.sut.makeDocumentationForColumnChecks();
+        List<String> listOfAllCheckNames = documentationModels.stream()
+                .flatMap(category -> category.getCheckGroups().stream())
+                .flatMap(checkGroup -> checkGroup.getAllChecks().stream())
+                .map(checkModel -> checkModel.getCheckName())
+                .collect(Collectors.toList());
+
+        Path targetFilePath = checklistFolder.resolve("column_checks.csv");
+        Files.write(targetFilePath, listOfAllCheckNames, StandardCharsets.UTF_8);
     }
 }

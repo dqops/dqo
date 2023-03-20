@@ -35,7 +35,7 @@ import picocli.CommandLine;
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "edit", description = "Edit table which match filters")
+@CommandLine.Command(name = "edit", header = "Edit table that matches a given condition", description = "Edit the table or tables that match the filter conditions specified in the options. It allows the user to modify the details of an existing table in the application.")
 public class TableEditCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand {
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
@@ -59,7 +59,7 @@ public class TableEditCliCommand extends BaseCommand implements ICommand, IConne
         this.tableEditService = tableEditService;
     }
 
-    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table)", completionCandidates = FullTableNameCompleter.class)
+    @CommandLine.Option(names = {"-t", "--table"}, description = "Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", completionCandidates = FullTableNameCompleter.class)
     private String table;
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection Name", completionCandidates = ConnectionNameCompleter.class)
@@ -113,7 +113,7 @@ public class TableEditCliCommand extends BaseCommand implements ICommand, IConne
 
         if (Strings.isNullOrEmpty(this.table)) {
 			throwRequiredParameterMissingIfHeadless("--table");
-			this.table = this.terminalReader.prompt("Full table name e.g. schemaname.tablename (--table)", null, false);
+			this.table = this.terminalReader.prompt("Full table name (schema.table), supports wildcard patterns 'sch*.tab*'", null, false);
         }
 
         return this.tableEditService.launchEditorForTable(this.connection, this.table);

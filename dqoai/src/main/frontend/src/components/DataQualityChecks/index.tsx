@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { CheckResultsOverviewDataModel, UIAllChecksModel, UICheckModel } from '../../api';
+import { CheckResultsOverviewDataModel, UICheckContainerModel, UICheckModel } from '../../api';
 import { useTree } from '../../contexts/treeContext';
 import clsx from 'clsx';
 import { useParams } from "react-router-dom";
@@ -8,8 +8,8 @@ import TableHeader from "./CheckTableHeader";
 import Loader from "../Loader";
 
 interface IDataQualityChecksProps {
-  checksUI?: UIAllChecksModel;
-  onChange: (ui: UIAllChecksModel) => void;
+  checksUI?: UICheckContainerModel;
+  onChange: (ui: UICheckContainerModel) => void;
   className?: string;
   checkResultsOverview: CheckResultsOverviewDataModel[];
   getCheckOverview: () => void;

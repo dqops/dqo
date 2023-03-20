@@ -68,15 +68,15 @@ const NotificationMenu = () => {
       <PopoverHandler>
         <IconButton className="!mr-3 !bg-transparent" ripple={false} variant="text">
           <div className="relative">
-            <SvgIcon name="bell" className="w-5 h-5 text-gray-500" />
-            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-purple-500 text-white px-1 py-0.5 text-xxs">
+            <SvgIcon name="bell" className="w-5 h-5 text-gray-700" />
+            <span className="absolute top-0 right-0 transform translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500 text-white px-1 py-0.5 text-xxs">
               {data.length}
             </span>
           </div>
         </IconButton>
       </PopoverHandler>
       <PopoverContent className="z-50 min-w-120 max-w-120 px-0 ">
-        <div className="border-b border-gray-300 font-semibold pb-2 text-xl flex items-center justify-between px-4">
+        <div className="border-b border-gray-300 text-gray-700 font-semibold pb-2 text-xl flex items-center justify-between px-4">
           <div>Notifications</div>
         </div>
         <div className="overflow-auto max-h-100 py-4 px-4">

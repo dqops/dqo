@@ -38,7 +38,7 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.services.check.mapping.basicmodels.UIAllChecksBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.utils.reflection.ClassInfo;
@@ -105,17 +105,17 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @return UI friendly model of data quality checks' container.
      */
     @Override
-    public UIAllChecksModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
-                                          CheckSearchFilters runChecksTemplate,
-                                          ConnectionSpec connectionSpec,
-                                          TableSpec tableSpec,
-                                          ExecutionContext executionContext,
-                                          ProviderType providerType) {
-        UIAllChecksModel uiAllChecksModel = new UIAllChecksModel();
-        uiAllChecksModel.setRunChecksJobTemplate(runChecksTemplate.clone());
-        uiAllChecksModel.setDataCleanJobTemplate(
+    public UICheckContainerModel createUiModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+                                               CheckSearchFilters runChecksTemplate,
+                                               ConnectionSpec connectionSpec,
+                                               TableSpec tableSpec,
+                                               ExecutionContext executionContext,
+                                               ProviderType providerType) {
+        UICheckContainerModel uiCheckContainerModel = new UICheckContainerModel();
+        uiCheckContainerModel.setRunChecksJobTemplate(runChecksTemplate.clone());
+        uiCheckContainerModel.setDataCleanJobTemplate(
                 DeleteStoredDataQueueJobParameters.fromCheckSearchFilters(
-                        uiAllChecksModel.getRunChecksJobTemplate()));
+                        uiCheckContainerModel.getRunChecksJobTemplate()));
 
         UIEffectiveScheduleModel effectiveScheduleModel = getEffectiveScheduleModel(
                 tableSpec.getSchedulesOverride(),
@@ -145,13 +145,13 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                         : null
             );
         }
-        uiAllChecksModel.setEffectiveSchedule(effectiveScheduleModel);
-        uiAllChecksModel.setEffectiveScheduleEnabledStatus(scheduleEnabledStatus);
+        uiCheckContainerModel.setEffectiveSchedule(effectiveScheduleModel);
+        uiCheckContainerModel.setEffectiveScheduleEnabledStatus(scheduleEnabledStatus);
 
         String defaultDataStreamName = tableSpec.getDataStreams().getFirstDataStreamMappingName();
 
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
-        Optional<String> categoryNameFilter = Optional.ofNullable(uiAllChecksModel.getRunChecksJobTemplate().getCheckCategory());
+        Optional<String> categoryNameFilter = Optional.ofNullable(uiCheckContainerModel.getRunChecksJobTemplate().getCheckCategory());
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, categoryNameFilter);
         CheckType checkType = checkCategoriesSpec.getCheckType();
         CheckTimeScale checkTimeScale = checkCategoriesSpec.getCheckTimeScale();
@@ -169,12 +169,12 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                     checkTimeScale,
                     defaultDataStreamName);
             if (categoryModel != null && categoryModel.getChecks().size() > 0) {
-                uiAllChecksModel.getCategories().add(categoryModel);
+                uiCheckContainerModel.getCategories().add(categoryModel);
             }
         }
 
         // All checks override schedule especially in cases when CheckSearchFilters are very specific.
-        List<UICheckModel> allChecksFlattened = uiAllChecksModel.getCategories().stream()
+        List<UICheckModel> allChecksFlattened = uiCheckContainerModel.getCategories().stream()
                 .flatMap(checkCategory -> checkCategory.getChecks().stream())
                 .collect(Collectors.toList());
 
@@ -183,11 +183,11 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                         check -> check.getEffectiveSchedule() != null
         )) {
              // Info about schedule for the whole model is irrelevant.
-            uiAllChecksModel.setEffectiveSchedule(null);
-            uiAllChecksModel.setEffectiveScheduleEnabledStatus(UIScheduleEnabledStatus.overridden_by_checks);
+            uiCheckContainerModel.setEffectiveSchedule(null);
+            uiCheckContainerModel.setEffectiveScheduleEnabledStatus(UIScheduleEnabledStatus.overridden_by_checks);
         }
 
-        return uiAllChecksModel;
+        return uiCheckContainerModel;
     }
 
     /**
@@ -199,10 +199,10 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @return Simplistic UI friendly model of data quality checks' container.
      */
     @Override
-    public UIAllChecksBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
+    public UICheckContainerBasicModel createUiBasicModel(AbstractRootChecksContainerSpec checkCategoriesSpec,
                                                     ExecutionContext executionContext,
                                                     ProviderType providerType) {
-        UIAllChecksBasicModel uiAllChecksBasicModel = new UIAllChecksBasicModel();
+        UICheckContainerBasicModel uiCheckContainerBasicModel = new UICheckContainerBasicModel();
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, Optional.empty());
         CheckType checkType = checkCategoriesSpec.getCheckType();
@@ -221,12 +221,12 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 UICheckBasicModel checkModel = createCheckBasicModel(checkFieldInfo, checkSpecObject, executionContext, providerType, checkType, checkTimeScale);
                 checkModel.setConfigured(checkIsConfigured);
                 checkModel.setCheckCategory(categoryFieldInfo.getYamlFieldName());
-                uiAllChecksBasicModel.getChecks().add(checkModel);
+                uiCheckContainerBasicModel.getChecks().add(checkModel);
             }
         }
 
-        uiAllChecksBasicModel.getChecks().sort(UICheckBasicModel::compareTo);
-        return uiAllChecksBasicModel;
+        uiCheckContainerBasicModel.getChecks().sort(UICheckBasicModel::compareTo);
+        return uiCheckContainerBasicModel;
     }
 
     /**
@@ -392,6 +392,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         checkModel.setIncludeInSla(checkSpec.isIncludeInSla());
         checkModel.setDataStream(checkSpec.getDataStream());
         checkModel.setCheckSpec(checkSpec);
+        checkModel.setCheckTarget(UICheckTarget.target);
 
         List<UIFieldModel> fieldsForParameterSpec = createFieldsForSensorParameters(parametersSpec);
         checkModel.setSensorParameters(fieldsForParameterSpec);
