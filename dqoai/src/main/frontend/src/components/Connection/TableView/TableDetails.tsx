@@ -57,7 +57,7 @@ const TableDetails = () => {
         isUpdating={isUpdating}
       />
 
-      <table className="mb-6 mt-4 w-160">
+      <table className="mb-6 w-160">
         <tbody>
           <tr>
             <td className="px-4 py-2">Connection Name</td>

@@ -36,7 +36,7 @@ const ConnectionLabelsView = () => {
   };
 
   return (
-    <div>
+    <div className="px-4">
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedLabels}
