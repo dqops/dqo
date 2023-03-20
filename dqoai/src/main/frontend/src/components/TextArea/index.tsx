@@ -52,7 +52,7 @@ const TextArea = ({
           <div>
             <SvgIcon
               name="info"
-              className="w-4 h-4 text-blue-700 cursor-pointer"
+              className="w-4 h-4 text-gray-700 cursor-pointer"
             />
           </div>
         </Tooltip>
