@@ -26,10 +26,13 @@ import ai.dqo.execution.sensors.TimeWindowFilterParameters;
 import ai.dqo.metadata.fields.ParameterDataType;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
+import ai.dqo.metadata.search.HierarchyNodeTreeSearcher;
+import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.services.check.mapping.UIAllChecksPatchApplier;
 import ai.dqo.services.check.mapping.UIAllChecksPatchFactory;
@@ -40,10 +43,7 @@ import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -99,6 +99,23 @@ public class CheckServiceImpl implements CheckService {
 
         this.dqoJobQueue.pushJob(runChecksJob);
         return runChecksJob.getResult();
+    }
+
+    /**
+     * Disable existing checks matching the provided filters.
+     *
+     * @param filters Check search filters to find checks to disable.
+     */
+    @Override
+    public void disableChecks(CheckSearchFilters filters) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        HierarchyNodeTreeSearcher hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(new HierarchyNodeTreeWalkerImpl());
+        Collection<AbstractCheckSpec<?,?,?,?>> checks = hierarchyNodeTreeSearcher.findChecks(userHome, filters);
+
+        for (AbstractCheckSpec<?,?,?,?> check: checks) {
+            check.setDisabled(false);
+        }
     }
 
     /**
