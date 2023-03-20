@@ -32,6 +32,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode(callSuper = false)
 public class RuleExecutionRunParameters {
     private Double actualValue;
+    private Double expectedValue;
     private AbstractRuleParametersSpec parameters;
     private LocalDateTime timePeriodLocal;
     private HistoricDataPoint[] previousReadouts;
@@ -46,17 +47,20 @@ public class RuleExecutionRunParameters {
     /**
      * Constructor that fills the actual sensor value and the rule parameters.
      * @param actualValue Sensor actual value.
+     * @param expectedValue Optional expected value returned by the sensor.
      * @param parameters Rule parameters.
      * @param timePeriodLocal Time period of the readouts as a local date time.
      * @param previousReadouts Array of previous sensor readouts (could be null).
      * @param timeWindow Rule threshold time window configuration.
      */
     public RuleExecutionRunParameters(Double actualValue,
+                                      Double expectedValue,
 									  AbstractRuleParametersSpec parameters,
 									  LocalDateTime timePeriodLocal,
 									  HistoricDataPoint[] previousReadouts,
 									  RuleTimeWindowSettingsSpec timeWindow) {
         this.actualValue = actualValue;
+        this.expectedValue = expectedValue;
         this.parameters = parameters;
         this.timePeriodLocal = timePeriodLocal;
         this.previousReadouts = previousReadouts;
@@ -77,6 +81,22 @@ public class RuleExecutionRunParameters {
      */
     public void setActualValue(Double actualValue) {
         this.actualValue = actualValue;
+    }
+
+    /**
+     * Returns an optional expected value that is returned by a sensor.
+     * @return Optional expected value.
+     */
+    public Double getExpectedValue() {
+        return expectedValue;
+    }
+
+    /**
+     * Sets an optional expected value returned by the sensor.
+     * @param expectedValue Optional expected value.
+     */
+    public void setExpectedValue(Double expectedValue) {
+        this.expectedValue = expectedValue;
     }
 
     /**

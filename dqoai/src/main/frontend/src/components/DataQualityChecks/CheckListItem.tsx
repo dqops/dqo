@@ -195,7 +195,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                   name={!check?.disabled ? 'stop' : 'disable'}
                   className={clsx(
                     'w-5 h-5 cursor-pointer',
-                    !check?.disabled ? 'text-blue-700' : 'text-red-700'
+                    !check?.disabled ? 'text-gray-700' : 'text-red-700'
                   )}
                   onClick={() =>
                     check?.configured &&
@@ -211,7 +211,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
               <div>
                 <SvgIcon
                   name="cog"
-                  className="w-5 h-5 text-blue-700 cursor-pointer"
+                  className="w-5 h-5 text-gray-700 cursor-pointer"
                   onClick={openCheckSettings}
                 />
               </div>
@@ -298,7 +298,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
               <div className="w-5 h-5">
                 <SvgIcon
                   name="info"
-                  className="w-5 h-5 text-blue-700 cursor-pointer"
+                  className="w-5 h-5 text-gray-700 cursor-pointer"
                 />
               </div>
             </Tooltip>

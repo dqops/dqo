@@ -42,7 +42,7 @@ const DataStreamsMappingView = ({
   };
 
   return (
-    <div className="py-4 px-6">
+    <div className="py-4 px-4">
       {Array(9)
         .fill(0)
         .map((item, index) => (

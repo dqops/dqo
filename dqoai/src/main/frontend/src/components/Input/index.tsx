@@ -60,7 +60,7 @@ const Input = ({
               <div>
                 <SvgIcon
                   name="info"
-                  className="w-4 h-4 text-blue-700 cursor-pointer"
+                  className="w-4 h-4 text-gray-700 cursor-pointer"
                 />
               </div>
             </Tooltip>
@@ -97,7 +97,7 @@ const Input = ({
         </div>
       )}
     </div>
-    {error && <div className="text-red-500 text-sm ml-2">{helperText}</div>}
+    {error && <div className="text-red-500 text-xs ml-2">{helperText}</div>}
   </div>
 );
 

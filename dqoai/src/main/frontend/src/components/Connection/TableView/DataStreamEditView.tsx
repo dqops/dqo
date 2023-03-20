@@ -113,13 +113,13 @@ const DataStreamEditView = ({
   };
 
   return (
-    <div>
+    <div className="px-4">
       <ActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdated}
         isUpdating={isUpdating}
       />
-      <div className="flex py-4 border-b border-gray-300 px-6 justify-between items-center">
+      <div className="flex py-4 border-b border-gray-300 px-8 -mx-4 justify-between items-center">
         {selectedDataStream ? (
           <div>{selectedDataStream?.data_stream_name}</div>
         ) : (
@@ -132,6 +132,7 @@ const DataStreamEditView = ({
           label="Back"
           color="primary"
           variant="text"
+          className="px-0"
           leftIcon={<SvgIcon name="chevron-left" className="w-4 h-4 mr-2" />}
           onClick={onBack}
         />

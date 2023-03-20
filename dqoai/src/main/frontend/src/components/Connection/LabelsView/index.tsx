@@ -32,7 +32,7 @@ const LabelsView = ({ labels, onChange }: ILabelsViewProps) => {
 
   return (
     <div className="p-4">
-      <table className="my-3 w-full">
+      <table className="w-full">
         <thead>
           <th className="text-left min-w-40 w-full pr-4 py-2">Label</th>
           <th className="px-8 min-w-34 max-w-34 py-2">Action</th>

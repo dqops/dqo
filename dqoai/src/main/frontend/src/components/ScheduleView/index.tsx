@@ -122,7 +122,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
       <table className="mb-6">
         <tbody>
           <tr>
-            <td className="px-4 py-2">
+            <td className="pr-4 py-2">
               <div>Unix cron expression:</div>
             </td>
             <td className="px-4 py-2">
@@ -133,7 +133,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
             </td>
           </tr>
           <tr>
-            <td className="px-4 py-2">
+            <td className="pr-4 py-2">
               <div>Disable schedule:</div>
             </td>
             <td className="px-4 py-2">
