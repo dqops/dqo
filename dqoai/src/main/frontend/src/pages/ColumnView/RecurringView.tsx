@@ -187,7 +187,7 @@ const RecurringView = () => {
             onUpdate={onUpdate}
             checksUI={dailyRecurring}
             onChange={onDailyRecurringChange}
-            className="max-h-checks"
+            className="max-h-table"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
             loading={loading}
@@ -198,7 +198,7 @@ const RecurringView = () => {
             onUpdate={onUpdate}
             checksUI={monthlyRecurring}
             onChange={onMonthlyRecurringChange}
-            className="max-h-checks"
+            className="max-h-table"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
             loading={loading}
