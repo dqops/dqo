@@ -29,6 +29,7 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "check", description = "Commands related to checks and rules", subcommands = {
         CheckRunCliCommand.class,
         CheckEnableCliCommand.class,
+        CheckDisableCliCommand.class,
 })
 public class CheckCliCommand extends BaseCommand {
 }

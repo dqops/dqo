@@ -40,41 +40,25 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 import java.util.HashMap;
-import java.util.Map;
 
 /**
- * "check enable" 2nd level CLI command that enables data quality checks.
+ * "check disable" 2nd level CLI command that disables data quality checks.
  */
 @Component
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-@CommandLine.Command(name = "enable", description = "Enable data quality checks matching specified filters")
-public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITableNameCommand {
+@CommandLine.Command(name = "disable", description = "Disable data quality checks matching specified filters")
+public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITableNameCommand {
     private TerminalReader terminalReader;
-    private TerminalWriter terminalWriter;
-    private TerminalTableWritter terminalTableWritter;
     private CheckService checkService;
-    private JsonSerializer jsonSerializer;
-    private OutputFormatService outputFormatService;
-    private FileWritter fileWritter;
 
-    public CheckEnableCliCommand() {
+    public CheckDisableCliCommand() {
     }
 
     @Autowired
-    public CheckEnableCliCommand(TerminalReader terminalReader,
-                                 TerminalWriter terminalWriter,
-                                 TerminalTableWritter terminalTableWritter,
-                                 CheckService checkService,
-                                 JsonSerializer jsonSerializer,
-                                 OutputFormatService outputFormatService,
-                                 FileWritter fileWritter) {
+    public CheckDisableCliCommand(TerminalReader terminalReader,
+                                  CheckService checkService) {
         this.terminalReader = terminalReader;
-        this.terminalWriter = terminalWriter;
-        this.terminalTableWritter = terminalTableWritter;
         this.checkService = checkService;
-        this.jsonSerializer = jsonSerializer;
-        this.outputFormatService = outputFormatService;
-        this.fileWritter = fileWritter;
     }
 
     @CommandLine.Option(names = {"-c", "--connection"}, description = "Connection name, supports patterns like 'conn*'",
@@ -95,7 +79,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'")
     private String sensor;
 
-    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (adhoc, checkpoint, partitioned)")
+    @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, checkpoint, partitioned)")
     private CheckType checkType;
 
     @CommandLine.Option(names = {"-ts", "--time-scale"}, description = "Time scale for checkpoint and partitioned checks (daily, monthly, etc.)")
@@ -104,30 +88,11 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     @CommandLine.Option(names = {"-cat", "--category"}, description = "Check category name (standard, nulls, numeric, etc.)")
     private String checkCategory;
 
-    @CommandLine.Option(names = {"-dt", "--data-type"}, description = "Datatype of columns on which to enable checks.")
+    @CommandLine.Option(names = {"-dt", "--data-type"}, description = "Datatype of columns on which to disable checks.")
     private String datatypeFilter;
 
-    @CommandLine.Option(names = {"-n", "--nullable"}, description = "Enable check only on nullable columns (false for explicitly non-nullable columns).")
+    @CommandLine.Option(names = {"-n", "--nullable"}, description = "Disable check only on nullable columns (false for explicitly non-nullable columns).")
     private Boolean columnNullable = null;
-
-    @CommandLine.Option(names = {"-wrn", "--warning"}, description = "Enable warning rules on checks.")
-    private Boolean warningLevelEnabled = false;
-
-    // TODO: Explain how does the filtering work in level options, what is the difference between true, false and not considered (right now it's TBD tbh).
-    @CommandLine.Option(names = {"-W", "--warning-rule"}, mapFallbackValue = "true", description = "Warning level rule options.\nUsage:\n\t-W<rule_name>,\n\t-W<rule_name>=false,\n\t--warning-rule=<rule_name>,\n\t--warning-rule=<rule_name>=false.")
-    private Map<String, String> warningLevelOptions;
-
-    @CommandLine.Option(names = {"-err", "--error"}, description = "Enable error rules on checks.")
-    private Boolean errorLevelEnabled = false;
-
-    @CommandLine.Option(names = {"-E", "--error-rule"}, mapFallbackValue = "true", description = "Error level rule options.\nUsage:\n\t-E<rule_name>,\n\t-E<rule_name>=false,\n\t--error-rule=<rule_name>,\n\t--error-rule=<rule_name>=false.")
-    private Map<String, String> errorLevelOptions;
-
-    @CommandLine.Option(names = {"-ftl", "--fatal"}, description = "Enable fatal rules on checks.")
-    private Boolean fatalLevelEnabled = false;
-
-    @CommandLine.Option(names = {"-F", "--fatal-rule"}, mapFallbackValue = "true", description = "Fatal level rule options.\nUsage:\n\t-F<rule_name>,\n\t-F<rule_name>=false,\n\t--fatal-rule=<rule_name>,\n\t--fatal-rule=<rule_name>=false.")
-    private Map<String, String> fatalLevelOptions;
 
     /**
      * Gets the connection name.
@@ -265,28 +230,8 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
         return datatypeFilter;
     }
 
-    /**
-     * Gets the warning level options map.
-     * @return Warning level rule options map.
-     */
-    public Map<String, String> getWarningLevelOptions() {
-        return warningLevelOptions;
-    }
-
-    /**
-     * Gets the error level options map.
-     * @return Error level rule options map.
-     */
-    public Map<String, String> getErrorLevelOptions() {
-        return errorLevelOptions;
-    }
-
-    /**
-     * Gets the fatal level options map.
-     * @return Fatal level rule options map.
-     */
-    public Map<String, String> getFatalLevelOptions() {
-        return fatalLevelOptions;
+    public void setDatatypeFilter(String datatypeFilter) {
+        this.datatypeFilter = datatypeFilter;
     }
 
     /**
@@ -318,42 +263,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
         filters.setColumnDataType(this.datatypeFilter);
         filters.setColumnNullable(this.columnNullable);
 
-        if (this.warningLevelEnabled && this.warningLevelOptions == null) {
-            this.warningLevelOptions = new HashMap<>();
-        }
-        if (this.errorLevelEnabled && this.errorLevelOptions == null) {
-            this.errorLevelOptions = new HashMap<>();
-        }
-        if (this.fatalLevelEnabled && this.fatalLevelOptions == null) {
-            this.fatalLevelOptions = new HashMap<>();
-        }
-
-        if (this.warningLevelOptions == null
-                && this.errorLevelOptions == null
-                && this.fatalLevelOptions == null) {
-            // By default, enable on every alert level
-            this.warningLevelOptions = new HashMap<>();
-            this.errorLevelOptions = new HashMap<>();
-            this.fatalLevelOptions = new HashMap<>();
-        }
-
-        UIAllChecksPatchParameters patchParameters = new UIAllChecksPatchParameters() {{
-            setCheckSearchFilters(filters);
-            setWarningLevelOptions(warningLevelOptions);
-            setErrorLevelOptions(errorLevelOptions);
-            setFatalLevelOptions(fatalLevelOptions);
-        }};
-        if (this.warningLevelOptions != null) {
-            patchParameters.setDisableWarningLevel(false);
-        }
-        if (this.errorLevelOptions != null) {
-            patchParameters.setDisableErrorLevel(false);
-        }
-        if (this.fatalLevelOptions != null) {
-            patchParameters.setDisableFatalLevel(false);
-        }
-
-        this.checkService.updateAllChecksPatch(patchParameters);
+        this.checkService.disableChecks(filters);
 
         return 0;
     }
