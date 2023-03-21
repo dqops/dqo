@@ -66,8 +66,8 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
         return RuleExecutionResult()
 
     expected_value = rule_parameters.expected_value
-    lower_bound = - rule_parameters.parameters.max_diff_percent
-    upper_bound = rule_parameters.parameters.max_diff_percent
-    passed = lower_bound <= 100.0 * (rule_parameters.expected_value - rule_parameters.actual_value)/rule_parameters.expected_value <= upper_bound
+    lower_bound = rule_parameters.expected_value - (rule_parameters.parameters.max_diff_percent/100 * rule_parameters.expected_value)
+    upper_bound = rule_parameters.expected_value + (rule_parameters.parameters.max_diff_percent/100 * rule_parameters.expected_value)
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
