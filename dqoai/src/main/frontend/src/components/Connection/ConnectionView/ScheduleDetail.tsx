@@ -105,7 +105,7 @@ const ScheduleDetail = () => {
   }, [sourceRoute]);
 
   return (
-    <div className="p-4">
+    <div className="py-4 px-8">
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedSchedule}

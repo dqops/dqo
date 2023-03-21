@@ -24,6 +24,7 @@ import { SourceConnectionApi } from "../../../services/apiClient";
 import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorModal";
 import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
 import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
+import SqlServerConnection from "../../Dashboard/DatabaseConnection/SqlServerConnection";
 
 const ConnectionDetail = () => {
   const { connection }: { connection: string } = useParams();
@@ -143,6 +144,14 @@ const ConnectionDetail = () => {
             <RedshiftConnection
               redshift={connectionBasic?.redshift}
               onChange={(redshift) => onChange({ redshift })}
+            />
+          )
+        }
+        {connectionBasic?.provider_type ===
+          ConnectionSpecProviderTypeEnum.sqlserver && (
+            <SqlServerConnection
+              sqlserver={connectionBasic?.sqlserver}
+              onChange={(sqlserver) => onChange({ sqlserver })}
             />
           )
         }

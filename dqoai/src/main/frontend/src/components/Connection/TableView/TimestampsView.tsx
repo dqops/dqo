@@ -52,7 +52,7 @@ const TimestampsView = () => {
   const isDisabled = !isUpdated;
 
   return (
-    <div className="py-4 px-8 flex flex-col">
+    <div className="py-6 px-8 flex flex-col">
       <ActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdated}

@@ -49,7 +49,7 @@ const TableCommentView = () => {
   };
 
   return (
-    <div>
+    <div className="px-4">
       <ActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedComments}

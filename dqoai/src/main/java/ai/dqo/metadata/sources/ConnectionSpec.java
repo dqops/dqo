@@ -18,6 +18,7 @@ package ai.dqo.metadata.sources;
 import ai.dqo.connectors.ConnectionProviderSpecificParameters;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.connectors.bigquery.BigQueryParametersSpec;
+import ai.dqo.connectors.sqlserver.SqlServerParametersSpec;
 import ai.dqo.connectors.postgresql.PostgresqlParametersSpec;
 import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
@@ -58,6 +59,7 @@ public class ConnectionSpec extends AbstractSpec {
 			put("snowflake", o -> o.snowflake);
             put("postgresql", o -> o.postgresql);
             put("redshift", o -> o.redshift);
+            put("sqlserver", o -> o.sqlserver);
             put("labels", o -> o.labels);
             put("schedules", o -> o.schedules);
             put("notifications", o -> o.notifications);
@@ -80,8 +82,12 @@ public class ConnectionSpec extends AbstractSpec {
     private PostgresqlParametersSpec postgresql;
 
     @CommandLine.Mixin // fill properties from CLI command line arguments
-    @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Snowflake JDBC url).")
+    @JsonPropertyDescription("Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).")
     private RedshiftParametersSpec redshift;
+
+    @CommandLine.Mixin // fill properties from CLI command line arguments
+    @JsonPropertyDescription("SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).")
+    private SqlServerParametersSpec sqlserver;
 
     @JsonPropertyDescription("The concurrency limit for the maximum number of parallel executions of checks on this connection.")
     private Integer parallelRunsLimit;
@@ -215,6 +221,24 @@ public class ConnectionSpec extends AbstractSpec {
         setDirtyIf(!Objects.equals(this.redshift, redshift));
         this.redshift = redshift;
         propagateHierarchyIdToField(redshift, "redshift");
+    }
+
+    /**
+     * Returns the connection parameters for SQL Server.
+     * @return Redshift connection parameters.
+     */
+    public SqlServerParametersSpec getSqlserver() {
+        return sqlserver;
+    }
+
+    /**
+     * Sets the Redshift connection parameters.
+     * @param sqlserver New Redshift connection parameters.
+     */
+    public void setSqlserver(SqlServerParametersSpec sqlserver) {
+        setDirtyIf(!Objects.equals(this.sqlserver, sqlserver));
+        this.sqlserver = sqlserver;
+        propagateHierarchyIdToField(sqlserver, "sqlserver");
     }
 
     /**
@@ -375,6 +399,9 @@ public class ConnectionSpec extends AbstractSpec {
             }
             if (cloned.redshift != null) {
                 cloned.redshift = cloned.redshift.expandAndTrim(secretValueProvider);
+            }
+            if (cloned.sqlserver != null) {
+                cloned.sqlserver = cloned.sqlserver.expandAndTrim(secretValueProvider);
             }
             if (cloned.notifications != null) {
                 cloned.notifications = cloned.notifications.expandAndTrim(secretValueProvider);

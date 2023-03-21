@@ -36,11 +36,20 @@ public class UIAllChecksPatchParameters {
     @NotNull
     CheckSearchFilters checkSearchFilters;
 
+    @JsonPropertyDescription("Disable warning level rule. If null, ignored.")
+    Boolean disableWarningLevel;
+
     @JsonPropertyDescription("Options for warning level rules on checks, example of an entry: \"min_count\" -> 20, etc. If null, warning level will be ignored.")
     Map<String, String> warningLevelOptions;
 
+    @JsonPropertyDescription("Disable error level rule. If null, ignored.")
+    Boolean disableErrorLevel;
+
     @JsonPropertyDescription("Options for error level rules on checks, example of an entry: \"min_count\" -> 10, etc. If null, error level will be ignored.")
     Map<String, String> errorLevelOptions;
+
+    @JsonPropertyDescription("Disable fatal level rule. If null, ignored.")
+    Boolean disableFatalLevel;
 
     @JsonPropertyDescription("Options for fatal level rules on checks, example of an entry: \"min_count\" -> 5, etc. If null, fatal level will be ignored.")
     Map<String, String> fatalLevelOptions;

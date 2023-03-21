@@ -69,7 +69,7 @@ const ColumnCommentsView = ({
   };
 
   return (
-    <div>
+    <div className="px-4">
       <ColumnActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedComments}

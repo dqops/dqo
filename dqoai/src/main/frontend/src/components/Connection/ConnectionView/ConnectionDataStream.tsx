@@ -53,7 +53,7 @@ const ConnectionDataStream = () => {
   };
 
   return (
-    <div>
+    <div className="px-4">
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedDataStreamsMapping}

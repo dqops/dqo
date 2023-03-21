@@ -260,12 +260,15 @@ public class ColumnSpec extends AbstractSpec {
      * Retrieves a non-null root check container for the requested category.
      * Creates a new check root container object if there was no such object configured and referenced
      * from the column specification.
-     * @param checkType Check type.
-     * @param checkTimeScale Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
+     *
+     * @param checkType            Check type.
+     * @param checkTimeScale       Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
+     * @param attachCheckContainer When the check container doesn't exist, should the newly created check container be attached to the column.
      * @return Newly created container root.
      */
     public AbstractRootChecksContainerSpec getColumnCheckRootContainer(CheckType checkType,
-                                                                       CheckTimeScale checkTimeScale) {
+                                                                       CheckTimeScale checkTimeScale,
+                                                                       boolean attachCheckContainer) {
         switch (checkType) {
             case PROFILING: {
                 if (this.checks != null) {
@@ -274,6 +277,9 @@ public class ColumnSpec extends AbstractSpec {
 
                 ColumnProfilingCheckCategoriesSpec columnProfilingCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
                 columnProfilingCheckCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "checks"));
+                if (attachCheckContainer) {
+                    this.checks = columnProfilingCheckCategoriesSpec;
+                }
                 return columnProfilingCheckCategoriesSpec;
             }
 
@@ -282,6 +288,9 @@ public class ColumnSpec extends AbstractSpec {
                 if (recurringSpec == null) {
                     recurringSpec = new ColumnRecurringSpec();
                     recurringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "recurring"));
+                    if (attachCheckContainer) {
+                        this.recurring = recurringSpec;
+                    }
                 }
 
                 switch (checkTimeScale) {
@@ -292,6 +301,9 @@ public class ColumnSpec extends AbstractSpec {
 
                         ColumnDailyRecurringCategoriesSpec dailyRecurringCategoriesSpec = new ColumnDailyRecurringCategoriesSpec();
                         dailyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            recurringSpec.setDaily(dailyRecurringCategoriesSpec);
+                        }
                         return dailyRecurringCategoriesSpec;
                     }
                     case monthly: {
@@ -301,6 +313,9 @@ public class ColumnSpec extends AbstractSpec {
 
                         ColumnMonthlyRecurringCategoriesSpec monthlyRecurringCategoriesSpec = new ColumnMonthlyRecurringCategoriesSpec();
                         monthlyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            recurringSpec.setMonthly(monthlyRecurringCategoriesSpec);
+                        }
                         return monthlyRecurringCategoriesSpec;
                     }
                     default:
@@ -313,6 +328,9 @@ public class ColumnSpec extends AbstractSpec {
                 if (partitionedChecksSpec == null) {
                     partitionedChecksSpec = new ColumnPartitionedChecksRootSpec();
                     partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
+                    if (attachCheckContainer) {
+                        this.partitionedChecks = partitionedChecksSpec;
+                    }
                 }
 
                 switch (checkTimeScale) {
@@ -323,6 +341,9 @@ public class ColumnSpec extends AbstractSpec {
 
                         ColumnDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new ColumnDailyPartitionedCheckCategoriesSpec();
                         dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            partitionedChecksSpec.setDaily(dailyPartitionedCategoriesSpec);
+                        }
                         return dailyPartitionedCategoriesSpec;
                     }
                     case monthly: {
@@ -332,6 +353,9 @@ public class ColumnSpec extends AbstractSpec {
 
                         ColumnMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new ColumnMonthlyPartitionedCheckCategoriesSpec();
                         monthlyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            partitionedChecksSpec.setMonthly(monthlyPartitionedCategoriesSpec);
+                        }
                         return monthlyPartitionedCategoriesSpec;
                     }
                     default:

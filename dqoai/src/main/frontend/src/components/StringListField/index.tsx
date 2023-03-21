@@ -35,7 +35,7 @@ const StringListField = ({
                 <div>
                   <SvgIcon
                     name="info"
-                    className="w-4 h-4 text-blue-700 cursor-pointer"
+                    className="w-4 h-4 text-gray-700 cursor-pointer"
                   />
                 </div>
               </Tooltip>
@@ -47,7 +47,7 @@ const StringListField = ({
         <div className="relative text-sm leading-1">{value?.join(', ')}</div>
         <SvgIcon
           name="edit"
-          className="w-4 h-4 text-blue-700 cursor-pointer"
+          className="w-4 h-4 text-gray-700 cursor-pointer"
           onClick={() => setOpen(true)}
         />
       </div>
