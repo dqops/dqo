@@ -203,7 +203,6 @@ function TreeProvider(props: any) {
         open: false
       }
     ];
-    console.log('sourceRoute', sourceRoute)
     if (sourceRoute === CheckTypes.PROFILING) {
       items.push(
         {
@@ -832,7 +831,6 @@ function TreeProvider(props: any) {
   }
 
   const switchTab = (node: CustomTreeNode) => {
-    console.log('node:', node);
     if (!node) return;
     const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
