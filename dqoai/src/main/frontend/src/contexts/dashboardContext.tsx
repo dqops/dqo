@@ -77,7 +77,6 @@ function DashboardProvider(props: any) {
   }, []);
 
   const toggleDashboardFolder = useCallback((key: string) => {
-    console.log('1');
     setDashboardStatus({
       ...dashboardStatus,
       [key]: !dashboardStatus[key]
