@@ -129,7 +129,13 @@ const TablePartitionedChecksView = () => {
       )
     );
   }, [isUpdatedMonthlyPartitionedChecks]);
-  
+
+  useEffect(() => {
+    if (tab !== 'daily' && tab !== 'monthly') {
+      history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, tab));
+    }
+  }, [tab]);
+
   const getDailyCheckOverview = () => {
     CheckResultOverviewApi.getTablePartitionedChecksOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
       setDailyCheckResultsOverview(res.data);

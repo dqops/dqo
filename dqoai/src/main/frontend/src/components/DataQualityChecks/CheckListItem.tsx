@@ -175,8 +175,8 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
           check?.disabled ? 'line-through' : ''
         )}
       >
-        <td className="py-2 pl-4 pr-4">
-          <div className="flex space-x-1 items-center min-w-60">
+        <td className="py-2 pl-4 pr-4 min-w-120 max-w-120">
+          <div className="flex space-x-1 items-center">
             {/*<div className="w-5">*/}
             {/*  <Checkbox checked={checked} onChange={setChecked} />*/}
             {/*</div>*/}
@@ -327,7 +327,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
             <div className="text-sm">{check.check_name}</div>
           </div>
         </td>
-        <td className="py-2 px-4">
+        <td className="py-2 px-4 min-w-120 max-w-120">
           <div className="flex space-x-2">
             <div className="text-gray-700 text-sm w-full">
               <SensorParameters
