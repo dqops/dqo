@@ -17,9 +17,33 @@ experiments to see which check would be most appropriate for monitoring the qual
 checks can be run daily and monthly. Daily recurring checks stores the most recent sensor readouts for each day when 
 the data quality check was run. While monthly recurring checks store the most recent sensor readout for each month 
 when the data quality check was run.
+
 - [Partition checks](./partition-checks/partition-checks.md) measure data quality for each daily or monthly partition by
 creating a separate data quality score. To run a partition check, you need to select a data column that is the time 
 partitioning key for the table.
+
+## Categories of checks
+
+Each type of checks is divided into two main categories: table and column. Table-level data quality checks are used to 
+evaluate the table at a high-level without reference to individual columns, while column-level checks are run on 
+specific column. Built-in checks available in DQO are divided in the following subcategories.
+
+Table checks:
+- standard
+- timeliness
+- sql
+- availability
+
+Column checks:
+- nulls
+- numeric
+- uniqueness
+- strings
+- datetime
+- pii
+- sql
+- bool
+- integrity
 
 ## Severity levels
 
@@ -178,7 +202,7 @@ not group the data by day and calculated an aggregate score for the table only d
 too far from the average score. The examples above only show 5 days of data, but in a real database, this drop will be 
 below the average daily change in the metric value.
 
-## Data segmentation by data streams
+## Data stream segmentation
 
 An important aspect of data monitoring is the ability to calculate data quality metrics for different groups of rows
 stored in the same table. Data in the fact table can be loaded from different sources such as countries, states, or
@@ -186,7 +210,7 @@ received from different external sources. Each stream of data would be loaded by
 for different data streams may fail independently of each other.
 
 Data streams can be identified by a discriminator column, such as country or state. DQO can analyze data within separate
-segments with a GROUP BY <data_stream_discriminator_column> clause to the data quality queries. DQO support setting up
+segments with a GROUP BY <data_stream_discriminator_column> clause to the data quality queries. DQO support setting of up
 to 9 different data streams. Below is an example of a query with grouping by country.
 
 ``` sql hl_lines="4 5"

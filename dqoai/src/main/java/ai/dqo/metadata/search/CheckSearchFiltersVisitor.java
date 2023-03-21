@@ -161,18 +161,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
         DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
         dataStreamSearcherObject.setTableDataStreams(tableSpec.getDataStreams());
 
-        if (enabledFilter != null) {
-            if (enabledFilter && tableSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-            if (!enabledFilter && !tableSpec.isDisabled()) {
-                return TreeNodeTraversalResult.SKIP_CHILDREN;
-            }
-
-            return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-        }
-
-        if (tableSpec.isDisabled()) {
+        if (tableSpec.isDisabled() && (enabledFilter == null || enabledFilter)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 
@@ -220,8 +209,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
         LabelsSearcherObject labelsSearcherObject = parameter.getLabelsSearcherObject();
         labelsSearcherObject.setColumnLabels(columnSpec.getLabels());
 
-        if (enabledFilter != null
-                && (enabledFilter ^ !columnSpec.isDisabled())) {
+        if (columnSpec.isDisabled() && (enabledFilter == null || enabledFilter)) {
             return TreeNodeTraversalResult.SKIP_CHILDREN;
         }
 

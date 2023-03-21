@@ -1,4 +1,4 @@
-import React, { ChangeEvent, FocusEvent } from 'react';
+import React, { ChangeEvent, FocusEvent, KeyboardEvent } from 'react';
 
 import clsx from 'clsx';
 
@@ -22,6 +22,7 @@ interface IInputProps {
   tooltipText?: string;
   disabled?: boolean;
   defaultValue?: string;
+  onKeyDown?: (e: KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const Input = ({
@@ -39,7 +40,8 @@ const Input = ({
   dataTestId,
   tooltipText,
   disabled,
-  defaultValue
+  defaultValue,
+  onKeyDown,
 }: IInputProps) => (
   <div>
     <div className="flex space-x-1">
@@ -60,7 +62,7 @@ const Input = ({
               <div>
                 <SvgIcon
                   name="info"
-                  className="w-4 h-4 text-blue-700 cursor-pointer"
+                  className="w-4 h-4 text-gray-700 cursor-pointer"
                 />
               </div>
             </Tooltip>
@@ -86,6 +88,7 @@ const Input = ({
         onBlur={onBlur}
         data-testid={dataTestId}
         defaultValue={defaultValue}
+        onKeyDown={onKeyDown}
       />
       {value && (
         <div className="absolute top-1/2 right-4 transform -translate-y-1/2 w-4 h-4 flex justify-center items-center">
@@ -97,7 +100,7 @@ const Input = ({
         </div>
       )}
     </div>
-    {error && <div className="text-red-500 text-sm ml-2">{helperText}</div>}
+    {error && <div className="text-red-500 text-xs ml-2">{helperText}</div>}
   </div>
 );
 

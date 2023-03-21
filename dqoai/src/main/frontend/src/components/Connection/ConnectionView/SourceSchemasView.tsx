@@ -75,7 +75,7 @@ const SourceSchemasView = () => {
         <table className="w-full">
           <thead>
             <tr>
-              <th className="py-2 px-4 text-left">Source Schema Name</th>
+              <th className="py-2 pr-4 text-left">Source Schema Name</th>
               <th className="py-2 px-4 text-left">Is already imported</th>
               <th />
             </tr>
@@ -86,7 +86,7 @@ const SourceSchemasView = () => {
                 key={item.schemaName}
                 className="border-b border-gray-300 last:border-b-0"
               >
-                <td className="py-2 px-4 text-left">{item.schemaName}</td>
+                <td className="py-2 pr-4 text-left">{item.schemaName}</td>
                 <td className="py-2 px-4 text-left">
                   <SvgIcon
                     name={item.alreadyImported ? 'check' : 'close'}

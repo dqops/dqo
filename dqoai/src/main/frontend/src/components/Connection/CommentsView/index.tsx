@@ -63,7 +63,7 @@ const CommentsView = ({
 
   return (
     <div className="p-4">
-      <table className={clsx('my-6 w-full', className)}>
+      <table className={clsx('w-full', className)}>
         <thead>
           <th className="text-left w-full pr-4 py-2">Comment</th>
           <th className="text-left px-8 py-2">Author</th>

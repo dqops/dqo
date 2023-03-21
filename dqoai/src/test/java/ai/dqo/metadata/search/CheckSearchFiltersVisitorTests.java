@@ -151,7 +151,8 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 		this.checkSearchFilters.setEnabled(false);
 		this.tableSpec.setDisabled(false);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.tableSpec, new SearchParameterObject());
-        Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
+        // We want to get disabled checks. If table is enabled, it still can contain disabled checks.
+        Assertions.assertEquals(TreeNodeTraversalResult.TRAVERSE_CHILDREN, treeNodeTraversalResult);
     }
 
     @Test
@@ -189,7 +190,8 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 		this.checkSearchFilters.setEnabled(false);
 		this.columnSpec.setDisabled(false);
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(this.columnSpec, new SearchParameterObject());
-        Assertions.assertEquals(treeNodeTraversalResult, TreeNodeTraversalResult.SKIP_CHILDREN);
+        // We want to get disabled checks. If column is enabled, it still can contain disabled checks.
+        Assertions.assertEquals(TreeNodeTraversalResult.TRAVERSE_CHILDREN, treeNodeTraversalResult);
     }
 
     @Test
@@ -245,7 +247,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptAbstractRootCheckContainerSpec_whenCalledForSelectedColumnCheckOnColumn_thenTraverseChildren() {
         this.structure1Setup();
-        AbstractRootChecksContainerSpec columnCheckContainer = this.columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec columnCheckContainer = this.columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
 
         SearchParameterObject searchParameterObject = new SearchParameterObject();
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(columnCheckContainer, searchParameterObject);

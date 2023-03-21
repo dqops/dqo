@@ -106,8 +106,18 @@ function TreeProvider(props: any) {
       data_clean_job_template: connection.data_clean_job_template,
       open: false
     };
-    setTreeData([...treeData, newNode]);
-    await changeActiveTab(newNode);
+
+    const newTreeDataMaps = [
+      CheckTypes.CHECKS,
+      CheckTypes.SOURCES,
+      CheckTypes.PROFILING,
+      CheckTypes.PARTITION,
+    ].reduce((acc, cur) => ({
+      ...acc,
+      [cur]: [...treeDataMaps[cur], newNode]
+    }), {});
+
+    setTreeDataMaps(newTreeDataMaps);
   };
 
   useEffect(() => {
@@ -193,7 +203,6 @@ function TreeProvider(props: any) {
         open: false
       }
     ];
-    console.log('sourceRoute', sourceRoute)
     if (sourceRoute === CheckTypes.PROFILING) {
       items.push(
         {
@@ -822,7 +831,6 @@ function TreeProvider(props: any) {
   }
 
   const switchTab = (node: CustomTreeNode) => {
-    console.log('node:', node);
     if (!node) return;
     const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {

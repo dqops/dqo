@@ -45,7 +45,7 @@ const ConnectionCommentView = () => {
   };
 
   return (
-    <div>
+    <div className="px-4">
       <ConnectionActionGroup
         onUpdate={onUpdate}
         isUpdated={isUpdatedComments}

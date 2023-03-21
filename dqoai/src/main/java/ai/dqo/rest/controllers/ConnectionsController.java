@@ -20,6 +20,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
+import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -28,6 +29,8 @@ import ai.dqo.rest.models.dictionaries.CommonColumnModel;
 import ai.dqo.rest.models.metadata.ConnectionBasicModel;
 import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import ai.dqo.services.check.CheckService;
+import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,10 +53,13 @@ import java.util.stream.Stream;
 @Api(value = "Connections", description = "Connection management")
 public class ConnectionsController {
     private final UserHomeContextFactory userHomeContextFactory;
+    private final CheckService checkService;
 
     @Autowired
-    public ConnectionsController(UserHomeContextFactory userHomeContextFactory) {
+    public ConnectionsController(UserHomeContextFactory userHomeContextFactory,
+                                 CheckService checkService) {
         this.userHomeContextFactory = userHomeContextFactory;
+        this.checkService = checkService;
     }
 
     /**
@@ -642,6 +648,86 @@ public class ConnectionsController {
         }
         userHomeContext.flush();
 
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Enables a named check on this connection in the locations specified by filter.
+     * Allows for configuring the rules for particular alert levels.
+     * @param connectionName        Connection name.
+     * @param checkName             Check name.
+     * @param updatePatchParameters Check search filters and rules configuration.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/checks/{checkName}/enable")
+    @ApiOperation(value = "enableConnectionChecks", notes = "Enables a named check on this connection in the locations specified by filter")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Checks enabled"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> enableConnectionChecks(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Check name") @PathVariable String checkName,
+            @ApiParam("Check search filters and rules configuration")
+            @RequestBody UIAllChecksPatchParameters updatePatchParameters) {
+        if (updatePatchParameters == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.BAD_REQUEST); // 400 - update patch parameters not supplied
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        updatePatchParameters.getCheckSearchFilters().setConnectionName(connectionName);
+        updatePatchParameters.getCheckSearchFilters().setCheckName(checkName);
+        checkService.updateAllChecksPatch(updatePatchParameters);
+
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+    }
+
+    /**
+     * Disables a named check on this connection in the locations specified by filter.
+     * @param connectionName        Connection name.
+     * @param checkName             Check name.
+     * @param checkSearchFilters    Optional search filters.
+     * @return Empty response.
+     */
+    @PutMapping("/{connectionName}/checks/{checkName}/disable")
+    @ApiOperation(value = "disableConnectionChecks", notes = "Disables a named check on this connection in the locations specified by filter")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Checks disabled"),
+            @ApiResponse(code = 400, message = "Bad request, adjust before retrying"), // TODO: returned when the validation failed
+            @ApiResponse(code = 404, message = "Connection not found"),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
+    })
+    public ResponseEntity<Mono<?>> disableConnectionChecks(
+            @ApiParam("Connection name") @PathVariable String connectionName,
+            @ApiParam("Check name") @PathVariable String checkName,
+            @ApiParam("Optional check search filters")
+            @RequestBody Optional<CheckSearchFilters> checkSearchFilters) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        ConnectionList connections = userHome.getConnections();
+        ConnectionWrapper connectionWrapper = connections.getByObjectName(connectionName, true);
+        if (connectionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the connection was not found
+        }
+
+        CheckSearchFilters filters = checkSearchFilters.orElseGet(CheckSearchFilters::new);
+        filters.setConnectionName(connectionName);
+        filters.setCheckName(checkName);
+
+        checkService.disableChecks(filters);
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
 
