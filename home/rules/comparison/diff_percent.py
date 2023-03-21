@@ -65,9 +65,9 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
     if not hasattr(rule_parameters, 'expected_value') and hasattr(rule_parameters, 'actual_value'):
         return RuleExecutionResult()
 
-    expected_value = None
-    lower_bound = None
+    expected_value = rule_parameters.expected_value
+    lower_bound = - rule_parameters.parameters.max_diff_percent
     upper_bound = rule_parameters.parameters.max_diff_percent
-    passed = 100.0 * abs(rule_parameters.expected_value - rule_parameters.actual_value)/rule_parameters.expected_value <= upper_bound
+    passed = lower_bound <= 100.0 * (rule_parameters.expected_value - rule_parameters.actual_value)/rule_parameters.expected_value <= upper_bound
 
     return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)

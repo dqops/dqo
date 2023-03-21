@@ -36,27 +36,24 @@ public class MaxDiffPercentRuleParametersSpecTests extends BaseTest {
     void executeRule_whenActualValueIsBelowExpectedValue_thenReturnsFailed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(0.8,1.00, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(1.0, ruleExecutionResult.getUpperBound());
-        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(-1.0, ruleExecutionResult.getLowerBound());
     }
 
     @Test
     void executeRule_whenActualValueIsAboveExpectedValue_thenReturnsFailed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.00,0.8, this.sut);
         Assertions.assertFalse(ruleExecutionResult.isPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(1.0, ruleExecutionResult.getUpperBound());
-        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(-1.0, ruleExecutionResult.getLowerBound());
     }
 
     @Test
     void executeRule_whenActualValueIsEqualToExpectedValue_thenReturnsPassed() {
         RuleExecutionResult ruleExecutionResult = PythonRuleRunnerObjectMother.executeBuiltInRule(1.00,1.00, this.sut);
         Assertions.assertTrue(ruleExecutionResult.isPassed());
-        Assertions.assertNull(ruleExecutionResult.getExpectedValue());
         Assertions.assertEquals(1.0, ruleExecutionResult.getUpperBound());
-        Assertions.assertNull(ruleExecutionResult.getLowerBound());
+        Assertions.assertEquals(-1.0, ruleExecutionResult.getLowerBound());
     }
 
 }
