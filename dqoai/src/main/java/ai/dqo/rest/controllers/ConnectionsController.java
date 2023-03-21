@@ -276,13 +276,13 @@ public class ConnectionsController {
     }
 
     /**
-     * Finds common column names that are used on one or more tables. The columns are sorted descending by number of tables (where the column is used) and the column name ascending.
+     * Finds common column names that are used on one or more tables. The columns are sorted in descending order by column name.
      * @param connectionName Connection name.
      * @return Sorted collection of most common columns.
      */
     @GetMapping("/{connectionName}/commoncolumns")
     @ApiOperation(value = "getConnectionCommonColumns", notes = "Finds common column names that are used on one or more tables. " +
-            "The list of columns is sorted by the count of occurrence and the column name.", response = CommonColumnModel[].class)
+            "The list of columns is sorted in descending order by column name.", response = CommonColumnModel[].class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "List of common columns within a connection returned", response = CommonColumnModel[].class),
@@ -316,7 +316,7 @@ public class ConnectionsController {
         }
 
         List<CommonColumnModel> sortedCommonColumnList = foundColumns.values().stream()
-                .sorted()
+                .sorted(Comparator.comparing(CommonColumnModel::getColumnName))
                 .collect(Collectors.toList());
 
         return new ResponseEntity<>(Flux.fromIterable(sortedCommonColumnList), HttpStatus.OK); // 200
