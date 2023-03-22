@@ -39,7 +39,7 @@ public class ParquetPartitionId {
      * @param month The date of the first day of the month.
      */
     public ParquetPartitionId(DqoRoot tableType, String connectionName, PhysicalTableName tableName, LocalDate month) {
-        assert month.getDayOfMonth() == 1;
+        assert month == null || month.getDayOfMonth() == 1;
         this.tableType = tableType;
         this.connectionName = connectionName;
         this.tableName = tableName;

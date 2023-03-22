@@ -30,7 +30,7 @@ import java.util.List;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Data
 public class DeleteStoredDataQueueJobParameters implements Cloneable {
-    @NotNull
+    // @NotNull  // should be NotNull, but there are errors in TypeScript (CheckTableHeader.tsx)
     private String connectionName;
     private String schemaTableName;
     private LocalDate dateStart;
