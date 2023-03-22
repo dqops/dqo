@@ -21,7 +21,7 @@ import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
 /**
  * Service that deletes outdated statistics results.
  */
-public interface StatisticsResultsDeleteService {
+public interface StatisticsDeleteService {
 
     /**
      * Deletes the statistics results from a table, applying specific filters to get the fragment (if necessary).

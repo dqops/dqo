@@ -15,6 +15,9 @@
  */
 package ai.dqo.rest.controllers;
 
+import ai.dqo.core.jobqueue.DqoQueueJobId;
+import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.scheduling.CheckRunRecurringScheduleGroup;
@@ -31,6 +34,7 @@ import ai.dqo.rest.models.metadata.ConnectionModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.check.CheckService;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
+import ai.dqo.services.metadata.ConnectionService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,14 +56,17 @@ import java.util.stream.Stream;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Connections", description = "Connection management")
 public class ConnectionsController {
+    private final ConnectionService connectionService;
     private final UserHomeContextFactory userHomeContextFactory;
     private final CheckService checkService;
 
     @Autowired
-    public ConnectionsController(UserHomeContextFactory userHomeContextFactory,
-                                 CheckService checkService) {
-        this.userHomeContextFactory = userHomeContextFactory;
+    public ConnectionsController(ConnectionService connectionService,
+                                 CheckService checkService,
+                                 UserHomeContextFactory userHomeContextFactory) {
+        this.connectionService = connectionService;
         this.checkService = checkService;
+        this.userHomeContextFactory = userHomeContextFactory;
     }
 
     /**
@@ -742,17 +749,17 @@ public class ConnectionsController {
     /**
      * Deletes a connection.
      * @param connectionName Connection name to delete.
-     * @return Empty response.
+     * @return Deferred operations job id.
      */
     @DeleteMapping("/{connectionName}")
     @ApiOperation(value = "deleteConnection", notes = "Deletes a connection")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Connection successfully deleted"),
+            @ApiResponse(code = 200, message = "Connection successfully deleted", response = DqoQueueJobId.class),
             @ApiResponse(code = 404, message = "Connection not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> deleteConnection(
+    public ResponseEntity<Mono<DqoQueueJobId>> deleteConnection(
             @ApiParam("Connection name") @PathVariable String connectionName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
@@ -763,9 +770,7 @@ public class ConnectionsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        connectionWrapper.markForDeletion(); // will be deleted
-        userHomeContext.flush();
-
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.connectionService.deleteConnection(connectionWrapper);
+        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
     }
 }

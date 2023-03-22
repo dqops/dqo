@@ -18,11 +18,9 @@ package ai.dqo.cli.commands.connection;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.connection.impl.ConnectionService;
+import ai.dqo.cli.commands.connection.impl.ConnectionCliService;
 import ai.dqo.cli.completion.completers.ProviderTypeCompleter;
 import ai.dqo.cli.terminal.TerminalFactory;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.connectors.ProviderType;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import com.google.common.base.Strings;
@@ -32,8 +30,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
-import java.util.LinkedHashMap;
-
 /**
  * Cli command to add a new connection.
  */
@@ -41,16 +37,16 @@ import java.util.LinkedHashMap;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "add", header = "Add a connection with specified details", description = "Creates a new connection to the database with the specified details such as connection name, database type, hostname, username, and password. It allows the user to connect to the database from the application to perform various operations on the database.")
 public class ConnectionAddCliCommand extends BaseCommand implements ICommand {
-    private ConnectionService connectionService;
+    private ConnectionCliService connectionCliService;
     private TerminalFactory terminalFactory;
 
     public ConnectionAddCliCommand() {
     }
 
     @Autowired
-    public ConnectionAddCliCommand(ConnectionService connectionService,
+    public ConnectionAddCliCommand(ConnectionCliService connectionCliService,
                                    TerminalFactory terminalFactory) {
-        this.connectionService = connectionService;
+        this.connectionCliService = connectionCliService;
         this.terminalFactory = terminalFactory;
     }
 
@@ -136,9 +132,9 @@ public class ConnectionAddCliCommand extends BaseCommand implements ICommand {
         ConnectionSpec connectionSpec = this.connection != null ? this.connection : new ConnectionSpec();
         connectionSpec.setProviderType(providerType);
 
-		this.connectionService.promptForConnectionParameters(connectionSpec, this.isHeadless(), this.terminalFactory.getReader(), this.terminalFactory.getWriter());
+		this.connectionCliService.promptForConnectionParameters(connectionSpec, this.isHeadless(), this.terminalFactory.getReader(), this.terminalFactory.getWriter());
 
-        CliOperationStatus cliOperationStatus = this.connectionService.addConnection(this.name, connectionSpec);
+        CliOperationStatus cliOperationStatus = this.connectionCliService.addConnection(this.name, connectionSpec);
         this.terminalFactory.getWriter().writeLine(cliOperationStatus.getMessage());
         return cliOperationStatus.isSuccess() ? 0 : -1;
     }

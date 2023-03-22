@@ -50,6 +50,7 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @SpringBootTest
@@ -75,9 +76,11 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(userConfigurationProperties, dqoConfigurationProperties);
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager, synchronizationStatusTracker);
+        HivePartitionPathUtility hivePartitionPathUtility = new HivePartitionPathUtilityImpl();
 
         this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker);
+                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker,
+                hivePartitionPathUtility);
 
         this.errorsStorageSettings = ErrorsSnapshot.createErrorsStorageSettings();
         this.errorsTableFactory = new ErrorsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());
@@ -87,7 +90,10 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
                 this.errorsTableFactory
         );
 
-        this.sut = new ErrorsDeleteServiceImpl(errorsSnapshotFactory);
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
+                newLockManager, localUserHomeFileStorageService, hivePartitionPathUtility);
+
+        this.sut = new ErrorsDeleteServiceImpl(errorsSnapshotFactory, parquetPartitionMetadataService);
     }
 
     private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
@@ -492,7 +498,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
-            setColumnName("col2");
+            setColumnNames(new ArrayList<>(){{add("col2");}});
             setSensorName("s2");
         }};
 

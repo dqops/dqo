@@ -21,7 +21,6 @@ import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
-import ai.dqo.cli.converters.StringToLocalDateCliConverterAbstract;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthEnd;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthStart;
 import ai.dqo.cli.output.OutputFormatService;
@@ -44,6 +43,8 @@ import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
 import java.time.LocalDate;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * "data clean" 2nd level CLI command that deletes data selectively from the data.
@@ -162,9 +163,9 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
                 this.begin,
                 this.end
         );
-        
+
         deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
-        deleteStoredDataJobParameters.setDeleteProfilingResults(this.deleteStatistics);
+        deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
         deleteStoredDataJobParameters.setDeleteRuleResults(this.deleteRuleResults);
         deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
 
@@ -185,7 +186,8 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
         }
 
         if (!Strings.isNullOrEmpty(this.column)) {
-            deleteStoredDataJobParameters.setColumnName(this.column);
+            List<String> columnNames = new LinkedList<>(){{add(column);}};
+            deleteStoredDataJobParameters.setColumnNames(columnNames);
         }
 
         if (!Strings.isNullOrEmpty(this.sensor)) {
@@ -211,7 +213,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
         if (this.statisticsTarget != null) {
             deleteStoredDataJobParameters.setCollectorTarget(this.statisticsTarget.name());
         }
-        
+
         return deleteStoredDataJobParameters;
     }
 

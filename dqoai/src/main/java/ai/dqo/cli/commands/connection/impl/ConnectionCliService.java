@@ -28,7 +28,7 @@ import ai.dqo.metadata.sources.ConnectionWrapper;
 /**
  * Connection management service.
  */
-public interface ConnectionService {
+public interface ConnectionCliService {
 
     /**
      * Returns cli operation status.

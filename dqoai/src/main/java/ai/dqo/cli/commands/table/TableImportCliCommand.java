@@ -19,7 +19,7 @@ import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.table.impl.TableImportFailedException;
-import ai.dqo.cli.commands.table.impl.TableService;
+import ai.dqo.cli.commands.table.impl.TableCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.SchemaNameCompleter;
@@ -45,7 +45,7 @@ public class TableImportCliCommand extends BaseCommand implements ICommand, ICon
     private TerminalReader terminalReader;
     private TerminalWriter terminalWriter;
     private TerminalTableWritter terminalTableWriter;
-    private TableService tableImportService;
+    private TableCliService tableImportService;
 
     public TableImportCliCommand() {
     }
@@ -54,7 +54,7 @@ public class TableImportCliCommand extends BaseCommand implements ICommand, ICon
     public TableImportCliCommand(TerminalReader terminalReader,
 								 TerminalWriter terminalWriter,
                                  TerminalTableWritter terminalTableWriter,
-								 TableService tableImportService) {
+								 TableCliService tableImportService) {
         this.terminalReader = terminalReader;
         this.terminalWriter = terminalWriter;
         this.terminalTableWriter = terminalTableWriter;

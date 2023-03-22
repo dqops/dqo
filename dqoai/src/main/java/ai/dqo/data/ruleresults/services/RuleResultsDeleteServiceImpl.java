@@ -16,24 +16,29 @@
 
 package ai.dqo.data.ruleresults.services;
 
+import ai.dqo.data.ruleresults.factory.RuleResultsColumnNames;
 import ai.dqo.data.ruleresults.models.RuleResultsFragmentFilter;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
+import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
-import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
     private RuleResultsSnapshotFactory ruleResultsSnapshotFactory;
+    private ParquetPartitionMetadataService parquetPartitionMetadataService;
 
     @Autowired
-    public RuleResultsDeleteServiceImpl(RuleResultsSnapshotFactory ruleResultsSnapshotFactory) {
+    public RuleResultsDeleteServiceImpl(RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
+                                        ParquetPartitionMetadataService parquetPartitionMetadataService) {
         this.ruleResultsSnapshotFactory = ruleResultsSnapshotFactory;
+        this.parquetPartitionMetadataService = parquetPartitionMetadataService;
     }
 
     /**
@@ -42,17 +47,46 @@ public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
      */
     @Override
     public void deleteSelectedRuleResultsFragment(RuleResultsFragmentFilter filter) {
-        Map<String, String> conditions = filter.getColumnConditions();
+        Map<String, String> simpleConditions = filter.getColumnConditions();
+        Map<String, Set<String>> conditions = new HashMap<>();
+        for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
+            String columnName = kv.getKey();
+            String columnValue = kv.getValue();
+            Set<String> wrappedValue = new HashSet<>(){{add(columnValue);}};
+            conditions.put(columnName, wrappedValue);
+        }
+        if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
+            conditions.put(RuleResultsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
+        }
 
-        RuleResultsSnapshot currentSnapshot = this.ruleResultsSnapshotFactory.createSnapshot(
-                filter.getTableSearchFilters().getConnectionName(),
-                PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName())
-        );
+        Collection<PhysicalTableName> tablesToDelete;
+        if (filter.getTableSearchFilters().getSchemaTableName() == null) {
+            tablesToDelete = this.parquetPartitionMetadataService.listTablesForConnection(
+                    filter.getTableSearchFilters().getConnectionName(),
+                    RuleResultsSnapshot.createRuleResultsStorageSettings()
+            );
+        } else {
+            tablesToDelete = new LinkedList<>();
+            tablesToDelete.add(PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName()));
+        }
 
-        LocalDate startDeletionRange = filter.getDateStart();
-        LocalDate endDeletionRange = filter.getDateEnd();
+        if (tablesToDelete == null) {
+            // No matching tables specified or found.
+            return;
+        }
 
-        currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
-        currentSnapshot.save();
+        Collection<RuleResultsSnapshot> ruleResultsSnapshots = tablesToDelete.stream()
+                .map(tableName -> this.ruleResultsSnapshotFactory.createSnapshot(
+                        filter.getTableSearchFilters().getConnectionName(),
+                        tableName
+                )).collect(Collectors.toList());
+
+        for (RuleResultsSnapshot currentSnapshot: ruleResultsSnapshots) {
+            LocalDate startDeletionRange = filter.getDateStart();
+            LocalDate endDeletionRange = filter.getDateEnd();
+
+            currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+            currentSnapshot.save();
+        }
     }
 }

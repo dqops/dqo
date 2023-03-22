@@ -22,6 +22,7 @@ import lombok.Data;
 import org.apache.parquet.Strings;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
@@ -30,14 +31,10 @@ import java.util.Objects;
  */
 @Data
 public class StatisticsResultsFragmentFilter extends ParquetDataFragmentFilter {
+    private List<String> columnNames;
     private String collectorCategory;
-
     private String collectorName;
-
     private String collectorTarget;
-
-    private String columnName;
-
     private String dataStreamName;
     private String sensorName;
 
@@ -56,9 +53,6 @@ public class StatisticsResultsFragmentFilter extends ParquetDataFragmentFilter {
         }
         if (!Strings.isNullOrEmpty(collectorTarget)) {
             result.put(StatisticsColumnNames.COLLECTOR_TARGET_COLUMN_NAME, collectorTarget);
-        }
-        if (!Strings.isNullOrEmpty(columnName)) {
-            result.put(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
         }
         if (!Strings.isNullOrEmpty(dataStreamName)) {
             result.put(StatisticsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
@@ -82,7 +76,7 @@ public class StatisticsResultsFragmentFilter extends ParquetDataFragmentFilter {
             return false;
         if (!Objects.equals(collectorName, that.collectorName)) return false;
         if (!Objects.equals(collectorTarget, that.collectorTarget)) return false;
-        if (!Objects.equals(columnName, that.columnName)) return false;
+        if (!Objects.equals(columnNames, that.columnNames)) return false;
         if (!Objects.equals(dataStreamName, that.dataStreamName))
             return false;
         return Objects.equals(sensorName, that.sensorName);
@@ -94,7 +88,7 @@ public class StatisticsResultsFragmentFilter extends ParquetDataFragmentFilter {
         result = 31 * result + (collectorCategory != null ? collectorCategory.hashCode() : 0);
         result = 31 * result + (collectorName != null ? collectorName.hashCode() : 0);
         result = 31 * result + (collectorTarget != null ? collectorTarget.hashCode() : 0);
-        result = 31 * result + (columnName != null ? columnName.hashCode() : 0);
+        result = 31 * result + (columnNames != null ? columnNames.hashCode() : 0);
         result = 31 * result + (dataStreamName != null ? dataStreamName.hashCode() : 0);
         result = 31 * result + (sensorName != null ? sensorName.hashCode() : 0);
         return result;

@@ -18,7 +18,7 @@ package ai.dqo.cli.commands.column;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.column.impl.ColumnService;
+import ai.dqo.cli.commands.column.impl.ColumnCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
@@ -39,7 +39,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "enable", header = "Enable the column(s) filtered by the given conditions", description = "Enable one or more columns in a table based on a specified condition. This command will restore the data in the previously disabled columns.")
 public class ColumnEnableCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
-	private ColumnService columnService;
+	private ColumnCliService columnCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -49,10 +49,10 @@ public class ColumnEnableCliCommand extends BaseCommand implements ICommand, ICo
 	@Autowired
 	public ColumnEnableCliCommand(TerminalReader terminalReader,
 								   TerminalWriter terminalWriter,
-								   ColumnService columnService) {
+								   ColumnCliService columnCliService) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
-		this.columnService = columnService;
+		this.columnCliService = columnCliService;
 	}
 
 	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
@@ -124,7 +124,7 @@ public class ColumnEnableCliCommand extends BaseCommand implements ICommand, ICo
 	@Override
 	public Integer call() throws Exception {
 
-		CliOperationStatus cliOperationStatus = columnService.setDisableTo(connectionName, fullTableName, columnName, false);
+		CliOperationStatus cliOperationStatus = columnCliService.setDisableTo(connectionName, fullTableName, columnName, false);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}

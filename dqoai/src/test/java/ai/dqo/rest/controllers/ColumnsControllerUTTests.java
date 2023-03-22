@@ -28,6 +28,10 @@ import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesS
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
 import ai.dqo.connectors.ProviderType;
+import ai.dqo.core.jobqueue.DqoJobQueue;
+import ai.dqo.core.jobqueue.DqoJobQueueImpl;
+import ai.dqo.core.jobqueue.DqoQueueJobFactory;
+import ai.dqo.core.jobqueue.DqoQueueJobFactoryImpl;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
@@ -48,6 +52,10 @@ import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
 import ai.dqo.sampledata.SampleCsvFileNames;
 import ai.dqo.sampledata.SampleTableMetadata;
 import ai.dqo.sampledata.SampleTableMetadataObjectMother;
+import ai.dqo.services.metadata.ColumnService;
+import ai.dqo.services.metadata.ColumnServiceImpl;
+import ai.dqo.utils.BeanFactoryObjectMother;
+import ai.dqo.utils.jobs.DqoJobQueueObjectMother;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,13 +79,17 @@ public class ColumnsControllerUTTests extends BaseTest {
     
     @BeforeEach
     void setUp() {
+        this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
+        DqoQueueJobFactory dqoQueueJobFactory = new DqoQueueJobFactoryImpl(BeanFactoryObjectMother.getBeanFactory());
+        DqoJobQueue dqoJobQueue = DqoJobQueueObjectMother.getDefault();
+        ColumnService columnService = new ColumnServiceImpl(this.userHomeContextFactory, dqoQueueJobFactory, dqoJobQueue);
+
         ReflectionServiceImpl reflectionService = new ReflectionServiceImpl();
         SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
                 reflectionService, new SensorDefinitionFindServiceImpl());
         UiToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
-        this.userHomeContextFactory = UserHomeContextFactoryObjectMother.createWithInMemoryContext();
         DqoHomeContextFactory dqoHomeContextFactory = DqoHomeContextFactoryObjectMother.getRealDqoHomeContextFactory();
-        this.sut = new ColumnsController(this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService, null);
+        this.sut = new ColumnsController(columnService, this.userHomeContextFactory, dqoHomeContextFactory, specToUiCheckMappingService, uiToSpecCheckMappingService, null);
         this.userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         this.sampleTable = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_one_row_per_day, ProviderType.bigquery);
     }
