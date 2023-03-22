@@ -37,11 +37,23 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
     public static final ChildHierarchyNodeFieldMapImpl<ColumnProfilingAccuracyChecksSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckCategorySpec.FIELDS) {
         {
             put("total_sum_match_percent", o -> o.totalSumMatchPercent);
+            put("min_match_percent", o -> o.minMatchPercent);
+            put("max_match_percent", o -> o.maxMatchPercent);
+            put("average_match_percent", o -> o.averageMatchPercent);
         }
     };
 
     @JsonPropertyDescription("Verifies that percentage of the difference in sum of a column in a table and sum of a column of another table does not exceed the set number.")
     private ColumnAccuracyTotalSumMatchPercentCheckSpec totalSumMatchPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number.")
+    private ColumnAccuracyMinMatchPercentCheckSpec minMatchPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of difference in max of a column in a table and max of a column of another table does not exceed the set number.")
+    private ColumnAccuracyMaxMatchPercentCheckSpec maxMatchPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number.")
+    private ColumnAccuracyAverageMatchPercentCheckSpec averageMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
@@ -59,6 +71,60 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.totalSumMatchPercent, totalSumMatchPercent));
         this.totalSumMatchPercent = totalSumMatchPercent;
         propagateHierarchyIdToField(totalSumMatchPercent, "total_sum_match_percent");
+    }
+
+    /**
+     * Returns an accuracy min percent check specification.
+     * @return Accuracy min percent check specification.
+     */
+    public ColumnAccuracyMinMatchPercentCheckSpec getMinMatchPercent() {
+        return minMatchPercent;
+    }
+
+    /**
+     * Sets a new definition of an accuracy min percent check.
+     * @param minMatchPercent Accuracy min percent check specification.
+     */
+    public void setMinMatchPercent(ColumnAccuracyMinMatchPercentCheckSpec minMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.minMatchPercent, minMatchPercent));
+        this.minMatchPercent = minMatchPercent;
+        propagateHierarchyIdToField(minMatchPercent, "min_match_percent");
+    }
+
+    /**
+     * Returns an accuracy max percent check specification.
+     * @return Accuracy max percent check specification.
+     */
+    public ColumnAccuracyMaxMatchPercentCheckSpec getMaxMatchPercent() {
+        return maxMatchPercent;
+    }
+
+    /**
+     * Sets a new definition of an accuracy max percent check.
+     * @param maxMatchPercent Accuracy max percent check specification.
+     */
+    public void setMaxMatchPercent(ColumnAccuracyMaxMatchPercentCheckSpec maxMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.maxMatchPercent, maxMatchPercent));
+        this.maxMatchPercent = maxMatchPercent;
+        propagateHierarchyIdToField(maxMatchPercent, "max_match_percent");
+    }
+
+    /**
+     * Returns an accuracy average percent check specification.
+     * @return Accuracy average percent check specification.
+     */
+    public ColumnAccuracyAverageMatchPercentCheckSpec getAverageMatchPercent() {
+        return averageMatchPercent;
+    }
+
+    /**
+     * Sets a new definition of an accuracy average percent check.
+     * @param averageMatchPercent Accuracy average percent check specification.
+     */
+    public void setAverageMatchPercent(ColumnAccuracyAverageMatchPercentCheckSpec averageMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.averageMatchPercent, averageMatchPercent));
+        this.averageMatchPercent = averageMatchPercent;
+        propagateHierarchyIdToField(averageMatchPercent, "average_match_percent");
     }
 
     /**
