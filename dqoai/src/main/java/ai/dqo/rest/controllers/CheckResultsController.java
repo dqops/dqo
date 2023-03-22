@@ -19,9 +19,9 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.data.ruleresults.services.CheckResultsDetailedParameters;
-import ai.dqo.data.ruleresults.services.RuleResultsDataService;
-import ai.dqo.data.ruleresults.services.models.CheckResultsDetailedDataModel;
+import ai.dqo.data.checkresults.services.CheckResultsDetailedParameters;
+import ai.dqo.data.checkresults.services.CheckResultsDataService;
+import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -46,18 +46,18 @@ import java.util.Optional;
 @Api(value = "CheckResults", description = "Returns the complete results of executed checks on tables and columns.")
 public class CheckResultsController {
     private UserHomeContextFactory userHomeContextFactory;
-    private RuleResultsDataService ruleResultsDataService;
+    private CheckResultsDataService checkResultsDataService;
 
     /**
      * Dependency injection constructor.
      * @param userHomeContextFactory User home context factory.
-     * @param ruleResultsDataService Rule results data service.
+     * @param checkResultsDataService Rule results data service.
      */
     @Autowired
     public CheckResultsController(UserHomeContextFactory userHomeContextFactory,
-                                  RuleResultsDataService ruleResultsDataService) {
+                                  CheckResultsDataService checkResultsDataService) {
         this.userHomeContextFactory = userHomeContextFactory;
-        this.ruleResultsDataService = ruleResultsDataService;
+        this.checkResultsDataService = checkResultsDataService;
     }
 
     /**
@@ -113,7 +113,7 @@ public class CheckResultsController {
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 checks, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
@@ -173,7 +173,7 @@ public class CheckResultsController {
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 recurringPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
@@ -232,7 +232,7 @@ public class CheckResultsController {
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 partitionedCheckPartition, new CheckResultsDetailedParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
@@ -298,7 +298,7 @@ public class CheckResultsController {
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 checks, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
@@ -365,7 +365,7 @@ public class CheckResultsController {
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 recurringPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }
@@ -432,7 +432,7 @@ public class CheckResultsController {
         monthStart.ifPresent(loadParams::setStartMonth);
         monthEnd.ifPresent(loadParams::setEndMonth);
 
-        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.ruleResultsDataService.readCheckStatusesDetailed(
+        CheckResultsDetailedDataModel[] checkResultsDetailedDataModels = this.checkResultsDataService.readCheckStatusesDetailed(
                 partitionedCheckPartition, loadParams);
         return new ResponseEntity<>(Flux.fromArray(checkResultsDetailedDataModels), HttpStatus.OK); // 200
     }

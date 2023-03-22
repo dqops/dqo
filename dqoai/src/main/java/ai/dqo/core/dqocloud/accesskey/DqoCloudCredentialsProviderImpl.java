@@ -56,7 +56,7 @@ public class DqoCloudCredentialsProviderImpl implements DqoCloudCredentialsProvi
             case data_sensor_readouts:
                 return accessTokenIssueApi.issueBucketSensorReadoutsRWAccessToken();
 
-            case data_rule_results:
+            case data_check_results:
                 return accessTokenIssueApi.issueBucketRuleResultsRWAccessToken();
 
             case data_errors:

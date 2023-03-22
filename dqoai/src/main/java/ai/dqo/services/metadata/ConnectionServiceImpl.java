@@ -89,7 +89,7 @@ public class ConnectionServiceImpl implements ConnectionService {
             DeleteStoredDataQueueJobParameters param = new DeleteStoredDataQueueJobParameters() {{
                 setConnectionName(connection);
                 setDeleteStatistics(true);
-                setDeleteRuleResults(true);
+                setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
                 setDeleteErrors(true);
             }};

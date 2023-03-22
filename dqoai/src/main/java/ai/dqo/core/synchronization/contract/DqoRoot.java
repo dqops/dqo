@@ -32,9 +32,9 @@ public enum DqoRoot {
     data_sensor_readouts,
 
     /**
-     * Parquet files with the rule evaluation results (alerts and passed data quality checks).
+     * Parquet files with the check evaluation results (alerts and passed data quality checks).
      */
-    data_rule_results,
+    data_check_results,
 
     /**
      * Parquet files with the statistics results (basic profiler results).
@@ -107,8 +107,8 @@ public enum DqoRoot {
             if (Objects.equals(folder2, BuiltInFolderNames.SENSOR_READOUTS)) {
                 return data_sensor_readouts;
             }
-            else if (Objects.equals(folder2, BuiltInFolderNames.RULE_RESULTS)) {
-                return data_rule_results;
+            else if (Objects.equals(folder2, BuiltInFolderNames.CHECK_RESULTS)) {
+                return data_check_results;
             }
             else if (Objects.equals(folder2, BuiltInFolderNames.STATISTICS)) {
                 return data_statistics;

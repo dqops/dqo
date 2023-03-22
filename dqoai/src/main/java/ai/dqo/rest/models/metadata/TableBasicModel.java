@@ -26,7 +26,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
-import org.apache.http.annotation.Obsolete;
 
 /**
  * Table basic model returned by the rest api that is limited only to the basic fields, excluding nested nodes.
@@ -206,7 +205,7 @@ public class TableBasicModel {
 
                 setDeleteStatistics(true);
                 setDeleteErrors(true);
-                setDeleteRuleResults(true);
+                setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
             }});
         }};

@@ -128,7 +128,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         synchronizeFolder(DqoRoot.sensors, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.rules, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_rule_results, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_check_results, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.data_statistics, synchronizationDirection, synchronizationListener);
     }
@@ -142,7 +142,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
     @Override
     public void synchronizeData(FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener) {
         synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_rule_results, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_check_results, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.data_statistics, synchronizationDirection, synchronizationListener);
     }

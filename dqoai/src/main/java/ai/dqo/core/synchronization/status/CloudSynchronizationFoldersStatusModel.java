@@ -95,7 +95,7 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 return sources;
             case data_sensor_readouts:
                 return dataSensorReadouts;
-            case data_rule_results:
+            case data_check_results:
                 return dataRuleResults;
             case data_errors:
                 return dataErrors;
@@ -128,7 +128,7 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
             case data_sensor_readouts:
                 this.dataSensorReadouts = newStatus;
                 return;
-            case data_rule_results:
+            case data_check_results:
                 this.dataRuleResults = newStatus;
                 return;
             case data_errors:

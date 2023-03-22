@@ -93,7 +93,7 @@ public class TableServiceImpl implements TableService {
                 setConnectionName(connection);
                 setSchemaTableName(table);
                 setDeleteStatistics(true);
-                setDeleteRuleResults(true);
+                setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
                 setDeleteErrors(true);
             }};
