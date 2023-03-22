@@ -18,7 +18,7 @@ const Tree = () => {
 
   const handleNodeClick = (node: CustomTreeNode) => {
     switchTab(node);
-    changeActiveTab(node);
+    changeActiveTab(node, true);
   };
 
   const groupedData = groupBy(treeData, 'parentId');
