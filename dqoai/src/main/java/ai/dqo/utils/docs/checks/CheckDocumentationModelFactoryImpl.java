@@ -28,6 +28,7 @@ import ai.dqo.connectors.redshift.RedshiftConnectionProvider;
 import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
+import ai.dqo.connectors.sqlserver.SqlServerConnectionProvider;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderParameters;
@@ -523,6 +524,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 return PostgresqlConnectionProvider.DIALECT_SETTINGS;
             case redshift:
                 return RedshiftConnectionProvider.DIALECT_SETTINGS;
+            case sqlserver:
+                return SqlServerConnectionProvider.DIALECT_SETTINGS;
             default:
                 throw new DqoRuntimeException("Missing configuration of the dialect settings for the provider " + providerType + ", please add it here");
         }

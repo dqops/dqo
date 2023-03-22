@@ -82,6 +82,11 @@ public class SensorReadoutsColumnNames {
     public static final String TABLE_NAME_COLUMN_NAME = CommonColumnNames.TABLE_NAME_COLUMN_NAME;
 
     /**
+     * Column name for a table name pattern.
+     */
+    public static final String TABLE_NAME_PATTERN_COLUMN_NAME = CommonColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME;
+
+    /**
      * Column name for a table stage.
      */
     public static final String TABLE_STAGE_COLUMN_NAME = CommonColumnNames.TABLE_STAGE_COLUMN_NAME;
@@ -95,6 +100,11 @@ public class SensorReadoutsColumnNames {
      * Column name for a column name.
      */
     public static final String COLUMN_NAME_COLUMN_NAME = CommonColumnNames.COLUMN_NAME_COLUMN_NAME;
+
+    /**
+     * Column name for a column name pattern.
+     */
+    public static final String COLUMN_NAME_PATTERN_COLUMN_NAME = CommonColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME;
 
     /**
      * Column name for a check hash.
