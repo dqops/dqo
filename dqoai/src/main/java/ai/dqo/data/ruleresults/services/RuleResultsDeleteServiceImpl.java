@@ -20,20 +20,25 @@ import ai.dqo.data.ruleresults.factory.RuleResultsColumnNames;
 import ai.dqo.data.ruleresults.models.RuleResultsFragmentFilter;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
 import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
+import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
     private RuleResultsSnapshotFactory ruleResultsSnapshotFactory;
+    private ParquetPartitionMetadataService parquetPartitionMetadataService;
 
     @Autowired
-    public RuleResultsDeleteServiceImpl(RuleResultsSnapshotFactory ruleResultsSnapshotFactory) {
+    public RuleResultsDeleteServiceImpl(RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
+                                        ParquetPartitionMetadataService parquetPartitionMetadataService) {
         this.ruleResultsSnapshotFactory = ruleResultsSnapshotFactory;
+        this.parquetPartitionMetadataService = parquetPartitionMetadataService;
     }
 
     /**
@@ -54,15 +59,34 @@ public class RuleResultsDeleteServiceImpl implements RuleResultsDeleteService {
             conditions.put(RuleResultsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
 
-        RuleResultsSnapshot currentSnapshot = this.ruleResultsSnapshotFactory.createSnapshot(
-                filter.getTableSearchFilters().getConnectionName(),
-                PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName())
-        );
+        Collection<PhysicalTableName> tablesToDelete;
+        if (filter.getTableSearchFilters().getSchemaTableName() == null) {
+            tablesToDelete = this.parquetPartitionMetadataService.listTablesForConnection(
+                    filter.getTableSearchFilters().getConnectionName(),
+                    RuleResultsSnapshot.createRuleResultsStorageSettings()
+            );
+        } else {
+            tablesToDelete = new LinkedList<>();
+            tablesToDelete.add(PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName()));
+        }
 
-        LocalDate startDeletionRange = filter.getDateStart();
-        LocalDate endDeletionRange = filter.getDateEnd();
+        if (tablesToDelete == null) {
+            // No matching tables specified or found.
+            return;
+        }
 
-        currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
-        currentSnapshot.save();
+        Collection<RuleResultsSnapshot> ruleResultsSnapshots = tablesToDelete.stream()
+                .map(tableName -> this.ruleResultsSnapshotFactory.createSnapshot(
+                        filter.getTableSearchFilters().getConnectionName(),
+                        tableName
+                )).collect(Collectors.toList());
+
+        for (RuleResultsSnapshot currentSnapshot: ruleResultsSnapshots) {
+            LocalDate startDeletionRange = filter.getDateStart();
+            LocalDate endDeletionRange = filter.getDateEnd();
+
+            currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+            currentSnapshot.save();
+        }
     }
 }

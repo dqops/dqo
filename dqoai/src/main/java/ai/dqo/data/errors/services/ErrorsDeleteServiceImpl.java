@@ -71,6 +71,11 @@ public class ErrorsDeleteServiceImpl implements ErrorsDeleteService {
             tablesToDelete.add(PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName()));
         }
 
+        if (tablesToDelete == null) {
+            // No matching tables specified or found.
+            return;
+        }
+
         Collection<ErrorsSnapshot> errorsSnapshots = tablesToDelete.stream()
                 .map(tableName -> this.errorsSnapshotFactory.createSnapshot(
                         filter.getTableSearchFilters().getConnectionName(),

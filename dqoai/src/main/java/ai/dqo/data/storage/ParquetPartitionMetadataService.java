@@ -29,7 +29,7 @@ public interface ParquetPartitionMetadataService {
      *
      * @param connectionName  Connection name.
      * @param storageSettings Storage settings that identify the target partition type.
-     * @return Returns a list of physical table names that are currently stored for the connection.
+     * @return Returns a list of physical table names that are currently stored for the connection. Null if connection not found.
      */
     List<PhysicalTableName> listTablesForConnection(String connectionName,
                                                     FileStorageSettings storageSettings);

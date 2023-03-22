@@ -20,15 +20,14 @@ import ai.dqo.data.statistics.factory.StatisticsColumnNames;
 import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactory;
+import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Service that deletes statistics data from parquet files.
@@ -36,10 +35,13 @@ import java.util.Set;
 @Service
 public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
     private StatisticsSnapshotFactory statisticsSnapshotFactory;
+    private ParquetPartitionMetadataService parquetPartitionMetadataService;
 
     @Autowired
-    public StatisticsDeleteServiceImpl(StatisticsSnapshotFactory statisticsSnapshotFactory) {
+    public StatisticsDeleteServiceImpl(StatisticsSnapshotFactory statisticsSnapshotFactory,
+                                       ParquetPartitionMetadataService parquetPartitionMetadataService) {
         this.statisticsSnapshotFactory = statisticsSnapshotFactory;
+        this.parquetPartitionMetadataService = parquetPartitionMetadataService;
     }
 
     /**
@@ -60,15 +62,34 @@ public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
             conditions.put(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
 
-        StatisticsSnapshot currentSnapshot = this.statisticsSnapshotFactory.createSnapshot(
-                filter.getTableSearchFilters().getConnectionName(),
-                PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName())
-        );
+        Collection<PhysicalTableName> tablesToDelete;
+        if (filter.getTableSearchFilters().getSchemaTableName() == null) {
+            tablesToDelete = this.parquetPartitionMetadataService.listTablesForConnection(
+                    filter.getTableSearchFilters().getConnectionName(),
+                    StatisticsSnapshot.createStatisticsStorageSettings()
+            );
+        } else {
+            tablesToDelete = new LinkedList<>();
+            tablesToDelete.add(PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName()));
+        }
 
-        LocalDate startDeletionRange = filter.getDateStart();
-        LocalDate endDeletionRange = filter.getDateEnd();
+        if (tablesToDelete == null) {
+            // No matching tables specified or found.
+            return;
+        }
 
-        currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
-        currentSnapshot.save();
+        Collection<StatisticsSnapshot> statisticsSnapshots = tablesToDelete.stream()
+                .map(tableName -> this.statisticsSnapshotFactory.createSnapshot(
+                        filter.getTableSearchFilters().getConnectionName(),
+                        tableName
+                )).collect(Collectors.toList());
+
+        for (StatisticsSnapshot currentSnapshot: statisticsSnapshots) {
+            LocalDate startDeletionRange = filter.getDateStart();
+            LocalDate endDeletionRange = filter.getDateEnd();
+
+            currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+            currentSnapshot.save();
+        }
     }
 }

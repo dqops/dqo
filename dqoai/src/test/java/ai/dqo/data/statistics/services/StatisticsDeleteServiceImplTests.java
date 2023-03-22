@@ -81,15 +81,18 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
                 HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker,
                 hivePartitionPathUtility);
 
-        this.profilingResultsStorageSettings = StatisticsSnapshot.createProfilingResultsStorageSettings();
+        this.profilingResultsStorageSettings = StatisticsSnapshot.createStatisticsStorageSettings();
         this.statisticsResultsTableFactory = new StatisticsResultsTableFactoryImpl();
 
         StatisticsSnapshotFactory statisticsSnapshotFactory = new StatisticsSnapshotFactoryImpl(
                 this.parquetPartitionStorageService,
                 this.statisticsResultsTableFactory
         );
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
+                newLockManager, localUserHomeFileStorageService, hivePartitionPathUtility);
 
-        this.sut = new StatisticsDeleteServiceImpl(statisticsSnapshotFactory);
+        this.sut = new StatisticsDeleteServiceImpl(statisticsSnapshotFactory,
+                                                   parquetPartitionMetadataService);
     }
 
     private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {

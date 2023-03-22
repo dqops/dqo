@@ -44,7 +44,7 @@ public class StatisticsSnapshot extends TableDataSnapshot {
                               PhysicalTableName tableName,
                               ParquetPartitionStorageService storageService,
                               Table newResults) {
-        super(connectionName, tableName, storageService, createProfilingResultsStorageSettings(), newResults);
+        super(connectionName, tableName, storageService, createStatisticsStorageSettings(), newResults);
     }
 
     /**
@@ -60,14 +60,14 @@ public class StatisticsSnapshot extends TableDataSnapshot {
                               ParquetPartitionStorageService storageService,
                               String[] columnNames,
                               Table tableResultsSample) {
-        super(connectionName, tableName, storageService, createProfilingResultsStorageSettings(), columnNames, tableResultsSample);
+        super(connectionName, tableName, storageService, createStatisticsStorageSettings(), columnNames, tableResultsSample);
     }
 
     /**
-     * Creates the storage settings for storing the profiling results.
+     * Creates the storage settings for storing the statistics results.
      * @return Storage settings.
      */
-    public static FileStorageSettings createProfilingResultsStorageSettings() {
+    public static FileStorageSettings createStatisticsStorageSettings() {
         return new FileStorageSettings(DqoRoot.data_statistics,
                 BuiltInFolderNames.STATISTICS,
                 PARQUET_FILE_NAME,

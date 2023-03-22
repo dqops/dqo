@@ -88,7 +88,10 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
                 this.parquetPartitionStorageService,
                 this.sensorReadoutsTableFactory);
 
-        this.sut = new SensorReadoutsDeleteServiceImpl(sensorReadoutsSnapshotFactory);
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
+                newLockManager, localUserHomeFileStorageService, hivePartitionPathUtility);
+        this.sut = new SensorReadoutsDeleteServiceImpl(sensorReadoutsSnapshotFactory,
+                                                       parquetPartitionMetadataService);
     }
 
     private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {

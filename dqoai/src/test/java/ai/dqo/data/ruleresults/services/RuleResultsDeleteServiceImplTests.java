@@ -89,7 +89,11 @@ public class RuleResultsDeleteServiceImplTests extends BaseTest {
                 this.parquetPartitionStorageService,
                 this.ruleResultsTableFactory);
 
-        this.sut = new RuleResultsDeleteServiceImpl(ruleResultsSnapshotFactory);
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
+                newLockManager, localUserHomeFileStorageService, hivePartitionPathUtility);
+
+        this.sut = new RuleResultsDeleteServiceImpl(ruleResultsSnapshotFactory,
+                                                    parquetPartitionMetadataService);
     }
 
     private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {

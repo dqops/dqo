@@ -20,23 +20,25 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
+import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteService {
     private SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory;
+    private ParquetPartitionMetadataService parquetPartitionMetadataService;
 
     @Autowired
-    public SensorReadoutsDeleteServiceImpl(SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory) {
+    public SensorReadoutsDeleteServiceImpl(SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory,
+                                           ParquetPartitionMetadataService parquetPartitionMetadataService) {
         this.sensorReadoutsSnapshotFactory = sensorReadoutsSnapshotFactory;
+        this.parquetPartitionMetadataService = parquetPartitionMetadataService;
     }
 
     /**
@@ -57,15 +59,34 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
             conditions.put(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
 
-        SensorReadoutsSnapshot currentSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(
-                filter.getTableSearchFilters().getConnectionName(),
-                PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName())
-        );
+        Collection<PhysicalTableName> tablesToDelete;
+        if (filter.getTableSearchFilters().getSchemaTableName() == null) {
+            tablesToDelete = this.parquetPartitionMetadataService.listTablesForConnection(
+                    filter.getTableSearchFilters().getConnectionName(),
+                    SensorReadoutsSnapshot.createSensorReadoutsStorageSettings()
+            );
+        } else {
+            tablesToDelete = new LinkedList<>();
+            tablesToDelete.add(PhysicalTableName.fromSchemaTableFilter(filter.getTableSearchFilters().getSchemaTableName()));
+        }
 
-        LocalDate startDeletionRange = filter.getDateStart();
-        LocalDate endDeletionRange = filter.getDateEnd();
+        if (tablesToDelete == null) {
+            // No matching tables specified or found.
+            return;
+        }
 
-        currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
-        currentSnapshot.save();
+        Collection<SensorReadoutsSnapshot> readoutsSnapshots = tablesToDelete.stream()
+                .map(tableName -> this.sensorReadoutsSnapshotFactory.createSnapshot(
+                        filter.getTableSearchFilters().getConnectionName(),
+                        tableName
+                )).collect(Collectors.toList());
+
+        for (SensorReadoutsSnapshot currentSnapshot: readoutsSnapshots) {
+            LocalDate startDeletionRange = filter.getDateStart();
+            LocalDate endDeletionRange = filter.getDateEnd();
+
+            currentSnapshot.markSelectedForDeletion(startDeletionRange, endDeletionRange, conditions);
+            currentSnapshot.save();
+        }
     }
 }
