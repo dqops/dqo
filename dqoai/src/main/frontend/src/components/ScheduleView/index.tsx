@@ -137,10 +137,12 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
               <div>Disable schedule:</div>
             </td>
             <td className="px-4 py-2">
-              <Checkbox
-                checked={schedule?.disabled}
-                onChange={(value) => handleChange({ disabled: value })}
-              />
+              <div className="flex">
+                <Checkbox
+                  checked={schedule?.disabled}
+                  onChange={(value) => handleChange({ disabled: value })}
+                />
+              </div>
             </td>
           </tr>
         </tbody>

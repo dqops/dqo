@@ -29,7 +29,7 @@ const Checkbox = ({
   checkClassName,
 }: CheckboxProps) => {
   return (
-    <label className={clsx('relative cursor-pointer rounded-sm inline-flex items-center select-none', className, labelPosition === "left" ? 'flex-row-reverse' : '' )}>
+    <label className={clsx('block relative cursor-pointer rounded-sm inline-flex items-center select-none', className, labelPosition === "left" ? 'flex-row-reverse' : '' )}>
       <div className="relative">
         <input
           disabled={disabled}

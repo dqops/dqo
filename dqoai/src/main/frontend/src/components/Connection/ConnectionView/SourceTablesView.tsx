@@ -108,10 +108,12 @@ const SourceSchemasView = ({
                 className="border-b border-gray-300 last:border-b-0"
               >
                 <td className="py-2 px-4 text-left">
-                  <Checkbox
-                    onChange={() => onSelectChange(item.tableName ?? '')}
-                    checked={selectedTables.indexOf(item.tableName ?? '') > -1}
-                  />
+                  <div className="flex">
+                    <Checkbox
+                      onChange={() => onSelectChange(item.tableName ?? '')}
+                      checked={selectedTables.indexOf(item.tableName ?? '') > -1}
+                    />
+                  </div>
                 </td>
                 <td className="py-2 px-4 text-left">{item.tableName}</td>
                 <td className="py-2 px-4 text-left">

@@ -109,10 +109,12 @@ const TableDetails = ({
           <tr>
             <td className="px-4 py-2">Disable Data Quality Checks</td>
             <td className="px-4 py-2">
-              <Checkbox
-                onChange={(value) => handleChange({ disabled: value })}
-                checked={columnBasic?.disabled}
-              />
+              <div className="flex">
+                <Checkbox
+                  onChange={(value) => handleChange({ disabled: value })}
+                  checked={columnBasic?.disabled}
+                />
+              </div>
             </td>
           </tr>
           <tr>
