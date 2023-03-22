@@ -37,5 +37,11 @@ public enum DqoCloudLimit {
      * Tables per connections limit.
      */
     @JsonProperty("tcl")
-    CONNECTION_TABLES_LIMIT
+    CONNECTION_TABLES_LIMIT,
+
+    /**
+     * Total tables limit.
+     */
+    @JsonProperty("tl")
+    TABLES_LIMIT
 }
