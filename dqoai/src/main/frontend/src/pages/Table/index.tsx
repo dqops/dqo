@@ -62,8 +62,8 @@ const TablePage = () => {
     isUpdatedSchedule,
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.table);
-  const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.CHECKS, [checkTypes]);
-  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITION, [checkTypes]);
+  const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.RECURRING, [checkTypes]);
+  const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITIONED, [checkTypes]);
   const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
   const showAllSubTabs = useMemo(
     () => !isRecurringOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,

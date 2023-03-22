@@ -1517,12 +1517,20 @@ public class TablesController {
                 schedules.setProfiling(newScheduleSpec);
                 break;
 
-            case daily:
-                schedules.setDaily(newScheduleSpec);
+            case recurring_daily:
+                schedules.setRecurringDaily(newScheduleSpec);
                 break;
 
-            case monthly:
-                schedules.setMonthly(newScheduleSpec);
+            case recurring_monthly:
+                schedules.setRecurringMonthly(newScheduleSpec);
+                break;
+
+            case partitioned_daily:
+                schedules.setPartitionedDaily(newScheduleSpec);
+                break;
+
+            case partitioned_monthly:
+                schedules.setPartitionedMonthly(newScheduleSpec);
                 break;
 
             default:

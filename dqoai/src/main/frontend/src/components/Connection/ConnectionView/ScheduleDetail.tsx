@@ -20,12 +20,20 @@ const pageTabs = [
     value: CheckRunRecurringScheduleGroup.profiling
   },
   {
-    label: 'Daily',
-    value: CheckRunRecurringScheduleGroup.daily
+    label: 'Recurring daily',
+    value: CheckRunRecurringScheduleGroup.recurring_daily
   },
   {
-    label: 'Monthly',
-    value: CheckRunRecurringScheduleGroup.monthly
+    label: 'Recurring monthly',
+    value: CheckRunRecurringScheduleGroup.recurring_monthly
+  },
+  {
+    label: 'Partitioned daily',
+    value: CheckRunRecurringScheduleGroup.partitioned_daily
+  },
+  {
+    label: 'Partitioned monthly',
+    value: CheckRunRecurringScheduleGroup.partitioned_monthly
   },
 ]
 
@@ -89,18 +97,54 @@ const ScheduleDetail = () => {
         },
       ]);
       setActiveTab(CheckRunRecurringScheduleGroup.profiling);
+    } else if (sourceRoute === 'recurring') {
+      setTabs([
+        {
+          label: 'Recurring Daily',
+          value: CheckRunRecurringScheduleGroup.recurring_daily
+        },
+        {
+          label: 'Recurring Monthly',
+          value: CheckRunRecurringScheduleGroup.recurring_monthly
+        },
+      ]);
+      setActiveTab(CheckRunRecurringScheduleGroup.recurring_daily);
+    } else if (sourceRoute === 'partitioned') {
+      setTabs([
+        {
+          label: 'Partitioned Daily',
+          value: CheckRunRecurringScheduleGroup.partitioned_daily
+        },
+        {
+          label: 'Partitioned Monthly',
+          value: CheckRunRecurringScheduleGroup.partitioned_monthly
+        },
+      ]);
+      setActiveTab(CheckRunRecurringScheduleGroup.partitioned_daily);
     } else {
       setTabs([
         {
-          label: 'Daily',
-          value: CheckRunRecurringScheduleGroup.daily
+          label: 'Profiling',
+          value: CheckRunRecurringScheduleGroup.profiling
         },
         {
-          label: 'Monthly',
-          value: CheckRunRecurringScheduleGroup.monthly
+          label: 'Recurring Daily',
+          value: CheckRunRecurringScheduleGroup.recurring_daily
+        },
+        {
+          label: 'Recurring Monthly',
+          value: CheckRunRecurringScheduleGroup.recurring_monthly
+        },
+        {
+          label: 'Partitioned Daily',
+          value: CheckRunRecurringScheduleGroup.partitioned_daily
+        },
+        {
+          label: 'Partitioned Monthly',
+          value: CheckRunRecurringScheduleGroup.partitioned_monthly
         },
       ]);
-      setActiveTab(CheckRunRecurringScheduleGroup.daily);
+      setActiveTab(CheckRunRecurringScheduleGroup.profiling);
     }
   }, [sourceRoute]);
 

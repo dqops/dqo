@@ -370,6 +370,6 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @Override
     @JsonIgnore
     public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.daily;
+        return CheckRunRecurringScheduleGroup.partitioned_daily;
     }
 }

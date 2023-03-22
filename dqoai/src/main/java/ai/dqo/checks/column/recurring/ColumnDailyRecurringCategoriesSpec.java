@@ -368,6 +368,6 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     @Override
     @JsonIgnore
     public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.daily;
+        return CheckRunRecurringScheduleGroup.recurring_daily;
     }
 }

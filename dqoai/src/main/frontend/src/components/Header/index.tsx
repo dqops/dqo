@@ -36,14 +36,14 @@ const Header = () => {
             Profiling
           </div>
           <div
-            className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.CHECKS}`) ? 'font-bold' : '' )}
-            onClick={onClick(`/${CheckTypes.CHECKS}`)}
+            className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.RECURRING}`) ? 'font-bold' : '' )}
+            onClick={onClick(`/${CheckTypes.RECURRING}`)}
           >
             Recurring Checks
           </div>
           <div
-            className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.PARTITION}`) ? 'font-bold' : '' )}
-            onClick={onClick(`/${CheckTypes.PARTITION}`)}
+            className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.PARTITIONED}`) ? 'font-bold' : '' )}
+            onClick={onClick(`/${CheckTypes.PARTITIONED}`)}
           >
             Partition Checks
           </div>

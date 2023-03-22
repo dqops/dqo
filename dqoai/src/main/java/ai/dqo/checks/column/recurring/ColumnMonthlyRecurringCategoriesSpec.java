@@ -368,6 +368,6 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     @Override
     @JsonIgnore
     public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.monthly;
+        return CheckRunRecurringScheduleGroup.recurring_monthly;
     }
 }

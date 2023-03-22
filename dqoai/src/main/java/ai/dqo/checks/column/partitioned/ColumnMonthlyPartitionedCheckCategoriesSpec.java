@@ -370,6 +370,6 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @Override
     @JsonIgnore
     public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.monthly;
+        return CheckRunRecurringScheduleGroup.partitioned_monthly;
     }
 }

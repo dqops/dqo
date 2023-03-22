@@ -27,15 +27,15 @@ const TreeContext = React.createContext({} as any);
 const checkTypesToJobTemplateKey= {
   [CheckTypes.SOURCES]: 'run_checks_job_template',
   [CheckTypes.PROFILING]: 'run_profiling_checks_job_template',
-  [CheckTypes.CHECKS]: 'run_recurring_checks_job_template',
-  [CheckTypes.PARTITION]: 'run_partition_checks_job_template'
+  [CheckTypes.RECURRING]: 'run_recurring_checks_job_template',
+  [CheckTypes.PARTITIONED]: 'run_partition_checks_job_template'
 };
 
 const checkTypesToHasConfiguredCheckKey = {
   [CheckTypes.SOURCES]: 'has_any_configured_checks',
   [CheckTypes.PROFILING]: 'has_any_configured_profiling_checks',
-  [CheckTypes.CHECKS]: 'has_any_configured_recurring_checks',
-  [CheckTypes.PARTITION]: 'has_any_configured_partition_checks'
+  [CheckTypes.RECURRING]: 'has_any_configured_recurring_checks',
+  [CheckTypes.PARTITIONED]: 'has_any_configured_partition_checks'
 };
 
 function TreeProvider(props: any) {
@@ -82,10 +82,10 @@ function TreeProvider(props: any) {
       open: false
     }));
     const treeDataMaps = [
-      CheckTypes.CHECKS,
+      CheckTypes.RECURRING,
       CheckTypes.SOURCES,
       CheckTypes.PROFILING,
-      CheckTypes.PARTITION,
+      CheckTypes.PARTITIONED,
     ].reduce((acc, cur) => ({
       ...acc,
       [cur]: mappedConnectionsToTreeData
@@ -108,10 +108,10 @@ function TreeProvider(props: any) {
     };
 
     const newTreeDataMaps = [
-      CheckTypes.CHECKS,
+      CheckTypes.RECURRING,
       CheckTypes.SOURCES,
       CheckTypes.PROFILING,
-      CheckTypes.PARTITION,
+      CheckTypes.PARTITIONED,
     ].reduce((acc, cur) => ({
       ...acc,
       [cur]: [...treeDataMaps[cur], newNode]
@@ -215,7 +215,7 @@ function TreeProvider(props: any) {
           open: false
         });
     }
-    if (sourceRoute === CheckTypes.CHECKS) {
+    if (sourceRoute === CheckTypes.RECURRING) {
       items.push(
         {
           id: `${node.id}.dailyCheck`,
@@ -237,7 +237,7 @@ function TreeProvider(props: any) {
         }
       )
     }
-    if (sourceRoute === CheckTypes.PARTITION) {
+    if (sourceRoute === CheckTypes.PARTITIONED) {
       items.push(
         {
           id: `${node.id}.dailyPartitionedChecks`,
@@ -280,7 +280,7 @@ function TreeProvider(props: any) {
         open: false
       });
     }
-    if (sourceRoute === CheckTypes.CHECKS) {
+    if (sourceRoute === CheckTypes.RECURRING) {
       items.push(
         {
           id: `${node.id}.dailyCheck`,
@@ -302,7 +302,7 @@ function TreeProvider(props: any) {
         }
       );
     }
-    if (sourceRoute === CheckTypes.PARTITION) {
+    if (sourceRoute === CheckTypes.PARTITIONED) {
       items.push(
         {
           id: `${node.id}.dailyPartitionedChecks`,
@@ -798,13 +798,13 @@ function TreeProvider(props: any) {
     if (node.data_clean_job_template) {
       let checkType;
       switch (sourceRoute) {
-        case CheckTypes.CHECKS:
+        case CheckTypes.RECURRING:
           checkType = 'recurring';
           break;
         case CheckTypes.PROFILING:
           checkType = 'profiling';
           break;
-        case CheckTypes.PARTITION:
+        case CheckTypes.PARTITIONED:
           checkType = 'partitioned';
           break;
         default:
@@ -844,7 +844,7 @@ function TreeProvider(props: any) {
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       let tab = subTabMap[node.id];
-      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.PARTITION) {
+      if (sourceRoute === CheckTypes.RECURRING || sourceRoute === CheckTypes.PARTITIONED) {
         tab = tab || 'daily';
       } else {
         tab = tab || 'detail'
@@ -935,7 +935,7 @@ function TreeProvider(props: any) {
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       let tab = subTabMap[node.id];
-      if (sourceRoute === CheckTypes.CHECKS || sourceRoute === CheckTypes.PARTITION) {
+      if (sourceRoute === CheckTypes.RECURRING || sourceRoute === CheckTypes.PARTITIONED) {
         tab = tab || 'daily';
       } else {
         tab = tab || 'detail'

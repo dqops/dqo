@@ -45,8 +45,10 @@ public class RecurringSchedulesSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<RecurringSchedulesSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("profiling", o -> o.profiling);
-            put("daily", o -> o.daily);
-            put("monthly", o -> o.monthly);
+            put("recurring_daily", o -> o.recurringDaily);
+            put("recurring_monthly", o -> o.recurringMonthly);
+            put("partitioned_daily", o -> o.partitionedDaily);
+            put("partitioned_monthly", o -> o.partitionedMonthly);
         }
     };
 
@@ -55,15 +57,25 @@ public class RecurringSchedulesSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private RecurringScheduleSpec profiling;
 
-    @JsonPropertyDescription("Schedule for running daily whole table checks and day level time period checks.")
+    @JsonPropertyDescription("Schedule for running daily recurring checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private RecurringScheduleSpec daily;
+    private RecurringScheduleSpec recurringDaily;
 
-    @JsonPropertyDescription("Schedule for running monthly whole table checks and month level time period checks.")
+    @JsonPropertyDescription("Schedule for running monthly recurring checks.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private RecurringScheduleSpec monthly;
+    private RecurringScheduleSpec recurringMonthly;
+
+    @JsonPropertyDescription("Schedule for running daily partitioned checks.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringScheduleSpec partitionedDaily;
+
+    @JsonPropertyDescription("Schedule for running monthly partitioned checks.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private RecurringScheduleSpec partitionedMonthly;
 
     /**
      * Returns the schedule for running profiling data quality checks
@@ -80,43 +92,79 @@ public class RecurringSchedulesSpec extends AbstractSpec {
     public void setProfiling(RecurringScheduleSpec profiling) {
         this.setDirtyIf(!Objects.equals(this.profiling, profiling));
         this.profiling = profiling;
-        propagateHierarchyIdToField(profiling, CheckRunRecurringScheduleGroup.profiling);
+        propagateHierarchyIdToField(profiling, CheckRunRecurringScheduleGroup.profiling.name());
     }
 
     /**
      * Returns the configuration of the schedule for running daily checks.
      * @return Configuration of daily checks.
      */
-    public RecurringScheduleSpec getDaily() {
-        return daily;
+    public RecurringScheduleSpec getRecurringDaily() {
+        return recurringDaily;
     }
 
     /**
      * Sets the schedule for running daily checks.
-     * @param daily Configuration of schedule for daily checks.
+     * @param recurringDaily Configuration of schedule for daily checks.
      */
-    public void setDaily(RecurringScheduleSpec daily) {
-        this.setDirtyIf(!Objects.equals(this.daily, daily));
-        this.daily = daily;
-        propagateHierarchyIdToField(daily, CheckRunRecurringScheduleGroup.daily);
+    public void setRecurringDaily(RecurringScheduleSpec recurringDaily) {
+        this.setDirtyIf(!Objects.equals(this.recurringDaily, recurringDaily));
+        this.recurringDaily = recurringDaily;
+        propagateHierarchyIdToField(recurringDaily, CheckRunRecurringScheduleGroup.recurring_daily.name());
     }
 
     /**
      * Returns the configuration of the schedule for running monthly checks.
      * @return Configuration of monthly checks.
      */
-    public RecurringScheduleSpec getMonthly() {
-        return monthly;
+    public RecurringScheduleSpec getRecurringMonthly() {
+        return recurringMonthly;
     }
 
     /**
      * Sets the schedule for running monthly checks.
-     * @param monthly Configuration of schedule for monthly checks.
+     * @param recurringMonthly Configuration of schedule for monthly checks.
      */
-    public void setMonthly(RecurringScheduleSpec monthly) {
-        this.setDirtyIf(!Objects.equals(this.monthly, monthly));
-        this.monthly = monthly;
-        propagateHierarchyIdToField(monthly, CheckRunRecurringScheduleGroup.monthly);
+    public void setRecurringMonthly(RecurringScheduleSpec recurringMonthly) {
+        this.setDirtyIf(!Objects.equals(this.recurringMonthly, recurringMonthly));
+        this.recurringMonthly = recurringMonthly;
+        propagateHierarchyIdToField(recurringMonthly, CheckRunRecurringScheduleGroup.recurring_monthly.name());
+    }
+
+    /**
+     * Returns the configuration of the schedule for running daily partitioned checks.
+     * @return Configuration of daily partitioned checks.
+     */
+    public RecurringScheduleSpec getPartitionedDaily() {
+        return partitionedDaily;
+    }
+
+    /**
+     * Sets the schedule for running daily partitioned checks.
+     * @param partitionedDaily Configuration of schedule for daily partitioned checks.
+     */
+    public void setPartitionedDaily(RecurringScheduleSpec partitionedDaily) {
+        this.setDirtyIf(!Objects.equals(this.partitionedDaily, partitionedDaily));
+        this.partitionedDaily = partitionedDaily;
+        propagateHierarchyIdToField(partitionedDaily, CheckRunRecurringScheduleGroup.partitioned_daily.name());
+    }
+
+    /**
+     * Returns the configuration of the schedule for running monthly partitioned checks.
+     * @return Configuration of monthly partitioned checks.
+     */
+    public RecurringScheduleSpec getPartitionedMonthly() {
+        return partitionedMonthly;
+    }
+
+    /**
+     * Sets the schedule for running monthly partitioned checks.
+     * @param partitionedMonthly Configuration of schedule for monthly partitioned checks.
+     */
+    public void setPartitionedMonthly(RecurringScheduleSpec partitionedMonthly) {
+        this.setDirtyIf(!Objects.equals(this.partitionedMonthly, partitionedMonthly));
+        this.partitionedMonthly = partitionedMonthly;
+        propagateHierarchyIdToField(partitionedMonthly, CheckRunRecurringScheduleGroup.partitioned_monthly.name());
     }
 
     /**
@@ -147,6 +195,6 @@ public class RecurringSchedulesSpec extends AbstractSpec {
      * @return Configuration of a recurring schedule (cron expression) for the given scheduling group.
      */
     public RecurringScheduleSpec getScheduleForCheckSchedulingGroup(CheckRunRecurringScheduleGroup checkSchedulingGroup) {
-        return (RecurringScheduleSpec)this.getChild(checkSchedulingGroup);
+        return (RecurringScheduleSpec)this.getChild(checkSchedulingGroup.name());
     }
 }
