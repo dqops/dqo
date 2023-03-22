@@ -26,6 +26,7 @@ import ai.dqo.connectors.*;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJobResult;
@@ -39,6 +40,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.services.metadata.TableService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -55,7 +57,8 @@ import java.util.stream.Collectors;
  */
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class TableServiceImpl implements TableService {
+public class TableCliServiceImpl implements TableCliService {
+    private final TableService tableService;
     private final UserHomeContextFactory userHomeContextFactory;
     private final TerminalReader terminalReader;
     private final TerminalWriter terminalWriter;
@@ -67,15 +70,17 @@ public class TableServiceImpl implements TableService {
     private final DqoQueueJobFactory dqoQueueJobFactory;
 
     @Autowired
-    public TableServiceImpl(UserHomeContextFactory userHomeContextFactory,
-                            ConnectionProviderRegistry connectionProviderRegistry,
-                            TerminalReader terminalReader,
-                            TerminalWriter terminalWriter,
-                            SecretValueProvider secretValueProvider,
-                            TerminalTableWritter terminalTableWritter,
-                            OutputFormatService outputFormatService,
-                            DqoJobQueue dqoJobQueue,
-                            DqoQueueJobFactory dqoQueueJobFactory) {
+    public TableCliServiceImpl(TableService tableService,
+                               UserHomeContextFactory userHomeContextFactory,
+                               ConnectionProviderRegistry connectionProviderRegistry,
+                               TerminalReader terminalReader,
+                               TerminalWriter terminalWriter,
+                               SecretValueProvider secretValueProvider,
+                               TerminalTableWritter terminalTableWritter,
+                               OutputFormatService outputFormatService,
+                               DqoJobQueue dqoJobQueue,
+                               DqoQueueJobFactory dqoQueueJobFactory) {
+        this.tableService = tableService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.terminalReader = terminalReader;
@@ -317,19 +322,30 @@ public class TableServiceImpl implements TableService {
 
         CliOperationStatus listingStatus = listTables(connectionName, fullTableName, TabularOutputFormat.TABLE, null, null);
         this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
-        this.terminalWriter.writeLine("Do You want to remove these " + tableWrappers.size() + " tables?");
+        this.terminalWriter.writeLine("Do you want to remove these " + tableWrappers.size() + " tables?");
         boolean response = this.terminalReader.promptBoolean("Yes or No", false);
         if (!response) {
-            cliOperationStatus.setFailedMessage("You deleted 0 tables");
+            cliOperationStatus.setFailedMessage("Delete operation cancelled.");
             return cliOperationStatus;
         }
 
-        tableWrappers.forEach(
-                tableWrapper -> {
-                    tableWrapper.markForDeletion();
-                    userHomeContext.flush();
-                }
-        );
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.tableService.deleteTables(tableWrappers);
+
+        try {
+            for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
+                job.getFuture().get();
+            }
+        } catch (InterruptedException e) {
+            cliOperationStatus.setSuccessMessage(String.format("Removed %d tables.", tableWrappers.size())
+                    + " Deleting results for these tables has been cancelled."
+            );
+            return cliOperationStatus;
+        } catch (ExecutionException e) {
+            cliOperationStatus.setSuccessMessage(String.format("Removed %d tables.", tableWrappers.size())
+                    + " An exception occurred while deleting results for these tables."
+            );
+            return cliOperationStatus;
+        }
 
         cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d tables", tableWrappers.size()));
         return cliOperationStatus;

@@ -49,10 +49,11 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @SpringBootTest
-public class StatisticsResultsDeleteServiceImplTests extends BaseTest {
-    private StatisticsResultsDeleteServiceImpl sut;
+public class StatisticsDeleteServiceImplTests extends BaseTest {
+    private StatisticsDeleteServiceImpl sut;
     private ParquetPartitionStorageService parquetPartitionStorageService;
     private FileStorageSettings profilingResultsStorageSettings;
     private StatisticsResultsTableFactory statisticsResultsTableFactory;
@@ -74,19 +75,24 @@ public class StatisticsResultsDeleteServiceImplTests extends BaseTest {
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
                 homeLocationFindService, newLockManager, synchronizationStatusTracker);
+        HivePartitionPathUtility hivePartitionPathUtility = new HivePartitionPathUtilityImpl();
 
         this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker);
+                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker,
+                hivePartitionPathUtility);
 
-        this.profilingResultsStorageSettings = StatisticsSnapshot.createProfilingResultsStorageSettings();
+        this.profilingResultsStorageSettings = StatisticsSnapshot.createStatisticsStorageSettings();
         this.statisticsResultsTableFactory = new StatisticsResultsTableFactoryImpl();
 
         StatisticsSnapshotFactory statisticsSnapshotFactory = new StatisticsSnapshotFactoryImpl(
                 this.parquetPartitionStorageService,
                 this.statisticsResultsTableFactory
         );
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
+                newLockManager, localUserHomeFileStorageService, hivePartitionPathUtility);
 
-        this.sut = new StatisticsResultsDeleteServiceImpl(statisticsSnapshotFactory);
+        this.sut = new StatisticsDeleteServiceImpl(statisticsSnapshotFactory,
+                                                   parquetPartitionMetadataService);
     }
 
     private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
@@ -471,7 +477,7 @@ public class StatisticsResultsDeleteServiceImplTests extends BaseTest {
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
-            setColumnName("col2");
+            setColumnNames(new ArrayList<>(){{add("col2");}});
             setDataStreamName("ds1");
             setSensorName("s2");
         }};

@@ -22,7 +22,7 @@ import ai.dqo.metadata.sources.ColumnSpec;
 /**
  * Service that performs column operations.
  */
-public interface ColumnService {
+public interface ColumnCliService {
 	/**
 	 * Loads a list of columns from a given connection, table and column.
 	 * @param connectionName Connection name.

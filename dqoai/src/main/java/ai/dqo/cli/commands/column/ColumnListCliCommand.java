@@ -19,7 +19,7 @@ import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.commands.TabularOutputFormat;
-import ai.dqo.cli.commands.column.impl.ColumnService;
+import ai.dqo.cli.commands.column.impl.ColumnCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
@@ -44,7 +44,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "list", header = "List the columns that match a given condition", description = "List all the columns in a table or filter them based on a specified condition.")
 public class ColumnListCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
-	private ColumnService columnService;
+	private ColumnCliService columnCliService;
 	private TerminalWriter terminalWriter;
 	private TerminalTableWritter terminalTableWritter;
 	private FileWritter fileWritter;
@@ -54,11 +54,11 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 
 	@Autowired
 	public ColumnListCliCommand(TerminalWriter terminalWriter,
-							   ColumnService columnService,
+							   ColumnCliService columnCliService,
 								TerminalTableWritter terminalTableWritter,
 								FileWritter fileWritter) {
 		this.terminalWriter = terminalWriter;
-		this.columnService = columnService;
+		this.columnCliService = columnCliService;
 		this.terminalTableWritter = terminalTableWritter;
 		this.fileWritter = fileWritter;
 	}
@@ -155,7 +155,7 @@ public class ColumnListCliCommand extends BaseCommand implements ICommand, IConn
 	@Override
 	public Integer call() throws Exception {
 
-		CliOperationStatus cliOperationStatus = this.columnService.loadColumns(connectionName, fullTableName, columnName, this.getOutputFormat(), tags, labels);
+		CliOperationStatus cliOperationStatus = this.columnCliService.loadColumns(connectionName, fullTableName, columnName, this.getOutputFormat(), tags, labels);
 
 		if (cliOperationStatus.isSuccess()) {
 			if (this.getOutputFormat() == TabularOutputFormat.TABLE) {

@@ -23,6 +23,8 @@ import ai.dqo.cli.exceptions.CliRequiredParameterMissingException;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.*;
 import ai.dqo.connectors.*;
+import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.search.ConnectionSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
@@ -33,10 +35,9 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.services.metadata.ConnectionService;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.IntColumn;
 import tech.tablesaw.api.Row;
@@ -47,13 +48,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
 /**
  * Connection management service.
  */
 @Component
-public class ConnectionServiceImpl implements ConnectionService {
+public class ConnectionCliServiceImpl implements ConnectionCliService {
+    private final ConnectionService connectionService;
     private final UserHomeContextFactory userHomeContextFactory;
     private final TerminalFactory terminalFactory;
     private final TerminalTableWritter terminalTableWritter;
@@ -63,13 +66,15 @@ public class ConnectionServiceImpl implements ConnectionService {
     private final EditorLaunchService editorLaunchService;
 
     @Autowired
-    public ConnectionServiceImpl(UserHomeContextFactory userHomeContextFactory,
-								 ConnectionProviderRegistry connectionProviderRegistry,
-                                 TerminalFactory terminalFactory,
-                                 TerminalTableWritter terminalTableWritter,
-                                 SecretValueProvider secretValueProvider,
-                                 OutputFormatService outputFormatService,
-                                 EditorLaunchService editorLaunchService) {
+    public ConnectionCliServiceImpl(ConnectionService connectionService,
+                                    UserHomeContextFactory userHomeContextFactory,
+                                    ConnectionProviderRegistry connectionProviderRegistry,
+                                    TerminalFactory terminalFactory,
+                                    TerminalTableWritter terminalTableWritter,
+                                    SecretValueProvider secretValueProvider,
+                                    OutputFormatService outputFormatService,
+                                    EditorLaunchService editorLaunchService) {
+        this.connectionService = connectionService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.connectionProviderRegistry = connectionProviderRegistry;
         this.terminalFactory = terminalFactory;
@@ -89,7 +94,7 @@ public class ConnectionServiceImpl implements ConnectionService {
      * @param connectionName Connection name.
      * @param fullTableName Full table name.
      * @param tabularOutputFormat Tabular output format.
-     * @return Cli operation status.
+     * @return CLI operation status.
      */
     @Override
     public CliOperationStatus showTableForConnection(String connectionName, String fullTableName, TabularOutputFormat tabularOutputFormat) {
@@ -175,7 +180,7 @@ public class ConnectionServiceImpl implements ConnectionService {
      * @param tabularOutputFormat Tabular output format.
      * @param dimensions Dimensions filter.
      * @param labels Labels filter.
-     * @return Cli operation status.
+     * @return CLI operation status.
      */
     @Override
     public CliOperationStatus loadTableList(String connectionName, String schemaName, String tableName, TabularOutputFormat tabularOutputFormat,
@@ -382,7 +387,7 @@ public class ConnectionServiceImpl implements ConnectionService {
      *
      * @param connectionName Connection name.
      * @param connectionSpec Connection specification.
-     * @return Cli operation status.
+     * @return CLI operation status.
      */
     @Override
     public CliOperationStatus addConnection(String connectionName, ConnectionSpec connectionSpec) {
@@ -408,7 +413,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     /**
      * Remove a connection.
      * @param connectionName Connection name.
-     * @return Cli operation status.
+     * @return CLI operation status.
      */
     @Override
     public CliOperationStatus removeConnection(String connectionName) {
@@ -437,18 +442,32 @@ public class ConnectionServiceImpl implements ConnectionService {
         this.terminalFactory.getWriter().writeLine("Do you want to remove these " + connectionTables.getRows().size() + " connections?");
         boolean response = this.terminalFactory.getReader().promptBoolean("Yes or No", false);
         if (!response) {
-            cliOperationStatus.setFailedMessage("You deleted 0 connections");
+            cliOperationStatus.setFailedMessage("Delete operation cancelled.");
             return cliOperationStatus;
         }
 
-        connectionSpecs.forEach(
-                spec -> {
-                    ConnectionWrapper connectionWrapper = connections.getByObjectName(spec.getConnectionName(), true);
-                    connectionWrapper.markForDeletion();
-                }
-        );
+        List<ConnectionWrapper> connectionWrappers = connectionSpecs.stream()
+                .map(spec -> connections.getByObjectName(spec.getConnectionName(), true))
+                .collect(Collectors.toList());
 
-        userHomeContext.flush();
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.connectionService.deleteConnections(connectionWrappers);
+
+        try {
+            for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
+                job.getFuture().get();
+            }
+        } catch (InterruptedException e) {
+            cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionWrappers.size())
+                    + " Deleting results for these connections has been cancelled."
+            );
+            return cliOperationStatus;
+        } catch (ExecutionException e) {
+            cliOperationStatus.setSuccessMessage(String.format("Removed %d connections.", connectionWrappers.size())
+                    + " An exception occurred while deleting results for these connections."
+            );
+            return cliOperationStatus;
+        }
+
         cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d connections", connectionSpecs.size()));
         return cliOperationStatus;
     }
@@ -456,7 +475,7 @@ public class ConnectionServiceImpl implements ConnectionService {
     /**
      * Update a connection.
      * @param connectionName Connection name.
-     * @return Cli operation status.
+     * @return CLI operation status.
      */
     @Override
     public CliOperationStatus updateConnection(String connectionName, ConnectionSpec connectionSpec) {

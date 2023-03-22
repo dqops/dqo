@@ -1,5 +1,5 @@
 /*
- * Copyright © 2022 DQO.ai (support@dqo.ai)
+ * Copyright © 2023 DQO.ai (support@dqo.ai)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package ai.dqo.data.readouts.services;
+package ai.dqo.data.statistics.services;
 
-import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
-import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
-import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
-import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
+import ai.dqo.data.statistics.factory.StatisticsColumnNames;
+import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
+import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
+import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactory;
 import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,24 +29,27 @@ import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service that deletes statistics data from parquet files.
+ */
 @Service
-public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteService {
-    private SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory;
+public class StatisticsDeleteServiceImpl implements StatisticsDeleteService {
+    private StatisticsSnapshotFactory statisticsSnapshotFactory;
     private ParquetPartitionMetadataService parquetPartitionMetadataService;
 
     @Autowired
-    public SensorReadoutsDeleteServiceImpl(SensorReadoutsSnapshotFactory sensorReadoutsSnapshotFactory,
-                                           ParquetPartitionMetadataService parquetPartitionMetadataService) {
-        this.sensorReadoutsSnapshotFactory = sensorReadoutsSnapshotFactory;
+    public StatisticsDeleteServiceImpl(StatisticsSnapshotFactory statisticsSnapshotFactory,
+                                       ParquetPartitionMetadataService parquetPartitionMetadataService) {
+        this.statisticsSnapshotFactory = statisticsSnapshotFactory;
         this.parquetPartitionMetadataService = parquetPartitionMetadataService;
     }
 
     /**
-     * Deletes the readouts from a table, applying specific filters to get the fragment (if necessary).
-     * @param filter Filter for the readouts fragment that is of interest.
+     * Deletes the statistics results from a table, applying specific filters to get the fragment (if necessary).
+     * @param filter Filter for the statistics results fragment that is of interest.
      */
     @Override
-    public void deleteSelectedSensorReadoutsFragment(SensorReadoutsFragmentFilter filter) {
+    public void deleteSelectedStatisticsResultsFragment(StatisticsResultsFragmentFilter filter) {
         Map<String, String> simpleConditions = filter.getColumnConditions();
         Map<String, Set<String>> conditions = new HashMap<>();
         for (Map.Entry<String, String> kv: simpleConditions.entrySet()) {
@@ -56,14 +59,14 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
             conditions.put(columnName, wrappedValue);
         }
         if (filter.getColumnNames() != null && !filter.getColumnNames().isEmpty()) {
-            conditions.put(SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
+            conditions.put(StatisticsColumnNames.COLUMN_NAME_COLUMN_NAME, new HashSet<>(filter.getColumnNames()));
         }
 
         Collection<PhysicalTableName> tablesToDelete;
         if (filter.getTableSearchFilters().getSchemaTableName() == null) {
             tablesToDelete = this.parquetPartitionMetadataService.listTablesForConnection(
                     filter.getTableSearchFilters().getConnectionName(),
-                    SensorReadoutsSnapshot.createSensorReadoutsStorageSettings()
+                    StatisticsSnapshot.createStatisticsStorageSettings()
             );
         } else {
             tablesToDelete = new LinkedList<>();
@@ -75,13 +78,13 @@ public class SensorReadoutsDeleteServiceImpl implements SensorReadoutsDeleteServ
             return;
         }
 
-        Collection<SensorReadoutsSnapshot> readoutsSnapshots = tablesToDelete.stream()
-                .map(tableName -> this.sensorReadoutsSnapshotFactory.createSnapshot(
+        Collection<StatisticsSnapshot> statisticsSnapshots = tablesToDelete.stream()
+                .map(tableName -> this.statisticsSnapshotFactory.createSnapshot(
                         filter.getTableSearchFilters().getConnectionName(),
                         tableName
                 )).collect(Collectors.toList());
 
-        for (SensorReadoutsSnapshot currentSnapshot: readoutsSnapshots) {
+        for (StatisticsSnapshot currentSnapshot: statisticsSnapshots) {
             LocalDate startDeletionRange = filter.getDateStart();
             LocalDate endDeletionRange = filter.getDateEnd();
 

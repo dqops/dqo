@@ -19,9 +19,9 @@ import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.TabularOutputFormat;
 import ai.dqo.cli.output.OutputFormatService;
 import ai.dqo.cli.terminal.TerminalFactory;
-import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalTableWritter;
-import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.metadata.search.ColumnSearchFilters;
 import ai.dqo.metadata.search.HierarchyNodeTreeSearcherImpl;
 import ai.dqo.metadata.sources.ColumnSpec;
@@ -33,6 +33,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.services.metadata.ColumnService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
@@ -40,20 +41,25 @@ import org.springframework.stereotype.Service;
 import tech.tablesaw.api.*;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-public class ColumnServiceImpl implements ColumnService {
+public class ColumnCliServiceImpl implements ColumnCliService {
+	private final ColumnService columnService;
 	private final UserHomeContextFactory userHomeContextFactory;
 	private TerminalFactory terminalFactory;
 	private final TerminalTableWritter terminalTableWritter;
 	private final OutputFormatService outputFormatService;
 
 	@Autowired
-	public ColumnServiceImpl(UserHomeContextFactory userHomeContextFactory,
-							 TerminalFactory terminalFactory,
-							 TerminalTableWritter terminalTableWritter,
-							 OutputFormatService outputFormatService) {
+	public ColumnCliServiceImpl(ColumnService columnService,
+								UserHomeContextFactory userHomeContextFactory,
+								TerminalFactory terminalFactory,
+								TerminalTableWritter terminalTableWritter,
+								OutputFormatService outputFormatService) {
+		this.columnService = columnService;
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.terminalFactory = terminalFactory;
 		this.terminalTableWritter = terminalTableWritter;
@@ -67,7 +73,7 @@ public class ColumnServiceImpl implements ColumnService {
 	 * @param tabularOutputFormat Tabular output format.
 	 * @param tags Dimensions filter.
 	 * @param labels Labels filter.
-	 * @return Cli operation status.
+	 * @return CLI operation status.
 	 */
 	@Override
 	public CliOperationStatus loadColumns(String connectionName, String tableName, String columnName, TabularOutputFormat tabularOutputFormat, String[] tags, String[] labels) {
@@ -83,10 +89,11 @@ public class ColumnServiceImpl implements ColumnService {
 		HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
 		HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
 
-		Collection <ColumnSpec> columnSpecs = hierarchyNodeTreeSearcher.findColumns(userHomeContextFactory.openLocalUserHome().getUserHome(), columnSearchFilters);
+		Collection <ColumnSpec> columnSpecs = hierarchyNodeTreeSearcher.findColumns(
+				userHomeContextFactory.openLocalUserHome().getUserHome(), columnSearchFilters);
 
 		if (columnSpecs.size() == 0) {
-			cliOperationStatus.setFailedMessage("There are no columns with this filters!");
+			setColumnsNotFoundStatusMessage(cliOperationStatus);
 			return cliOperationStatus;
 		}
 
@@ -136,7 +143,7 @@ public class ColumnServiceImpl implements ColumnService {
 	 * @param tableName Table name.
 	 * @param columnName Column name.
 	 * @param columnSpec Column spec.
-	 * @return Cli operation status.
+	 * @return CLI operation status.
 	 */
 	@Override
 	public CliOperationStatus addColumn(String connectionName, String tableName, String columnName, ColumnSpec columnSpec) {
@@ -174,7 +181,7 @@ public class ColumnServiceImpl implements ColumnService {
 	 * @param connectionName Connection name.
 	 * @param tableName Table name.
 	 * @param columnName Column name.
-	 * @return Cli operation status.
+	 * @return CLI operation status.
 	 */
 	@Override
 	public CliOperationStatus removeColumn(String connectionName, String tableName, String columnName) {
@@ -191,29 +198,39 @@ public class ColumnServiceImpl implements ColumnService {
 		HierarchyNodeTreeWalker hierarchyNodeTreeWalker = new HierarchyNodeTreeWalkerImpl();
 		HierarchyNodeTreeSearcherImpl hierarchyNodeTreeSearcher = new HierarchyNodeTreeSearcherImpl(hierarchyNodeTreeWalker);
 
-		Collection <ColumnSpec> columnSpecs = hierarchyNodeTreeSearcher.findColumns(userHome, columnSearchFilters);
+		Collection<ColumnSpec> columnSpecs = hierarchyNodeTreeSearcher.findColumns(userHome, columnSearchFilters);
 
 		if (columnSpecs.size() == 0) {
-			cliOperationStatus.setFailedMessage("There are no columns with this filters!");
+			setColumnsNotFoundStatusMessage(cliOperationStatus);
 			return cliOperationStatus;
 		}
 
 		CliOperationStatus listingStatus = loadColumns(connectionName, tableName, columnName, TabularOutputFormat.TABLE, null, null);
 		this.terminalTableWritter.writeTable(listingStatus.getTable(), true);
-		this.terminalFactory.getWriter().writeLine("Do You want to remove these " + columnSpecs.size() + " columns?");
+		this.terminalFactory.getWriter().writeLine("Do you want to remove these " + columnSpecs.size() + " columns?");
 		boolean response = this.terminalFactory.getReader().promptBoolean("Yes or No", false);
 		if (!response) {
-			cliOperationStatus.setFailedMessage("You deleted 0 columns");
+			cliOperationStatus.setFailedMessage("Delete operation cancelled.");
 			return cliOperationStatus;
 		}
 
-		columnSpecs.forEach(
-				spec -> {
-					TableWrapper table = userHome.findTableFor(spec.getHierarchyId());
-					table.getSpec().getColumns().remove(spec.getColumnName());
-					userHomeContext.flush();
-				}
-		);
+		List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.columnService.deleteColumns(columnSpecs);
+
+		try {
+			for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {
+				job.getFuture().get();
+			}
+		} catch (InterruptedException e) {
+			cliOperationStatus.setSuccessMessage(String.format("Removed %d columns.", columnSpecs.size())
+					+ " Deleting results for these columns has been cancelled."
+			);
+			return cliOperationStatus;
+		} catch (ExecutionException e) {
+			cliOperationStatus.setSuccessMessage(String.format("Removed %d columns.", columnSpecs.size())
+					+ " An exception occurred while deleting results for these columns."
+			);
+			return cliOperationStatus;
+		}
 
 		cliOperationStatus.setSuccessMessage(String.format("Successfully removed %d columns.", columnSpecs.size()));
 		return cliOperationStatus;
@@ -225,7 +242,7 @@ public class ColumnServiceImpl implements ColumnService {
 	 * @param tableName Table name.
 	 * @param columnName Column name.
 	 * @param columnSpec Column spec.
-	 * @return Cli operation status.
+	 * @return CLI operation status.
 	 */
 	@Override
 	public CliOperationStatus updateColumn(String connectionName, String tableName, String columnName, ColumnSpec columnSpec) {
@@ -245,7 +262,7 @@ public class ColumnServiceImpl implements ColumnService {
 		Collection <ColumnSpec> columnSpecs = hierarchyNodeTreeSearcher.findColumns(userHome, columnSearchFilters);
 
 		if (columnSpecs.size() == 0) {
-			cliOperationStatus.setFailedMessage("There are no columns with this filters!");
+			setColumnsNotFoundStatusMessage(cliOperationStatus);
 			return cliOperationStatus;
 		}
 
@@ -268,7 +285,7 @@ public class ColumnServiceImpl implements ColumnService {
 	 * @param tableName Table name.
 	 * @param columnName Column name.
 	 * @param newColumnName New column name.
-	 * @return Cli operation status.
+	 * @return CLI operation status.
 	 */
 	@Override
 	public CliOperationStatus renameColumn(String connectionName, String tableName, String columnName, String newColumnName) {
@@ -288,12 +305,12 @@ public class ColumnServiceImpl implements ColumnService {
 		Collection <ColumnSpec> columnSpecs = hierarchyNodeTreeSearcher.findColumns(userHome, columnSearchFilters);
 
 		if (columnSpecs.size() == 0) {
-			cliOperationStatus.setFailedMessage("There are no columns with this filters!");
+			setColumnsNotFoundStatusMessage(cliOperationStatus);
 			return cliOperationStatus;
 		}
 
 		if (columnSpecs.size() > 1) {
-			cliOperationStatus.setFailedMessage("There are too many columns with this filters!");
+			cliOperationStatus.setFailedMessage("There are too many columns with these filters!");
 			return cliOperationStatus;
 		}
 
@@ -316,7 +333,7 @@ public class ColumnServiceImpl implements ColumnService {
 	 * @param tableName Table name.
 	 * @param columnName Column name.
 	 * @param disable logic value determines if we turn on or off check.
-	 * @return Cli operation status.
+	 * @return CLI operation status.
 	 */
 	@Override
 	public CliOperationStatus setDisableTo(String connectionName, String tableName, String columnName, boolean disable) {
@@ -337,7 +354,7 @@ public class ColumnServiceImpl implements ColumnService {
 		Collection <ColumnSpec> columnSpecs = hierarchyNodeTreeSearcher.findColumns(userHome, columnSearchFilters);
 
 		if (columnSpecs.size() == 0) {
-			cliOperationStatus.setFailedMessage("There are no columns with this filters!");
+			setColumnsNotFoundStatusMessage(cliOperationStatus);
 			return cliOperationStatus;
 		}
 
@@ -349,7 +366,7 @@ public class ColumnServiceImpl implements ColumnService {
 		}
 
 		if (columnSpecs.size() == 1 && !isPossible) {
-			String message = disable ? "You cannot disable disabled column" : "You cannot enable enabled column";
+			String message = disable ? "You cannot disable a disabled column" : "You cannot enable an enabled column";
 			cliOperationStatus.setFailedMessage(message);
 			return cliOperationStatus;
 		}
@@ -363,5 +380,13 @@ public class ColumnServiceImpl implements ColumnService {
 		cliOperationStatus.setSuccessMessage(String.format("Successfully %s %d columns.",
 															disable ? "disabled" : "enabled", columnSpecs.size()));
 		return cliOperationStatus;
+	}
+
+	/**
+	 * Sets a shared "columns not found" message on CLI operation status.
+	 * @param cliOperationStatus CLI operation status to modify.
+	 */
+	protected static void setColumnsNotFoundStatusMessage(CliOperationStatus cliOperationStatus) {
+		cliOperationStatus.setFailedMessage("There are no columns with these filters!");
 	}
 }

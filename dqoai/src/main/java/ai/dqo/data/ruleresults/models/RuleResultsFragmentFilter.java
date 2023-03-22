@@ -29,10 +29,10 @@ import java.util.*;
  */
 @Data
 public class RuleResultsFragmentFilter extends ParquetDataFragmentFilter {
+    private List<String> columnNames;
     private String checkCategory;
     private String checkName;
     private String checkType;
-    private String columnName;
     private String dataStreamName;
     private String sensorName;
     private String qualityDimension;
@@ -53,9 +53,6 @@ public class RuleResultsFragmentFilter extends ParquetDataFragmentFilter {
         }
         if (!Strings.isNullOrEmpty(checkType)) {
             result.put(RuleResultsColumnNames.CHECK_TYPE_COLUMN_NAME, checkType);
-        }
-        if (!Strings.isNullOrEmpty(columnName)) {
-            result.put(RuleResultsColumnNames.COLUMN_NAME_COLUMN_NAME, columnName);
         }
         if (!Strings.isNullOrEmpty(dataStreamName)) {
             result.put(RuleResultsColumnNames.DATA_STREAM_NAME_COLUMN_NAME, dataStreamName);
@@ -85,7 +82,7 @@ public class RuleResultsFragmentFilter extends ParquetDataFragmentFilter {
             return false;
         if (!Objects.equals(checkName, that.checkName)) return false;
         if (!Objects.equals(checkType, that.checkType)) return false;
-        if (!Objects.equals(columnName, that.columnName)) return false;
+        if (!Objects.equals(columnNames, that.columnNames)) return false;
         if (!Objects.equals(dataStreamName, that.dataStreamName))
             return false;
         if (!Objects.equals(sensorName, that.sensorName)) return false;
@@ -100,7 +97,7 @@ public class RuleResultsFragmentFilter extends ParquetDataFragmentFilter {
         result = 31 * result + (checkCategory != null ? checkCategory.hashCode() : 0);
         result = 31 * result + (checkName != null ? checkName.hashCode() : 0);
         result = 31 * result + (checkType != null ? checkType.hashCode() : 0);
-        result = 31 * result + (columnName != null ? columnName.hashCode() : 0);
+        result = 31 * result + (columnNames != null ? columnNames.hashCode() : 0);
         result = 31 * result + (dataStreamName != null ? dataStreamName.hashCode() : 0);
         result = 31 * result + (sensorName != null ? sensorName.hashCode() : 0);
         result = 31 * result + (qualityDimension != null ? qualityDimension.hashCode() : 0);

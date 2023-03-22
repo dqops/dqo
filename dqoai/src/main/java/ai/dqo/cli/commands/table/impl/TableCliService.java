@@ -22,7 +22,7 @@ import tech.tablesaw.api.Table;
 /**
  * Service that performs table import operations.
  */
-public interface TableService {
+public interface TableCliService {
     /**
      * Loads a list of schemas from a given connection.
      * @param connectionName Connection name.
@@ -37,7 +37,7 @@ public interface TableService {
      * @param connectionName Connection name.
      * @param schemaName Schema name.
      * @param tableName Optional table name pattern.
-     * @return Cli operation status.
+     * @return CLI operation status.
      */
     CliOperationStatus importTables(String connectionName, String schemaName, String tableName) throws TableImportFailedException;
 
@@ -48,7 +48,7 @@ public interface TableService {
      * @param tabularOutputFormat tabular output format.
      * @param dimensions Dimensions filter.
      * @param labels Labels filter.
-     * @return Cli operation status.
+     * @return CLI operation status.
      */
 	CliOperationStatus listTables(String connectionName, String tableName, TabularOutputFormat tabularOutputFormat, String[] dimensions, String[] labels);
 
@@ -57,7 +57,7 @@ public interface TableService {
      * @param connectionName Connection name.
      * @param schemaName Schema name.
      * @param tableName Table name.
-     * @return Cli operation status.
+     * @return CLI operation status.
      */
     CliOperationStatus addTable(String connectionName, String schemaName, String tableName);
 
@@ -65,7 +65,7 @@ public interface TableService {
      * Removes a table to the connection from a given schema and table name.
      * @param connectionName Connection name.
      * @param fullTableName Full table name.
-     * @return Cli operation status.
+     * @return CLI operation status.
      */
     CliOperationStatus removeTable(String connectionName, String fullTableName);
 
@@ -74,7 +74,7 @@ public interface TableService {
      * @param connectionName Connection name.
      * @param schemaName Schema name.
      * @param tableName Table name.
-     * @return Cli operation status.
+     * @return CLI operation status.
      */
     CliOperationStatus updateTable(String connectionName, String schemaName, String tableName, String newTableName) throws TableMetadataUpdateException;
 

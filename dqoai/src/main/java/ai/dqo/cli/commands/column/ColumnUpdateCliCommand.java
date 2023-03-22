@@ -18,7 +18,7 @@ package ai.dqo.cli.commands.column;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.commands.column.impl.ColumnService;
+import ai.dqo.cli.commands.column.impl.ColumnCliService;
 import ai.dqo.cli.completion.completedcommands.IConnectionNameCommand;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
@@ -41,7 +41,7 @@ import picocli.CommandLine;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "update", header = "Update the column(s) that match a given condition", description = "Update one or more columns in a table that match a specified condition.")
 public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, IConnectionNameCommand, ITableNameCommand {
-	private ColumnService columnService;
+	private ColumnCliService columnCliService;
 	private TerminalReader terminalReader;
 	private TerminalWriter terminalWriter;
 
@@ -51,10 +51,10 @@ public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, ICo
 	@Autowired
 	public ColumnUpdateCliCommand(TerminalReader terminalReader,
 							   TerminalWriter terminalWriter,
-							   ColumnService columnService) {
+							   ColumnCliService columnCliService) {
 		this.terminalReader = terminalReader;
 		this.terminalWriter = terminalWriter;
-		this.columnService = columnService;
+		this.columnCliService = columnCliService;
 	}
 
 	@CommandLine.Option(names = {"-t", "--table"}, description = "Table name", required = false,
@@ -131,7 +131,7 @@ public class ColumnUpdateCliCommand extends BaseCommand implements ICommand, ICo
 		ColumnTypeSnapshotSpec columnTypeSnapshotSpec = new ColumnTypeSnapshotSpec(dataType);
 		ColumnSpec columnSpec = new ColumnSpec(columnTypeSnapshotSpec);
 
-		CliOperationStatus cliOperationStatus = columnService.updateColumn(connectionName, fullTableName, columnName, columnSpec);
+		CliOperationStatus cliOperationStatus = columnCliService.updateColumn(connectionName, fullTableName, columnName, columnSpec);
 		this.terminalWriter.writeLine(cliOperationStatus.getMessage());
 		return cliOperationStatus.isSuccess() ? 0 : -1;
 	}
