@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.recurring.accuracy.ColumnAccuracyDailyRecurringSpec;
 import ai.dqo.checks.column.recurring.bool.ColumnBoolDailyRecurringSpec;
 import ai.dqo.checks.column.recurring.datetime.ColumnDatetimeDailyRecurringSpec;
 import ai.dqo.checks.column.recurring.nulls.ColumnNullsDailyRecurringSpec;
@@ -65,6 +66,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
            put("sql", o -> o.sql);
            put("bool", o -> o.bool);
            put("integrity", o -> o.integrity);
+           put("accuracy", o -> o.accuracy);
 
         }
     };
@@ -113,6 +115,11 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnIntegrityDailyRecurringSpec integrity;
+
+    @JsonPropertyDescription("Daily recurring of accuracy in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAccuracyDailyRecurringSpec accuracy;
 
     /**
      * Returns the container of recurring for standard data quality checks.
@@ -274,6 +281,24 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.integrity, integrity));
         this.integrity = integrity;
         this.propagateHierarchyIdToField(integrity, "integrity");
+    }
+
+    /**
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
+     */
+    public ColumnAccuracyDailyRecurringSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets the container of accuracy data quality checks (recurring).
+     * @param accuracy New accuracy checks.
+     */
+    public void setAccuracy(ColumnAccuracyDailyRecurringSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        this.propagateHierarchyIdToField(accuracy, "accuracy");
     }
 
     /**
