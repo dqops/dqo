@@ -47,7 +47,7 @@ public final class BuiltInFolderNames {
     /**
      * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the rule results are stored.
      */
-    public static final String RULE_RESULTS = "rule_results";
+    public static final String CHECK_RESULTS = "check_results";
 
     /**
      * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the statistics results (basic profile) are stored.

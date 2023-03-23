@@ -19,7 +19,6 @@ import ai.dqo.metadata.search.CheckSearchFilters;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.Data;
 
-import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.util.LinkedList;
 import java.util.List;
@@ -38,7 +37,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
 
     private boolean deleteErrors = false;
     private boolean deleteStatistics = false;
-    private boolean deleteRuleResults = false;
+    private boolean deleteCheckResults = false;
     private boolean deleteSensorReadouts = false;
 
     private List<String> columnNames;
@@ -90,7 +89,7 @@ public class DeleteStoredDataQueueJobParameters implements Cloneable {
             setSensorName(checkSearchFilters.getSensorName());
             setCheckCategory(checkSearchFilters.getCheckCategory());
 
-            setDeleteRuleResults(true);
+            setDeleteCheckResults(true);
             setDeleteErrors(true);
             setDeleteStatistics(true);
             setDeleteSensorReadouts(true);

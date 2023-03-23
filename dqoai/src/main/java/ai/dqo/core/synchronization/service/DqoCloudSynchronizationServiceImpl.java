@@ -15,14 +15,13 @@
  */
 package ai.dqo.core.synchronization.service;
 
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import ai.dqo.core.synchronization.fileexchange.*;
 import ai.dqo.core.synchronization.filesystems.dqocloud.DqoCloudRemoteFileSystemServiceFactory;
 import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactory;
-import ai.dqo.core.synchronization.fileexchange.FileSynchronizationDirection;
-import ai.dqo.core.synchronization.fileexchange.FileSystemChangeSet;
-import ai.dqo.core.synchronization.fileexchange.FileSystemSynchronizationService;
-import ai.dqo.core.synchronization.fileexchange.SynchronizationResult;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationListener;
 import ai.dqo.metadata.fileindices.FileIndexName;
 import ai.dqo.metadata.fileindices.FileIndexWrapper;
@@ -45,6 +44,8 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
     private FileSystemSynchronizationService fileSystemSynchronizationService;
     private LocalSynchronizationFileSystemFactory localSynchronizationFileSystemFactory;
     private DqoCloudRemoteFileSystemServiceFactory dqoCloudRemoteFileSystemServiceFactory;
+    private DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
+    private DqoCloudWarehouseService dqoCloudWarehouseService;
 
     /**
      * Dependency injection constructor.
@@ -52,16 +53,22 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
      * @param fileSystemSynchronizationService File system synchronization utility.
      * @param localSynchronizationFileSystemFactory User home file system factory.
      * @param dqoCloudRemoteFileSystemServiceFactory DQO Cloud remote file system factory.
+     * @param dqoCloudApiKeyProvider API key provider.
+     * @param dqoCloudWarehouseService DQO CLoud warehouse refresh service, used to refresh the native tables.
      */
     @Autowired
     public DqoCloudSynchronizationServiceImpl(UserHomeContextFactory userHomeContextFactory,
                                               FileSystemSynchronizationService fileSystemSynchronizationService,
                                               LocalSynchronizationFileSystemFactory localSynchronizationFileSystemFactory,
-                                              DqoCloudRemoteFileSystemServiceFactory dqoCloudRemoteFileSystemServiceFactory) {
+                                              DqoCloudRemoteFileSystemServiceFactory dqoCloudRemoteFileSystemServiceFactory,
+                                              DqoCloudApiKeyProvider dqoCloudApiKeyProvider,
+                                              DqoCloudWarehouseService dqoCloudWarehouseService) {
         this.userHomeContextFactory = userHomeContextFactory;
         this.fileSystemSynchronizationService = fileSystemSynchronizationService;
         this.localSynchronizationFileSystemFactory = localSynchronizationFileSystemFactory;
         this.dqoCloudRemoteFileSystemServiceFactory = dqoCloudRemoteFileSystemServiceFactory;
+        this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
+        this.dqoCloudWarehouseService = dqoCloudWarehouseService;
     }
 
     /**
@@ -100,8 +107,14 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
                 remoteFileIndexWrapper.getSpec().getFolder(),
                 Optional.empty()); // empty means that the file system should be scanned to find new files
 
+        DqoCloudApiKey apiKey = this.dqoCloudApiKeyProvider.getApiKey();
         SynchronizationResult synchronizationResult = this.fileSystemSynchronizationService.synchronize(
-                sourceChangeSet, remoteChangeSet, dqoRoot, synchronizationDirection, synchronizationListener);
+                sourceChangeSet, remoteChangeSet, dqoRoot, synchronizationDirection, apiKey, synchronizationListener);
+
+        TargetTableModifiedPartitions targetTableModifiedPartitions = synchronizationResult.getTargetTableModifiedPartitions();
+        if (targetTableModifiedPartitions.hasAnyChanges()) {
+            this.dqoCloudWarehouseService.refreshNativeTable(targetTableModifiedPartitions);
+        }
 
         if (localFileIndexWrapper.getSpec().getFolder() == null ||
                 !Objects.equals(localFileIndexWrapper.getSpec().getFolder().getHash(), synchronizationResult.getSourceFileIndex().getHash())) {
@@ -128,7 +141,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         synchronizeFolder(DqoRoot.sensors, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.rules, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_rule_results, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_check_results, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.data_statistics, synchronizationDirection, synchronizationListener);
     }
@@ -142,7 +155,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
     @Override
     public void synchronizeData(FileSynchronizationDirection synchronizationDirection, FileSystemSynchronizationListener synchronizationListener) {
         synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, synchronizationListener);
-        synchronizeFolder(DqoRoot.data_rule_results, synchronizationDirection, synchronizationListener);
+        synchronizeFolder(DqoRoot.data_check_results, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, synchronizationListener);
         synchronizeFolder(DqoRoot.data_statistics, synchronizationDirection, synchronizationListener);
     }

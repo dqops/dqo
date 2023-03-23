@@ -67,8 +67,8 @@ public class LocalSynchronizationFileSystemFactoryImpl implements LocalSynchroni
             case data_sensor_readouts:
                 return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.SENSOR_READOUTS);
 
-            case data_rule_results:
-                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.RULE_RESULTS);
+            case data_check_results:
+                return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.CHECK_RESULTS);
 
             case data_errors:
                 return localUserHomePath.resolve(BuiltInFolderNames.DATA).resolve(BuiltInFolderNames.ERRORS);

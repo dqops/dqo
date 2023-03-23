@@ -121,7 +121,7 @@ public class SchemaModel {
 
                 setDeleteStatistics(true);
                 setDeleteErrors(true);
-                setDeleteRuleResults(true);
+                setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
             }});
         }};

@@ -151,6 +151,10 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         tableNameColumn.setMissingTo(sensorRunParameters.getTable().getTarget().getTableName());
         sortedNormalizedTable.addColumns(tableNameColumn);
 
+        StringColumn tableNamePatternColumn = StringColumn.create(SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME, resultsRowCount);
+        tableNamePatternColumn.setMissingTo(sensorRunParameters.getTable().getTarget().getTableName());
+        sortedNormalizedTable.addColumns(tableNamePatternColumn);
+
         StringColumn tableStageColumn = StringColumn.create(SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME, resultsRowCount);
         if (sensorRunParameters.getTable().getStage() != null) {
             tableStageColumn.setMissingTo(sensorRunParameters.getTable().getStage());
@@ -170,6 +174,12 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
             columnNameColumn.setMissingTo(sensorRunParameters.getColumn().getColumnName());
         }
         sortedNormalizedTable.addColumns(columnNameColumn);
+
+        StringColumn columnNamePatternColumn = StringColumn.create(SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME, resultsRowCount);
+        if (sensorRunParameters.getColumn() != null) {
+            columnNamePatternColumn.setMissingTo(sensorRunParameters.getColumn().getColumnName());
+        }
+        sortedNormalizedTable.addColumns(columnNamePatternColumn);
 
         LongColumn checkHashColumn = LongColumn.create(SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME, resultsRowCount);
         long checkHash = sensorRunParameters.getCheck().getHierarchyId().hashCode64();

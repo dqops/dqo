@@ -67,14 +67,12 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
                 homeLocationFindService, newLockManager, synchronizationStatusTracker);
-        HivePartitionPathUtility hivePartitionPathUtility = new HivePartitionPathUtilityImpl();
 
         this.sut = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub,
                                                           newLockManager,
                                                           HadoopConfigurationProviderObjectMother.getDefault(),
                                                           localUserHomeFileStorageService,
-                                                          synchronizationStatusTracker,
-                                                          hivePartitionPathUtility);
+                                                          synchronizationStatusTracker);
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
     }
 

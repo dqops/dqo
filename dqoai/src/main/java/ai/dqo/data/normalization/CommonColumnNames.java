@@ -61,6 +61,11 @@ public final class CommonColumnNames {
     public static final String TABLE_NAME_COLUMN_NAME = "table_name";
 
     /**
+     * Column name for a table name pattern.
+     */
+    public static final String TABLE_NAME_PATTERN_COLUMN_NAME = "table_name_pattern";
+
+    /**
      * Column name for a table stage.
      */
     public static final String TABLE_STAGE_COLUMN_NAME = "table_stage";
@@ -74,6 +79,11 @@ public final class CommonColumnNames {
      * Column name for a column name.
      */
     public static final String COLUMN_NAME_COLUMN_NAME = "column_name";
+
+    /**
+     * Column name for a column name pattern.
+     */
+    public static final String COLUMN_NAME_PATTERN_COLUMN_NAME = "column_name_pattern";
 
     /**
      * Column name for a sensor name.

@@ -106,7 +106,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value
@@ -174,7 +174,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                 SELECT
                     100.0 * SUM(
                         CASE
-                            WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*) AS actual_value,
@@ -209,7 +209,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -244,7 +244,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -286,7 +286,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -323,7 +323,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -362,7 +362,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
                 SELECT
                     100.0 * SUM(
                         CASE
-                            WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                            WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                             ELSE 0
                         END
                     ) / COUNT(*) AS actual_value,
@@ -410,7 +410,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -451,7 +451,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,
@@ -492,7 +492,7 @@ public class ColumnDatetimeValueInRangeDatePercentSensorParametersSpecBigQueryTe
             SELECT
                 100.0 * SUM(
                     CASE
-                        WHEN CAST(%1$s AS DATE) >= '2022-01-01' AND CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
+                        WHEN SAFE_CAST(%1$s AS DATE) >= '2022-01-01' AND SAFE_CAST(%1$s AS DATE) <= '2022-01-10' THEN 1
                         ELSE 0
                     END
                 ) / COUNT(*) AS actual_value,

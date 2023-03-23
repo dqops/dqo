@@ -4,9 +4,9 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.data.ruleresults.services.CheckResultsOverviewParameters;
-import ai.dqo.data.ruleresults.services.RuleResultsDataService;
-import ai.dqo.data.ruleresults.services.models.CheckResultsOverviewDataModel;
+import ai.dqo.data.checkresults.services.CheckResultsOverviewParameters;
+import ai.dqo.data.checkresults.services.CheckResultsDataService;
+import ai.dqo.data.checkresults.services.models.CheckResultsOverviewDataModel;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -31,18 +31,18 @@ import java.util.Objects;
 @Api(value = "CheckResultsOverview", description = "Returns the overview of the recently executed checks on tables and columns.")
 public class CheckResultsOverviewController {
     private UserHomeContextFactory userHomeContextFactory;
-    private RuleResultsDataService ruleResultsDataService;
+    private CheckResultsDataService checkResultsDataService;
 
     /**
      * Dependency injection constructor.
      * @param userHomeContextFactory User home context factory.
-     * @param ruleResultsDataService Rule results data service.
+     * @param checkResultsDataService Rule results data service.
      */
     @Autowired
     public CheckResultsOverviewController(UserHomeContextFactory userHomeContextFactory,
-                                          RuleResultsDataService ruleResultsDataService) {
+                                          CheckResultsDataService checkResultsDataService) {
         this.userHomeContextFactory = userHomeContextFactory;
-        this.ruleResultsDataService = ruleResultsDataService;
+        this.checkResultsDataService = checkResultsDataService;
     }
 
     /**
@@ -94,7 +94,7 @@ public class CheckResultsOverviewController {
                     return container;
                 });
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checks, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
@@ -144,7 +144,7 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
@@ -194,7 +194,7 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
@@ -249,7 +249,7 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checks = columnSpec.getColumnCheckRootContainer(CheckType.PROFILING, null, false);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checks, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
@@ -306,7 +306,7 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.RECURRING, timeScale, false);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }
@@ -363,7 +363,7 @@ public class CheckResultsOverviewController {
 
         AbstractRootChecksContainerSpec checkRootContainer = columnSpec.getColumnCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
 
-        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.ruleResultsDataService.readMostRecentCheckStatuses(
+        CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
         return new ResponseEntity<>(Flux.fromArray(checkResultsOverviewDataModels), HttpStatus.OK); // 200
     }

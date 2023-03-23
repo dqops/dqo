@@ -130,7 +130,7 @@ public class ColumnServiceImpl implements ColumnService {
                                 setSchemaTableName(table);
                                 setColumnNames(columns);
                                 setDeleteStatistics(true);
-                                setDeleteRuleResults(true);
+                                setDeleteCheckResults(true);
                                 setDeleteSensorReadouts(true);
                                 setDeleteErrors(true);
                             }};

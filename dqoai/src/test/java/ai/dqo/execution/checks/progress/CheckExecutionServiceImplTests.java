@@ -40,7 +40,7 @@ import ai.dqo.data.normalization.CommonTableNormalizationServiceImpl;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizationService;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizationServiceImpl;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactoryObjectMother;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactoryObjectMother;
+import ai.dqo.data.checkresults.snapshot.RuleResultsSnapshotFactoryObjectMother;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.CheckExecutionServiceImpl;

@@ -136,7 +136,7 @@ public class ConnectionBasicModel {
 
                 setDeleteStatistics(true);
                 setDeleteErrors(true);
-                setDeleteRuleResults(true);
+                setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
             }});
         }};

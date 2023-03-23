@@ -16,6 +16,7 @@
 package ai.dqo.core.synchronization.fileexchange;
 
 import ai.dqo.core.configuration.DqoCloudConfigurationProperties;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.filesystem.metadata.FileDifference;
 import ai.dqo.core.filesystem.metadata.FileMetadata;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
@@ -69,6 +70,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
      * @param remote Target file system to send the changes in the source and download new changes.
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
+     * @param apiKey API Key with the license limits.
      * @param synchronizationListener Synchronization listener that is informed about the progress.
      * @return Synchronization result with two new file indexes after the file synchronization.
      */
@@ -76,11 +78,13 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                                              FileSystemChangeSet remote,
                                              DqoRoot dqoRoot,
                                              FileSynchronizationDirection synchronizationDirection,
+                                             DqoCloudApiKey apiKey,
                                              FileSystemSynchronizationListener synchronizationListener) {
         SynchronizationRoot localFileSystem = local.getFileSystem();
         FolderMetadata lastLocalFolderIndex = local.getStoredFileIndex();
         SynchronizationRoot remoteFileSystem = remote.getFileSystem();
         FolderMetadata lastRemoteFolderIndex = remote.getStoredFileIndex();
+        TargetTableModifiedPartitions targetTableModifiedPartitions = new TargetTableModifiedPartitions(dqoRoot);
 
         assert Objects.equals(lastLocalFolderIndex.getRelativePath(), lastRemoteFolderIndex.getRelativePath());
 
@@ -113,10 +117,14 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
                             sourceFileSystemRoot, lastLocalFolderIndex.getRelativePath(), lastLocalFolderIndex));
             newLocalFolderIndex = currentLocalFolderIndex.isFrozen() ? currentLocalFolderIndex.cloneUnfrozen() : currentLocalFolderIndex;
 
+            // TODO: modify the newLocalFolderIndex index and leave only a limited number of connections and tables, to match with the limits
+
             if (synchronizationDirection == FileSynchronizationDirection.full || synchronizationDirection == FileSynchronizationDirection.upload) {
-                Collection<FileDifference> localChanges = lastLocalFolderIndex.findFileDifferences(currentLocalFolderIndex);
+                Collection<FileDifference> localChanges = lastLocalFolderIndex.findFileDifferences(newLocalFolderIndex);
 
                 if (localChanges != null) {
+                    targetTableModifiedPartitions.addModifications(localChanges);
+
                     // upload source (local) changes to the remote file system
                     synchronizedLocalChanges = uploadLocalToRemoteAsync(dqoRoot, synchronizationListener, localFileSystem, remoteFileSystem, targetFileSystemSynchronizationOperations,
                             targetFileSystemRoot, newTargetFolderIndex, sourceFileSystemSynchronizationOperations, sourceFileSystemRoot, localChanges)
@@ -188,7 +196,7 @@ public class FileSystemSynchronizationServiceImpl implements FileSystemSynchroni
 
         synchronizationListener.onSynchronizationFinished(dqoRoot, localFileSystem, remoteFileSystem);
 
-        return new SynchronizationResult(newLocalFolderIndex, newTargetFolderIndex);
+        return new SynchronizationResult(newLocalFolderIndex, newTargetFolderIndex, targetTableModifiedPartitions);
 //        return new SynchronizationResult(sourceFileIndexAfterChanges, targetFileIndexAfterChanges);
     }
 

@@ -94,7 +94,7 @@ public class CloudSyncDataCliCommand extends BaseCommand implements ICommand {
         if (synchronizeReadoutsResult < 0) {
             return synchronizeReadoutsResult;
         }
-        int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.data_rule_results, this.mode, this.direction, this.isHeadless(), true);
+        int synchronizeRuleResultsResult = this.cloudSynchronizationService.synchronizeRoot(DqoRoot.data_check_results, this.mode, this.direction, this.isHeadless(), true);
         if (synchronizeRuleResultsResult < 0) {
             return synchronizeReadoutsResult;
         }

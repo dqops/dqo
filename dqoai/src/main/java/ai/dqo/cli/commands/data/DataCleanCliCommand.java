@@ -97,8 +97,8 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-st", "--statistics"}, description = "Delete the statistics")
     private boolean deleteStatistics = false;
 
-    @CommandLine.Option(names = {"-rr", "--rule-results"}, description = "Delete the rule results")
-    private boolean deleteRuleResults = false;
+    @CommandLine.Option(names = {"-rr", "--check-results"}, description = "Delete the check results")
+    private boolean deleteCheckResults = false;
 
     @CommandLine.Option(names = {"-sr", "--sensor-readouts"}, description = "Delete the sensor readouts")
     private boolean deleteSensorReadouts = false;
@@ -166,7 +166,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
 
         deleteStoredDataJobParameters.setDeleteErrors(this.deleteErrors);
         deleteStoredDataJobParameters.setDeleteStatistics(this.deleteStatistics);
-        deleteStoredDataJobParameters.setDeleteRuleResults(this.deleteRuleResults);
+        deleteStoredDataJobParameters.setDeleteCheckResults(this.deleteCheckResults);
         deleteStoredDataJobParameters.setDeleteSensorReadouts(this.deleteSensorReadouts);
 
         if (!Strings.isNullOrEmpty(this.checkCategory)) {

@@ -18,12 +18,12 @@ package ai.dqo.cli.commands.data;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.terminal.TerminalWriter;
-import ai.dqo.data.ruleresults.factory.RuleResultsColumnNames;
-import ai.dqo.data.ruleresults.factory.RuleResultsTableFactory;
-import ai.dqo.data.ruleresults.models.RuleResultsFragmentFilter;
-import ai.dqo.data.ruleresults.services.RuleResultsDeleteService;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshotFactory;
+import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
+import ai.dqo.data.checkresults.factory.CheckResultsTableFactory;
+import ai.dqo.data.checkresults.models.CheckResultsFragmentFilter;
+import ai.dqo.data.checkresults.services.CheckResultsDeleteService;
+import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
+import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.data.storage.LoadedMonthlyPartition;
 import ai.dqo.metadata.search.TableSearchFilters;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -44,22 +44,22 @@ import java.time.LocalDate;
 @CommandLine.Command(name = "perf", description = "Run performance tests of writing parquet files. To be used only for development purposes.")
 public class DataStoragePerformanceCliCommand extends BaseCommand implements ICommand {
     private TerminalWriter terminalWriter;
-    private RuleResultsTableFactory ruleResultsTableFactory;
-    private RuleResultsSnapshotFactory ruleResultsSnapshotFactory;
-    private RuleResultsDeleteService ruleResultsDeleteService;
+    private CheckResultsTableFactory checkResultsTableFactory;
+    private CheckResultsSnapshotFactory checkResultsSnapshotFactory;
+    private CheckResultsDeleteService checkResultsDeleteService;
 
     public DataStoragePerformanceCliCommand() {
     }
 
     @Autowired
     public DataStoragePerformanceCliCommand(TerminalWriter terminalWriter,
-                                            RuleResultsTableFactory ruleResultsTableFactory,
-                                            RuleResultsSnapshotFactory ruleResultsSnapshotFactory,
-                                            RuleResultsDeleteService ruleResultsDeleteService) {
+                                            CheckResultsTableFactory checkResultsTableFactory,
+                                            CheckResultsSnapshotFactory checkResultsSnapshotFactory,
+                                            CheckResultsDeleteService checkResultsDeleteService) {
         this.terminalWriter = terminalWriter;
-        this.ruleResultsTableFactory = ruleResultsTableFactory;
-        this.ruleResultsSnapshotFactory = ruleResultsSnapshotFactory;
-        this.ruleResultsDeleteService = ruleResultsDeleteService;
+        this.checkResultsTableFactory = checkResultsTableFactory;
+        this.checkResultsSnapshotFactory = checkResultsSnapshotFactory;
+        this.checkResultsDeleteService = checkResultsDeleteService;
     }
 
     @CommandLine.Option(names = {"-r", "--repeats"}, description = "The number of repeats (write file, delete file... and another retry: write, delete)",
@@ -74,27 +74,27 @@ public class DataStoragePerformanceCliCommand extends BaseCommand implements ICo
      * Performs one iteration of the performance test: create parquet file, delete file.
      */
     private void runOneIteration(LocalDate monthDate, Table newRows) {
-        RuleResultsSnapshot snapshot = this.ruleResultsSnapshotFactory.createSnapshot("perftestdelete", new PhysicalTableName("perfschema", "perftest"));
+        CheckResultsSnapshot snapshot = this.checkResultsSnapshotFactory.createSnapshot("perftestdelete", new PhysicalTableName("perfschema", "perftest"));
         LoadedMonthlyPartition monthPartition = snapshot.getMonthPartition(monthDate, false);
         Table targetTable = snapshot.getTableDataChanges().getNewOrChangedRows();
         targetTable.append(newRows);
 
         snapshot.save();
 
-        RuleResultsFragmentFilter deleteFilter = new RuleResultsFragmentFilter();
+        CheckResultsFragmentFilter deleteFilter = new CheckResultsFragmentFilter();
         TableSearchFilters tableSearchFilters = new TableSearchFilters();
         tableSearchFilters.setConnectionName("perftestdelete");
         tableSearchFilters.setSchemaTableName("perfschema.perftest");
         deleteFilter.setTableSearchFilters(tableSearchFilters);
         deleteFilter.setDateStart(monthDate);
         deleteFilter.setDateEnd(monthDate.plusMonths(1));
-        this.ruleResultsDeleteService.deleteSelectedRuleResultsFragment(deleteFilter);
+        this.checkResultsDeleteService.deleteSelectedCheckResultsFragment(deleteFilter);
     }
 
     private void generateRows(LocalDate monthDate, Table targetTable) {
-        StringColumn idColumn = targetTable.stringColumn(RuleResultsColumnNames.ID_COLUMN_NAME);
-        DoubleColumn actualValueColumn = targetTable.doubleColumn(RuleResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
-        DateTimeColumn timePeriodColumn = targetTable.dateTimeColumn(RuleResultsColumnNames.TIME_PERIOD_COLUMN_NAME);
+        StringColumn idColumn = targetTable.stringColumn(CheckResultsColumnNames.ID_COLUMN_NAME);
+        DoubleColumn actualValueColumn = targetTable.doubleColumn(CheckResultsColumnNames.ACTUAL_VALUE_COLUMN_NAME);
+        DateTimeColumn timePeriodColumn = targetTable.dateTimeColumn(CheckResultsColumnNames.TIME_PERIOD_COLUMN_NAME);
 
         for (int i = 0; i < this.rowCount; i++) {
             Row row = targetTable.appendRow();
@@ -114,7 +114,7 @@ public class DataStoragePerformanceCliCommand extends BaseCommand implements ICo
     @Override
     public Integer call() throws Exception {
         LocalDate monthDate = LocalDate.of(2023, 03, 01);
-        Table targetTable = this.ruleResultsTableFactory.createEmptyRuleResultsTable("rules");
+        Table targetTable = this.checkResultsTableFactory.createEmptyCheckResultsTable("rules");
         generateRows(monthDate, targetTable);
 
         long startMillis = System.currentTimeMillis();

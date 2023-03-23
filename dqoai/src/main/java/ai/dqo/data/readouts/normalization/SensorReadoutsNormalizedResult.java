@@ -39,9 +39,11 @@ public class SensorReadoutsNormalizedResult {
     private final LongColumn tableHashColumn;
     private final StringColumn schemaNameColumn;
     private final StringColumn tableNameColumn;
+    private final StringColumn tableNamePatternColumn;
     private final StringColumn tableStageColumn;
     private final LongColumn columnHashColumn;
     private final StringColumn columnNameColumn;
+    private final StringColumn columnNamePatternColumn;
     private final LongColumn checkHashColumn;
     private final StringColumn checkNameColumn;
     private final StringColumn checkDisplayNameColumn;
@@ -74,9 +76,11 @@ public class SensorReadoutsNormalizedResult {
         this.tableHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.TABLE_HASH_COLUMN_NAME);
         this.schemaNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.SCHEMA_NAME_COLUMN_NAME);
         this.tableNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_NAME_COLUMN_NAME);
+        this.tableNamePatternColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_NAME_PATTERN_COLUMN_NAME);
         this.tableStageColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.TABLE_STAGE_COLUMN_NAME);
         this.columnHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.COLUMN_HASH_COLUMN_NAME);
         this.columnNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_COLUMN_NAME);
+        this.columnNamePatternColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.COLUMN_NAME_PATTERN_COLUMN_NAME);
         this.checkHashColumn = TableColumnUtility.getOrAddLongColumn(table, SensorReadoutsColumnNames.CHECK_HASH_COLUMN_NAME);
         this.checkNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_NAME_COLUMN_NAME);
         this.checkDisplayNameColumn = TableColumnUtility.getOrAddStringColumn(table, SensorReadoutsColumnNames.CHECK_DISPLAY_NAME_COLUMN_NAME);
@@ -211,6 +215,14 @@ public class SensorReadoutsNormalizedResult {
     }
 
     /**
+     * Returns a tablesaw column with the table name pattern.
+     * @return Column with the table name pattern.
+     */
+    public StringColumn getTableNamePatternColumn() {
+        return tableNamePatternColumn;
+    }
+
+    /**
      * Returns a tablesaw column with the table's stage.
      * @return Table's stage column.
      */
@@ -232,6 +244,14 @@ public class SensorReadoutsNormalizedResult {
      */
     public StringColumn getColumnNameColumn() {
         return columnNameColumn;
+    }
+
+    /**
+     * Returns a tablesaw column that stores the column name pattern. The column with "column names" may contain nulls when checks are defined on a whole table level.
+     * @return Column name pattern tablesaw column.
+     */
+    public StringColumn getColumnNamePatternColumn() {
+        return columnNamePatternColumn;
     }
 
     /**

@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.synchronization.fileexchange;
 
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationListener;
 
@@ -29,6 +30,7 @@ public interface FileSystemSynchronizationService {
      * @param remote Target file system to send the changes in the source and download new changes.
      * @param dqoRoot User Home folder type to synchronize.
      * @param synchronizationDirection File synchronization direction (full, download, upload).
+     * @param apiKey API key with the license limits.
      * @param synchronizationListener Synchronization listener that is informed about the progress.
      * @return Synchronization result with two new file indexes after the file synchronization.
      */
@@ -36,5 +38,6 @@ public interface FileSystemSynchronizationService {
                                       FileSystemChangeSet remote,
                                       DqoRoot dqoRoot,
                                       FileSynchronizationDirection synchronizationDirection,
+                                      DqoCloudApiKey apiKey,
                                       FileSystemSynchronizationListener synchronizationListener);
 }

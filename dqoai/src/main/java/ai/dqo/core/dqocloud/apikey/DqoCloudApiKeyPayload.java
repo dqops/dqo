@@ -32,7 +32,7 @@ public class DqoCloudApiKeyPayload {
     /**
      * API Key format version.
      */
-    public static final long CURRENT_API_KEY_VERSION = 3;
+    public static final long CURRENT_API_KEY_VERSION = 4;
 
     @JsonProperty("ver")
     private Long version;

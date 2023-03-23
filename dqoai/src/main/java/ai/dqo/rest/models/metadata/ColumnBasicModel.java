@@ -164,7 +164,7 @@ public class ColumnBasicModel {
 
                 setDeleteStatistics(true);
                 setDeleteErrors(true);
-                setDeleteRuleResults(true);
+                setDeleteCheckResults(true);
                 setDeleteSensorReadouts(true);
             }});
         }};
