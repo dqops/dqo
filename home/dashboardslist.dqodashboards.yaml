@@ -161,7 +161,7 @@ spec:
             height: 1300
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: DQ KPIs per quality dimension
             url: >-
               https://lookerstudio.google.com/embed/reporting/1e2459aa-adb2-40ff-b9b1-d1eddcb0afad/page/c5B8C
@@ -169,7 +169,7 @@ spec:
             height: 1300
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
         folders:
           - folder_name: DQ KPIs profiling per quality dimension
             dashboards:
@@ -180,7 +180,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Validity
               - dashboard_name: KPIs reasonableness
                 url: >-
@@ -189,7 +189,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Reasonableness
               - dashboard_name: KPIs completeness
                 url: >-
@@ -198,7 +198,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Completeness
           - folder_name: DQ KPIs profiling per category
             dashboards:
@@ -209,7 +209,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: uniqueness
               - dashboard_name: DQ KPIs - timeliness
                 url: >-
@@ -218,7 +218,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: timeliness
               - dashboard_name: DQ KPIs - strings
                 url: >-
@@ -227,7 +227,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: strings
               - dashboard_name: DQ KPIs - standard
                 url: >-
@@ -236,7 +236,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: standard
               - dashboard_name: DQ KPIs - pii
                 url: >-
@@ -245,7 +245,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: pii
               - dashboard_name: DQ KPIs - numeric
                 url: >-
@@ -254,7 +254,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: numeric
               - dashboard_name: DQ KPIs - nulls
                 url: >-
@@ -263,7 +263,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: nulls
               - dashboard_name: DQ KPIs - datetime
                 url: >-
@@ -272,7 +272,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: datetime
               - dashboard_name: DQ KPIs - bool
                 url: >-
@@ -281,20 +281,20 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: bool
-      - folder_name: DQ KPIs whole table checks
+      - folder_name: DQ KPIs recurring checks
         dashboards:
-          - dashboard_name: DQ KPIs whole table checks
+          - dashboard_name: DQ KPIs recurring checks
             url: >-
               https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
             width: 1580
             height: 1800
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
+              ds0.p_check_type: recurring
         folders:
-          - folder_name: DQ KPIs whole table checks per quality dimension
+          - folder_name: DQ KPIs recurring checks per quality dimension
             dashboards:
               - dashboard_name: KPIs validity
                 url: >-
@@ -303,7 +303,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Validity
               - dashboard_name: KPIs reasonableness
                 url: >-
@@ -312,7 +312,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Reasonableness
               - dashboard_name: KPIs completeness
                 url: >-
@@ -321,9 +321,9 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Completeness
-          - folder_name: DQ KPIs whole table checks per category
+          - folder_name: DQ KPIs recurring checks per category
             dashboards:
               - dashboard_name: DQ KPIs - uniqueness
                 url: >-
@@ -332,7 +332,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: uniqueness
               - dashboard_name: DQ KPIs - timeliness
                 url: >-
@@ -341,7 +341,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: timeliness
               - dashboard_name: DQ KPIs - strings
                 url: >-
@@ -350,7 +350,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: strings
               - dashboard_name: DQ KPIs - standard
                 url: >-
@@ -359,7 +359,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: standard
               - dashboard_name: DQ KPIs - pii
                 url: >-
@@ -368,7 +368,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: pii
               - dashboard_name: DQ KPIs - numeric
                 url: >-
@@ -377,7 +377,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: numeric
               - dashboard_name: DQ KPIs - nulls
                 url: >-
@@ -386,7 +386,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: nulls
               - dashboard_name: DQ KPIs - datetime
                 url: >-
@@ -395,7 +395,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: datetime
               - dashboard_name: DQ KPIs - bool
                 url: >-
@@ -404,11 +404,11 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: bool
-      - folder_name: DQ KPIs time period checks
+      - folder_name: DQ KPIs partitioned checks
         dashboards:
-          - dashboard_name: DQ KPIs time period checks
+          - dashboard_name: DQ KPIs partitioned checks
             url: >-
               https://datastudio.google.com/embed/reporting/5f3d7f47-ea13-465c-95e6-5ab75948a0a4/page/c5B8C
             width: 1580
@@ -417,7 +417,7 @@ spec:
             parameters:
               ds0.p_check_type: partitioned
         folders:
-          - folder_name: DQ KPIs time period checks per quality dimension
+          - folder_name: DQ KPIs partitioned checks per quality dimension
             dashboards:
               - dashboard_name: KPIs validity
                 url: >-
@@ -446,7 +446,7 @@ spec:
                 parameters:
                   ds0.p_check_type: partitioned
                   ds0.p_quality_dimension: Completeness
-          - folder_name: DQ KPIs time period checks per category
+          - folder_name: DQ KPIs partitioned checks per category
             dashboards:
               - dashboard_name: DQ KPIs - uniqueness
                 url: >-
@@ -664,7 +664,7 @@ spec:
             height: 1800
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
               ds0.p_quality_dimension: 'all'
         folders:
           - folder_name: Affected tables profiling per quality dimension
@@ -676,7 +676,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Validity
               - dashboard_name: Affected tables reasonableness
                 url: >-
@@ -685,7 +685,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Reasonableness
               - dashboard_name: Affected tables completeness
                 url: >-
@@ -694,7 +694,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Completeness
           - folder_name: Affected tables profiling per category
             dashboards:
@@ -705,7 +705,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: uniqueness
               - dashboard_name: Affected tables - timeliness
                 url: >-
@@ -714,7 +714,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: timeliness
               - dashboard_name: Affected tables - strings
                 url: >-
@@ -723,7 +723,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: strings
               - dashboard_name: Affected tables - standard
                 url: >-
@@ -732,7 +732,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: standard
               - dashboard_name: Affected tables - pii
                 url: >-
@@ -741,7 +741,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: pii
               - dashboard_name: Affected tables - numeric
                 url: >-
@@ -750,7 +750,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: numeric
               - dashboard_name: Affected tables - nulls
                 url: >-
@@ -759,7 +759,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: nulls
               - dashboard_name: Affected tables - datetime
                 url: >-
@@ -768,7 +768,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: datetime
               - dashboard_name: Affected tables - bool
                 url: >-
@@ -777,18 +777,18 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: bool
-      - folder_name: Affected tables for whole table checks
+      - folder_name: Affected tables for recurring checks
         dashboards:
-          - dashboard_name: Affected tables for whole table checks
+          - dashboard_name: Affected tables for recurring checks
             url: >-
               https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
             width: 1580
             height: 1800
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
+              ds0.p_check_type: recurring
               ds0.p_quality_dimension: 'all'
         folders:
           - folder_name: Total affected tables per quality dimension
@@ -800,7 +800,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Validity
               - dashboard_name: Affected tables reasonableness
                 url: >-
@@ -809,7 +809,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Reasonableness
               - dashboard_name: Affected tables completeness
                 url: >-
@@ -818,7 +818,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Completeness
           - folder_name: Total affected tables per category
             dashboards:
@@ -829,7 +829,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: uniqueness
               - dashboard_name: Affected tables - timeliness
                 url: >-
@@ -838,7 +838,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: timeliness
               - dashboard_name: Affected tables - strings
                 url: >-
@@ -847,7 +847,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: strings
               - dashboard_name: Affected tables - standard
                 url: >-
@@ -856,7 +856,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: standard
               - dashboard_name: Affected tables - pii
                 url: >-
@@ -865,7 +865,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: pii
               - dashboard_name: Affected tables - numeric
                 url: >-
@@ -874,7 +874,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: numeric
               - dashboard_name: Affected tables - nulls
                 url: >-
@@ -883,7 +883,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: nulls
               - dashboard_name: Affected tables - datetime
                 url: >-
@@ -892,7 +892,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: datetime
               - dashboard_name: Affected tables - bool
                 url: >-
@@ -901,11 +901,11 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: bool
-      - folder_name: Affected tables time period checks
+      - folder_name: Affected tables partitioned checks
         dashboards:
-          - dashboard_name: Affected tables time period checks
+          - dashboard_name: Affected tables partitioned checks
             url: >-
               https://datastudio.google.com/embed/reporting/64146a51-d02b-498c-bc3d-e04786414575/page/c5B8C
             width: 1580
@@ -915,7 +915,7 @@ spec:
               ds0.p_check_type: partitioned
               ds0.p_quality_dimension: 'all'
         folders:
-          - folder_name: Affected tables time period checks per quality dimension
+          - folder_name: Affected tables partitioned checks per quality dimension
             dashboards:
               - dashboard_name: Affected tables validity
                 url: >-
@@ -1534,7 +1534,7 @@ spec:
             height: 1800
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
               ds0.p_quality_dimension: 'all'
         folders:
           - folder_name: Issue details profiling per quality dimension
@@ -1546,7 +1546,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Validity
               - dashboard_name: Issue details reasonableness
                 url: >-
@@ -1555,7 +1555,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Reasonableness
               - dashboard_name: Issue details completeness
                 url: >-
@@ -1564,7 +1564,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: Completeness
           - folder_name: Total Issue details profiling per category
             dashboards:
@@ -1575,7 +1575,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: uniqueness
               - dashboard_name: Issue details - timeliness
                 url: >-
@@ -1584,7 +1584,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: timeliness
               - dashboard_name: Issue details - strings
                 url: >-
@@ -1593,7 +1593,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: strings
               - dashboard_name: Issue details - standard
                 url: >-
@@ -1602,7 +1602,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: standard
               - dashboard_name: Issue details - pii
                 url: >-
@@ -1611,7 +1611,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: pii
               - dashboard_name: Issue details - numeric
                 url: >-
@@ -1620,7 +1620,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: numeric
               - dashboard_name: Issue details - nulls
                 url: >-
@@ -1629,7 +1629,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: nulls
               - dashboard_name: Issue details - datetime
                 url: >-
@@ -1638,7 +1638,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: datetime
               - dashboard_name: Issue details - bool
                 url: >-
@@ -1647,7 +1647,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_check_category: bool
           - folder_name: Issues history
             dashboards:
@@ -1658,7 +1658,7 @@ spec:
                 height: 2500
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: 'all'
             folders:
               - folder_name: Issues history profiling per quality dimension
@@ -1670,7 +1670,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Validity
                   - dashboard_name: Issues history reasonableness
                     url: >-
@@ -1679,7 +1679,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Issues history completeness
                     url: >-
@@ -1688,7 +1688,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
               - folder_name: Issues history profiling per category
                 dashboards:
@@ -1699,7 +1699,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Issues history - timeliness
                     url: >-
@@ -1708,7 +1708,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Issues history - strings
                     url: >-
@@ -1717,7 +1717,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Issues history - standard
                     url: >-
@@ -1726,7 +1726,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Issues history - pii
                     url: >-
@@ -1735,7 +1735,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Issues history - numeric
                     url: >-
@@ -1744,7 +1744,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Issues history - nulls
                     url: >-
@@ -1753,7 +1753,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Issues history - datetime
                     url: >-
@@ -1762,7 +1762,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Issues history - bool
                     url: >-
@@ -1771,7 +1771,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
           - folder_name: Issues per check
             dashboards:
@@ -1782,7 +1782,7 @@ spec:
                 height: 2100
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: 'all'
             folders:
               - folder_name: Issues per check profiling per quality dimension
@@ -1794,7 +1794,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Validity
                   - dashboard_name: Issues per check reasonableness
                     url: >-
@@ -1803,7 +1803,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Issues per check completeness
                     url: >-
@@ -1812,7 +1812,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
               - folder_name: Issues per check profiling per category
                 dashboards:
@@ -1823,7 +1823,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Issues per check - timeliness
                     url: >-
@@ -1832,7 +1832,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Issues per check - strings
                     url: >-
@@ -1841,7 +1841,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Issues per check - standard
                     url: >-
@@ -1850,7 +1850,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Issues per check - pii
                     url: >-
@@ -1859,7 +1859,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Issues per check - numeric
                     url: >-
@@ -1868,7 +1868,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Issues per check - nulls
                     url: >-
@@ -1877,7 +1877,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Issues per check - datetime
                     url: >-
@@ -1886,7 +1886,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Issues per check - bool
                     url: >-
@@ -1895,7 +1895,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
           - folder_name: Issues per table
             dashboards:
@@ -1906,7 +1906,7 @@ spec:
                 height: 2100
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: adhoc
+                  ds0.p_check_type: profiling
                   ds0.p_quality_dimension: 'all'
             folders:
               - folder_name: Issues per table profiling per quality dimension
@@ -1918,7 +1918,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Validity
                   - dashboard_name: Issues per table reasonableness
                     url: >-
@@ -1927,7 +1927,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Issues per table completeness
                     url: >-
@@ -1936,7 +1936,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
               - folder_name: Issues per table profiling per category
                 dashboards:
@@ -1947,7 +1947,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Issues per table - timeliness
                     url: >-
@@ -1956,7 +1956,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Issues per table - strings
                     url: >-
@@ -1965,7 +1965,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Issues per table - standard
                     url: >-
@@ -1974,7 +1974,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Issues per table - pii
                     url: >-
@@ -1983,7 +1983,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Issues per table - numeric
                     url: >-
@@ -1992,7 +1992,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Issues per table - nulls
                     url: >-
@@ -2001,7 +2001,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Issues per table - datetime
                     url: >-
@@ -2010,7 +2010,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Issues per table - bool
                     url: >-
@@ -2019,21 +2019,21 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
-      - folder_name: Issue details whole table checks
+      - folder_name: Issue details recurring checks
         dashboards:
-          - dashboard_name: Total issue details whole table checks
+          - dashboard_name: Total issue details recurring checks
             url: >-
               https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
             width: 1580
             height: 1800
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
               ds0.p_quality_dimension: 'all'
         folders:
-          - folder_name: Issue details whole table checks per quality dimension
+          - folder_name: Issue details recurring checks per quality dimension
             dashboards:
               - dashboard_name: Issue details validity
                 url: >-
@@ -2042,7 +2042,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Validity
               - dashboard_name: Issue details reasonableness
                 url: >-
@@ -2051,7 +2051,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Reasonableness
               - dashboard_name: Issue details completeness
                 url: >-
@@ -2060,9 +2060,9 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: Completeness
-          - folder_name: Total Issue details whole table checks per category
+          - folder_name: Total Issue details recurring checks per category
             dashboards:
               - dashboard_name: Issue details - uniqueness
                 url: >-
@@ -2071,7 +2071,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: uniqueness
               - dashboard_name: Issue details - timeliness
                 url: >-
@@ -2080,7 +2080,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: timeliness
               - dashboard_name: Issue details - strings
                 url: >-
@@ -2089,7 +2089,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: strings
               - dashboard_name: Issue details - standard
                 url: >-
@@ -2098,7 +2098,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: standard
               - dashboard_name: Issue details - pii
                 url: >-
@@ -2107,7 +2107,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: pii
               - dashboard_name: Issue details - numeric
                 url: >-
@@ -2116,7 +2116,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: numeric
               - dashboard_name: Issue details - nulls
                 url: >-
@@ -2125,7 +2125,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: nulls
               - dashboard_name: Issue details - datetime
                 url: >-
@@ -2134,7 +2134,7 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: datetime
               - dashboard_name: Issue details - bool
                 url: >-
@@ -2143,21 +2143,21 @@ spec:
                 height: 1800
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_check_category: bool
           - folder_name: Issues history
             dashboards:
-              - dashboard_name: Issues history whole table checks
+              - dashboard_name: Issues history recurring checks
                 url: >-
                   https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
                 width: 1580
                 height: 2500
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: 'all'
             folders:
-              - folder_name: Issues history whole table checks per quality dimension
+              - folder_name: Issues history recurring checks per quality dimension
                 dashboards:
                   - dashboard_name: Issues history validity
                     url: >-
@@ -2166,7 +2166,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Validity
                   - dashboard_name: Issues history reasonableness
                     url: >-
@@ -2175,7 +2175,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Issues history completeness
                     url: >-
@@ -2184,9 +2184,9 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
-              - folder_name: Issues history whole table checks per category
+              - folder_name: Issues history recurring checks per category
                 dashboards:
                   - dashboard_name: Issues history - uniqueness
                     url: >-
@@ -2195,7 +2195,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Issues history - timeliness
                     url: >-
@@ -2204,7 +2204,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Issues history - strings
                     url: >-
@@ -2213,7 +2213,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Issues history - standard
                     url: >-
@@ -2222,7 +2222,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Issues history - pii
                     url: >-
@@ -2231,7 +2231,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Issues history - numeric
                     url: >-
@@ -2240,7 +2240,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Issues history - nulls
                     url: >-
@@ -2249,7 +2249,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Issues history - datetime
                     url: >-
@@ -2258,7 +2258,7 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Issues history - bool
                     url: >-
@@ -2267,21 +2267,21 @@ spec:
                     height: 2500
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
           - folder_name: Issues per check
             dashboards:
-              - dashboard_name: Issues per check whole table checks
+              - dashboard_name: Issues per check recurring checks
                 url: >-
                   https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
                 width: 1580
                 height: 2100
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: 'all'
             folders:
-              - folder_name: Issues per check whole table checks per quality dimension
+              - folder_name: Issues per check recurring checks per quality dimension
                 dashboards:
                   - dashboard_name: Issues per check validity
                     url: >-
@@ -2290,7 +2290,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Validity
                   - dashboard_name: Issues per check reasonableness
                     url: >-
@@ -2299,7 +2299,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Issues per check completeness
                     url: >-
@@ -2308,9 +2308,9 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
-              - folder_name: Issues per check whole table checks per category
+              - folder_name: Issues per check recurring checks per category
                 dashboards:
                   - dashboard_name: Issues per check - uniqueness
                     url: >-
@@ -2319,7 +2319,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Issues per check - timeliness
                     url: >-
@@ -2328,7 +2328,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Issues per check - strings
                     url: >-
@@ -2337,7 +2337,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Issues per check - standard
                     url: >-
@@ -2346,7 +2346,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Issues per check - pii
                     url: >-
@@ -2355,7 +2355,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Issues per check - numeric
                     url: >-
@@ -2364,7 +2364,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Issues per check - nulls
                     url: >-
@@ -2373,7 +2373,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Issues per check - datetime
                     url: >-
@@ -2382,7 +2382,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Issues per check - bool
                     url: >-
@@ -2391,21 +2391,21 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
           - folder_name: Issues per table
             dashboards:
-              - dashboard_name: Issues per table whole table checks
+              - dashboard_name: Issues per table recurring checks
                 url: >-
                   https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
                 width: 1580
                 height: 2100
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
                   ds0.p_quality_dimension: 'all'
             folders:
-              - folder_name: Issues per table whole table checks per quality dimension
+              - folder_name: Issues per table recurring checks per quality dimension
                 dashboards:
                   - dashboard_name: Issues per table validity
                     url: >-
@@ -2414,7 +2414,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Validity
                   - dashboard_name: Issues per table reasonableness
                     url: >-
@@ -2423,7 +2423,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Issues per table completeness
                     url: >-
@@ -2432,9 +2432,9 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
-              - folder_name: Issues per table whole table checks per category
+              - folder_name: Issues per table recurring checks per category
                 dashboards:
                   - dashboard_name: Issues per table - uniqueness
                     url: >-
@@ -2443,7 +2443,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Issues per table - timeliness
                     url: >-
@@ -2452,7 +2452,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Issues per table - strings
                     url: >-
@@ -2461,7 +2461,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Issues per table - standard
                     url: >-
@@ -2470,7 +2470,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Issues per table - pii
                     url: >-
@@ -2479,7 +2479,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Issues per table - numeric
                     url: >-
@@ -2488,7 +2488,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Issues per table - nulls
                     url: >-
@@ -2497,7 +2497,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Issues per table - datetime
                     url: >-
@@ -2506,7 +2506,7 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Issues per table - bool
                     url: >-
@@ -2515,11 +2515,11 @@ spec:
                     height: 2100
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
-      - folder_name: Issue details time period checks
+      - folder_name: Issue details partitioned checks
         dashboards:
-          - dashboard_name: Total issue details time period checks
+          - dashboard_name: Total issue details partitioned checks
             url: >-
               https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
             width: 1580
@@ -2529,7 +2529,7 @@ spec:
               ds0.p_check_type: partitioned
               ds0.p_quality_dimension: 'all'
         folders:
-          - folder_name: Issue details time period checks per quality dimension
+          - folder_name: Issue details partitioned checks per quality dimension
             dashboards:
               - dashboard_name: Issue details validity
                 url: >-
@@ -2558,7 +2558,7 @@ spec:
                 parameters:
                   ds0.p_check_type: partitioned
                   ds0.p_quality_dimension: Completeness
-          - folder_name: Total Issue details time period checks per category
+          - folder_name: Total Issue details partitioned checks per category
             dashboards:
               - dashboard_name: Issue details - uniqueness
                 url: >-
@@ -2643,7 +2643,7 @@ spec:
                   ds0.p_check_category: bool
           - folder_name: Issues history
             dashboards:
-              - dashboard_name: Issues history time period checks
+              - dashboard_name: Issues history partitioned checks
                 url: >-
                   https://datastudio.google.com/embed/reporting/00ae6cbe-7a1d-48d7-b221-4d56d0207d3c/page/c5B8C
                 width: 1580
@@ -2653,7 +2653,7 @@ spec:
                   ds0.p_check_type: partitioned
                   ds0.p_quality_dimension: 'all'
             folders:
-              - folder_name: Issues history time period checks per quality dimension
+              - folder_name: Issues history partitioned checks per quality dimension
                 dashboards:
                   - dashboard_name: Issues history validity
                     url: >-
@@ -2682,7 +2682,7 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
-              - folder_name: Issues history time period checks per category
+              - folder_name: Issues history partitioned checks per category
                 dashboards:
                   - dashboard_name: Issues history - uniqueness
                     url: >-
@@ -2767,7 +2767,7 @@ spec:
                       ds0.p_check_category: bool
           - folder_name: Issues per check
             dashboards:
-              - dashboard_name: Issues per check time period checks
+              - dashboard_name: Issues per check partitioned checks
                 url: >-
                   https://datastudio.google.com/embed/reporting/77fe746e-8e5f-4aae-93b7-0f3ee42dfa2a/page/c5B8C
                 width: 1580
@@ -2777,7 +2777,7 @@ spec:
                   ds0.p_check_type: partitioned
                   ds0.p_quality_dimension: 'all'
             folders:
-              - folder_name: Issues per check time period checks per quality dimension
+              - folder_name: Issues per check partitioned checks per quality dimension
                 dashboards:
                   - dashboard_name: Issues per check validity
                     url: >-
@@ -2806,7 +2806,7 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
-              - folder_name: Issues per check time period checks per category
+              - folder_name: Issues per check partitioned checks per category
                 dashboards:
                   - dashboard_name: Issues per check - uniqueness
                     url: >-
@@ -2891,7 +2891,7 @@ spec:
                       ds0.p_check_category: bool
           - folder_name: Issues per table
             dashboards:
-              - dashboard_name: Issues per table time period checks
+              - dashboard_name: Issues per table partitioned checks
                 url: >-
                   https://datastudio.google.com/embed/reporting/ddf39a75-b3fa-413d-b41d-312b6ffb1b74/page/c5B8C
                 width: 1580
@@ -2901,7 +2901,7 @@ spec:
                   ds0.p_check_type: partitioned
                   ds0.p_quality_dimension: 'all'
             folders:
-              - folder_name: Issues per table time period checks per quality dimension
+              - folder_name: Issues per table partitioned checks per quality dimension
                 dashboards:
                   - dashboard_name: Issues per table validity
                     url: >-
@@ -2930,7 +2930,7 @@ spec:
                     parameters:
                       ds0.p_check_type: partitioned
                       ds0.p_quality_dimension: Completeness
-              - folder_name: Issues per table time period checks per category
+              - folder_name: Issues per table partitioned checks per category
                 dashboards:
                   - dashboard_name: Issues per table - uniqueness
                     url: >-
@@ -3017,13 +3017,13 @@ spec:
     folders:
       - folder_name: Volume
         dashboards:
-          - dashboard_name: Table row count readouts for time period checks
+          - dashboard_name: Table row count readouts for partitioned checks
             url: >-
               https://datastudio.google.com/embed/reporting/e66f82cf-efea-4e79-8190-2396d1218b2e/page/c5B8C
             width: 1580
             height: 2100
             dqo_cloud_credentials: true
-          - dashboard_name: Biggest tables from whole table checks
+          - dashboard_name: Biggest tables from recurring checks
             url: >-
               https://datastudio.google.com/embed/reporting/2489ad1c-3651-4c5e-ace4-75d4ba0e43d2/page/c5B8C
             width: 1580
@@ -3031,7 +3031,7 @@ spec:
             dqo_cloud_credentials: true
       - folder_name: Timeliness
         dashboards:
-          - dashboard_name: Table freshness known from checkpoints
+          - dashboard_name: Table freshness known from recurrings
             url: >-
               https://datastudio.google.com/embed/reporting/e5d9a738-4592-4e46-99a5-295791fad600/page/c5B8C
             width: 1580
@@ -3051,7 +3051,7 @@ spec:
             dqo_cloud_credentials: true
       - folder_name: Completeness
         folders:
-          - folder_name: Most incomplete columns for whole table checks
+          - folder_name: Most incomplete columns for recurring checks
             dashboards:
               - dashboard_name: Most incomplete columns - count
                 url: >-
@@ -3060,7 +3060,7 @@ spec:
                 height: 1700
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
               - dashboard_name: Most incomplete columns - percent
                 url: >-
                   https://datastudio.google.com/embed/reporting/e7165c33-e937-4573-a6b1-4f60fbb908ca/page/p_fbueszx31c
@@ -3068,7 +3068,7 @@ spec:
                 height: 1700
                 dqo_cloud_credentials: true
                 parameters:
-                  ds0.p_check_type: checkpoint
+                  ds0.p_check_type: recurring
   - folder_name: Technical
     folders:
       - folder_name: Total technical
@@ -4285,7 +4285,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Daily tests per check for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
@@ -4293,7 +4293,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Daily tests per data stream, table for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
@@ -4301,7 +4301,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Daily tests per data stream, check for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
@@ -4309,7 +4309,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Scoreboard per table for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
@@ -4317,7 +4317,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Scoreboard per check for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
@@ -4325,7 +4325,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Scoreboard per data stream, table
             url: >-
               https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
@@ -4339,7 +4339,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Scoreboard per data stream, check for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
@@ -4347,7 +4347,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Daily KPI per table for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
@@ -4355,7 +4355,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Daily KPI per check for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
@@ -4363,7 +4363,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Daily KPI per data stream, table for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
@@ -4371,7 +4371,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
           - dashboard_name: Daily KPI per data stream, check for profiling
             url: >-
               https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
@@ -4379,7 +4379,7 @@ spec:
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: adhoc
+              ds0.p_check_type: profiling
         folders:
           - folder_name: Daily tests per table
             folders:
@@ -4392,7 +4392,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily tests - timeliness
                     url: >-
@@ -4401,7 +4401,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily tests - strings
                     url: >-
@@ -4410,7 +4410,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Daily tests - standard
                     url: >-
@@ -4419,7 +4419,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Daily tests - pii
                     url: >-
@@ -4428,7 +4428,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Daily tests - numeric
                     url: >-
@@ -4437,7 +4437,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily tests - nulls
                     url: >-
@@ -4446,7 +4446,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily tests - datetime
                     url: >-
@@ -4455,7 +4455,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily tests - bool
                     url: >-
@@ -4464,7 +4464,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
@@ -4475,7 +4475,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
@@ -4484,7 +4484,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily tests per check
             folders:
@@ -4497,7 +4497,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily tests - timeliness
                     url: >-
@@ -4506,7 +4506,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily tests - strings
                     url: >-
@@ -4515,7 +4515,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Daily tests - standard
                     url: >-
@@ -4524,7 +4524,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Daily tests - pii
                     url: >-
@@ -4533,7 +4533,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Daily tests - numeric
                     url: >-
@@ -4542,7 +4542,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily tests - nulls
                     url: >-
@@ -4551,7 +4551,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily tests - datetime
                     url: >-
@@ -4560,7 +4560,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily tests - bool
                     url: >-
@@ -4569,7 +4569,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
@@ -4580,7 +4580,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily tests - completeness
                     url: >-
@@ -4589,7 +4589,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily tests per data stream, table
             folders:
@@ -4602,7 +4602,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily tests - timeliness
                     url: >-
@@ -4611,7 +4611,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily tests - strings
                     url: >-
@@ -4620,7 +4620,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Daily tests - standard
                     url: >-
@@ -4629,7 +4629,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Daily tests - pii
                     url: >-
@@ -4638,7 +4638,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Daily tests - numeric
                     url: >-
@@ -4647,7 +4647,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily tests - nulls
                     url: >-
@@ -4656,7 +4656,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily tests - datetime
                     url: >-
@@ -4665,7 +4665,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily tests - bool
                     url: >-
@@ -4674,7 +4674,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
@@ -4685,7 +4685,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily tests - completeness
                     url: >-
@@ -4694,7 +4694,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily tests per data stream, check
             folders:
@@ -4707,7 +4707,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily tests - timeliness
                     url: >-
@@ -4716,7 +4716,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily tests - strings
                     url: >-
@@ -4725,7 +4725,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Daily tests - standard
                     url: >-
@@ -4734,7 +4734,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Daily tests - pii
                     url: >-
@@ -4743,7 +4743,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Daily tests - numeric
                     url: >-
@@ -4752,7 +4752,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily tests - nulls
                     url: >-
@@ -4761,7 +4761,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily tests - datetime
                     url: >-
@@ -4770,7 +4770,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily tests - bool
                     url: >-
@@ -4779,7 +4779,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
@@ -4790,7 +4790,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily tests - completeness
                     url: >-
@@ -4799,7 +4799,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Scoreboard per table
             folders:
@@ -4812,7 +4812,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Scoreboard - timeliness
                     url: >-
@@ -4821,7 +4821,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Scoreboard - strings
                     url: >-
@@ -4830,7 +4830,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Scoreboard - standard
                     url: >-
@@ -4839,7 +4839,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Scoreboard - pii
                     url: >-
@@ -4848,7 +4848,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Scoreboard - numeric
                     url: >-
@@ -4857,7 +4857,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Scoreboard - nulls
                     url: >-
@@ -4866,7 +4866,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Scoreboard - datetime
                     url: >-
@@ -4875,7 +4875,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Scoreboard - bool
                     url: >-
@@ -4884,7 +4884,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
@@ -4895,7 +4895,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                     ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Scoreboard - completeness
                     url: >-
@@ -4904,7 +4904,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Scoreboard per check
             folders:
@@ -4917,7 +4917,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Scoreboard - timeliness
                     url: >-
@@ -4926,7 +4926,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Scoreboard - strings
                     url: >-
@@ -4935,7 +4935,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Scoreboard - standard
                     url: >-
@@ -4944,7 +4944,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Scoreboard - pii
                     url: >-
@@ -4953,7 +4953,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Scoreboard - numeric
                     url: >-
@@ -4962,7 +4962,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Scoreboard - nulls
                     url: >-
@@ -4971,7 +4971,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Scoreboard - datetime
                     url: >-
@@ -4980,7 +4980,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Scoreboard - bool
                     url: >-
@@ -4989,7 +4989,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
@@ -5000,7 +5000,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Scoreboard - completeness
                     url: >-
@@ -5009,7 +5009,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Scoreboard per data stream, table
             folders:
@@ -5022,7 +5022,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Scoreboard - timeliness
                     url: >-
@@ -5031,7 +5031,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Scoreboard - strings
                     url: >-
@@ -5040,7 +5040,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Scoreboard - standard
                     url: >-
@@ -5049,7 +5049,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Scoreboard - pii
                     url: >-
@@ -5058,7 +5058,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Scoreboard - numeric
                     url: >-
@@ -5067,7 +5067,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Scoreboard - nulls
                     url: >-
@@ -5076,7 +5076,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Scoreboard - datetime
                     url: >-
@@ -5085,7 +5085,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Scoreboard - bool
                     url: >-
@@ -5094,7 +5094,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
@@ -5105,7 +5105,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Scoreboard - completeness
                     url: >-
@@ -5114,7 +5114,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Scoreboard per data stream, check
             folders:
@@ -5127,7 +5127,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Scoreboard - timeliness
                     url: >-
@@ -5136,7 +5136,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Scoreboard - strings
                     url: >-
@@ -5145,7 +5145,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Scoreboard - standard
                     url: >-
@@ -5154,7 +5154,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Scoreboard - pii
                     url: >-
@@ -5163,7 +5163,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Scoreboard - numeric
                     url: >-
@@ -5172,7 +5172,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Scoreboard - nulls
                     url: >-
@@ -5181,7 +5181,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Scoreboard - datetime
                     url: >-
@@ -5190,7 +5190,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Scoreboard - bool
                     url: >-
@@ -5199,7 +5199,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
@@ -5210,7 +5210,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Scoreboard - completeness
                     url: >-
@@ -5219,7 +5219,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily KPI per table
             folders:
@@ -5232,7 +5232,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily KPI - timeliness
                     url: >-
@@ -5241,7 +5241,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily KPI - strings
                     url: >-
@@ -5250,7 +5250,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Daily KPI - standard
                     url: >-
@@ -5259,7 +5259,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Daily KPI - pii
                     url: >-
@@ -5268,7 +5268,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Daily KPI - numeric
                     url: >-
@@ -5277,7 +5277,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily KPI - nulls
                     url: >-
@@ -5286,7 +5286,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily KPI - datetime
                     url: >-
@@ -5295,7 +5295,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily KPI - bool
                     url: >-
@@ -5304,7 +5304,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
@@ -5315,7 +5315,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily - completeness
                     url: >-
@@ -5324,7 +5324,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily KPI per check
             folders:
@@ -5337,7 +5337,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily KPI - timeliness
                     url: >-
@@ -5346,7 +5346,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily KPI - strings
                     url: >-
@@ -5355,7 +5355,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Daily KPI - standard
                     url: >-
@@ -5364,7 +5364,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Daily KPI - pii
                     url: >-
@@ -5373,7 +5373,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Daily KPI - numeric
                     url: >-
@@ -5382,7 +5382,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily KPI - nulls
                     url: >-
@@ -5391,7 +5391,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily KPI - datetime
                     url: >-
@@ -5400,7 +5400,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily KPI - bool
                     url: >-
@@ -5409,7 +5409,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
@@ -5420,7 +5420,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily KPI - completeness
                     url: >-
@@ -5429,7 +5429,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily KPI per data stream, table
             folders:
@@ -5442,7 +5442,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily KPI - timeliness
                     url: >-
@@ -5451,7 +5451,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily KPI - strings
                     url: >-
@@ -5460,7 +5460,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Daily KPI - standard
                     url: >-
@@ -5469,7 +5469,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Daily KPI - pii
                     url: >-
@@ -5478,7 +5478,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Daily KPI - numeric
                     url: >-
@@ -5487,7 +5487,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily KPI - nulls
                     url: >-
@@ -5496,7 +5496,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily KPI - datetime
                     url: >-
@@ -5505,7 +5505,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily KPI - bool
                     url: >-
@@ -5514,7 +5514,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
@@ -5525,7 +5525,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily KPI - completeness
                     url: >-
@@ -5534,7 +5534,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily KPI per data stream, check
             folders:
@@ -5547,7 +5547,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily KPI - timeliness
                     url: >-
@@ -5556,7 +5556,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily KPI - strings
                     url: >-
@@ -5565,7 +5565,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: strings
                   - dashboard_name: Daily KPI - standard
                     url: >-
@@ -5574,7 +5574,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: standard
                   - dashboard_name: Daily KPI - pii
                     url: >-
@@ -5583,7 +5583,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: pii
                   - dashboard_name: Daily KPI - numeric
                     url: >-
@@ -5592,7 +5592,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily KPI - nulls
                     url: >-
@@ -5601,7 +5601,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily KPI - datetime
                     url: >-
@@ -5610,7 +5610,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily KPI - bool
                     url: >-
@@ -5619,7 +5619,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
@@ -5630,7 +5630,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily KPI - completeness
                     url: >-
@@ -5639,106 +5639,106 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: adhoc
+                      ds0.p_check_type: profiling
                       ds0.p_quality_dimension: Completeness
-      - folder_name: Technical details for whole table checks
+      - folder_name: Technical details for recurring checks
         dashboards:
-          - dashboard_name: Daily tests per table for whole table checks
+          - dashboard_name: Daily tests per table for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Daily tests per check for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Daily tests per check for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Daily tests per data stream, table for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Daily tests per data stream, table for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Daily tests per data stream, check for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Daily tests per data stream, check for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Scoreboard per table for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Scoreboard per table for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Scoreboard per check for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Scoreboard per check for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Scoreboard per data stream, table for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Scoreboard per data stream, table for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Scoreboard per data stream, check for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Scoreboard per data stream, check for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Daily KPI per table for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Daily KPI per table for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Daily KPI per check for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Daily KPI per check for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Daily KPI per data stream, table for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Daily KPI per data stream, table for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
-          - dashboard_name: Daily KPI per data stream, check for whole table checks
+              ds0.p_check_type: recurring
+          - dashboard_name: Daily KPI per data stream, check for recurring checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
             width: 1580
             height: 1400
             dqo_cloud_credentials: true
             parameters:
-              ds0.p_check_type: checkpoint
+              ds0.p_check_type: recurring
         folders:
           - folder_name: Daily tests per table
             folders:
@@ -5751,7 +5751,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily tests - timeliness
                     url: >-
@@ -5760,7 +5760,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily tests - strings
                     url: >-
@@ -5769,7 +5769,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Daily tests - standard
                     url: >-
@@ -5778,7 +5778,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Daily tests - pii
                     url: >-
@@ -5787,7 +5787,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Daily tests - numeric
                     url: >-
@@ -5796,7 +5796,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily tests - nulls
                     url: >-
@@ -5805,7 +5805,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily tests - datetime
                     url: >-
@@ -5814,7 +5814,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily tests - bool
                     url: >-
@@ -5823,7 +5823,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
@@ -5834,7 +5834,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily tests - reasonableness
                     url: >-
@@ -5843,7 +5843,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily tests per check
             folders:
@@ -5856,7 +5856,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily tests - timeliness
                     url: >-
@@ -5865,7 +5865,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily tests - strings
                     url: >-
@@ -5874,7 +5874,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Daily tests - standard
                     url: >-
@@ -5883,7 +5883,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Daily tests - pii
                     url: >-
@@ -5892,7 +5892,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Daily tests - numeric
                     url: >-
@@ -5901,7 +5901,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily tests - nulls
                     url: >-
@@ -5910,7 +5910,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily tests - datetime
                     url: >-
@@ -5919,7 +5919,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily tests - bool
                     url: >-
@@ -5928,7 +5928,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
@@ -5939,7 +5939,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily tests - completeness
                     url: >-
@@ -5948,7 +5948,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily tests per data stream, table
             folders:
@@ -5961,7 +5961,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily tests - timeliness
                     url: >-
@@ -5970,7 +5970,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily tests - strings
                     url: >-
@@ -5979,7 +5979,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Daily tests - standard
                     url: >-
@@ -5988,7 +5988,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Daily tests - pii
                     url: >-
@@ -5997,7 +5997,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Daily tests - numeric
                     url: >-
@@ -6006,7 +6006,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily tests - nulls
                     url: >-
@@ -6015,7 +6015,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily tests - datetime
                     url: >-
@@ -6024,7 +6024,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily tests - bool
                     url: >-
@@ -6033,7 +6033,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
@@ -6044,7 +6044,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily tests - completeness
                     url: >-
@@ -6053,7 +6053,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily tests per data stream, check
             folders:
@@ -6066,7 +6066,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily tests - timeliness
                     url: >-
@@ -6075,7 +6075,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily tests - strings
                     url: >-
@@ -6084,7 +6084,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Daily tests - standard
                     url: >-
@@ -6093,7 +6093,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Daily tests - pii
                     url: >-
@@ -6102,7 +6102,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Daily tests - numeric
                     url: >-
@@ -6111,7 +6111,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily tests - nulls
                     url: >-
@@ -6120,7 +6120,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily tests - datetime
                     url: >-
@@ -6129,7 +6129,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily tests - bool
                     url: >-
@@ -6138,7 +6138,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Daily tests per quality dimension
                 dashboards:
@@ -6149,7 +6149,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily tests - completeness
                     url: >-
@@ -6158,7 +6158,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Scoreboard per table
             folders:
@@ -6171,7 +6171,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Scoreboard - timeliness
                     url: >-
@@ -6180,7 +6180,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Scoreboard - strings
                     url: >-
@@ -6189,7 +6189,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Scoreboard - standard
                     url: >-
@@ -6198,7 +6198,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Scoreboard - pii
                     url: >-
@@ -6207,7 +6207,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Scoreboard - numeric
                     url: >-
@@ -6216,7 +6216,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Scoreboard - nulls
                     url: >-
@@ -6225,7 +6225,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Scoreboard - datetime
                     url: >-
@@ -6234,7 +6234,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Scoreboard - bool
                     url: >-
@@ -6243,7 +6243,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
@@ -6254,7 +6254,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                     ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Scoreboard - completeness
                     url: >-
@@ -6263,7 +6263,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Scoreboard per check
             folders:
@@ -6276,7 +6276,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Scoreboard - timeliness
                     url: >-
@@ -6285,7 +6285,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Scoreboard - strings
                     url: >-
@@ -6294,7 +6294,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Scoreboard - standard
                     url: >-
@@ -6303,7 +6303,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Scoreboard - pii
                     url: >-
@@ -6312,7 +6312,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Scoreboard - numeric
                     url: >-
@@ -6321,7 +6321,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Scoreboard - nulls
                     url: >-
@@ -6330,7 +6330,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Scoreboard - datetime
                     url: >-
@@ -6339,7 +6339,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Scoreboard - bool
                     url: >-
@@ -6348,7 +6348,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
@@ -6359,7 +6359,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Scoreboard - completeness
                     url: >-
@@ -6368,7 +6368,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Scoreboard per data stream, table
             folders:
@@ -6381,7 +6381,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Scoreboard - timeliness
                     url: >-
@@ -6390,7 +6390,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Scoreboard - strings
                     url: >-
@@ -6399,7 +6399,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Scoreboard - standard
                     url: >-
@@ -6408,7 +6408,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Scoreboard - pii
                     url: >-
@@ -6417,7 +6417,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Scoreboard - numeric
                     url: >-
@@ -6426,7 +6426,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Scoreboard - nulls
                     url: >-
@@ -6435,7 +6435,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Scoreboard - datetime
                     url: >-
@@ -6444,7 +6444,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Scoreboard - bool
                     url: >-
@@ -6453,7 +6453,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
@@ -6464,7 +6464,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Scoreboard - completeness
                     url: >-
@@ -6473,7 +6473,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Scoreboard per data stream, check
             folders:
@@ -6486,7 +6486,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Scoreboard - timeliness
                     url: >-
@@ -6495,7 +6495,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Scoreboard - strings
                     url: >-
@@ -6504,7 +6504,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Scoreboard - standard
                     url: >-
@@ -6513,7 +6513,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Scoreboard - pii
                     url: >-
@@ -6522,7 +6522,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Scoreboard - numeric
                     url: >-
@@ -6531,7 +6531,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Scoreboard - nulls
                     url: >-
@@ -6540,7 +6540,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Scoreboard - datetime
                     url: >-
@@ -6549,7 +6549,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Scoreboard - bool
                     url: >-
@@ -6558,7 +6558,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Scoreboard per quality dimension
                 dashboards:
@@ -6569,7 +6569,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Scoreboard - completeness
                     url: >-
@@ -6578,7 +6578,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily KPI per table
             folders:
@@ -6591,7 +6591,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily KPI - timeliness
                     url: >-
@@ -6600,7 +6600,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily KPI - strings
                     url: >-
@@ -6609,7 +6609,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Daily KPI - standard
                     url: >-
@@ -6618,7 +6618,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Daily KPI - pii
                     url: >-
@@ -6627,7 +6627,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Daily KPI - numeric
                     url: >-
@@ -6636,7 +6636,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily KPI - nulls
                     url: >-
@@ -6645,7 +6645,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily KPI - datetime
                     url: >-
@@ -6654,7 +6654,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily KPI - bool
                     url: >-
@@ -6663,7 +6663,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
@@ -6674,7 +6674,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily - completeness
                     url: >-
@@ -6683,7 +6683,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily KPI per check
             folders:
@@ -6696,7 +6696,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily KPI - timeliness
                     url: >-
@@ -6705,7 +6705,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily KPI - strings
                     url: >-
@@ -6714,7 +6714,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Daily KPI - standard
                     url: >-
@@ -6723,7 +6723,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Daily KPI - pii
                     url: >-
@@ -6732,7 +6732,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Daily KPI - numeric
                     url: >-
@@ -6741,7 +6741,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily KPI - nulls
                     url: >-
@@ -6750,7 +6750,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily KPI - datetime
                     url: >-
@@ -6759,7 +6759,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily KPI - bool
                     url: >-
@@ -6768,7 +6768,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
@@ -6779,7 +6779,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily KPI - completeness
                     url: >-
@@ -6788,7 +6788,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily KPI per data stream, table
             folders:
@@ -6801,7 +6801,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily KPI - timeliness
                     url: >-
@@ -6810,7 +6810,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily KPI - strings
                     url: >-
@@ -6819,7 +6819,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Daily KPI - standard
                     url: >-
@@ -6828,7 +6828,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Daily KPI - pii
                     url: >-
@@ -6837,7 +6837,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Daily KPI - numeric
                     url: >-
@@ -6846,7 +6846,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily KPI - nulls
                     url: >-
@@ -6855,7 +6855,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily KPI - datetime
                     url: >-
@@ -6864,7 +6864,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily KPI - bool
                     url: >-
@@ -6873,7 +6873,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
@@ -6884,7 +6884,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily KPI - completeness
                     url: >-
@@ -6893,7 +6893,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
           - folder_name: Daily KPI per data stream, check
             folders:
@@ -6906,7 +6906,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: uniqueness
                   - dashboard_name: Daily KPI - timeliness
                     url: >-
@@ -6915,7 +6915,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: timeliness
                   - dashboard_name: Daily KPI - strings
                     url: >-
@@ -6924,7 +6924,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: strings
                   - dashboard_name: Daily KPI - standard
                     url: >-
@@ -6933,7 +6933,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: standard
                   - dashboard_name: Daily KPI - pii
                     url: >-
@@ -6942,7 +6942,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: pii
                   - dashboard_name: Daily KPI - numeric
                     url: >-
@@ -6951,7 +6951,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: numeric
                   - dashboard_name: Daily KPI - nulls
                     url: >-
@@ -6960,7 +6960,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: nulls
                   - dashboard_name: Daily KPI - datetime
                     url: >-
@@ -6969,7 +6969,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: datetime
                   - dashboard_name: Daily KPI - bool
                     url: >-
@@ -6978,7 +6978,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_check_category: bool
               - folder_name: Daily KPI per quality dimension
                 dashboards:
@@ -6989,7 +6989,7 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Reasonableness
                   - dashboard_name: Daily KPI - completeness
                     url: >-
@@ -6998,11 +6998,11 @@ spec:
                     height: 1400
                     dqo_cloud_credentials: true
                     parameters:
-                      ds0.p_check_type: checkpoint
+                      ds0.p_check_type: recurring
                       ds0.p_quality_dimension: Completeness
-      - folder_name: Technical details time period checks
+      - folder_name: Technical details partitioned checks
         dashboards:
-          - dashboard_name: Daily tests per table for time period checks
+          - dashboard_name: Daily tests per table for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/0a690cb5-0437-427c-8217-a953f4c85aff/page/c5B8C
             width: 1580
@@ -7010,7 +7010,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Daily tests per check for time period checks
+          - dashboard_name: Daily tests per check for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/ae29db78-ab0a-42b8-9efd-29d18a7f951e/page/p_9xvdtzxu0c
             width: 1580
@@ -7018,7 +7018,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Daily tests per data stream, table for time period checks
+          - dashboard_name: Daily tests per data stream, table for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/398e125f-980f-44e0-9236-caf2d29d1dc8/page/c5B8C
             width: 1580
@@ -7026,7 +7026,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Daily tests per data stream, check for time period checks
+          - dashboard_name: Daily tests per data stream, check for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/381695bc-3b42-4611-ba57-3945f322be04/page/c5B8C
             width: 1580
@@ -7034,7 +7034,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Scoreboard per table for time period checks
+          - dashboard_name: Scoreboard per table for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/3524043e-4c32-4564-8de3-d1d41eeb1289/page/p_9xvdtzxu0c
             width: 1580
@@ -7042,7 +7042,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Scoreboard per check for time period checks
+          - dashboard_name: Scoreboard per check for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/7f82b4aa-d61c-46d8-b704-2fd2b6df3d3f/page/p_9xvdtzxu0c
             width: 1580
@@ -7050,7 +7050,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Scoreboard per data stream, table for time period checks
+          - dashboard_name: Scoreboard per data stream, table for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/4d624eb6-ba94-44b0-831c-cb3ff7be92df/page/p_9xvdtzxu0c
             width: 1580
@@ -7058,7 +7058,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Scoreboard per data stream, check for time period checks
+          - dashboard_name: Scoreboard per data stream, check for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/df98d884-4a92-403b-ba39-4663b75c11a3/page/p_9xvdtzxu0c
             width: 1580
@@ -7066,7 +7066,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Daily KPI per table for time period checks
+          - dashboard_name: Daily KPI per table for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/bfe3ae0c-4817-4013-8d79-bd52d6d91f0b/page/p_9xvdtzxu0c
             width: 1580
@@ -7074,7 +7074,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Daily KPI per check for time period checks
+          - dashboard_name: Daily KPI per check for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/2a2fb37e-b342-403c-bc44-10f6f2653015/page/p_9xvdtzxu0c
             width: 1580
@@ -7082,7 +7082,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Daily KPI per data stream, table for time period checks
+          - dashboard_name: Daily KPI per data stream, table for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/f7cf9d89-88be-4d45-9346-41478a39fb5e/page/p_9xvdtzxu0c
             width: 1580
@@ -7090,7 +7090,7 @@ spec:
             dqo_cloud_credentials: true
             parameters:
               ds0.p_check_type: partitioned
-          - dashboard_name: Daily KPI per data stream, check for time period checks
+          - dashboard_name: Daily KPI per data stream, check for partitioned checks
             url: >-
               https://lookerstudio.google.com/embed/reporting/499b504b-037d-4831-a74a-e84e40550621/page/p_9xvdtzxu0c
             width: 1580
