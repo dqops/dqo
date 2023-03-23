@@ -29,7 +29,7 @@ const FolderLevel = ({ folder, parents }: FolderLevelProps) => {
             <div
               key={jIndex}
               className="cursor-pointer flex space-x-1.5 items-center mb-1 h-5"
-              onClick={() => changeActiveTab(dashboard, folder.folder_name, parents)}
+              onClick={() => changeActiveTab(dashboard, folder.folder_name, parents, true)}
             >
               <SvgIcon name="grid" className="w-4 h-4 min-w-4 shrink-0" />
               <div className="text-[13px] leading-1.5 whitespace-nowrap">{dashboard.dashboard_name}</div>
