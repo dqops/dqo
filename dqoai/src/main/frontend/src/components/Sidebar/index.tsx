@@ -11,7 +11,7 @@ const Sidebar = () => {
   const history = useHistory();
   const sidebarRef = useRef<HTMLDivElement>(null);
   const [isResizing, setIsResizing] = useState(false);
-  const { sidebarWidth, setSidebarWidth } = useTree();
+  const { sidebarWidth, setSidebarWidth, sourceRoute } = useTree();
 
   const startResizing = useCallback(() => {
     setIsResizing(true);
@@ -52,15 +52,18 @@ const Sidebar = () => {
       style={{ width: sidebarWidth }}
     >
       <div className="px-4 flex mb-0">
-        <Button
-          label="Create new connection"
-          color="primary"
-          className="px-4"
-          leftIcon={<SvgIcon name="add" className="text-white mr-2 w-5" />}
-          onClick={() => history.push('/create')}
-        />
+        {sourceRoute === 'sources' ? (
+          <Button
+            label="Create new connection"
+            color="primary"
+            className="px-4"
+            leftIcon={<SvgIcon name="add" className="text-white mr-2 w-5" />}
+            onClick={() => history.push('/create')}
+          />
+        ) : (
+          <div className="h-10 w-full" />
+        )}
       </div>
-      {/*<CustomTree />*/}
       <Tree />
       <div
         className="cursor-ew-resize fixed top-16 bottom-0 w-2 transform -translate-x-1/2 z-50"
