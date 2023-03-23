@@ -1,39 +1,83 @@
 # Data storage
 
-Potwierdzic czy to zostaje tutaj i czy uaktualnić opis
+In DQO, sensor readouts and rule results (data quality results) are stored as Apache Parquet files following the Apache
+Hive compatible folder tree, partitioned by connection name, table name, and month.
+For example, rule results for February 2023 for a single table would be stored in a file
+`userhome/.data/rule_results/c=bigquery-public-data/t=america_health_rankings.ahr/m=2023-02-01/rule_results.0.parquet`.
 
-Dqo stores data quality check's alerts and readings in a .parquet files.
-You can find them in a private directory in an userhome folder:
-`userhome\.data\`.
+The data is stored locally in `userhome` folder, allowing true multi-cloud data collection without accessing any
+sensitive data through an external cloud or SaaS solution.
 
-Here is a userhome folder structure.
-``` java
+The data can simply be replicated to a data lake or cloud bucket. Any SQL engine capable of querying
+Hive-compatible data can query the output files of the data quality tool. Data can be queried using Apache Hive,
+Apache Spark, DataBricks, Google BigQuery, Presto, Trino, SQL Server PolyBase, AWS Athena, and AWS Redshift Spectrum.
+
+## Userhome folder structure
+
+The `userhome` folder has the following structure:
+
+```
 userhome
 ├───.data                                                                   
-│   ├───alerts //(1)                                                        
-│   │   └───c=dqo-ai-testing                                                
-│   │       └───t=dqo_ai_test_data.test_data_regex_sensor_179306422851143075
-│   │           └───m=2022-05-01                                            
-│   └───readings //(2)                                                            
-│       └───c=dqo-ai-testing                                                
-│           └───t=dqo_ai_test_data.test_data_regex_sensor_179306422851143075
-│               └───m=2022-05-01                                               
-├───.index                                                                  
+│   ├───statistics                                                        
+│   │   └───c=bigquery-public-data                                                
+│   │       └───t=america_health_rankings.ahr
+│   │           └───m=2023-02-01   
+│   │               ├─.statistics.0.parquet.snappy.crc   
+│   │               └─statistics.0.parquet.snappy   
+│   ├───sensor_redouts                                                            
+│   │   └───c=bigquery-public-data                                                
+│   │       └───t=america_health_rankings.ahr
+│   │           └───m=2023-02-01
+│   │               ├─.sensor_readout.0.parquet.crc   
+│   │               └─sensor_readout.0.parquet  
+│   ├───check_results
+│   │   └───c=bigquery-public-data                                                
+│   │       └───t=america_health_rankings.ahr
+│   │           └───m=2023-02-01 
+│   │               ├─.rule_results.0.parquet.crc   
+│   │               └─rule_results.0.parquet
+│   └───errors
+│       └───c=bigquery-public-data                                                
+│           └───t=america_health_rankings.ahr
+│               └───m=2023-02-01  
+│                   ├─.errors.0.parquet.snappy.crc   
+│                   └─errors.0.parquet.snappy                                           
+├───.index 
+│    ├─data_check_results.LOCAL.dqofidx.json
+│    ├─data_check_results.REMOTE.dqofidx.json
+│    ├─data_sensor_readouts.LOCAL.dqofidx.json
+│    ├─data_sensor_readouts.REMOTE.dqofidx.json
+│    ├─rules.LOCAL.dqofidx.json
+│    ├─rules.REMOTE.dqofidx.json
+│    ├─sensors.LOCAL.dqofidx.json
+│    ├─sensors.REMOTE.dqofidx.json
+│    ├─sources.LOCAL.dqofidx.json
+│    └─sources.REMOTE.dqofidx.json                                                                
+├───.logs
+│   ├─dqo-logs.log   
+│   └─dqo-logs-2023-02-01_15.log 
 ├───rules                                                                   
 ├───sensors                                                                 
-└───sources //(3)                                                                 
-    └───dqo-ai-testing      
+└───sources                                                                
+    └───bigquery-public-data
+        └─america_health_rankings.ahr.dqotable.yaml
+          
 ```
 
-1. Folder with alerts
-2. Folder with readings
-3. Sources
+The `.data` folder contains subfolders with basic statistics (profiling), sensor readouts, check results, and error logs. These subfolders 
+are further organized into subfolders for specific connections, tables, and months. Each dataset contains .parquet 
+files that store compressed data in a columnar format and a .crc (Cyclic Redundancy Check) files used to verify the 
+integrity of the Parquet file, to ensure that it has not been corrupted during transmission or storage.
 
+The `.index` folder contain JSON files with metadata about the stored data. Each data type has a separate index file for 
+both locally stored and remote sources.
 
-After running
+The `.logs` folder contains daily log files for DQO.
 
-```
-cloud sync data 
-```
+The `rules` folder contains user-defined [data quality rules](../rules/rules.md), while the `sensors` folder contains 
+user-defined [data quality sensors](../sensors/sensors.md) in Jinja2 templating engine which are further rendered into a
+SQL queries.
 
-The data should appear in BigQuery, partitioned by month
+The `sources` folder contains [YAML configuration files](../working-with-yaml-files/working-with-yaml-files.md) for 
+each connection and table

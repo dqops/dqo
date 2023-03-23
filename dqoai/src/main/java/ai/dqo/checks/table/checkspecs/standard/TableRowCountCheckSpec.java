@@ -38,7 +38,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCountSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRuleParametersSpec, MinCountRuleParametersSpec> {
+public class TableRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCountSensorParametersSpec, MinCountRuleParametersSpec, MinCountRule0ParametersSpec, MinCountRuleParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableRowCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -49,15 +49,15 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCo
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableStandardRowCountSensorParametersSpec parameters = new TableStandardRowCountSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec error;
-
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinCountRuleParametersSpec warning;
+
+    @JsonPropertyDescription("Default alerting threshold for a row count that raises a data quality error (alert)")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MinCountRule0ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -84,26 +84,6 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCo
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
-     *
-     * @return Default "ERROR" alerting thresholds.
-     */
-    @Override
-    public MinCountRule0ParametersSpec getError() {
-        return this.error;
-    }
-
-    /**
-     * Sets a new error level alerting threshold.
-     * @param error Error alerting threshold to set.
-     */
-    public void setError(MinCountRule0ParametersSpec error) {
-        this.setDirtyIf(!Objects.equals(this.error, error));
-        this.error = error;
-        this.propagateHierarchyIdToField(error, "error");
-    }
-
-    /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      *
      * @return Warning severity rule parameters.
@@ -121,6 +101,26 @@ public class TableRowCountCheckSpec extends AbstractCheckSpec<TableStandardRowCo
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     *
+     * @return Default "ERROR" alerting thresholds.
+     */
+    @Override
+    public MinCountRule0ParametersSpec getError() {
+        return this.error;
+    }
+
+    /**
+     * Sets a new error level alerting threshold.
+     * @param error Error alerting threshold to set.
+     */
+    public void setError(MinCountRule0ParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**

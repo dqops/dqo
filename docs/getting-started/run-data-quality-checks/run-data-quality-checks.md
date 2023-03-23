@@ -26,11 +26,11 @@ Here is how the YAML file looks like:
 Checks are added below a column and its descriptions that is chosen to be checked.
 
 In our case it is the column named "unique_key".
-Those are the highlighted lines. They define used sensor along with [min_count](../../rule_reference/comparison/min_count.md) rule.
+Those are the highlighted lines. They define used sensor along with [min_count] rule.
 
-Firstly write `checks:` below a chosen column, then write a [dimension](../../dqo-concepts/sensors/sensors.md) name and a [sensor](../../sensor_reference/what_is_a_sensor.md) name in our case this is `uniqueness` and [distinct_count_percent](../../sensor_reference/uniqueness/distinct_count_percent/distinct_count_percent.md).
+Firstly write `checks:` below a chosen column, then write a [dimension] name and a [sensor] name in our case this is `uniqueness` and [distinct_count_percent]
 
-Next write `rules:` and define it, in this example this is [min_count](../../rule_reference/comparison/min_count.md).
+Next write `rules:` and define it, in this example this is [min_count]
 
 Save the file.
 

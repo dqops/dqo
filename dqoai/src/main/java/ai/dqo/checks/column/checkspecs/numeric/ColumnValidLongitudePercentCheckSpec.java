@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnValidLongitudePercentCheckSpec
-        extends AbstractCheckSpec<ColumnNumericValidLongitudePercentSensorParametersSpec, MaxPercentRule98ParametersSpec, MaxPercentRule99ParametersSpec, MaxPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnNumericValidLongitudePercentSensorParametersSpec, MaxPercentRule99ParametersSpec, MaxPercentRule98ParametersSpec, MaxPercentRule95ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnValidLongitudePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -51,15 +51,15 @@ public class ColumnValidLongitudePercentCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericValidLongitudePercentSensorParametersSpec parameters = new ColumnNumericValidLongitudePercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a set percentage of rows with valid longitude value in a column that raises a data quality alert")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxPercentRule98ParametersSpec error;
-
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxPercentRule99ParametersSpec warning;
+
+    @JsonPropertyDescription("Default alerting threshold for a set percentage of rows with valid longitude value in a column that raises a data quality alert")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MaxPercentRule98ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -88,27 +88,6 @@ public class ColumnValidLongitudePercentCheckSpec
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
-     *
-     * @return Default "error" alerting thresholds.
-     */
-    @Override
-    public MaxPercentRule98ParametersSpec getError() {
-        return this.error;
-    }
-
-    /**
-     * Sets a new error level alerting threshold.
-     *
-     * @param error Error alerting threshold to set.
-     */
-    public void setError(MaxPercentRule98ParametersSpec error) {
-        this.setDirtyIf(!Objects.equals(this.error, error));
-        this.error = error;
-        this.propagateHierarchyIdToField(error, "error");
-    }
-
-    /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      *
      * @return Warning severity rule parameters.
@@ -127,6 +106,27 @@ public class ColumnValidLongitudePercentCheckSpec
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     *
+     * @return Default "error" alerting thresholds.
+     */
+    @Override
+    public MaxPercentRule98ParametersSpec getError() {
+        return this.error;
+    }
+
+    /**
+     * Sets a new error level alerting threshold.
+     *
+     * @param error Error alerting threshold to set.
+     */
+    public void setError(MaxPercentRule98ParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**

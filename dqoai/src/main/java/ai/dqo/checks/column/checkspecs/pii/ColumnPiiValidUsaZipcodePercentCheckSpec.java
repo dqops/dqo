@@ -40,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnPiiValidUsaZipcodePercentCheckSpec
-        extends AbstractCheckSpec<ColumnPiiValidUsaZipcodePercentSensorParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule95ParametersSpec> {
+        extends AbstractCheckSpec<ColumnPiiValidUsaZipcodePercentSensorParametersSpec, MinPercentRule99ParametersSpec, MinPercentRule98ParametersSpec, MinPercentRule95ParametersSpec> {
 
     public static final ChildHierarchyNodeFieldMapImpl<ColumnPiiValidUsaZipcodePercentCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
@@ -52,15 +52,15 @@ public class ColumnPiiValidUsaZipcodePercentCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnPiiValidUsaZipcodePercentSensorParametersSpec parameters = new ColumnPiiValidUsaZipcodePercentSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinPercentRule98ParametersSpec error;
-
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MinPercentRule99ParametersSpec warning;
+
+    @JsonPropertyDescription("Default alerting threshold for a minimum percentage of rows with a parsable to integer strings in a column that raises a data quality error (alert).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MinPercentRule98ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -87,26 +87,6 @@ public class ColumnPiiValidUsaZipcodePercentCheckSpec
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
-     *
-     * @return Default "ERROR" alerting thresholds.
-     */
-    @Override
-    public MinPercentRule98ParametersSpec getError() {
-        return this.error;
-    }
-
-    /**
-     * Sets a new error level alerting threshold.
-     * @param error Error alerting threshold to set.
-     */
-    public void setError(MinPercentRule98ParametersSpec error) {
-        this.setDirtyIf(!Objects.equals(this.error, error));
-        this.error = error;
-        this.propagateHierarchyIdToField(error, "error");
-    }
-
-    /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      *
      * @return Warning severity rule parameters.
@@ -124,6 +104,26 @@ public class ColumnPiiValidUsaZipcodePercentCheckSpec
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     *
+     * @return Default "ERROR" alerting thresholds.
+     */
+    @Override
+    public MinPercentRule98ParametersSpec getError() {
+        return this.error;
+    }
+
+    /**
+     * Sets a new error level alerting threshold.
+     * @param error Error alerting threshold to set.
+     */
+    public void setError(MinPercentRule98ParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**

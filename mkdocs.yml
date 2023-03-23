@@ -17,6 +17,7 @@ nav:
     - Inspect results: 'getting-started/inspect-results/inspect-results.md'
   - DQO concepts:
     - 'dqo-concepts/index.md'
+    - Architecture: 'dqo-concepts/architecture/architecture.md'
     - Checks:
       - 'dqo-concepts/checks/index.md'
       - Advanced profiling: 'dqo-concepts/checks/advanced-profiling/advanced-profiling.md'
@@ -28,10 +29,9 @@ nav:
     - Dashboards: 'dqo-concepts/dashboards/dashboards.md'
     - Data quality dimensions: 'dqo-concepts/data-quality-dimensions/data-quality-dimensions.md'
     - Data stream segmentation: 'dqo-concepts/data-stream-segmentation/data-stream-segmentation.md'
+    - Data storage: 'dqo-concepts\data-storage\data-storage.md'
     - Working with YAML files: 'dqo-concepts/working-with-yaml-files/working-with-yaml-files.md'
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
-    - Architecture: 'dqo-concepts/architecture/architecture.md'
-    - Data storage: 'dqo-concepts\data-storage\data-storage.md'
   - Working with DQO:
     - 'working-with-dqo/index.md'
     - Adding connections:

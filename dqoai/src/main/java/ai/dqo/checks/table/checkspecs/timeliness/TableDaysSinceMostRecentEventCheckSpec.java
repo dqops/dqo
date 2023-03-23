@@ -39,7 +39,7 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<TableTimelinessDaysSinceMostRecentEventSensorParametersSpec, MaxDaysRule2ParametersSpec, MaxDaysRule1ParametersSpec, MaxDaysRule7ParametersSpec> {
+public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<TableTimelinessDaysSinceMostRecentEventSensorParametersSpec, MaxDaysRule1ParametersSpec, MaxDaysRule2ParametersSpec, MaxDaysRule7ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableDaysSinceMostRecentEventCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -50,15 +50,15 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private TableTimelinessDaysSinceMostRecentEventSensorParametersSpec parameters = new TableTimelinessDaysSinceMostRecentEventSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for max days since most recent event that raises a data quality error (alert)")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxDaysRule2ParametersSpec error;
-
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private MaxDaysRule1ParametersSpec warning;
+
+    @JsonPropertyDescription("Default alerting threshold for max days since most recent event that raises a data quality error (alert)")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private MaxDaysRule2ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -85,26 +85,6 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
-     *
-     * @return Default "ERROR" alerting thresholds.
-     */
-    @Override
-    public MaxDaysRule2ParametersSpec getError() {
-        return this.error;
-    }
-
-    /**
-     * Sets a new error level alerting threshold.
-     * @param error Error alerting threshold to set.
-     */
-    public void setError(MaxDaysRule2ParametersSpec error) {
-        this.setDirtyIf(!Objects.equals(this.error, error));
-        this.error = error;
-        this.propagateHierarchyIdToField(error, "error");
-    }
-
-    /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      *
      * @return Warning severity rule parameters.
@@ -122,6 +102,26 @@ public class TableDaysSinceMostRecentEventCheckSpec extends AbstractCheckSpec<Ta
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     *
+     * @return Default "ERROR" alerting thresholds.
+     */
+    @Override
+    public MaxDaysRule2ParametersSpec getError() {
+        return this.error;
+    }
+
+    /**
+     * Sets a new error level alerting threshold.
+     * @param error Error alerting threshold to set.
+     */
+    public void setError(MaxDaysRule2ParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**
