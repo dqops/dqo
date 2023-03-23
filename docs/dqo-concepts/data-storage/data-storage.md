@@ -31,7 +31,7 @@ userhome
 │   │           └───m=2023-02-01
 │   │               ├─.sensor_readout.0.parquet.crc   
 │   │               └─sensor_readout.0.parquet  
-│   ├───rule_results
+│   ├───check_results
 │   │   └───c=bigquery-public-data                                                
 │   │       └───t=america_health_rankings.ahr
 │   │           └───m=2023-02-01 
@@ -44,8 +44,8 @@ userhome
 │                   ├─.errors.0.parquet.snappy.crc   
 │                   └─errors.0.parquet.snappy                                           
 ├───.index 
-│    ├─data_rule_results.LOCAL.dqofidx.json
-│    ├─data_rule_results.REMOTE.dqofidx.json
+│    ├─data_check_results.LOCAL.dqofidx.json
+│    ├─data_check_results.REMOTE.dqofidx.json
 │    ├─data_sensor_readouts.LOCAL.dqofidx.json
 │    ├─data_sensor_readouts.REMOTE.dqofidx.json
 │    ├─rules.LOCAL.dqofidx.json
@@ -65,7 +65,7 @@ userhome
           
 ```
 
-The `.data` folder contains subfolders with basic statistics (profiling), sensor readouts, rule results, and error logs. These subfolders 
+The `.data` folder contains subfolders with basic statistics (profiling), sensor readouts, check results, and error logs. These subfolders 
 are further organized into subfolders for specific connections, tables, and months. Each dataset contains .parquet 
 files that store compressed data in a columnar format and a .crc (Cyclic Redundancy Check) files used to verify the 
 integrity of the Parquet file, to ensure that it has not been corrupted during transmission or storage.
