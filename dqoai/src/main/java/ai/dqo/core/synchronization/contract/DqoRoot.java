@@ -120,4 +120,19 @@ public enum DqoRoot {
 
         return null; // unknown folder, not
     }
+
+    /**
+     * Checks if the given root is a data folder, with a parquet organized table.
+     * @return True when it is a table folder, otherwise false.
+     */
+    public boolean isTableFolder() {
+        if (this == data_sensor_readouts ||
+            this == data_check_results ||
+            this == data_errors ||
+            this == data_statistics) {
+            return true;
+        }
+
+        return false;
+    }
 }

@@ -15,6 +15,9 @@
  */
 package ai.dqo.core.filesystem.metadata;
 
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyPayload;
+import ai.dqo.core.dqocloud.apikey.DqoCloudLimit;
+import ai.dqo.data.storage.HivePartitionPathUtility;
 import ai.dqo.utils.serialization.PathAsStringJsonDeserializer;
 import ai.dqo.utils.serialization.PathAsStringJsonSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -634,5 +637,72 @@ public class FolderMetadata implements Cloneable {
         }
 
         return false;
+    }
+
+    /**
+     * Removes connections and tables beyond the accepted limit, to match the license limitations.
+     * @param apiKeyPayload API Key payload with the license limits.
+     */
+    public void truncateToLicenseLimits(DqoCloudApiKeyPayload apiKeyPayload) {
+        Integer connectionsLimit = apiKeyPayload.getLimits().get(DqoCloudLimit.CONNECTIONS_LIMIT);
+        if (connectionsLimit != null && this.folders.size() > connectionsLimit) {
+            this.getMutableFolders().truncateToLimit(connectionsLimit,
+                    HivePartitionPathUtility::validHivePartitionConnectionFolderName,
+                    FolderTruncationMode.ASCENDING_SORTED_FIRST);
+        }
+
+        Integer tablesLimit = apiKeyPayload.getLimits().get(DqoCloudLimit.TABLES_LIMIT);
+        Integer tablesPerConnectionLimit = apiKeyPayload.getLimits().get(DqoCloudLimit.CONNECTION_TABLES_LIMIT);
+        if (tablesLimit != null || tablesPerConnectionLimit != null) {
+            int tablesCount = 0;
+            for (FolderMetadata connectionFolder : this.getMutableFolders()) {
+                if (!HivePartitionPathUtility.validHivePartitionConnectionFolderName(connectionFolder.getFolderName())) {
+                    continue;
+                }
+
+                if (tablesLimit != null && tablesCount + connectionFolder.folders.size() > tablesLimit) {
+                    FolderMetadata mutableConnectionFolder = this.getMutableFolders().getMutable(connectionFolder.getFolderName());
+                    mutableConnectionFolder.getMutableFolders().truncateToLimit(tablesLimit,
+                            HivePartitionPathUtility::validHivePartitionTableFolderName,
+                            FolderTruncationMode.ASCENDING_SORTED_FIRST);
+                } else {
+                    tablesCount += connectionFolder.folders.size();
+                }
+
+                if (tablesPerConnectionLimit != null) {
+                    if (connectionFolder.getFolders().size() > tablesPerConnectionLimit) {
+                        FolderMetadata mutableConnectionFolder = this.getMutableFolders().getMutable(connectionFolder.getFolderName());
+                        mutableConnectionFolder.getMutableFolders().truncateToLimit(tablesPerConnectionLimit,
+                                HivePartitionPathUtility::validHivePartitionTableFolderName,
+                                FolderTruncationMode.ASCENDING_SORTED_FIRST);
+                    }
+                }
+            }
+        }
+
+        Integer monthsLimit = apiKeyPayload.getLimits().get(DqoCloudLimit.MONTHS_LIMIT);
+        if (monthsLimit != null) {
+            for (FolderMetadata connectionFolder : this.getMutableFolders()) {
+                if (!HivePartitionPathUtility.validHivePartitionConnectionFolderName(connectionFolder.getFolderName())) {
+                    continue;
+                }
+
+                FolderMetadata mutableConnectionFolder = this.getMutableFolders().getMutable(connectionFolder.getFolderName());
+                FolderMetadataMap tableFolders = mutableConnectionFolder.getMutableFolders();
+
+                for (FolderMetadata tableFolder : tableFolders) {
+                    if (!HivePartitionPathUtility.validHivePartitionTableFolderName(tableFolder.getFolderName())) {
+                        continue;
+                    }
+
+                    if (tableFolder.getFolders().size() > monthsLimit) {
+                        FolderMetadata mutableTableFolder = tableFolders.getMutable(tableFolder.getFolderName());
+                        mutableTableFolder.getMutableFolders().truncateToLimit(monthsLimit,
+                                HivePartitionPathUtility::validHivePartitionMonthFolderName,
+                                FolderTruncationMode.DESCENDING_SORTED_FIRST);
+                    }
+                }
+            }
+        }
     }
 }
