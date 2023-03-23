@@ -44,13 +44,13 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, RError extends AbstractRuleParametersSpec, RWarning extends AbstractRuleParametersSpec, RFatal extends AbstractRuleParametersSpec>
+public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, RWarning extends AbstractRuleParametersSpec, RError extends AbstractRuleParametersSpec, RFatal extends AbstractRuleParametersSpec>
             extends AbstractSpec implements Cloneable {
     public static final ChildHierarchyNodeFieldMapImpl<AbstractCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
             put("parameters", o -> o.getParameters());
-            put("error", o -> o.getError());
             put("warning", o -> o.getWarning());
+            put("error", o -> o.getError());
             put("fatal", o -> o.getFatal());
             put("schedule_override", o -> o.scheduleOverride);
             put("comments", o -> o.comments);
@@ -254,18 +254,6 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     public abstract void setParameters(S parameters);
 
     /**
-     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
-     * @return Default "error" alerting thresholds.
-     */
-    public abstract RError getError();
-
-    /**
-     * Sets a new instance of an alerting rule for the error severity.
-     * @param error New rule parameters for the error severity or null to disable the severity level.
-     */
-    public abstract void setError(RError error);
-
-    /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      * @return Warning severity rule parameters.
      */
@@ -276,6 +264,18 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      * @param warning New rule parameters for the warning severity or null to disable the severity level.
      */
     public abstract void setWarning(RWarning warning);
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     * @return Default "error" alerting thresholds.
+     */
+    public abstract RError getError();
+
+    /**
+     * Sets a new instance of an alerting rule for the error severity.
+     * @param error New rule parameters for the error severity or null to disable the severity level.
+     */
+    public abstract void setError(RError error);
 
     /**
      * Alerting threshold configuration that raise a "FATAL" severity alerts for unsatisfied rules.
@@ -317,12 +317,12 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
      */
     @JsonIgnore
     public String getRuleDefinitionName() {
-        if (this.getError() != null) {
-            return this.getError().getRuleDefinitionName();
-        }
-
         if (this.getWarning() != null) {
             return this.getWarning().getRuleDefinitionName();
+        }
+
+        if (this.getError() != null) {
+            return this.getError().getRuleDefinitionName();
         }
 
         if (this.getFatal() != null) {

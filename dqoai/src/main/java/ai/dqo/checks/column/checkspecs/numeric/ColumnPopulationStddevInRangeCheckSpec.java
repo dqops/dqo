@@ -49,15 +49,15 @@ public class ColumnPopulationStddevInRangeCheckSpec
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnNumericPopulationStddevInRangeSensorParametersSpec parameters = new ColumnNumericPopulationStddevInRangeSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for a population (biased) standard deviation in range in a column that raises a data quality error (alert).")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private BetweenFloatsRuleParametersSpec error;
-
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec warning;
+
+    @JsonPropertyDescription("Default alerting threshold for a population (biased) standard deviation in range in a column that raises a data quality error (alert).")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private BetweenFloatsRuleParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -84,26 +84,6 @@ public class ColumnPopulationStddevInRangeCheckSpec
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
-     *
-     * @return Default "ERROR" alerting thresholds.
-     */
-    @Override
-    public BetweenFloatsRuleParametersSpec getError() {
-        return this.error;
-    }
-
-    /**
-     * Sets a new error level alerting threshold.
-     * @param error Error alerting threshold to set.
-     */
-    public void setError(BetweenFloatsRuleParametersSpec error) {
-        this.setDirtyIf(!Objects.equals(this.error, error));
-        this.error = error;
-        this.propagateHierarchyIdToField(error, "error");
-    }
-
-    /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      *
      * @return Warning severity rule parameters.
@@ -121,6 +101,26 @@ public class ColumnPopulationStddevInRangeCheckSpec
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     *
+     * @return Default "ERROR" alerting thresholds.
+     */
+    @Override
+    public BetweenFloatsRuleParametersSpec getError() {
+        return this.error;
+    }
+
+    /**
+     * Sets a new error level alerting threshold.
+     * @param error Error alerting threshold to set.
+     */
+    public void setError(BetweenFloatsRuleParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**

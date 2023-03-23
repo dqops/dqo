@@ -49,15 +49,15 @@ public class ColumnSqlAggregateExprCheckSpec extends AbstractCheckSpec<ColumnSql
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnSqlAggregatedExpressionSensorParametersSpec parameters = new ColumnSqlAggregatedExpressionSensorParametersSpec();
 
-    @JsonPropertyDescription("Default alerting threshold for errors raised when the aggregated value is above the maximum accepted value.")
-    @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private BetweenFloatsRuleParametersSpec error;
-
     @JsonPropertyDescription("Default alerting threshold for warnings raised when the aggregated value is above the maximum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private BetweenFloatsRuleParametersSpec warning;
+
+    @JsonPropertyDescription("Default alerting threshold for errors raised when the aggregated value is above the maximum accepted value.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private BetweenFloatsRuleParametersSpec error;
 
     @JsonPropertyDescription("Default alerting threshold for fatal data quality issues raised when the aggregated value is above the maximum accepted value.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -84,26 +84,6 @@ public class ColumnSqlAggregateExprCheckSpec extends AbstractCheckSpec<ColumnSql
     }
 
     /**
-     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
-     *
-     * @return Default "ERROR" alerting thresholds.
-     */
-    @Override
-    public BetweenFloatsRuleParametersSpec getError() {
-        return this.error;
-    }
-
-    /**
-     * Sets a new error level alerting threshold.
-     * @param error Error alerting threshold to set.
-     */
-    public void setError(BetweenFloatsRuleParametersSpec error) {
-        this.setDirtyIf(!Objects.equals(this.error, error));
-        this.error = error;
-        this.propagateHierarchyIdToField(error, "error");
-    }
-
-    /**
      * Alerting threshold configuration that raise a "WARNING" severity alerts for unsatisfied rules.
      *
      * @return Warning severity rule parameters.
@@ -121,6 +101,26 @@ public class ColumnSqlAggregateExprCheckSpec extends AbstractCheckSpec<ColumnSql
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
+    }
+
+    /**
+     * Alerting threshold configuration that raise a regular "ERROR" severity alerts for unsatisfied rules.
+     *
+     * @return Default "ERROR" alerting thresholds.
+     */
+    @Override
+    public BetweenFloatsRuleParametersSpec getError() {
+        return this.error;
+    }
+
+    /**
+     * Sets a new error level alerting threshold.
+     * @param error Error alerting threshold to set.
+     */
+    public void setError(BetweenFloatsRuleParametersSpec error) {
+        this.setDirtyIf(!Objects.equals(this.error, error));
+        this.error = error;
+        this.propagateHierarchyIdToField(error, "error");
     }
 
     /**
