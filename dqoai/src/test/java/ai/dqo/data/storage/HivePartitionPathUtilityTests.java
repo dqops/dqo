@@ -26,13 +26,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDate;
 
 @SpringBootTest
-public class HivePartitionPathUtilityImplTests extends BaseTest {
-    private HivePartitionPathUtilityImpl sut;
+public class HivePartitionPathUtilityTests extends BaseTest {
     private FileStorageSettings sensorReadoutsStorageSettings;
 
     @BeforeEach
     void setUp() {
-        this.sut = new HivePartitionPathUtilityImpl();
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
     }
 
@@ -43,7 +41,7 @@ public class HivePartitionPathUtilityImplTests extends BaseTest {
                 "connection",
                 new PhysicalTableName("sch", "tab"),
                 LocalDate.of(2022, 10, 1));
-        String partitionPath = this.sut.makeHivePartitionPath(partitionId);
+        String partitionPath = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
 
         Assertions.assertEquals("c=connection/t=sch.tab/m=2022-10-01/", partitionPath);
     }
@@ -55,7 +53,7 @@ public class HivePartitionPathUtilityImplTests extends BaseTest {
                 "connection 1/%&\\",
                 new PhysicalTableName("sch", "tab"),
                 LocalDate.of(2022, 10, 1));
-        String partitionPath = this.sut.makeHivePartitionPath(partitionId);
+        String partitionPath = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
 
         Assertions.assertEquals("c=connection+1%2F%25%26%5C/t=sch.tab/m=2022-10-01/", partitionPath);
     }
@@ -67,7 +65,7 @@ public class HivePartitionPathUtilityImplTests extends BaseTest {
                 "connection",
                 new PhysicalTableName("sch", "tab 1/%&\\"),
                 LocalDate.of(2022, 10, 1));
-        String partitionPath = this.sut.makeHivePartitionPath(partitionId);
+        String partitionPath = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
         Assertions.assertEquals("c=connection/t=sch.tab+1%2F%25%26%5C/m=2022-10-01/", partitionPath);
     }
 }

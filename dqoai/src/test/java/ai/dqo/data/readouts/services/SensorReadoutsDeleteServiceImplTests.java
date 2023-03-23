@@ -75,11 +75,9 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
                 homeLocationFindService, newLockManager, synchronizationStatusTracker);
-        HivePartitionPathUtility hivePartitionPathUtility = new HivePartitionPathUtilityImpl();
 
         this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker,
-                hivePartitionPathUtility);
+                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker);
 
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
         this.sensorReadoutsTableFactory = new SensorReadoutsTableFactoryImpl();
@@ -89,7 +87,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
                 this.sensorReadoutsTableFactory);
 
         ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
-                newLockManager, localUserHomeFileStorageService, hivePartitionPathUtility);
+                newLockManager, localUserHomeFileStorageService);
         this.sut = new SensorReadoutsDeleteServiceImpl(sensorReadoutsSnapshotFactory,
                                                        parquetPartitionMetadataService);
     }

@@ -38,22 +38,18 @@ import java.util.stream.Collectors;
 public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMetadataService {
     private final UserHomeLockManager userHomeLockManager;
     private LocalUserHomeFileStorageService localUserHomeFileStorageService;
-    private HivePartitionPathUtility hivePartitionPathUtility;
 
     /**
      * Dependency injection constructor.
      * @param userHomeLockManager User home lock manager.
      * @param localUserHomeFileStorageService Local DQO_USER_HOME file storage service.
-     * @param hivePartitionPathUtility Utility for manipulating hive partition paths.
      */
     @Autowired
     public ParquetPartitionMetadataServiceImpl(
             UserHomeLockManager userHomeLockManager,
-            LocalUserHomeFileStorageService localUserHomeFileStorageService,
-            HivePartitionPathUtility hivePartitionPathUtility) {
+            LocalUserHomeFileStorageService localUserHomeFileStorageService) {
         this.userHomeLockManager = userHomeLockManager;
         this.localUserHomeFileStorageService = localUserHomeFileStorageService;
-        this.hivePartitionPathUtility = hivePartitionPathUtility;
     }
 
     /**
@@ -67,7 +63,7 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
     public List<PhysicalTableName> listTablesForConnection(String connectionName, FileStorageSettings storageSettings) {
         Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
         ParquetPartitionId partitionId = new ParquetPartitionId(storageSettings.getTableType(), connectionName, null, null);
-        String hivePartitionFolderName = this.hivePartitionPathUtility.makeHivePartitionPath(partitionId);
+        String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(partitionId);
         Path homeRelativePartitionPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
 
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
@@ -79,8 +75,8 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
 
             return connectionStoredFolders.stream()
                     .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
-                    .filter(this.hivePartitionPathUtility::validHivePartitionTableFolderName)
-                    .map(this.hivePartitionPathUtility::tableFromHivePartitionFolderName)
+                    .filter(HivePartitionPathUtility::validHivePartitionTableFolderName)
+                    .map(HivePartitionPathUtility::tableFromHivePartitionFolderName)
                     .collect(Collectors.toList());
         }
     }

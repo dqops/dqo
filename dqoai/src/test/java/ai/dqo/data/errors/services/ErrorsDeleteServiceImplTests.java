@@ -76,11 +76,9 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         HomeLocationFindService homeLocationFindService = new HomeLocationFindServiceImpl(userConfigurationProperties, dqoConfigurationProperties);
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(homeLocationFindService, newLockManager, synchronizationStatusTracker);
-        HivePartitionPathUtility hivePartitionPathUtility = new HivePartitionPathUtilityImpl();
 
         this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker,
-                hivePartitionPathUtility);
+                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker);
 
         this.errorsStorageSettings = ErrorsSnapshot.createErrorsStorageSettings();
         this.errorsTableFactory = new ErrorsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());
@@ -91,7 +89,7 @@ public class ErrorsDeleteServiceImplTests extends BaseTest {
         );
 
         ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
-                newLockManager, localUserHomeFileStorageService, hivePartitionPathUtility);
+                newLockManager, localUserHomeFileStorageService);
 
         this.sut = new ErrorsDeleteServiceImpl(errorsSnapshotFactory, parquetPartitionMetadataService);
     }

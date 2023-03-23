@@ -58,11 +58,9 @@ public class CheckResultsSnapshotTests extends BaseTest {
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
         // TODO: Add stub / virtual filesystem for localUserHomeFileStorageService
-        HivePartitionPathUtility hivePartitionPathUtility = new HivePartitionPathUtilityImpl();
 
         parquetStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), null, new SynchronizationStatusTrackerStub(),
-                hivePartitionPathUtility);
+                HadoopConfigurationProviderObjectMother.getDefault(), null, new SynchronizationStatusTrackerStub());
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
 		this.sut = new CheckResultsSnapshot("conn", tableName, this.parquetStorageService, newRows);

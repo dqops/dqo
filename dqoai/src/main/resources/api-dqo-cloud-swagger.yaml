@@ -18,6 +18,7 @@ tags:
 - name: "AccessTokenIssue"
 - name: "ApiKeyRequest"
 - name: "LookerStudioKeyRequest"
+- name: "TenantDataWarehouse"
 schemes:
 - "https"
 paths:
@@ -37,14 +38,14 @@ paths:
             $ref: "#/definitions/TenantQueryAccessTokenModel"
       security:
       - api_key: []
-  /api/v1/accesstokenissue/rw/errors:
+  /api/v1/accesstokenissue/rw/check_results:
     get:
       tags:
       - "AccessTokenIssue"
-      summary: "issueBucketErrorsRWAccessToken"
+      summary: "issueBucketCheckResultsRWAccessToken"
       description: "Issues a Google Storage access token for accessing the tenant's\
-        \ folder with errors"
-      operationId: "issueBucketErrorsRWAccessToken"
+        \ folder with rule results"
+      operationId: "issueBucketCheckResultsRWAccessToken"
       parameters: []
       responses:
         200:
@@ -53,14 +54,14 @@ paths:
             $ref: "#/definitions/TenantAccessTokenModel"
       security:
       - api_key: []
-  /api/v1/accesstokenissue/rw/rule_results:
+  /api/v1/accesstokenissue/rw/errors:
     get:
       tags:
       - "AccessTokenIssue"
-      summary: "issueBucketRuleResultsRWAccessToken"
+      summary: "issueBucketErrorsRWAccessToken"
       description: "Issues a Google Storage access token for accessing the tenant's\
-        \ folder with rule results"
-      operationId: "issueBucketRuleResultsRWAccessToken"
+        \ folder with errors"
+      operationId: "issueBucketErrorsRWAccessToken"
       parameters: []
       responses:
         200:
@@ -255,6 +256,26 @@ paths:
             type: "string"
       security:
       - api_key: []
+  /api/v1/tenantdatawarehouse/refreshNativeTable:
+    post:
+      tags:
+      - "TenantDataWarehouse"
+      summary: "refreshNativeTable"
+      description: "Refreshes a native table."
+      operationId: "refreshNativeTable"
+      parameters:
+      - in: "body"
+        name: "body"
+        required: false
+        schema:
+          $ref: "#/definitions/RefreshTableRequest"
+      responses:
+        200:
+          description: "successful operation"
+          schema:
+            type: "string"
+      security:
+      - api_key: []
 securityDefinitions:
   api_key:
     type: "apiKey"
@@ -267,21 +288,62 @@ securityDefinitions:
     authorizationUrl: ""
     flow: "implicit"
 definitions:
+  RefreshTableRequest:
+    type: "object"
+    properties:
+      table:
+        type: "string"
+        description: "Target table to be refreshed."
+        enum:
+        - "sensor_readouts"
+        - "check_results"
+        - "errors"
+        - "statistics"
+        - "sources"
+        - "sensors"
+        - "rules"
+      connections:
+        type: "array"
+        description: "Optional list of connection names that were modified and the\
+          \ data should be refreshed."
+        items:
+          type: "string"
+      tables:
+        type: "array"
+        description: "Optional list of full table names (schema.table) that were modified\
+          \ and the data should be refreshed."
+        items:
+          type: "string"
+      months:
+        type: "array"
+        description: "Optional list of dates of the first day of the month (for example:\
+          \ '2023-02-01') that were modified and the data should be refreshed."
+        items:
+          type: "string"
+          format: "date"
+    description: "Request object for refreshing a native table in the data quality\
+      \ data warehouse."
   TenantAccessTokenModel:
     type: "object"
     properties:
       accessToken:
         type: "string"
+        description: "Google cloud access token."
       tenantId:
         type: "string"
+        description: "Tenant (customer) id."
       bucketName:
         type: "string"
+        description: "Google Cloud Storage bucket name for the tenant."
       bucketPathPrefix:
         type: "string"
+        description: "Object name prefix (path) inside the bucket to store the data."
       expiresAt:
         type: "string"
+        description: "Access token expiration time (UTC)."
       billingProjectId:
         type: "string"
+        description: "GCP project id holding the data of the tenant."
     description: "Model returned by the DQO Cloud with an AccessToken for accessing\
       \ a folder within the landing zone of the tenant's data quality data warehouse."
   TenantQueryAccessTokenModel:
@@ -297,7 +359,11 @@ definitions:
         type: "string"
       sensorReadoutsTableName:
         type: "string"
-      ruleResultsTableName:
+      checkResultsTableName:
+        type: "string"
+      errorsTableName:
+        type: "string"
+      statisticsTableName:
         type: "string"
     description: "Model that returns an AccessToken used by Looker Studio to query\
       \ the data warehouse."
