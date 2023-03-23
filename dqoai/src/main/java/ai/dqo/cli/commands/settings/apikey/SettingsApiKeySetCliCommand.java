@@ -75,14 +75,14 @@ public class SettingsApiKeySetCliCommand extends BaseCommand implements ICommand
 	@Override
 	public Integer call() throws Exception {
 		if (Strings.isNullOrEmpty(this.key)) {
-			throwRequiredParameterMissingIfHeadless("<time zone>");
+			throwRequiredParameterMissingIfHeadless("key");
 			this.key = this.terminalReader.prompt("Api key", null, false);
 		}
 
 		try {
 			this.apiKeyProvider.decodeApiKey(this.key);
 		}
-		catch (DecoderException ex) {
+		catch (Exception ex) {
 			this.terminalWriter.writeLine("Invalid Cloud DQO API key: " + ex.getMessage());
 			return -1;
 		}

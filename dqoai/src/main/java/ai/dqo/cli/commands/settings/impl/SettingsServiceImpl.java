@@ -17,6 +17,10 @@ package ai.dqo.cli.commands.settings.impl;
 
 import ai.dqo.cli.commands.CliOperationStatus;
 import ai.dqo.core.dqocloud.accesskey.DqoCloudAccessTokenCache;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyPayload;
+import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import ai.dqo.core.dqocloud.apikey.DqoCloudLimit;
 import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.settings.SettingsWrapper;
@@ -29,6 +33,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
+import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -39,14 +44,17 @@ public class SettingsServiceImpl implements SettingsService {
 	private final UserHomeContextFactory userHomeContextFactory;
 	private final DefaultTimeZoneProvider defaultTimeZoneProvider;
 	private final DqoCloudAccessTokenCache dqoCloudAccessTokenCache;
+	private final DqoCloudApiKeyProvider dqoCloudApiKeyProvider;
 
 	@Autowired
 	public SettingsServiceImpl(UserHomeContextFactory userHomeContextFactory,
 							   DefaultTimeZoneProvider defaultTimeZoneProvider,
-							   DqoCloudAccessTokenCache dqoCloudAccessTokenCache) {
+							   DqoCloudAccessTokenCache dqoCloudAccessTokenCache,
+							   DqoCloudApiKeyProvider dqoCloudApiKeyProvider) {
 		this.userHomeContextFactory = userHomeContextFactory;
 		this.defaultTimeZoneProvider = defaultTimeZoneProvider;
 		this.dqoCloudAccessTokenCache = dqoCloudAccessTokenCache;
+		this.dqoCloudApiKeyProvider = dqoCloudApiKeyProvider;
 	}
 
 	private SettingsWrapper createEmptySettingFile(UserHome userHome) {
@@ -274,12 +282,44 @@ public class SettingsServiceImpl implements SettingsService {
 			settings = userHome.getSettings().getSpec();
 		}
 
-		String key = settings.getApiKey();
-		if (Strings.isNullOrEmpty(key)) {
+		String apiKeyString = settings.getApiKey();
+		if (Strings.isNullOrEmpty(apiKeyString)) {
 			cliOperationStatus.setFailedMessage(String.format("Api key is not set"));
 			return cliOperationStatus;
 		}
-		cliOperationStatus.setSuccessMessage(String.format("Set api key is: %s", key));
+
+		DqoCloudApiKey cloudApiKey = this.dqoCloudApiKeyProvider.decodeApiKey(apiKeyString);
+		DqoCloudApiKeyPayload apiKeyPayload = cloudApiKey.getApiKeyPayload();
+
+		StringBuilder textBuilder = new StringBuilder();
+		textBuilder.append(String.format("DQO Cloud API key is: %s\n", apiKeyString));
+		textBuilder.append(String.format("Tenant id: %s/%d\n", apiKeyPayload.getTenantId(), apiKeyPayload.getTenantGroup()));
+		textBuilder.append(String.format("License type: %s\n", apiKeyPayload.getLicenseType()));
+
+		for (Map.Entry<DqoCloudLimit, Integer> limitEntry : apiKeyPayload.getLimits().entrySet()) {
+			String limitEntryName = "";
+			switch (limitEntry.getKey()) {
+				case CONNECTIONS_LIMIT:
+					limitEntryName = "Maximum number of synchronized connections";
+					break;
+				case TABLES_LIMIT:
+					limitEntryName = "Maximum number of synchronized tables";
+					break;
+				case CONNECTION_TABLES_LIMIT:
+					limitEntryName = "Maximum number of synchronized tables inside a single connection";
+					break;
+				case MONTHS_LIMIT:
+					limitEntryName = "Maximum number of synchronized months with data quality results, including the current month";
+					break;
+				default:
+					limitEntryName = limitEntry.getKey().toString();
+					break;
+			}
+
+			textBuilder.append(String.format("%s: %d\n", limitEntryName, limitEntry.getValue()));
+		}
+
+		cliOperationStatus.setSuccessMessage(textBuilder.toString());
 		return cliOperationStatus;
 	}
 

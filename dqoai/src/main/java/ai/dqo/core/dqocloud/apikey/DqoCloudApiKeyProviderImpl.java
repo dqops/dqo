@@ -21,6 +21,7 @@ import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.settings.SettingsWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
@@ -87,7 +88,7 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
 
             DqoCloudApiKey dqoCloudApiKey = decodeApiKey(apiKey);
             return dqoCloudApiKey;
-        } catch (DecoderException e) {
+        } catch (Exception e) {
             throw new DqoCloudInvalidKeyException("API Key is invalid", e);
         }
     }
@@ -99,15 +100,20 @@ public class DqoCloudApiKeyProviderImpl implements DqoCloudApiKeyProvider {
      * @throws DecoderException When the api key is invalid.
      */
     @NotNull
-    public DqoCloudApiKey decodeApiKey(String apiKey) throws DecoderException {
-        byte[] messageBytes = Hex.decodeHex(apiKey);
-        byte[] payloadBytes = new byte[messageBytes.length - 32];
-        System.arraycopy(messageBytes, 0, payloadBytes, 0, payloadBytes.length);
+    public DqoCloudApiKey decodeApiKey(String apiKey) {
+        try {
+            byte[] messageBytes = Hex.decodeHex(apiKey);
+            byte[] payloadBytes = new byte[messageBytes.length - 32];
+            System.arraycopy(messageBytes, 0, payloadBytes, 0, payloadBytes.length);
 
-        String payloadJsonString = new String(payloadBytes, StandardCharsets.UTF_8);
-        DqoCloudApiKeyPayload deserializedApiKeyPayload = this.jsonSerializer.deserialize(payloadJsonString, DqoCloudApiKeyPayload.class);
+            String payloadJsonString = new String(payloadBytes, StandardCharsets.UTF_8);
+            DqoCloudApiKeyPayload deserializedApiKeyPayload = this.jsonSerializer.deserialize(payloadJsonString, DqoCloudApiKeyPayload.class);
 
-        DqoCloudApiKey dqoCloudApiKey = new DqoCloudApiKey(apiKey, deserializedApiKeyPayload);
-        return dqoCloudApiKey;
+            DqoCloudApiKey dqoCloudApiKey = new DqoCloudApiKey(apiKey, deserializedApiKeyPayload);
+            return dqoCloudApiKey;
+        }
+        catch (DecoderException ex) {
+            throw new DqoCloudInvalidKeyException("Failed to decode a DQO Cloud API Key, error: " + ex.getMessage(), ex);
+        }
     }
 }
