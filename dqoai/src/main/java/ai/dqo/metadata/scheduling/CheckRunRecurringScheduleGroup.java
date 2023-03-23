@@ -25,12 +25,22 @@ public enum CheckRunRecurringScheduleGroup {
     profiling,
 
     /**
-     * Schedule for checks that should be executed daily because they capture daily snapshot of a data quality metrics or they are analyzing data for daily periods.
+     * Schedule for recurring checks that should be executed daily because they capture daily snapshot of a data quality metrics.
      */
-    daily,
+    recurring_daily,
 
     /**
-     * Schedule for checks that should be executed monthly because they capture monthly snapshot of a data quality metrics or they are analyzing data for monthly periods.
+     * Schedule for recurring checks that should be executed monthly because they capture monthly snapshot of a data quality metrics.
      */
-    monthly;
+    recurring_monthly,
+
+    /**
+     * Schedule for partition checks for daily partitioned data.
+     */
+    partitioned_daily,
+
+    /**
+     * Schedule for partition checks for monthly partitioned data.
+     */
+    partitioned_monthly;
 }

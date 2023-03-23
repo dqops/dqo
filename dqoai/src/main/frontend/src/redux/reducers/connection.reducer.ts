@@ -37,12 +37,22 @@ export interface IConnectionState {
       updatedSchedule?: RecurringScheduleSpec;
       isUpdatedSchedule?: boolean;
     }
-    daily?: {
+    recurring_daily?: {
       schedule?: RecurringScheduleSpec;
       updatedSchedule?: RecurringScheduleSpec;
       isUpdatedSchedule?: boolean;
     }
-    monthly?: {
+    recurring_monthly?: {
+      schedule?: RecurringScheduleSpec;
+      updatedSchedule?: RecurringScheduleSpec;
+      isUpdatedSchedule?: boolean;
+    }
+    partitioned_daily?: {
+      schedule?: RecurringScheduleSpec;
+      updatedSchedule?: RecurringScheduleSpec;
+      isUpdatedSchedule?: boolean;
+    }
+    partitioned_monthly?: {
       schedule?: RecurringScheduleSpec;
       updatedSchedule?: RecurringScheduleSpec;
       isUpdatedSchedule?: boolean;

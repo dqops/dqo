@@ -29,10 +29,7 @@ import ai.dqo.data.readouts.factory.SensorReadoutTableFactoryObjectMother;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorNormalizedResultObjectMother;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
-import ai.dqo.data.storage.LoadedMonthlyPartition;
-import ai.dqo.data.storage.ParquetPartitionId;
-import ai.dqo.data.storage.ParquetPartitionStorageService;
-import ai.dqo.data.storage.ParquetPartitionStorageServiceImpl;
+import ai.dqo.data.storage.*;
 import ai.dqo.data.storage.parquet.HadoopConfigurationProviderObjectMother;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import org.junit.jupiter.api.Assertions;
@@ -61,8 +58,11 @@ public class RuleResultsSnapshotTests extends BaseTest {
         LocalDqoUserHomePathProvider localUserHomeProviderStub = LocalDqoUserHomePathProviderObjectMother.createLocalUserHomeProviderStub(dqoUserConfigurationProperties);
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
         // TODO: Add stub / virtual filesystem for localUserHomeFileStorageService
+        HivePartitionPathUtility hivePartitionPathUtility = new HivePartitionPathUtilityImpl();
+
         parquetStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), null, new SynchronizationStatusTrackerStub());
+                HadoopConfigurationProviderObjectMother.getDefault(), null, new SynchronizationStatusTrackerStub(),
+                hivePartitionPathUtility);
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
 		this.sut = new RuleResultsSnapshot("conn", tableName, this.parquetStorageService, newRows);

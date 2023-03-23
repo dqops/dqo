@@ -19,6 +19,7 @@ import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.column.recurring.accuracy.ColumnAccuracyMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.bool.ColumnBoolMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.datetime.ColumnDatetimeMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.nulls.ColumnNullsMonthlyRecurringSpec;
@@ -65,6 +66,7 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
            put("sql", o -> o.sql);
            put("bool", o -> o.bool);
            put("integrity", o -> o.integrity);
+           put("accuracy", o -> o.accuracy);
 
         }
     };
@@ -113,6 +115,11 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnIntegrityMonthlyRecurringSpec integrity;
+
+    @JsonPropertyDescription("Monthly recurring of accuracy in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnAccuracyMonthlyRecurringSpec accuracy;
 
     /**
      * Returns the container of recurring for standard data quality checks.
@@ -277,6 +284,24 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     }
 
     /**
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
+     */
+    public ColumnAccuracyMonthlyRecurringSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets the container of accuracy data quality checks (recurring).
+     * @param accuracy New accuracy checks.
+     */
+    public void setAccuracy(ColumnAccuracyMonthlyRecurringSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        this.propagateHierarchyIdToField(accuracy, "accuracy");
+    }
+
+    /**
      * Returns the child map on the spec class with all fields.
      *
      * @return Return the field map.
@@ -343,6 +368,6 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     @Override
     @JsonIgnore
     public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.monthly;
+        return CheckRunRecurringScheduleGroup.recurring_monthly;
     }
 }

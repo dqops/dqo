@@ -57,6 +57,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
             put("sql", o -> o.sql);
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
+            put("accuracy", o -> o.accuracy);
 
 
         }
@@ -106,6 +107,11 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnProfilingIntegrityChecksSpec integrity;
+
+    @JsonPropertyDescription("Configuration of accuracy checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnProfilingAccuracyChecksSpec accuracy;
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -267,6 +273,24 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.integrity, integrity));
         this.integrity = integrity;
         this.propagateHierarchyIdToField(integrity, "integrity");
+    }
+
+    /**
+     * Returns the accuracy check configuration on a column level.
+     * @return Accuracy check configuration.
+     */
+    public ColumnProfilingAccuracyChecksSpec getAccuracy() {
+        return accuracy;
+    }
+
+    /**
+     * Sets the accuracy check configuration on a column level.
+     * @param accuracy New accuracy checks configuration.
+     */
+    public void setAccuracy(ColumnProfilingAccuracyChecksSpec accuracy) {
+        this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
+        this.accuracy = accuracy;
+        this.propagateHierarchyIdToField(accuracy, "accuracy");
     }
 
     /**

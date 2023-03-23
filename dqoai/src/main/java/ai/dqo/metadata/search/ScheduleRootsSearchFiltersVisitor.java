@@ -57,12 +57,20 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
                 foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.profiling, connectionSpec));
             }
 
-            if (Objects.equals(schedules.getDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.daily, connectionSpec));
+            if (Objects.equals(schedules.getRecurringDaily(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.recurring_daily, connectionSpec));
             }
 
-            if (Objects.equals(schedules.getMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.monthly, connectionSpec));
+            if (Objects.equals(schedules.getRecurringMonthly(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.recurring_monthly, connectionSpec));
+            }
+
+            if (Objects.equals(schedules.getPartitionedDaily(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.partitioned_daily, connectionSpec));
+            }
+
+            if (Objects.equals(schedules.getPartitionedMonthly(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.partitioned_monthly, connectionSpec));
             }
         }
 
@@ -94,12 +102,20 @@ public class ScheduleRootsSearchFiltersVisitor extends AbstractSearchVisitor<Fou
                 foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.profiling, tableSpec));
             }
 
-            if (Objects.equals(schedulesOverride.getDaily(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.daily, tableSpec));
+            if (Objects.equals(schedulesOverride.getRecurringDaily(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.recurring_daily, tableSpec));
             }
 
-            if (Objects.equals(schedulesOverride.getMonthly(), this.filters.getSchedule())) {
-                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.monthly, tableSpec));
+            if (Objects.equals(schedulesOverride.getRecurringMonthly(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.recurring_monthly, tableSpec));
+            }
+
+            if (Objects.equals(schedulesOverride.getPartitionedDaily(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.partitioned_daily, tableSpec));
+            }
+
+            if (Objects.equals(schedulesOverride.getPartitionedMonthly(), this.filters.getSchedule())) {
+                foundNodes.add(new ScheduleRootResult(CheckRunRecurringScheduleGroup.partitioned_monthly, tableSpec));
             }
         }
 

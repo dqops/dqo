@@ -20,7 +20,7 @@ import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.errors.services.ErrorsDeleteService;
 import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
-import ai.dqo.data.statistics.services.StatisticsResultsDeleteService;
+import ai.dqo.data.statistics.services.StatisticsDeleteService;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 import ai.dqo.data.readouts.services.SensorReadoutsDeleteService;
 import ai.dqo.data.ruleresults.services.RuleResultsDeleteService;
@@ -38,18 +38,18 @@ import org.springframework.stereotype.Component;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJobResult> {
     private ErrorsDeleteService errorsDeleteService;
-    private StatisticsResultsDeleteService statisticsResultsDeleteService;
+    private StatisticsDeleteService statisticsDeleteService;
     private RuleResultsDeleteService ruleResultsDeleteService;
     private SensorReadoutsDeleteService sensorReadoutsDeleteService;
     private DeleteStoredDataQueueJobParameters deletionParameters;
 
     @Autowired
     public DeleteStoredDataQueueJob(ErrorsDeleteService errorsDeleteService,
-                                    StatisticsResultsDeleteService statisticsResultsDeleteService,
+                                    StatisticsDeleteService statisticsDeleteService,
                                     RuleResultsDeleteService ruleResultsDeleteService,
                                     SensorReadoutsDeleteService sensorReadoutsDeleteService) {
         this.errorsDeleteService = errorsDeleteService;
-        this.statisticsResultsDeleteService = statisticsResultsDeleteService;
+        this.statisticsDeleteService = statisticsDeleteService;
         this.ruleResultsDeleteService = ruleResultsDeleteService;
         this.sensorReadoutsDeleteService = sensorReadoutsDeleteService;
     }
@@ -82,7 +82,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setCheckCategory(deletionParameters.getCheckCategory());
             setCheckName(deletionParameters.getCheckName());
             setCheckType(deletionParameters.getCheckType());
-            setColumnName(deletionParameters.getColumnName());
+            setColumnNames(deletionParameters.getColumnNames());
             setSensorName(deletionParameters.getSensorName());
             setQualityDimension(deletionParameters.getQualityDimension());
             setTimeGradient(deletionParameters.getTimeGradient());
@@ -100,7 +100,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setCollectorCategory(deletionParameters.getCollectorCategory());
             setCollectorName(deletionParameters.getCollectorName());
             setCollectorTarget(deletionParameters.getCollectorTarget());
-            setColumnName(deletionParameters.getColumnName());
+            setColumnNames(deletionParameters.getColumnNames());
             setDataStreamName(deletionParameters.getDataStreamName());
             setSensorName(deletionParameters.getSensorName());
         }};
@@ -117,7 +117,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setCheckCategory(deletionParameters.getCheckCategory());
             setCheckName(deletionParameters.getCheckName());
             setCheckType(deletionParameters.getCheckType());
-            setColumnName(deletionParameters.getColumnName());
+            setColumnNames(deletionParameters.getColumnNames());
             setDataStreamName(deletionParameters.getDataStreamName());
             setSensorName(deletionParameters.getSensorName());
             setQualityDimension(deletionParameters.getQualityDimension());
@@ -136,7 +136,7 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
             setCheckCategory(deletionParameters.getCheckCategory());
             setCheckName(deletionParameters.getCheckName());
             setCheckType(deletionParameters.getCheckType());
-            setColumnName(deletionParameters.getColumnName());
+            setColumnNames(deletionParameters.getColumnNames());
             setDataStreamName(deletionParameters.getDataStreamName());
             setSensorName(deletionParameters.getSensorName());
             setQualityDimension(deletionParameters.getQualityDimension());
@@ -157,8 +157,8 @@ public class DeleteStoredDataQueueJob extends DqoQueueJob<DeleteStoredDataQueueJ
         if (this.deletionParameters.isDeleteErrors()) {
             this.errorsDeleteService.deleteSelectedErrorsFragment(this.getErrorsFragmentFilter());
         }
-        if (this.deletionParameters.isDeleteProfilingResults()) {
-            this.statisticsResultsDeleteService.deleteSelectedStatisticsResultsFragment(this.getStatisticsResultsFragmentFilter());
+        if (this.deletionParameters.isDeleteStatistics()) {
+            this.statisticsDeleteService.deleteSelectedStatisticsResultsFragment(this.getStatisticsResultsFragmentFilter());
         }
         if (this.deletionParameters.isDeleteRuleResults()) {
             this.ruleResultsDeleteService.deleteSelectedRuleResultsFragment(this.getRuleResultsFragmentFilter());

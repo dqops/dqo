@@ -25,6 +25,9 @@ import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.core.jobqueue.DqoQueueJobId;
+import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
 import ai.dqo.data.statistics.services.StatisticsDataService;
 import ai.dqo.data.statistics.services.models.StatisticsResultsForColumnModel;
@@ -45,6 +48,7 @@ import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
 import ai.dqo.rest.models.metadata.ColumnStatisticsModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import ai.dqo.services.metadata.ColumnService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +71,7 @@ import java.util.stream.Stream;
 @ResponseStatus(HttpStatus.OK)
 @Api(value = "Columns", description = "Manages columns inside a table")
 public class ColumnsController {
+    private final ColumnService columnService;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoHomeContextFactory dqoHomeContextFactory;
     private SpecToUiCheckMappingService specToUiCheckMappingService;
@@ -75,6 +80,7 @@ public class ColumnsController {
 
     /**
      * Creates a columns rest controller.
+     * @param columnService               Column logic service.
      * @param userHomeContextFactory      User home context factory.
      * @param dqoHomeContextFactory       DQO home context factory, used to find built-in sensors.
      * @param specToUiCheckMappingService Check mapper to convert the check specification to a UI model.
@@ -82,11 +88,13 @@ public class ColumnsController {
      * @param statisticsDataService       Statistics data service.
      */
     @Autowired
-    public ColumnsController(UserHomeContextFactory userHomeContextFactory,
+    public ColumnsController(ColumnService columnService,
+                             UserHomeContextFactory userHomeContextFactory,
                              DqoHomeContextFactory dqoHomeContextFactory,
                              SpecToUiCheckMappingService specToUiCheckMappingService,
                              UiToSpecCheckMappingService uiToSpecCheckMappingService,
                              StatisticsDataService statisticsDataService) {
+        this.columnService = columnService;
         this.userHomeContextFactory = userHomeContextFactory;
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.specToUiCheckMappingService = specToUiCheckMappingService;
@@ -1833,17 +1841,17 @@ public class ColumnsController {
      * @param schemaName     Schema name.
      * @param tableName      Table name.
      * @param columnName     Column name.
-     * @return Empty response.
+     * @return Deferred operations job id.
      */
     @DeleteMapping("/{connectionName}/schemas/{schemaName}/tables/{tableName}/columns/{columnName}")
     @ApiOperation(value = "deleteColumn", notes = "Deletes a column from the table")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 204, message = "Column successfully deleted"),
+            @ApiResponse(code = 200, message = "Column successfully deleted", response = DqoQueueJobId.class),
             @ApiResponse(code = 404, message = "Column not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> deleteColumn(
+    public ResponseEntity<Mono<DqoQueueJobId>> deleteColumn(
             @ApiParam("Connection name") @PathVariable String connectionName,
             @ApiParam("Schema name") @PathVariable String schemaName,
             @ApiParam("Table name") @PathVariable String tableName,
@@ -1854,17 +1862,13 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the table was not found
         }
 
-        TableSpec tableSpec = tableWrapper.getSpec();
-        ColumnSpecMap columns = tableSpec.getColumns();
-        ColumnSpec existingColumnSpec = columns.get(columnName);
+        ColumnSpec existingColumnSpec = tableWrapper.getSpec().getColumns().get(columnName);
         if (existingColumnSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404 - the column was not found
         }
 
-        columns.remove(columnName);
-        userHomeContext.flush();
-
-        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
+        PushJobResult<DeleteStoredDataQueueJobResult> backgroundJob = this.columnService.deleteColumn(existingColumnSpec);
+        return new ResponseEntity<>(Mono.just(backgroundJob.getJobId()), HttpStatus.OK); // 200
     }
 
 

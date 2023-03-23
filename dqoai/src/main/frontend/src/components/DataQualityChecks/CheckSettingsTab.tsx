@@ -50,10 +50,12 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
             <tr>
               <td className="px-4 py-2 w-60">Disable data quality check</td>
               <td className="px-4 py-2">
-                <Checkbox
-                  checked={check?.disabled}
-                  onChange={(value) => onChange({ ...check, disabled: value })}
-                />
+                <div className="flex">
+                  <Checkbox
+                    checked={check?.disabled}
+                    onChange={(value) => onChange({ ...check, disabled: value })}
+                  />
+                </div>
               </td>
             </tr>
             <tr>
@@ -83,23 +85,27 @@ const CheckSettingsTab = ({ check, onChange }: ICheckSettingsTabProps) => {
             <tr>
               <td className="px-4 py-2">Exclude from KPI</td>
               <td className="px-4 py-2">
-                <Checkbox
-                  checked={check?.exclude_from_kpi}
-                  onChange={(value) =>
-                    onChange({ ...check, exclude_from_kpi: value })
-                  }
-                />
+                <div className="flex">
+                  <Checkbox
+                    checked={check?.exclude_from_kpi}
+                    onChange={(value) =>
+                      onChange({ ...check, exclude_from_kpi: value })
+                    }
+                  />
+                </div>
               </td>
             </tr>
             <tr>
               <td className="px-4 py-2">Include in SLA</td>
               <td className="px-4 py-2">
-                <Checkbox
-                  checked={check?.include_in_sla}
-                  onChange={(value) =>
-                    onChange({ ...check, include_in_sla: value })
-                  }
-                />
+                <div className="flex">
+                  <Checkbox
+                    checked={check?.include_in_sla}
+                    onChange={(value) =>
+                      onChange({ ...check, include_in_sla: value })
+                    }
+                  />
+                </div>
               </td>
             </tr>
             <tr>

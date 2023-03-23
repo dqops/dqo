@@ -49,6 +49,7 @@ import tech.tablesaw.api.Table;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 
 @SpringBootTest
 public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
@@ -74,9 +75,11 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
                 homeLocationFindService, newLockManager, synchronizationStatusTracker);
+        HivePartitionPathUtility hivePartitionPathUtility = new HivePartitionPathUtilityImpl();
 
         this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker);
+                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker,
+                hivePartitionPathUtility);
 
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
         this.sensorReadoutsTableFactory = new SensorReadoutsTableFactoryImpl();
@@ -85,7 +88,10 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
                 this.parquetPartitionStorageService,
                 this.sensorReadoutsTableFactory);
 
-        this.sut = new SensorReadoutsDeleteServiceImpl(sensorReadoutsSnapshotFactory);
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
+                newLockManager, localUserHomeFileStorageService, hivePartitionPathUtility);
+        this.sut = new SensorReadoutsDeleteServiceImpl(sensorReadoutsSnapshotFactory,
+                                                       parquetPartitionMetadataService);
     }
 
     private Table prepareSimplePartitionTable(String tableName, LocalDateTime startDate, String id_prefix) {
@@ -484,7 +490,7 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
             }});
             setDateStart(month);
             setDateEnd(month.plusMonths(1).minusDays(1));
-            setColumnName("col2");
+            setColumnNames(new ArrayList<>(){{add("col2");}});
             setDataStreamName("ds1");
             setSensorName("s2");
         }};

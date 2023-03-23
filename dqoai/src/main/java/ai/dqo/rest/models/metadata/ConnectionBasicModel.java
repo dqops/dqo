@@ -134,7 +134,7 @@ public class ConnectionBasicModel {
                 setDateStart(null);
                 setDateEnd(null);
 
-                setDeleteProfilingResults(true);
+                setDeleteStatistics(true);
                 setDeleteErrors(true);
                 setDeleteRuleResults(true);
                 setDeleteSensorReadouts(true);

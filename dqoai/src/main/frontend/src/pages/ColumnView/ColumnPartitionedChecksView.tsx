@@ -161,6 +161,12 @@ const ColumnPartitionedChecksView = () => {
     );
   }, [isUpdatedMonthlyPartitionedChecks]);
 
+  useEffect(() => {
+    if (tab !== 'daily' && tab !== 'monthly') {
+      history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connection, schema, table, column, 'daily'));
+    }
+  }, [tab]);
+
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.COLUMN_LEVEL_PAGE(checkTypes, connection, schema, table, column, tab));
   };
@@ -184,7 +190,7 @@ const ColumnPartitionedChecksView = () => {
             onUpdate={onUpdate}
             checksUI={dailyPartitionedChecks}
             onChange={onDailyPartitionedChecksChange}
-            className="max-h-checks"
+            className="max-h-table"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
             loading={loading}
@@ -195,7 +201,7 @@ const ColumnPartitionedChecksView = () => {
             onUpdate={onUpdate}
             checksUI={monthlyPartitionedChecks}
             onChange={onMonthlyPartitionedChecksChange}
-            className="max-h-checks"
+            className="max-h-table"
             checkResultsOverview={checkResultsOverview}
             getCheckOverview={getCheckOverview}
             loading={loading}

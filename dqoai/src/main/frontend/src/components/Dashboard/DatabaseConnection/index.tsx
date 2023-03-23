@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import Button from '../../Button';
 import Input from '../../Input';
@@ -41,6 +41,7 @@ const DatabaseConnection = ({
   const [isSaving, setIsSaving] = useState(false);
   const [showConfirm, setShowConfirm] = useState(false);
   const [message, setMessage] = useState<string>();
+  const [nameError, setNameError] = useState('');
 
   const onConfirmSave = async () => {
     if (!database.connection_name) {
@@ -61,10 +62,20 @@ const DatabaseConnection = ({
     setShowConfirm(false);
   };
 
-  const isError = useMemo(() => !/^([A-Za-z0-9])*$/.test(database.connection_name as string), [database?.connection_name]);
+  useEffect(() => {
+    if (!/^([A-Za-z0-9])*$/.test(database.connection_name as string)) {
+      setNameError('Database name should be alphanumeric characters');
+    } else {
+      setNameError('');
+    }
+  }, [database?.connection_name]);
 
   const onSave = async () => {
-    if (!database.connection_name || isError) {
+    if (!database.connection_name) {
+      setNameError('Connection Name is required');
+      return;
+    }
+    if (nameError) {
       return;
     }
 
@@ -138,16 +149,16 @@ const DatabaseConnection = ({
       />
       ),
     [ConnectionBasicModelProviderTypeEnum.redshift]: (
-    <RedshiftConnection
-      redshift={database.redshift}
-      onChange={(redshift) => onChange({ ...database, redshift })}
-    />
+      <RedshiftConnection
+        redshift={database.redshift}
+        onChange={(redshift) => onChange({ ...database, redshift })}
+      />
     ),
     [ConnectionBasicModelProviderTypeEnum.sqlserver]: (
-    <SqlServerConnection
-      sqlserver={database.sqlserver}
-      onChange={(sqlserver) => onChange({ ...database, sqlserver })}
-    />
+      <SqlServerConnection
+        sqlserver={database.sqlserver}
+        onChange={(sqlserver) => onChange({ ...database, sqlserver })}
+      />
     )
   };
 
@@ -189,8 +200,8 @@ const DatabaseConnection = ({
           onChange={(e) =>
             onChange({ ...database, connection_name: e.target.value })
           }
-          error={isError}
-          helperText={isError ? 'Database name should be alphanumeric characters' : ''}
+          error={!!nameError}
+          helperText={nameError}
         />
 
         <div className="mt-6">

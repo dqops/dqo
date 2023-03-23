@@ -19,12 +19,20 @@ const pageTabs = [
     value: CheckRunRecurringScheduleGroup.profiling
   },
   {
-    label: 'Daily',
-    value: CheckRunRecurringScheduleGroup.daily
+    label: 'Recurring Daily',
+    value: CheckRunRecurringScheduleGroup.recurring_daily
   },
   {
-    label: 'Monthly',
-    value: CheckRunRecurringScheduleGroup.monthly
+    label: 'Recurring Monthly',
+    value: CheckRunRecurringScheduleGroup.recurring_monthly
+  },
+  {
+    label: 'Partitioned Daily',
+    value: CheckRunRecurringScheduleGroup.partitioned_daily
+  },
+  {
+    label: 'Partitioned Monthly',
+    value: CheckRunRecurringScheduleGroup.partitioned_monthly
   },
 ]
 

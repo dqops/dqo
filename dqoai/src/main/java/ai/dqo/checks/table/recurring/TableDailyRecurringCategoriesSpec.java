@@ -217,6 +217,6 @@ public class TableDailyRecurringCategoriesSpec extends AbstractRootChecksContain
     @Override
     @JsonIgnore
     public CheckRunRecurringScheduleGroup getSchedulingGroup() {
-        return CheckRunRecurringScheduleGroup.daily;
+        return CheckRunRecurringScheduleGroup.recurring_daily;
     }
 }

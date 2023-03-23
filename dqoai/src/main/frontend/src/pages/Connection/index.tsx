@@ -38,7 +38,7 @@ const initSourceTabs = [
     value: 'schemas'
   },
   {
-    label: 'Data Streams',
+    label: 'Default data stream template',
     value: 'data-streams'
   }
 ];

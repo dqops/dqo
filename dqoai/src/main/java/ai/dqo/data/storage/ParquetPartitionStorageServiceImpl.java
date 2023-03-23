@@ -63,14 +63,12 @@ import java.util.stream.Collectors;
  */
 @Service
 public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStorageService {
-    private final Pattern HIVE_PARTITION_MONTH_PATTERN =
-            Pattern.compile(ParquetPartitioningKeys.MONTH + "=(\\d{4}-(0\\d|1[0-2])-([0-2]\\d|3[0-1]))");
-
     private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
     private final UserHomeLockManager userHomeLockManager;
     private HadoopConfigurationProvider hadoopConfigurationProvider;
     private LocalUserHomeFileStorageService localUserHomeFileStorageService;
     private SynchronizationStatusTracker synchronizationStatusTracker;
+    private HivePartitionPathUtility hivePartitionPathUtility;
 
     /**
      * Dependency injection constructor.
@@ -79,6 +77,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      * @param hadoopConfigurationProvider Hadoop configuration provider.
      * @param localUserHomeFileStorageService Local DQO_USER_HOME file storage service.
      * @param synchronizationStatusTracker File synchronization status tracker.
+     * @param hivePartitionPathUtility Utility for manipulating hive partition paths.
      */
     @Autowired
     public ParquetPartitionStorageServiceImpl(
@@ -86,68 +85,16 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             UserHomeLockManager userHomeLockManager,
             HadoopConfigurationProvider hadoopConfigurationProvider,
             LocalUserHomeFileStorageService localUserHomeFileStorageService,
-            SynchronizationStatusTracker synchronizationStatusTracker) {
+            SynchronizationStatusTracker synchronizationStatusTracker,
+            HivePartitionPathUtility hivePartitionPathUtility) {
         this.localDqoUserHomePathProvider = localDqoUserHomePathProvider;
         this.userHomeLockManager = userHomeLockManager;
         this.hadoopConfigurationProvider = hadoopConfigurationProvider;
         this.localUserHomeFileStorageService = localUserHomeFileStorageService;
         this.synchronizationStatusTracker = synchronizationStatusTracker;
+        this.hivePartitionPathUtility = hivePartitionPathUtility;
     }
 
-    /**
-     * Creates a hive compatible partition path (folder) for the file.
-     * @param partitionId Partition id that identifies the connection, table (with a schema) and the month.
-     * @return Hive compatible partition folder path, followed by '/'.
-     */
-    public String makeHivePartitionPath(ParquetPartitionId partitionId) {
-        // TODO: HivePartitionPaths should be refactored from the ground-up, to make easily serializable and deserializable.
-        assert partitionId.getMonth().getDayOfMonth() == 1;
-
-        StringBuilder stringBuilder = new StringBuilder();
-
-        stringBuilder.append(ParquetPartitioningKeys.CONNECTION);
-        stringBuilder.append('=');
-        String encodedConnection = URLEncoder.encode(partitionId.getConnectionName(), StandardCharsets.UTF_8);
-        stringBuilder.append(encodedConnection);
-        stringBuilder.append('/');
-
-        stringBuilder.append(ParquetPartitioningKeys.TARGET);
-        stringBuilder.append('=');
-        String encodedTable = URLEncoder.encode(partitionId.getTableName().toString(), StandardCharsets.UTF_8);
-        stringBuilder.append(encodedTable);
-        stringBuilder.append('/');
-
-        stringBuilder.append(ParquetPartitioningKeys.MONTH);
-        stringBuilder.append('=');
-        stringBuilder.append(partitionId.getMonth());
-        stringBuilder.append('/');
-
-        String hivePartitionPath = stringBuilder.toString();
-        return hivePartitionPath;
-    }
-
-    /**
-     * Checks if the {@code folderName} is a valid hive partition folder name for a month.
-     * @param folderName Folder name to validate.
-     * @return True if the name is a valid hive partition folder name. False otherwise.
-     */
-    protected boolean validHivePartitionMonthFolderName(String folderName) {
-        return HIVE_PARTITION_MONTH_PATTERN.asMatchPredicate().test(folderName);
-    }
-
-    /**
-     * Extracts the month from the folder name in hive partition.
-     * @param monthFolderName Folder name representing the partition for the month.
-     * @return The month to which the {@code monthFolderName} refers to. Null if folder name is incorrect.
-     */
-    protected LocalDate monthFromHivePartitionFolderName(String monthFolderName) {
-        Matcher matcher = HIVE_PARTITION_MONTH_PATTERN.matcher(monthFolderName);
-        if (!matcher.find()) {
-            return null;
-        }
-        String localDateString = matcher.group(1);
-        return LocalDate.parse(localDateString);
-    }
 
     /**
      * Reads the data of one monthly partition.
@@ -160,7 +107,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     public LoadedMonthlyPartition loadPartition(ParquetPartitionId partitionId, FileStorageSettings storageSettings, String[] columnNames) {
         Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
         Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
-        String hivePartitionFolderName = makeHivePartitionPath(partitionId);
+        String hivePartitionFolderName = this.hivePartitionPathUtility.makeHivePartitionPath(partitionId);
         Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
         Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
         File targetParquetFile = targetParquetFilePath.toFile();
@@ -215,7 +162,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             FileStorageSettings storageSettings,
             String[] columnNames) {
         if (start == null || end == null) {
-            throw new IllegalArgumentException("Start and end dates indicating the range need to be concrete");
+            throw new IllegalArgumentException("Start and end dates indicating the range need to be specified");
         }
 
         return loadRecentPartitionsForMonthsRange(connectionName, tableName, start, end, storageSettings, columnNames, Integer.MAX_VALUE);
@@ -251,7 +198,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         }
         if (startNonNull == null) {
             // No data stored for this table
-            return resultPartitions;
+            return null;
         }
 
         LocalDate endNonNull = Objects.requireNonNullElse(endBoundary, LocalDate.now());
@@ -305,10 +252,9 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
             Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
 
-            LocalDate dummyMonth = LocalDateTimeTruncateUtility.truncateMonth(LocalDate.now());
-            String hivePartitionFolderName = makeHivePartitionPath(new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, dummyMonth));
-            Path partitionPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
-            Path tablePartitionsPath = partitionPath.getParent();
+            String hivePartitionFolderName = this.hivePartitionPathUtility.makeHivePartitionPath(
+                    new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, null));
+            Path tablePartitionsPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
 
             List<HomeFolderPath> tableStoredFolders = this.localUserHomeFileStorageService.listFolders(
                     HomeFolderPathUtility.createFromFilesystemPath(tablePartitionsPath));
@@ -318,8 +264,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
             return tableStoredFolders.stream()
                     .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
-                    .filter(this::validHivePartitionMonthFolderName)
-                    .map(this::monthFromHivePartitionFolderName)
+                    .filter(this.hivePartitionPathUtility::validHivePartitionMonthFolderName)
+                    .map(this.hivePartitionPathUtility::monthFromHivePartitionFolderName)
                     .collect(Collectors.toList());
         }
     }
@@ -360,7 +306,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             Path configuredStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
             Path storeRootPath = this.localDqoUserHomePathProvider.getLocalUserHomePath().resolve(configuredStoragePath);
 
-            String hivePartitionFolderName = makeHivePartitionPath(loadedPartition.getPartitionId());
+            String hivePartitionFolderName = this.hivePartitionPathUtility.makeHivePartitionPath(loadedPartition.getPartitionId());
             Path partitionPath = storeRootPath.resolve(hivePartitionFolderName);
             Path targetParquetFilePath = partitionPath.resolve(storageSettings.getParquetFileName());
             File targetParquetFile = targetParquetFilePath.toFile();
