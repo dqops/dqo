@@ -26,24 +26,33 @@ partitioning key for the table.
 
 Each type of checks is divided into two main categories: table and column. Table-level data quality checks are used to 
 evaluate the table at a high-level without reference to individual columns, while column-level checks are run on 
-specific column. Built-in checks available in DQO are divided in the following subcategories.
+specific column. Built-in checks available in DQO are divided into the following subcategories. 
 
-Table checks:
-- standard
-- timeliness
-- sql
-- availability
+You can access the full lists of available checks with detailed descriptions by clicking on a link. 
 
-Column checks:
-- nulls
-- numeric
-- uniqueness
-- strings
-- datetime
-- pii
-- sql
-- bool
-- integrity
+### **Table checks**
+
+| Subcategory       | Description                                                                                                                                                                                                                                 |
+|-------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Standard          | Evaluates the overall quality of the table by verifying the number of rows.                                                                                                                                                                 |
+| Timeliness        | Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.                                                                                                                          |
+| SQL               | Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range. |
+| Availability      | Checks whether the table is accessible and available for use.                                                                                                                                                                               |                                                                                                                                                                                                                                            |
+
+### **Column checks**
+
+| Subcategory | Description                                                                                                                                                                                                                                |
+|-------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Nulls       | Checks for the presence of null or missing values in a column.                                                                                                                                                                             |
+| Numeric     | Validates that the data in a numeric column is in the expected format or within predefined ranges.                                                                                                                                         |
+| Strings     | Validates that the data in a string column match the expected format or pattern.                                                                                                                                                           |
+| Uniqueness  | Counts the number or percent of duplicate or unique values in a column.                                                                                                                                                                    |
+| DateTime    | Validates that the data in a date or time column is in the expected format and within predefined ranges.                                                                                                                                   |
+| PII         | Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.                                                                                       |
+| SQL         | Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range. |
+| Bool        | Calculates the percentage of data in a Boolean format.                                                                                                                                                                                     |
+| Integrity   | Checks the referential integrity of a column against a column in another table.                                                                                                                                                            |
+
 
 ## Severity levels
 

@@ -1,7 +1,9 @@
 # Working with YAML files
 
-In DQO, the configuration of [data quality checks](./checks/index.md) is defined in YAML files. YAML is a human-readable
-data serialization language that is often used for writing configuration files. Defining data quality checks in YAML files
+In DQO, the configuration of [data quality checks](../checks/index.md) is defined in YAML files. YAML is a human-readable
+data serialization language that is often used for writing configuration files. 
+
+Defining data quality checks in YAML files
 allows checks definitions to be stored in a source code repository and versioned along with any other pipeline code or 
 machine learning code.
 
@@ -50,4 +52,8 @@ be raised.
 
 ## Editing YAML files
 
+YAMl configuration files are located in the `userhome/sources` folder. The complete DQO YAML schema can e found [here](https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json). 
+
 YAML files in DQO support code completion in code editors, such as Visual Studio Code.
+
+**Add Screen**

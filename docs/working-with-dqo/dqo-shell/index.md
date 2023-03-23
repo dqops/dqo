@@ -20,7 +20,7 @@ Open a Command Prompt, change the directory to the one where DQO.ai is installed
 
 In the first run DQO.ai will ask you if you
 want to initialize `user home` at specified directory, and if you want to log in to the dqo cloud (this step is
-necessary to use `cloud` commands, there is a separate article on [how to push the data to the cloud](push-data-to-the-cloud.md) ).
+necessary to use `cloud` commands, there is a separate article on [how to push the data to the cloud]).
 
 ```
 (dqoai) C:\>dqo
@@ -60,7 +60,7 @@ Let's check whether any connection has been established, for that use the `conne
 
 Notice that autocompletion is available, press the tab key to accept a suggestion.
 
-![Autocompletion](cooooorrrrrrrr.jpg)
+
 
 Moreover, once the first part of a command is typed, there are suggestions on the next part:
 

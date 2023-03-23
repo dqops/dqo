@@ -2,7 +2,8 @@
 
 Create diagram and describe architecture.
 
-Gdzie jest dqo gdzie? sa przechowywane pliki lokalne?
+Gdzie jest dqo? 
+Gdzie sa przechowywane pliki lokalne?
 Gdzie jest data quality data lake?
 Gdzie sa dashboardy?
 Gdzie są połaczenia z bazą danych?
