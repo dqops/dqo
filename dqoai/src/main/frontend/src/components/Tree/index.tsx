@@ -143,7 +143,7 @@ const Tree = () => {
   }, [selectedNode]);
 
   return (
-    <div className="pl-2 mt-4">
+    <div className={clsx("pl-2", sourceRoute === 'sources' ? 'mt-4' : 'mt-0')}>
       <div>{renderTree('null', 0)}</div>
       <ConfirmDialog
         open={isOpen}
