@@ -228,7 +228,7 @@ export const getColumnLabels =
         tableName,
         columnName
       );
-      dispatch(getColumnLabelsSuccess(res.data));
+      dispatch(getColumnLabelsSuccess(res.data || []));
     } catch (err) {
       dispatch(getColumnLabelsFailed(err));
     }

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, KeyboardEvent } from 'react';
+import React, { useState, KeyboardEvent } from 'react';
 import LabelItem from './LabelItem';
 import Input from "../../Input";
 
@@ -7,15 +7,8 @@ interface ILabelsViewProps {
   onChange: (labels: string[]) => void;
 }
 
-const LabelsView = ({ labels, onChange }: ILabelsViewProps) => {
+const LabelsView = ({ labels = [], onChange }: ILabelsViewProps) => {
   const [text, setText] = useState('');
-
-  useEffect(() => {
-    // if (text.length) {
-    //   onChange([...labels, text]);
-    //   setText('');
-    // }
-  }, [text]);
 
   const onChangeLabel = (key: number, value: string) => {
     onChange(labels.map((label, index) => (key === index ? value : label)));
