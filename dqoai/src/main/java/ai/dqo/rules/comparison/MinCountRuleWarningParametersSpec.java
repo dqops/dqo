@@ -33,27 +33,27 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MinCountRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MinCountRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MinCountRuleWarningParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MinCountRuleWarningParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
     @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    @SampleValues(values = "5")
+    @SampleValues(values = "0")
     private Long minCount;
 
     /**
      * Default constructor, the minimum accepted value is 0.
      */
-    public MinCountRuleParametersSpec() {
+    public MinCountRuleWarningParametersSpec() {
     }
 
     /**
      * Creates a rule with a given value.
      * @param minCount Minimum accepted value.
      */
-    public MinCountRuleParametersSpec(Long minCount) {
+    public MinCountRuleWarningParametersSpec(Long minCount) {
         this.minCount = minCount;
     }
 
@@ -61,7 +61,7 @@ public class MinCountRuleParametersSpec extends AbstractRuleParametersSpec {
      * Creates a rule with a given value.
      * @param minCount Minimum accepted value.
      */
-    public MinCountRuleParametersSpec(int minCount) {
+    public MinCountRuleWarningParametersSpec(int minCount) {
         this.minCount = (long)minCount;
     }
 
