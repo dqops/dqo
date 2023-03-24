@@ -61,12 +61,12 @@ const Sidebar = () => {
             onClick={() => history.push('/create')}
           />
         ) : (
-          <div className="h-10 w-full" />
+          <div />
         )}
       </div>
       <Tree />
       <div
-        className="cursor-ew-resize fixed top-16 bottom-0 w-2 transform -translate-x-1/2 z-50"
+        className="cursor-ew-resize fixed bottom-0 w-2 transform -translate-x-1/2 z-50 top-16"
         onMouseDown={startResizing}
         style={{ left: sidebarWidth }}
       />
