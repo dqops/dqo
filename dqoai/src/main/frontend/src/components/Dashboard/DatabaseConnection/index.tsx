@@ -65,6 +65,8 @@ const DatabaseConnection = ({
   useEffect(() => {
     if (!/^([A-Za-z0-9])*$/.test(database.connection_name as string)) {
       setNameError('Database name should be alphanumeric characters');
+    }  else if (database.connection_name?.length && database.connection_name.length > 36) {
+          setNameError('Database name cannot be longer than 36 characters');
     } else {
       setNameError('');
     }
