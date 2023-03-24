@@ -283,7 +283,7 @@ export const getTableLabels =
         schemaName,
         tableName
       );
-      dispatch(getTableLabelsSuccess(res.data));
+      dispatch(getTableLabelsSuccess(res.data || []));
     } catch (err) {
       dispatch(getTableLabelsFailed(err));
     }

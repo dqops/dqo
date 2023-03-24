@@ -236,7 +236,7 @@ export const getConnectionLabels =
     dispatch(getConnectionLabelsRequest());
     try {
       const res = await ConnectionApiClient.getConnectionLabels(connectionName);
-      dispatch(getConnectionLabelsSuccess(res.data));
+      dispatch(getConnectionLabelsSuccess(res.data || []));
     } catch (err) {
       dispatch(getConnectionLabelsFailed(err));
     }
