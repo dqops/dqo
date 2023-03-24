@@ -197,10 +197,10 @@ const TablePage = () => {
         <div />
       ) : (
         <div className="relative h-full flex flex-col">
-          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0">
-            <div className="flex items-center space-x-2">
-              <SvgIcon name="table" className="w-5 h-5" />
-              <div className="text-xl font-semibold">{`${description}${connection}.${schema}.${table}`}</div>
+          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0 pr-[340px]">
+            <div className="flex items-center space-x-2 max-w-full">
+              <SvgIcon name="table" className="w-5 h-5 shrink-0" />
+              <div className="text-xl font-semibold truncate">{`${description}${connection}.${schema}.${table}`}</div>
             </div>
           </div>
           {isProfilingChecksOnly && (
