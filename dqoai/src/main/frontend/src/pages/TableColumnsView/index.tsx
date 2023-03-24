@@ -10,9 +10,9 @@ const TableColumnsView = () => {
   return (
     <ConnectionLayout>
       <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 min-h-14">
-        <div className="flex items-center space-x-2">
-          <SvgIcon name="column" className="w-5 h-5" />
-          <div className="text-xl font-semibold">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
+        <div className="flex items-center space-x-2 max-w-full">
+          <SvgIcon name="column" className="w-5 h-5 shrink-0" />
+          <div className="text-xl font-semibold truncate">{`${connectionName}.${schemaName}.${tableName} columns`}</div>
         </div>
       </div>
       <div>

@@ -33,7 +33,7 @@ const Tab = ({ tab, active, onChange, closable, onClose }: TabProps) => {
       }`}
       onClick={() => onChange && onChange(tab)}
     >
-      <div className="truncate max-w-60 capitalize">
+      <div className="truncate min-w-fit max-w-60 capitalize">
         {tab.label}
         {tab.isUpdated ? '*' : ''}
       </div>
