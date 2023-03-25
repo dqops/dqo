@@ -25,15 +25,17 @@ public interface SchedulerFileSynchronizationService {
      * Synchronizes the whole user home, both the metadata (checks, rules, sensors) and the parquet data files. Should be called in the job that updates the metadata.
      *
      * @param synchronizationReportingMode File system synchronization mode.
+     * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @return true when synchronization was successful, false - when it failed, no API Key was provided or the cloud synchronization is simply disabled
      */
-    boolean synchronizeAll(FileSystemSynchronizationReportingMode synchronizationReportingMode);
+    boolean synchronizeAll(FileSystemSynchronizationReportingMode synchronizationReportingMode, boolean forceRefreshNativeTable);
 
     /**
      * Synchronizes only the data files (parquet files). Should be called in the job that executes the data quality checks.
      *
      * @param synchronizationReportingMode File system synchronization mode.
+     * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @return true when synchronization was successful, false - when it failed, no API Key was provided or the cloud synchronization is simply disabled
      */
-    boolean synchronizeData(FileSystemSynchronizationReportingMode synchronizationReportingMode);
+    boolean synchronizeData(FileSystemSynchronizationReportingMode synchronizationReportingMode, boolean forceRefreshNativeTable);
 }

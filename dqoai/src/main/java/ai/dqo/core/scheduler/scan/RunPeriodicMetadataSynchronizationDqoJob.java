@@ -61,7 +61,7 @@ public class RunPeriodicMetadataSynchronizationDqoJob extends DqoQueueJob<Void> 
     @Override
     public Void onExecute(DqoJobExecutionContext jobExecutionContext) {
         FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
-        this.schedulerFileSynchronizationService.synchronizeAll(synchronizationMode);
+        this.schedulerFileSynchronizationService.synchronizeAll(synchronizationMode, false);
 
         UniqueSchedulesCollection activeSchedules = this.jobSchedulerService.getActiveSchedules(JobKeys.RUN_CHECKS);
         JobSchedulesDelta schedulesToAddOrRemove = this.scheduleChangeFinderService.findSchedulesToAddOrRemove(activeSchedules);

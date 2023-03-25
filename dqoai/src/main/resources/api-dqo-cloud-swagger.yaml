@@ -256,7 +256,7 @@ paths:
             type: "string"
       security:
       - api_key: []
-  /api/v1/tenantdatawarehouse/refreshNativeTable:
+  /api/v1/tenantdatawarehouse/refresh/table:
     post:
       tags:
       - "TenantDataWarehouse"
