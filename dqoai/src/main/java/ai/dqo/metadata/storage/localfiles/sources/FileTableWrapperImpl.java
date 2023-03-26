@@ -93,14 +93,6 @@ public class FileTableWrapperImpl extends TableWrapperImpl {
             if (deserialized.getKind() != SpecificationKind.TABLE) {
                 throw new LocalFileSystemException("Invalid kind in file " + fileNode.getFilePath().toString());
             }
-            if (deserializedSpec.getTarget() == null) {
-                deserializedSpec.getTarget().setSchemaName(this.getObjectName().getSchemaName());
-                deserializedSpec.getTarget().setTableName(this.getObjectName().getTableName());
-            }
-            if (!deserializedSpec.getTarget().toPhysicalTableName().equals(this.getObjectName())) {
-                // file name does not match the physical table name, we will return an error to the user, users must fix the file name
-                throw new IncorrectFileNameException("File " + fileNode.getFilePath().toString() + " is incorrectly named. The file name must be a <schema>.<table>" + SpecFileNames.TABLE_SPEC_FILE_EXT_YAML);
-            }
 
 			this.setSpec(deserializedSpec);
 			this.clearDirty(true);

@@ -25,6 +25,7 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -41,6 +42,7 @@ import lombok.EqualsAndHashCode;
 public class JinjaTemplateRenderParameters {
     private ConnectionSpec connection;
     private TableSpec table;
+    private PhysicalTableName targetTable;
     private ColumnSpec column; // may be null
     private String columnName; // may be null
     private AbstractSensorParametersSpec parameters;
@@ -84,6 +86,7 @@ public class JinjaTemplateRenderParameters {
 										 ProviderDialectSettings dialectSettings) {
         this.connection = connection;
         this.table = table;
+        this.targetTable = table.getPhysicalTableName();
         this.column = column;
         this.columnName = columnName;
         this.parameters = parameters;
@@ -108,6 +111,7 @@ public class JinjaTemplateRenderParameters {
         {{
 			setConnection(sensorRunParameters.getConnection().trim());
 			setTable(sensorRunParameters.getTable().trim());
+            setTargetTable(sensorRunParameters.getTable().getPhysicalTableName());
 			setColumn(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().trim() : null);
 			setColumnName(sensorRunParameters.getColumn() != null ? sensorRunParameters.getColumn().getColumnName() : null);
 			setParameters(sensorRunParameters.getSensorParameters());
@@ -152,6 +156,22 @@ public class JinjaTemplateRenderParameters {
      */
     public void setTable(TableSpec table) {
         this.table = table;
+    }
+
+    /**
+     * Returns the physical table name on which the check will be executed.
+     * @return Physical table name.
+     */
+    public PhysicalTableName getTargetTable() {
+        return targetTable;
+    }
+
+    /**
+     * Sets the physical table name on which the check will be executed.
+     * @param targetTable Physical table name.
+     */
+    public void setTargetTable(PhysicalTableName targetTable) {
+        this.targetTable = targetTable;
     }
 
     /**

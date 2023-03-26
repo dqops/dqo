@@ -16,8 +16,8 @@
 package ai.dqo.rest.models.metadata;
 
 import ai.dqo.metadata.sources.PartitionIncrementalTimeWindowSpec;
+import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.metadata.sources.TableTargetSpec;
 import ai.dqo.metadata.sources.TimestampColumnsSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -38,7 +38,7 @@ public class TablePartitioningModel {
     private String connectionName;
 
     @JsonPropertyDescription("Physical table details (a physical schema name and a physical table name)")
-    private TableTargetSpec target;
+    private PhysicalTableName target;
 
     @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
     private TimestampColumnsSpec timestampColumns;
@@ -55,7 +55,7 @@ public class TablePartitioningModel {
     public static TablePartitioningModel fromTableSpecification(String connectionName, TableSpec tableSpec) {
         return new TablePartitioningModel() {{
             setConnectionName(connectionName);
-            setTarget(tableSpec.getTarget());
+            setTarget(tableSpec.getPhysicalTableName());
             setTimestampColumns(tableSpec.getTimestampColumns());
             setIncrementalTimeWindow(tableSpec.getIncrementalTimeWindow());
         }};

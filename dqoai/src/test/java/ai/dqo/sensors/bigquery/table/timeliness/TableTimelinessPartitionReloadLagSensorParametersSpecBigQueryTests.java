@@ -116,8 +116,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 this.getIngestionTimestampColumn(),
                 this.getEventTimestampColumn(),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -147,8 +147,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 this.getIngestionTimestampColumn(),
                 this.getEventTimestampColumn(),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -178,8 +178,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 this.getIngestionTimestampColumn(),
                 this.getEventTimestampColumn(),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -209,8 +209,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 this.getIngestionTimestampColumn(),
                 this.getEventTimestampColumn(),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -248,8 +248,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 this.getIngestionTimestampColumn(),
                 this.getEventTimestampColumn(),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -282,8 +282,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 this.getIngestionTimestampColumn(),
                 this.getEventTimestampColumn(),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -318,8 +318,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 this.getIngestionTimestampColumn(),
                 this.getEventTimestampColumn(),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -355,8 +355,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 this.getIngestionTimestampColumn(),
                 this.getEventTimestampColumn(),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -393,8 +393,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 this.getIngestionTimestampColumn(),
                 this.getEventTimestampColumn(),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -433,8 +433,8 @@ public class TableTimelinessPartitionReloadLagSensorParametersSpecBigQueryTests 
                 this.getIngestionTimestampColumn(),
                 this.getEventTimestampColumn(),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }

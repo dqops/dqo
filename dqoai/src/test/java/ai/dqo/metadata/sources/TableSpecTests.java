@@ -81,27 +81,6 @@ public class TableSpecTests extends BaseTest {
     }
 
     @Test
-    void isDirty_whenTableTargetSpecSet_thenIsDirtyIsTrue() {
-        TableTargetSpec tableTargetSpec = new TableTargetSpec();
-        tableTargetSpec.setTableName("other");
-		this.sut.setTarget(tableTargetSpec);
-        Assertions.assertEquals(tableTargetSpec, this.sut.getTarget());
-        Assertions.assertTrue(this.sut.isDirty());
-    }
-
-    @Test
-    void isDirty_whenSameTableTargetSpecObjectAsCurrentSet_thenIsDirtyIsTru() {
-        TableTargetSpec tableTargetSpec = new TableTargetSpec();
-        tableTargetSpec.setTableName("other");
-		this.sut.setTarget(tableTargetSpec);
-        Assertions.assertTrue(this.sut.isDirty());
-		this.sut.clearDirty(true);
-        Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setTarget(tableTargetSpec);
-        Assertions.assertFalse(this.sut.isDirty());
-    }
-
-    @Test
     void mergeColumnsFrom_whenNewColumnsInSource_thenAddsNewColumns() {
         TableSpec sourceTableSpec = new TableSpec();
         ColumnSpec col1Spec = new ColumnSpec(ColumnTypeSnapshotSpec.fromType("string"));

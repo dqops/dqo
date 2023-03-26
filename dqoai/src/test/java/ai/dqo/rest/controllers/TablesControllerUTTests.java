@@ -97,7 +97,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Flux<TableBasicModel>> responseEntity = this.sut.getTables(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName());
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName());
 
         List<TableBasicModel> result = responseEntity.getBody().collectList().block();
         Assertions.assertNotNull(result);
@@ -113,16 +113,16 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<TableModel>> responseEntity = this.sut.getTable(
                 this.sampleTable.getConnectionName(),
-                tableSpec.getTarget().getSchemaName(),
-                tableSpec.getTarget().getTableName());
+                tableSpec.getPhysicalTableName().getSchemaName(),
+                tableSpec.getPhysicalTableName().getTableName());
 
         TableModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(tableSpec.getTarget().getTableName(), result.getSpec().getTarget().getTableName());
+        Assertions.assertEquals(tableSpec.getPhysicalTableName().getTableName(), result.getSpec().getPhysicalTableName().getTableName());
         Assertions.assertEquals(this.sampleTable.getConnectionName(), result.getConnectionName());
         Assertions.assertEquals(
-                tableSpec.getTarget().toPhysicalTableName(),
-                result.getSpec().getTarget().toPhysicalTableName());
+                tableSpec.getPhysicalTableName(),
+                result.getSpec().getPhysicalTableName());
         Assertions.assertEquals(tableSpec.getHierarchyId().hashCode64(), result.getSpec().getHierarchyId().hashCode64());
         Assertions.assertSame(tableSpec, result.getSpec());
     }
@@ -134,14 +134,14 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<TableBasicModel>> responseEntity = this.sut.getTableBasic(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName());
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 
         TableBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(tableSpec.getTarget().getTableName(), result.getTarget().getTableName());
+        Assertions.assertEquals(tableSpec.getPhysicalTableName().getTableName(), result.getTarget().getTableName());
         Assertions.assertEquals(this.sampleTable.getConnectionName(), result.getConnectionName());
-        Assertions.assertEquals(tableSpec.getTarget().toPhysicalTableName(), result.getTarget().toPhysicalTableName());
+        Assertions.assertEquals(tableSpec.getPhysicalTableName(), result.getTarget());
         Assertions.assertEquals(tableSpec.getHierarchyId().hashCode64(), result.getTableHash());
     }
 
@@ -152,8 +152,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksUI(
                 this.sampleTable.getConnectionName(),
-                tableSpec.getTarget().getSchemaName(),
-                tableSpec.getTarget().getTableName());
+                tableSpec.getPhysicalTableName().getSchemaName(),
+                tableSpec.getPhysicalTableName().getTableName());
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
@@ -183,8 +183,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> responseEntity = this.sut.getTableRecurringDaily(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName());
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 
         TableDailyRecurringCategoriesSpec result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
@@ -213,8 +213,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<TableDailyPartitionedCheckCategoriesSpec>> responseEntity = this.sut.getTablePartitionedChecksDaily(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName());
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 
         TableDailyPartitionedCheckCategoriesSpec result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
@@ -227,8 +227,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableProfilingChecksUI(
                 this.sampleTable.getConnectionName(),
-                tableSpec.getTarget().getSchemaName(),
-                tableSpec.getTarget().getTableName());
+                tableSpec.getPhysicalTableName().getSchemaName(),
+                tableSpec.getPhysicalTableName().getTableName());
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
@@ -242,8 +242,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTableRecurringUI(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 timePartition);
 
         UICheckContainerModel result = responseEntity.getBody().block();
@@ -258,8 +258,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<UICheckContainerModel>> responseEntity = this.sut.getTablePartitionedChecksUI(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 timePartition);
 
         UICheckContainerModel result = responseEntity.getBody().block();
@@ -274,8 +274,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableProfilingChecksUIBasic(
                 this.sampleTable.getConnectionName(),
-                tableSpec.getTarget().getSchemaName(),
-                tableSpec.getTarget().getTableName());
+                tableSpec.getPhysicalTableName().getSchemaName(),
+                tableSpec.getPhysicalTableName().getTableName());
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
@@ -289,8 +289,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTableRecurringUIBasic(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 timePartition);
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
@@ -305,8 +305,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<UICheckContainerBasicModel>> responseEntity = this.sut.getTablePartitionedChecksUIBasic(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 timePartition);
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
@@ -333,8 +333,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableProfilingChecks(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 Optional.of(sampleProfilingCheck));
 
         Object result = responseEntity.getBody().block();
@@ -363,8 +363,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateTableRecurringDaily(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 Optional.of(sampleRecurring.getDaily()));
 
         Object result = responseEntity.getBody().block();
@@ -395,8 +395,8 @@ public class TablesControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateTablePartitionedChecksDaily(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 Optional.of(samplePartitionedCheck.getDaily()));
 
         Object result = responseEntity.getBody().block();

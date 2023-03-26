@@ -158,7 +158,7 @@ public class CheckExecutionSummary {
 								 int warningsCount, int errorsCount, int fatalErrorsCount, int executionErrorsCount) {
         Row row = this.summaryTable.appendRow();
 		this.connectionColumn.set(row.getRowNumber(), connection.getName());
-		this.tableColumn.set(row.getRowNumber(), tableSpec.getTarget().toPhysicalTableName().toString());
+		this.tableColumn.set(row.getRowNumber(), tableSpec.getPhysicalTableName().toString());
 		this.checksExecutedColumn.set(row.getRowNumber(), checksExecuted);
 		this.sensorResultsColumn.set(row.getRowNumber(), sensorResults);
 		this.validResultsColumn.set(row.getRowNumber(), validResults);

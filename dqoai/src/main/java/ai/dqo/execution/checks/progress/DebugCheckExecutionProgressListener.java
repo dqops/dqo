@@ -48,7 +48,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     @Override
     public void onSensorExecuted(SensorExecutedEvent event) {
         renderEventHeader();
-        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
         String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         String sensorDefinitionName = event.getSensorRunParameters().getSensorParameters().getSensorDefinitionName();
         Table resultTable = event.getSensorResult().getResultTable();
@@ -72,7 +72,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     @Override
     public void onSensorFailed(SensorFailedEvent event) {
         renderEventHeader();
-        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
         String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         String sensorDefinitionName = event.getSensorRunParameters().getSensorParameters().getSensorDefinitionName();
         this.terminalWriter.writeLine(String.format("Sensor failed with an error for a check %s on the table %s using a sensor definition %s",
@@ -99,7 +99,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     @Override
     public void onRuleExecuted(RuleExecutedEvent event) {
         renderEventHeader();
-        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
         String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         Table ruleResultsTable = event.getRuleEvaluationResult().getRuleResultsTable();
         int evaluatedRulesCount = ruleResultsTable.rowCount();
@@ -123,7 +123,7 @@ public class DebugCheckExecutionProgressListener extends InfoCheckExecutionProgr
     @Override
     public void onRuleFailed(RuleFailedEvent event) {
         renderEventHeader();
-        String tableName = event.getTableSpec().getTarget().toPhysicalTableName().toString();
+        String tableName = event.getTableSpec().getPhysicalTableName().toString();
         String checkName = event.getSensorRunParameters().getCheck().getCheckName();
         this.terminalWriter.writeLine(String.format("Rule evaluation failed with an error for a check %s on the table %s using a rule definition %s",
                 checkName, tableName, event.getRuleDefinitionName()));

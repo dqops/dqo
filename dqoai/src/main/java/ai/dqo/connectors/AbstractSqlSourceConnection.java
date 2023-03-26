@@ -205,8 +205,7 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
                 TableSpec tableSpec = tablesByTableName.get(physicalTableName);
                 if (tableSpec == null) {
                     tableSpec = new TableSpec();
-                    tableSpec.getTarget().setSchemaName(schemaName);
-                    tableSpec.getTarget().setTableName(physicalTableName);
+                    tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
                     tablesByTableName.put(physicalTableName, tableSpec);
                     tableSpecs.add(tableSpec);
                 }
@@ -330,9 +329,9 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             sqlBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
             sqlBuilder.append(".");
         }
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getTarget().getSchemaName()));
+        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getSchemaName()));
         sqlBuilder.append(".");
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getTarget().getTableName()));
+        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getTableName()));
         sqlBuilder.append(" (\n");
 
         Map.Entry<String, ColumnSpec> [] columnKeyPairs = tableSpec.getColumns().entrySet().toArray(Map.Entry[]::new);
@@ -398,9 +397,9 @@ public abstract class AbstractSqlSourceConnection implements SourceConnection {
             sqlBuilder.append(dialectSettings.quoteIdentifier(providerSpecificConfiguration.getDatabase()));
             sqlBuilder.append(".");
         }
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getTarget().getSchemaName()));
+        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getSchemaName()));
         sqlBuilder.append(".");
-        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getTarget().getTableName()));
+        sqlBuilder.append(dialectSettings.quoteIdentifier(tableSpec.getPhysicalTableName().getTableName()));
         sqlBuilder.append("(");
         for (int i = 0; i < data.columnCount() ; i++) {
             if (i > 0) {

@@ -35,6 +35,7 @@ import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.statistics.table.TableStatisticsCollectorsRootCategoriesSpec;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -57,7 +58,6 @@ import java.util.Objects;
 public class TableSpec extends AbstractSpec {
     private static final ChildHierarchyNodeFieldMapImpl<TableSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractSpec.FIELDS) {
         {
-			put("target", o -> o.target);
             put("timestamp_columns", o -> o.timestampColumns);
             put("incremental_time_window", o -> o.incrementalTimeWindow);
 			put("data_streams", o -> o.dataStreams);
@@ -81,14 +81,11 @@ public class TableSpec extends AbstractSpec {
 
     /**
      * Creates a table spec with a target table specification.
-     * @param target Target table specification.
+     * @param physicalTableName Target table specification.
      */
-    public TableSpec(TableTargetSpec target) {
-        this.target = target;
+    public TableSpec(PhysicalTableName physicalTableName) {
+        this.setPhysicalTableName(physicalTableName);
     }
-
-    @JsonPropertyDescription("Physical table details (a physical schema name and a physical table name)")
-    private TableTargetSpec target = new TableTargetSpec();
 
     @JsonPropertyDescription("Disables all data quality checks on the table. Data quality checks will not be executed.")
     @JsonInclude(JsonInclude.Include.NON_DEFAULT)
@@ -159,24 +156,6 @@ public class TableSpec extends AbstractSpec {
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private CommentsListSpec comments;
 
-
-    /**
-     * Target table that is covered by the data quality tests.
-     * @return Table target.
-     */
-    public TableTargetSpec getTarget() {
-        return target;
-    }
-
-    /**
-     * Changes the table target.
-     * @param target Table target.
-     */
-    public void setTarget(TableTargetSpec target) {
-		setDirtyIf(!Objects.equals(this.target, target));
-        this.target = target;
-		propagateHierarchyIdToField(target, "target");
-    }
 
     /**
      * Disable quality checks and prevent it from executing on this table and it's columns.
@@ -673,9 +652,6 @@ public class TableSpec extends AbstractSpec {
             cloned.owner = null;
             cloned.comments = null;
             cloned.statisticsCollector = null;
-            if (cloned.target != null) {
-                cloned.target = cloned.target.expandAndTrim(secretValueProvider);
-            }
             if (cloned.timestampColumns != null) {
                 cloned.timestampColumns = cloned.timestampColumns.expandAndTrim(secretValueProvider);
             }
@@ -701,9 +677,6 @@ public class TableSpec extends AbstractSpec {
     public TableSpec trim() {
         try {
             TableSpec cloned = (TableSpec) this.clone();
-            if (cloned.target != null) {
-                cloned.target = cloned.target.deepClone();
-            }
             if (cloned.timestampColumns != null) {
                 cloned.timestampColumns = cloned.timestampColumns.deepClone();
             }
@@ -734,9 +707,6 @@ public class TableSpec extends AbstractSpec {
     public TableSpec cloneBare() {
         try {
             TableSpec cloned = (TableSpec) this.clone();
-            if (cloned.target != null) {
-                cloned.target = cloned.target.deepClone();
-            }
             cloned.checks = null;
             cloned.recurring = null;
             cloned.partitionedChecks = null;
@@ -753,5 +723,34 @@ public class TableSpec extends AbstractSpec {
         catch (CloneNotSupportedException ex) {
             throw new RuntimeException("Object cannot be cloned", ex);
         }
+    }
+
+    /**
+     * Retrieves the physical table name from the HierarchyId.
+     * @return Physical table name, retrieved from the hierarchy id.
+     */
+    @JsonIgnore
+    public PhysicalTableName getPhysicalTableName() {
+        HierarchyId hierarchyId = this.getHierarchyId();
+        if (hierarchyId == null) {
+            return null;
+        }
+
+        return hierarchyId.getPhysicalTableName();
+    }
+
+    /**
+     * Stores a physical table name in a temporary hierarchy id, using a fake connection name.
+     * This method could be called only for a new table specification that is not yet attached to a parent node.
+     * @param physicalTableName Physical table name to store.
+     */
+    @JsonIgnore
+    public void setPhysicalTableName(PhysicalTableName physicalTableName) {
+        if (this.getHierarchyId() != null) {
+            throw new DqoRuntimeException("Cannot assign a temporary physical table name in the hierarchy id when the hierarchy ID was already created");
+        }
+
+        HierarchyId hierarchyId = HierarchyId.makeHierarchyIdForTable("unknown", physicalTableName);
+        this.setHierarchyId(hierarchyId);
     }
 }

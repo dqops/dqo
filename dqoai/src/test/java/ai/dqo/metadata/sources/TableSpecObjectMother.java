@@ -27,7 +27,7 @@ public class TableSpecObjectMother {
      */
     public static TableSpec create(String schemaName, String tableName) {
         return new TableSpec() {{
-			setTarget(new TableTargetSpec() {{
+			setPhysicalTableName(new PhysicalTableName() {{
 				setSchemaName(schemaName);
 				setTableName(tableName);
             }});

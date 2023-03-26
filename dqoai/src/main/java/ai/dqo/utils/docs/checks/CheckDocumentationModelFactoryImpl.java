@@ -139,8 +139,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      */
     private TableSpec createTableSpec(boolean addAnalyzedColumn) {
         TableSpec tableSpec = new TableSpec();
-        tableSpec.getTarget().setSchemaName("target_schema");
-        tableSpec.getTarget().setTableName("target_table");
+        tableSpec.setPhysicalTableName(new PhysicalTableName("target_schema", "target_table"));
 
         if (addAnalyzedColumn) {
             ColumnSpec columnSpec = createColumnWithLabel("This is the column that is analyzed for data quality issues");

@@ -215,8 +215,7 @@ public class BigQuerySourceConnection extends AbstractSqlSourceConnection {
                 TableSpec tableSpec = tablesByTableName.get(physicalTableName);
                 if (tableSpec == null) {
                     tableSpec = new TableSpec();
-                    tableSpec.getTarget().setSchemaName(schemaName);
-                    tableSpec.getTarget().setTableName(physicalTableName);
+                    tableSpec.setPhysicalTableName(new PhysicalTableName(schemaName, physicalTableName));
                     tablesByTableName.put(physicalTableName, tableSpec);
                     tableSpecs.add(tableSpec);
                 }

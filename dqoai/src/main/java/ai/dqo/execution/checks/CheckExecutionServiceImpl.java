@@ -233,7 +233,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         TableSpec tableSpec = targetTable.getSpec();
         progressListener.onExecuteChecksOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
         String connectionName = connectionWrapper.getName();
-        PhysicalTableName physicalTableName = tableSpec.getTarget().toPhysicalTableName();
+        PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
 
         SensorReadoutsSnapshot sensorReadoutsSnapshot = this.sensorReadoutsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         Table allNormalizedSensorResultsTable = sensorReadoutsSnapshot.getTableDataChanges().getNewOrChangedRows();

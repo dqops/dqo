@@ -42,7 +42,7 @@ public class TableBasicModel {
     private Long tableHash;
 
     @JsonPropertyDescription("Physical table details (a physical schema name and a physical table name)")
-    private TableTargetSpec target;
+    private PhysicalTableName target;
 
     @JsonPropertyDescription("Column names that store the timestamps that identify the event (transaction) timestamp and the ingestion (inserted / loaded at) timestamps. Also configures the timestamp source for the date/time partitioned data quality checks (event timestamp or ingestion timestamp).")
     @Deprecated
@@ -106,7 +106,7 @@ public class TableBasicModel {
         return new TableBasicModel() {{
             setConnectionName(connectionName);
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
-            setTarget(tableSpec.getTarget());
+            setTarget(tableSpec.getPhysicalTableName());
             setDisabled(tableSpec.isDisabled());
             setHasAnyConfiguredChecks(tableSpec.hasAnyChecksConfigured());
             setHasAnyConfiguredProfilingChecks(tableSpec.hasAnyChecksConfigured(CheckType.PROFILING));
@@ -115,34 +115,34 @@ public class TableBasicModel {
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setEnabled(true);
             }});
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.PROFILING);
                 setEnabled(true);
             }});
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.RECURRING);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.PARTITIONED);
                 setEnabled(true);
             }});
             setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setEnabled(true);
             }});
         }};
@@ -158,7 +158,7 @@ public class TableBasicModel {
         return new TableBasicModel() {{
             setConnectionName(connectionName);
             setTableHash(tableSpec.getHierarchyId() != null ? tableSpec.getHierarchyId().hashCode64() : null);
-            setTarget(tableSpec.getTarget());
+            setTarget(tableSpec.getPhysicalTableName());
             setTimestampColumns(tableSpec.getTimestampColumns());
             setDisabled(tableSpec.isDisabled());
             setStage(tableSpec.getStage());
@@ -171,34 +171,34 @@ public class TableBasicModel {
             setRunChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setEnabled(true);
             }});
             setRunProfilingChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.PROFILING);
                 setEnabled(true);
             }});
             setRunRecurringChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.RECURRING);
                 setEnabled(true);
             }});
             setRunPartitionChecksJobTemplate(new CheckSearchFilters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
                 setCheckType(CheckType.PARTITIONED);
                 setEnabled(true);
             }});
             setDataCleanJobTemplate(new DeleteStoredDataQueueJobParameters()
             {{
                 setConnectionName(connectionName);
-                setSchemaTableName(tableSpec.getTarget().toTableSearchFilter());
+                setSchemaTableName(tableSpec.getPhysicalTableName().toTableSearchFilter());
 
                 setDateStart(null);
                 setDateEnd(null);

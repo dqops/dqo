@@ -1,7 +1,7 @@
 {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
 
 {%- macro render_referenced_table(referenced_table) -%}
-    {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(table.target.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
+    {{ lib.quote_identifier(connection.redshift.database) }}.{{ lib.quote_identifier(target_table.schema_name) }}.{{ lib.quote_identifier(referenced_table) }}
 {%- endmacro %}
 
 SELECT

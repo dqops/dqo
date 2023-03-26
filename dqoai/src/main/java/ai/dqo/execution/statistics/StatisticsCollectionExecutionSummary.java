@@ -147,7 +147,7 @@ public class StatisticsCollectionExecutionSummary {
                                  int collectorsResults) {
         Row row = this.summaryTable.appendRow();
 		this.connectionColumn.set(row.getRowNumber(), connection.getName());
-		this.tableColumn.set(row.getRowNumber(), tableSpec.getTarget().toPhysicalTableName().toString());
+		this.tableColumn.set(row.getRowNumber(), tableSpec.getPhysicalTableName().toString());
 		this.collectorsExecutedColumn.set(row.getRowNumber(), collectorsExecuted);
 		this.collectorsColumnsColumn.set(row.getRowNumber(), profiledColumns);
 		this.collectorsColumnsSuccessfullyColumn.set(row.getRowNumber(), profiledColumnsSuccessfully);

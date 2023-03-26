@@ -131,11 +131,11 @@ public class ColumnAccuracyMinMatchPercentSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getReferencedTableColumnName(runReferencedParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 runReferencedParameters.getConnection().getBigquery().getSourceProjectId(),
-                runReferencedParameters.getTable().getTarget().getSchemaName(),
-                runReferencedParameters.getTable().getTarget().getTableName(),
+                runReferencedParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runReferencedParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table"),
                 this.getReferencedSubstitutedFilter("referenced_table")
         ), renderedTemplate);
@@ -164,11 +164,11 @@ public class ColumnAccuracyMinMatchPercentSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getReferencedTableColumnName(runReferencedParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 runReferencedParameters.getConnection().getBigquery().getSourceProjectId(),
-                runReferencedParameters.getTable().getTarget().getSchemaName(),
-                runReferencedParameters.getTable().getTarget().getTableName(),
+                runReferencedParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runReferencedParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table"),
                 this.getReferencedSubstitutedFilter("referenced_table")
         ), renderedTemplate);

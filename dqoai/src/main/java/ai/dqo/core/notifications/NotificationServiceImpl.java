@@ -97,8 +97,8 @@ public class NotificationServiceImpl implements NotificationService {
     protected Mono<Void> sendNotification(ConnectionSpec connectionSpec, TableSpec tableSpec, Set<String> checksWithNewAlerts) {
         NewIssueOnTableNotificationMessage notificationMessage = new NewIssueOnTableNotificationMessage();
         notificationMessage.setConnection(connectionSpec.getConnectionName());
-        notificationMessage.setSchema(tableSpec.getTarget().getSchemaName());
-        notificationMessage.setTable(tableSpec.getTarget().getTableName());
+        notificationMessage.setSchema(tableSpec.getPhysicalTableName().getSchemaName());
+        notificationMessage.setTable(tableSpec.getPhysicalTableName().getTableName());
         notificationMessage.setQualityChecks(checksWithNewAlerts);
 
         NotificationSettingsSpec notificationSettings = connectionSpec.getNotifications();

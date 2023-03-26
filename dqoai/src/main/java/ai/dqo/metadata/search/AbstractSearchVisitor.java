@@ -156,18 +156,6 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts a table target (physical table information).
-     *
-     * @param tableTargetSpec Physical target table specification.
-     * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(TableTargetSpec tableTargetSpec, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
      * Accepts a column collection (map).
      *
      * @param columnSpecMap Column collection.

@@ -99,7 +99,7 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
     public List<TableSpec> filterTableSpecs(List<TableSpec> baseSpecs, String tableFilterName) {
         List<TableSpec>resultList = new ArrayList<>();
         for (TableSpec spec: baseSpecs) {
-            PhysicalTableName physicalTableName = spec.getTarget().toPhysicalTableName();
+            PhysicalTableName physicalTableName = spec.getPhysicalTableName();
             String sourceTableName = physicalTableName.getTableName();
             if(fitsTableFilterName(sourceTableName, tableFilterName)) {
                 resultList.add(spec);
@@ -121,8 +121,8 @@ public class ImportSchemaQueueJob extends DqoQueueJob<ImportSchemaQueueJobResult
 
         for( TableSpec sourceTableSpec : sourceTableSpecs) {
             Row row = resultTable.appendRow();
-            row.setString(0, sourceTableSpec.getTarget().getSchemaName());
-            row.setString(1, sourceTableSpec.getTarget().getTableName());
+            row.setString(0, sourceTableSpec.getPhysicalTableName().getSchemaName());
+            row.setString(1, sourceTableSpec.getPhysicalTableName().getTableName());
             row.setInt(2, sourceTableSpec.getColumns().size());
         }
         return resultTable;

@@ -133,8 +133,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -165,8 +165,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%m/%d/%Y'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -197,8 +197,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%d/%m/%Y'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -229,8 +229,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y/%m/%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -261,8 +261,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%b %d, %Y'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -301,8 +301,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -336,8 +336,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -373,8 +373,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -412,8 +412,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -451,8 +451,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -492,8 +492,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -541,8 +541,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -584,8 +584,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -629,8 +629,8 @@ public class ColumnStringsStringNotMatchDateRegexCountSensorParametersSpecBigQue
                 this.getTableColumnName(runParameters),
                 "'%Y-%m-%d'",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }

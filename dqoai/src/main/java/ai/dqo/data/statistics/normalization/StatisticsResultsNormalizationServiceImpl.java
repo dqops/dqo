@@ -193,11 +193,11 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         normalizedResults.addColumns(tableHashColumn);
 
         StringColumn schemaNameColumn = StringColumn.create(StatisticsColumnNames.SCHEMA_NAME_COLUMN_NAME, resultRowCount);
-        schemaNameColumn.setMissingTo(sensorRunParameters.getTable().getTarget().getSchemaName());
+        schemaNameColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getSchemaName());
         normalizedResults.addColumns(schemaNameColumn);
 
         StringColumn tableNameColumn = StringColumn.create(StatisticsColumnNames.TABLE_NAME_COLUMN_NAME, resultRowCount);
-        tableNameColumn.setMissingTo(sensorRunParameters.getTable().getTarget().getTableName());
+        tableNameColumn.setMissingTo(sensorRunParameters.getTable().getPhysicalTableName().getTableName());
         normalizedResults.addColumns(tableNameColumn);
 
         StringColumn tableStageColumn = StringColumn.create(StatisticsColumnNames.TABLE_STAGE_COLUMN_NAME, resultRowCount);
