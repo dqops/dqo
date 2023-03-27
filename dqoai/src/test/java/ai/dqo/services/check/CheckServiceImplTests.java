@@ -61,10 +61,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
-import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MinCountRuleFatalParametersSpec;
+import ai.dqo.rules.comparison.*;
 import ai.dqo.services.check.mapping.*;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
@@ -185,9 +182,9 @@ public class CheckServiceImplTests extends BaseTest {
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         ColumnProfilingStringsChecksSpec col21stringChecksSpec = new ColumnProfilingStringsChecksSpec();
         ColumnStringLengthAboveMaxLengthCountCheckSpec col21stringLengthAboveCheckSpec = new ColumnStringLengthAboveMaxLengthCountCheckSpec();
-        MaxCountRule0ParametersSpec countRule0ParametersSpec = new MaxCountRule0ParametersSpec();
+        MaxCountRule10ParametersSpec countRule0ParametersSpec = new MaxCountRule10ParametersSpec();
         countRule0ParametersSpec.setMaxCount(40L);
-        MaxCountRule0ParametersSpec countRule0ParametersSpec1 = new MaxCountRule0ParametersSpec();
+        MaxCountRule15ParametersSpec countRule0ParametersSpec1 = new MaxCountRule15ParametersSpec();
         countRule0ParametersSpec1.setMaxCount(100L);
         col21stringLengthAboveCheckSpec.setError(countRule0ParametersSpec);
         col21stringLengthAboveCheckSpec.setFatal(countRule0ParametersSpec1);
@@ -203,7 +200,7 @@ public class CheckServiceImplTests extends BaseTest {
         col23categoriesSpec.setNumeric(col23numericChecksSpec);
         ColumnNegativeCountCheckSpec columnNegativeCountCheckSpec = new ColumnNegativeCountCheckSpec();
         col23numericChecksSpec.setDailyNegativeCount(columnNegativeCountCheckSpec);
-        MaxCountRule10ParametersSpec col23max1 = new MaxCountRule10ParametersSpec();
+        MaxCountRule0ParametersSpec col23max1 = new MaxCountRule0ParametersSpec();
         col23max1.setMaxCount(15L);
         columnNegativeCountCheckSpec.setWarning(col23max1);
 

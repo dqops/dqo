@@ -38,6 +38,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
+import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
 import ai.dqo.services.check.mapping.utils.UICheckContainerBasicModelUtility;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
@@ -164,7 +165,7 @@ public class TablesControllerUTTests extends BaseTest {
     void getTableRecurringDaily_whenTableRequested_thenReturnsRecurring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        MinCountRuleFatalParametersSpec minRule1 = new MinCountRuleFatalParametersSpec(10L);
+        MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
         MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
         MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
@@ -194,7 +195,7 @@ public class TablesControllerUTTests extends BaseTest {
     void getTablePartitionedChecksDaily_whenTableRequested_thenReturnsPartitionedChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        MinCountRuleFatalParametersSpec minRule1 = new MinCountRuleFatalParametersSpec(10L);
+        MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
         MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
         MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
@@ -318,7 +319,7 @@ public class TablesControllerUTTests extends BaseTest {
     void updateTableProfilingChecks_whenTableAndProfilingChecksRequested_updatesProfilingChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        MinCountRuleFatalParametersSpec minRule1 = new MinCountRuleFatalParametersSpec(10L);
+        MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
         MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
         MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
@@ -346,7 +347,7 @@ public class TablesControllerUTTests extends BaseTest {
     void updateTableRecurringDaily_whenTableAndRecurringRequested_updatesRecurring() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        MinCountRuleFatalParametersSpec minRule1 = new MinCountRuleFatalParametersSpec(10L);
+        MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
         MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
         MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();
@@ -378,7 +379,7 @@ public class TablesControllerUTTests extends BaseTest {
     void updateTablePartitionedChecksDaily_whenTableAndPartitionedChecksRequested_updatesPartitionedChecks() {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
 
-        MinCountRuleFatalParametersSpec minRule1 = new MinCountRuleFatalParametersSpec(10L);
+        MinCountRuleWarningParametersSpec minRule1 = new MinCountRuleWarningParametersSpec(10L);
         MinCountRule0ParametersSpec minRule2 = new MinCountRule0ParametersSpec(20L);
         MinCountRuleFatalParametersSpec minRule3 = new MinCountRuleFatalParametersSpec(30L);
         TableRowCountCheckSpec minRowCountSpec = new TableRowCountCheckSpec();

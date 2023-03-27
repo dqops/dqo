@@ -33,6 +33,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -218,7 +219,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
         this.columnSpec.setChecks(new ColumnProfilingCheckCategoriesSpec() {{
             setNulls(new ColumnProfilingNullsChecksSpec() {{
                 setNullsCount(new ColumnNullsCountCheckSpec() {{
-                    setError(new MaxCountRule0ParametersSpec(20L));
+                    setError(new MaxCountRule10ParametersSpec(20L));
                 }});
             }});
         }});
