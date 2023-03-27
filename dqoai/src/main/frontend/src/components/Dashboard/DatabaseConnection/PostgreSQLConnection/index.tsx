@@ -1,10 +1,11 @@
 import React from 'react';
 
-import Input from '../../../Input';
 import SectionWrapper from '../../SectionWrapper';
 import { PostgresqlParametersSpec } from "../../../../api";
 import SnowflakePropertiesView from "../SnowflakeProperties";
 import Checkbox from "../../../Checkbox";
+import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
+
 
 interface IPostgreSQLConnectionProps {
   postgresql?: PostgresqlParametersSpec;
@@ -27,30 +28,30 @@ const PostgreSQLConnection = ({
 
   return (
     <SectionWrapper title="PostgreSQL connection parameters" className="mb-4">
-      <Input
+      <FieldTypeInput
         label="Host"
         className="mb-4"
         value={postgresql?.host}
-        onChange={(e) => handleChange({ host: e.target.value })}
+        onChange={(value) => handleChange({ host: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Port"
         className="mb-4"
-        value={postgresql?.port || 5432}
-        onChange={(e) => handleChange({ port: e.target.value })}
+        value={(postgresql?.port || 5432).toString()}
+        onChange={(value) => handleChange({ port: value })}
       />
-      <Input
+      <FieldTypeInput
         label="User name"
         className="mb-4"
         value={postgresql?.user}
-        onChange={(e) => handleChange({ user: e.target.value })}
+        onChange={(value) => handleChange({ user: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Password"
-        type="password"
         className="mb-4"
+        maskingType="password"
         value={postgresql?.password}
-        onChange={(e) => handleChange({ password: e.target.value })}
+        onChange={(value) => handleChange({ password: value })}
       />
       <Checkbox
         checked={postgresql?.ssl}
@@ -58,7 +59,6 @@ const PostgreSQLConnection = ({
         label="Use SSL"
         labelPosition="left"
       />
-
       <SnowflakePropertiesView
         properties={postgresql?.properties}
         onChange={(properties) => handleChange({ properties })}
