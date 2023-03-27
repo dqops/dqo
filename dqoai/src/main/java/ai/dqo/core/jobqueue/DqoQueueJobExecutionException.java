@@ -17,6 +17,8 @@ package ai.dqo.core.jobqueue;
 
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 
+import java.util.concurrent.ExecutionException;
+
 /**
  * Exception thrown when it was not possible to retrieve a result from a job that was pushed to a job queue.
  * It could be caused by an {@link InterruptedException} or an {@link java.util.concurrent.ExecutionException}.
@@ -33,5 +35,18 @@ public class DqoQueueJobExecutionException extends DqoRuntimeException {
 
     public DqoQueueJobExecutionException(Throwable cause) {
         super(cause);
+    }
+
+    /**
+     * Extracts the real exception that was raised during a job execution.
+     * @return Real exception
+     */
+    public Throwable getRealCause() {
+        if (this.getCause() instanceof ExecutionException) {
+            ExecutionException executionException = (ExecutionException) this.getCause();
+            return executionException.getCause();
+        } else {
+            return this.getCause();
+        }
     }
 }

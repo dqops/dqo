@@ -75,8 +75,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
     private String getSubstitutedSqlCondition(SensorExecutionRunParameters runParameters, String tableName, String columnName) {
         String fullTableName = String.format("`%s`.`%s`.`%s`.%s",
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 tableName);
 
         String fullColumnName = String.format("`%s`", columnName);
@@ -125,8 +125,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getSubstitutedSqlCondition(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -163,8 +163,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getSubstitutedSqlCondition(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -195,8 +195,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getSubstitutedSqlCondition(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -229,8 +229,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getSubstitutedSqlCondition(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -265,8 +265,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getSubstitutedSqlCondition(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -301,8 +301,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getSubstitutedSqlCondition(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -339,8 +339,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getSubstitutedSqlCondition(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -385,8 +385,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getSubstitutedSqlCondition(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -425,8 +425,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getSubstitutedSqlCondition(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -467,8 +467,8 @@ public class ColumnSqlConditionFailedCountSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getSubstitutedSqlCondition(runParameters, "analyzed_table", "length_int"),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }

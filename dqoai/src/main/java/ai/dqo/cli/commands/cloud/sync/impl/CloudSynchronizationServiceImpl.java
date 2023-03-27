@@ -81,13 +81,16 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
      * @param reportingMode File synchronization progress reporting mode.
      * @param headlessMode The application was started in a headless mode and should not bother the user with questions (prompts).
      * @param synchronizationDirection File synchronization direction.
+     * @param forceRefreshNativeTable Forces to refresh a whole native table for data folders.
      * @param runOnBackgroundQueue True when the actual synchronization operation should be executed in the background on the DQO job queue.
      *                             False when the operation should be executed on the caller's thread.
      * @return 0 when success, -1 when an error.
      */
+    @Override
     public int synchronizeRoot(DqoRoot rootType,
                                FileSystemSynchronizationReportingMode reportingMode,
                                FileSynchronizationDirection synchronizationDirection,
+                               boolean forceRefreshNativeTable,
                                boolean headlessMode,
                                boolean runOnBackgroundQueue) {
         DqoCloudApiKey apiKey = this.apiKeyProvider.getApiKey();
@@ -114,7 +117,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
         if (runOnBackgroundQueue) {
             SynchronizeRootFolderDqoQueueJob synchronizeRootFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
             SynchronizeRootFolderParameters synchronizationParameter = new SynchronizeRootFolderParameters(
-                    rootType, FileSynchronizationDirection.full);
+                    rootType, FileSynchronizationDirection.full, forceRefreshNativeTable);
             SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(
                     synchronizationParameter, synchronizationListener);
             synchronizeRootFolderJob.setParameters(jobParameters);
@@ -123,7 +126,7 @@ public class CloudSynchronizationServiceImpl implements CloudSynchronizationServ
             synchronizeRootFolderJob.waitForFinish();
         }
         else {
-            this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationDirection, synchronizationListener);
+            this.dqoCloudSynchronizationService.synchronizeFolder(rootType, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         }
 
         this.terminalFactory.getWriter().writeLine(rootType.toString() + " synchronization between local DQO User Home and DQO Cloud finished.\n");

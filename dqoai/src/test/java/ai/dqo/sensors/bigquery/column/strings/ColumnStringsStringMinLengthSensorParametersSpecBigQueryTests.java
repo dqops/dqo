@@ -105,8 +105,8 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -137,8 +137,8 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -163,8 +163,8 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -191,8 +191,8 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -221,8 +221,8 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -251,8 +251,8 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -283,8 +283,8 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -323,8 +323,8 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -357,8 +357,8 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -393,8 +393,8 @@ public class ColumnStringsStringMinLengthSensorParametersSpecBigQueryTests exten
         Assertions.assertEquals(String.format(target_query,
                 this.getTableColumnName(runParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }

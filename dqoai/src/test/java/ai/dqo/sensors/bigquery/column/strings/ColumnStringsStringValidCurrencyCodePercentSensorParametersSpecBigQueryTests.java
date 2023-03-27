@@ -119,8 +119,8 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 this.getTableColumnName(runParameters),
                 this.valuesString,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -159,8 +159,8 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 this.getTableColumnName(runParameters),
                 this.valuesString,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -193,8 +193,8 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 this.getTableColumnName(runParameters),
                 this.valuesString,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -229,8 +229,8 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 this.getTableColumnName(runParameters),
                 this.valuesString,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -267,8 +267,8 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 this.getTableColumnName(runParameters),
                 this.valuesString,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -305,8 +305,8 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 this.getTableColumnName(runParameters),
                 this.valuesString,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -345,8 +345,8 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 this.getTableColumnName(runParameters),
                 this.valuesString,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -393,8 +393,8 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 this.getTableColumnName(runParameters),
                 this.valuesString,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -435,8 +435,8 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 this.getTableColumnName(runParameters),
                 this.valuesString,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -479,8 +479,8 @@ public class ColumnStringsStringValidCurrencyCodePercentSensorParametersSpecBigQ
                 this.getTableColumnName(runParameters),
                 this.valuesString,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }

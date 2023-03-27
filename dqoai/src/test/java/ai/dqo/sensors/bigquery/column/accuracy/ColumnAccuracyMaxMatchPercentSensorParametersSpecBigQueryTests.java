@@ -24,7 +24,6 @@ import ai.dqo.execution.sensors.SensorExecutionRunParametersObjectMother;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderServiceObjectMother;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperObjectMother;
-import ai.dqo.metadata.groupings.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.sampledata.SampleCsvFileNames;
@@ -131,11 +130,11 @@ public class ColumnAccuracyMaxMatchPercentSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getReferencedTableColumnName(runReferencedParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 runReferencedParameters.getConnection().getBigquery().getSourceProjectId(),
-                runReferencedParameters.getTable().getTarget().getSchemaName(),
-                runReferencedParameters.getTable().getTarget().getTableName(),
+                runReferencedParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runReferencedParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table"),
                 this.getReferencedSubstitutedFilter("referenced_table")
         ), renderedTemplate);
@@ -164,11 +163,11 @@ public class ColumnAccuracyMaxMatchPercentSensorParametersSpecBigQueryTests exte
                 this.getTableColumnName(runParameters),
                 this.getReferencedTableColumnName(runReferencedParameters),
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 runReferencedParameters.getConnection().getBigquery().getSourceProjectId(),
-                runReferencedParameters.getTable().getTarget().getSchemaName(),
-                runReferencedParameters.getTable().getTarget().getTableName(),
+                runReferencedParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runReferencedParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table"),
                 this.getReferencedSubstitutedFilter("referenced_table")
         ), renderedTemplate);

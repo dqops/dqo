@@ -49,7 +49,6 @@ public class FileTableListImplTests extends BaseTest {
     void createAndAddNew_whenNewTableAddedAndFlushed_thenIsSaved() {
         TableWrapper wrapper = this.sut.createAndAddNew(this.physicalTableName);
         TableSpec model = wrapper.getSpec();
-        model.getTarget().copyFrom(this.physicalTableName);
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
@@ -58,17 +57,16 @@ public class FileTableListImplTests extends BaseTest {
         TableList sut2 = conn2.getTables();
         TableWrapper wrapper2 = sut2.getByObjectName(physicalTableName, true);
         Assertions.assertNotNull(wrapper2);
-        Assertions.assertEquals(physicalTableName.getTableName(), wrapper2.getSpec().getTarget().getTableName());
+        Assertions.assertEquals(physicalTableName.getTableName(), wrapper2.getSpec().getPhysicalTableName().getTableName());
     }
 
     @Test
     void createAndAddNew_whenNewTableAddedUsingPhysicalTableNameAndFlushed_thenIsSaved() {
         TableWrapper wrapper = this.sut.createAndAddNew(this.physicalTableName);
         TableSpec model = wrapper.getSpec();
-        model.getTarget().copyFrom(this.physicalTableName);
 		homeContext.flush();
-        Assertions.assertEquals(physicalTableName.getSchemaName(), model.getTarget().getSchemaName());
-        Assertions.assertEquals(physicalTableName.getTableName(), model.getTarget().getTableName());
+        Assertions.assertEquals(physicalTableName.getSchemaName(), model.getPhysicalTableName().getSchemaName());
+        Assertions.assertEquals(physicalTableName.getTableName(), model.getPhysicalTableName().getTableName());
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources2 = homeContext2.getUserHome().getConnections();
@@ -76,18 +74,17 @@ public class FileTableListImplTests extends BaseTest {
         TableList sut2 = conn2.getTables();
         TableWrapper wrapper2 = sut2.getByObjectName(physicalTableName, true);
         Assertions.assertNotNull(wrapper2);
-        Assertions.assertEquals(physicalTableName.getTableName(), wrapper2.getSpec().getTarget().getTableName());
+        Assertions.assertEquals(physicalTableName.getTableName(), wrapper2.getSpec().getPhysicalTableName().getTableName());
     }
 
     @Test
     void createAndAddNew_whenNewTableAddedUWithEmptyListOfLabels_thenDeserializedCopyHasNullLabels() {
         TableWrapper wrapper = this.sut.createAndAddNew(this.physicalTableName);
         TableSpec model = wrapper.getSpec();
-        model.getTarget().copyFrom(this.physicalTableName);
         model.setLabels(new LabelSetSpec());
 		homeContext.flush();
-        Assertions.assertEquals(physicalTableName.getSchemaName(), model.getTarget().getSchemaName());
-        Assertions.assertEquals(physicalTableName.getTableName(), model.getTarget().getTableName());
+        Assertions.assertEquals(physicalTableName.getSchemaName(), model.getPhysicalTableName().getSchemaName());
+        Assertions.assertEquals(physicalTableName.getTableName(), model.getPhysicalTableName().getTableName());
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources2 = homeContext2.getUserHome().getConnections();
@@ -102,11 +99,10 @@ public class FileTableListImplTests extends BaseTest {
     void createAndAddNew_whenNewTableAddedUWithEmptyListOfComments_thenDeserializedCopyHasNullComments() {
         TableWrapper wrapper = this.sut.createAndAddNew(this.physicalTableName);
         TableSpec model = wrapper.getSpec();
-        model.getTarget().copyFrom(this.physicalTableName);
         model.setComments(new CommentsListSpec());
 		homeContext.flush();
-        Assertions.assertEquals(physicalTableName.getSchemaName(), model.getTarget().getSchemaName());
-        Assertions.assertEquals(physicalTableName.getTableName(), model.getTarget().getTableName());
+        Assertions.assertEquals(physicalTableName.getSchemaName(), model.getPhysicalTableName().getSchemaName());
+        Assertions.assertEquals(physicalTableName.getTableName(), model.getPhysicalTableName().getTableName());
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
         ConnectionList sources2 = homeContext2.getUserHome().getConnections();
@@ -121,7 +117,6 @@ public class FileTableListImplTests extends BaseTest {
     void flush_whenExistingTableLoadedModifiedAndFlushed_thenIsSaved() {
         TableWrapper wrapper = this.sut.createAndAddNew(this.physicalTableName);
         TableSpec model = wrapper.getSpec();
-        model.getTarget().copyFrom(this.physicalTableName);
 		homeContext.flush();
 
         UserHomeContext homeContext2 = UserHomeContextObjectMother.createTemporaryFileHomeContext(false);
@@ -145,7 +140,6 @@ public class FileTableListImplTests extends BaseTest {
     void iterator_whenTableAdded_thenReturnsConnection() {
         TableWrapper wrapper = this.sut.createAndAddNew(this.physicalTableName);
         TableSpec spec = wrapper.getSpec();
-        spec.getTarget().copyFrom(this.physicalTableName);
         spec.setLabels(new LabelSetSpec());
         spec.getLabels().add("label2");
 		homeContext.flush();

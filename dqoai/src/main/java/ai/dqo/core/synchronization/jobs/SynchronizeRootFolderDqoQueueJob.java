@@ -69,6 +69,7 @@ public class SynchronizeRootFolderDqoQueueJob extends DqoQueueJob<Void> {
         this.cloudSynchronizationService.synchronizeFolder(
                 this.parameters.getSynchronizationParameter().getFolder(),
                 this.parameters.getSynchronizationParameter().getDirection(),
+                this.parameters.getSynchronizationParameter().isForceRefreshNativeTable(),
                 this.parameters.getFileSystemSynchronizationListener());
         return null;
     }

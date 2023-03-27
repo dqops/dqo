@@ -193,26 +193,26 @@ public abstract class AbstractIndexingList<K, V extends ObjectName<K> & Flushabl
 
     /**
      * Creates a new element instance that is marked as new and should be saved on flush.
-     * @param connectionName Object key.
+     * @param key Object key.
      * @return Created object instance.
      */
-    public V createAndAddNew(K connectionName) {
-        V existingElement = this.getByObjectName(connectionName, true);
+    public V createAndAddNew(K key) {
+        V existingElement = this.getByObjectName(key, true);
         if (existingElement != null) {
             throw new DuplicateKeyException("Object with this name already exist");
         }
         if (this.deleted.size() > 0) {
-            Optional<V> deleted = this.deleted.stream().filter(w -> Objects.equals(w.getObjectName(), connectionName)).findFirst();
+            Optional<V> deleted = this.deleted.stream().filter(w -> Objects.equals(w.getObjectName(), key)).findFirst();
             if(deleted.isPresent()) {
                 this.deleted.remove(deleted.get()); // resurrect
             }
         }
-        V newElement = createNewElement(connectionName);
+        V newElement = createNewElement(key);
         newElement.setStatus(InstanceStatus.ADDED);
-		this.index.put(connectionName, newElement);
+		this.index.put(key, newElement);
 		this.list.add(newElement);
         if (this.hierarchyId != null) {
-            newElement.setHierarchyId(new HierarchyId(this.hierarchyId, connectionName));
+            newElement.setHierarchyId(new HierarchyId(this.hierarchyId, key));
         }
 		this.dirty = true;
         return newElement;

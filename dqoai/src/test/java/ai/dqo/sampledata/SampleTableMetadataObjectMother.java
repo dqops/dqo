@@ -113,8 +113,8 @@ public class SampleTableMetadataObjectMother {
         ConnectionSpec connectionSpec = connectionSpecRaw.expandAndTrim(SecretValueProviderObjectMother.getInstance());
         String targetSchema = getSchemaForProvider(providerType);
         SampleTableFromCsv sampleTable = CsvSampleFilesObjectMother.getSampleTable(csvFileName);
-        TableTargetSpec tableTargetSpec = new TableTargetSpec(targetSchema, sampleTable.getHashedTableName());
-        TableSpec tableSpec = new TableSpec(tableTargetSpec);
+        PhysicalTableName physicalTableName = new PhysicalTableName(targetSchema, sampleTable.getHashedTableName());
+        TableSpec tableSpec = new TableSpec(physicalTableName);
         tableSpec.getDataStreams().setFirstDataStreamMapping(new DataStreamMappingSpec());
         ConnectionProvider connectionProvider = ConnectionProviderRegistryObjectMother.getConnectionProvider(providerType);
 

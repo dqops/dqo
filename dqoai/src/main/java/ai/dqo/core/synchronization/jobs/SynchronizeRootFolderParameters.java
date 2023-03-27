@@ -31,6 +31,7 @@ import lombok.EqualsAndHashCode;
 public class SynchronizeRootFolderParameters implements Cloneable {
     private DqoRoot folder;
     private FileSynchronizationDirection direction = FileSynchronizationDirection.full;
+    private boolean forceRefreshNativeTable;
 
     /**
      * Default constructor.
@@ -42,10 +43,12 @@ public class SynchronizeRootFolderParameters implements Cloneable {
      * Creates a synchronization parameter given the synchronization direction and a folder name to be synchronized.
      * @param folder Folder to be synchronized.
      * @param direction Synchronization direction.
+     * @param forceRefreshNativeTable Force refreshing the native table.
      */
-    public SynchronizeRootFolderParameters(DqoRoot folder, FileSynchronizationDirection direction) {
+    public SynchronizeRootFolderParameters(DqoRoot folder, FileSynchronizationDirection direction, boolean forceRefreshNativeTable) {
         this.folder = folder;
         this.direction = direction;
+        this.forceRefreshNativeTable = forceRefreshNativeTable;
     }
 
     /**
@@ -78,6 +81,22 @@ public class SynchronizeRootFolderParameters implements Cloneable {
      */
     public void setDirection(FileSynchronizationDirection direction) {
         this.direction = direction;
+    }
+
+    /**
+     * Returns true if the native table for a data folder must be refreshed, even if there are no changes.
+     * @return True when the native table must be refreshed.
+     */
+    public boolean isForceRefreshNativeTable() {
+        return forceRefreshNativeTable;
+    }
+
+    /**
+     * Sets the flag to refresh a native table for all data.
+     * @param forceRefreshNativeTable Refresh a native table for all data.
+     */
+    public void setForceRefreshNativeTable(boolean forceRefreshNativeTable) {
+        this.forceRefreshNativeTable = forceRefreshNativeTable;
     }
 
     /**

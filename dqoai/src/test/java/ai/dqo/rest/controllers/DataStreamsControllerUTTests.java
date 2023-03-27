@@ -85,8 +85,8 @@ public class DataStreamsControllerUTTests extends BaseTest {
 
         ResponseEntity<Flux<DataStreamBasicModel>> responseEntity = this.sut.getDataStreams(
                 this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName());
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
         List<DataStreamBasicModel> result = responseEntity.getBody().collectList().block();
@@ -106,8 +106,8 @@ public class DataStreamsControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<DataStreamModel>> responseEntity = this.sut.getDataStream(
                 this.sampleTable.getConnectionName(),
-                sampleTableSpec.getTarget().getSchemaName(),
-                sampleTableSpec.getTarget().getTableName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName);
         Assertions.assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
 
@@ -132,8 +132,8 @@ public class DataStreamsControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateDataStream(
                 this.sampleTable.getConnectionName(),
-                sampleTableSpec.getTarget().getSchemaName(),
-                sampleTableSpec.getTarget().getTableName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName,
                 new DataStreamTrimmedModel() {{
                     setDataStreamName(newName);
@@ -166,8 +166,8 @@ public class DataStreamsControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateDataStream(
                 this.sampleTable.getConnectionName(),
-                sampleTableSpec.getTarget().getSchemaName(),
-                sampleTableSpec.getTarget().getTableName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
                 DATASTREAM_NAME_1,
                 new DataStreamTrimmedModel() {{
                     setDataStreamName(substitutableName);
@@ -199,8 +199,8 @@ public class DataStreamsControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<?>> responseEntity = this.sut.updateDataStream(
                 this.sampleTable.getConnectionName(),
-                sampleTableSpec.getTarget().getSchemaName(),
-                sampleTableSpec.getTarget().getTableName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName,
                 new DataStreamTrimmedModel() {{
                     setDataStreamName(null);
@@ -228,8 +228,8 @@ public class DataStreamsControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<?>> responseEntity = this.sut.setDefaultDataStream(
                 this.sampleTable.getConnectionName(),
-                sampleTableSpec.getTarget().getSchemaName(),
-                sampleTableSpec.getTarget().getTableName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName);
         Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
 
@@ -250,8 +250,8 @@ public class DataStreamsControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<?>> responseEntity = this.sut.deleteDataStream(
                 this.sampleTable.getConnectionName(),
-                sampleTableSpec.getTarget().getSchemaName(),
-                sampleTableSpec.getTarget().getTableName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName);
         Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
 
@@ -271,8 +271,8 @@ public class DataStreamsControllerUTTests extends BaseTest {
 
         ResponseEntity<Mono<?>> responseEntity = this.sut.deleteDataStream(
                 this.sampleTable.getConnectionName(),
-                sampleTableSpec.getTarget().getSchemaName(),
-                sampleTableSpec.getTarget().getTableName(),
+                sampleTableSpec.getPhysicalTableName().getSchemaName(),
+                sampleTableSpec.getPhysicalTableName().getTableName(),
                 dataStreamName);
         Assertions.assertEquals(HttpStatus.NO_CONTENT, responseEntity.getStatusCode());
 

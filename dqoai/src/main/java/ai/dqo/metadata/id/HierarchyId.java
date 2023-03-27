@@ -75,6 +75,17 @@ public class HierarchyId {
     }
 
     /**
+     * Creates a new hierarchy id for a table node.
+     * @param connectionName Connection name.
+     * @param physicalTableName Physical table name.
+     * @return Hierarchy id for a table.
+     */
+    public static HierarchyId makeHierarchyIdForTable(String connectionName, PhysicalTableName physicalTableName) {
+        HierarchyId hierarchyId = new HierarchyId("connections", connectionName, "tables", physicalTableName);
+        return hierarchyId;
+    }
+
+    /**
      * Returns a path element at the given index.
      * @param index 0-based index of the hierarchy path element to retrieve.
      * @return Hierarchy path element.

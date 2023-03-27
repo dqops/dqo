@@ -116,14 +116,6 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(TableSpec tableSpec, P parameter);
 
     /**
-     * Accepts a table target (physical table information).
-     * @param tableTargetSpec Physical target table specification.
-     * @param parameter Additional parameter.
-     * @return Accept's result.
-     */
-    R accept(TableTargetSpec tableTargetSpec, P parameter);
-
-    /**
      * Accepts a column collection (map).
      * @param columnSpecMap Column collection.
      * @param parameter Additional parameter.

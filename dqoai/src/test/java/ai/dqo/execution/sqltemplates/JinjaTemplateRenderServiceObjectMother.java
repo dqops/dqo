@@ -65,11 +65,11 @@ public class JinjaTemplateRenderServiceObjectMother {
         switch (providerType) {
             case bigquery:
                 return dialectForProvider.quoteIdentifier(runParameters.getConnection().getBigquery().getSourceProjectId()) + "." +
-                        dialectForProvider.quoteIdentifier(runParameters.getTable().getTarget().getSchemaName()) + "." +
-                        dialectForProvider.quoteIdentifier(runParameters.getTable().getTarget().getTableName());
+                        dialectForProvider.quoteIdentifier(runParameters.getTable().getPhysicalTableName().getSchemaName()) + "." +
+                        dialectForProvider.quoteIdentifier(runParameters.getTable().getPhysicalTableName().getTableName());
             case snowflake:
-                return dialectForProvider.quoteIdentifier(runParameters.getTable().getTarget().getSchemaName()) + "." +
-                        dialectForProvider.quoteIdentifier(runParameters.getTable().getTarget().getTableName());
+                return dialectForProvider.quoteIdentifier(runParameters.getTable().getPhysicalTableName().getSchemaName()) + "." +
+                        dialectForProvider.quoteIdentifier(runParameters.getTable().getPhysicalTableName().getTableName());
             default:
                 Assertions.fail("Missing provider, add a case statement to support a new provider.");
         }

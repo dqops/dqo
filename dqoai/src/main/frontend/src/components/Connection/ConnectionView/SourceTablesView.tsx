@@ -15,7 +15,7 @@ interface ISourceSchemasViewProps {
   onBack: () => void;
 }
 
-const SourceSchemasView = ({
+const SourceTablesView = ({
   connectionName,
   schemaName,
   onBack
@@ -75,12 +75,13 @@ const SourceSchemasView = ({
     <div className="py-4 px-8">
       <ConnectionActionGroup onImport={onBack} />
       <div className="flex justify-end space-x-4 mb-4">
-        <Button color="primary" label="Select All" onClick={selectAll} />
-        <Button color="primary" label="Unselect All" onClick={unselectAll} />
+        <Button color="primary" label="Select All" onClick={selectAll} disabled={selectedTables.length === tables.length} />
+        <Button color="primary" label="Unselect All" onClick={unselectAll} disabled={selectedTables.length === 0} />
         <Button
           color="primary"
           label="Import selected tables"
           onClick={importSelectedTables}
+          disabled={selectedTables.length === 0}
         />
         <Button
           color="primary"
@@ -135,4 +136,4 @@ const SourceSchemasView = ({
   );
 };
 
-export default SourceSchemasView;
+export default SourceTablesView;

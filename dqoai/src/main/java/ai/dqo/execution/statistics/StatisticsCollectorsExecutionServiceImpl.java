@@ -146,7 +146,7 @@ public class StatisticsCollectorsExecutionServiceImpl implements StatisticsColle
         TableSpec tableSpec = targetTable.getSpec();
 //        progressListener.onExecuteProfilerOnTableStart(new ExecuteChecksOnTableStartEvent(connectionWrapper, tableSpec, checks));
         String connectionName = connectionWrapper.getName();
-        PhysicalTableName physicalTableName = tableSpec.getTarget().toPhysicalTableName();
+        PhysicalTableName physicalTableName = tableSpec.getPhysicalTableName();
         StatisticsSnapshot statisticsSnapshot = this.statisticsSnapshotFactory.createSnapshot(connectionName, physicalTableName);
         Table allNormalizedStatisticsTable = statisticsSnapshot.getTableDataChanges().getNewOrChangedRows();
         int collectorsExecuted = 0;

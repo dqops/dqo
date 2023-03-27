@@ -206,8 +206,8 @@ public class TableCliServiceImpl implements TableCliService {
             TableSpec sourceTableSpec = sourceTableWrapper.getSpec();
             row.setLong(0, sourceTableSpec.getHierarchyId().hashCode64());
             row.setString(1, connectionWrapper.getName());
-            row.setString(2, sourceTableSpec.getTarget().getSchemaName());
-            row.setString(3, sourceTableSpec.getTarget().getTableName());
+            row.setString(2, sourceTableSpec.getPhysicalTableName().getSchemaName());
+            row.setString(3, sourceTableSpec.getPhysicalTableName().getTableName());
             row.setInt(4, sourceTableSpec.getColumns().size());
         }
         return resultTable;

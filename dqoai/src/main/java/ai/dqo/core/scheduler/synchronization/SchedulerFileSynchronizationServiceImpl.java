@@ -61,10 +61,12 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
     /**
      * Synchronizes the whole user home, both the metadata (checks, rules, sensors) and the parquet data files. Should be called in the job that updates the metadata.
      * @param synchronizationReportingMode File system synchronization mode.
+     * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @return true when synchronization was successful, false - when it failed, no API Key was provided or the cloud synchronization is simply disabled
      */
     @Override
-    public boolean synchronizeAll(FileSystemSynchronizationReportingMode synchronizationReportingMode) {
+    public boolean synchronizeAll(FileSystemSynchronizationReportingMode synchronizationReportingMode,
+                                  boolean forceRefreshNativeTable) {
         if (!this.schedulerConfigurationProperties.isEnableCloudSync()) {
             return false;
         }
@@ -77,7 +79,7 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
 
         try {
             FileSystemSynchronizationListener synchronizationListener = this.fileSystemSynchronizationListenerProvider.getSynchronizationListener(synchronizationReportingMode);
-            this.dqoCloudSynchronizationService.synchronizeAll(FileSynchronizationDirection.full, synchronizationListener);
+            this.dqoCloudSynchronizationService.synchronizeAll(FileSynchronizationDirection.full, forceRefreshNativeTable, synchronizationListener);
         }
         catch (Exception ex) {
             LOG.error("Cannot synchronize the metadata when refreshing the user home during a metadata refresh in the job scheduler.", ex);
@@ -90,10 +92,12 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
     /**
      * Synchronizes only the data files (parquet files). Should be called in the job that executes the data quality checks.
      * @param synchronizationReportingMode File system synchronization mode.
+     * @param forceRefreshNativeTable True when the native table should be forcibly refreshed even if there are no changes.
      * @return true when synchronization was successful, false - when it failed, no API Key was provided or the cloud synchronization is simply disabled
      */
     @Override
-    public boolean synchronizeData(FileSystemSynchronizationReportingMode synchronizationReportingMode) {
+    public boolean synchronizeData(FileSystemSynchronizationReportingMode synchronizationReportingMode,
+                                   boolean forceRefreshNativeTable) {
         if (!this.schedulerConfigurationProperties.isEnableCloudSync()) {
             return false;
         }
@@ -106,7 +110,7 @@ public class SchedulerFileSynchronizationServiceImpl implements SchedulerFileSyn
 
         try {
             FileSystemSynchronizationListener synchronizationListener = this.fileSystemSynchronizationListenerProvider.getSynchronizationListener(synchronizationReportingMode);
-            this.dqoCloudSynchronizationService.synchronizeData(FileSynchronizationDirection.full, synchronizationListener);
+            this.dqoCloudSynchronizationService.synchronizeData(FileSynchronizationDirection.full, forceRefreshNativeTable, synchronizationListener);
         }
         catch (Exception ex) {
             LOG.error("Cannot synchronize the data files when running schedule data quality checks.", ex);

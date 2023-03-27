@@ -52,8 +52,8 @@ public class ColumnsControllerITTests extends BaseTest {
         UserHomeContextObjectMother.addSampleTable(this.userHomeContext, this.sampleTable);
         this.userHomeContext.flush();
         String uri = String.format("/api/connections/%s/schemas/%s/tables/%s/columns", this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName());
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName());
 
         WebClient.ResponseSpec response = webClient.get()
                 .uri(uri)
@@ -76,8 +76,8 @@ public class ColumnsControllerITTests extends BaseTest {
         ColumnSpec firstColumnSpec = this.sampleTable.getTableSpec().getColumns().values().stream().findFirst().get();
         String columnName = firstColumnSpec.getColumnName();
         String uri = String.format("/api/connections/%s/schemas/%s/tables/%s/columns/%s/basic", this.sampleTable.getConnectionName(),
-                this.sampleTable.getTableSpec().getTarget().getSchemaName(),
-                this.sampleTable.getTableSpec().getTarget().getTableName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getSchemaName(),
+                this.sampleTable.getTableSpec().getPhysicalTableName().getTableName(),
                 columnName);
 
         WebClient.ResponseSpec response = webClient.get()

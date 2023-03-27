@@ -102,7 +102,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
         FileSystemSynchronizationReportingMode synchronizationMode = this.jobSchedulerService.getSynchronizationMode();
         CheckRunReportingMode checkRunReportingMode = this.jobSchedulerService.getCheckRunReportingMode();
 
-        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // synchronize the data before running the checks, just in case that the files were removed remotely
+        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode, false); // synchronize the data before running the checks, just in case that the files were removed remotely
 
         ExecutionContext executionContext = this.executionContextFactory.create();
 
@@ -111,7 +111,7 @@ public class RunScheduledChecksDqoJob extends DqoQueueJob<Void> {
         CheckExecutionSummary checkExecutionSummary = this.checkExecutionService.executeChecksForSchedule(
                 executionContext, this.cronSchedule, progressListener);
 
-        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode); // push the updated data files (parquet) back to the cloud
+        this.schedulerFileSynchronizationService.synchronizeData(synchronizationMode, false); // push the updated data files (parquet) back to the cloud
 
         return null;
     }

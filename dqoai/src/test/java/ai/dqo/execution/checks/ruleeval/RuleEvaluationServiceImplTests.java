@@ -99,7 +99,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		progressListener = new CheckExecutionProgressListenerStub();
 		sensorExecutionResult = new SensorExecutionResult(this.sensorExecutionRunParameters, this.table);
         SensorReadoutsSnapshotFactory dummySensorReadoutStorageService = SensorReadoutsSnapshotFactoryObjectMother.createDummySensorReadoutStorageService();
-		sensorReadoutsSnapshot = dummySensorReadoutStorageService.createSnapshot("conn", tableSpec.getTarget().toPhysicalTableName());
+		sensorReadoutsSnapshot = dummySensorReadoutStorageService.createSnapshot("conn", tableSpec.getPhysicalTableName());
     }
 
     @Test

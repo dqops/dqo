@@ -40,7 +40,7 @@ public class TableListImplTests extends BaseTest {
     void createAndAddNew_whenPhysicalTableNameGiven_thenCopiesToTarget() {
         PhysicalTableName physicalTableName = new PhysicalTableName("s2", "tab2");
         TableWrapper tableWrapper = this.sut.createAndAddNew(physicalTableName);
-        Assertions.assertEquals(physicalTableName.getSchemaName(), tableWrapper.getSpec().getTarget().getSchemaName());
-        Assertions.assertEquals(physicalTableName.getTableName(), tableWrapper.getSpec().getTarget().getTableName());
+        Assertions.assertEquals(physicalTableName.getSchemaName(), tableWrapper.getSpec().getPhysicalTableName().getSchemaName());
+        Assertions.assertEquals(physicalTableName.getTableName(), tableWrapper.getSpec().getPhysicalTableName().getTableName());
     }
 }

@@ -98,8 +98,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -127,8 +127,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -150,8 +150,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -175,8 +175,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -202,8 +202,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -229,8 +229,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -258,8 +258,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -287,8 +287,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -323,8 +323,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -354,8 +354,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }
@@ -387,8 +387,8 @@ public class TableStandardRowCountSensorParametersSpecBigQueryTests extends Base
 
         Assertions.assertEquals(String.format(target_query,
                 runParameters.getConnection().getBigquery().getSourceProjectId(),
-                runParameters.getTable().getTarget().getSchemaName(),
-                runParameters.getTable().getTarget().getTableName(),
+                runParameters.getTable().getPhysicalTableName().getSchemaName(),
+                runParameters.getTable().getPhysicalTableName().getTableName(),
                 this.getSubstitutedFilter("analyzed_table")
         ), renderedTemplate);
     }

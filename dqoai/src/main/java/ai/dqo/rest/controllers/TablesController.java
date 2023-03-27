@@ -1203,13 +1203,6 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
         }
 
-        if (tableSpec.getTarget() == null ||
-                !Objects.equals(schemaName, tableSpec.getTarget().getSchemaName()) ||
-                !Objects.equals(tableName, tableSpec.getTarget().getTableName())) {
-            return new ResponseEntity<>(Mono.justOrEmpty("Target schema and table name in the table specification must match the schema and table name in the url"),
-                    HttpStatus.NOT_ACCEPTABLE); // 400
-        }
-
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
@@ -1260,13 +1253,6 @@ public class TablesController {
                 Strings.isNullOrEmpty(schemaName) ||
                 Strings.isNullOrEmpty(tableName)) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_ACCEPTABLE); // 406
-        }
-
-        if (tableSpec.getTarget() == null ||
-                !Objects.equals(schemaName, tableSpec.getTarget().getSchemaName()) ||
-                !Objects.equals(tableName, tableSpec.getTarget().getTableName())) {
-            return new ResponseEntity<>(Mono.justOrEmpty("Target schema and table name in the table specification must match the schema and table name in the url"),
-                    HttpStatus.NOT_ACCEPTABLE); // 400 - wrong values
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();

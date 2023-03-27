@@ -57,7 +57,7 @@ public class FileTableWrapperImplTests extends BaseTest {
         ConnectionWrapper conn2 = homeContext2.getUserHome().getConnections().getByObjectName("conn", true);
         TableList tables2 = conn2.getTables();
         TableWrapper sut2 = tables2.getByObjectName(physicalTableName, true);
-        Assertions.assertEquals(physicalTableName.getTableName(), sut2.getSpec().getTarget().getTableName());
+        Assertions.assertEquals(physicalTableName.getTableName(), sut2.getSpec().getPhysicalTableName().getTableName());
     }
 
     @Test
