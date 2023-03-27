@@ -1,9 +1,9 @@
 import React from 'react';
 
-import Input from '../../../Input';
 import SectionWrapper from '../../SectionWrapper';
 import { SqlServerParametersSpec } from "../../../../api";
 import SnowflakePropertiesView from "../SnowflakeProperties";
+import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
 import Checkbox from "../../../Checkbox";
 
 interface ISqlServerConnectionProps {
@@ -27,36 +27,36 @@ const SqlServerConnection = ({
 
   return (
     <SectionWrapper title="Microsoft SQL Server/SQL Server connection parameters" className="mb-4">
-      <Input
+      <FieldTypeInput
         label="Host"
         className="mb-4"
         value={sqlserver?.host}
-        onChange={(e) => handleChange({ host: e.target.value })}
+        onChange={(value) => handleChange({ host: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Port"
         className="mb-4"
-        value={sqlserver?.port || 1433}
-        onChange={(e) => handleChange({ port: e.target.value })}
+        value={(sqlserver?.port || 1433).toString()}
+        onChange={(value) => handleChange({ port: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Database"
         className="mb-4"
         value={sqlserver?.database}
-        onChange={(e) => handleChange({ database: e.target.value })}
+        onChange={(value) => handleChange({ database: value })}
       />
-      <Input
+      <FieldTypeInput
         label="User name"
         className="mb-4"
         value={sqlserver?.user}
-        onChange={(e) => handleChange({ user: e.target.value })}
+        onChange={(value) => handleChange({ user: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Password"
-        type="password"
         className="mb-4"
+        maskingType="password"
         value={sqlserver?.password}
-        onChange={(e) => handleChange({ password: e.target.value })}
+        onChange={(value) => handleChange({ password: value })}
       />
       <Checkbox
         checked={sqlserver?.ssl}

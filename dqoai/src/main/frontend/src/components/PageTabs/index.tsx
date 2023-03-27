@@ -1,7 +1,5 @@
 import React, { useMemo } from 'react';
 
-import IconButton from '../IconButton';
-import SvgIcon from '../SvgIcon';
 import Tab, { TabOption } from './tab';
 
 export interface IPageTabsProps {
@@ -10,7 +8,6 @@ export interface IPageTabsProps {
   activeTab?: string;
   onChange?: any;
   onRemoveTab: (value: string) => void;
-  onAddTab: () => void;
   limit?: number;
 }
 
@@ -20,7 +17,6 @@ const PageTabs = ({
   activeTab,
   onChange,
   onRemoveTab,
-  onAddTab,
   limit = 10,
 }: IPageTabsProps) => {
   const onChangeTab = (tab: TabOption) => {
@@ -46,12 +42,6 @@ const PageTabs = ({
           />
         ))}
       </div>
-      <IconButton
-        className="bg-primary hover:bg-opacity-80 w-7 h-7 m-1 !rounded-md"
-        onClick={onAddTab}
-      >
-        <SvgIcon name="add" className="w-5 text-white" />
-      </IconButton>
     </div>
   );
 };

@@ -1,9 +1,10 @@
 import React from 'react';
 
-import Input from '../../../Input';
 import SectionWrapper from '../../SectionWrapper';
 import { SnowflakeParametersSpec } from "../../../../api";
 import SnowflakePropertiesView from "../SnowflakeProperties";
+import FieldTypeInput from "../../../Connection/ConnectionView/FieldTypeInput";
+
 
 interface ISnowflakeConnectionProps {
   snowflake?: SnowflakeParametersSpec;
@@ -26,41 +27,41 @@ const SnowflakeConnection = ({
 
   return (
     <SectionWrapper title="Snowflake connection parameters" className="mb-4">
-      <Input
+      <FieldTypeInput
         label="Account"
         className="mb-4"
         value={snowflake?.account}
-        onChange={(e) => handleChange({ account: e.target.value })}
+        onChange={(value) => handleChange({ account: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Warehouse"
         className="mb-4"
         value={snowflake?.warehouse}
-        onChange={(e) => handleChange({ warehouse: e.target.value })}
+        onChange={(value) => handleChange({ warehouse: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Database"
         className="mb-4"
         value={snowflake?.database}
-        onChange={(e) => handleChange({ database: e.target.value })}
+        onChange={(value) => handleChange({ database: value })}
       />
-      <Input
+      <FieldTypeInput
         label="User name"
         className="mb-4"
         value={snowflake?.user}
-        onChange={(e) => handleChange({ user: e.target.value })}
+        onChange={(value) => handleChange({ user: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Password"
-        type="password"
         className="mb-4"
+        maskingType="password"
         value={snowflake?.password}
-        onChange={(e) => handleChange({ password: e.target.value })}
+        onChange={(value) => handleChange({ password: value })}
       />
-      <Input
+      <FieldTypeInput
         label="Role"
         value={snowflake?.role}
-        onChange={(e) => handleChange({ role: e.target.value })}
+        onChange={(value) => handleChange({ role: value })}
       />
 
       <SnowflakePropertiesView

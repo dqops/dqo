@@ -19,7 +19,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.rules.comparison.MinCountRuleWarningParametersSpec;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
+import ai.dqo.rules.comparison.MinCountRuleFatalParametersSpec;
 import ai.dqo.sensors.column.uniqueness.ColumnUniquenessUniqueCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -38,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class ColumnUniqueCountCheckSpec
-        extends AbstractCheckSpec<ColumnUniquenessUniqueCountSensorParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec, MinCountRule0ParametersSpec> {
+        extends AbstractCheckSpec<ColumnUniquenessUniqueCountSensorParametersSpec, MinCountRuleWarningParametersSpec, MinCountRule0ParametersSpec, MinCountRuleFatalParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<ColumnUniqueCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -52,7 +54,7 @@ public class ColumnUniqueCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning that is considered as a passed data quality check")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec warning;
+    private MinCountRuleWarningParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows with nulls in a column that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -62,7 +64,7 @@ public class ColumnUniqueCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MinCountRule0ParametersSpec fatal;
+    private MinCountRuleFatalParametersSpec fatal;
 
     /**
      * Returns the parameters of the sensor.
@@ -89,7 +91,7 @@ public class ColumnUniqueCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MinCountRule0ParametersSpec getWarning() {
+    public MinCountRuleWarningParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -97,7 +99,7 @@ public class ColumnUniqueCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MinCountRule0ParametersSpec warning) {
+    public void setWarning(MinCountRuleWarningParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -129,7 +131,7 @@ public class ColumnUniqueCountCheckSpec
      * @return Fatal severity rule parameters.
      */
     @Override
-    public MinCountRule0ParametersSpec getFatal() {
+    public MinCountRuleFatalParametersSpec getFatal() {
         return this.fatal;
     }
 
@@ -137,7 +139,7 @@ public class ColumnUniqueCountCheckSpec
      * Sets a new fatal level alerting threshold.
      * @param fatal Fatal alerting threshold to set.
      */
-    public void setFatal(MinCountRule0ParametersSpec fatal) {
+    public void setFatal(MinCountRuleFatalParametersSpec fatal) {
         this.setDirtyIf(!Objects.equals(this.fatal, fatal));
         this.fatal = fatal;
         this.propagateHierarchyIdToField(fatal, "fatal");

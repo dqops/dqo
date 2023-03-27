@@ -64,7 +64,7 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
-import ai.dqo.rules.comparison.MinCountRuleParametersSpec;
+import ai.dqo.rules.comparison.MinCountRuleFatalParametersSpec;
 import ai.dqo.services.check.mapping.*;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.services.timezone.DefaultTimeZoneProviderObjectMother;
@@ -173,7 +173,7 @@ public class CheckServiceImplTests extends BaseTest {
         TableProfilingStandardChecksSpec t1standardChecksSpec = new TableProfilingStandardChecksSpec();
         TableRowCountCheckSpec t1rowCountSpec = new TableRowCountCheckSpec();
         MinCountRule0ParametersSpec t1rowCountErrorSpec = new MinCountRule0ParametersSpec();
-        MinCountRuleParametersSpec t1rowCountFatalSpec = new MinCountRuleParametersSpec();
+        MinCountRuleFatalParametersSpec t1rowCountFatalSpec = new MinCountRuleFatalParametersSpec();
         t1rowCountErrorSpec.setMinCount(50L);
         t1rowCountFatalSpec.setMinCount(20L);
         t1rowCountSpec.setError(t1rowCountErrorSpec);
