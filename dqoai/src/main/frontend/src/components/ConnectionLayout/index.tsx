@@ -213,6 +213,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
           onChange={handleChange}
           onRemoveTab={closeTab}
           onAddTab={onAddTab}
+          limit={10}
         />
         <div
           className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"

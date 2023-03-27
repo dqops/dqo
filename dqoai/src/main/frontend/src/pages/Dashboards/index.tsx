@@ -25,6 +25,7 @@ const Dashboards = () => {
           onChange={setActiveTab}
           onRemoveTab={closeTab}
           onAddTab={onAddTab}
+          limit={8}
         />
         <div className="flex-1 bg-white border border-gray-300 flex-auto relative">
           {!tabs?.length && (

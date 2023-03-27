@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import IconButton from '../IconButton';
 import SvgIcon from '../SvgIcon';
@@ -11,6 +11,7 @@ export interface IPageTabsProps {
   onChange?: any;
   onRemoveTab: (value: string) => void;
   onAddTab: () => void;
+  limit?: number;
 }
 
 const PageTabs = ({
@@ -19,14 +20,21 @@ const PageTabs = ({
   activeTab,
   onChange,
   onRemoveTab,
-  onAddTab
+  onAddTab,
+  limit = 10,
 }: IPageTabsProps) => {
   const onChangeTab = (tab: TabOption) => {
     onChange(tab.value);
   };
 
+  useMemo(() => {
+    if (tabs.length > limit) {
+      onRemoveTab(tabs[0].value);
+    }
+  }, [tabs, limit, onRemoveTab]);
+
   return (
-    <div className={`flex space-x-4 ${className}`}>
+    <div className={`flex space-x-4 overflow-x-auto ${className}`}>
       <div className="flex">
         {tabs.map((tab) => (
           <Tab
