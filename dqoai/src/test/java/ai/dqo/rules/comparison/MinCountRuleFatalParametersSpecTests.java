@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class MinCountRuleParametersSpecTests extends BaseTest {
+public class MinCountRuleFatalParametersSpecTests extends BaseTest {
     private MinCountRule0ParametersSpec sut;
 
     @BeforeEach

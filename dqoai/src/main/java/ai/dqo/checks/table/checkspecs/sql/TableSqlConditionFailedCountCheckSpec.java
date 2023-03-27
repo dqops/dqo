@@ -21,6 +21,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule15ParametersSpec;
 import ai.dqo.sensors.table.sql.TableSqlConditionFailedCountSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -39,7 +40,7 @@ import java.util.Objects;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 public class TableSqlConditionFailedCountCheckSpec
-        extends AbstractCheckSpec<TableSqlConditionFailedCountSensorParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec, MaxCountRule0ParametersSpec> {
+        extends AbstractCheckSpec<TableSqlConditionFailedCountSensorParametersSpec, MaxCountRule15ParametersSpec, MaxCountRule10ParametersSpec, MaxCountRule0ParametersSpec> {
     public static final ChildHierarchyNodeFieldMapImpl<TableSqlConditionFailedCountCheckSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractCheckSpec.FIELDS) {
         {
         }
@@ -53,12 +54,12 @@ public class TableSqlConditionFailedCountCheckSpec
     @JsonPropertyDescription("Alerting threshold that raises a data quality warning when a given number of rows failed the custom SQL condition (expression). The warning is considered as a passed data quality check.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule10ParametersSpec warning;
+    private MaxCountRule15ParametersSpec warning;
 
     @JsonPropertyDescription("Default alerting threshold for a maximum number of rows failing the custom SQL condition (expression) that raises a data quality error (alert).")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
-    private MaxCountRule0ParametersSpec error;
+    private MaxCountRule10ParametersSpec error;
 
     @JsonPropertyDescription("Alerting threshold that raises a fatal data quality issue when a given number of rows failed the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -90,7 +91,7 @@ public class TableSqlConditionFailedCountCheckSpec
      * @return Warning severity rule parameters.
      */
     @Override
-    public MaxCountRule10ParametersSpec getWarning() {
+    public MaxCountRule15ParametersSpec getWarning() {
         return this.warning;
     }
 
@@ -98,7 +99,7 @@ public class TableSqlConditionFailedCountCheckSpec
      * Sets a new warning level alerting threshold.
      * @param warning Warning alerting threshold to set.
      */
-    public void setWarning(MaxCountRule10ParametersSpec warning) {
+    public void setWarning(MaxCountRule15ParametersSpec warning) {
         this.setDirtyIf(!Objects.equals(this.warning, warning));
         this.warning = warning;
         this.propagateHierarchyIdToField(warning, "warning");
@@ -110,7 +111,7 @@ public class TableSqlConditionFailedCountCheckSpec
      * @return Default "ERROR" alerting thresholds.
      */
     @Override
-    public MaxCountRule0ParametersSpec getError() {
+    public MaxCountRule10ParametersSpec getError() {
         return this.error;
     }
 
@@ -118,7 +119,7 @@ public class TableSqlConditionFailedCountCheckSpec
      * Sets a new error level alerting threshold.
      * @param error Error alerting threshold to set.
      */
-    public void setError(MaxCountRule0ParametersSpec error) {
+    public void setError(MaxCountRule10ParametersSpec error) {
         this.setDirtyIf(!Objects.equals(this.error, error));
         this.error = error;
         this.propagateHierarchyIdToField(error, "error");
