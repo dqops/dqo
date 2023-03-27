@@ -129,6 +129,19 @@ const ConnectionPage = () => {
     setTabs(checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs)
   }, [checkTypes])
 
+  useEffect(() => {
+    if (import_schema === 'true') {
+      setTabs([
+        {
+          label: 'Schemas',
+          value: 'schemas'
+        }
+      ]);
+    } else {
+      setTabs(initCheckTabs)
+    }
+  }, [import_schema]);
+
   return (
     <ConnectionLayout>
       <div className="relative">

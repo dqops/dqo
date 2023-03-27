@@ -6,6 +6,7 @@ import { IRootState } from '../../../redux/reducers';
 import { ConnectionApiClient } from '../../../services/apiClient';
 import { useHistory, useParams } from 'react-router-dom';
 import { CheckTypes, ROUTES } from "../../../shared/routes";
+import { useTree } from "../../../contexts/treeContext";
 
 interface IConnectionActionGroupProps {
   isDisabled?: boolean;
@@ -29,6 +30,7 @@ const ConnectionActionGroup = ({
     (state: IRootState) => state.connection
   );
   const history = useHistory();
+  const { sourceRoute } = useTree();
 
   const removeConnection = async () => {
     if (connectionBasic) {
@@ -38,7 +40,7 @@ const ConnectionActionGroup = ({
     }
   };
   const goToSchemas = (isImport = true) => {
-    history.push(`${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connectionName, 'schemas')}${isImport ? '?import_schema=true' : ''}`)
+    history.push(`${ROUTES.CONNECTION_DETAIL(sourceRoute, connectionName, 'schemas')}${isImport ? '?import_schema=true' : ''}`)
 
     if (onImport) {
       onImport();
@@ -71,7 +73,7 @@ const ConnectionActionGroup = ({
             label="Manage metadata"
             color="primary"
             variant="outlined"
-            onClick={() => goToSchemas(false)}
+            onClick={() => goToSchemas()}
           />
         ) : null
       )}
