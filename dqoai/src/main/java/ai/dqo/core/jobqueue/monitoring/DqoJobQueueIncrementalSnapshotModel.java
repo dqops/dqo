@@ -40,6 +40,7 @@ public class DqoJobQueueIncrementalSnapshotModel {
                                                long lastSequenceNumber) {
         this.jobChanges = jobChanges;
         this.lastSequenceNumber = lastSequenceNumber;
+        this.folderSynchronizationStatus = folderSynchronizationStatus;
     }
 
     /**
