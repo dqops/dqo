@@ -30,7 +30,7 @@ const PageTabs = ({
   }, [tabs, limit, onRemoveTab]);
 
   return (
-    <div className={`flex space-x-4 overflow-x-auto ${className}`}>
+    <div className={`flex space-x-4 overflow-x-auto min-h-8 ${className}`}>
       <div className="flex">
         {tabs.map((tab) => (
           <Tab
