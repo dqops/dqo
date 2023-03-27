@@ -26,14 +26,14 @@ const Tab = ({ tab, active, onChange, closable, onClose }: TabProps) => {
 
   return (
     <div
-      className={`relative text-sm leading-20 px-8 py-2 cursor-pointer ${
+      className={`relative text-sm leading-20 py-2 cursor-pointer ${
         active
           ? 'font-semibold relative bg-white border-b-2 border-primary'
           : ''
       }`}
       onClick={() => onChange && onChange(tab)}
     >
-      <div className="truncate min-w-fit max-w-60 capitalize">
+      <div className="max-w-50 w-50 capitalize text-center truncate">
         {tab.label}
         {tab.isUpdated ? '*' : ''}
       </div>
