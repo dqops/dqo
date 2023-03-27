@@ -108,9 +108,7 @@
     {%- elif part == 'week' -%}
         DATEADD(wk, DATEDIFF(wk, 0, CAST({{value}} AS date)), 0)
     {%- elif part == 'day' -%}
-        {%- if datatype | upper == 'DATE' -%}
-            CAST({{value}} AS date)
-        {%- endif -%}
+        CAST({{value}} AS date)
     {%- elif part == 'hour' -%}
         DATEFROMPARTS(YEAR(CAST({{value}} AS datetime2)), MONTH(CAST({{value}} AS datetime2)), DAY(CAST({{value}} AS datetime2))),
         DATEPART(hour, CAST({{value}} AS datetime2))
