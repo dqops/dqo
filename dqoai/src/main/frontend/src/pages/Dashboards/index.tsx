@@ -10,7 +10,7 @@ import { AuthenticatedDashboardModel } from "../../api";
 
 const Dashboards = () => {
   const dispatch = useActionDispatch();
-  const { tabs, activeTab, setActiveTab, closeTab, onAddTab, openedDashboards } = useDashboard();
+  const { tabs, activeTab, setActiveTab, closeTab, openedDashboards } = useDashboard();
 
   useEffect(() => {
     dispatch(getAllDashboards());
@@ -24,7 +24,6 @@ const Dashboards = () => {
           activeTab={activeTab}
           onChange={setActiveTab}
           onRemoveTab={closeTab}
-          onAddTab={onAddTab}
         />
         <div className="flex-1 bg-white border border-gray-300 flex-auto relative">
           {!tabs?.length && (
