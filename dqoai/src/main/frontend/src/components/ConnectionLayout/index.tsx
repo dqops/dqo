@@ -11,7 +11,7 @@ interface ConnectionLayoutProps {
 }
 
 const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
-  const { tabs, setActiveTab, activeTab, onAddTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode } =
+  const { tabs, setActiveTab, activeTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode } =
     useTree();
 
   const { connection, schema, table, column, category, timePartitioned, checkName } = useParams() as any;
@@ -212,7 +212,6 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
           activeTab={activeTab}
           onChange={handleChange}
           onRemoveTab={closeTab}
-          onAddTab={onAddTab}
         />
         <div
           className="flex-1 bg-white border border-gray-300 flex-auto min-h-0 overflow-auto"
