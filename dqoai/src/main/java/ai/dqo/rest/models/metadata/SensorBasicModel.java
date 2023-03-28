@@ -22,7 +22,7 @@ public class SensorBasicModel {
     @JsonPropertyDescription("A map of folder-level children sensors.")
     private Map<String, SensorBasicModel> folders;
 
-    @JsonPropertyDescription("Whether the sensor is a Dqo-Home sensor.")
+    @JsonPropertyDescription("Whether the sensor is a User Home sensor.")
     private Boolean custom = null;
 
     public SensorBasicModel() {}
@@ -34,7 +34,7 @@ public class SensorBasicModel {
     /**
      * Adds a child sensor to the folder-level map.
      * @param path     The path of the child sensor.
-     * @param custom Whether the child sensor is Dqo-home or not.
+     * @param custom Whether the child sensor is User Home or not.
      */
     public void addChild(String path, Boolean custom) {
         if (this.folders == null) {
@@ -52,7 +52,7 @@ public class SensorBasicModel {
             child.addChild(childFolder, custom);
         }
         if (child.getFolders() == null && childFolder == null) {
-            child.setCustom(custom);
+            child.setIsCustom(custom);
         }
     }
 
@@ -60,11 +60,11 @@ public class SensorBasicModel {
         return this.folders;
     }
 
-    public Boolean getCustom() {
+    public Boolean isCustom() {
         return this.custom;
     }
 
-    public void setCustom(Boolean custom) {
+    public void setIsCustom(Boolean custom) {
         this.custom = custom;
     }
 }

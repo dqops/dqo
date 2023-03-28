@@ -877,7 +877,7 @@ public class SensorsController {
      * Returns all combined sensor basic model.
      * @return sensor basic model.
      */
-    @GetMapping("/combinedBasic")
+    @GetMapping("/combinedbasic")
     @ApiOperation(value = "getAllSensorsBasic", notes = "Returns a list of combined basic sensors", response = SensorBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
