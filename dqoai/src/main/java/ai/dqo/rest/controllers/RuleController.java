@@ -15,9 +15,13 @@
  */
 package ai.dqo.rest.controllers;
 
+import ai.dqo.core.jobqueue.DqoQueueJobId;
+import ai.dqo.core.jobqueue.PushJobResult;
+import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
 import ai.dqo.metadata.dqohome.DqoHome;
+import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -38,6 +42,7 @@ import reactor.core.publisher.Mono;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 /**
@@ -69,117 +74,41 @@ public class RuleController {
     }
 
     /**
-     * Returns a list of builtin rules.
-     * @return List of rules model.
-     */
-    @GetMapping("/builtin")
-    @ApiOperation(value = "getAllBuiltInRules", notes = "Returns a list of builtin rules", response = RuleBasicModel[].class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel[].class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Flux<RuleBasicModel>> getAllBuiltInRules() {
-
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        RuleDefinitionList ruleDefinitionList = dqoHome.getRules();
-
-        List<RuleDefinitionWrapper> ruleDefinitionWrapperList = ruleDefinitionList.toList();
-
-        Stream<RuleBasicModel> ruleBasicModelStream = ruleDefinitionWrapperList.stream()
-                .map(ruleMappingService::toRuleBasicModel);
-
-        return new ResponseEntity<>(Flux.fromStream(ruleBasicModelStream), HttpStatus.OK);
-    }
-
-    /**
-     * Returns the configuration of a builtin rule.
+     * Returns the configuration of a rule, first checking if it is a custom rule, then checking if it is a built-in rule.
      * @param ruleName Rule name.
      * @return Model of the rule with specific rule name.
      */
-    @GetMapping("/builtin/{ruleName}")
-    @ApiOperation(value = "getBuiltInRule", notes = "Returns a builtin rule", response = RuleBasicModel.class)
+    @GetMapping("/rule/{ruleName}")
+    @ApiOperation(value = "getRule", notes = "Returns a rule definition", response = RuleBasicModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "OK", response = RuleBasicModel.class),
             @ApiResponse(code = 404, message = "Rule name not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<RuleBasicModel>> getBuiltInRule(
+    public ResponseEntity<Mono<RuleBasicModel>> getRule(
             @ApiParam("Rule name") @PathVariable String ruleName
     ) {
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+        RuleDefinitionWrapper userRuleDefinitionWrapper = userHome.getRules().getByObjectName(ruleName, true);
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
+        RuleDefinitionWrapper builtinRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(ruleName, true);
 
-        RuleDefinitionList ruleDefinitionList = dqoHome.getRules();
-        RuleDefinitionWrapper ruleDefinitionWrapper = ruleDefinitionList.getByObjectName(ruleName, true);
-
-        if (ruleDefinitionWrapper == null) {
+        if (userRuleDefinitionWrapper == null && builtinRuleDefinitionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 
-        RuleBasicModel ruleModel = ruleMappingService.toRuleBasicModel(ruleDefinitionWrapper);
+        RuleDefinitionWrapper effectiveRuleDefinition = Optional.of(userRuleDefinitionWrapper).orElse(builtinRuleDefinitionWrapper);
+
+        boolean isCustom = userRuleDefinitionWrapper != null;
+        boolean isBuiltIn = builtinRuleDefinitionWrapper != null;
+        RuleBasicModel ruleModel = ruleMappingService.toRuleBasicModel(effectiveRuleDefinition, isCustom, isBuiltIn);
 
         return new ResponseEntity<>(Mono.just(ruleModel), HttpStatus.OK);
     }
-
-    /**
-     * Returns a list of custom rules.
-     * @return List of rules model.
-     */
-    @GetMapping("/custom")
-    @ApiOperation(value = "getAllCustomInRules", notes = "Returns a list of custom rules", response = RuleBasicModel[].class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel[].class),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Flux<RuleBasicModel>> getAllCustomInRules() {
-
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        RuleDefinitionList ruleDefinitionList = userHome.getRules();
-        Stream<RuleBasicModel> ruleBasicModelStream = ruleDefinitionList.toList().stream()
-                .map(ruleMappingService::toRuleBasicModel);
-
-        return new ResponseEntity<>(Flux.fromStream(ruleBasicModelStream), HttpStatus.OK);
-    }
-
-    /**
-     * Returns the configuration of a custom rule.
-     * @param ruleName Rule name.
-     * @return Model of the rule with specific rule name.
-     */
-    @GetMapping("/custom/{ruleName}")
-    @ApiOperation(value = "getCustomRule", notes = "Returns a custom rule", response = RuleBasicModel.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel.class),
-            @ApiResponse(code = 404, message = "Rule name not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<RuleBasicModel>> getCustomRule(
-            @ApiParam("Rule name") @PathVariable String ruleName
-    ) {
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-
-        RuleDefinitionList ruleDefinitionList = userHome.getRules();
-        RuleDefinitionWrapper ruleDefinitionWrapper = ruleDefinitionList.getByObjectName(ruleName, true);
-
-        if (ruleDefinitionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
-
-        RuleBasicModel ruleModel = ruleMappingService.toRuleBasicModel(ruleDefinitionWrapper);
-
-        return new ResponseEntity<>(Mono.just(ruleModel), HttpStatus.OK);
-    }
-
 
     /**
      * Creates (adds) a new custom rule given sensor information.
@@ -187,7 +116,7 @@ public class RuleController {
      * @param ruleBasicModel List of rule definitions.
      * @return Empty response.
      */
-    @PostMapping("/custom/{ruleName}")
+    @PostMapping("/rule/{ruleName}")
     @ApiOperation(value = "createRule", notes = "Creates (adds) a new custom rule given sensor information.")
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
@@ -223,13 +152,13 @@ public class RuleController {
     }
 
     /**
-     * Updates an existing custom rule.
+     * Updates an existing rule, creating possibly a custom rule.
      * @param ruleName  Rule name.
-     * @param ruleBasicModel List of rule definitions.
+     * @param ruleBasicModel Rule definition model.
      * @return Empty response.
      */
-    @PutMapping("/custom/{ruleName}")
-    @ApiOperation(value = "updateCustomRule", notes = "Updates an existing custom rule")
+    @PutMapping("/rule/{ruleName}")
+    @ApiOperation(value = "updateRule", notes = "Updates an existing rule, making a custom rule definition if it is not present")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Custom rule successfully updated"),
@@ -237,7 +166,7 @@ public class RuleController {
             @ApiResponse(code = 404, message = "Rule not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Mono<?>> updateCustomRule(
+    public ResponseEntity<Mono<?>> updateRule(
             @ApiParam("Rule name") @PathVariable String ruleName,
             @ApiParam("List of rule definitions") @RequestBody RuleBasicModel ruleBasicModel) {
         if (Strings.isNullOrEmpty(ruleName) || ruleBasicModel == null) {
@@ -246,16 +175,26 @@ public class RuleController {
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
+        RuleDefinitionList userRuleDefinitionList = userHome.getRules();
+        RuleDefinitionWrapper existingUserRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(ruleName, true);
 
-        RuleDefinitionList ruleDefinitionList = userHome.getRules();
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+        RuleDefinitionWrapper builtinRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(ruleName, true);
 
-        RuleDefinitionWrapper existingRuleDefinitionWrapper = ruleDefinitionList.getByObjectName(ruleName, true);
-        if (existingRuleDefinitionWrapper == null) {
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.CONFLICT);
+        if (existingUserRuleDefinitionWrapper == null && builtinRuleDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
         }
 
-        existingRuleDefinitionWrapper.setSpec(ruleMappingService.withRuleDefinitionSpec(ruleBasicModel));
-        existingRuleDefinitionWrapper.setRulePythonModuleContent(ruleMappingService.withRuleDefinitionPythonModuleContent(ruleBasicModel));
+        if (existingUserRuleDefinitionWrapper == null) {
+            RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(ruleBasicModel.getRuleName());
+            ruleDefinitionWrapper.setSpec(ruleMappingService.withRuleDefinitionSpec(ruleBasicModel));
+            ruleDefinitionWrapper.setRulePythonModuleContent(ruleMappingService.withRuleDefinitionPythonModuleContent(ruleBasicModel));
+        }
+        else {
+            existingUserRuleDefinitionWrapper.setSpec(ruleMappingService.withRuleDefinitionSpec(ruleBasicModel));
+            existingUserRuleDefinitionWrapper.setRulePythonModuleContent(ruleMappingService.withRuleDefinitionPythonModuleContent(ruleBasicModel));
+        }
 
         userHomeContext.flush();
 
@@ -263,99 +202,41 @@ public class RuleController {
     }
 
     /**
-     * Returns a list of combined rules. If the same rule is defined both as custom (in user home)
-     * and as builtin (in dqo home), we return the custom definition.
-     * @return List of combined rules model.
+     * Deletes a custom rule definition.
+     * @param ruleName  Rule name.
+     * @return Empty response.
      */
-    @GetMapping("/combined")
-    @ApiOperation(value = "getAllCombinedRules", notes = "Returns a list of combined rules", response = RuleBasicModel[].class)
-    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/rule/{ruleName}")
+    @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel[].class),
+            @ApiResponse(code = 200, message = "Custom rule definition successfully deleted", response = DqoQueueJobId.class),
+            @ApiResponse(code = 404, message = "Custom rule not found"),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
-    public ResponseEntity<Flux<RuleBasicModel>> getAllCombinedRules() {
-
+    public ResponseEntity<Mono<?>> deleteRule(
+            @ApiParam("Rule name") @PathVariable String ruleName) {
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
-        RuleDefinitionList customRuleDefinitionList = userHome.getRules();
+        RuleDefinitionList userRuleDefinitionList = userHome.getRules();
+        RuleDefinitionWrapper existingUserRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(ruleName, true);
 
-        List<RuleDefinitionWrapper> customRuleDefinitionWrapperList = customRuleDefinitionList.toList();
-
-
-        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-        DqoHome dqoHome = dqoHomeContext.getDqoHome();
-
-        RuleDefinitionList ruleDefinitionList = dqoHome.getRules();
-
-        List<RuleDefinitionWrapper> ruleDefinitionWrapperList = ruleDefinitionList.toList();
-
-
-        Map<String, RuleDefinitionWrapper> ruleDefinitionMap = new HashMap<>();
-
-
-        for (RuleDefinitionWrapper ruleDefinitionWrapper: customRuleDefinitionWrapperList) {
-            ruleDefinitionMap.put(ruleDefinitionWrapper.getRuleName(), ruleDefinitionWrapper);
+        if (existingUserRuleDefinitionWrapper == null) {
+            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        for (RuleDefinitionWrapper ruleDefinitionWrapper: ruleDefinitionWrapperList) {
-            if(!ruleDefinitionMap.containsKey(ruleDefinitionWrapper.getRuleName())){
-                ruleDefinitionMap.put(ruleDefinitionWrapper.getRuleName(), ruleDefinitionWrapper);
-            }
-        }
+        userRuleDefinitionList.remove(ruleName);
+        userHomeContext.flush();
 
-        Stream<RuleBasicModel> ruleModelStream = ruleDefinitionMap.values().stream().map(ruleMappingService::toRuleBasicModel);
-
-
-        return new ResponseEntity<>(Flux.fromStream(ruleModelStream), HttpStatus.OK);
+        return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204
     }
-
-    /**
-     * Returns a combined rule. Check if the rule definition exists in User home.
-     * If not exists, find rule definition in DQO Home.
-     * @return Combined rule model.
-     */
-    @GetMapping("/combined/{ruleName}")
-    @ApiOperation(value = "getCombinedRule", notes = "Returns a list of combined rules", response = RuleBasicModel.class)
-    @ResponseStatus(HttpStatus.OK)
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "OK", response = RuleBasicModel.class),
-            @ApiResponse(code = 404, message = "Rule name not found"),
-            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
-    })
-    public ResponseEntity<Mono<RuleBasicModel>> getCombinedRule(
-            @ApiParam("Rule name") @PathVariable String ruleName
-    ) {
-
-        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
-        UserHome userHome = userHomeContext.getUserHome();
-        RuleDefinitionList customRuleDefinitionList = userHome.getRules();
-
-        RuleDefinitionWrapper ruleDefinitionWrapper = customRuleDefinitionList.getByObjectName(ruleName, true);
-
-        if(ruleDefinitionWrapper == null){
-            DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
-            DqoHome dqoHome = dqoHomeContext.getDqoHome();
-            RuleDefinitionList ruleDefinitionList = dqoHome.getRules();
-            ruleDefinitionWrapper =  ruleDefinitionList.getByObjectName(ruleName, true);
-        }
-
-        if(ruleDefinitionWrapper == null){
-            return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
-        }
-
-        RuleBasicModel ruleModel = ruleMappingService.toRuleBasicModel(ruleDefinitionWrapper);
-
-        return new ResponseEntity<>(Mono.just(ruleModel), HttpStatus.OK);
-    }
-
 
     /**
      * Returns all combined rule basic tree model.
      * @return rule basic tree model.
      */
-    @GetMapping("/combinedbasictree")
+    @GetMapping("/tree")
     @ApiOperation(value = "getAllRulesBasicTree", notes = "Returns a list of combined basic tree rules", response = RuleBasicTreeModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -387,5 +268,4 @@ public class RuleController {
 
         return new ResponseEntity<>(Mono.just(ruleBasicTreeModel), HttpStatus.OK);
     }
-
 }

@@ -49,7 +49,9 @@ public interface RuleMappingService {
     /**
      * Returns the rule basic model object.
      * @param ruleDefinitionWrapper Rule basic model.
+     * @param custom This rule has a custom (user) definition.
+     * @param builtIn This rule is provided as part of DQO.
      * @return rule basic model object.
      */
-    RuleBasicModel toRuleBasicModel(RuleDefinitionWrapper ruleDefinitionWrapper);
+    RuleBasicModel toRuleBasicModel(RuleDefinitionWrapper ruleDefinitionWrapper, boolean custom, boolean builtIn);
 }

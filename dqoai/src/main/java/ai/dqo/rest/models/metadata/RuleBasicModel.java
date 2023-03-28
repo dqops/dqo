@@ -64,6 +64,12 @@ public class RuleBasicModel {
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, String> parameters;
 
+    @JsonPropertyDescription("This rule has a custom (user level) definition.")
+    public boolean custom;
+
+    @JsonPropertyDescription("This rule has is a built-in rule.")
+    public boolean builtIn;
+
     public RuleBasicModel withRuleName(String ruleName) {
         this.ruleName = ruleName;
         return this;
