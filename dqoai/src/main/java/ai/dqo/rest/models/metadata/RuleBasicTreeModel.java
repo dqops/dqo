@@ -26,30 +26,30 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Sensor basic model that is returned by the REST API.
+ * Rule basic tree model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "SensorBasicModel", description = "Sensor basic model")
-public class SensorBasicModel {
+@ApiModel(value = "RuleBasicTreeModel", description = "Rule basic tree model")
+public class RuleBasicTreeModel {
 
-    @JsonPropertyDescription("A map of folder-level children sensors.")
-    private Map<String, SensorBasicModel> folders;
+    @JsonPropertyDescription("A map of folder-level children rules.")
+    private Map<String, RuleBasicTreeModel> folders;
 
-    @JsonPropertyDescription("Whether the sensor is a User Home sensor.")
+    @JsonPropertyDescription("Whether the rule is a User Home rule.")
     private Boolean custom = null;
 
-    public SensorBasicModel() {}
+    public RuleBasicTreeModel() {}
 
-    public SensorBasicModel(Map<String, SensorBasicModel> folders) {
+    public RuleBasicTreeModel(Map<String, RuleBasicTreeModel> folders, Boolean custom) {
         this.folders = folders;
     }
 
     /**
-     * Adds a child sensor to the folder-level map.
-     * @param path     The path of the child sensor.
-     * @param custom Whether the child sensor is User Home or not.
+     * Adds a child rule to the folder-level map.
+     * @param path     The path of the child rule.
+     * @param custom Whether the child rule is User Home or not.
      */
     public void addChild(String path, Boolean custom) {
         if (this.folders == null) {
@@ -58,9 +58,9 @@ public class SensorBasicModel {
         String[] parts = path.split("/", 2);
         String name = parts[0];
         String childFolder = parts.length > 1 ? parts[1] : null;
-        SensorBasicModel child = this.folders.get(name);
+        RuleBasicTreeModel child = this.folders.get(name);
         if (child == null) {
-            child = new SensorBasicModel();
+            child = new RuleBasicTreeModel();
             this.folders.put(name, child);
         }
         if (childFolder != null) {
@@ -71,12 +71,16 @@ public class SensorBasicModel {
         }
     }
 
-    public Map<String, SensorBasicModel> getFolders() {
-        return this.folders;
+    public Map<String, RuleBasicTreeModel> getFolders() {
+        return folders;
     }
 
     public Boolean getCustom() {
-        return this.custom;
+        return custom;
+    }
+
+    public void setFolders(Map<String, RuleBasicTreeModel> folders) {
+        this.folders = folders;
     }
 
     public void setCustom(Boolean custom) {
