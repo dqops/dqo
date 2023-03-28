@@ -58,8 +58,7 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
-
-
+            put("consistency", o -> o.consistency);
         }
     };
 
@@ -112,6 +111,11 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnProfilingAccuracyChecksSpec accuracy;
+
+    @JsonPropertyDescription("Configuration of consistency checks on a column level.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnProfilingConsistencyChecksSpec consistency;
 
     /**
      * Returns the nulls check configuration on a column level.
@@ -291,6 +295,24 @@ public class ColumnProfilingCheckCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
         this.accuracy = accuracy;
         this.propagateHierarchyIdToField(accuracy, "accuracy");
+    }
+
+    /**
+     * Returns the consistency check configuration on a column level.
+     * @return Consistency check configuration.
+     */
+    public ColumnProfilingConsistencyChecksSpec getConsistency() {
+        return consistency;
+    }
+
+    /**
+     * Sets the consistency check configuration on a column level.
+     * @param consistency New consistency checks configuration.
+     */
+    public void setConsistency(ColumnProfilingConsistencyChecksSpec consistency) {
+        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
+        this.consistency = consistency;
+        this.propagateHierarchyIdToField(consistency, "consistency");
     }
 
     /**
