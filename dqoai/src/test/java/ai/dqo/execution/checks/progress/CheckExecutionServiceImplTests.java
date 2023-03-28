@@ -61,6 +61,7 @@ import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
+import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
@@ -108,7 +109,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         ColumnProfilingCheckCategoriesSpec columnProfilingCheckCategoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         ColumnProfilingNullsChecksSpec columnProfilingNullsChecksSpec = new ColumnProfilingNullsChecksSpec();
         ColumnNullsCountCheckSpec columnNullsCountCheckSpec = new ColumnNullsCountCheckSpec();
-        columnNullsCountCheckSpec.setError(new MaxCountRule0ParametersSpec());
+        columnNullsCountCheckSpec.setError(new MaxCountRule10ParametersSpec());
         columnProfilingNullsChecksSpec.setNullsCount(columnNullsCountCheckSpec);
         columnProfilingCheckCategoriesSpec.setNulls(columnProfilingNullsChecksSpec);
         columnSpec.setChecks(columnProfilingCheckCategoriesSpec);

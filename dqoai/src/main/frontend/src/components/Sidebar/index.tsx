@@ -49,7 +49,7 @@ const Sidebar = () => {
       className="fixed top-16 left-0 border-r border-gray-300 h-screen overflow-y-auto overflow-x-hidden flex flex-col bg-white py-4 z-50"
       ref={sidebarRef}
       onMouseDown={(e) => e.preventDefault()}
-      style={{ width: sidebarWidth }}
+      style={{ width: sidebarWidth, maxHeight: 'calc(100vh - 64px)' }}
     >
       <div className="px-4 flex mb-0">
         {sourceRoute === 'sources' ? (

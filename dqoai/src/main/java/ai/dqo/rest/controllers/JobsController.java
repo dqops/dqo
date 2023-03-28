@@ -16,6 +16,8 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.jobs.SynchronizeMultipleFoldersJobModel;
 import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
 import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJobParameters;
 import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderParameters;
@@ -47,7 +49,6 @@ import ai.dqo.execution.statistics.RunStatisticsCollectionQueueJobParameters;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListenerProvider;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionReportingMode;
-import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
@@ -59,6 +60,7 @@ import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -285,17 +287,53 @@ public class JobsController {
      * @return Job summary response with the identity of the started jobs.
      */
     @PostMapping("/synchronize")
-    @ApiOperation(value = "synchronizeFolders", notes = "Starts a file synchronization job that will synchronize files from selected DQO User home folders to the DQO Cloud. " +
+    @ApiOperation(value = "synchronizeFolders", notes = "Starts multiple file synchronization jobs that will synchronize files from selected DQO User home folders to the DQO Cloud. " +
             "The the default synchronization mode is a full synchronization (upload local files, download new files from the cloud).", response = DqoQueueJobId[].class)
     @ResponseStatus(HttpStatus.CREATED)
     @ApiResponses(value = {
-            @ApiResponse(code = 201, message = "New jobs that will synchronize a folder were added to the queue", response = DqoQueueJobId[].class),
+            @ApiResponse(code = 201, message = "New jobs that will synchronize folders were added to the queue", response = DqoQueueJobId[].class),
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Flux<DqoQueueJobId>> synchronizeFolders(
-            @ApiParam("Synchronize folder job parameters, each parameter identifies a single folder synchronization job for one folder")
-            @RequestBody SynchronizeRootFolderParameters[] synchronizeFolderParameters) {
-        Flux<DqoQueueJobId> dqoQueueJobIdFlux = Flux.fromArray(synchronizeFolderParameters)
+            @ApiParam("Selection of folders that should be synchronized to the DQO Cloud")
+            @RequestBody SynchronizeMultipleFoldersJobModel synchronizeFolderParameters) {
+        List<SynchronizeRootFolderParameters> jobParametersList = new ArrayList<>();
+        if (synchronizeFolderParameters.isSources()) {
+            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.sources,
+                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
+        }
+
+        if (synchronizeFolderParameters.isSensors()) {
+            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.sensors,
+                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
+        }
+
+        if (synchronizeFolderParameters.isRules()) {
+            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.rules,
+                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
+        }
+
+        if (synchronizeFolderParameters.isDataSensorReadouts()) {
+            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_sensor_readouts,
+                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
+        }
+
+        if (synchronizeFolderParameters.isDataCheckResults()) {
+            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_check_results,
+                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
+        }
+
+        if (synchronizeFolderParameters.isDataStatistics()) {
+            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_statistics,
+                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
+        }
+
+        if (synchronizeFolderParameters.isDataErrors()) {
+            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.data_errors,
+                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
+        }
+
+        Flux<DqoQueueJobId> dqoQueueJobIdFlux = Flux.fromIterable(jobParametersList)
                 .flatMap(synchronizeFolderParameter -> {
                     SynchronizeRootFolderDqoQueueJob synchronizeFolderJob = this.dqoQueueJobFactory.createSynchronizeRootFolderJob();
                     SynchronizeRootFolderDqoQueueJobParameters jobParameters = new SynchronizeRootFolderDqoQueueJobParameters(synchronizeFolderParameter,

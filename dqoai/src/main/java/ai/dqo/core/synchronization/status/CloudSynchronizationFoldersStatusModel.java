@@ -60,11 +60,11 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
     private FolderSynchronizationStatus dataSensorReadouts = FolderSynchronizationStatus.unchanged; // when using snake case, the enums in typescript/swagger will use _, making this enum the same as "data_sensor_readouts" in DqoRoot
 
     /**
-     * The synchronization status of the ".data/rule_results" folder.
+     * The synchronization status of the ".data/check_results" folder.
      */
-    @JsonPropertyDescription("The synchronization status of the \".data/rule_results\" folder.")
+    @JsonPropertyDescription("The synchronization status of the \".data/check_results\" folder.")
     @Setter(AccessLevel.NONE)
-    private FolderSynchronizationStatus dataRuleResults = FolderSynchronizationStatus.unchanged;
+    private FolderSynchronizationStatus dataCheckResults = FolderSynchronizationStatus.unchanged;
 
     /**
      * The synchronization status of the ".data/statistics" folder.
@@ -96,7 +96,7 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
             case data_sensor_readouts:
                 return dataSensorReadouts;
             case data_check_results:
-                return dataRuleResults;
+                return dataCheckResults;
             case data_errors:
                 return dataErrors;
             case data_statistics:
@@ -129,7 +129,7 @@ public class CloudSynchronizationFoldersStatusModel implements Cloneable {
                 this.dataSensorReadouts = newStatus;
                 return;
             case data_check_results:
-                this.dataRuleResults = newStatus;
+                this.dataCheckResults = newStatus;
                 return;
             case data_errors:
                 this.dataErrors = newStatus;

@@ -15,7 +15,6 @@
  */
 package ai.dqo.rules.comparison;
 
-import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.AbstractRuleParametersSpec;
@@ -28,58 +27,37 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality check readout is greater or equal a minimum value.
+ * Data quality rule that verifies if a data quality check (sensor) readout is less or equal a maximum value.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class MinCountRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<MinCountRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MaxCountRule15ParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MaxCountRule15ParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
-    @JsonPropertyDescription("Minimum accepted value for the actual_value returned by the sensor (inclusive).")
-    @SampleValues(values = "5")
-    private Long minCount;
+    // TODO: Constructor setting maxCount, like in MinCountRuleParametersSpec
+
+    @JsonPropertyDescription("Maximum accepted value for the actual_value returned by the sensor (inclusive).")
+    private Long maxCount = 15L;
 
     /**
-     * Default constructor, the minimum accepted value is 0.
+     * Returns a maximum value for a data quality check readout, for example a maximum row count.
+     * @return Maximum value for a data quality check readout.
      */
-    public MinCountRuleParametersSpec() {
+    public Long getMaxCount() {
+        return maxCount;
     }
 
     /**
-     * Creates a rule with a given value.
-     * @param minCount Minimum accepted value.
+     * Sets a maximum data quality check readout that is accepted, for example a maximum row count.
+     * @param maxCount Maximum value that is accepted.
      */
-    public MinCountRuleParametersSpec(Long minCount) {
-        this.minCount = minCount;
-    }
-
-    /**
-     * Creates a rule with a given value.
-     * @param minCount Minimum accepted value.
-     */
-    public MinCountRuleParametersSpec(int minCount) {
-        this.minCount = (long)minCount;
-    }
-
-    /**
-     * Minimum value for a data quality check readout, for example a minimum row count.
-     * @return Minimum value for a data quality check readout.
-     */
-    public Long getMinCount() {
-        return minCount;
-    }
-
-    /**
-     * Changes the minimum value (threshold) for a data quality readout.
-     * @param minCount Minimum value.
-     */
-    public void setMinCount(Long minCount) {
-        this.setDirtyIf(!Objects.equals(this.minCount, minCount));
-        this.minCount = minCount;
+    public void setMaxCount(Long maxCount) {
+        this.setDirtyIf(!Objects.equals(this.maxCount, maxCount));
+        this.maxCount = maxCount;
     }
 
     /**
@@ -99,6 +77,6 @@ public class MinCountRuleParametersSpec extends AbstractRuleParametersSpec {
      */
     @Override
     public String getRuleDefinitionName() {
-        return "comparison/min_count";
+        return "comparison/max_count";
     }
 }
