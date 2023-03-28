@@ -52,7 +52,7 @@ public class SensorBasicModel {
             child.addChild(childFolder, custom);
         }
         if (child.getFolders() == null && childFolder == null) {
-            child.setIsCustom(custom);
+            child.setCustom(custom);
         }
     }
 
@@ -60,11 +60,11 @@ public class SensorBasicModel {
         return this.folders;
     }
 
-    public Boolean isCustom() {
+    public Boolean getCustom() {
         return this.custom;
     }
 
-    public void setIsCustom(Boolean custom) {
+    public void setCustom(Boolean custom) {
         this.custom = custom;
     }
 }
