@@ -30,7 +30,7 @@ import lombok.Data;
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "SensorBasicModel", description = "Sensor basic model")
+@ApiModel(value = "SensorModel", description = "Sensor model")
 public class SensorModel {
     @JsonPropertyDescription("Sensor name")
     private String sensorName;
