@@ -37,7 +37,7 @@ public class ColumnConsistencyDateMatchFormatPercentSensorParametersSpec extends
     };
 
     @JsonPropertyDescription("Desired date format. Sensor will try to parse the column records and cast the data using this format.")
-    private ConsistencyBuiltInDateFormats dateFormats = ConsistencyBuiltInDateFormats.ISO8601;
+    private ConsistencyBuiltInDateFormats dateFormats = ConsistencyBuiltInDateFormats.DaySlashMonthSlashYear;
 
     /**
      * Returns a desired format to parse the date.
