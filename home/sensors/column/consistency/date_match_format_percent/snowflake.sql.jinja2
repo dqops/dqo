@@ -1,0 +1,29 @@
+{% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+
+{% macro render_date_formats(date_formats) %}
+    {%- if date_formats == 'MM/DD/YYYY'-%}
+        '^(?:(?:31(\/|-|\.)(?:0?[13578]|1[02]))\1|(?:(?:29|30)(\/|-|\.)(?:0?[13-9]|1[0-2])\2))(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+    {%- elif date_formats == 'MM-DD-YYYY' -%}
+        '^(?:29(\/|-|\.)0?2\3(?:(?:(?:1[6-9]|[2-9]\d)?(?:0[48]|[2468][048]|[13579][26])|(?:(?:16|[2468][048]|[3579][26])00))))$'
+    {%- elif date_formats == 'MM.DD.YYYY' -%}
+        '^(?:0?[1-9]|1\d|2[0-8])(\/|-|\.)(?:(?:0?[1-9])|(?:1[0-2]))\4(?:(?:1[6-9]|[2-9]\d)?\d{2})$'
+    {%- endif -%}
+{% endmacro -%}
+
+SELECT
+    CASE
+        WHEN COUNT({{ lib.render_target_column('analyzed_table') }}) = 0 THEN NULL
+        ELSE 100.0 * SUM(
+            CASE
+                WHEN REGEXP_LIKE({{ lib.render_target_column('analyzed_table') }}, {{render_date_formats(parameters.date_formats)}})
+                    THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*)
+    END AS actual_value
+    {{- lib.render_data_stream_projections('analyzed_table') }}
+    {{- lib.render_time_dimension_projection('analyzed_table') }}
+FROM {{ lib.render_target_table() }} AS analyzed_table
+{{- lib.render_where_clause() -}}
+{{- lib.render_group_by() -}}
+{{- lib.render_order_by() -}}

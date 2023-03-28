@@ -29,6 +29,7 @@ import ai.dqo.checks.column.partitioned.strings.ColumnStringsDailyPartitionedChe
 import ai.dqo.checks.column.partitioned.uniqueness.ColumnUniquenessDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityDailyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.accuracy.ColumnAccuracyDailyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.consistency.ColumnConsistencyDailyPartitionedChecksSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -67,8 +68,7 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
-
-
+            put("consistency", o -> o.consistency);
         }
     };
 
@@ -121,6 +121,11 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyDailyPartitionedChecksSpec accuracy;
+
+    @JsonPropertyDescription("Daily partitioned checks for consistency in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnConsistencyDailyPartitionedChecksSpec consistency;
 
     /**
      * Returns the container of daily null data quality partitioned checks.
@@ -300,6 +305,24 @@ public class ColumnDailyPartitionedCheckCategoriesSpec extends AbstractRootCheck
         this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
         this.accuracy = accuracy;
         propagateHierarchyIdToField(accuracy, "accuracy");
+    }
+
+    /**
+     * Returns a container of custom accuracy checks on a column.
+     * @return Custom accuracy checks.
+     */
+    public ColumnConsistencyDailyPartitionedChecksSpec getConsistency() {
+        return consistency;
+    }
+
+    /**
+     * Sets a reference to a container of custom consistency checks.
+     * @param consistency Custom consistency checks.
+     */
+    public void setConsistency(ColumnConsistencyDailyPartitionedChecksSpec consistency) {
+        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
+        this.consistency = consistency;
+        propagateHierarchyIdToField(consistency, "consistency");
     }
 
     /**

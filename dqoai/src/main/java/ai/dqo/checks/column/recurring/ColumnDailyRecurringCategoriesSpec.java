@@ -29,6 +29,7 @@ import ai.dqo.checks.column.recurring.sql.ColumnSqlDailyRecurringSpec;
 import ai.dqo.checks.column.recurring.strings.ColumnStringsDailyRecurringSpec;
 import ai.dqo.checks.column.recurring.uniqueness.ColumnUniquenessDailyRecurringSpec;
 import ai.dqo.checks.column.recurring.integrity.ColumnIntegrityDailyRecurringSpec;
+import ai.dqo.checks.column.recurring.consistency.ColumnConsistencyDailyRecurringSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -67,6 +68,7 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
            put("bool", o -> o.bool);
            put("integrity", o -> o.integrity);
            put("accuracy", o -> o.accuracy);
+           put("consistency", o -> o.consistency);
 
         }
     };
@@ -120,6 +122,11 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyDailyRecurringSpec accuracy;
+
+    @JsonPropertyDescription("Daily recurring of consistency in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnConsistencyDailyRecurringSpec consistency;
 
     /**
      * Returns the container of recurring for standard data quality checks.
@@ -299,6 +306,24 @@ public class ColumnDailyRecurringCategoriesSpec extends AbstractRootChecksContai
         this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
         this.accuracy = accuracy;
         this.propagateHierarchyIdToField(accuracy, "accuracy");
+    }
+
+    /**
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
+     */
+    public ColumnConsistencyDailyRecurringSpec getConsistency() {
+        return consistency;
+    }
+
+    /**
+     * Sets the container of consistency data quality checks (recurring).
+     * @param consistency New consistency checks.
+     */
+    public void setConsistency(ColumnConsistencyDailyRecurringSpec consistency) {
+        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
+        this.consistency = consistency;
+        this.propagateHierarchyIdToField(consistency, "consistency");
     }
 
     /**
