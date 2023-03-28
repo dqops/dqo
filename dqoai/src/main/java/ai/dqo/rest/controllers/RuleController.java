@@ -24,6 +24,7 @@ import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.RuleBasicModel;
+import ai.dqo.rest.models.metadata.RuleBasicTreeModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.services.rule.RuleMappingService;
 import com.google.common.base.Strings;
@@ -348,4 +349,43 @@ public class RuleController {
 
         return new ResponseEntity<>(Mono.just(ruleModel), HttpStatus.OK);
     }
+
+
+    /**
+     * Returns all combined rule basic tree model.
+     * @return rule basic tree model.
+     */
+    @GetMapping("/combinedbasictree")
+    @ApiOperation(value = "getAllRulesBasicTree", notes = "Returns a list of combined basic tree rules", response = RuleBasicTreeModel.class)
+    @ResponseStatus(HttpStatus.OK)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "OK", response = RuleBasicTreeModel.class),
+            @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class )
+    })
+    public ResponseEntity<Mono<RuleBasicTreeModel>> getAllRulesBasicTree() {
+
+        RuleBasicTreeModel ruleBasicTreeModel = new RuleBasicTreeModel();
+
+        DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
+        DqoHome dqoHome = dqoHomeContext.getDqoHome();
+        List<RuleDefinitionWrapper> ruleDefinitionWrapperListDqoHome = dqoHome.getRules().toList();
+
+        for (RuleDefinitionWrapper ruleDefinitionWrapperDqoHome : ruleDefinitionWrapperListDqoHome) {
+            String ruleNameDqoHome = ruleDefinitionWrapperDqoHome.getRuleName();
+            ruleBasicTreeModel.addChild(ruleNameDqoHome, false);
+        }
+
+        UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
+        UserHome userHome = userHomeContext.getUserHome();
+
+        List<RuleDefinitionWrapper> ruleDefinitionWrapperListUserHome = userHome.getRules().toList();
+
+        for (RuleDefinitionWrapper ruleDefinitionWrapperUserHome : ruleDefinitionWrapperListUserHome) {
+            String ruleNameUserHome = ruleDefinitionWrapperUserHome.getRuleName();
+            ruleBasicTreeModel.addChild(ruleNameUserHome, true);
+        }
+
+        return new ResponseEntity<>(Mono.just(ruleBasicTreeModel), HttpStatus.OK);
+    }
+
 }
