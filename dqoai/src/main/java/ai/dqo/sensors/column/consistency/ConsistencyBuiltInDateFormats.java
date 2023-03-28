@@ -21,12 +21,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  * Predefined date formats.
  */
 public enum ConsistencyBuiltInDateFormats {
-    @JsonProperty("YYYY-MM-DD")
-    ISO8601,
+    @JsonProperty("DD/MM/YYYY")
+    DaySlashMonthSlashYear,
 
-    @JsonProperty("MM-DD-YYYY")
-    MonthDashDayDashYear,
+    @JsonProperty("DD-MM-YYYY")
+    DayDashMonthDashYear,
 
-    @JsonProperty("MM.DD.YYYY")
-    MonthDotDayDotYear
+    @JsonProperty("DD.MM.YYYY")
+    DayDotMonthDotYear
 }
