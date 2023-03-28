@@ -130,6 +130,10 @@ const ConnectionPage = () => {
   }, [checkTypes])
 
   useEffect(() => {
+    if (checkTypes === CheckTypes.SOURCES) {
+      return;
+    }
+
     if (import_schema === 'true') {
       setTabs([
         {
@@ -140,7 +144,7 @@ const ConnectionPage = () => {
     } else {
       setTabs(initCheckTabs)
     }
-  }, [import_schema]);
+  }, [import_schema, checkTypes]);
 
   return (
     <ConnectionLayout>
