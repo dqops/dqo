@@ -75,8 +75,8 @@ public class DataRepairCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-st", "--statistics"}, description = "Repair the statistics")
     private boolean repairStatistics = false;
 
-    @CommandLine.Option(names = {"-rr", "--rule-results"}, description = "Repair the rule results")
-    private boolean repairRuleResults = false;
+    @CommandLine.Option(names = {"-cr", "--check-results"}, description = "Repair the check results")
+    private boolean repairCheckResults = false;
 
     @CommandLine.Option(names = {"-sr", "--sensor-readouts"}, description = "Repair the sensor readouts")
     private boolean repairSensorReadouts = false;
@@ -97,16 +97,16 @@ public class DataRepairCliCommand extends BaseCommand implements ICommand {
                 this.table
         );
 
-        if (!this.repairErrors && !this.repairStatistics && !this.repairRuleResults && !this.repairSensorReadouts) {
+        if (!this.repairErrors && !this.repairStatistics && !this.repairCheckResults && !this.repairSensorReadouts) {
             // Repair everything by default
             repairStoredDataQueueJobParameters.setRepairErrors(true);
             repairStoredDataQueueJobParameters.setRepairStatistics(true);
-            repairStoredDataQueueJobParameters.setRepairRuleResults(true);
+            repairStoredDataQueueJobParameters.setRepairCheckResults(true);
             repairStoredDataQueueJobParameters.setRepairSensorReadouts(true);
         } else {
             repairStoredDataQueueJobParameters.setRepairErrors(this.repairErrors);
             repairStoredDataQueueJobParameters.setRepairStatistics(this.repairStatistics);
-            repairStoredDataQueueJobParameters.setRepairRuleResults(this.repairRuleResults);
+            repairStoredDataQueueJobParameters.setRepairCheckResults(this.repairCheckResults);
             repairStoredDataQueueJobParameters.setRepairSensorReadouts(this.repairSensorReadouts);
         }
 

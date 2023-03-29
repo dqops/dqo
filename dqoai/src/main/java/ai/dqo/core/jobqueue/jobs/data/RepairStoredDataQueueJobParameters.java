@@ -31,7 +31,7 @@ public class RepairStoredDataQueueJobParameters implements Cloneable {
 
     private boolean repairErrors = false;
     private boolean repairStatistics = false;
-    private boolean repairRuleResults = false;
+    private boolean repairCheckResults = false;
     private boolean repairSensorReadouts = false;
 
     public RepairStoredDataQueueJobParameters() {
@@ -58,7 +58,7 @@ public class RepairStoredDataQueueJobParameters implements Cloneable {
             setConnectionName(tableSearchFilters.getConnectionName());
             setSchemaTableName(tableSearchFilters.getSchemaTableName());
 
-            setRepairRuleResults(true);
+            setRepairCheckResults(true);
             setRepairErrors(true);
             setRepairStatistics(true);
             setRepairSensorReadouts(true);

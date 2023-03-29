@@ -72,7 +72,7 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
     @CommandLine.Option(names = {"-st", "--statistics"}, description = "Delete the statistics")
     private boolean deleteStatistics = false;
 
-    @CommandLine.Option(names = {"-rr", "--check-results"}, description = "Delete the check results")
+    @CommandLine.Option(names = {"-cr", "--check-results"}, description = "Delete the check results")
     private boolean deleteCheckResults = false;
 
     @CommandLine.Option(names = {"-sr", "--sensor-readouts"}, description = "Delete the sensor readouts")

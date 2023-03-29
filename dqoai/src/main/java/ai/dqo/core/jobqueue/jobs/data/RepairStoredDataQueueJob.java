@@ -82,7 +82,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
         if (this.repairParameters.isRepairStatistics()) {
             this.loadMonthlyPartitions(StatisticsSnapshot.createStatisticsStorageSettings());
         }
-        if (this.repairParameters.isRepairRuleResults()) {
+        if (this.repairParameters.isRepairCheckResults()) {
             this.loadMonthlyPartitions(CheckResultsSnapshot.createCheckResultsStorageSettings());
         }
         if (this.repairParameters.isRepairSensorReadouts()) {
