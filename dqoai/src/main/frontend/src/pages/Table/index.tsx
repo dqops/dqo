@@ -17,6 +17,7 @@ import TableLabelsView from "../../components/Connection/TableView/TableLabelsVi
 import TableDataStream from "../../components/Connection/TableView/TableDataStream";
 import TimestampsView from "../../components/Connection/TableView/TimestampsView";
 import { findTreeNode } from "../../utils/tree";
+import clsx from "clsx";
 
 const initTabs = [
   {
@@ -45,9 +46,41 @@ const initTabs = [
   }
 ];
 
+type NavigationMenu = {
+  label: string;
+  value: string;
+}
+
+const navigations: NavigationMenu[] = [
+  {
+    label: 'Table metadata',
+    value: CheckTypes.SOURCES
+  },
+  {
+    label: 'Advanced profiling',
+    value: CheckTypes.PROFILING
+  },
+  {
+    label: 'Recurring checks',
+    value: CheckTypes.RECURRING
+  },
+  {
+    label: 'Partition checks',
+    value: CheckTypes.PARTITIONED
+  },
+];
+
 const TablePage = () => {
   const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: string } = useParams();
-  const { activeTab: pageTab, tabMap, setTabMap, treeData } = useTree();
+  const {
+    activeTab: pageTab,
+    tabMap,
+    setTabMap,
+    treeData,
+    selectedTreeNode,
+    switchTab,
+    changeActiveTab
+  } = useTree();
   const history = useHistory();
   const [tabs, setTabs] = useState(initTabs);
   const {
@@ -69,6 +102,7 @@ const TablePage = () => {
     () => !isRecurringOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
     [isRecurringOnly, isPartitionChecksOnly, isProfilingChecksOnly]
   );
+
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab));
     setTabMap({
@@ -191,6 +225,22 @@ const TablePage = () => {
     return ''
   }, [isProfilingChecksOnly, isRecurringOnly, isPartitionChecksOnly, activeTab]);
 
+  const activeIndex = useMemo(() => {
+    return navigations.findIndex((item) => item.value === checkTypes);
+  }, [checkTypes]);
+  const onChangeNavigation = async (item: NavigationMenu) => {
+    if (item.value === CheckTypes.SOURCES) {
+      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'))
+    } else if (item.value === CheckTypes.PROFILING) {
+      console.log('')
+      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
+    } else if (item.value === CheckTypes.RECURRING) {
+      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
+    } else if (item.value === CheckTypes.PARTITIONED) {
+      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
+    }
+  };
+
   return (
     <ConnectionLayout>
       {!activeNode ? (
@@ -202,6 +252,19 @@ const TablePage = () => {
               <SvgIcon name="table" className="w-5 h-5 shrink-0" />
               <div className="text-xl font-semibold truncate">{`${description}${connection}.${schema}.${table}`}</div>
             </div>
+          </div>
+          <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
+            {navigations.map((item, index) => (
+              <div
+                className={clsx("flex items-center cursor-pointer w-70", activeIndex === index ? "font-bold" : "")}
+                key={item.value}
+                onClick={() => onChangeNavigation(item)}
+              >
+                {activeIndex > index ? <SvgIcon name="chevron-left" className="w-3 mr-2" /> : ''}
+                <span>{item.label}</span>
+                {activeIndex < index ? <SvgIcon name="chevron-right" className="w-6 ml-2" /> : ''}
+              </div>
+            ))}
           </div>
           {isProfilingChecksOnly && (
             <ProfilingView />

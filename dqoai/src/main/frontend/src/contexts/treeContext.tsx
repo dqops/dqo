@@ -64,6 +64,7 @@ function TreeProvider(props: any) {
   const activeTab = activeTabMaps[sourceRoute];
 
   const [sidebarWidth, setSidebarWidth] = useState(280);
+  const [selectedTreeNode, setSelectedTreeNode] = useState<CustomTreeNode>();
   const history = useHistory();
 
   const getConnections = async () => {
@@ -830,8 +831,10 @@ function TreeProvider(props: any) {
     history.push(path);
   }
 
-  const switchTab = (node: CustomTreeNode) => {
+  const switchTab = async (node: CustomTreeNode, sourceRoute: string) => {
     if (!node) return;
+
+    setSelectedTreeNode(node);
     const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
       pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || defaultConnectionTab));
@@ -853,6 +856,7 @@ function TreeProvider(props: any) {
     } else if ([TREE_LEVEL.TABLE_CHECKS, TREE_LEVEL.TABLE_DAILY_CHECKS, TREE_LEVEL.TABLE_MONTHLY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_DAILY_CHECKS, TREE_LEVEL.TABLE_PARTITIONED_MONTHLY_CHECKS].includes(node.level)) {
       const tableNode = findTreeNode(treeData, node.parentId ?? '');
       const schemaNode = findTreeNode(treeData, tableNode?.parentId ?? '');
+
       const connectionNode = findTreeNode(treeData, schemaNode?.parentId ?? '');
 
       if (node.level === TREE_LEVEL.TABLE_CHECKS) {
@@ -952,7 +956,7 @@ function TreeProvider(props: any) {
     if (_activeTab) {
       const node = findTreeNode(treeData, _activeTab);
       if (node) {
-        switchTab(node);
+        switchTab(node, sourceRoute);
       }
     }
   }, [sourceRoute]);
@@ -1033,6 +1037,8 @@ function TreeProvider(props: any) {
         deleteStoredData,
         sourceRoute,
         deleteData,
+        selectedTreeNode,
+        setSelectedTreeNode,
       }}
       {...props}
     />

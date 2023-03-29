@@ -1,34 +1,45 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import MainLayout from "../MainLayout";
 import PageTabs from "../PageTabs";
 import { useTree } from "../../contexts/treeContext";
 import { findTreeNode } from "../../utils/tree";
 import { useParams, useRouteMatch } from "react-router-dom";
 import { ROUTES } from "../../shared/routes";
+import { CustomTreeNode } from "../../shared/interfaces";
 
 interface ConnectionLayoutProps {
   children: any;
 }
 
 const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
-  const { tabs, setActiveTab, activeTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode } =
+  const { tabs, setActiveTab, activeTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode, sourceRoute } =
     useTree();
 
   const { connection, schema, table, column, category, timePartitioned, checkName } = useParams() as any;
   const match = useRouteMatch();
 
-  useEffect(() => {
-    if (activeNode) {
-      return;
+  const handleChangeTab = useCallback((node?: CustomTreeNode) => {
+    if (!node) return;
+
+    if (!activeTab) {
+      changeActiveTab(node, true);
+    } else {
+      console.log('>>', node.id, activeTab)
+      if ((node.id !== activeTab && activeNode?.id === node.id) || (node.id === activeTab && activeNode?.id !== node.id)) {
+        changeActiveTab(node, true);
+      }
     }
+  }, [changeActiveTab, activeTab, activeNode])
 
-    if (activeTab) return;
-
+  useEffect(() => {
     (async () => {
       if (connection) {
         const connectionNode = findTreeNode(treeData, connection);
+        if (!connectionNode) {
+          return;
+        }
         if (match.path === ROUTES.PATTERNS.CONNECTION) {
-          changeActiveTab(connectionNode);
+          handleChangeTab(connectionNode);
         }
         if (!connectionNode?.open && schema) {
           await refreshNode(connectionNode);
@@ -36,14 +47,14 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
           const schemaNode = findTreeNode(treeData, `${connection}.${schema}`);
 
           if (match.path === ROUTES.PATTERNS.SCHEMA) {
-            changeActiveTab(schemaNode);
+            handleChangeTab(schemaNode);
           }
           if (!schemaNode?.open && table) {
             await refreshNode(schemaNode);
           } else if (table) {
             const tableNode = findTreeNode(treeData, `${connection}.${schema}.${table}`);
             if (match.path === ROUTES.PATTERNS.TABLE) {
-              changeActiveTab(tableNode);
+              handleChangeTab(tableNode);
             } else if (!tableNode?.open) {
               await refreshNode(tableNode);
             } else {
@@ -61,13 +72,13 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
               ) {
                 const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns`);
                 if (match.path === ROUTES.PATTERNS.TABLE_COLUMNS) {
-                  changeActiveTab(node);
+                  handleChangeTab(node);
                 } else if (!node?.open) {
                   await refreshNode(node);
                 } else if (column) {
                   const columnNode = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}`);
                   if (match.path === ROUTES.PATTERNS.COLUMN) {
-                    changeActiveTab(columnNode);
+                    handleChangeTab(columnNode);
                   } else if (!columnNode?.open) {
                     await refreshNode(columnNode);
                   } else {
@@ -75,7 +86,7 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
                       const node = findTreeNode(treeData, `${connection}.${schema}.${table}.columns.${column}.checks`);
 
                       if (match.path === ROUTES.PATTERNS.COLUMN_PROFILINGS) {
-                        changeActiveTab(node);
+                        handleChangeTab(node);
                       } else if (!node?.open) {
                         await refreshNode(node);
                       } else if (match.path === ROUTES.PATTERNS.COLUMN_PROFILINGS_FILTER) {
@@ -196,11 +207,11 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
         }
       }
     })();
-  }, [treeData, activeTab]);
+  }, [connection, schema, table, column, category, timePartitioned, checkName, treeData, handleChangeTab]);
 
   const handleChange = (value: string) => {
     const node = findTreeNode(treeData, value);
-    switchTab(node);
+    switchTab(node, sourceRoute);
     setActiveTab(value);
   }
 
