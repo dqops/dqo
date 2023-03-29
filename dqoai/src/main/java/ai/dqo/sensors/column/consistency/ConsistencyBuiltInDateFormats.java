@@ -28,5 +28,8 @@ public enum ConsistencyBuiltInDateFormats {
     DayDashMonthDashYear,
 
     @JsonProperty("DD.MM.YYYY")
-    DayDotMonthDotYear
+    DayDotMonthDotYear,
+
+    @JsonProperty("YYYY-MM-DD")
+    ISO8601
 }
