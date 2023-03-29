@@ -17,7 +17,18 @@ import { useParams } from "react-router-dom";
 const SourceSchemasView = () => {
   const { connection }: { connection: string } = useParams();
   const [loading, setLoading] = useState(false);
-  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([]);
+  const [schemas, setSchemas] = useState<SchemaRemoteModel[]>([
+    {
+      connectionName: 'bgTest',
+      schemaName: 'test',
+      alreadyImported: false,
+      importTableJobParameters: {
+        connectionName: 'bgTest',
+        schemaName: 'test',
+        tableNames: ['table 1', 'table 2', 'table 3']
+      }
+    }
+  ]);
 
   const [selectedSchema, setSelectedSchema] = useState<SchemaRemoteModel>();
   const { jobs } = useSelector((state: IRootState) => state.job);

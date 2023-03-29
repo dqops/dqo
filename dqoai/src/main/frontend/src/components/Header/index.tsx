@@ -11,7 +11,9 @@ const Header = () => {
   const location = useLocation();
 
   const onClick = (route: string) => () => {
-    history.push(route)
+    const paths = location.pathname.split('/');
+    paths[1] = route;
+    history.push(paths.join('/'))
   }
 
   return (
@@ -25,31 +27,31 @@ const Header = () => {
         <div className="flex items-center">
           <div
             className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.SOURCES}`) ? 'font-bold' : '' )}
-            onClick={onClick(`/${CheckTypes.SOURCES}`)}
+            onClick={onClick(CheckTypes.SOURCES)}
           >
             Data Sources
           </div>
           <div
             className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.PROFILING}`) ? 'font-bold' : '' )}
-            onClick={onClick(`/${CheckTypes.PROFILING}`)}
+            onClick={onClick(CheckTypes.PROFILING)}
           >
             Profiling
           </div>
           <div
             className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.RECURRING}`) ? 'font-bold' : '' )}
-            onClick={onClick(`/${CheckTypes.RECURRING}`)}
+            onClick={onClick(CheckTypes.RECURRING)}
           >
             Recurring Checks
           </div>
           <div
             className={clsx("px-4 cursor-pointer", location.pathname.startsWith(`/${CheckTypes.PARTITIONED}`) ? 'font-bold' : '' )}
-            onClick={onClick(`/${CheckTypes.PARTITIONED}`)}
+            onClick={onClick(CheckTypes.PARTITIONED)}
           >
             Partition Checks
           </div>
           <div
             className={clsx("px-4 cursor-pointer", location.pathname === '/dashboards' ? 'font-bold' : '' )}
-            onClick={onClick('/dashboards')}
+            onClick={() => history.push('/dashboards')}
           >
             Data Quality Dashboards
           </div>
