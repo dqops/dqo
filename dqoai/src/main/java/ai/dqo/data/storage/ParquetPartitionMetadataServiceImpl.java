@@ -27,7 +27,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -77,6 +79,56 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
                     .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
                     .filter(HivePartitionPathUtility::validHivePartitionTableFolderName)
                     .map(HivePartitionPathUtility::tableFromHivePartitionFolderName)
+                    .collect(Collectors.toList());
+        }
+    }
+
+    /**
+     * Get the month, furthest in the past, for which partition is stored, given the connection and table names, provided storage settings.
+     * @param connectionName  Connection name.
+     * @param tableName       Table name.
+     * @param storageSettings File storage settings.
+     * @return Optional with the oldest month as local date, if it exists. If not, <code>Optional.empty()</code>.
+     */
+    @Override
+    public Optional<LocalDate> getOldestStoredPartitionMonth(String connectionName,
+                                                             PhysicalTableName tableName,
+                                                             FileStorageSettings storageSettings) {
+        List<LocalDate> storedPartitionMonths = getStoredPartitionMonths(connectionName, tableName, storageSettings);
+        if (storedPartitionMonths == null) {
+            return Optional.empty();
+        }
+        return storedPartitionMonths.stream().min(LocalDate::compareTo);
+    }
+
+    /**
+     * Gets months for which partitions are currently stored for a given connection and table names, provided storage settings to know where to look.
+     * @param connectionName  Connection name.
+     * @param tableName       Table name.
+     * @param storageSettings File storage settings.
+     * @return List of months given as local dates. Null if parameters are invalid (e.g. target directory doesn't exist).
+     */
+    @Override
+    public List<LocalDate> getStoredPartitionMonths(String connectionName,
+                                                    PhysicalTableName tableName,
+                                                    FileStorageSettings storageSettings) {
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
+            Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
+
+            String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(
+                    new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, null));
+            Path tablePartitionsPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
+
+            List<HomeFolderPath> tableStoredFolders = this.localUserHomeFileStorageService.listFolders(
+                    HomeFolderPathUtility.createFromFilesystemPath(tablePartitionsPath));
+            if (tableStoredFolders == null) {
+                return null;
+            }
+
+            return tableStoredFolders.stream()
+                    .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
+                    .filter(HivePartitionPathUtility::validHivePartitionMonthFolderName)
+                    .map(HivePartitionPathUtility::monthFromHivePartitionFolderName)
                     .collect(Collectors.toList());
         }
     }

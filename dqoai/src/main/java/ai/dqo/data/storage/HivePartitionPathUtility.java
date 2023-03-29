@@ -17,7 +17,6 @@
 package ai.dqo.data.storage;
 
 import ai.dqo.metadata.sources.PhysicalTableName;
-import org.springframework.stereotype.Component;
 
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
@@ -28,7 +27,6 @@ import java.util.regex.Pattern;
 /**
  * Utility class that detects and parses hive partitioning folder names.
  */
-@Component
 public class HivePartitionPathUtility {
     private static final Pattern HIVE_PARTITION_CONNECTION_PATTERN =
             Pattern.compile(ParquetPartitioningKeys.CONNECTION + "=(.*)");
