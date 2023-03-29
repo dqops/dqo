@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.Path;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -94,24 +95,53 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
     public Optional<LocalDate> getOldestStoredPartitionMonth(String connectionName,
                                                              PhysicalTableName tableName,
                                                              FileStorageSettings storageSettings) {
-        List<LocalDate> storedPartitionMonths = getStoredPartitionMonths(connectionName, tableName, storageSettings);
-        if (storedPartitionMonths == null) {
-            return Optional.empty();
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
+            List<ParquetPartitionId> storedPartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings);
+            if (storedPartitions == null) {
+                return Optional.empty();
+            }
+
+            return storedPartitions.stream()
+                    .map(ParquetPartitionId::getMonth)
+                    .min(LocalDate::compareTo);
         }
-        return storedPartitionMonths.stream().min(LocalDate::compareTo);
     }
 
     /**
-     * Gets months for which partitions are currently stored for a given connection and table names, provided storage settings to know where to look.
+     * Gets ids of partitions that are currently stored for a given connection name, provided storage settings to know where to look.
+     * @param connectionName  Connection name.
+     * @param storageSettings File storage settings.
+     * @return List of partition ids. Null if parameters are invalid (e.g. target directory doesn't exist).
+     */
+    @Override
+    public List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
+                                                           FileStorageSettings storageSettings) {
+        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
+            List<PhysicalTableName> tablesForConnection = listTablesForConnection(connectionName, storageSettings);
+            List<ParquetPartitionId> result = new ArrayList<>();
+
+            for (PhysicalTableName tableName: tablesForConnection) {
+                List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings);
+                if (tablePartitions == null) {
+                    continue;
+                }
+                result.addAll(tablePartitions);
+            }
+            return result;
+        }
+    }
+
+    /**
+     * Gets ids of partitions that are currently stored for a given connection and table names, provided storage settings to know where to look.
      * @param connectionName  Connection name.
      * @param tableName       Table name.
      * @param storageSettings File storage settings.
-     * @return List of months given as local dates. Null if parameters are invalid (e.g. target directory doesn't exist).
+     * @return List of partition ids. Null if parameters are invalid (e.g. target directory doesn't exist).
      */
     @Override
-    public List<LocalDate> getStoredPartitionMonths(String connectionName,
-                                                    PhysicalTableName tableName,
-                                                    FileStorageSettings storageSettings) {
+    public List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
+                                                           PhysicalTableName tableName,
+                                                           FileStorageSettings storageSettings) {
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
             Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
 
@@ -129,6 +159,7 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
                     .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
                     .filter(HivePartitionPathUtility::validHivePartitionMonthFolderName)
                     .map(HivePartitionPathUtility::monthFromHivePartitionFolderName)
+                    .map(month -> new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, month))
                     .collect(Collectors.toList());
         }
     }

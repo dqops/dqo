@@ -54,13 +54,22 @@ public interface ParquetPartitionMetadataService {
                                                       FileStorageSettings storageSettings);
 
     /**
-     * Gets months for which partitions are currently stored for a given connection and table names, provided storage settings to know where to look.
+     * Gets ids of partitions that are currently stored for a given connection name, provided storage settings to know where to look.
+     * @param connectionName  Connection name.
+     * @param storageSettings File storage settings.
+     * @return List of partition ids. Null if parameters are invalid (e.g. target directory doesn't exist).
+     */
+    List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
+                                                    FileStorageSettings storageSettings);
+
+    /**
+     * Gets ids of partitions that are currently stored for a given connection and table names, provided storage settings to know where to look.
      * @param connectionName  Connection name.
      * @param tableName       Table name.
      * @param storageSettings File storage settings.
-     * @return List of months given as local dates. Null if parameters are invalid (e.g. target directory doesn't exist).
+     * @return List of partition ids. Null if parameters are invalid (e.g. target directory doesn't exist).
      */
-    List<LocalDate> getStoredPartitionMonths(String connectionName,
-                                             PhysicalTableName tableName,
-                                             FileStorageSettings storageSettings);
+    List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
+                                                    PhysicalTableName tableName,
+                                                    FileStorageSettings storageSettings);
 }
