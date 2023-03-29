@@ -40,7 +40,7 @@ import java.util.Map;
 public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJobResult> {
     private ParquetPartitionStorageService parquetPartitionStorageService;
     private ParquetPartitionMetadataService parquetPartitionMetadataService;
-    private RepairStoredDataQueueJobParameters repairingParameters;
+    private RepairStoredDataQueueJobParameters repairParameters;
 
     @Autowired
     public RepairStoredDataQueueJob(ParquetPartitionStorageService parquetPartitionStorageService,
@@ -50,19 +50,19 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
     }
 
     /**
-     * Returns the repairing parameters object.
-     * @return Repairing parameters object.
+     * Returns the repair parameters object.
+     * @return Repair parameters object.
      */
-    public RepairStoredDataQueueJobParameters getRepairingParameters() {
-        return repairingParameters;
+    public RepairStoredDataQueueJobParameters getRepairParameters() {
+        return repairParameters;
     }
 
     /**
      * Sets the parameters object for the job that specify the data that needs to be removed from ".data" directory.
-     * @param repairingParameters Repairing parameters to store.
+     * @param repairParameters Repair parameters to store.
      */
-    public void setRepairingParameters(RepairStoredDataQueueJobParameters repairingParameters) {
-        this.repairingParameters = repairingParameters;
+    public void setRepairParameters(RepairStoredDataQueueJobParameters repairParameters) {
+        this.repairParameters = repairParameters;
     }
 
     /**
@@ -75,17 +75,17 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
     public RepairStoredDataQueueJobResult onExecute(DqoJobExecutionContext jobExecutionContext) {
         RepairStoredDataQueueJobResult result = new RepairStoredDataQueueJobResult();
 
-        if (this.repairingParameters.isRepairErrors()) {
+        if (this.repairParameters.isRepairErrors()) {
             // Load and ignore results to force automatic repair of corrupted data.
             this.loadMonthlyPartitions(ErrorsSnapshot.createErrorsStorageSettings());
         }
-        if (this.repairingParameters.isRepairStatistics()) {
+        if (this.repairParameters.isRepairStatistics()) {
             this.loadMonthlyPartitions(StatisticsSnapshot.createStatisticsStorageSettings());
         }
-        if (this.repairingParameters.isRepairRuleResults()) {
+        if (this.repairParameters.isRepairRuleResults()) {
             this.loadMonthlyPartitions(RuleResultsSnapshot.createRuleResultsStorageSettings());
         }
-        if (this.repairingParameters.isRepairSensorReadouts()) {
+        if (this.repairParameters.isRepairSensorReadouts()) {
             this.loadMonthlyPartitions(SensorReadoutsSnapshot.createSensorReadoutsStorageSettings());
         }
 
@@ -93,19 +93,19 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
     }
 
     /**
-     * Load all partitions fitting the <code>repairingParameters</code> for given storage settings.
+     * Load all partitions fitting the <code>repairParameters</code> for given storage settings.
      * @param fileStorageSettings File storage settings.
      * @return Map of loaded partitions for existing partition ids. All columns are loaded for the partitions.
      */
     protected Map<ParquetPartitionId, LoadedMonthlyPartition> loadMonthlyPartitions(FileStorageSettings fileStorageSettings) {
         List<ParquetPartitionId> partitionIds;
-        if (this.repairingParameters.getSchemaTableName() == null) {
+        if (this.repairParameters.getSchemaTableName() == null) {
             partitionIds = this.parquetPartitionMetadataService.getStoredPartitionsIds(
-                    this.repairingParameters.getConnectionName(), fileStorageSettings);
+                    this.repairParameters.getConnectionName(), fileStorageSettings);
         } else {
             partitionIds = this.parquetPartitionMetadataService.getStoredPartitionsIds(
-                    this.repairingParameters.getConnectionName(),
-                    PhysicalTableName.fromSchemaTableFilter(this.repairingParameters.getSchemaTableName()),
+                    this.repairParameters.getConnectionName(),
+                    PhysicalTableName.fromSchemaTableFilter(this.repairParameters.getSchemaTableName()),
                     fileStorageSettings);
         }
 
@@ -139,7 +139,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
     public DqoJobEntryParametersModel createParametersModel() {
         return new DqoJobEntryParametersModel()
         {{
-            setRepairStoredDataParameters(repairingParameters);
+            setRepairStoredDataParameters(repairParameters);
         }};
     }
 
@@ -152,7 +152,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
     @Override
     public JobConcurrencyConstraint getConcurrencyConstraint() {
         RepairStoredDataQueueJobConcurrencyTarget target = new RepairStoredDataQueueJobConcurrencyTarget(
-                this.repairingParameters.getConnectionName());
+                this.repairParameters.getConnectionName());
         JobConcurrencyTarget concurrencyTarget = new JobConcurrencyTarget(ConcurrentJobType.REPAIR_STORED_DATA, target);
         return new JobConcurrencyConstraint(concurrencyTarget, 1);
     }

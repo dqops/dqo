@@ -23,10 +23,6 @@ import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthEnd;
 import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthStart;
-import ai.dqo.cli.output.OutputFormatService;
-import ai.dqo.cli.terminal.FileWritter;
-import ai.dqo.cli.terminal.TerminalTableWritter;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.PushJobResult;
@@ -34,7 +30,6 @@ import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.data.statistics.factory.StatisticsCollectorTarget;
-import ai.dqo.utils.serialization.JsonSerializer;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -53,11 +48,6 @@ import java.util.List;
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 @CommandLine.Command(name = "clean", header = "Delete stored data that matches a given condition", description = "Delete stored data that matches certain conditions.It is important to use caution when using this command, as it will permanently delete the selected data and cannot be undone.")
 public class DataCleanCliCommand extends BaseCommand implements ICommand {
-    private TerminalWriter terminalWriter;
-    private TerminalTableWritter terminalTableWritter;
-    private JsonSerializer jsonSerializer;
-    private OutputFormatService outputFormatService;
-    private FileWritter fileWritter;
     private DqoJobQueue dqoJobQueue;
     private DqoQueueJobFactory dqoQueueJobFactory;
 
@@ -66,27 +56,12 @@ public class DataCleanCliCommand extends BaseCommand implements ICommand {
 
     /**
      * Dependency injection constructor.
-     * @param terminalWriter Terminal writer.
-     * @param terminalTableWritter Terminal table writer.
-     * @param jsonSerializer Json serializer.
-     * @param outputFormatService Output format service.
-     * @param fileWritter File writer.
      * @param dqoJobQueue Job queue.
      * @param dqoQueueJobFactory Job queue factory.
      */
     @Autowired
-    public DataCleanCliCommand(TerminalWriter terminalWriter,
-                                   TerminalTableWritter terminalTableWritter,
-                                   JsonSerializer jsonSerializer,
-                                   OutputFormatService outputFormatService,
-                                   FileWritter fileWritter,
-                                   DqoJobQueue dqoJobQueue,
-                                   DqoQueueJobFactory dqoQueueJobFactory) {
-        this.terminalWriter = terminalWriter;
-        this.terminalTableWritter = terminalTableWritter;
-        this.jsonSerializer = jsonSerializer;
-        this.outputFormatService = outputFormatService;
-        this.fileWritter = fileWritter;
+    public DataCleanCliCommand(DqoJobQueue dqoJobQueue,
+                               DqoQueueJobFactory dqoQueueJobFactory) {
         this.dqoJobQueue = dqoJobQueue;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
     }

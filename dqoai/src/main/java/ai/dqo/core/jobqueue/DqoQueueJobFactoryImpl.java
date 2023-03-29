@@ -15,6 +15,7 @@
  */
 package ai.dqo.core.jobqueue;
 
+import ai.dqo.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
 import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
@@ -121,5 +122,14 @@ public class DqoQueueJobFactoryImpl implements DqoQueueJobFactory {
     @Override
     public DeleteStoredDataQueueJob createDeleteStoredDataJob() {
         return this.beanFactory.getBean(DeleteStoredDataQueueJob.class);
+    }
+
+    /**
+     * Creates a job that repairs data in user's ".data" directory.
+     * @return Repair stored data job.
+     */
+    @Override
+    public RepairStoredDataQueueJob createRepairStoredDataJob() {
+        return this.beanFactory.getBean(RepairStoredDataQueueJob.class);
     }
 }
