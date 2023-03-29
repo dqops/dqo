@@ -25,7 +25,7 @@ import {
   RecurringScheduleSpec,
   TableProfilingCheckCategoriesSpec,
   TableBasicModel,
-  UICheckContainerModel
+  UICheckContainerModel, TablePartitioningModel
 } from '../../api';
 import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
 
@@ -945,4 +945,70 @@ export const setTableUpdatedRecurringUIFilter = (ui: UICheckContainerModel) => (
 export const setTableUpdatedPartitionedChecksUiFilter = (ui: UICheckContainerModel) => ({
   type: TABLE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
   data: ui
+});
+
+export const getTableTimestampsRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS
+});
+
+export const getTableTimestampsSuccess = (data: TablePartitioningModel) => ({
+  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS_SUCCESS,
+  data
+});
+
+export const getTableTimestampsFailed = (error: unknown) => ({
+  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS_ERROR,
+  error
+});
+
+export const getTableTimestamps =
+  (connectionName: string, schemaName: string, tableName: string) =>
+    async (dispatch: Dispatch) => {
+      dispatch(getTableTimestampsRequest());
+      try {
+        const res = await TableApiClient.getTablePartitioning(
+          connectionName,
+          schemaName,
+          tableName
+        );
+        dispatch(getTableTimestampsSuccess(res.data));
+      } catch (err) {
+        dispatch(getTableTimestampsFailed(err));
+      }
+    };
+
+export const updateTableTimestampsRequest = () => ({
+  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS
+});
+
+export const updateTableTimestampsSuccess = (data: TablePartitioningModel) => ({
+  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS_SUCCESS,
+  data
+});
+
+export const updateTableTimestampsFailed = (error: unknown) => ({
+  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS_ERROR,
+  error
+});
+
+export const updateTableTimestamps =
+  (connectionName: string, schemaName: string, tableName: string, data: TablePartitioningModel) =>
+    async (dispatch: Dispatch) => {
+      dispatch(updateTableTimestampsRequest());
+      try {
+        const res = await TableApiClient.updateTablePartitioning(
+          connectionName,
+          schemaName,
+          tableName,
+          data
+        );
+        dispatch(updateTableTimestampsSuccess(res.data));
+      } catch (err) {
+        dispatch(updateTableTimestampsFailed(err));
+      }
+    };
+
+export const setUpdatedTablePartitioning = (data: TablePartitioningModel) => ({
+  type: TABLE_ACTION.SET_UPDATED_TABLE_TIME_STAMPS,
+  data
 });

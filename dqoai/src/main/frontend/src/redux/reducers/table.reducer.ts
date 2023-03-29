@@ -21,7 +21,7 @@ import {
   RecurringScheduleSpec,
   TableProfilingCheckCategoriesSpec,
   UICheckContainerModel,
-  DataStreamMappingSpec
+  DataStreamMappingSpec, TablePartitioningModel
 } from '../../api';
 import { TABLE_ACTION } from '../types';
 
@@ -85,6 +85,10 @@ export interface ITableState {
   isUpdatedRecurringUIFilter?: boolean;
   partitionedChecksUIFilter?: UICheckContainerModel;
   isUpdatedPartitionedChecksUIFilter?: boolean;
+  tablePartitioning?: TablePartitioningModel
+  isUpdatedTablePartitioning?: boolean;
+  loadingTablePartitioning: boolean;
+  updatingTablePartitioning: boolean;
 }
 
 const initialState: ITableState = {
@@ -94,7 +98,9 @@ const initialState: ITableState = {
   activeTable: '',
   isUpdating: false,
   comments: [],
-  labels: []
+  labels: [],
+  loadingTablePartitioning: false,
+  updatingTablePartitioning: false,
 };
 
 const tableReducer = (state = initialState, action: any) => {
@@ -656,6 +662,45 @@ const tableReducer = (state = initialState, action: any) => {
         ...state,
         isUpdatedPartitionedChecksUIFilter: true,
         partitionedChecksUIFilter: action.data
+      }
+    case TABLE_ACTION.GET_TABLE_TIME_STAMPS:
+      return {
+        ...state,
+        loading: true
+      }
+    case TABLE_ACTION.GET_TABLE_TIME_STAMPS_SUCCESS:
+      return {
+        ...state,
+        loading: false,
+        isUpdatedTablePartitioning: false,
+        tablePartitioning: action.data
+      }
+    case TABLE_ACTION.GET_TABLE_TIME_STAMPS_ERROR:
+      return {
+        ...state,
+        loading: false,
+      }
+
+    case TABLE_ACTION.UPDATE_TABLE_TIME_STAMPS:
+      return {
+        ...state,
+        updatingTablePartitioning: true
+      }
+    case TABLE_ACTION.UPDATE_TABLE_TIME_STAMPS_SUCCESS:
+      return {
+        ...state,
+        updatingTablePartitioning: false,
+      }
+    case TABLE_ACTION.UPDATE_TABLE_TIME_STAMPS_ERROR:
+      return {
+        ...state,
+        updatingTablePartitioning: false,
+      }
+    case TABLE_ACTION.SET_UPDATED_TABLE_TIME_STAMPS:
+      return {
+        ...state,
+        tablePartitioning: action.data,
+        isUpdatedTablePartitioning: true,
       }
     default:
       return state;

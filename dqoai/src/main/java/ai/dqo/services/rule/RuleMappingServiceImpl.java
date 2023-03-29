@@ -79,10 +79,12 @@ public class RuleMappingServiceImpl implements RuleMappingService {
     /**
      * Returns the rule basic model object.
      * @param ruleDefinitionWrapper Rule basic model.
+     * @param custom This rule has a custom (user) definition.
+     * @param builtIn This rule is provided as part of DQO.
      * @return rule basic model object.
      */
     @Override
-    public RuleBasicModel toRuleBasicModel(RuleDefinitionWrapper ruleDefinitionWrapper) {
+    public RuleBasicModel toRuleBasicModel(RuleDefinitionWrapper ruleDefinitionWrapper, boolean custom, boolean builtIn) {
 
         RuleBasicModel ruleBasicModel = new RuleBasicModel();
         ruleBasicModel.withRuleName(ruleDefinitionWrapper.getRuleName())
@@ -93,6 +95,8 @@ public class RuleMappingServiceImpl implements RuleMappingService {
                 .withTimeWindow(ruleDefinitionWrapper.getSpec().getTimeWindow())
                 .withFields(ruleDefinitionWrapper.getSpec().getFields())
                 .withParameters(ruleDefinitionWrapper.getSpec().getParameters());
+        ruleBasicModel.setCustom(custom);
+        ruleBasicModel.setBuiltIn(builtIn);
 
         return ruleBasicModel;
     }

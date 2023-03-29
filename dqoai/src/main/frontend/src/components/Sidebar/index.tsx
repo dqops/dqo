@@ -54,7 +54,7 @@ const Sidebar = () => {
       <div className="px-4 flex mb-0">
         {sourceRoute === 'sources' ? (
           <Button
-            label="Create new connection"
+            label="Add connection"
             color="primary"
             className="px-4"
             leftIcon={<SvgIcon name="add" className="text-white mr-2 w-5" />}
