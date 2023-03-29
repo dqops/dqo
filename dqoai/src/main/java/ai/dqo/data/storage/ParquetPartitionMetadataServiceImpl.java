@@ -118,8 +118,11 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
                                                            FileStorageSettings storageSettings) {
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
             List<PhysicalTableName> tablesForConnection = listTablesForConnection(connectionName, storageSettings);
-            List<ParquetPartitionId> result = new ArrayList<>();
+            if (tablesForConnection == null) {
+                return null;
+            }
 
+            List<ParquetPartitionId> result = new ArrayList<>();
             for (PhysicalTableName tableName: tablesForConnection) {
                 List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings);
                 if (tablePartitions == null) {

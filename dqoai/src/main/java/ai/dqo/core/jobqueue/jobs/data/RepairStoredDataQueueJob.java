@@ -109,6 +109,10 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
                     fileStorageSettings);
         }
 
+        if (partitionIds == null) {
+            return null;
+        }
+
         Map<ParquetPartitionId, LoadedMonthlyPartition> result = new HashMap<>();
         for (ParquetPartitionId partitionId: partitionIds) {
             // columnNames is null in order to force parquetPartitionStorageService to load all columns.
