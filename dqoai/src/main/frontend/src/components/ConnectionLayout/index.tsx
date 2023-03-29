@@ -24,7 +24,6 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
     if (!activeTab) {
       changeActiveTab(node, true);
     } else {
-      console.log('>>', node.id, activeTab)
       if ((node.id !== activeTab && activeNode?.id === node.id) || (node.id === activeTab && activeNode?.id !== node.id)) {
         changeActiveTab(node, true);
       }
