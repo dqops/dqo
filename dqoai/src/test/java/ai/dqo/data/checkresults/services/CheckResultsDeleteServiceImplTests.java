@@ -76,19 +76,22 @@ public class CheckResultsDeleteServiceImplTests extends BaseTest {
         SynchronizationStatusTrackerStub synchronizationStatusTracker = new SynchronizationStatusTrackerStub();
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
                 homeLocationFindService, newLockManager, synchronizationStatusTracker);
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(newLockManager, localUserHomeFileStorageService);
 
-        this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker);
+        this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(
+                parquetPartitionMetadataService,
+                localUserHomeProviderStub,
+                newLockManager,
+                HadoopConfigurationProviderObjectMother.getDefault(),
+                localUserHomeFileStorageService,
+                synchronizationStatusTracker);
 
-        this.ruleResultsStorageSettings = CheckResultsSnapshot.createRuleResultsStorageSettings();
+        this.ruleResultsStorageSettings = CheckResultsSnapshot.createCheckResultsStorageSettings();
         this.checkResultsTableFactory = new CheckResultsTableFactoryImpl(new SensorReadoutsTableFactoryImpl());
 
         CheckResultsSnapshotFactory checkResultsSnapshotFactory = new CheckResultsSnapshotFactoryImpl(
                 this.parquetPartitionStorageService,
                 this.checkResultsTableFactory);
-
-        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
-                newLockManager, localUserHomeFileStorageService);
 
         this.sut = new CheckResultsDeleteServiceImpl(checkResultsSnapshotFactory,
                                                     parquetPartitionMetadataService);

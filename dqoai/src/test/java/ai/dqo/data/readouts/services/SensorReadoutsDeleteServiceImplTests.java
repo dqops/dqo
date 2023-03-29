@@ -76,8 +76,15 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
                 homeLocationFindService, newLockManager, synchronizationStatusTracker);
 
-        this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker);
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(newLockManager, localUserHomeFileStorageService);
+
+        this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(
+                parquetPartitionMetadataService,
+                localUserHomeProviderStub,
+                newLockManager,
+                HadoopConfigurationProviderObjectMother.getDefault(),
+                localUserHomeFileStorageService,
+                synchronizationStatusTracker);
 
         this.sensorReadoutsStorageSettings = SensorReadoutsSnapshot.createSensorReadoutsStorageSettings();
         this.sensorReadoutsTableFactory = new SensorReadoutsTableFactoryImpl();
@@ -86,8 +93,6 @@ public class SensorReadoutsDeleteServiceImplTests extends BaseTest {
                 this.parquetPartitionStorageService,
                 this.sensorReadoutsTableFactory);
 
-        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
-                newLockManager, localUserHomeFileStorageService);
         this.sut = new SensorReadoutsDeleteServiceImpl(sensorReadoutsSnapshotFactory,
                                                        parquetPartitionMetadataService);
     }

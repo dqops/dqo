@@ -29,6 +29,7 @@ import picocli.CommandLine;
 @CommandLine.Command(name = "data", description = "Commands related to the data",
         subcommands = {
                 DataCleanCliCommand.class,
+                DataRepairCliCommand.class,
 //                DataStoragePerformanceCliCommand.class
 })
 public class DataCliCommand extends BaseCommand {

@@ -44,7 +44,7 @@ public class CheckResultsSnapshot extends TableDataSnapshot {
                                 PhysicalTableName tableName,
                                 ParquetPartitionStorageService storageService,
                                 Table newResults) {
-        super(connectionName, tableName, storageService, createRuleResultsStorageSettings(), newResults);
+        super(connectionName, tableName, storageService, createCheckResultsStorageSettings(), newResults);
     }
 
     /**
@@ -60,14 +60,14 @@ public class CheckResultsSnapshot extends TableDataSnapshot {
                                 ParquetPartitionStorageService storageService,
                                 String[] columnNames,
                                 Table tableResultsSample) {
-        super(connectionName, tableName, storageService, createRuleResultsStorageSettings(), columnNames, tableResultsSample);
+        super(connectionName, tableName, storageService, createCheckResultsStorageSettings(), columnNames, tableResultsSample);
     }
 
     /**
-     * Creates the storage settings for storing the rule results.
+     * Creates the storage settings for storing the check results.
      * @return Storage settings.
      */
-    public static FileStorageSettings createRuleResultsStorageSettings() {
+    public static FileStorageSettings createCheckResultsStorageSettings() {
         return new FileStorageSettings(DqoRoot.data_check_results,
                 BuiltInFolderNames.CHECK_RESULTS,
                 PARQUET_FILE_NAME,

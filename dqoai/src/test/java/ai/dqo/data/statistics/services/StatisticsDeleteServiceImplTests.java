@@ -76,8 +76,16 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
                 homeLocationFindService, newLockManager, synchronizationStatusTracker);
 
-        this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), localUserHomeFileStorageService, synchronizationStatusTracker);
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
+                newLockManager, localUserHomeFileStorageService);
+
+        this.parquetPartitionStorageService = new ParquetPartitionStorageServiceImpl(
+                parquetPartitionMetadataService,
+                localUserHomeProviderStub,
+                newLockManager,
+                HadoopConfigurationProviderObjectMother.getDefault(),
+                localUserHomeFileStorageService,
+                synchronizationStatusTracker);
 
         this.profilingResultsStorageSettings = StatisticsSnapshot.createStatisticsStorageSettings();
         this.statisticsResultsTableFactory = new StatisticsResultsTableFactoryImpl();
@@ -86,8 +94,6 @@ public class StatisticsDeleteServiceImplTests extends BaseTest {
                 this.parquetPartitionStorageService,
                 this.statisticsResultsTableFactory
         );
-        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
-                newLockManager, localUserHomeFileStorageService);
 
         this.sut = new StatisticsDeleteServiceImpl(statisticsSnapshotFactory,
                                                    parquetPartitionMetadataService);

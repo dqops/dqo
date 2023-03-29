@@ -15,9 +15,17 @@
  */
 package ai.dqo.data.storage;
 
+import ai.dqo.core.filesystem.BuiltInFolderNames;
+import ai.dqo.core.filesystem.virtual.HomeFolderPath;
+import ai.dqo.core.filesystem.virtual.utility.HomeFolderPathUtility;
+import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.metadata.sources.PhysicalTableName;
 
+import java.nio.file.Path;
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * Service providing information regarding metadata contained in the partitions of stored data,
@@ -32,5 +40,36 @@ public interface ParquetPartitionMetadataService {
      * @return Returns a list of physical table names that are currently stored for the connection. Null if connection not found.
      */
     List<PhysicalTableName> listTablesForConnection(String connectionName,
+                                                    FileStorageSettings storageSettings);
+
+    /**
+     * Get the month, furthest in the past, for which partition is stored, given the connection and table names, provided storage settings.
+     * @param connectionName  Connection name.
+     * @param tableName       Table name.
+     * @param storageSettings File storage settings.
+     * @return Optional with the oldest month as local date, if it exists. If not, <code>Optional.empty()</code>.
+     */
+    Optional<LocalDate> getOldestStoredPartitionMonth(String connectionName,
+                                                      PhysicalTableName tableName,
+                                                      FileStorageSettings storageSettings);
+
+    /**
+     * Gets ids of partitions that are currently stored for a given connection name, provided storage settings to know where to look.
+     * @param connectionName  Connection name.
+     * @param storageSettings File storage settings.
+     * @return List of partition ids. Null if parameters are invalid (e.g. target directory doesn't exist).
+     */
+    List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
+                                                    FileStorageSettings storageSettings);
+
+    /**
+     * Gets ids of partitions that are currently stored for a given connection and table names, provided storage settings to know where to look.
+     * @param connectionName  Connection name.
+     * @param tableName       Table name.
+     * @param storageSettings File storage settings.
+     * @return List of partition ids. Null if parameters are invalid (e.g. target directory doesn't exist).
+     */
+    List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
+                                                    PhysicalTableName tableName,
                                                     FileStorageSettings storageSettings);
 }
