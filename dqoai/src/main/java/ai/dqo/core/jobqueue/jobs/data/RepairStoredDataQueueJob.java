@@ -19,7 +19,7 @@ import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
-import ai.dqo.data.ruleresults.snapshot.RuleResultsSnapshot;
+import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.storage.*;
 import ai.dqo.metadata.sources.PhysicalTableName;
@@ -83,7 +83,7 @@ public class RepairStoredDataQueueJob extends DqoQueueJob<RepairStoredDataQueueJ
             this.loadMonthlyPartitions(StatisticsSnapshot.createStatisticsStorageSettings());
         }
         if (this.repairParameters.isRepairRuleResults()) {
-            this.loadMonthlyPartitions(RuleResultsSnapshot.createRuleResultsStorageSettings());
+            this.loadMonthlyPartitions(CheckResultsSnapshot.createCheckResultsStorageSettings());
         }
         if (this.repairParameters.isRepairSensorReadouts()) {
             this.loadMonthlyPartitions(SensorReadoutsSnapshot.createSensorReadoutsStorageSettings());

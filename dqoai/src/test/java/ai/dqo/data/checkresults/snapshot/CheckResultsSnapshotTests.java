@@ -59,8 +59,15 @@ public class CheckResultsSnapshotTests extends BaseTest {
         UserHomeLockManager newLockManager = UserHomeLockManagerObjectMother.createNewLockManager();
         // TODO: Add stub / virtual filesystem for localUserHomeFileStorageService
 
-        parquetStorageService = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub, newLockManager,
-                HadoopConfigurationProviderObjectMother.getDefault(), null, new SynchronizationStatusTrackerStub());
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(
+                newLockManager, null);
+        this.parquetStorageService = new ParquetPartitionStorageServiceImpl(
+                parquetPartitionMetadataService,
+                localUserHomeProviderStub,
+                newLockManager,
+                HadoopConfigurationProviderObjectMother.getDefault(),
+                null,
+                new SynchronizationStatusTrackerStub());
 		tableName = new PhysicalTableName("sch2", "tab2");
         Table newRows = SensorReadoutTableFactoryObjectMother.createEmptyNormalizedTable("new_rows");
 		this.sut = new CheckResultsSnapshot("conn", tableName, this.parquetStorageService, newRows);

@@ -68,7 +68,9 @@ public class ParquetPartitionStorageServiceImplTests extends BaseTest {
         LocalUserHomeFileStorageService localUserHomeFileStorageService = new LocalUserHomeFileStorageServiceImpl(
                 homeLocationFindService, newLockManager, synchronizationStatusTracker);
 
-        this.sut = new ParquetPartitionStorageServiceImpl(localUserHomeProviderStub,
+        ParquetPartitionMetadataService parquetPartitionMetadataService = new ParquetPartitionMetadataServiceImpl(newLockManager, localUserHomeFileStorageService);
+        this.sut = new ParquetPartitionStorageServiceImpl(parquetPartitionMetadataService,
+                                                          localUserHomeProviderStub,
                                                           newLockManager,
                                                           HadoopConfigurationProviderObjectMother.getDefault(),
                                                           localUserHomeFileStorageService,
