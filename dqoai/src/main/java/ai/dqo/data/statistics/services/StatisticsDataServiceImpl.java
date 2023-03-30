@@ -180,6 +180,8 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
         result.setCollector(row.getString(StatisticsColumnNames.COLLECTOR_NAME_COLUMN_NAME));
         String resultTypeString = row.getString(StatisticsColumnNames.RESULT_TYPE_COLUMN_NAME);
         StatisticsResultDataType statisticsResultDataType = StatisticsResultDataType.fromName(resultTypeString);
+        result.setResultDataType(statisticsResultDataType);
+        result.setCollectedAt(row.getDateTime(StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME));
 
         switch (statisticsResultDataType) {
             case INTEGER:
