@@ -20,14 +20,17 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
 
     if (value === 'minutes') {
       handleChange({ cron_expression: `*/${minutes} * * * *` });
+      return;
     }
     if (value === 'hour') {
       handleChange({ cron_expression: `${minutes} * * * *` });
+      return;
     }
     if (value === 'day') {
       handleChange({ cron_expression: `${minutes} ${hour} * * *` });
+      return;
     }
-    if (value) {
+    if (!value) {
       handleChange({ cron_expression: '' });
     }
   };
@@ -56,10 +59,10 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   };
 
   useEffect(() => {
-    if (!schedule?.cron_expression) return;
     const cron_expression = schedule?.cron_expression ?? "";
     if (!cron_expression) {
       setMode("");
+      return;
     }
     if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
       setMode('minutes');
