@@ -12,6 +12,7 @@ import { IRootState } from "../../redux/reducers";
 import { isEqual } from "lodash";
 import { JobApiClient } from "../../services/apiClient";
 import DeleteOnlyDataDialog from "../CustomTree/DeleteOnlyDataDialog";
+import CheckMenu from "./CheckMenu";
 
 interface CheckCategoriesViewProps {
   category: UIQualityCategoryModel;
@@ -48,14 +49,13 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
             <div className="font-semibold text-gray-700 capitalize">
               {category.category}
             </div>
-            <div className="flex space-x-1">
+            <div className="flex items-center">
               {(!job ||
                 job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
                 job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-                <SvgIcon
-                  name="play"
-                  className="text-primary h-5 cursor-pointer"
-                  onClick={onRunChecks}
+                <CheckMenu
+                  onRunChecks={onRunChecks}
+                  onDeleteChecks={() => setDeleteDataDialogOpened(true)}
                 />
               )}
               {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
@@ -71,11 +71,6 @@ const CheckCategoriesView = ({ category, checkResultsOverview, handleChangeDataD
                   className="text-gray-700 h-5 cursor-pointer"
                 />
               )}
-              <SvgIcon
-                name="delete"
-                className="h-5 cursor-pointer"
-                onClick={() => setDeleteDataDialogOpened(true)}
-              />
             </div>
           </div>
         </td>
