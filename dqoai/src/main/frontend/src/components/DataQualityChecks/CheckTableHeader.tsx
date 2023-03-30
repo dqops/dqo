@@ -6,6 +6,7 @@ import { isEqual } from "lodash";
 import { useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
 import DeleteOnlyDataDialog from "../CustomTree/DeleteOnlyDataDialog";
+import CategoryMenu from "./CategoryMenu";
 
 interface TableHeaderProps {
   checksUI: UICheckContainerModel;
@@ -50,10 +51,9 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
             {(!job ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.succeeded ||
               job?.status === DqoJobHistoryEntryModelStatusEnum.failed) && (
-              <SvgIcon
-                name="play"
-                className="text-primary h-5 cursor-pointer"
-                onClick={onRunChecks}
+              <CategoryMenu
+                onRunChecks={onRunChecks}
+                onDeleteChecks={() => setDeleteDataDialogOpened(true)}
               />
             )}
             {job?.status === DqoJobHistoryEntryModelStatusEnum.waiting && (
@@ -69,11 +69,6 @@ const TableHeader = ({ checksUI }: TableHeaderProps) => {
                 className="text-gray-700 h-5 cursor-pointer"
               />
             )}
-            <SvgIcon
-              name="delete"
-              className="h-5 cursor-pointer"
-              onClick={() => setDeleteDataDialogOpened(true)}
-            />
           </div>
         </td>
         <td className="text-left whitespace-nowrap text-gray-700 py-3 px-4 font-semibold bg-gray-400">
