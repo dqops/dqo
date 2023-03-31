@@ -443,8 +443,8 @@ public class FolderTreeNode {
             }
 
             // remove deleted files from the tree
-			this.files.stream().collect(Collectors.toList())
-                    .stream().filter(node -> node.getStatus() == FileTreeNodeStatus.DELETED)
+            new ArrayList<>(this.files).stream()
+                    .filter(node -> node.getStatus() == FileTreeNodeStatus.DELETED)
                     .forEach(node -> this.files.remove(node));
         }
     }
