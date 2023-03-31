@@ -23,6 +23,7 @@ import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
 import ai.dqo.metadata.sources.ConnectionWrapper;
+import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,15 +38,12 @@ import java.util.List;
 @Service
 @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 public class ConnectionServiceImpl implements ConnectionService {
-    private final UserHomeContextFactory userHomeContextFactory;
     private final DqoQueueJobFactory dqoQueueJobFactory;
     private final DqoJobQueue dqoJobQueue;
 
     @Autowired
-    public ConnectionServiceImpl(UserHomeContextFactory userHomeContextFactory,
-                                 DqoQueueJobFactory dqoQueueJobFactory,
+    public ConnectionServiceImpl(DqoQueueJobFactory dqoQueueJobFactory,
                                  DqoJobQueue dqoJobQueue) {
-        this.userHomeContextFactory = userHomeContextFactory;
         this.dqoQueueJobFactory = dqoQueueJobFactory;
         this.dqoJobQueue = dqoJobQueue;
     }
@@ -55,12 +53,15 @@ public class ConnectionServiceImpl implements ConnectionService {
      * Cleans all stored data from .data folder related to this connection.
      *
      * @param connectionWrapper Connection wrapper.
+     * @param userHomeContext   User home context in which the wrapper has been opened.
      * @return Asynchronous job result object for deferred background operations.
      */
     @Override
-    public PushJobResult<DeleteStoredDataQueueJobResult> deleteConnection(ConnectionWrapper connectionWrapper) {
+    public PushJobResult<DeleteStoredDataQueueJobResult> deleteConnection(ConnectionWrapper connectionWrapper,
+                                                                          UserHomeContext userHomeContext) {
         List<PushJobResult<DeleteStoredDataQueueJobResult>> jobResultList = this.deleteConnections(
-                new LinkedList<>(){{add(connectionWrapper);}}
+                new LinkedList<>(){{add(connectionWrapper);}},
+                userHomeContext
         );
         return jobResultList.get(0);
     }
@@ -70,12 +71,12 @@ public class ConnectionServiceImpl implements ConnectionService {
      * Cleans all stored data from .data folder related to these connections.
      *
      * @param connectionWrappers Iterable of connection wrappers.
+     * @param userHomeContext    User home context in which the wrappers have been opened.
      * @return List of asynchronous job result objects for deferred background operations.
      */
     @Override
-    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteConnections(Iterable<ConnectionWrapper> connectionWrappers) {
-        UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
-
+    public List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteConnections(Iterable<ConnectionWrapper> connectionWrappers,
+                                                                                 UserHomeContext userHomeContext) {
         for (ConnectionWrapper connectionWrapper: connectionWrappers) {
             connectionWrapper.markForDeletion();
         }
