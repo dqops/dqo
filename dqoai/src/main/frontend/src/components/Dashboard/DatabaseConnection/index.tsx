@@ -10,8 +10,8 @@ import {
 } from '../../../api';
 import { ConnectionApiClient, SourceConnectionApi } from '../../../services/apiClient';
 import { useTree } from '../../../contexts/treeContext';
-import { useHistory, useParams } from 'react-router-dom';
-import { ROUTES } from "../../../shared/routes";
+import { useHistory } from 'react-router-dom';
+import { CheckTypes, ROUTES } from "../../../shared/routes";
 import Loader from "../../Loader";
 import ErrorModal from "./ErrorModal";
 import ConfirmErrorModal from "./ConfirmErrorModal";
@@ -32,7 +32,6 @@ const DatabaseConnection = ({
   database,
   onChange
 }: IDatabaseConnectionProps) => {
-  const { checkTypes }: { checkTypes: any } = useParams();
   const { addConnection } = useTree();
   const history = useHistory();
   const [isTesting, setIsTesting] = useState(false);
@@ -57,7 +56,7 @@ const DatabaseConnection = ({
       database.connection_name
     );
     addConnection(res.data);
-    history.push(`${ROUTES.CONNECTION_DETAIL(checkTypes, database.connection_name, 'schemas')}?import_schema=true`);
+    history.push(`${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, database.connection_name, 'schemas')}?import_schema=true&create_success=true`);
     setIsSaving(false);
     setShowConfirm(false);
   };

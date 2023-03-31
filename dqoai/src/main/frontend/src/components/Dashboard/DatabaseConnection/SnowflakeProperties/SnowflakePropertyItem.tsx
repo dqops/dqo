@@ -38,7 +38,7 @@ const SnowflakePropertyItem = ({
       </td>
       <td className="px-8 min-w-20 py-2 text-center">
         {isLast ? (
-          <IconButton size="sm">
+          <IconButton className="bg-teal-500" size="sm">
             <SvgIcon name="add" className="w-4" />
           </IconButton>
         ) : (
