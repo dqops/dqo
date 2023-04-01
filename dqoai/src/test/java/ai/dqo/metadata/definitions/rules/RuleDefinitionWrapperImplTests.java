@@ -13,9 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.metadata.definitions.sensors;
+package ai.dqo.metadata.definitions.rules;
 
 import ai.dqo.BaseTest;
+import ai.dqo.metadata.definitions.sensors.ProviderSensorDefinitionListImpl;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionSpec;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapper;
+import ai.dqo.metadata.definitions.sensors.SensorDefinitionWrapperImpl;
 import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import org.junit.jupiter.api.Assertions;
@@ -24,41 +28,34 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-public class SensorDefinitionWrapperImplTests extends BaseTest {
-    private SensorDefinitionWrapperImpl sut;
+public class RuleDefinitionWrapperImplTests extends BaseTest {
+    private RuleDefinitionWrapperImpl sut;
 
     @BeforeEach
     void setUp() {
-		this.sut = new SensorDefinitionWrapperImpl();
+		this.sut = new RuleDefinitionWrapperImpl();
     }
 
     @Test
     void setName_whenSet_returnName() {
-		this.sut.setName("test");
-        Assertions.assertEquals("test", this.sut.getName());
-    }
-
-    @Test
-    void setProviderChecks_whenSet_returnProviderChecks() {
-        ProviderSensorDefinitionListImpl providerCheckList = new ProviderSensorDefinitionListImpl();
-		this.sut.setProviderSensors(providerCheckList);
-        Assertions.assertEquals(providerCheckList, this.sut.getProviderSensors());
+		this.sut.setRuleName("test");
+        Assertions.assertEquals("test", this.sut.getRuleName());
     }
 
     @Test
     void clone_whenCalled_thenListOfFieldsIsCloned() {
-        SensorDefinitionSpec sensorDefinitionSpec = new SensorDefinitionSpec();
+        RuleDefinitionSpec ruleDefinitionSpec = new RuleDefinitionSpec();
         ParameterDefinitionsListSpec fields = new ParameterDefinitionsListSpec();
-        sensorDefinitionSpec.setFields(fields);
+        ruleDefinitionSpec.setFields(fields);
         fields.add(new ParameterDefinitionSpec() {{
             setFieldName("field");
         }});
-        sut.setSpec(sensorDefinitionSpec);
+        sut.setSpec(ruleDefinitionSpec);
 
-        SensorDefinitionWrapper cloned = sut.clone();
+        RuleDefinitionWrapper cloned = sut.clone();
         Assertions.assertNotNull(cloned);
         Assertions.assertNotSame(cloned, this.sut);
-        Assertions.assertNotSame(cloned.getSpec(), sensorDefinitionSpec);
+        Assertions.assertNotSame(cloned.getSpec(), ruleDefinitionSpec);
         Assertions.assertNotSame(cloned.getSpec().getFields(), fields);
         Assertions.assertNotSame(cloned.getSpec().getFields().get(0), fields.get(0));
     }

@@ -16,6 +16,7 @@
 package ai.dqo.metadata.definitions.sensors;
 
 import ai.dqo.metadata.basespecs.AbstractElementWrapper;
+import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
@@ -131,5 +132,13 @@ public class SensorDefinitionWrapperImpl extends AbstractElementWrapper<String, 
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Creates and returns a deep clone (copy) of this object.
+     */
+    @Override
+    public SensorDefinitionWrapper clone() {
+        return (SensorDefinitionWrapper)super.deepClone();
     }
 }

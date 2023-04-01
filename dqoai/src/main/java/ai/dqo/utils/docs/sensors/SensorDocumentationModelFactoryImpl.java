@@ -79,6 +79,7 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
             System.err.println("Sensor definition for sensor " + sensorDefinitionName + " was not found");
             return null;
         }
+        sensorDefinitionWrapper = sensorDefinitionWrapper.clone();
 
         documentationModel.setSqlTemplates(createSqlTemplates(sensorDefinitionWrapper));
 
