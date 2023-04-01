@@ -51,6 +51,7 @@ public class DqoHomeDefinitionFillPostProcessor {
             DqoHomeContext dqoHomeContext = DqoHomeDirectFactory.openDqoHome(dqoHomePath);
 
             updateSpecificationsForRules(projectDir, dqoHomeContext);
+            updateSpecificationsForSensors(projectDir, dqoHomeContext);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,5 +69,20 @@ public class DqoHomeDefinitionFillPostProcessor {
                 new RuleDefinitionDefaultSpecUpdateServiceImpl(dqoHomeContext, specToUiCheckMappingService);
 
         ruleDefinitionDefaultSpecUpdateService.updateRuleSpecifications(projectRoot, dqoHomeContext);
+    }
+
+
+    /**
+     * Updates specifications for sensors.
+     * @param projectRoot Path to the project root.
+     * @param dqoHomeContext DQO home instance with access to the sensor references.
+     */
+    public static void updateSpecificationsForSensors(Path projectRoot, DqoHomeContext dqoHomeContext) {
+        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+        SensorDefinitionDefaultSpecUpdateService sensorDefinitionDefaultSpecUpdateService =
+                new SensorDefinitionDefaultSpecUpdateServiceImpl(dqoHomeContext, specToUiCheckMappingService);
+
+        sensorDefinitionDefaultSpecUpdateService.updateSensorSpecifications(projectRoot, dqoHomeContext);
     }
 }

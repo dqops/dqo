@@ -549,7 +549,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         assert fieldInfo.getDataType() != null && fieldInfo.getDataType() != ParameterDataType.object_type :
                 fieldInfo.getYamlFieldName() + " on " + parentObject.getClass().getName() + " has an unsupported type " + fieldInfo.getDataType();
         parameterDefinitionSpec.setDataType(fieldInfo.getDataType());
-        parameterDefinitionSpec.setFieldName(fieldInfo.getClassFieldName());
+        parameterDefinitionSpec.setFieldName(fieldInfo.getYamlFieldName());
         parameterDefinitionSpec.setDisplayName(fieldInfo.getDisplayName());
         parameterDefinitionSpec.setHelpText(fieldInfo.getHelpText());
         parameterDefinitionSpec.setDisplayHint(fieldInfo.getDisplayHint());

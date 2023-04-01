@@ -95,10 +95,13 @@ public class RuleDefinitionDefaultSpecUpdateServiceImpl implements RuleDefinitio
                     .stream()
                     .map(uiFieldModel -> uiFieldModel.getDefinition())
                     .collect(Collectors.toList());
-            fieldDefinitionList.forEach(fieldDefinition -> fieldDefinition.setFieldName(fieldDefinition.getDisplayName()));
 
             ParameterDefinitionsListSpec expectedParameterListSpec = new ParameterDefinitionsListSpec(fieldDefinitionList);
             ParameterDefinitionsListSpec currentParameterListSpec = ruleDefinitionSpec.getFields();
+
+            if (expectedParameterListSpec.size() == 0 && currentParameterListSpec == null) {
+                continue;
+            }
 
             if (!Objects.equals(expectedParameterListSpec, currentParameterListSpec)) {
                 ruleDefinitionSpec.setFields(expectedParameterListSpec);
