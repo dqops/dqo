@@ -45,13 +45,13 @@ import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorCategorySpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
-import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
-import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
+
 
 /**
  * Hierarchy node visitor (for the visitor design pattern) whose "accept" methods return a result.
@@ -156,20 +156,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(AbstractRuleParametersSpec abstractRuleParametersSpec, P parameter);
 
     /**
-     * Accepts any table level sensor specification (sensor call parameters).
-     * @param abstractTableSensorParameters Table level sensor specification (parameters).
+     * Accepts any sensor specification (sensor call parameters).
+     * @param abstractSensorParameters Sensor specification (parameters).
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(AbstractTableSensorParametersSpec abstractTableSensorParameters, P parameter);
-
-    /**
-     * Accepts any column level sensor specification (sensor call parameters).
-     * @param abstractColumnSensorParameters Column level sensor specification (parameters).
-     * @param parameter Additional parameter.
-     * @return Accept's result.
-     */
-    R accept(AbstractColumnSensorParametersSpec abstractColumnSensorParameters, P parameter);
+    R accept(AbstractSensorParametersSpec abstractSensorParameters, P parameter);
 
     /**
      * Accepts a list of sensor definitions.

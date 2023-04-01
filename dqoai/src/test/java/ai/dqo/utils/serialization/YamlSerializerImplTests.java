@@ -78,9 +78,9 @@ public class YamlSerializerImplTests extends BaseTest {
     void deserialize_whenUndeclaredPropertyInObjectExtendingAbstractSpec_thenIgnoredPropertiesAddedToMap() {
         TableSpec deserialized = this.sut.deserialize("missing_field1: abc\nmissing_field2: 10\n", TableSpec.class);
         Assertions.assertNotNull(deserialized);
-        Assertions.assertNotNull(deserialized.getIgnoredProperties());
-        Assertions.assertEquals(2, deserialized.getIgnoredProperties().size());
-        Assertions.assertTrue(deserialized.getIgnoredProperties().containsKey("missing_field1"));
-        Assertions.assertTrue(deserialized.getIgnoredProperties().containsKey("missing_field2"));
+        Assertions.assertNotNull(deserialized.getAdditionalProperties());
+        Assertions.assertEquals(2, deserialized.getAdditionalProperties().size());
+        Assertions.assertTrue(deserialized.getAdditionalProperties().containsKey("missing_field1"));
+        Assertions.assertTrue(deserialized.getAdditionalProperties().containsKey("missing_field2"));
     }
 }

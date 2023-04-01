@@ -25,6 +25,7 @@ import ai.dqo.utils.serialization.DeserializationAware;
 import ai.dqo.utils.serialization.YamlNotRenderWhenDefault;
 import com.fasterxml.jackson.annotation.JsonAnySetter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.rits.cloning.Cloner;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
 
@@ -65,7 +66,7 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    private Map<String, Object> ignoredProperties;
+    private Map<String, Object> additionalProperties;
 
     /**
      * Returns the hierarchy ID of this node.
@@ -94,15 +95,6 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
      */
     public boolean isWasDeserialized() {
         return wasDeserialized;
-    }
-
-    /**
-     * Returns a dictionary of invalid properties that were present in the YAML specification file, but were not declared in the class.
-     * Returns null when all properties were valid.
-     * @return True when undefined properties were present in the YAML file that failed the deserialization. Null when all properties were valid (declared).
-     */
-    public Map<String, Object> getIgnoredProperties() {
-        return ignoredProperties;
     }
 
     /**
@@ -299,16 +291,34 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
     }
 
     /**
+     * Returns a dictionary of invalid properties that were present in the YAML specification file, but were not declared in the class.
+     * Returns null when all properties were valid.
+     * @return True when undefined properties were present in the YAML file that failed the deserialization. Null when all properties were valid (declared).
+     */
+    public Map<String, Object> getAdditionalProperties() {
+        return additionalProperties;
+    }
+
+    /**
+     * Sets a new dictionary of additional properties. It is used to store custom sensor and custom rule parameters.
+     * @param additionalProperties Dictionary of additional properties (fields that were not mapped to JSON).
+     */
+    public void setAdditionalProperties(Map<String, Object> additionalProperties) {
+        this.setDirtyIf(!Objects.equals(this.additionalProperties, additionalProperties));
+        this.additionalProperties = additionalProperties;
+    }
+
+    /**
      * Called by Jackson property when an undeclared property was present in the deserialized YAML or JSON text.
      * @param name Undeclared (and ignored) property name.
      * @param value Property value.
      */
     @JsonAnySetter
     public void handleUndeclaredProperty(String name, Object value) {
-        if (this.ignoredProperties == null) {
-            this.ignoredProperties = new LinkedHashMap<>();
+        if (this.additionalProperties == null) {
+            this.additionalProperties = new LinkedHashMap<>();
         }
-        this.ignoredProperties.put(name, value);
+        this.additionalProperties.put(name, value);
     }
 
     /**
@@ -318,6 +328,10 @@ public abstract class AbstractSpec extends BaseDirtyTrackingSpec
     public AbstractSpec deepClone() {
         try {
             AbstractSpec cloned = (AbstractSpec) super.clone();
+            if (this.additionalProperties != null) {
+                Cloner cloner = new Cloner();
+                cloned.additionalProperties = cloner.deepClone(this.additionalProperties);
+            }
 
             ReflectionService reflectionService = ReflectionServiceSingleton.getInstance();
             ClassInfo myClassInfo = reflectionService.getClassInfoForClass(this.getClass());

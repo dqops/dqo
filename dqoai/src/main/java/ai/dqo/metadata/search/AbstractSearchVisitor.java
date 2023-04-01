@@ -47,13 +47,12 @@ import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorCategorySpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
-import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
-import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
 
 /**
  * Base class for search visitors that simply visits all nodes.
@@ -216,26 +215,14 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
     }
 
     /**
-     * Accepts any table level sensor specification (sensor call parameters).
+     * Accepts any sensor specification (sensor call parameters).
      *
-     * @param abstractTableSensorParameters Table level sensor specification (parameters).
+     * @param abstractSensorParameters Sensor specification (parameters).
      * @param parameter Target object where found hierarchy nodes, dimensions and labels should be added.
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractTableSensorParametersSpec abstractTableSensorParameters, T parameter) {
-        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
-    }
-
-    /**
-     * Accepts any column level sensor specification (sensor call parameters).
-     *
-     * @param abstractColumnSensorParameters Column level sensor specification (parameters).
-     * @param parameter                      Additional parameter.
-     * @return Accept's result.
-     */
-    @Override
-    public TreeNodeTraversalResult accept(AbstractColumnSensorParametersSpec abstractColumnSensorParameters, T parameter) {
+    public TreeNodeTraversalResult accept(AbstractSensorParametersSpec abstractSensorParameters, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 

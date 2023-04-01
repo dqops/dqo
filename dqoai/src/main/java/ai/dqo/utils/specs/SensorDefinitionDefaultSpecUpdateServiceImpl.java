@@ -22,8 +22,7 @@ import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.sensors.column.CustomColumnSensorParametersSpec;
-import ai.dqo.sensors.table.CustomTableSensorParametersSpec;
+import ai.dqo.sensors.CustomSensorParametersSpec;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
 import ai.dqo.utils.reflection.TargetClassSearchUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,8 +67,7 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
 
         for (Class<? extends AbstractSensorParametersSpec> sensorParametersClass : classes) {
             AbstractSensorParametersSpec abstractSensorParametersSpec = createSensorParameterInstance(sensorParametersClass);
-            if (abstractSensorParametersSpec instanceof CustomColumnSensorParametersSpec ||
-                    abstractSensorParametersSpec instanceof CustomTableSensorParametersSpec) {
+            if (abstractSensorParametersSpec instanceof CustomSensorParametersSpec) {
                 continue;
             }
 
