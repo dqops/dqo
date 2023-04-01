@@ -24,6 +24,7 @@ import ai.dqo.data.statistics.services.models.StatisticsResultsForTableModel;
 import ai.dqo.data.statistics.services.models.StatisticsMetricModel;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactory;
+import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import com.google.common.base.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -94,8 +95,15 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
             else {
                 String columnName = columnNameColumn.get(i);
                 StatisticsResultsForColumnModel columnModel = tableStatisticsResults.getColumns().get(columnName);
+
                 if (columnModel == null) {
                     columnModel = new StatisticsResultsForColumnModel(connectionName, physicalTableName, columnName);
+                    columnModel.setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters() {{
+                        setConnectionName(connectionName);
+                        setSchemaTableName(physicalTableName.toTableSearchFilter());
+                        setColumnName(columnName);
+                        setEnabled(true);
+                    }});
                     tableStatisticsResults.getColumns().put(columnName, columnModel);
                 }
 
@@ -124,6 +132,13 @@ public class StatisticsDataServiceImpl implements StatisticsDataService {
                                                                             String columName,
                                                                             String dataStreamName) {
         StatisticsResultsForColumnModel columnStatisticsResults = new StatisticsResultsForColumnModel(connectionName, physicalTableName, columName);
+        columnStatisticsResults.setCollectStatisticsJobTemplate(new StatisticsCollectorSearchFilters() {{
+            setConnectionName(connectionName);
+            setSchemaTableName(physicalTableName.toTableSearchFilter());
+            setColumnName(columName);
+            setEnabled(true);
+        }});
+
         Table allData = loadStatisticsResultsForTable(connectionName, physicalTableName);
         if (allData == null) {
             return columnStatisticsResults; // no profiling data
