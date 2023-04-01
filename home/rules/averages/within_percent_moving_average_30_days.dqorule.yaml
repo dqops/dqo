@@ -9,7 +9,7 @@ spec:
     prediction_time_window: 30
     min_periods_with_readouts: 10
   fields:
-  - field_name: maxPercentWithin
+  - field_name: max_percent_within
     display_name: max_percent_within
     help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
       \ within a moving average within the time window. Set the time window at the\

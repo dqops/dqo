@@ -9,7 +9,7 @@ spec:
     prediction_time_window: 30
     min_periods_with_readouts: 10
   fields:
-  - field_name: percentPopulationBelow
+  - field_name: percent_population_below
     display_name: percent_population_below
     help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
       \ below a moving average within the time window. Set the time window at the\

@@ -95,6 +95,8 @@ public class RuleDefinitionDefaultSpecUpdateServiceImpl implements RuleDefinitio
                     .stream()
                     .map(uiFieldModel -> uiFieldModel.getDefinition())
                     .collect(Collectors.toList());
+            fieldDefinitionList.forEach(fieldDefinition -> fieldDefinition.setFieldName(fieldDefinition.getDisplayName()));
+
             ParameterDefinitionsListSpec expectedParameterListSpec = new ParameterDefinitionsListSpec(fieldDefinitionList);
             ParameterDefinitionsListSpec currentParameterListSpec = ruleDefinitionSpec.getFields();
 

@@ -9,7 +9,7 @@ spec:
     prediction_time_window: 10
     min_periods_with_readouts: 5
   fields:
-  - field_name: maxPercentAbove
+  - field_name: max_percent_above
     display_name: max_percent_above
     help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
       \ above a moving average within the time window. Set the time window at the\
@@ -19,7 +19,7 @@ spec:
     data_type: double
     sample_values:
     - 10.0
-  - field_name: maxPercentBelow
+  - field_name: max_percent_below
     display_name: max_percent_below
     help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
       \ below a moving average within the time window. Set the time window at the\

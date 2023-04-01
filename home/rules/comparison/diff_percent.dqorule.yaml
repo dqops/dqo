@@ -6,7 +6,7 @@ spec:
   java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
-  - field_name: maxDiffPercent
+  - field_name: max_diff_percent
     display_name: max_diff_percent
     help_text: Maximum accepted value for the percentage of difference between expected_value
       and actual_value returned by the sensor (inclusive).

@@ -9,7 +9,7 @@ spec:
     prediction_time_window: 7
     min_periods_with_readouts: 3
   fields:
-  - field_name: stdevMultiplierBelow
+  - field_name: stdev_multiplier_below
     display_name: stdev_multiplier_below
     help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
       \ below a moving average within the time window. Set the time window at the\

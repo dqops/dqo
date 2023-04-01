@@ -6,7 +6,7 @@ spec:
   java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
   fields:
-  - field_name: maxValue
+  - field_name: max_value
     display_name: max_value
     help_text: Maximum accepted value for the actual_value returned by the sensor
       (inclusive).
