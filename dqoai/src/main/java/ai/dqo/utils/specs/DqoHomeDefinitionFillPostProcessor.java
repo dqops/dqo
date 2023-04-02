@@ -20,6 +20,7 @@ import ai.dqo.execution.sensors.finder.SensorDefinitionFindServiceImpl;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeDirectFactory;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingServiceImpl;
+import ai.dqo.services.check.matching.SimilarCheckMatchingServiceImpl;
 import ai.dqo.utils.docs.HandlebarsDocumentationUtilities;
 import ai.dqo.utils.reflection.ReflectionServiceImpl;
 
@@ -52,6 +53,7 @@ public class DqoHomeDefinitionFillPostProcessor {
 
             updateSpecificationsForRules(projectDir, dqoHomeContext);
             updateSpecificationsForSensors(projectDir, dqoHomeContext);
+            updateSpecificationsForChecks(dqoHomeContext);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -84,5 +86,18 @@ public class DqoHomeDefinitionFillPostProcessor {
                 new SensorDefinitionDefaultSpecUpdateServiceImpl(dqoHomeContext, specToUiCheckMappingService);
 
         sensorDefinitionDefaultSpecUpdateService.updateSensorSpecifications(projectRoot, dqoHomeContext);
+    }
+
+    /**
+     * Updates specifications for built-in checks.
+     * @param dqoHomeContext DQO home instance with access to the check references.
+     */
+    public static void updateSpecificationsForChecks(DqoHomeContext dqoHomeContext) {
+        SpecToUiCheckMappingServiceImpl specToUiCheckMappingService = SpecToUiCheckMappingServiceImpl.createInstanceUnsafe(
+                new ReflectionServiceImpl(), new SensorDefinitionFindServiceImpl());
+        CheckDefinitionDefaultSpecUpdateService sensorDefinitionDefaultSpecUpdateService =
+                new CheckDefinitionDefaultSpecUpdateServiceImpl(new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService));
+
+        sensorDefinitionDefaultSpecUpdateService.updateCheckSpecifications(dqoHomeContext);
     }
 }

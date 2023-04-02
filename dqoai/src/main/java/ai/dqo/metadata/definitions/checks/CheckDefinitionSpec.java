@@ -28,7 +28,7 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Custom data quality check specification. Provides the custom check configuration which is a pair of a sensor name and rule name.
+ * Custom data quality check specification. Provides the custom check configuration which is a pair of a sensor name and a rule name.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -46,10 +46,12 @@ public class CheckDefinitionSpec extends AbstractSpec {
      * Create a check definition specification.
      * @param sensorName Sensor name.
      * @param ruleName Rule name.
+     * @param helpText Help text.
      */
-    public CheckDefinitionSpec(String sensorName, String ruleName) {
+    public CheckDefinitionSpec(String sensorName, String ruleName, String helpText) {
         this.sensorName = sensorName;
         this.ruleName = ruleName;
+        this.helpText = helpText;
     }
 
     @JsonPropertyDescription("Sensor name. It is a folder name inside the user's home 'sensors' folder or the DQO Home (DQO distribution) home/sensors folder. Sample sensor name: table/standard/row_count.")
@@ -57,6 +59,9 @@ public class CheckDefinitionSpec extends AbstractSpec {
 
     @JsonPropertyDescription("Optional custom rule name. It is a path to a custom rule python module that starts at the user's home 'rules' folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule.")
     private String ruleName;
+
+    @JsonPropertyDescription("Help text that describes the data quality check.")
+    private String helpText;
 
     /**
      * Returns a sensor name.
@@ -90,6 +95,23 @@ public class CheckDefinitionSpec extends AbstractSpec {
     public void setRuleName(String ruleName) {
         this.setDirtyIf(!Objects.equals(this.ruleName, ruleName));
         this.ruleName = ruleName;
+    }
+
+    /**
+     * Returns the help text that is show for the check in the check editor.
+     * @return Help text.
+     */
+    public String getHelpText() {
+        return helpText;
+    }
+
+    /**
+     * Sets the help text that is shown for the check.
+     * @param helpText Help text.
+     */
+    public void setHelpText(String helpText) {
+        this.setDirtyIf(!Objects.equals(this.helpText, helpText));
+        this.helpText = helpText;
     }
 
     /**

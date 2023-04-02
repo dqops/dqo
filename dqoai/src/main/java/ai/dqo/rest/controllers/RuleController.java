@@ -220,7 +220,7 @@ public class RuleController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        userRuleDefinitionList.remove(ruleName);
+        existingUserRuleDefinitionWrapper.markForDeletion();
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT); // 204

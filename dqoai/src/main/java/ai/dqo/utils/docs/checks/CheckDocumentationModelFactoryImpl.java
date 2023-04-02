@@ -84,7 +84,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
-    private DqoHomeContext dqoHomeContext;
     private SimilarCheckMatchingService similarCheckMatchingService;
     private SensorDocumentationModelFactory sensorDocumentationModelFactory;
     private RuleDocumentationModelFactory ruleDocumentationModelFactory;
@@ -94,7 +93,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
     /**
      * Creates a check documentation service.
-     * @param dqoHomeContext DQO Home.
      * @param similarCheckMatchingService Service that finds all similar checks that share the same sensor and rule.
      * @param sensorDocumentationModelFactory Sensor documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the sensor.
      * @param ruleDocumentationModelFactory Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
@@ -103,14 +101,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      * @param jinjaTemplateRenderService Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
      */
     @Autowired
-    public CheckDocumentationModelFactoryImpl(DqoHomeContext dqoHomeContext,
-                                              SimilarCheckMatchingService similarCheckMatchingService,
+    public CheckDocumentationModelFactoryImpl(SimilarCheckMatchingService similarCheckMatchingService,
                                               SensorDocumentationModelFactory sensorDocumentationModelFactory,
                                               RuleDocumentationModelFactory ruleDocumentationModelFactory,
                                               UiToSpecCheckMappingService uiToSpecCheckMappingService,
                                               YamlSerializer yamlSerializer,
                                               JinjaTemplateRenderService jinjaTemplateRenderService) {
-        this.dqoHomeContext = dqoHomeContext;
         this.similarCheckMatchingService = similarCheckMatchingService;
         this.sensorDocumentationModelFactory = sensorDocumentationModelFactory;
         this.ruleDocumentationModelFactory = ruleDocumentationModelFactory;
@@ -374,8 +370,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private List<String> createCheckSample(String yamlSample, SimilarCheckModel similarCheckModel, CheckDocumentationModel checkDocumentationModel) {
         List<String> checkSample = new ArrayList<>();
         boolean isCheckSection = false;
-        String checkBeginMarker = "checks:";
-        String checkpointBeginMarker = "checkpoints:";
+        String checkBeginMarker = "profiling_checks:";
+        String checkpointBeginMarker = "recurring_checks:";
         String partitionedCheckBeginMarker = "partitioned_checks:";
         String checkEndMarker = "";
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
