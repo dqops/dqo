@@ -185,11 +185,11 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         Assertions.assertEquals(1, recurringSummary.getTotalChecksExecutedCount());
 
 
-        Assertions.assertEquals(1.0, profilingSummary.getValidResultsColumn().sum());
+        Assertions.assertEquals(2.0, profilingSummary.getValidResultsColumn().sum());
         Assertions.assertEquals(0.0, recurringSummary.getValidResultsColumn().sum());
         Assertions.assertEquals(0.0, partitionedSummary.getValidResultsColumn().sum());
 
-        Assertions.assertEquals(1, profilingSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(0, profilingSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(1, recurringSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, partitionedSummary.getErrorSeverityIssuesCount());
 
