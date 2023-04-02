@@ -180,7 +180,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 if (fatalRule != null) {
                     RuleExecutionRunParameters ruleRunParametersFatal = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
                             fatalRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal);
+                    RuleExecutionResult ruleExecutionResultFatal = this.ruleRunner.executeRule(executionContext, ruleRunParametersFatal, sensorRunParameters);
 
                     if (!ruleExecutionResultFatal.isPassed()) {
                         highestSeverity = 3;
@@ -201,7 +201,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 if (errorRule != null) {
                     RuleExecutionRunParameters ruleRunParametersError = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
                             errorRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError);
+                    RuleExecutionResult ruleExecutionResultError = this.ruleRunner.executeRule(executionContext, ruleRunParametersError, sensorRunParameters);
 
                     if (highestSeverity == null && !ruleExecutionResultError.isPassed()) {
                         highestSeverity = 2;
@@ -222,7 +222,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
                 if (warningRule != null) {
                     RuleExecutionRunParameters ruleRunParametersWarning = new RuleExecutionRunParameters(actualValue, expectedValueFromSensor,
                             warningRule, timePeriodLocal, previousDataPoints, ruleTimeWindowSettings);
-                    RuleExecutionResult ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning);
+                    RuleExecutionResult ruleExecutionResultWarning = this.ruleRunner.executeRule(executionContext, ruleRunParametersWarning, sensorRunParameters);
 
                     if (highestSeverity == null && !ruleExecutionResultWarning.isPassed()) {
                         highestSeverity = 1;

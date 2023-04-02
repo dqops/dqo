@@ -86,8 +86,8 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "tab1"));
 		tableSpec = tableWrapper.getSpec();
 		checkSpec = new TableRowCountCheckSpec();
-        tableSpec.getChecks().setStandard(new TableProfilingStandardChecksSpec());
-		tableSpec.getChecks().getStandard().setRowCount(this.checkSpec);
+        tableSpec.getProfilingChecks().setStandard(new TableProfilingStandardChecksSpec());
+		tableSpec.getProfilingChecks().getStandard().setRowCount(this.checkSpec);
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,

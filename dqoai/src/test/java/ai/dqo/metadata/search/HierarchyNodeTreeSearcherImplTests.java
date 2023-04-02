@@ -213,7 +213,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setCheckName("*");
         TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
         table.setSpec(tableSpec);
@@ -228,7 +228,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
     void findChecks_whenCalledForNonFilters_thenReturnsAll() {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
         table.setSpec(tableSpec);
@@ -244,7 +244,7 @@ public class HierarchyNodeTreeSearcherImplTests extends BaseTest {
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters();
         checkSearchFilters.setCheckName("test");
         TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
 		table.setSpec(tableSpec);

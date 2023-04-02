@@ -177,7 +177,7 @@ public class CheckServiceImplTests extends BaseTest {
         t1rowCountSpec.setFatal(t1rowCountFatalSpec);
         t1standardChecksSpec.setRowCount(t1rowCountSpec);
         t1categoriesSpec.setStandard(t1standardChecksSpec);
-        table1.getSpec().setChecks(t1categoriesSpec);
+        table1.getSpec().setProfilingChecks(t1categoriesSpec);
 
         ColumnProfilingCheckCategoriesSpec col21categoriesSpec = new ColumnProfilingCheckCategoriesSpec();
         ColumnProfilingStringsChecksSpec col21stringChecksSpec = new ColumnProfilingStringsChecksSpec();
@@ -190,10 +190,10 @@ public class CheckServiceImplTests extends BaseTest {
         col21stringLengthAboveCheckSpec.setFatal(countRule0ParametersSpec1);
         col21stringChecksSpec.setStringLengthAboveMaxLengthCount(col21stringLengthAboveCheckSpec);
         col21categoriesSpec.setStrings(col21stringChecksSpec);
-        col21.setChecks(col21categoriesSpec);
+        col21.setProfilingChecks(col21categoriesSpec);
 
         ColumnRecurringSpec col23recurringSpec = new ColumnRecurringSpec();
-        col23.setRecurring(col23recurringSpec);
+        col23.setRecurringChecks(col23recurringSpec);
         ColumnDailyRecurringCategoriesSpec col23categoriesSpec = new ColumnDailyRecurringCategoriesSpec();
         col23recurringSpec.setDaily(col23categoriesSpec);
         ColumnNumericDailyRecurringSpec col23numericChecksSpec = new ColumnNumericDailyRecurringSpec();
@@ -226,7 +226,7 @@ public class CheckServiceImplTests extends BaseTest {
         TableRowCountCheckSpec tableRowCountCheckSpec = userHome
                 .getConnections().getByObjectName("conn", true)
                 .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getChecks().getStandard().getRowCount();
+                .getProfilingChecks().getStandard().getRowCount();
 
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
@@ -254,7 +254,7 @@ public class CheckServiceImplTests extends BaseTest {
         tableRowCountCheckSpec = userHome
                 .getConnections().getByObjectName("conn", true)
                 .getTables().getByObjectName(new PhysicalTableName("sch", "tab1"), true).getSpec()
-                .getChecks().getStandard().getRowCount();
+                .getProfilingChecks().getStandard().getRowCount();
         Assertions.assertNull(tableRowCountCheckSpec.getWarning());
         Assertions.assertNotNull(tableRowCountCheckSpec.getError());
         Assertions.assertNotNull(tableRowCountCheckSpec.getFatal());

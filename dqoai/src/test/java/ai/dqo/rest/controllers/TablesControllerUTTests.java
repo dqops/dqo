@@ -180,7 +180,7 @@ public class TablesControllerUTTests extends BaseTest {
         TableRecurringSpec sampleRecurring = new TableRecurringSpec();
         sampleRecurring.setDaily(dailyRecurring);
         
-        this.sampleTable.getTableSpec().setRecurring(sampleRecurring);
+        this.sampleTable.getTableSpec().setRecurringChecks(sampleRecurring);
 
         ResponseEntity<Mono<TableDailyRecurringCategoriesSpec>> responseEntity = this.sut.getTableRecurringDaily(
                 this.sampleTable.getConnectionName(),
@@ -340,7 +340,7 @@ public class TablesControllerUTTests extends BaseTest {
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(this.sampleTable.getTableSpec().getChecks(), sampleProfilingCheck);
+        Assertions.assertSame(this.sampleTable.getTableSpec().getProfilingChecks(), sampleProfilingCheck);
     }
 
     @Test
@@ -371,7 +371,7 @@ public class TablesControllerUTTests extends BaseTest {
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
         Assertions.assertSame(
-                this.sampleTable.getTableSpec().getRecurring().getDaily(),
+                this.sampleTable.getTableSpec().getRecurringChecks().getDaily(),
                 sampleRecurring.getDaily());
     }
 

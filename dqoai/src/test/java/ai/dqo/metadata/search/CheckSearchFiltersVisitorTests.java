@@ -32,7 +32,6 @@ import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextObjectMother;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
-import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import org.junit.jupiter.api.Assertions;
@@ -207,7 +206,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
 
     private void structure1Setup() {
         // Check attached to table.
-        this.tableSpec.setChecks(new TableProfilingCheckCategoriesSpec() {{
+        this.tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec() {{
             setStandard(new TableProfilingStandardChecksSpec() {{
                 setRowCount(new TableRowCountCheckSpec() {{
                     setError(new MinCountRule0ParametersSpec(10L));
@@ -216,7 +215,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
         }});
 
         // Check attached to column.
-        this.columnSpec.setChecks(new ColumnProfilingCheckCategoriesSpec() {{
+        this.columnSpec.setProfilingChecks(new ColumnProfilingCheckCategoriesSpec() {{
             setNulls(new ColumnProfilingNullsChecksSpec() {{
                 setNullsCount(new ColumnNullsCountCheckSpec() {{
                     setError(new MaxCountRule10ParametersSpec(20L));
@@ -259,7 +258,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptAbstractCheckCategorySpec_whenCalledForSelectedColumnCheckOnColumn_thenTraverseChildren() {
         this.structure1Setup();
-        AbstractCheckCategorySpec columnCheckCategorySpec = this.columnSpec.getChecks().getNulls();
+        AbstractCheckCategorySpec columnCheckCategorySpec = this.columnSpec.getProfilingChecks().getNulls();
 
         SearchParameterObject searchParameterObject = new SearchParameterObject();
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(columnCheckCategorySpec, searchParameterObject);
@@ -270,7 +269,7 @@ public class CheckSearchFiltersVisitorTests extends BaseTest {
     @Test
     void acceptAbstractCheckSpec_whenCalledForSelectedColumnCheckOnColumn_thenSkipChildrenReturnCheck() {
         this.structure1Setup();
-        AbstractCheckSpec columnCheckSpec = this.columnSpec.getChecks().getNulls().getNullsCount();
+        AbstractCheckSpec columnCheckSpec = this.columnSpec.getProfilingChecks().getNulls().getNullsCount();
 
         SearchParameterObject searchParameterObject = new SearchParameterObject();
         TreeNodeTraversalResult treeNodeTraversalResult = this.sut.accept(columnCheckSpec, searchParameterObject);

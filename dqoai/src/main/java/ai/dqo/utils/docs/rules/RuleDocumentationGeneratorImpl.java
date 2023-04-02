@@ -17,7 +17,7 @@ package ai.dqo.utils.docs.rules;
 
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.custom.CustomRuleParametersSpec;
+import ai.dqo.rules.CustomRuleParametersSpec;
 import ai.dqo.utils.docs.HandlebarsDocumentationUtilities;
 import ai.dqo.utils.docs.files.DocumentationFolder;
 import ai.dqo.utils.docs.files.DocumentationMarkdownFile;

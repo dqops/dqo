@@ -84,7 +84,7 @@ public class JinjaTemplateRenderServiceObjectMother {
      */
     public static String renderBuiltInTemplate(JinjaTemplateRenderParameters renderParameters) {
         SensorDefinitionFindResult sensorDefinitions =
-                SensorDefinitionFindResultObjectMother.findDqoHomeSensorDefinition(renderParameters.getParameters().getSensorDefinitionName(),
+                SensorDefinitionFindResultObjectMother.findDqoHomeSensorDefinition(renderParameters.getParameters().getSensorDefinitionName(null, null),
                         renderParameters.getConnection().getProviderType());
 
         JinjaTemplateRenderServiceImpl renderService = getDefault();

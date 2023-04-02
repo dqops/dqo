@@ -16,6 +16,7 @@
 package ai.dqo.execution.checks.progress;
 
 import ai.dqo.cli.terminal.TerminalWriter;
+import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.progress.*;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +59,10 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
     public void onExecutingSensor(ExecutingSensorEvent event) {
         renderEventHeader();
         String tableName = event.getTableSpec().getPhysicalTableName().toString();
-        String checkName = event.getSensorRunParameters().getCheck().getCheckName();
-        String sensorDefinitionName = event.getSensorRunParameters().getSensorParameters().getSensorDefinitionName();
+        SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
+        String checkName = sensorRunParameters.getCheck().getCheckName();
+        String sensorDefinitionName = sensorRunParameters.getSensorParameters().getSensorDefinitionName(
+                sensorRunParameters.getCheck(), sensorRunParameters.getProfiler());
         this.terminalWriter.writeLine(String.format("Executing a sensor for a check %s on the table %s using a sensor definition %s",
                 checkName, tableName, sensorDefinitionName));
         renderEventFooter();

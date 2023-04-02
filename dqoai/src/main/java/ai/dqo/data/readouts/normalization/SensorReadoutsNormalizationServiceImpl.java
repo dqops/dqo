@@ -212,7 +212,8 @@ public class SensorReadoutsNormalizationServiceImpl implements SensorReadoutsNor
         sortedNormalizedTable.addColumns(qualityDimensionColumn);
 
         StringColumn sensorNameColumn = StringColumn.create(SensorReadoutsColumnNames.SENSOR_NAME_COLUMN_NAME, resultsRowCount);
-        String sensorDefinitionName = sensorRunParameters.getSensorParameters().getSensorDefinitionName();
+        String sensorDefinitionName = sensorRunParameters.getSensorParameters().getSensorDefinitionName(
+                sensorRunParameters.getCheck(), sensorRunParameters.getProfiler());
         sensorNameColumn.setMissingTo(sensorDefinitionName);
         sortedNormalizedTable.addColumns(sensorNameColumn);
 

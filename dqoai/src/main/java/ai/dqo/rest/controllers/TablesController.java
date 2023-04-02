@@ -472,7 +472,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        TableProfilingCheckCategoriesSpec checks = tableSpec.getChecks();
+        TableProfilingCheckCategoriesSpec checks = tableSpec.getProfilingChecks();
         return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
     }
 
@@ -515,7 +515,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        TableDailyRecurringCategoriesSpec dailyRecurring = tableSpec.getRecurring().getDaily();
+        TableDailyRecurringCategoriesSpec dailyRecurring = tableSpec.getRecurringChecks().getDaily();
         return new ResponseEntity<>(Mono.justOrEmpty(dailyRecurring), HttpStatus.OK); // 200
     }
 
@@ -558,7 +558,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableMonthlyRecurringCategoriesSpec monthlyRecurring = tableSpec.getRecurring().getMonthly();
+        TableMonthlyRecurringCategoriesSpec monthlyRecurring = tableSpec.getRecurringChecks().getMonthly();
         return new ResponseEntity<>(Mono.justOrEmpty(monthlyRecurring), HttpStatus.OK); // 200
     }
     
@@ -1713,7 +1713,7 @@ public class TablesController {
                     if (tableProfilingCheckCategoriesSpec.isPresent()) {
                         spec.setTableCheckRootContainer(tableProfilingCheckCategoriesSpec.get());
                     } else {
-                        spec.setChecks(new TableProfilingCheckCategoriesSpec()); // it is never empty...
+                        spec.setProfilingChecks(new TableProfilingCheckCategoriesSpec()); // it is never empty...
                     }
                 },
                 connectionName,
@@ -1760,7 +1760,7 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    TableRecurringSpec recurringSpec = spec.getRecurring();
+                    TableRecurringSpec recurringSpec = spec.getRecurringChecks();
                     
                     if (tableDailyRecurringSpec.isPresent()) {
                         recurringSpec.setDaily(tableDailyRecurringSpec.get());
@@ -1812,7 +1812,7 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    TableRecurringSpec recurringSpec = spec.getRecurring();
+                    TableRecurringSpec recurringSpec = spec.getRecurringChecks();
 
                     if (tableMonthlyRecurringSpec.isPresent()) {
                         recurringSpec.setMonthly(tableMonthlyRecurringSpec.get());
@@ -2005,7 +2005,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecksUI(
-                TableSpec::getChecks,
+                TableSpec::getProfilingChecks,
                 connectionName,
                 schemaName,
                 tableName,

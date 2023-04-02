@@ -717,6 +717,12 @@
 			<artifactId>therapi-runtime-javadoc</artifactId>
 			<version>0.15.0</version>
 		</dependency>
+		<dependency>
+			<groupId>com.github.victools</groupId>
+			<artifactId>jsonschema-generator</artifactId>
+			<version>4.29.0</version>
+			<scope>provided</scope>
+		</dependency>
 
 		<!-- JDBC driver dependencies, make sure that they are the same as those in the lib/pom.xml file, because they are distributed in a separate folder -->
 		<dependency>
@@ -959,7 +965,7 @@
 			<plugin>
 				<groupId>com.github.victools</groupId>
 				<artifactId>jsonschema-maven-plugin</artifactId>
-				<version>4.22.0</version>
+				<version>4.29.0</version>
 				<executions>
 					<execution>
 						<goals>
@@ -986,6 +992,9 @@
 							<options>
 								<option>FLATTENED_ENUMS_FROM_JSONPROPERTY</option>
 							</options>
+						</module>
+						<module>
+							<className>ai.dqo.utils.schema.AdditionalPropertiesYamlSchemaModule</className>
 						</module>
 					</modules>
 				</configuration>

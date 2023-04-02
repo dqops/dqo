@@ -249,7 +249,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
         DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
@@ -300,7 +300,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             if (sensorParameters == null) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN; // sensor is not configured (has no parameters, we don't know what to run)
             }
-            String sensorDefinitionName = sensorParameters.getSensorDefinitionName();
+            String sensorDefinitionName = sensorParameters.getSensorDefinitionName(abstractCheckSpec, null);
             String sensorEntryName = sensorParameters.getHierarchyId().getLast().toString();
             if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter) &&
                     !StringPatternComparer.matchSearchPattern(sensorEntryName, sensorNameFilter)) {

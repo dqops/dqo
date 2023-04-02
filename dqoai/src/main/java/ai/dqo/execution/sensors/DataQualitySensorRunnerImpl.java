@@ -56,7 +56,8 @@ public class DataQualitySensorRunnerImpl implements DataQualitySensorRunner {
                                                SensorExecutionRunParameters sensorRunParameters,
                                                SensorExecutionProgressListener progressListener,
                                                boolean dummySensorExecution) {
-        String sensorName = sensorRunParameters.getSensorParameters().getSensorDefinitionName();
+        String sensorName = sensorRunParameters.getSensorParameters().getSensorDefinitionName(
+                sensorRunParameters.getCheck(), sensorRunParameters.getProfiler());
         ProviderType providerType = sensorRunParameters.getConnection().getProviderType();
 
         SensorDefinitionFindResult sensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(

@@ -20,6 +20,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
@@ -516,10 +517,18 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(RecurringSchedulesSpec recurringSchedulesSpec, P parameter);
 
     /**
-     * Accepts a configuration of incremental partition checks..
+     * Accepts a configuration of incremental partition checks.
      * @param partitionIncrementalTimeWindowSpec Configuration of incremental partition checks.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
     R accept(PartitionIncrementalTimeWindowSpec partitionIncrementalTimeWindowSpec, P parameter);
+
+    /**
+     * Accepts a dictionary of custom checks. The keys must be names of configured custom checks.
+     * @param customCheckSpecMap Dictionary of custom checks.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(CustomCheckSpecMap customCheckSpecMap, P parameter);
 }

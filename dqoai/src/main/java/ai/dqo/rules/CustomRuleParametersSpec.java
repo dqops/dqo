@@ -13,13 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.sensors;
+package ai.dqo.rules;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.custom.CustomCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.utils.schema.JsonAdditionalProperties;
 import com.fasterxml.jackson.annotation.JsonAnyGetter;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -27,23 +26,26 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.EqualsAndHashCode;
 
-import java.util.LinkedHashMap;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
- * Custom sensor parameters for custom checks.
+ * Custom data quality rule.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
 @JsonAdditionalProperties
-public class CustomSensorParametersSpec extends AbstractSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<CustomSensorParametersSpec> FIELDS =
-            new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
+public class CustomRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<CustomRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
+
+    /**
+     * Default constructor, the minimum accepted value is 0.
+     */
+    public CustomRuleParametersSpec() {
+    }
 
     /**
      * Returns the child map on the spec class with all fields.
@@ -110,29 +112,28 @@ public class CustomSensorParametersSpec extends AbstractSensorParametersSpec {
     }
 
     /**
-     * Returns the sensor definition name. This is the folder name that keeps the sensor definition files.
-     * This method supports custom checks and custom profilers.
+     * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
      *
-     * @param check    Optional parent check specification.
-     * @param profiler Optional parent profiler (statistics collector) specification.
-     * @return Sensor definition name.
+     * @param checkSpec Check specification, used to retrieve the check name from a custom check.
+     * @return Rule definition name (python module name without .py extension).
      */
     @Override
-    public String getSensorDefinitionName(AbstractCheckSpec<?, ?, ?, ?> check, AbstractStatisticsCollectorSpec<?> profiler) {
-        if (check instanceof CustomCheckSpec) {
-            CustomCheckSpec customCheckSpec = (CustomCheckSpec)check;
-            return customCheckSpec.getSensorName();
+    public String getRuleDefinitionName(AbstractCheckSpec<?, ?, ?, ?> checkSpec) {
+        if (checkSpec instanceof CustomCheckSpec) {
+            CustomCheckSpec customCheckSpec = (CustomCheckSpec) checkSpec;
+            return customCheckSpec.getRuleName();
         }
-        return super.getSensorDefinitionName(check, profiler);
+
+        return super.getRuleDefinitionName(checkSpec);
     }
 
     /**
-     * Returns the sensor definition name. This is the folder name that keeps the sensor definition files.
+     * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
      *
-     * @return Sensor definition name.
+     * @return Rule definition name (python module name without .py extension).
      */
     @Override
-    public String getSensorDefinitionName() {
-        throw new UnsupportedOperationException("Custom sensors do not return the sensor definition name without providing the instance of a custom check that has the sensor name.");
+    public String getRuleDefinitionName() {
+        throw new UnsupportedOperationException("Custom rule do not return the rule name without providing the instance of a custom check that has the rule name.");
     }
 }

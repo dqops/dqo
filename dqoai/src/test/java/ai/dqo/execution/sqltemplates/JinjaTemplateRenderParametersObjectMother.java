@@ -49,7 +49,8 @@ public class JinjaTemplateRenderParametersObjectMother {
     public static JinjaTemplateRenderParameters createForRunParameters(
 			SensorExecutionRunParameters sensorExecutionRunParameters) {
         assert sensorExecutionRunParameters.getSensorParameters() != null;
-        String sensorName = sensorExecutionRunParameters.getSensorParameters().getSensorDefinitionName();
+        String sensorName = sensorExecutionRunParameters.getSensorParameters().getSensorDefinitionName(
+                sensorExecutionRunParameters.getCheck(), sensorExecutionRunParameters.getProfiler());
         SensorDefinitionFindResult sensorDefinitions =
                 SensorDefinitionFindResultObjectMother.findDqoHomeSensorDefinition(sensorName, sensorExecutionRunParameters.getConnection().getProviderType());
 

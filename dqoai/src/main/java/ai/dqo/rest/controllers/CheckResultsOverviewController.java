@@ -87,7 +87,7 @@ public class CheckResultsOverviewController {
         }
 
         TableProfilingCheckCategoriesSpec checks = Objects.requireNonNullElseGet(
-                tableSpec.getChecks(),
+                tableSpec.getProfilingChecks(),
                 () -> {
                     TableProfilingCheckCategoriesSpec container = new TableProfilingCheckCategoriesSpec();
                     container.setHierarchyId(new HierarchyId(tableSpec.getHierarchyId(), "checks"));

@@ -122,8 +122,8 @@ public class TableSpecTests extends BaseTest {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
         profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
         profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
-		this.sut.setChecks(profilingChecks);
-        Assertions.assertEquals(this.sut.getChecks(), profilingChecks);
+		this.sut.setProfilingChecks(profilingChecks);
+        Assertions.assertEquals(this.sut.getProfilingChecks(), profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
     }
 
@@ -132,11 +132,11 @@ public class TableSpecTests extends BaseTest {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
         profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
         profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
-		this.sut.setChecks(profilingChecks);
+		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.isDirty());
 		this.sut.clearDirty(true);
         Assertions.assertFalse(this.sut.isDirty());
-		this.sut.setChecks(profilingChecks);
+		this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertFalse(this.sut.isDirty());
     }
 
@@ -150,7 +150,7 @@ public class TableSpecTests extends BaseTest {
         TableProfilingCheckCategoriesSpec profilingChecks = new TableProfilingCheckCategoriesSpec();
         profilingChecks.setStandard(new TableProfilingStandardChecksSpec());
         profilingChecks.getStandard().setRowCount(new TableRowCountCheckSpec());
-        this.sut.setChecks(profilingChecks);
+        this.sut.setProfilingChecks(profilingChecks);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 
@@ -162,7 +162,7 @@ public class TableSpecTests extends BaseTest {
         standard.setDailyRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
         recurring.setDaily(daily);
-        this.sut.setRecurring(recurring);
+        this.sut.setRecurringChecks(recurring);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 
@@ -174,7 +174,7 @@ public class TableSpecTests extends BaseTest {
         standard.setMonthlyRowCount(new TableRowCountCheckSpec());
         daily.setStandard(standard);
         recurring.setMonthly(daily);
-        this.sut.setRecurring(recurring);
+        this.sut.setRecurringChecks(recurring);
         Assertions.assertTrue(this.sut.hasAnyChecksConfigured());
     }
 

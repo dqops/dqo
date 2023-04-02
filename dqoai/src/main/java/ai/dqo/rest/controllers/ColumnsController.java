@@ -414,7 +414,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnProfilingCheckCategoriesSpec checks = columnSpec.getChecks();
+        ColumnProfilingCheckCategoriesSpec checks = columnSpec.getProfilingChecks();
         return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
     }
 
@@ -445,7 +445,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurring();
+        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
         if (recurringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -481,7 +481,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurring();
+        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
         if (recurringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -1428,9 +1428,9 @@ public class ColumnsController {
         }
 
         if (columnCheckCategoriesSpec.isPresent()) {
-            columnSpec.setChecks(columnCheckCategoriesSpec.get());
+            columnSpec.setProfilingChecks(columnCheckCategoriesSpec.get());
         } else {
-            columnSpec.setChecks(null);
+            columnSpec.setProfilingChecks(null);
         }
 
         userHomeContext.flush();
@@ -1476,17 +1476,17 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurring();
+        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
         if (recurringSpec == null) {
             recurringSpec = new ColumnRecurringSpec();
         }
         
         if (columnDailyRecurringSpec.isPresent()) {
             recurringSpec.setDaily(columnDailyRecurringSpec.get());
-            columnSpec.setRecurring(recurringSpec);
+            columnSpec.setRecurringChecks(recurringSpec);
         } else if (recurringSpec.getMonthly() == null) {
             // If there is no monthly recurring, and it's been requested to delete daily recurring, then delete all.
-            columnSpec.setRecurring(null);
+            columnSpec.setRecurringChecks(null);
         } else {
             recurringSpec.setDaily(null);
         }
@@ -1533,17 +1533,17 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurring();
+        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
         if (recurringSpec == null) {
             recurringSpec = new ColumnRecurringSpec();
         }
 
         if (columnMonthlyRecurringSpec.isPresent()) {
             recurringSpec.setMonthly(columnMonthlyRecurringSpec.get());
-            columnSpec.setRecurring(recurringSpec);
+            columnSpec.setRecurringChecks(recurringSpec);
         } else if (recurringSpec.getDaily() == null) {
             // If there is no daily recurring, and it's been requested to delete monthly recurring, then delete all.
-            columnSpec.setRecurring(null);
+            columnSpec.setRecurringChecks(null);
         } else {
             recurringSpec.setMonthly(null);
         }

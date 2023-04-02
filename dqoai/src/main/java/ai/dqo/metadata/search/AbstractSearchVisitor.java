@@ -20,6 +20,7 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
 import ai.dqo.metadata.comments.CommentSpec;
@@ -750,6 +751,18 @@ public abstract class AbstractSearchVisitor<T> implements HierarchyNodeResultVis
      */
     @Override
     public TreeNodeTraversalResult accept(PartitionIncrementalTimeWindowSpec partitionIncrementalTimeWindowSpec, T parameter) {
+        return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
+    }
+
+    /**
+     * Accepts a dictionary of custom checks. The keys must be names of configured custom checks.
+     *
+     * @param customCheckSpecMap Dictionary of custom checks.
+     * @param parameter          Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    @Override
+    public TreeNodeTraversalResult accept(CustomCheckSpecMap customCheckSpecMap, T parameter) {
         return TreeNodeTraversalResult.TRAVERSE_CHILDREN;
     }
 }

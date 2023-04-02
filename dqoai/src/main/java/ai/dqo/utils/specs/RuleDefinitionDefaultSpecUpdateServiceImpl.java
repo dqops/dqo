@@ -23,7 +23,7 @@ import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.custom.CustomRuleParametersSpec;
+import ai.dqo.rules.CustomRuleParametersSpec;
 import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
 import ai.dqo.utils.reflection.TargetClassSearchUtility;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -72,7 +72,7 @@ public class RuleDefinitionDefaultSpecUpdateServiceImpl implements RuleDefinitio
                 continue;
             }
 
-            String ruleDefinitionName = abstractRuleParametersSpec.getRuleDefinitionName();
+            String ruleDefinitionName = abstractRuleParametersSpec.getRuleDefinitionName(null);
             if (processedRuleName.contains(ruleDefinitionName)) {
                 continue;
             }

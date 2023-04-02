@@ -177,7 +177,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             }
         }
 
-        TableStatisticsCollectorsRootCategoriesSpec statisticsCollector = tableSpec.getStatisticsCollector();
+        TableStatisticsCollectorsRootCategoriesSpec statisticsCollector = tableSpec.getStatistics();
         if (statisticsCollector == null) {
             // the default traversal will not see the statistics collector, we need to create the default statistics collector and traverse it
             statisticsCollector = new TableStatisticsCollectorsRootCategoriesSpec();
@@ -251,7 +251,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             }
         }
 
-        ColumnStatisticsCollectorsRootCategoriesSpec statisticsCollector = columnSpec.getStatisticsCollector();
+        ColumnStatisticsCollectorsRootCategoriesSpec statisticsCollector = columnSpec.getStatistics();
         if (statisticsCollector == null) {
             // the default traversal will not see the statistics collector, we need to create the default statistics collector and traverse it
             statisticsCollector = new ColumnStatisticsCollectorsRootCategoriesSpec();
@@ -330,7 +330,7 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             if (sensorParameters == null) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN; // sensor is not configured (has no parameters, we don't know what to run)
             }
-            String sensorDefinitionName = sensorParameters.getSensorDefinitionName();
+            String sensorDefinitionName = sensorParameters.getSensorDefinitionName(null, abstractStatisticsCollectorSpec);
             String sensorEntryName = sensorParameters.getHierarchyId().getLast().toString();
             if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter) &&
                     !StringPatternComparer.matchSearchPattern(sensorEntryName, sensorNameFilter)) {
