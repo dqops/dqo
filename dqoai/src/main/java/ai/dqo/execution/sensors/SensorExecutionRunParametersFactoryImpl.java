@@ -17,9 +17,12 @@ package ai.dqo.execution.sensors;
 
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.custom.CustomCheckSpec;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
+import ai.dqo.execution.checks.EffectiveSensorRuleNames;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -30,6 +33,7 @@ import ai.dqo.metadata.sources.PartitionIncrementalTimeWindowSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -56,6 +60,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
      * @param table Table specification.
      * @param column Optional column specification for column sensors.
      * @param check Check specification.
+     * @param customCheckDefinition Optional custom check definition, required when the check is a custom check.
      * @param checkType Check type (adhoc, checkpoint, partitioned).
      * @param timeSeriesConfigurationSpec Time series configuration extracted from the group of checks (profiling, checkpoints, partitioned).
      * @param userTimeWindowFilters Optional user provided time window filters to analyze a time range of data or recent months/days.
@@ -68,6 +73,7 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                                                                TableSpec table,
                                                                ColumnSpec column,
                                                                AbstractCheckSpec<?,?,?,?> check,
+                                                               CheckDefinitionSpec customCheckDefinition,
                                                                CheckType checkType,
                                                                TimeSeriesConfigurationSpec timeSeriesConfigurationSpec,
                                                                TimeWindowFilterParameters userTimeWindowFilters,
@@ -82,9 +88,27 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                 expandedTable.getDataStreams().get(check.getDataStream()) : expandedTable.getDataStreams().getFirstDataStreamMapping();
         TimeWindowFilterParameters timeWindowFilterParameters =
                 this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
+        EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames();
+        if (customCheckDefinition != null) {
+            effectiveSensorRuleNames.setSensorName(customCheckDefinition.getSensorName());
+            effectiveSensorRuleNames.setRuleName(customCheckDefinition.getRuleName());
+        } else {
+            effectiveSensorRuleNames.setSensorName(check.getParameters().getSensorDefinitionName());
+            effectiveSensorRuleNames.setRuleName(check.getRuleDefinitionName());
+        }
+
+        if (check instanceof CustomCheckSpec) {
+            CustomCheckSpec customCheckSpec = (CustomCheckSpec) check;
+            if (!Strings.isNullOrEmpty(customCheckSpec.getSensorName())) {
+                effectiveSensorRuleNames.setSensorName(customCheckSpec.getSensorName());
+            }
+            if (!Strings.isNullOrEmpty(customCheckSpec.getRuleName())) {
+                effectiveSensorRuleNames.setRuleName(customCheckSpec.getRuleName());
+            }
+        }
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                check, null, checkType, timeSeries, timeWindowFilterParameters,
+                check, null, effectiveSensorRuleNames, checkType, timeSeries, timeWindowFilterParameters,
                 dataStreams, sensorParameters, dialectSettings);
     }
 
@@ -118,9 +142,11 @@ public class SensorExecutionRunParametersFactoryImpl implements SensorExecutionR
                 expandedTable.getDataStreams().getFirstDataStreamMapping();
         TimeWindowFilterParameters timeWindowFilterParameters =
                 this.makeEffectiveIncrementalFilter(table, timeSeries, userTimeWindowFilters);
+        EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
+                statisticsCollectorSpec.getParameters().getSensorDefinitionName(), null);
 
         return new SensorExecutionRunParameters(expandedConnection, expandedTable, expandedColumn,
-                null, statisticsCollectorSpec, null, timeSeries, timeWindowFilterParameters,
+                null, statisticsCollectorSpec, effectiveSensorRuleNames, null, timeSeries, timeWindowFilterParameters,
                 dataStreams, sensorParameters, dialectSettings);
     }
 

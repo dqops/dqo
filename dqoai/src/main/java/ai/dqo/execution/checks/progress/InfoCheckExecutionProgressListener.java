@@ -61,8 +61,7 @@ public class InfoCheckExecutionProgressListener extends SummaryCheckExecutionPro
         String tableName = event.getTableSpec().getPhysicalTableName().toString();
         SensorExecutionRunParameters sensorRunParameters = event.getSensorRunParameters();
         String checkName = sensorRunParameters.getCheck().getCheckName();
-        String sensorDefinitionName = sensorRunParameters.getSensorParameters().getSensorDefinitionName(
-                sensorRunParameters.getCheck(), sensorRunParameters.getProfiler());
+        String sensorDefinitionName = sensorRunParameters.getSensorParameters().getSensorDefinitionName();
         this.terminalWriter.writeLine(String.format("Executing a sensor for a check %s on the table %s using a sensor definition %s",
                 checkName, tableName, sensorDefinitionName));
         renderEventFooter();

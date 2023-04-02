@@ -111,28 +111,11 @@ public class CustomSensorParametersSpec extends AbstractSensorParametersSpec {
 
     /**
      * Returns the sensor definition name. This is the folder name that keeps the sensor definition files.
-     * This method supports custom checks and custom profilers.
-     *
-     * @param check    Optional parent check specification.
-     * @param profiler Optional parent profiler (statistics collector) specification.
-     * @return Sensor definition name.
-     */
-    @Override
-    public String getSensorDefinitionName(AbstractCheckSpec<?, ?, ?, ?> check, AbstractStatisticsCollectorSpec<?> profiler) {
-        if (check instanceof CustomCheckSpec) {
-            CustomCheckSpec customCheckSpec = (CustomCheckSpec)check;
-            return customCheckSpec.getSensorName();
-        }
-        return super.getSensorDefinitionName(check, profiler);
-    }
-
-    /**
-     * Returns the sensor definition name. This is the folder name that keeps the sensor definition files.
      *
      * @return Sensor definition name.
      */
     @Override
     public String getSensorDefinitionName() {
-        throw new UnsupportedOperationException("Custom sensors do not return the sensor definition name without providing the instance of a custom check that has the sensor name.");
+        throw new UnsupportedOperationException("A custom sensor parameters does not known its sensor name, it is defined on the custom check definition.");
     }
 }

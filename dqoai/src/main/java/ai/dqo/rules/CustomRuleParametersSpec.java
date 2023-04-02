@@ -116,26 +116,10 @@ public class CustomRuleParametersSpec extends AbstractRuleParametersSpec {
     /**
      * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
      *
-     * @param checkSpec Check specification, used to retrieve the check name from a custom check.
-     * @return Rule definition name (python module name without .py extension).
-     */
-    @Override
-    public String getRuleDefinitionName(AbstractCheckSpec<?, ?, ?, ?> checkSpec) {
-        if (checkSpec instanceof CustomCheckSpec) {
-            CustomCheckSpec customCheckSpec = (CustomCheckSpec) checkSpec;
-            return customCheckSpec.getRuleName();
-        }
-
-        return super.getRuleDefinitionName(checkSpec);
-    }
-
-    /**
-     * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
-     *
      * @return Rule definition name (python module name without .py extension).
      */
     @Override
     public String getRuleDefinitionName() {
-        throw new UnsupportedOperationException("Custom rule do not return the rule name without providing the instance of a custom check that has the rule name.");
+        throw new UnsupportedOperationException("A custom rule parameters does not known its sensor name, it is defined on the custom check definition.");
     }
 }

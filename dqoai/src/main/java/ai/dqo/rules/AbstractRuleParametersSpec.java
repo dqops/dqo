@@ -62,19 +62,10 @@ public abstract class AbstractRuleParametersSpec extends AbstractSpec implements
 
     /**
      * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
-     * @param checkSpec Check specification, used to retrieve the check name from a custom check.
-     * @return Rule definition name (python module name without .py extension).
-     */
-    public String getRuleDefinitionName(AbstractCheckSpec<?,?,?,?> checkSpec) {
-        return this.getRuleDefinitionName();
-    }
-
-    /**
-     * Returns a rule definition name. It is a name of a python module (file) without the ".py" extension. Rule names are related to the "rules" folder in DQO_HOME.
      * @return Rule definition name (python module name without .py extension).
      */
     @JsonIgnore
-    protected abstract String getRuleDefinitionName();
+    public abstract String getRuleDefinitionName();
 
     /**
      * Checks if the object is a default value, so it would be rendered as an empty node. We want to skip it and not render it to YAML.

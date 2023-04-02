@@ -215,10 +215,13 @@ public class FolderTreeNode {
                     return FolderKind.SOURCES;
                 }
                 else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.SENSORS)) {
-                    return FolderKind.CHECKS;
+                    return FolderKind.SENSORS;
                 }
                 else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.RULES)) {
                     return FolderKind.RULES;
+                }
+                else  if (Objects.equals(folderName.getFileSystemName(), BuiltInFolderNames.CHECKS)) {
+                    return FolderKind.CHECKS;
                 }
                 return FolderKind.FOREIGN;
             case CHECKS:

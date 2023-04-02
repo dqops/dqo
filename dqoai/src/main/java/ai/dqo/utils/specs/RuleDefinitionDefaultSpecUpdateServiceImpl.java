@@ -72,7 +72,7 @@ public class RuleDefinitionDefaultSpecUpdateServiceImpl implements RuleDefinitio
                 continue;
             }
 
-            String ruleDefinitionName = abstractRuleParametersSpec.getRuleDefinitionName(null);
+            String ruleDefinitionName = abstractRuleParametersSpec.getRuleDefinitionName();
             if (processedRuleName.contains(ruleDefinitionName)) {
                 continue;
             }

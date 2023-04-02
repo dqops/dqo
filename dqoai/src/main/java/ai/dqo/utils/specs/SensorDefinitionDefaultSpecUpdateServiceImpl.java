@@ -71,7 +71,7 @@ public class SensorDefinitionDefaultSpecUpdateServiceImpl implements SensorDefin
                 continue;
             }
 
-            String sensorDefinitionName = abstractSensorParametersSpec.getSensorDefinitionName(null, null);
+            String sensorDefinitionName = abstractSensorParametersSpec.getSensorDefinitionName();
             if (processedSensorName.contains(sensorDefinitionName)) {
                 continue;
             }

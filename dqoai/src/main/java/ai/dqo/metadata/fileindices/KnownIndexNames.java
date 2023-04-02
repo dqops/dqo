@@ -32,6 +32,11 @@ public class KnownIndexNames {
     public static final String RULES = BuiltInFolderNames.RULES;
 
     /**
+     * Custom checks index.
+     */
+    public static final String CHECKS = BuiltInFolderNames.CHECKS;
+
+    /**
      * Custom sensors index.
      */
     public static final String SENSORS = BuiltInFolderNames.SENSORS;

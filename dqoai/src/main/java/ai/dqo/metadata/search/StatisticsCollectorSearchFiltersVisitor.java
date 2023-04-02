@@ -330,10 +330,8 @@ public class StatisticsCollectorSearchFiltersVisitor extends AbstractSearchVisit
             if (sensorParameters == null) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN; // sensor is not configured (has no parameters, we don't know what to run)
             }
-            String sensorDefinitionName = sensorParameters.getSensorDefinitionName(null, abstractStatisticsCollectorSpec);
-            String sensorEntryName = sensorParameters.getHierarchyId().getLast().toString();
-            if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter) &&
-                    !StringPatternComparer.matchSearchPattern(sensorEntryName, sensorNameFilter)) {
+            String sensorDefinitionName = sensorParameters.getSensorDefinitionName();
+            if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }

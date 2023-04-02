@@ -57,7 +57,7 @@ public class CheckDefinitionSpec extends AbstractSpec {
     @JsonPropertyDescription("Sensor name. It is a folder name inside the user's home 'sensors' folder or the DQO Home (DQO distribution) home/sensors folder. Sample sensor name: table/standard/row_count.")
     private String sensorName;
 
-    @JsonPropertyDescription("Optional custom rule name. It is a path to a custom rule python module that starts at the user's home 'rules' folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule.")
+    @JsonPropertyDescription("Rule name used for the check. It is a path to a custom rule python module that starts at the user's home 'rules' folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule.")
     private String ruleName;
 
     @JsonPropertyDescription("Help text that describes the data quality check.")

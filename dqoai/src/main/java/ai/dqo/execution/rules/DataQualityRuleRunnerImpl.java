@@ -22,6 +22,7 @@ import ai.dqo.execution.rules.runners.AbstractRuleRunner;
 import ai.dqo.execution.rules.runners.RuleRunnerFactory;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
+import ai.dqo.rules.RuleSeverityLevel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -55,7 +56,7 @@ public class DataQualityRuleRunnerImpl implements DataQualityRuleRunner {
     public RuleExecutionResult executeRule(ExecutionContext executionContext,
                                            RuleExecutionRunParameters ruleRunParameters,
                                            SensorExecutionRunParameters sensorRunParameters) {
-        String ruleName = ruleRunParameters.getParameters().getRuleDefinitionName(sensorRunParameters.getCheck());
+        String ruleName = sensorRunParameters.getEffectiveSensorRuleNames().getRuleName();
 
         RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleName);
         RuleDefinitionSpec ruleDefinitionSpec = ruleFindResult.getRuleDefinitionSpec();

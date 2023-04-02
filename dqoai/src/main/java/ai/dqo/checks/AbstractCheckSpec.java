@@ -318,15 +318,15 @@ public abstract class AbstractCheckSpec<S extends AbstractSensorParametersSpec, 
     @JsonIgnore
     public String getRuleDefinitionName() {
         if (this.getWarning() != null) {
-            return this.getWarning().getRuleDefinitionName(this);
+            return this.getWarning().getRuleDefinitionName();
         }
 
         if (this.getError() != null) {
-            return this.getError().getRuleDefinitionName(this);
+            return this.getError().getRuleDefinitionName();
         }
 
         if (this.getFatal() != null) {
-            return this.getFatal().getRuleDefinitionName(this);
+            return this.getFatal().getRuleDefinitionName();
         }
 
         return null;

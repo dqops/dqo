@@ -71,7 +71,7 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
             }
         }
 
-        String ruleDefinitionName = ruleParametersSpec.getRuleDefinitionName(null);
+        String ruleDefinitionName = ruleParametersSpec.getRuleDefinitionName();
         documentationModel.setFullRuleName(ruleDefinitionName);
         String[] ruleParts = StringUtils.split(ruleDefinitionName, '/');
         documentationModel.setCategory(ruleParts[0]);

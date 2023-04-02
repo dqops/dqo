@@ -30,6 +30,7 @@ import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactoryObjectMother;
 import ai.dqo.execution.CheckExecutionContextObjectMother;
 import ai.dqo.execution.ExecutionContext;
+import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerStub;
 import ai.dqo.execution.rules.DataQualityRuleRunner;
 import ai.dqo.execution.rules.DataQualityRuleRunnerObjectMother;
@@ -91,6 +92,7 @@ public class RuleEvaluationServiceImplTests extends BaseTest {
 		sensorExecutionRunParameters = new SensorExecutionRunParameters(connectionWrapper.getSpec(), tableSpec, null,
 				checkSpec,
                 null,
+                new EffectiveSensorRuleNames(checkSpec.getParameters().getSensorDefinitionName(), new MinCountRuleWarningParametersSpec().getRuleDefinitionName()),
                 CheckType.PROFILING,
                 TimeSeriesConfigurationSpec.createCurrentTimeMilliseconds(),
                 new TimeWindowFilterParameters(),

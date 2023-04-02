@@ -152,6 +152,7 @@ public class LocalUserHomeCreatorImpl implements LocalUserHomeCreator {
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SOURCES));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.SENSORS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.RULES));
+            initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.CHECKS));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.DATA));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.INDEX));
             initializeEmptyFolder(userHomePath.resolve(BuiltInFolderNames.LOGS));

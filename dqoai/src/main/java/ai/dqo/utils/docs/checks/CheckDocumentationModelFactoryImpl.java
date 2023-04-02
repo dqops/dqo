@@ -29,6 +29,7 @@ import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.connectors.sqlserver.SqlServerConnectionProvider;
+import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderParameters;
@@ -472,12 +473,15 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider)checkRootContainer;
                 ProviderDialectSettings providerDialectSettings = getProviderDialectSettings(providerType);
 
+                EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
+                        sensorDocumentation.getSensorName(), null);
                 SensorExecutionRunParameters sensorRunParameters = new SensorExecutionRunParameters(
                         connectionSpec,
                         tableSpec,
                         tableSpec.getColumns().getAt(0),
                         checkSpec,
                         null,
+                        effectiveSensorRuleNames,
                         checkRootContainer.getCheckType(),
                         timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
                         null,

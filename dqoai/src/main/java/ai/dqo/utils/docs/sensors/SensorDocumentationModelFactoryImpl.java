@@ -66,7 +66,7 @@ public class SensorDocumentationModelFactoryImpl implements SensorDocumentationM
             }
         }
 
-        String sensorDefinitionName = sensorParametersSpec.getSensorDefinitionName(null, null);
+        String sensorDefinitionName = sensorParametersSpec.getSensorDefinitionName();
         documentationModel.setFullSensorName(sensorDefinitionName);
         String[] sensorParts = StringUtils.split(sensorDefinitionName, '/');
         documentationModel.setTarget(sensorParts[0]);

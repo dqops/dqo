@@ -92,7 +92,7 @@ public class RuleEvaluationServiceImpl implements RuleEvaluationService {
         DateTimeColumn timePeriodColumn = normalizedSensorResults.getTimePeriodColumn();
         RuleEvaluationResult result = RuleEvaluationResult.makeEmptyFromSensorResults(normalizedSensorResults);
 
-        String ruleDefinitionName = checkSpec.getRuleDefinitionName();
+        String ruleDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getRuleName();
         RuleDefinitionFindResult ruleFindResult = this.ruleDefinitionFindService.findRule(executionContext, ruleDefinitionName);
         RuleTimeWindowSettingsSpec ruleTimeWindowSettings = ruleFindResult.getRuleDefinitionSpec().getTimeWindow();
 

@@ -15,6 +15,9 @@
  */
 package ai.dqo.metadata.definitions.checks;
 
+import ai.dqo.checks.CheckTarget;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.basespecs.AbstractIndexingList;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 
@@ -72,5 +75,39 @@ public class CheckDefinitionListImpl extends AbstractIndexingList<String, CheckD
     @Override
     public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
         return visitor.accept(this, parameter);
+    }
+
+    /**
+     * Finds a check specification for the given check. Returns a check specification if the check was found or null, when the check is unknown.
+     *
+     * @param checkTarget    Check target (table or column).
+     * @param checkType      Check type (profiling, recurring, partitioned).
+     * @param checkTimeScale Optional check scale (daily, monthly). Null for profiling checks.
+     * @param checkName      Check name.
+     * @return Check specification when the check was found or null when the check is unknown.
+     */
+    @Override
+    public CheckDefinitionSpec getCheckDefinitionSpec(CheckTarget checkTarget,
+                                                      CheckType checkType,
+                                                      CheckTimeScale checkTimeScale,
+                                                      String checkName) {
+        StringBuilder fullCheckNameBuilder = new StringBuilder();
+        fullCheckNameBuilder.append(checkTarget);
+        fullCheckNameBuilder.append('/');
+        fullCheckNameBuilder.append(checkType.getDisplayName());
+        fullCheckNameBuilder.append('/');
+        if (checkTimeScale != null) {
+            fullCheckNameBuilder.append(checkTimeScale);
+            fullCheckNameBuilder.append('/');
+        }
+        fullCheckNameBuilder.append(checkName);
+        String fullCheckName = fullCheckNameBuilder.toString();
+
+        CheckDefinitionWrapper checkDefinitionWrapper = this.getByObjectName(fullCheckName, true);
+        if (checkDefinitionWrapper == null) {
+            return null;
+        }
+
+        return checkDefinitionWrapper.getSpec();
     }
 }

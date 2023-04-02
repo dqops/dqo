@@ -317,7 +317,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
         AbstractSensorParametersSpec parametersSpec = (AbstractSensorParametersSpec)parametersFieldInfo.getFieldValueOrNewObject(checkSpec);
         checkModel.setFilter(parametersSpec.getFilter());
-        String sensorDefinitionName = parametersSpec.getSensorDefinitionName(checkSpec, null);
+        String sensorDefinitionName = parametersSpec.getSensorDefinitionName();
         checkModel.setSensorName(sensorDefinitionName);
         checkModel.setSensorParametersSpec(parametersSpec);
 
@@ -418,7 +418,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         FieldInfo parametersFieldInfo = checkClassInfo.getField("parameters");
 
         AbstractSensorParametersSpec parametersSpec = (AbstractSensorParametersSpec)parametersFieldInfo.getFieldValueOrNewObject(checkSpec);
-        String sensorDefinitionName = parametersSpec.getSensorDefinitionName(checkSpec, null);
+        String sensorDefinitionName = parametersSpec.getSensorDefinitionName();
 
         if (executionContext != null && providerType != null) {
             SensorDefinitionFindResult providerSensorDefinition = this.sensorDefinitionFindService.findProviderSensorDefinition(
@@ -474,7 +474,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                 (AbstractRuleParametersSpec)severityFieldInfo.getFieldValueOrNewObject(abstractCheckSpec);
 
         parametersModel.setConfigured(parametersValueNullable != null);
-        parametersModel.setRuleName(parametersSpecNotNull.getRuleDefinitionName(abstractCheckSpec));
+        parametersModel.setRuleName(parametersSpecNotNull.getRuleDefinitionName());
         parametersModel.setRuleParametersSpec(parametersSpecNotNull);
 
         List<UIFieldModel> uiFieldModels = createFieldsForRuleParameters(parametersSpecNotNull);

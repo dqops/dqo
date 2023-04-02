@@ -74,23 +74,10 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
 
     /**
      * Returns the sensor definition name. This is the folder name that keeps the sensor definition files.
-     * This method supports custom checks and custom profilers.
-     * @param check Optional parent check specification.
-     * @param profiler Optional parent profiler (statistics collector) specification.
      * @return Sensor definition name.
      */
     @JsonIgnore
-    public String getSensorDefinitionName(AbstractCheckSpec<?,?,?,?> check,
-                                          AbstractStatisticsCollectorSpec<?> profiler) {
-        return getSensorDefinitionName(); // call the default method that returns a built-in sensor name
-    }
-
-    /**
-     * Returns the sensor definition name. This is the folder name that keeps the sensor definition files.
-     * @return Sensor definition name.
-     */
-    @JsonIgnore
-    protected abstract String getSensorDefinitionName();
+    public abstract String getSensorDefinitionName();
 
     /**
      * Creates a cloned and trimmed version of the object. A trimmed and cloned copy is passed to the sensor.
