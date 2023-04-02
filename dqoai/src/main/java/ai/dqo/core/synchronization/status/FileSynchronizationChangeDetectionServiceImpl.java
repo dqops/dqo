@@ -15,14 +15,14 @@
  */
 package ai.dqo.core.synchronization.status;
 
-import ai.dqo.core.synchronization.contract.SynchronizationRoot;
-import ai.dqo.core.synchronization.contract.DqoRoot;
-import ai.dqo.core.synchronization.contract.FileSystemSynchronizationOperations;
-import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactory;
 import ai.dqo.core.filesystem.metadata.FileDifference;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.core.locks.UserHomeLockManager;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.FileSystemSynchronizationOperations;
+import ai.dqo.core.synchronization.contract.SynchronizationRoot;
+import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactory;
 import ai.dqo.metadata.fileindices.FileIndexName;
 import ai.dqo.metadata.fileindices.FileIndexWrapper;
 import ai.dqo.metadata.fileindices.FileLocation;
@@ -124,8 +124,10 @@ public class FileSynchronizationChangeDetectionServiceImpl implements FileSynchr
     public void detectUnsynchronizedChangesInBackground() {
         Schedulers.parallel().schedule(() -> {
             detectAndPublishLocalFolderStatus(DqoRoot.sources);
+            detectAndPublishLocalFolderStatus(DqoRoot.sensors);
             detectAndPublishLocalFolderStatus(DqoRoot.rules);
             detectAndPublishLocalFolderStatus(DqoRoot.sensors);
+            detectAndPublishLocalFolderStatus(DqoRoot.checks);
             detectAndPublishLocalFolderStatus(DqoRoot.data_sensor_readouts);
             detectAndPublishLocalFolderStatus(DqoRoot.data_check_results);
             detectAndPublishLocalFolderStatus(DqoRoot.data_errors);

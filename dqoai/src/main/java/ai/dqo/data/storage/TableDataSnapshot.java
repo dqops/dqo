@@ -17,7 +17,6 @@ package ai.dqo.data.storage;
 
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
-import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.DateTimeColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;

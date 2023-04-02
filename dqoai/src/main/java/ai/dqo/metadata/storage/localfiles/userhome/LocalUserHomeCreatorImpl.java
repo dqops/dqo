@@ -16,8 +16,6 @@
 package ai.dqo.metadata.storage.localfiles.userhome;
 
 import ai.dqo.cli.terminal.TerminalFactory;
-import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoLoggingConfigurationProperties;
 import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.filesystem.BuiltInFolderNames;

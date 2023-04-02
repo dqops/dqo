@@ -23,23 +23,15 @@ import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
 import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
-import ai.dqo.cli.output.OutputFormatService;
-import ai.dqo.cli.terminal.FileWritter;
 import ai.dqo.cli.terminal.TerminalReader;
-import ai.dqo.cli.terminal.TerminalTableWritter;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.services.check.CheckService;
-import ai.dqo.services.check.models.UIAllChecksPatchParameters;
-import ai.dqo.utils.serialization.JsonSerializer;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
-
-import java.util.HashMap;
 
 /**
  * "check disable" 2nd level CLI command that disables data quality checks.

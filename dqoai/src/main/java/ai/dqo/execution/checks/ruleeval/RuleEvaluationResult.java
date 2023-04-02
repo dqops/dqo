@@ -15,9 +15,9 @@
  */
 package ai.dqo.execution.checks.ruleeval;
 
+import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
-import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;

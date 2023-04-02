@@ -15,34 +15,21 @@
  */
 package ai.dqo.cli.commands.data;
 
-import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
-import ai.dqo.cli.completion.completers.ColumnNameCompleter;
 import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
 import ai.dqo.cli.completion.completers.FullTableNameCompleter;
-import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthEnd;
-import ai.dqo.cli.converters.StringToLocalDateCliConverterMonthStart;
-import ai.dqo.cli.output.OutputFormatService;
-import ai.dqo.cli.terminal.FileWritter;
-import ai.dqo.cli.terminal.TerminalTableWritter;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.PushJobResult;
-import ai.dqo.core.jobqueue.jobs.data.*;
-import ai.dqo.data.statistics.factory.StatisticsCollectorTarget;
-import ai.dqo.utils.serialization.JsonSerializer;
-import org.apache.parquet.Strings;
+import ai.dqo.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
+import ai.dqo.core.jobqueue.jobs.data.RepairStoredDataQueueJobParameters;
+import ai.dqo.core.jobqueue.jobs.data.RepairStoredDataQueueJobResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
-
-import java.time.LocalDate;
-import java.util.LinkedList;
-import java.util.List;
 
 /**
  * "data repair" 2nd level CLI command that deletes corrupted files from stored data, leaving valid parquet files.

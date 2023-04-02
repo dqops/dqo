@@ -15,8 +15,8 @@
  */
 package ai.dqo.core.synchronization.filesystems.gcp;
 
-import ai.dqo.core.synchronization.contract.FileSystemSynchronizationRoot;
 import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.FileSystemSynchronizationRoot;
 import com.google.cloud.storage.Storage;
 
 import java.nio.file.Path;

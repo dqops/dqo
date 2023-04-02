@@ -18,14 +18,17 @@ package ai.dqo.metadata.id;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.checks.custom.CustomCheckSpecMap;
-import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.dashboards.*;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionListImpl;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionWrapperImpl;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
@@ -46,12 +49,12 @@ import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rules.AbstractRuleParametersSpec;
+import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorCategorySpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
-import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 
 
 /**
@@ -531,4 +534,28 @@ public interface HierarchyNodeResultVisitor<P, R> {
      * @return Accept's result.
      */
     R accept(CustomCheckSpecMap customCheckSpecMap, P parameter);
+
+    /**
+     * Accepts a definition of a custom check.
+     * @param checkDefinitionSpec Custom check specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(CheckDefinitionSpec checkDefinitionSpec, P parameter);
+
+    /**
+     * Accepts a wrapper for a definition of a custom check.
+     * @param checkDefinitionWrapper Custom check specification wrapper.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(CheckDefinitionWrapperImpl checkDefinitionWrapper, P parameter);
+
+    /**
+     * Accepts a list of custom checks.
+     * @param checkDefinitionWrappers Custom check list.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(CheckDefinitionListImpl checkDefinitionWrappers, P parameter);
 }

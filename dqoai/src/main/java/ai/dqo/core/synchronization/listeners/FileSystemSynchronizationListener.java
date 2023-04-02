@@ -15,9 +15,9 @@
  */
 package ai.dqo.core.synchronization.listeners;
 
-import ai.dqo.core.synchronization.contract.SynchronizationRoot;
-import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.filesystem.metadata.FileDifference;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 
 /**
  * Base class that is a progress handler to learn which files are synchronized.

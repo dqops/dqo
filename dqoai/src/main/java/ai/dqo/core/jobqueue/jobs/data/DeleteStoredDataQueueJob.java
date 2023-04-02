@@ -17,14 +17,14 @@ package ai.dqo.core.jobqueue.jobs.data;
 
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import ai.dqo.data.checkresults.models.CheckResultsFragmentFilter;
+import ai.dqo.data.checkresults.services.CheckResultsDeleteService;
 import ai.dqo.data.errors.models.ErrorsFragmentFilter;
 import ai.dqo.data.errors.services.ErrorsDeleteService;
-import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
-import ai.dqo.data.statistics.services.StatisticsDeleteService;
 import ai.dqo.data.readouts.models.SensorReadoutsFragmentFilter;
 import ai.dqo.data.readouts.services.SensorReadoutsDeleteService;
-import ai.dqo.data.checkresults.services.CheckResultsDeleteService;
-import ai.dqo.data.checkresults.models.CheckResultsFragmentFilter;
+import ai.dqo.data.statistics.models.StatisticsResultsFragmentFilter;
+import ai.dqo.data.statistics.services.StatisticsDeleteService;
 import ai.dqo.metadata.search.TableSearchFilters;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

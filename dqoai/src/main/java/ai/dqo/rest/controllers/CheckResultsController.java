@@ -19,8 +19,8 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.data.checkresults.services.CheckResultsDetailedParameters;
 import ai.dqo.data.checkresults.services.CheckResultsDataService;
+import ai.dqo.data.checkresults.services.CheckResultsDetailedParameters;
 import ai.dqo.data.checkresults.services.models.CheckResultsDetailedDataModel;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
@@ -107,7 +107,7 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
         CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
@@ -167,7 +167,7 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
         CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
@@ -226,7 +226,7 @@ public class CheckResultsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         CheckResultsDetailedParameters loadParams = new CheckResultsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);

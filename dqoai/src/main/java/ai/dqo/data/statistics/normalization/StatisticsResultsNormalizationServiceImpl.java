@@ -2,9 +2,9 @@ package ai.dqo.data.statistics.normalization;
 
 import ai.dqo.core.configuration.DqoStatisticsCollectorConfigurationProperties;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
-import ai.dqo.data.statistics.factory.*;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorResultNormalizeException;
+import ai.dqo.data.statistics.factory.*;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.utils.tables.TableColumnUtility;

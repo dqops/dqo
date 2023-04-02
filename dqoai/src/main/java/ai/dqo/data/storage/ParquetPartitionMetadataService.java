@@ -15,17 +15,11 @@
  */
 package ai.dqo.data.storage;
 
-import ai.dqo.core.filesystem.BuiltInFolderNames;
-import ai.dqo.core.filesystem.virtual.HomeFolderPath;
-import ai.dqo.core.filesystem.virtual.utility.HomeFolderPathUtility;
-import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.metadata.sources.PhysicalTableName;
 
-import java.nio.file.Path;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service providing information regarding metadata contained in the partitions of stored data,

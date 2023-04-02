@@ -16,12 +16,15 @@
 
 package ai.dqo.data.checkresults.models;
 
-import ai.dqo.data.models.ParquetDataFragmentFilter;
 import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
+import ai.dqo.data.models.ParquetDataFragmentFilter;
 import lombok.Data;
 import org.apache.parquet.Strings;
 
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Filter parameters for acquiring a fragment of check results.

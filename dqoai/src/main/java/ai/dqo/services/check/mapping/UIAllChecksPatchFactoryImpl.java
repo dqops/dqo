@@ -171,12 +171,12 @@ public class UIAllChecksPatchFactoryImpl implements UIAllChecksPatchFactory {
         Map<UICheckContainerTypeModel, AbstractRootChecksContainerSpec> checkContainers = new HashMap<>();
         for (CheckType checkType : checkTypes) {
             if (checkType == CheckType.PROFILING) {
-                AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, null);
+                AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, null, false);
                 checkContainers.put(new UICheckContainerTypeModel(checkType, null), checkContainer);
             }
             else {
                 for (CheckTimeScale timeScale : timeScales) {
-                    AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, timeScale);
+                    AbstractRootChecksContainerSpec checkContainer = tableSpec.getTableCheckRootContainer(checkType, timeScale, false);
                     checkContainers.put(new UICheckContainerTypeModel(checkType, timeScale), checkContainer);
                 }
             }

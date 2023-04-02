@@ -16,7 +16,7 @@
 
 package ai.dqo.utils.tables;
 
-import tech.tablesaw.api.*;
+import tech.tablesaw.api.Row;
 
 /**
  * Helper class used to operate on rows (eg. retrieve sanitized values).

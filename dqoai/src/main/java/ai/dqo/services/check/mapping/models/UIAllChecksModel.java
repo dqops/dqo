@@ -15,8 +15,6 @@
  */
 package ai.dqo.services.check.mapping.models;
 
-import ai.dqo.checks.CheckTimeScale;
-import ai.dqo.checks.CheckType;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.services.check.mapping.models.column.UIAllColumnChecksModel;
@@ -27,9 +25,6 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * UI model that returns the model of selected information related to all checks on a connection level.

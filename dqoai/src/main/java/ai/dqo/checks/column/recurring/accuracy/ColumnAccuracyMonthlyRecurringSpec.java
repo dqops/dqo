@@ -16,7 +16,10 @@
 package ai.dqo.checks.column.recurring.accuracy;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.accuracy.*;
+import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyAverageMatchPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyMaxMatchPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyMinMatchPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyTotalSumMatchPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;

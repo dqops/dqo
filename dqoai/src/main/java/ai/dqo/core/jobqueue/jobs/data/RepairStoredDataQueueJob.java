@@ -17,9 +17,9 @@ package ai.dqo.core.jobqueue.jobs.data;
 
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
-import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.storage.*;
 import ai.dqo.metadata.sources.PhysicalTableName;

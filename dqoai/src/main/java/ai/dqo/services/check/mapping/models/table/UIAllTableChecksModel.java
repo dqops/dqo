@@ -19,7 +19,6 @@ package ai.dqo.services.check.mapping.models.table;
 import ai.dqo.checks.CheckTarget;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.services.check.mapping.models.column.UITableColumnChecksModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

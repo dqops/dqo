@@ -16,7 +16,6 @@
 package ai.dqo.core.filesystem.virtual;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
-import ai.dqo.core.filesystem.localfiles.LocalFileSystemException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -25,7 +24,6 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Folder node in a virtual file system tree.

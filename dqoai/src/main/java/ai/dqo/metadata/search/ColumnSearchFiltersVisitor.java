@@ -19,7 +19,6 @@ import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.TreeNodeTraversalResult;
 import com.google.common.base.Strings;
-import org.antlr.runtime.tree.Tree;
 
 /**
  * Visitor for {@link ColumnSearchFilters} that finds the correct nodes.

@@ -35,6 +35,11 @@ public final class BuiltInFolderNames {
     public static final String RULES = "rules";
 
     /**
+     * Checks folder.
+     */
+    public static final String CHECKS = "checks";
+
+    /**
      * Local data folder.
      */
     public static final String DATA = ".data";

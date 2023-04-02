@@ -6,7 +6,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import picocli.CommandLine;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Documentation factory that creates documentation of a single CLI command.

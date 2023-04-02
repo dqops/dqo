@@ -28,8 +28,8 @@ import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.PartitionIncrementalTimeWindowSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

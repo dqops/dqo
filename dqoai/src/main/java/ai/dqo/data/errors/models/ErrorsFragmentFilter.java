@@ -18,7 +18,6 @@ package ai.dqo.data.errors.models;
 
 import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.models.ParquetDataFragmentFilter;
-import ai.dqo.data.normalization.CommonColumnNames;
 import lombok.Data;
 import org.apache.parquet.Strings;
 

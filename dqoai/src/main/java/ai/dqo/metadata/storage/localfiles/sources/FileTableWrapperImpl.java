@@ -24,7 +24,6 @@ import ai.dqo.metadata.basespecs.InstanceStatus;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.metadata.sources.TableWrapperImpl;
-import ai.dqo.metadata.storage.localfiles.IncorrectFileNameException;
 import ai.dqo.metadata.storage.localfiles.SpecFileNames;
 import ai.dqo.metadata.storage.localfiles.SpecificationKind;
 import ai.dqo.utils.serialization.YamlSerializer;

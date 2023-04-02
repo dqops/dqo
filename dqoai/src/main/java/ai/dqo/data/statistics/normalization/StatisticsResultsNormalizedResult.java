@@ -1,8 +1,8 @@
 package ai.dqo.data.statistics.normalization;
 
 import ai.dqo.data.statistics.factory.StatisticsCollectorResultStatus;
-import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.data.statistics.factory.StatisticsColumnNames;
+import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.utils.tables.TableColumnUtility;
 import tech.tablesaw.api.*;
 

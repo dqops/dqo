@@ -107,7 +107,7 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
         SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
@@ -167,7 +167,7 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec recurringPartition = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
         SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);
@@ -226,7 +226,7 @@ public class SensorReadoutsController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec partitionedCheckPartition = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         SensorReadoutsDetailedParameters loadParams = new SensorReadoutsDetailedParameters();
         dataStreamName.ifPresent(loadParams::setDataStreamName);
         monthStart.ifPresent(loadParams::setStartMonth);

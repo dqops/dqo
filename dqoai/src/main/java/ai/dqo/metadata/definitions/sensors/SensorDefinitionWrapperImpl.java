@@ -16,7 +16,6 @@
 package ai.dqo.metadata.definitions.sensors;
 
 import ai.dqo.metadata.basespecs.AbstractElementWrapper;
-import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;

@@ -15,8 +15,8 @@
  */
 package ai.dqo.core.synchronization.filesystems.dqocloud;
 
-import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 
 /**
  * Factory for a DQO Cloud remote file system.

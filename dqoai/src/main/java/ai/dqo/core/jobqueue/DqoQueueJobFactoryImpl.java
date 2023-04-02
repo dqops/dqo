@@ -15,13 +15,13 @@
  */
 package ai.dqo.core.jobqueue;
 
-import ai.dqo.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
-import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJob;
+import ai.dqo.core.jobqueue.jobs.data.RepairStoredDataQueueJob;
 import ai.dqo.core.jobqueue.jobs.schema.ImportSchemaQueueJob;
 import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJob;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksDqoJob;
 import ai.dqo.core.scheduler.scan.RunPeriodicMetadataSynchronizationDqoJob;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
 import ai.dqo.execution.checks.RunChecksQueueJob;
 import ai.dqo.execution.statistics.CollectStatisticsCollectionQueueJob;
 import org.springframework.beans.factory.BeanFactory;

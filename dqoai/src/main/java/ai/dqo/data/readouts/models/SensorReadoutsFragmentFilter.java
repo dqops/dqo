@@ -17,7 +17,6 @@
 package ai.dqo.data.readouts.models;
 
 import ai.dqo.data.models.ParquetDataFragmentFilter;
-import ai.dqo.data.normalization.CommonColumnNames;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import lombok.Data;
 import org.apache.parquet.Strings;

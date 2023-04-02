@@ -17,7 +17,6 @@ package ai.dqo.cli.terminal;
 
 import ai.dqo.cli.terminal.ansi.UrlFormatter;
 import org.jline.terminal.Terminal;
-import org.jline.utils.AttributedStringBuilder;
 import org.jline.utils.InfoCmp;
 
 

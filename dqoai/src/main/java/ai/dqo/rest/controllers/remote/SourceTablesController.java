@@ -15,10 +15,10 @@
  */
 package ai.dqo.rest.controllers.remote;
 
-import ai.dqo.services.remote.tables.SourceTablesService;
-import ai.dqo.services.remote.tables.SourceTablesServiceException;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import ai.dqo.rest.models.remote.TableRemoteBasicModel;
+import ai.dqo.services.remote.tables.SourceTablesService;
+import ai.dqo.services.remote.tables.SourceTablesServiceException;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

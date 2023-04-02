@@ -15,7 +15,6 @@
  */
 package ai.dqo.services.check.mapping.models;
 
-import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

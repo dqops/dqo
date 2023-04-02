@@ -21,7 +21,6 @@ import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.settings.SettingsWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
-import ai.dqo.utils.exceptions.DqoRuntimeException;
 import ai.dqo.utils.serialization.JsonSerializer;
 import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;

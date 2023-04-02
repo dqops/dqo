@@ -17,10 +17,10 @@ package ai.dqo.core.synchronization.service;
 
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import ai.dqo.core.synchronization.fileexchange.*;
 import ai.dqo.core.synchronization.filesystems.dqocloud.DqoCloudRemoteFileSystemServiceFactory;
-import ai.dqo.core.synchronization.contract.SynchronizationRoot;
-import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.core.synchronization.filesystems.local.LocalSynchronizationFileSystemFactory;
 import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationListener;
 import ai.dqo.metadata.fileindices.FileIndexName;
@@ -151,6 +151,7 @@ public class DqoCloudSynchronizationServiceImpl implements DqoCloudSynchronizati
         synchronizeFolder(DqoRoot.sources, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.sensors, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.rules, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
+        synchronizeFolder(DqoRoot.checks, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_sensor_readouts, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_check_results, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);
         synchronizeFolder(DqoRoot.data_errors, synchronizationDirection, forceRefreshNativeTable, synchronizationListener);

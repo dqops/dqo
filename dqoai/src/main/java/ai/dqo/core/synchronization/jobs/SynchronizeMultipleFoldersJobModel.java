@@ -59,6 +59,12 @@ public class SynchronizeMultipleFoldersJobModel {
     private boolean rules;
 
     /**
+     * Synchronize the "checks" folder.
+     */
+    @JsonPropertyDescription("Synchronize the \"checks\" folder.")
+    private boolean checks;
+
+    /**
      * Synchronize the ".data/sensor_readouts" folder.
      */
     @JsonPropertyDescription("Synchronize the \".data/sensor_readouts\" folder.")

@@ -15,10 +15,6 @@
  */
 package ai.dqo.rest.controllers;
 
-import ai.dqo.checks.CheckType;
-import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobParameters;
-import ai.dqo.metadata.search.CheckSearchFilters;
-import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;
 import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;

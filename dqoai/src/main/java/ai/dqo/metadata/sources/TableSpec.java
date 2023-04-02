@@ -18,13 +18,13 @@ package ai.dqo.metadata.sources;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.recurring.TableRecurringSpec;
-import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
-import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
@@ -446,10 +446,12 @@ public class TableSpec extends AbstractSpec {
      * from the table specification.
      * @param checkType Check type.
      * @param checkTimeScale Time scale. Null value is accepted for profiling checks, for other time scale aware checks, the proper time scale is required.
+     * @param attachCheckContainer When the check container doesn't exist, should the newly created check container be attached to the table specification.
      * @return Newly created container root.
      */
     public AbstractRootChecksContainerSpec getTableCheckRootContainer(CheckType checkType,
-                                                                      CheckTimeScale checkTimeScale) {
+                                                                      CheckTimeScale checkTimeScale,
+                                                                      boolean attachCheckContainer) {
         switch (checkType) {
             case PROFILING: {
                 if (this.profilingChecks != null) {
@@ -458,6 +460,9 @@ public class TableSpec extends AbstractSpec {
 
                 TableProfilingCheckCategoriesSpec tableProfilingCheckCategoriesSpec = new TableProfilingCheckCategoriesSpec();
                 tableProfilingCheckCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "profiling_checks"));
+                if (attachCheckContainer) {
+                    this.profilingChecks = tableProfilingCheckCategoriesSpec;
+                }
                 return tableProfilingCheckCategoriesSpec;
             }
 
@@ -466,6 +471,9 @@ public class TableSpec extends AbstractSpec {
                 if (recurringSpec == null) {
                     recurringSpec = new TableRecurringSpec();
                     recurringSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "recurring_checks"));
+                    if (attachCheckContainer) {
+                        this.recurringChecks = recurringSpec;
+                    }
                 }
 
                 switch (checkTimeScale) {
@@ -474,18 +482,24 @@ public class TableSpec extends AbstractSpec {
                             return recurringSpec.getDaily();
                         }
 
-                        TableDailyRecurringCategoriesSpec dailyCheckpointCategoriesSpec = new TableDailyRecurringCategoriesSpec();
-                        dailyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
-                        return dailyCheckpointCategoriesSpec;
+                        TableDailyRecurringCategoriesSpec dailyRecurringCategoriesSpec = new TableDailyRecurringCategoriesSpec();
+                        dailyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            recurringSpec.setDaily(dailyRecurringCategoriesSpec);
+                        }
+                        return dailyRecurringCategoriesSpec;
                     }
                     case monthly: {
                         if (recurringSpec.getMonthly() != null) {
                             return recurringSpec.getMonthly();
                         }
 
-                        TableMonthlyRecurringCategoriesSpec monthlyCheckpointCategoriesSpec = new TableMonthlyRecurringCategoriesSpec();
-                        monthlyCheckpointCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
-                        return monthlyCheckpointCategoriesSpec;
+                        TableMonthlyRecurringCategoriesSpec monthlyRecurringCategoriesSpec = new TableMonthlyRecurringCategoriesSpec();
+                        monthlyRecurringCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(recurringSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            recurringSpec.setMonthly(monthlyRecurringCategoriesSpec);
+                        }
+                        return monthlyRecurringCategoriesSpec;
                     }
                     default:
                         throw new IllegalArgumentException("Check time scale " + checkTimeScale + " is not supported");
@@ -497,6 +511,9 @@ public class TableSpec extends AbstractSpec {
                 if (partitionedChecksSpec == null) {
                     partitionedChecksSpec = new TablePartitionedChecksRootSpec();
                     partitionedChecksSpec.setHierarchyId(HierarchyId.makeChildOrNull(this.getHierarchyId(), "partitioned_checks"));
+                    if (attachCheckContainer) {
+                        this.partitionedChecks = partitionedChecksSpec;
+                    }
                 }
 
                 switch (checkTimeScale) {
@@ -507,6 +524,9 @@ public class TableSpec extends AbstractSpec {
 
                         TableDailyPartitionedCheckCategoriesSpec dailyPartitionedCategoriesSpec = new TableDailyPartitionedCheckCategoriesSpec();
                         dailyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "daily"));
+                        if (attachCheckContainer) {
+                            partitionedChecksSpec.setDaily(dailyPartitionedCategoriesSpec);
+                        }
                         return dailyPartitionedCategoriesSpec;
                     }
                     case monthly: {
@@ -516,6 +536,9 @@ public class TableSpec extends AbstractSpec {
 
                         TableMonthlyPartitionedCheckCategoriesSpec monthlyPartitionedCategoriesSpec = new TableMonthlyPartitionedCheckCategoriesSpec();
                         monthlyPartitionedCategoriesSpec.setHierarchyId(HierarchyId.makeChildOrNull(partitionedChecksSpec.getHierarchyId(), "monthly"));
+                        if (attachCheckContainer) {
+                            partitionedChecksSpec.setMonthly(monthlyPartitionedCategoriesSpec);
+                        }
                         return monthlyPartitionedCategoriesSpec;
                     }
                     default:

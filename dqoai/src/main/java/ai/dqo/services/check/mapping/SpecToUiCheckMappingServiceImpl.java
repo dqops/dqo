@@ -38,8 +38,8 @@ import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
-import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.utils.reflection.ClassInfo;
 import ai.dqo.utils.reflection.FieldInfo;
@@ -148,8 +148,6 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
         uiCheckContainerModel.setEffectiveSchedule(effectiveScheduleModel);
         uiCheckContainerModel.setEffectiveScheduleEnabledStatus(scheduleEnabledStatus);
 
-        String defaultDataStreamName = tableSpec.getDataStreams().getFirstDataStreamMappingName();
-
         ClassInfo checkCategoriesClassInfo = reflectionService.getClassInfoForClass(checkCategoriesSpec.getClass());
         Optional<String> categoryNameFilter = Optional.ofNullable(uiCheckContainerModel.getRunChecksJobTemplate().getCheckCategory());
         List<FieldInfo> categoryFields = this.getFilteredFieldInfo(checkCategoriesClassInfo, categoryNameFilter);
@@ -166,8 +164,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                     executionContext,
                     providerType,
                     checkType,
-                    checkTimeScale,
-                    defaultDataStreamName);
+                    checkTimeScale);
             if (categoryModel != null && categoryModel.getChecks().size() > 0) {
                 uiCheckContainerModel.getCategories().add(categoryModel);
             }
@@ -240,7 +237,6 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
      * @param providerType Provider type from the parent connection.
      * @param checkType Check type (profiling, recurring, ...).
      * @param checkTimeScale Check time scale: null for profiling, daily/monthly for others that apply the date truncation.
-     * @param defaultDataStreamName   Default data stream name to assign to new checks. This is the name of the first named data stream on a table level.
      * @return UI model for a category with all quality checks, filtered by runChecksTemplate.
      */
     protected UIQualityCategoryModel createCategoryModel(FieldInfo categoryFieldInfo,
@@ -251,8 +247,7 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
                                                          ExecutionContext executionContext,
                                                          ProviderType providerType,
                                                          CheckType checkType,
-                                                         CheckTimeScale checkTimeScale,
-                                                         String defaultDataStreamName) {
+                                                         CheckTimeScale checkTimeScale) {
         UIQualityCategoryModel categoryModel = new UIQualityCategoryModel();
         categoryModel.setCategory(categoryFieldInfo.getYamlFieldName());
         categoryModel.setHelpText(categoryFieldInfo.getHelpText());
@@ -289,10 +284,6 @@ public class SpecToUiCheckMappingServiceImpl implements SpecToUiCheckMappingServ
 
             checkModel.setConfigured(checkSpecObjectNullable != null);
             categoryModel.getChecks().add(checkModel);
-
-            if (checkSpecObjectNullable == null) { // this check is not configured, so we will propose the default data stream name
-                checkModel.setDataStream(defaultDataStreamName);
-            }
         }
 
         return categoryModel;

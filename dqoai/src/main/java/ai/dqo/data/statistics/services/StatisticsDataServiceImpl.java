@@ -17,11 +17,11 @@
 package ai.dqo.data.statistics.services;
 
 import ai.dqo.core.configuration.DqoStatisticsCollectorConfigurationProperties;
-import ai.dqo.data.statistics.factory.StatisticsResultDataType;
 import ai.dqo.data.statistics.factory.StatisticsColumnNames;
+import ai.dqo.data.statistics.factory.StatisticsResultDataType;
+import ai.dqo.data.statistics.services.models.StatisticsMetricModel;
 import ai.dqo.data.statistics.services.models.StatisticsResultsForColumnModel;
 import ai.dqo.data.statistics.services.models.StatisticsResultsForTableModel;
-import ai.dqo.data.statistics.services.models.StatisticsMetricModel;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshot;
 import ai.dqo.data.statistics.snapshot.StatisticsSnapshotFactory;
 import ai.dqo.metadata.search.StatisticsCollectorSearchFilters;

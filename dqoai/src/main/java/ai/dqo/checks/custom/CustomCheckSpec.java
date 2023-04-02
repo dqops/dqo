@@ -20,11 +20,9 @@ import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.DefaultDataQualityDimensions;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.rules.CustomRuleParametersSpec;
 import ai.dqo.sensors.CustomSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -47,10 +45,10 @@ public class CustomCheckSpec extends AbstractCheckSpec<CustomSensorParametersSpe
         }
     };
 
-    @JsonPropertyDescription("Optional custom sensor name. It is a folder name inside the user home sensors folder or the DQO Home (DQO distribution) home/sensors folder. Sample sensor name: table/standard/row_count. When this value is set, it overrides the default sensor definition defined for the named check definition")
+    @JsonPropertyDescription("Optional custom sensor name. It is a folder name inside the user's home 'sensors' folder or the DQO Home (DQO distribution) home/sensors folder. Sample sensor name: table/standard/row_count. When this value is set, it overrides the default sensor definition defined for the named check definition.")
     private String sensorName;
 
-    @JsonPropertyDescription("Optional custom rule name. It is a path to a custom rule python module that starts at the user home rules folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule. When this value is set, it overrides the default rule definition defined for the named check definition.")
+    @JsonPropertyDescription("Optional custom rule name. It is a path to a custom rule python module that starts at the user's home 'rules' folder. The path should not end with the .py file extension. Sample rule: myrules/my_custom_rule. When this value is set, it overrides the default rule definition defined for the named check definition.")
     private String ruleName;
 
     @JsonPropertyDescription("Custom sensor parameters")
@@ -204,24 +202,5 @@ public class CustomCheckSpec extends AbstractCheckSpec<CustomSensorParametersSpe
     @Override
     public DefaultDataQualityDimensions getDefaultDataQualityDimension() {
         return DefaultDataQualityDimensions.Validity; // this is just the default
-    }
-
-    /**
-     * Returns the data quality category name retrieved from the category field name used to store a container of check categories
-     * in the metadata.
-     * @return Check category name.
-     */
-    @JsonIgnore
-    public String getCategoryName() {
-        String categoryName = super.getCategoryName();
-        if (!Objects.equals(categoryName, "custom")) {
-            return categoryName;
-        }
-
-        HierarchyId hierarchyId = this.getHierarchyId();
-        if (hierarchyId == null) {
-            return null;
-        }
-        return hierarchyId.get(hierarchyId.size() - 3).toString();
     }
 }

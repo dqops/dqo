@@ -15,8 +15,8 @@
  */
 package ai.dqo.core.synchronization.fileexchange;
 
-import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import ai.dqo.core.filesystem.metadata.FolderMetadata;
+import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 
 import java.util.Optional;
 
