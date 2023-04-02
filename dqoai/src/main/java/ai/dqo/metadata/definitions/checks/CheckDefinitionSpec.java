@@ -15,6 +15,9 @@
  */
 package ai.dqo.metadata.definitions.checks;
 
+import ai.dqo.checks.CheckTarget;
+import ai.dqo.checks.CheckTimeScale;
+import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;

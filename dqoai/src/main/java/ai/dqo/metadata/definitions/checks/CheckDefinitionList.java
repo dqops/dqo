@@ -78,4 +78,50 @@ public interface CheckDefinitionList extends Iterable<CheckDefinitionWrapper> {
                                                CheckType checkType,
                                                CheckTimeScale checkTimeScale,
                                                String checkName);
+
+    /**
+     * Creates a folder path for checks at a given level.
+     * @param checkTarget Check target (table or column).
+     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param timeScale Time scale (daily, weekly) for recurring and partitioned checks.
+     * @return Full check name.
+     */
+    static String makeCheckFolderPrefix(CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale) {
+        StringBuilder checkNameBuilder = new StringBuilder();
+        checkNameBuilder.append(checkTarget);
+        checkNameBuilder.append('/');
+        checkNameBuilder.append(checkType.getDisplayName());
+        checkNameBuilder.append('/');
+        if (timeScale != null) {
+            checkNameBuilder.append(timeScale);
+            checkNameBuilder.append('/');
+        }
+
+        String checkFolderPrefix = checkNameBuilder.toString();
+        return checkFolderPrefix;
+    }
+
+    /**
+     * Creates a check name given all components on the check path.
+     * @param checkTarget Check target (table or column).
+     * @param checkType Check type (profiling, recurring, partitioned).
+     * @param timeScale Time scale (daily, weekly) for recurring and partitioned checks.
+     * @param checkName Check name.
+     * @return Full check name.
+     */
+    static String makeCheckName(CheckTarget checkTarget, CheckType checkType, CheckTimeScale timeScale, String checkName) {
+        StringBuilder checkNameBuilder = new StringBuilder();
+        checkNameBuilder.append(checkTarget);
+        checkNameBuilder.append('/');
+        checkNameBuilder.append(checkType.getDisplayName());
+        checkNameBuilder.append('/');
+        if (timeScale != null) {
+            checkNameBuilder.append(timeScale);
+            checkNameBuilder.append('/');
+        }
+        checkNameBuilder.append(checkName);
+
+        String fullCheckName = checkNameBuilder.toString();
+        return fullCheckName;
+    }
 }

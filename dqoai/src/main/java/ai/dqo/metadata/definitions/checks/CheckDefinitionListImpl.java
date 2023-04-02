@@ -21,6 +21,8 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.metadata.basespecs.AbstractIndexingList;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 /**
@@ -91,17 +93,7 @@ public class CheckDefinitionListImpl extends AbstractIndexingList<String, CheckD
                                                       CheckType checkType,
                                                       CheckTimeScale checkTimeScale,
                                                       String checkName) {
-        StringBuilder fullCheckNameBuilder = new StringBuilder();
-        fullCheckNameBuilder.append(checkTarget);
-        fullCheckNameBuilder.append('/');
-        fullCheckNameBuilder.append(checkType.getDisplayName());
-        fullCheckNameBuilder.append('/');
-        if (checkTimeScale != null) {
-            fullCheckNameBuilder.append(checkTimeScale);
-            fullCheckNameBuilder.append('/');
-        }
-        fullCheckNameBuilder.append(checkName);
-        String fullCheckName = fullCheckNameBuilder.toString();
+        String fullCheckName = CheckDefinitionList.makeCheckName(checkTarget, checkType, checkTimeScale, checkName);
 
         CheckDefinitionWrapper checkDefinitionWrapper = this.getByObjectName(fullCheckName, true);
         if (checkDefinitionWrapper == null) {
@@ -109,5 +101,27 @@ public class CheckDefinitionListImpl extends AbstractIndexingList<String, CheckD
         }
 
         return checkDefinitionWrapper.getSpec();
+    }
+
+    /**
+     * Finds all custom checks defined for the given check target (table or column), check type (profiling, recurring, partitioned) and optionally a time scale.
+     * @param checkTarget Check target (table or column).
+     * @param checkType      Check type (profiling, recurring, partitioned).
+     * @param checkTimeScale Optional check scale (daily, monthly). Null for profiling checks.
+     * @return Collection of custom checks defined at that level.
+     */
+    public Collection<CheckDefinitionSpec> getChecksAtLevel(CheckTarget checkTarget,
+                                                            CheckType checkType,
+                                                            CheckTimeScale checkTimeScale) {
+        String checkFolderPrefix = CheckDefinitionList.makeCheckFolderPrefix(checkTarget, checkType, checkTimeScale);
+        ArrayList<CheckDefinitionSpec> checksInFolder = new ArrayList<>();
+
+        for (CheckDefinitionWrapper checkWrapper : this) {
+            if (checkWrapper.getCheckName().startsWith(checkFolderPrefix)) {
+                checksInFolder.add(checkWrapper.getSpec());
+            }
+        }
+
+        return checksInFolder;
     }
 }

@@ -64,19 +64,10 @@ public class CheckDefinitionDefaultSpecUpdateServiceImpl implements CheckDefinit
 
         for (SimilarChecksGroup similarChecksGroup : allCheckGroups) {
             for (SimilarCheckModel similarCheckModel : similarChecksGroup.getSimilarChecks()) {
-                StringBuilder checkNameBuilder = new StringBuilder();
-                checkNameBuilder.append(similarCheckModel.getCheckTarget());
-                checkNameBuilder.append('/');
-                checkNameBuilder.append(similarCheckModel.getCheckType().getDisplayName());
-                checkNameBuilder.append('/');
-                if (similarCheckModel.getTimeScale() != null) {
-                    checkNameBuilder.append(similarCheckModel.getTimeScale());
-                    checkNameBuilder.append('/');
-                }
                 UICheckModel checkModel = similarCheckModel.getCheckModel();
-                checkNameBuilder.append(checkModel.getCheckName());
+                String fullCheckName = CheckDefinitionList.makeCheckName(similarCheckModel.getCheckTarget(),
+                        similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), checkModel.getCheckName());
 
-                String fullCheckName = checkNameBuilder.toString();
                 String sensorName = checkModel.getSensorName();
                 String ruleName = checkModel.getRule().getError().getRuleName();
                 String helpText = checkModel.getHelpText();
