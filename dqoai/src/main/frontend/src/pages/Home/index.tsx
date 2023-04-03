@@ -96,7 +96,7 @@ const HomePage = () => {
             <div className="flex flex-col gap-4">
               <p>Check the docs for more tutorials</p>
               <a href="https://docs.dqo.ai/latest/">
-                <img src="/images/home/book.svg" className="w-40 mb-5" alt="" />
+                <img src="/images/home/book.svg" className="w-20 mb-5" alt="" />
               </a>
               <p>
                 Download our best practices for effective <br />
@@ -126,7 +126,7 @@ const HomePage = () => {
                 Back to home page
               </p>
               <a href="https://dqo.ai/">
-                <img src="/images/home/dqoai.png" className="w-40" alt="" />
+                <img src="/logo.svg" className="w-40" alt="" />
               </a>
             </div>
           </div>

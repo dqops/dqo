@@ -17,8 +17,7 @@ One example of description from old examples
 
 # Value in range numerical percent
 
-In this example we will check the data of `bigquery-public-data.covid19_italy.data_by_region` using
-[`value_in_range_numerical_percent`](../../../check_reference/validity/value_in_range_numerical_percent/value_in_range_numerical_percent.md) check.
+In this example we will check the data of `bigquery-public-data.covid19_italy.data_by_region` using `value_in_range_numerical_percent` check.
 Our goal is to set up a validity check on `recovered` column in order to check how many percent of data are in range.
 In our case, we check how many people from `Sicilia` recovered in range `[0-500]`, and how many of these observations are part of the total data.
 
