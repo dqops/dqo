@@ -17,19 +17,19 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
-        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP()
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
+        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE()
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME()
                         THEN 1
@@ -64,19 +64,19 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
-        {%- if table.columns[column_name].type_snapshot.column_type | lower == 'timestamp with time zone' -%}
+        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_typ) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'timestamp without time zone' -%}
+        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
                         THEN 1
@@ -111,19 +111,19 @@ Column level sensor that calculates the percentage of rows with a date value in 
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_value_in_future() -%}
-        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | lower == 'date' -%}
+        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMPTZ' -%}
+        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
                         THEN 1
@@ -157,19 +157,19 @@ Column level sensor that calculates the percentage of rows with a date value in 
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     {% macro render_value_in_future() -%}
-        {%- if table.columns[column_name].type_snapshot.column_type | upper == 'TIMESTAMP' -%}
+        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_TIMESTAMP
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATE' -%}
+        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATE
                         THEN 1
                     ELSE 0
                 END
-        {%- elif table.columns[column_name].type_snapshot.column_type | upper == 'DATETIME' -%}
+        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
                 CASE
                     WHEN {{ lib.render_target_column('analyzed_table') }} > CURRENT_DATETIME
                         THEN 1
@@ -178,6 +178,53 @@ Column level sensor that calculates the percentage of rows with a date value in 
         {%- else -%}
                 CASE
                     WHEN TRY_TO_TIMESTAMP({{ lib.render_target_column('analyzed_table') }}) > CURRENT_TIMESTAMP
+                        THEN 1
+                    ELSE 0
+                END
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        CASE
+            WHEN COUNT(*) = 0 THEN 100.0
+            ELSE 100.0 * SUM(
+                {{ render_value_in_future() }}
+            ) / COUNT(*)
+        END AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% macro render_value_in_future() -%}
+        {%- if lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > SYSDATETIME()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- elif lib.is_local_date_time(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+                CASE
+                    WHEN {{ lib.render_target_column('analyzed_table') }} > GETDATE()
+                        THEN 1
+                    ELSE 0
+                END
+        {%- else -%}
+                CASE
+                    WHEN TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATETIME) > SYSDATETIME()
                         THEN 1
                     ELSE 0
                 END
@@ -225,9 +272,9 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {% import '/dialects/bigquery.sql.jinja2' as lib with context -%}
     
     {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
-        {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
         CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
         SAFE_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
@@ -254,9 +301,9 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {% import '/dialects/postgresql.sql.jinja2' as lib with context -%}
     
     {% macro render_date_format_cast()%}
-        {%- if lib.target_column_data_type == 'date' -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
         {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'timestamp' or lib.target_column_data_type == 'timestamp with time zone' or lib.target_column_data_type == 'varchar'-%}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true'-%}
         CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
         CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
@@ -283,9 +330,9 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {% import '/dialects/redshift.sql.jinja2' as lib with context -%}
     
     {% macro render_date_format_cast()%}
-        {%- if lib.target_column_data_type == 'date' -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
         {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'TIMESTAMP' or lib.target_column_data_type == 'TIMESTAMPTZ' or lib.target_column_data_type == 'VARCHAR'-%}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
         CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
         CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
@@ -312,9 +359,9 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
     
     {% macro render_date_format_cast() -%}
-        {%- if lib.target_column_data_type == 'DATE' -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
         {{ render_target_column('analyzed_table') }}
-        {%- elif lib.target_column_data_type == 'DATETIME' or lib.target_column_data_type == 'TIMESTAMP'-%}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
         TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
         {%- else -%}
         TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
@@ -334,5 +381,50 @@ Column level sensor that calculates the percent of non-negative values in a colu
     {{- lib.render_where_clause() -}}
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    
+    {% macro render_date_format_cast() -%}
+        {%- if lib.is_local_date(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        {{ lib.render_target_column('analyzed_table') }}
+        {%- elif lib.is_local_time(table.columns[column_name].type_snapshot.column_type) == 'true' or lib.is_instant(table.columns[column_name].type_snapshot.column_type) == 'true' -%}
+        CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- else -%}
+        TRY_CAST({{ lib.render_target_column('analyzed_table') }} AS DATE)
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    {% macro render_ordering_column_names() %}
+        {%- if lib.time_series is not none and lib.time_series.mode != 'current_time' -%}
+            ORDER BY {{ lib.render_time_dimension_expression(lib.table_alias_prefix) }}
+        {%- elif (lib.data_streams is not none and (lib.data_streams | length()) > 0) %}
+            {{ ', ' }}
+        {% endif %}
+        {%- if (lib.data_streams is not none and (lib.data_streams | length()) > 0) -%}
+            {%- for attribute in lib.data_streams -%}
+                {%- if not loop.first -%}
+                    {{ ', ' }}
+                {%- endif -%}
+                    {{ attribute }}
+            {%- endfor -%}
+        {%- endif -%}
+    {% endmacro %}
+    
+    SELECT
+        100.0 * SUM(
+            CASE
+                WHEN {{ render_date_format_cast() }} >= {{ lib.make_text_constant(parameters.min_value) }} AND {{ render_date_format_cast() }} <= {{ lib.make_text_constant(parameters.max_value) }} THEN 1
+                ELSE 0
+            END
+        ) / COUNT(*) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- render_ordering_column_names() -}}
     ```
 ___

@@ -25,8 +25,8 @@ dqo.ai> connection list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-d`<br/>`--dimension`<br/>|Dimension filter| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
@@ -51,6 +51,7 @@ Creates a new connection to the database with the specified details such as conn
 **Command-line synopsis**
 ```
 $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+                [--sqlserver-ssl]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
@@ -67,13 +68,19 @@ $ dqo [dqo options...] connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--red
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
-                [-t=<providerType>] [-F=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
+                [--sqlserver-database=<database>] [--sqlserver-host=<host>]
+                [--sqlserver-options=<options>]
+                [--sqlserver-password=<password>] [--sqlserver-port=<port>]
+                [--sqlserver-user=<user>] [-t=<providerType>]
+                [-F=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]...
+                [--sqlserver-properties=<String=String>]...
 
 ```
 **DQO Shell synopsis**
 ```
 dqo.ai> connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+                [--sqlserver-ssl]
                 [--bigquery-authentication-mode=<authenticationMode>]
                 [--bigquery-billing-project-id=<billingProjectId>]
                 [--bigquery-json-key-content=<jsonKeyContent>]
@@ -90,15 +97,20 @@ dqo.ai> connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
                 [--snowflake-database=<database>]
                 [--snowflake-password=<password>] [--snowflake-role=<role>]
                 [--snowflake-user=<user>] [--snowflake-warehouse=<warehouse>]
-                [-t=<providerType>] [-F=<String=String>]...
-                [-P=<String=String>]... [-R=<String=String>]...
+                [--sqlserver-database=<database>] [--sqlserver-host=<host>]
+                [--sqlserver-options=<options>]
+                [--sqlserver-password=<password>] [--sqlserver-port=<port>]
+                [--sqlserver-user=<user>] [-t=<providerType>]
+                [-F=<String=String>]... [-P=<String=String>]...
+                [-R=<String=String>]...
+                [--sqlserver-properties=<String=String>]...
 
 ```
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`--bigquery-authentication-mode`<br/>|Bigquery authentication mode.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
 |`--bigquery-billing-project-id`<br/>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
 |`--bigquery-json-key-content`<br/>|Bigquery service account key content as JSON.| ||
@@ -117,7 +129,7 @@ dqo.ai> connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
 |`--postgresql-port`<br/>|PostgreSQL port number| ||
 |`--postgresql-ssl`<br/>|Connect to PostgreSQL using SSL| ||
 |`--postgresql-user`<br/>|PostgreSQL user name. The value could be in the format null to use dynamic substitution.| ||
-|`-t`<br/>`--provider`<br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>|
+|`-t`<br/>`--provider`<br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>|
 |`--redshift-database`<br/>|Redshift database name. The value could be in the format null to use dynamic substitution.| ||
 |`--redshift-host`<br/>|Redshift host name| ||
 |`--redshift-options`<br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
@@ -131,6 +143,14 @@ dqo.ai> connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
 |`--snowflake-role`<br/>|Snowflake role name.| ||
 |`--snowflake-user`<br/>|Snowflake user name. The value could be in the format null to use dynamic substitution.| ||
 |`--snowflake-warehouse`<br/>|Snowflake warehouse name.| ||
+|`--sqlserver-database`<br/>|SQL Server database name. The value could be in the format null to use dynamic substitution.| ||
+|`--sqlserver-host`<br/>|SQL Server host name| ||
+|`--sqlserver-options`<br/>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|`--sqlserver-password`<br/>|SQL Server database password. The value could be in the format null to use dynamic substitution.| ||
+|`--sqlserver-port`<br/>|SQL Server port number| ||
+|`--sqlserver-properties`<br/>|SQL Server additional properties that are added to the JDBC connection string| ||
+|`--sqlserver-ssl`<br/>|Connecting to SQL Server with SSL disabled| ||
+|`--sqlserver-user`<br/>|SQL Server user name. The value could be in the format null to use dynamic substitution.| ||
 |`-F`<br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |`-P`<br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |`-R`<br/>|Redshift additional properties that are added to the JDBC connection string| ||
@@ -161,8 +181,8 @@ dqo.ai> connection remove [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
@@ -185,6 +205,7 @@ Update the connection or connections that match the conditions specified in the 
 **Command-line synopsis**
 ```
 $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+                   [--sqlserver-ssl]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
@@ -202,13 +223,19 @@ $ dqo [dqo options...] connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--
                    [--snowflake-database=<database>]
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
-                   [--snowflake-warehouse=<warehouse>] [-F=<String=String>]...
+                   [--snowflake-warehouse=<warehouse>]
+                   [--sqlserver-database=<database>] [--sqlserver-host=<host>]
+                   [--sqlserver-options=<options>]
+                   [--sqlserver-password=<password>] [--sqlserver-port=<port>]
+                   [--sqlserver-user=<user>] [-F=<String=String>]...
                    [-P=<String=String>]... [-R=<String=String>]...
+                   [--sqlserver-properties=<String=String>]...
 
 ```
 **DQO Shell synopsis**
 ```
 dqo.ai> connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
+                   [--sqlserver-ssl]
                    [--bigquery-authentication-mode=<authenticationMode>]
                    [--bigquery-billing-project-id=<billingProjectId>]
                    [--bigquery-json-key-content=<jsonKeyContent>]
@@ -226,15 +253,20 @@ dqo.ai> connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
                    [--snowflake-database=<database>]
                    [--snowflake-password=<password>] [--snowflake-role=<role>]
                    [--snowflake-user=<user>]
-                   [--snowflake-warehouse=<warehouse>] [-F=<String=String>]...
+                   [--snowflake-warehouse=<warehouse>]
+                   [--sqlserver-database=<database>] [--sqlserver-host=<host>]
+                   [--sqlserver-options=<options>]
+                   [--sqlserver-password=<password>] [--sqlserver-port=<port>]
+                   [--sqlserver-user=<user>] [-F=<String=String>]...
                    [-P=<String=String>]... [-R=<String=String>]...
+                   [--sqlserver-properties=<String=String>]...
 
 ```
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`--bigquery-authentication-mode`<br/>|Bigquery authentication mode.| |google_application_credentials<br/>json_key_content<br/>json_key_path<br/>|
 |`--bigquery-billing-project-id`<br/>|Bigquery billing GCP project id. This is the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.| ||
 |`--bigquery-json-key-content`<br/>|Bigquery service account key content as JSON.| ||
@@ -266,6 +298,14 @@ dqo.ai> connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
 |`--snowflake-role`<br/>|Snowflake role name.| ||
 |`--snowflake-user`<br/>|Snowflake user name. The value could be in the format null to use dynamic substitution.| ||
 |`--snowflake-warehouse`<br/>|Snowflake warehouse name.| ||
+|`--sqlserver-database`<br/>|SQL Server database name. The value could be in the format null to use dynamic substitution.| ||
+|`--sqlserver-host`<br/>|SQL Server host name| ||
+|`--sqlserver-options`<br/>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
+|`--sqlserver-password`<br/>|SQL Server database password. The value could be in the format null to use dynamic substitution.| ||
+|`--sqlserver-port`<br/>|SQL Server port number| ||
+|`--sqlserver-properties`<br/>|SQL Server additional properties that are added to the JDBC connection string| ||
+|`--sqlserver-ssl`<br/>|Connecting to SQL Server with SSL disabled| ||
+|`--sqlserver-user`<br/>|SQL Server user name. The value could be in the format null to use dynamic substitution.| ||
 |`-F`<br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |`-P`<br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |`-R`<br/>|Redshift additional properties that are added to the JDBC connection string| ||
@@ -298,8 +338,8 @@ dqo.ai> connection schema list [-h] [-fw] [-hl] [-n=<name>] [-of=<outputFormat>]
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-d`<br/>`--dimension`<br/>|Dimension filter| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
@@ -338,8 +378,8 @@ dqo.ai> connection table list [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFor
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-d`<br/>`--dimension`<br/>|Dimension filter| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
@@ -378,14 +418,14 @@ dqo.ai> connection table show [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFor
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-t`<br/>`--table`<br/>|Full table name| ||
+|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
 
 
 
@@ -413,8 +453,8 @@ dqo.ai> connection edit [-h] [-fw] [-hl] [-n=<connection>] [-of=<outputFormat>]
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-n`<br/>`--connection`<br/>|Connection Name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||

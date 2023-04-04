@@ -5,7 +5,7 @@
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
-|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
+|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
 |[spec](#tablespec)||object| | | |
 
 ___  
@@ -15,7 +15,6 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[target](#tabletargetspec)|Physical table details (a physical schema name and a physical table name)|object| | | |
 |disabled|Disables all data quality checks on the table. Data quality checks will not be executed.|boolean| | | |
 |stage|Stage name.|string| | | |
 |filter|SQL WHERE clause added to the sensor queries. Use replacement tokens {table} to replace the content with the full table name, {alias} to replace the content with the table alias of an analyzed table or {column} to replace the content with the analyzed column name.|string| | | |
@@ -23,24 +22,14 @@ ___
 |[incremental_time_window](#partitionincrementaltimewindowspec)|Configuration of the time window for analyzing daily or monthly partitions. Specifies the number of recent days and recent months that are analyzed when the partitioned data quality checks are run in an incremental mode (the default mode).|object| | | |
 |[data_streams](#datastreammappingspecmap)|Data stream mappings list. Data streams are configured in two cases: (1) a tag is assigned to a table (within a data stream level hierarchy), when the data is segmented at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning.|object| | | |
 |[owner](#tableownerspec)|Table owner information like the data steward name or the business application name.|object| | | |
-|[checks](#tableprofilingcheckcategoriesspec)|Configuration of data quality checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|object| | | |
-|[checkpoints](#tablecheckpointsspec)|Configuration of table level checkpoints. Checkpoints are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.|object| | | |
+|[profiling_checks](#tableprofilingcheckcategoriesspec)|Configuration of data quality profiling checks that are enabled. Pick a check from a category, apply the parameters and rules to enable it.|object| | | |
+|[recurring_checks](#tablerecurringspec)|Configuration of table level recurring checks. Recurring are data quality checks that are evaluated for each period of time (daily, weekly, monthly, etc.). A checkpoint stores only the most recent data quality check result for each period of time.|object| | | |
 |[partitioned_checks](#tablepartitionedchecksrootspec)|Configuration of table level date/time partitioned checks. Partitioned data quality checks are evaluated for each partition separately, raising separate alerts at a partition level. The table does not need to be physically partitioned by date, it is possible to run data quality checks for each day or month of data separately.|object| | | |
-|[statistics_collector](#tablestatisticscollectorsrootcategoriesspec)|Configuration of table level data statistics collector (a basic profiler). Configures which statistics collectors are enabled and how they are configured.|object| | | |
+|[statistics](#tablestatisticscollectorsrootcategoriesspec)|Configuration of table level data statistics collector (a basic profiler). Configures which statistics collectors are enabled and how they are configured.|object| | | |
 |[schedules_override](#recurringschedulesspec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|object| | | |
 |[columns](#columnspecmap)|Dictionary of columns, indexed by a physical column name. Column specification contains the expected column data type and a list of column level data quality checks that are enabled for a column.|object| | | |
 |[labels](#labelsetspec)|Custom labels that were assigned to the table. Labels are used for searching for tables when filtered data quality checks are executed.|object| | | |
 |[comments](#commentslistspec)|Comments used for change tracking and documenting changes directly in the table data quality specification file.|object| | | |
-
-___  
-
-## TableTargetSpec  
-**The structure of this object is described below**  
-  
-|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
-|---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|schema_name|Physical schema name in the target database.|string| | | |
-|table_name|Physical table name in the target database.|string| | | |
 
 ___  
 
@@ -98,6 +87,7 @@ ___
 |[timeliness](#tableprofilingtimelinesschecksspec)|Configuration of timeliness checks on a table level. Timeliness checks detect anomalies like rapid row count changes.|object| | | |
 |[sql](#tableprofilingsqlchecksspec)|Configuration of data quality checks that are evaluating custom SQL conditions and aggregated expressions.|object| | | |
 |[availability](#tableprofilingavailabilitychecksspec)|Configuration of standard data quality checks on a table level.|object| | | |
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|object| | | |
 
 ___  
 
@@ -116,12 +106,12 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablestandardrowcountsensorparametersspec)|Row count sensor parameters|object| | | |
+|[warning](#mincountrulewarningparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
 |[error](#mincountrule0parametersspec)|Default alerting threshold for a row count that raises a data quality error (alert)|object| | | |
-|[warning](#mincountruleparametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
-|[fatal](#mincountruleparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
+|[fatal](#mincountrulefatalparametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|object| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|object| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
 |quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
@@ -139,6 +129,15 @@ ___
 
 ___  
 
+## MinCountRuleWarningParametersSpec  
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| | |0<br/>|
+
+___  
+
 ## MinCountRule0ParametersSpec  
 **The structure of this object is described below**  
   
@@ -148,12 +147,12 @@ ___
 
 ___  
 
-## MinCountRuleParametersSpec  
+## MinCountRuleFatalParametersSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| | |5<br/>|
+|min_count|Minimum accepted value for the actual_value returned by the sensor (inclusive).|long| | |100<br/>|
 
 ___  
 
@@ -193,12 +192,12 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tabletimelinessdayssincemostrecenteventsensorparametersspec)|Max days since most recent event sensor parameters|object| | | |
-|[error](#maxdaysrule2parametersspec)|Default alerting threshold for max days since most recent event that raises a data quality error (alert)|object| | | |
 |[warning](#maxdaysrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
+|[error](#maxdaysrule2parametersspec)|Default alerting threshold for max days since most recent event that raises a data quality error (alert)|object| | | |
 |[fatal](#maxdaysrule7parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|object| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|object| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
 |quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
@@ -216,7 +215,7 @@ ___
 
 ___  
 
-## MaxDaysRule2ParametersSpec  
+## MaxDaysRule1ParametersSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -225,7 +224,7 @@ ___
 
 ___  
 
-## MaxDaysRule1ParametersSpec  
+## MaxDaysRule2ParametersSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -249,12 +248,12 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tabletimelinessdataingestiondelaysensorparametersspec)|Max number of days between event and ingestion sensor parameters|object| | | |
-|[error](#maxdaysrule2parametersspec)|Default alerting threshold for a max number of days between event and ingestion check that raises a data quality error (alert)|object| | | |
 |[warning](#maxdaysrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
+|[error](#maxdaysrule2parametersspec)|Default alerting threshold for a max number of days between event and ingestion check that raises a data quality error (alert)|object| | | |
 |[fatal](#maxdaysrule7parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|object| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|object| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
 |quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
@@ -278,12 +277,12 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tabletimelinessdayssincemostrecentingestionsensorparametersspec)|Min number of days between event and ingestion sensor parameters|object| | | |
-|[error](#maxdaysrule2parametersspec)|Default alerting threshold for a min number of days between event and ingestion check that raises a data quality error (alert)|object| | | |
 |[warning](#maxdaysrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
+|[error](#maxdaysrule2parametersspec)|Default alerting threshold for a min number of days between event and ingestion check that raises a data quality error (alert)|object| | | |
 |[fatal](#maxdaysrule7parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|object| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|object| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
 |quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
@@ -318,12 +317,12 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablesqlconditionpassedpercentsensorparametersspec)|Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row|object| | | |
-|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum acceptable percentage of rows passing the custom SQL condition (expression) that raises a data quality error (alert).|object| | | |
 |[warning](#minpercentrule100parametersspec)|Alerting threshold that raises a data quality warning when a minimum acceptable percentage of rows did not pass the custom SQL condition (expression). The warning is considered as a passed data quality check.|object| | | |
+|[error](#minpercentrule99parametersspec)|Default alerting threshold for a minimum acceptable percentage of rows passing the custom SQL condition (expression) that raises a data quality error (alert).|object| | | |
 |[fatal](#minpercentrule95parametersspec)|Alerting threshold that raises a fatal data quality issue when a minimum acceptable percentage of rows did not pass the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.|object| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|object| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|object| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
 |quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
@@ -342,7 +341,7 @@ ___
 
 ___  
 
-## MinPercentRule99ParametersSpec  
+## MinPercentRule100ParametersSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -351,7 +350,7 @@ ___
 
 ___  
 
-## MinPercentRule100ParametersSpec  
+## MinPercentRule99ParametersSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -375,12 +374,12 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablesqlconditionfailedcountsensorparametersspec)|Sensor parameters with the custom SQL condition (an expression that returns true/false) which is evaluated on a each row|object| | | |
-|[error](#maxcountrule0parametersspec)|Default alerting threshold for a maximum number of rows failing the custom SQL condition (expression) that raises a data quality error (alert).|object| | | |
-|[warning](#maxcountrule10parametersspec)|Alerting threshold that raises a data quality warning when a given number of rows failed the custom SQL condition (expression). The warning is considered as a passed data quality check.|object| | | |
+|[warning](#maxcountrule15parametersspec)|Alerting threshold that raises a data quality warning when a given number of rows failed the custom SQL condition (expression). The warning is considered as a passed data quality check.|object| | | |
+|[error](#maxcountrule10parametersspec)|Default alerting threshold for a maximum number of rows failing the custom SQL condition (expression) that raises a data quality error (alert).|object| | | |
 |[fatal](#maxcountrule0parametersspec)|Alerting threshold that raises a fatal data quality issue when a given number of rows failed the custom SQL condition (expression). A fatal issue indicates a serious data quality problem that should result in stopping the data pipelines.|object| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|object| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|object| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
 |quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
@@ -399,7 +398,7 @@ ___
 
 ___  
 
-## MaxCountRule0ParametersSpec  
+## MaxCountRule15ParametersSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -417,18 +416,27 @@ ___
 
 ___  
 
+## MaxCountRule0ParametersSpec  
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|max_count|Maximum accepted value for the actual_value returned by the sensor (inclusive).|long| | | |
+
+___  
+
 ## TableSqlAggregateExprCheckSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tablesqlaggregatedexpressionsensorparametersspec)|Sensor parameters with the custom SQL aggregate expression that is evaluated on a table|object| | | |
-|[error](#maxvalueruleparametersspec)|Default alerting threshold for errors raised when the aggregated value is above the maximum accepted value.|object| | | |
 |[warning](#maxvalueruleparametersspec)|Default alerting threshold for warnings raised when the aggregated value is above the maximum accepted value.|object| | | |
+|[error](#maxvalueruleparametersspec)|Default alerting threshold for errors raised when the aggregated value is above the maximum accepted value.|object| | | |
 |[fatal](#maxvalueruleparametersspec)|Default alerting threshold for fatal data quality issues raised when the aggregated value is above the maximum accepted value.|object| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|object| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|object| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
 |quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
@@ -471,12 +479,12 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tableavailabilitysensorparametersspec)|Row count sensor parameters|object| | | |
-|[error](#maxfailuresrule5parametersspec)|Default alerting threshold for a row count that raises a data quality error (alert)|object| | | |
 |[warning](#maxfailuresrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
+|[error](#maxfailuresrule5parametersspec)|Default alerting threshold for a row count that raises a data quality error (alert)|object| | | |
 |[fatal](#maxfailuresrule10parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|object| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|object| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
 |quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
@@ -494,7 +502,7 @@ ___
 
 ___  
 
-## MaxFailuresRule5ParametersSpec  
+## MaxFailuresRule1ParametersSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -503,7 +511,7 @@ ___
 
 ___  
 
-## MaxFailuresRule1ParametersSpec  
+## MaxFailuresRule5ParametersSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
@@ -521,117 +529,131 @@ ___
 
 ___  
 
-## TableCheckpointsSpec  
+## CustomCheckSpecMap  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily](#tabledailycheckpointcategoriesspec)|Configuration of daily checkpoints evaluated at a table level.|object| | | |
-|[monthly](#tablemonthlycheckpointcategoriesspec)|Configuration of monthly checkpoints evaluated at a table level.|object| | | |
+|access_order||boolean| | | |
+|size||integer| | | |
+|mod_count||integer| | | |
+|threshold||integer| | | |
 
 ___  
 
-## TableDailyCheckpointCategoriesSpec  
+## TableRecurringSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[standard](#tablestandarddailycheckpointspec)|Daily checkpoints of standard data quality checks|object| | | |
-|[timeliness](#tabletimelinessdailycheckpointspec)|Daily checkpoints of timeliness checks|object| | | |
-|[sql](#tablesqldailycheckpointspec)|Daily checkpoints of custom SQL checks|object| | | |
-|[availability](#tableavailabilitydailycheckpointspec)|Daily checkpoints availability checks|object| | | |
+|[daily](#tabledailyrecurringcategoriesspec)|Configuration of daily recurring evaluated at a table level.|object| | | |
+|[monthly](#tablemonthlyrecurringcategoriesspec)|Configuration of monthly recurring evaluated at a table level.|object| | | |
 
 ___  
 
-## TableStandardDailyCheckpointSpec  
+## TableDailyRecurringCategoriesSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_checkpoint_row_count](#tablerowcountcheckspec)|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|object| | | |
+|[standard](#tablestandarddailyrecurringspec)|Daily recurring of standard data quality checks|object| | | |
+|[timeliness](#tabletimelinessdailyrecurringspec)|Daily recurring of timeliness checks|object| | | |
+|[sql](#tablesqldailyrecurringspec)|Daily recurring of custom SQL checks|object| | | |
+|[availability](#tableavailabilitydailyrecurringspec)|Daily recurring availability checks|object| | | |
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|object| | | |
 
 ___  
 
-## TableTimelinessDailyCheckpointSpec  
+## TableStandardDailyRecurringSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_checkpoint_days_since_most_recent_event](#tabledayssincemostrecenteventcheckspec)|Daily checkpoint calculating the number of days since the most recent event timestamp (freshness)|object| | | |
-|[daily_checkpoint_data_ingestion_delay](#tabledataingestiondelaycheckspec)|Daily checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|object| | | |
-|[daily_checkpoint_days_since_most_recent_ingestion](#tabledayssincemostrecentingestioncheckspec)|Daily checkpoint calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|object| | | |
+|[daily_row_count](#tablerowcountcheckspec)|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each day when the data quality check was evaluated.|object| | | |
 
 ___  
 
-## TableSqlDailyCheckpointSpec  
+## TableTimelinessDailyRecurringSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_checkpoint_sql_condition_passed_percent_on_table](#tablesqlconditionpassedpercentcheckspec)|Verifies that a set percentage of rows passed a custom SQL condition (expression).|object| | | |
-|[daily_checkpoint_sql_condition_failed_count_on_table](#tablesqlconditionfailedcountcheckspec)|Verifies that a set number of rows failed a custom SQL condition (expression).|object| | | |
-|[daily_checkpoint_sql_aggregate_expr_table](#tablesqlaggregateexprcheckspec)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|object| | | |
+|[daily_days_since_most_recent_event](#tabledayssincemostrecenteventcheckspec)|Daily  calculating the number of days since the most recent event timestamp (freshness)|object| | | |
+|[daily_data_ingestion_delay](#tabledataingestiondelaycheckspec)|Daily  calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|object| | | |
+|[daily_days_since_most_recent_ingestion](#tabledayssincemostrecentingestioncheckspec)|Daily  calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|object| | | |
 
 ___  
 
-## TableAvailabilityDailyCheckpointSpec  
+## TableSqlDailyRecurringSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[daily_checkpoint_table_availability](#tableavailabilitycheckspec)|Verifies availability on table in database using simple row count|object| | | |
+|[daily_sql_condition_passed_percent_on_table](#tablesqlconditionpassedpercentcheckspec)|Verifies that a set percentage of rows passed a custom SQL condition (expression).|object| | | |
+|[daily_sql_condition_failed_count_on_table](#tablesqlconditionfailedcountcheckspec)|Verifies that a set number of rows failed a custom SQL condition (expression).|object| | | |
+|[daily_sql_aggregate_expr_table](#tablesqlaggregateexprcheckspec)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside the set range.|object| | | |
 
 ___  
 
-## TableMonthlyCheckpointCategoriesSpec  
+## TableAvailabilityDailyRecurringSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[standard](#tablestandardmonthlycheckpointspec)|Monthly checkpoints of standard data quality checks|object| | | |
-|[timeliness](#tabletimelinessmonthlycheckpointspec)|Monthly checkpoints of timeliness checks|object| | | |
-|[sql](#tablesqlmonthlycheckpointspec)|Monthly checkpoints of custom SQL checks|object| | | |
-|[availability](#tableavailabilitymonthlycheckpointspec)|Daily partitioned availability checks|object| | | |
+|[daily_table_availability](#tableavailabilitycheckspec)|Verifies availability on table in database using simple row count|object| | | |
 
 ___  
 
-## TableStandardMonthlyCheckpointSpec  
+## TableMonthlyRecurringCategoriesSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_checkpoint_row_count](#tablerowcountcheckspec)|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|object| | | |
+|[standard](#tablestandardmonthlyrecurringspec)|Monthly recurring of standard data quality checks|object| | | |
+|[timeliness](#tabletimelinessmonthlyrecurringspec)|Monthly recurring of timeliness checks|object| | | |
+|[sql](#tablesqlmonthlyrecurringspec)|Monthly recurring of custom SQL checks|object| | | |
+|[availability](#tableavailabilitymonthlyrecurringspec)|Daily partitioned availability checks|object| | | |
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|object| | | |
 
 ___  
 
-## TableTimelinessMonthlyCheckpointSpec  
+## TableStandardMonthlyRecurringSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_checkpoint_days_since_most_recent_event](#tabledayssincemostrecenteventcheckspec)|Monthly checkpoint calculating the number of days since the most recent event timestamp (freshness)|object| | | |
-|[monthly_checkpoint_data_ingestion_delay](#tabledataingestiondelaycheckspec)|Monthly checkpoint calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|object| | | |
-|[monthly_checkpoint_days_since_most_recent_ingestion](#tabledayssincemostrecentingestioncheckspec)|Monthly checkpoint calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|object| | | |
+|[monthly_row_count](#tablerowcountcheckspec)|Verifies that the number of rows in a table does not exceed the minimum accepted count. Stores the most recent row count for each month when the data quality check was evaluated.|object| | | |
 
 ___  
 
-## TableSqlMonthlyCheckpointSpec  
+## TableTimelinessMonthlyRecurringSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_checkpoint_sql_condition_passed_percent_on_table](#tablesqlconditionpassedpercentcheckspec)|Verifies that a set percentage of rows passed a custom SQL condition (expression).|object| | | |
-|[monthly_checkpoint_sql_condition_failed_count_on_table](#tablesqlconditionfailedcountcheckspec)|Verifies that a set number of rows failed a custom SQL condition (expression).|object| | | |
-|[monthly_checkpoint_sql_aggregate_expr_table](#tablesqlaggregateexprcheckspec)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.|object| | | |
+|[monthly_days_since_most_recent_event](#tabledayssincemostrecenteventcheckspec)|Monthly recurring calculating the number of days since the most recent event timestamp (freshness)|object| | | |
+|[monthly_data_ingestion_delay](#tabledataingestiondelaycheckspec)|Monthly recurring calculating the time difference in days between the most recent event timestamp and the most recent ingestion timestamp|object| | | |
+|[monthly_days_since_most_recent_ingestion](#tabledayssincemostrecentingestioncheckspec)|Monthly recurring calculating the time difference in days between the current date and the most recent data ingestion timestamp (staleness)|object| | | |
 
 ___  
 
-## TableAvailabilityMonthlyCheckpointSpec  
+## TableSqlMonthlyRecurringSpec  
 **The structure of this object is described below**  
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|[monthly_partition_table_availability](#tableavailabilitycheckspec)|Verifies availability on table in database using simple row count|object| | | |
+|[monthly_sql_condition_passed_percent_on_table](#tablesqlconditionpassedpercentcheckspec)|Verifies that a set percentage of rows passed a custom SQL condition (expression).|object| | | |
+|[monthly_sql_condition_failed_count_on_table](#tablesqlconditionfailedcountcheckspec)|Verifies that a set number of rows failed a custom SQL condition (expression).|object| | | |
+|[monthly_sql_aggregate_expr_table](#tablesqlaggregateexprcheckspec)|Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) returns a given minimum accepted value.|object| | | |
+
+___  
+
+## TableAvailabilityMonthlyRecurringSpec  
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|[monthly_table_availability](#tableavailabilitycheckspec)|Verifies availability on table in database using simple row count|object| | | |
 
 ___  
 
@@ -653,6 +675,7 @@ ___
 |[standard](#tablestandarddailypartitionedchecksspec)|Standard daily partitioned data quality checks that verify the quality of every day of data separately|object| | | |
 |[timeliness](#tabletimelinessdailypartitionedchecksspec)|Daily partitioned timeliness checks|object| | | |
 |[sql](#tablesqldailypartitionedspec)|Custom SQL daily partitioned data quality checks that verify the quality of every day of data separately|object| | | |
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|object| | | |
 
 ___  
 
@@ -683,12 +706,12 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[parameters](#tabletimelinesspartitionreloadlagsensorparametersspec)|Partition reload lag sensor parameters|object| | | |
-|[error](#maxdaysrule2parametersspec)|Default alerting threshold for partition reload lag that raises a data quality error (alert)|object| | | |
 |[warning](#maxdaysrule1parametersspec)|Alerting threshold that raises a data quality warning that is considered as a passed data quality check|object| | | |
+|[error](#maxdaysrule2parametersspec)|Default alerting threshold for partition reload lag that raises a data quality error (alert)|object| | | |
 |[fatal](#maxdaysrule7parametersspec)|Alerting threshold that raises a fatal data quality issue which indicates a serious data quality problem|object| | | |
 |[schedule_override](#recurringschedulespec)|Run check scheduling configuration. Specifies the schedule (a cron expression) when the data quality checks are executed by the scheduler.|object| | | |
 |[comments](#commentslistspec)|Comments for change tracking. Please put comments in this collection because YAML comments may be removed when the YAML file is modified by the tool (serialization and deserialization will remove non tracked comments).|object| | | |
-|disabled|Disables the data quality check. Only enabled data quality checks and checkpoints are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
+|disabled|Disables the data quality check. Only enabled data quality checks and recurrings are executed. The check should be disabled if it should not work, but the configuration of the sensor and rules should be preserved in the configuration.|boolean| | | |
 |exclude_from_kpi|Data quality check results (alerts) are included in the data quality KPI calculation by default. Set this field to true in order to exclude this data quality check from the data quality KPI calculation.|boolean| | | |
 |include_in_sla|Marks the data quality check as part of a data quality SLA. The data quality SLA is a set of critical data quality checks that must always pass and are considered as a data contract for the dataset.|boolean| | | |
 |quality_dimension|Configures a custom data quality dimension name that is different than the built-in dimensions (Timeliness, Validity, etc.).|string| | | |
@@ -725,6 +748,7 @@ ___
 |[standard](#tablestandardmonthlypartitionedchecksspec)|Standard monthly partitioned data quality checks that verify the quality of every month of data separately|object| | | |
 |[timeliness](#tabletimelinessmonthlypartitionedchecksspec)|Monthly partitioned timeliness checks|object| | | |
 |[sql](#tablesqlmonthlypartitionedspec)|Custom SQL daily partitioned data quality checks that verify the quality of every month of data separately|object| | | |
+|[custom](#customcheckspecmap)|Dictionary of custom checks. The keys are check names.|object| | | |
 
 ___  
 
@@ -794,8 +818,10 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[profiling](#recurringschedulespec)|Schedule for running profiling data quality checks.|object| | | |
-|[daily](#recurringschedulespec)|Schedule for running daily whole table checks and day level time period checks.|object| | | |
-|[monthly](#recurringschedulespec)|Schedule for running monthly whole table checks and month level time period checks.|object| | | |
+|[recurring_daily](#recurringschedulespec)|Schedule for running daily recurring checks.|object| | | |
+|[recurring_monthly](#recurringschedulespec)|Schedule for running monthly recurring checks.|object| | | |
+|[partitioned_daily](#recurringschedulespec)|Schedule for running daily partitioned checks.|object| | | |
+|[partitioned_monthly](#recurringschedulespec)|Schedule for running monthly partitioned checks.|object| | | |
 
 ___  
 

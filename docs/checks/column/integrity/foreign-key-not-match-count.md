@@ -33,28 +33,25 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=foreign_
 ```
 **Check structure (Yaml)**
 ```yaml
-      checks:
+      profiling_checks:
         integrity:
           foreign_key_not_match_count:
             parameters:
               foreign_table: dim_customer
               foreign_column: customer_id
-            error:
-              max_count: 0
             warning:
+              max_count: 0
+            error:
               max_count: 10
             fatal:
-              max_count: 0
+              max_count: 15
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-27"
+```yaml hl_lines="13-24"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -63,18 +60,18 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      checks:
+      profiling_checks:
         integrity:
           foreign_key_not_match_count:
             parameters:
               foreign_table: dim_customer
               foreign_column: customer_id
-            error:
-              max_count: 0
             warning:
+              max_count: 0
+            error:
               max_count: 10
             fatal:
-              max_count: 0
+              max_count: 15
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -129,8 +126,8 @@ spec:
         ) AS actual_value,
         CURRENT_TIMESTAMP() AS time_period,
         TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
-    LEFT OUTER JOIN `your-google-project-id`.`target_schema`.`dim_customer` AS foreign_table
+    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+    LEFT OUTER JOIN `your-google-project-id`.``.`dim_customer` AS foreign_table
     ON analyzed_table.`target_column` = foreign_table.`customer_id`
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -177,8 +174,8 @@ spec:
         ) AS actual_value,
         TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
         TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_snowflake_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_snowflake_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -229,8 +226,8 @@ spec:
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_postgresql_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_postgresql_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -281,8 +278,8 @@ spec:
         ) AS actual_value,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_redshift_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_redshift_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -290,14 +287,11 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 44-49"
+    ```yaml hl_lines="11-18 41-46"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -314,18 +308,18 @@ spec:
             column: state
       columns:
         target_column:
-          checks:
+          profiling_checks:
             integrity:
               foreign_key_not_match_count:
                 parameters:
                   foreign_table: dim_customer
                   foreign_column: customer_id
-                error:
-                  max_count: 0
                 warning:
+                  max_count: 0
+                error:
                   max_count: 10
                 fatal:
-                  max_count: 0
+                  max_count: 15
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -386,8 +380,8 @@ spec:
             analyzed_table.`state` AS stream_level_2,
             CURRENT_TIMESTAMP() AS time_period,
             TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-        FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
-        LEFT OUTER JOIN `your-google-project-id`.`target_schema`.`dim_customer` AS foreign_table
+        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        LEFT OUTER JOIN `your-google-project-id`.``.`dim_customer` AS foreign_table
         ON analyzed_table.`target_column` = foreign_table.`customer_id`
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -435,8 +429,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
             TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-        FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_snowflake_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_snowflake_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -488,8 +482,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_postgresql_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_postgresql_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -541,8 +535,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_redshift_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_redshift_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -555,57 +549,54 @@ spec:
 
 ___
 
-## **daily checkpoint foreign key not match count**  
+## **daily foreign key not match count**  
   
 **Check description**  
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_foreign_key_not_match_count|checkpoint|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|daily_foreign_key_not_match_count|recurring|daily|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_checkpoint_foreign_key_not_match_count
+dqo.ai> check run -ch=daily_foreign_key_not_match_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_checkpoint_foreign_key_not_match_count
+dqo.ai> check run -c=connection_name -ch=daily_foreign_key_not_match_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_foreign_key_not_match_count
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_foreign_key_not_match_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_foreign_key_not_match_count
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_foreign_key_not_match_count
 ```
 **Check structure (Yaml)**
 ```yaml
-      checkpoints:
+      recurring_checks:
         daily:
           integrity:
-            daily_checkpoint_foreign_key_not_match_count:
+            daily_foreign_key_not_match_count:
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              error:
-                max_count: 0
               warning:
+                max_count: 0
+              error:
                 max_count: 10
               fatal:
-                max_count: 0
+                max_count: 15
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-28"
+```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -614,19 +605,19 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      checkpoints:
+      recurring_checks:
         daily:
           integrity:
-            daily_checkpoint_foreign_key_not_match_count:
+            daily_foreign_key_not_match_count:
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              error:
-                max_count: 0
               warning:
+                max_count: 0
+              error:
                 max_count: 10
               fatal:
-                max_count: 0
+                max_count: 15
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -681,8 +672,8 @@ spec:
         ) AS actual_value,
         CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
-    LEFT OUTER JOIN `your-google-project-id`.`target_schema`.`dim_customer` AS foreign_table
+    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+    LEFT OUTER JOIN `your-google-project-id`.``.`dim_customer` AS foreign_table
     ON analyzed_table.`target_column` = foreign_table.`customer_id`
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -729,8 +720,8 @@ spec:
         ) AS actual_value,
         CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
         TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_snowflake_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_snowflake_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -781,8 +772,8 @@ spec:
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_postgresql_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_postgresql_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -833,8 +824,8 @@ spec:
         ) AS actual_value,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_redshift_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_redshift_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -842,14 +833,11 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 45-50"
+    ```yaml hl_lines="11-18 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -866,19 +854,19 @@ spec:
             column: state
       columns:
         target_column:
-          checkpoints:
+          recurring_checks:
             daily:
               integrity:
-                daily_checkpoint_foreign_key_not_match_count:
+                daily_foreign_key_not_match_count:
                   parameters:
                     foreign_table: dim_customer
                     foreign_column: customer_id
-                  error:
-                    max_count: 0
                   warning:
+                    max_count: 0
+                  error:
                     max_count: 10
                   fatal:
-                    max_count: 0
+                    max_count: 15
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -939,8 +927,8 @@ spec:
             analyzed_table.`state` AS stream_level_2,
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-        FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
-        LEFT OUTER JOIN `your-google-project-id`.`target_schema`.`dim_customer` AS foreign_table
+        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        LEFT OUTER JOIN `your-google-project-id`.``.`dim_customer` AS foreign_table
         ON analyzed_table.`target_column` = foreign_table.`customer_id`
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -988,8 +976,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
             TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_snowflake_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_snowflake_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1041,8 +1029,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_postgresql_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_postgresql_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1094,8 +1082,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_redshift_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_redshift_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1108,57 +1096,54 @@ spec:
 
 ___
 
-## **monthly checkpoint foreign key not match count**  
+## **monthly foreign key not match count**  
   
 **Check description**  
 Verifies that the number of values in a column that does not match values in another table column does not exceed the set count. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_foreign_key_not_match_count|checkpoint|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
+|monthly_foreign_key_not_match_count|recurring|monthly|[foreign_key_not_match_count](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-not-match-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_checkpoint_foreign_key_not_match_count
+dqo.ai> check run -ch=monthly_foreign_key_not_match_count
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_foreign_key_not_match_count
+dqo.ai> check run -c=connection_name -ch=monthly_foreign_key_not_match_count
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_foreign_key_not_match_count
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_foreign_key_not_match_count
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_foreign_key_not_match_count
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_foreign_key_not_match_count
 ```
 **Check structure (Yaml)**
 ```yaml
-      checkpoints:
+      recurring_checks:
         monthly:
           integrity:
-            monthly_checkpoint_foreign_key_not_match_count:
+            monthly_foreign_key_not_match_count:
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              error:
-                max_count: 0
               warning:
+                max_count: 0
+              error:
                 max_count: 10
               fatal:
-                max_count: 0
+                max_count: 15
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-28"
+```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -1167,19 +1152,19 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      checkpoints:
+      recurring_checks:
         monthly:
           integrity:
-            monthly_checkpoint_foreign_key_not_match_count:
+            monthly_foreign_key_not_match_count:
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              error:
-                max_count: 0
               warning:
+                max_count: 0
+              error:
                 max_count: 10
               fatal:
-                max_count: 0
+                max_count: 15
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1234,8 +1219,8 @@ spec:
         ) AS actual_value,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
-    LEFT OUTER JOIN `your-google-project-id`.`target_schema`.`dim_customer` AS foreign_table
+    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+    LEFT OUTER JOIN `your-google-project-id`.``.`dim_customer` AS foreign_table
     ON analyzed_table.`target_column` = foreign_table.`customer_id`
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1282,8 +1267,8 @@ spec:
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_snowflake_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_snowflake_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1334,8 +1319,8 @@ spec:
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_postgresql_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_postgresql_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1386,8 +1371,8 @@ spec:
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_redshift_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_redshift_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1395,14 +1380,11 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 45-50"
+    ```yaml hl_lines="11-18 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -1419,19 +1401,19 @@ spec:
             column: state
       columns:
         target_column:
-          checkpoints:
+          recurring_checks:
             monthly:
               integrity:
-                monthly_checkpoint_foreign_key_not_match_count:
+                monthly_foreign_key_not_match_count:
                   parameters:
                     foreign_table: dim_customer
                     foreign_column: customer_id
-                  error:
-                    max_count: 0
                   warning:
+                    max_count: 0
+                  error:
                     max_count: 10
                   fatal:
-                    max_count: 0
+                    max_count: 15
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1492,8 +1474,8 @@ spec:
             analyzed_table.`state` AS stream_level_2,
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-        FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
-        LEFT OUTER JOIN `your-google-project-id`.`target_schema`.`dim_customer` AS foreign_table
+        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        LEFT OUTER JOIN `your-google-project-id`.``.`dim_customer` AS foreign_table
         ON analyzed_table.`target_column` = foreign_table.`customer_id`
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1541,8 +1523,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_snowflake_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_snowflake_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1594,8 +1576,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_postgresql_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_postgresql_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1647,8 +1629,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_redshift_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_redshift_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -1696,22 +1678,19 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_pa
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              error:
-                max_count: 0
               warning:
+                max_count: 0
+              error:
                 max_count: 10
               fatal:
-                max_count: 0
+                max_count: 15
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-28"
+```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -1727,12 +1706,12 @@ spec:
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              error:
-                max_count: 0
               warning:
+                max_count: 0
+              error:
                 max_count: 10
               fatal:
-                max_count: 0
+                max_count: 15
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1787,8 +1766,8 @@ spec:
         ) AS actual_value,
         CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
         TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
-    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
-    LEFT OUTER JOIN `your-google-project-id`.`target_schema`.`dim_customer` AS foreign_table
+    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+    LEFT OUTER JOIN `your-google-project-id`.``.`dim_customer` AS foreign_table
     ON analyzed_table.`target_column` = foreign_table.`customer_id`
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1835,8 +1814,8 @@ spec:
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
-    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_snowflake_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_snowflake_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1887,8 +1866,8 @@ spec:
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_postgresql_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_postgresql_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1939,8 +1918,8 @@ spec:
         ) AS actual_value,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_redshift_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_redshift_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -1948,14 +1927,11 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 45-50"
+    ```yaml hl_lines="11-18 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -1979,12 +1955,12 @@ spec:
                   parameters:
                     foreign_table: dim_customer
                     foreign_column: customer_id
-                  error:
-                    max_count: 0
                   warning:
+                    max_count: 0
+                  error:
                     max_count: 10
                   fatal:
-                    max_count: 0
+                    max_count: 15
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2045,8 +2021,8 @@ spec:
             analyzed_table.`state` AS stream_level_2,
             CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
             TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
-        FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
-        LEFT OUTER JOIN `your-google-project-id`.`target_schema`.`dim_customer` AS foreign_table
+        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        LEFT OUTER JOIN `your-google-project-id`.``.`dim_customer` AS foreign_table
         ON analyzed_table.`target_column` = foreign_table.`customer_id`
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2094,8 +2070,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
             TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
-        FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_snowflake_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_snowflake_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2147,8 +2123,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
             CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_postgresql_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_postgresql_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2200,8 +2176,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
             CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_redshift_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_redshift_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2249,22 +2225,19 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              error:
-                max_count: 0
               warning:
+                max_count: 0
+              error:
                 max_count: 10
               fatal:
-                max_count: 0
+                max_count: 15
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-28"
+```yaml hl_lines="13-25"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -2280,12 +2253,12 @@ spec:
               parameters:
                 foreign_table: dim_customer
                 foreign_column: customer_id
-              error:
-                max_count: 0
               warning:
+                max_count: 0
+              error:
                 max_count: 10
               fatal:
-                max_count: 0
+                max_count: 15
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2340,8 +2313,8 @@ spec:
         ) AS actual_value,
         DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
-    FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
-    LEFT OUTER JOIN `your-google-project-id`.`target_schema`.`dim_customer` AS foreign_table
+    FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+    LEFT OUTER JOIN `your-google-project-id`.``.`dim_customer` AS foreign_table
     ON analyzed_table.`target_column` = foreign_table.`customer_id`
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2388,8 +2361,8 @@ spec:
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
-    FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_snowflake_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_snowflake_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2440,8 +2413,8 @@ spec:
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_postgresql_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_postgresql_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2492,8 +2465,8 @@ spec:
         ) AS actual_value,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-    FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
-    LEFT OUTER JOIN "your_redshift_database"."target_schema"."dim_customer" AS foreign_table
+    FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+    LEFT OUTER JOIN "your_redshift_database".""."dim_customer" AS foreign_table
     ON analyzed_table."target_column" = foreign_table."customer_id"
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
@@ -2501,14 +2474,11 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 45-50"
+    ```yaml hl_lines="11-18 42-47"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -2532,12 +2502,12 @@ spec:
                   parameters:
                     foreign_table: dim_customer
                     foreign_column: customer_id
-                  error:
-                    max_count: 0
                   warning:
+                    max_count: 0
+                  error:
                     max_count: 10
                   fatal:
-                    max_count: 0
+                    max_count: 15
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2598,8 +2568,8 @@ spec:
             analyzed_table.`state` AS stream_level_2,
             DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
-        FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
-        LEFT OUTER JOIN `your-google-project-id`.`target_schema`.`dim_customer` AS foreign_table
+        FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
+        LEFT OUTER JOIN `your-google-project-id`.``.`dim_customer` AS foreign_table
         ON analyzed_table.`target_column` = foreign_table.`customer_id`
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2647,8 +2617,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
-        FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_snowflake_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_snowflake_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2700,8 +2670,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_postgresql_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_postgresql_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
@@ -2753,8 +2723,8 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-        FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
-        LEFT OUTER JOIN "your_redshift_database"."target_schema"."dim_customer" AS foreign_table
+        FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
+        LEFT OUTER JOIN "your_redshift_database".""."dim_customer" AS foreign_table
         ON analyzed_table."target_column" = foreign_table."customer_id"
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc

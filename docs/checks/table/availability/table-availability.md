@@ -33,38 +33,35 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=table_av
 ```
 **Check structure (Yaml)**
 ```yaml
-  checks:
+  profiling_checks:
     availability:
       table_availability:
-        error:
-          max_failures: 5
         warning:
           max_failures: 1
+        error:
+          max_failures: 5
         fatal:
           max_failures: 10
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="14-22"
+```yaml hl_lines="11-19"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  checks:
+  profiling_checks:
     availability:
       table_availability:
-        error:
-          max_failures: 5
         warning:
           max_failures: 1
+        error:
+          max_failures: 5
         fatal:
           max_failures: 10
   columns:
@@ -115,7 +112,7 @@ spec:
                 *,
         CURRENT_TIMESTAMP() AS time_period,
         TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-            FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -161,7 +158,7 @@ spec:
                 *,
         TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
         TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -207,7 +204,7 @@ spec:
                 *,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -253,7 +250,7 @@ spec:
                 *,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -263,14 +260,11 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 38-43"
+    ```yaml hl_lines="11-18 35-40"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -285,13 +279,13 @@ spec:
           level_2:
             source: column_value
             column: state
-      checks:
+      profiling_checks:
         availability:
           table_availability:
-            error:
-              max_failures: 5
             warning:
               max_failures: 1
+            error:
+              max_failures: 5
             fatal:
               max_failures: 10
       columns:
@@ -346,7 +340,7 @@ spec:
                     *,
             CURRENT_TIMESTAMP() AS time_period,
             TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-                FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -391,7 +385,7 @@ spec:
                     *,
             TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
             TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -436,7 +430,7 @@ spec:
                     *,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -481,7 +475,7 @@ spec:
                     *,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -496,68 +490,65 @@ spec:
 
 ___
 
-## **daily checkpoint table availability**  
+## **daily table availability**  
   
 **Check description**  
 Verifies availability on table in database using simple row count  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_table_availability|checkpoint|daily|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|daily_table_availability|recurring|daily|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_checkpoint_table_availability
+dqo.ai> check run -ch=daily_table_availability
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_checkpoint_table_availability
+dqo.ai> check run -c=connection_name -ch=daily_table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_table_availability
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_table_availability
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_table_availability
 ```
 **Check structure (Yaml)**
 ```yaml
-  checkpoints:
+  recurring_checks:
     daily:
       availability:
-        daily_checkpoint_table_availability:
-          error:
-            max_failures: 5
+        daily_table_availability:
           warning:
             max_failures: 1
+          error:
+            max_failures: 5
           fatal:
             max_failures: 10
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="14-23"
+```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  checkpoints:
+  recurring_checks:
     daily:
       availability:
-        daily_checkpoint_table_availability:
-          error:
-            max_failures: 5
+        daily_table_availability:
           warning:
             max_failures: 1
+          error:
+            max_failures: 5
           fatal:
             max_failures: 10
   columns:
@@ -608,7 +599,7 @@ spec:
                 *,
         CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-            FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -654,7 +645,7 @@ spec:
                 *,
         CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
         TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -700,7 +691,7 @@ spec:
                 *,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -746,7 +737,7 @@ spec:
                 *,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -756,14 +747,11 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 39-44"
+    ```yaml hl_lines="11-18 36-41"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -778,14 +766,14 @@ spec:
           level_2:
             source: column_value
             column: state
-      checkpoints:
+      recurring_checks:
         daily:
           availability:
-            daily_checkpoint_table_availability:
-              error:
-                max_failures: 5
+            daily_table_availability:
               warning:
                 max_failures: 1
+              error:
+                max_failures: 5
               fatal:
                 max_failures: 10
       columns:
@@ -840,7 +828,7 @@ spec:
                     *,
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-                FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -885,7 +873,7 @@ spec:
                     *,
             CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
             TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -930,7 +918,7 @@ spec:
                     *,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -975,7 +963,7 @@ spec:
                     *,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -990,68 +978,65 @@ spec:
 
 ___
 
-## **monthly partition table availability**  
+## **monthly table availability**  
   
 **Check description**  
 Verifies availability on table in database using simple row count  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_partition_table_availability|checkpoint|monthly|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
+|monthly_table_availability|recurring|monthly|[table_availability](../../../../reference/sensors/table/availability-table-sensors/#table-availability)|[max_failures](../../../../reference/rules/comparison/#max-failures)|
   
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_partition_table_availability
+dqo.ai> check run -ch=monthly_table_availability
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_partition_table_availability
+dqo.ai> check run -c=connection_name -ch=monthly_table_availability
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_partition_table_availability
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_table_availability
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_partition_table_availability
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_table_availability
 ```
 **Check structure (Yaml)**
 ```yaml
-  checkpoints:
+  recurring_checks:
     monthly:
       availability:
-        monthly_partition_table_availability:
-          error:
-            max_failures: 5
+        monthly_table_availability:
           warning:
             max_failures: 1
+          error:
+            max_failures: 5
           fatal:
             max_failures: 10
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="14-23"
+```yaml hl_lines="11-20"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
   incremental_time_window:
     daily_partitioning_recent_days: 7
     monthly_partitioning_recent_months: 1
-  checkpoints:
+  recurring_checks:
     monthly:
       availability:
-        monthly_partition_table_availability:
-          error:
-            max_failures: 5
+        monthly_table_availability:
           warning:
             max_failures: 1
+          error:
+            max_failures: 5
           fatal:
             max_failures: 10
   columns:
@@ -1102,7 +1087,7 @@ spec:
                 *,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -1148,7 +1133,7 @@ spec:
                 *,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -1194,7 +1179,7 @@ spec:
                 *,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -1240,7 +1225,7 @@ spec:
                 *,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
             
             LIMIT 1
         ) AS tab_scan
@@ -1250,14 +1235,11 @@ spec:
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 39-44"
+    ```yaml hl_lines="11-18 36-41"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -1272,14 +1254,14 @@ spec:
           level_2:
             source: column_value
             column: state
-      checkpoints:
+      recurring_checks:
         monthly:
           availability:
-            monthly_partition_table_availability:
-              error:
-                max_failures: 5
+            monthly_table_availability:
               warning:
                 max_failures: 1
+              error:
+                max_failures: 5
               fatal:
                 max_failures: 10
       columns:
@@ -1334,7 +1316,7 @@ spec:
                     *,
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-                FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -1379,7 +1361,7 @@ spec:
                     *,
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -1424,7 +1406,7 @@ spec:
                     *,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan
@@ -1469,7 +1451,7 @@ spec:
                     *,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
                 
                 LIMIT 1
             ) AS tab_scan

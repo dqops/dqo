@@ -63,6 +63,19 @@ Column level sensor that counts maximum value in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 ___
 
 ## **max value**
@@ -121,6 +134,19 @@ Column level sensor that finds the maximum value. It works on any data type that
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MAX({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
@@ -196,6 +222,19 @@ Column level sensor that counts minimum value in a column.
     {{- lib.render_group_by() -}}
     {{- lib.render_order_by() -}}
     ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
 ___
 
 ## **min value**
@@ -254,6 +293,19 @@ Column level sensor that finds the minimum value. It works on any data type that
       
     ```
     {% import '/dialects/snowflake.sql.jinja2' as lib with context -%}
+    SELECT
+        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+    FROM {{ lib.render_target_table() }} AS analyzed_table
+    {{- lib.render_where_clause() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "sqlserver"
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
     SELECT
         MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         {{- lib.render_data_stream_projections('analyzed_table') }}
