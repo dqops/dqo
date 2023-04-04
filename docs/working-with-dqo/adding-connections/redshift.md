@@ -11,15 +11,15 @@ policies that restrict this communication.
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
-   ![Adding connection](./adding-connection.jpg)
+   ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection.jpg)
 
 2. Select Snowflake database type.
 
-   ![Selecting Snowflake database type](./adding-connection-snowflake.jpg)
+   ![Selecting Snowflake database type](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection-snowflake.jpg)
 
 3. Add connection settings.
 
-   ![Adding connection settings](./connection-settings-snowflake.jpg)
+   ![Adding connection settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-snowflake.jpg)
 
    | Snowflake connection settings | Property name in YAML configuration file | Description                                                                                                                                                                                                                                              | 
        |-------------------------------|------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -36,13 +36,13 @@ policies that restrict this communication.
    change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
    For example:
-   ![Adding connection settings - environmnetal variables](./connection-settings-snowflake-envvar.jpg)
+   ![Adding connection settings - environmnetal variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-snowflake-envvar.jpg)
 
    To add optional JDBC connection properties just type the **JDBC connection property** and the **Value**. The value
    can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.
 
    For example:
-   ![Adding connection JDBC settings](./connection-settings-JDBC-properties.jpg)
+   ![Adding connection JDBC settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-JDBC-properties.jpg)
 
    To remove the property click on the trash icon add the end of the input field.
 
@@ -52,11 +52,11 @@ policies that restrict this communication.
 6. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables.
 
-   ![Adding connection](./importing-schemas.jpg)
+   ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-   ![Adding connection](./importing-tables.jpg)
+   ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/importing-tables.jpg)
 
 ## Adding Snowflake connection using DQO Shell
 
@@ -99,14 +99,18 @@ dqo.ai> connection add --name=connection1
 
 After adding connection run `table import -c=connection1` to select schemas and import tables.
 
-DQO will ask you to select the schema (database, etc.) from which tables will be imported.
+DQO will ask you to select the schema from which the tables will be imported.
 
-You can also add the schema name as a parameter to import tables in just a single step.
+You can also add the schema and table name as a parameter to import tables in just a single step.
 
 ```
-dqo.ai> connection add -n={connection name} 
--t={schema name}
+dqo.ai> table import --connection={connection name} 
+--schema={schema name}
+--table={table name}
 ```
+DQO supports the use of the asterisk character * as a wildcard when selecting schemas and tables, which can substitute
+any number of characters. For example, use  pub* to find all schema a name with a name starting with "pub". The *
+character can be used at the beginning, in the middle or at the end of the name.
 
 ## Connections configuration files
 
