@@ -13,14 +13,16 @@ const ConfirmErrorModal = ({ open, onClose, message, onConfirm }: ConfirmErrorMo
   return (
     <Dialog open={open} handler={onClose} className="min-w-200">
       <DialogBody className="pt-6 pb-2 px-6">
-        <div className="text-2xl text-gray-900 whitespace-normal break-all">
-          Connection to the data source failed
-        </div>
-        <div className="text-xl text-red-700 whitespace-normal break-word p-3 border my-4 rounded-lg max-h-[110px] overflow-y-auto">
-          {message}
-        </div>
-        <div className="text-center text-xl text-gray-900">
-          Do you want to save the connection anyway?
+        <div className="flex flex-col">
+          <div className="text-2xl text-gray-900 whitespace-normal break-all">
+            Connection to the data source failed
+          </div>
+          <div className="text-xl text-red-700 whitespace-normal break-word p-3 border my-4 rounded-lg max-h-[110px] overflow-y-auto">
+            {message}
+          </div>
+          <div className="text-center text-xl text-gray-900">
+            Do you want to save the connection anyway?
+          </div>
         </div>
       </DialogBody>
       <DialogFooter className="justify-center space-x-6 pb-8">
