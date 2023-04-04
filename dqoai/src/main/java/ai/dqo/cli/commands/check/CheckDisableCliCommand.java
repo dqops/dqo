@@ -20,9 +20,7 @@ import ai.dqo.checks.CheckType;
 import ai.dqo.cli.commands.BaseCommand;
 import ai.dqo.cli.commands.ICommand;
 import ai.dqo.cli.completion.completedcommands.ITableNameCommand;
-import ai.dqo.cli.completion.completers.ColumnNameCompleter;
-import ai.dqo.cli.completion.completers.ConnectionNameCompleter;
-import ai.dqo.cli.completion.completers.FullTableNameCompleter;
+import ai.dqo.cli.completion.completers.*;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.services.check.CheckService;
@@ -65,10 +63,12 @@ public class CheckDisableCliCommand extends BaseCommand implements ICommand, ITa
             completionCandidates = ColumnNameCompleter.class)
     private String column;
 
-    @CommandLine.Option(names = {"-ch", "--check"}, description = "Data quality check name, supports patterns like '*_id'")
+    @CommandLine.Option(names = {"-ch", "--check"}, description = "Data quality check name, supports patterns like '*_id'",
+            completionCandidates = CheckNameCompleter.class)
     private String check;
 
-    @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'")
+    @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'",
+            completionCandidates = SensorNameCompleter.class)
     private String sensor;
 
     @CommandLine.Option(names = {"-ct", "--check-type"}, description = "Data quality check type (profiling, checkpoint, partitioned)")
