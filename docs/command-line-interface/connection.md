@@ -130,27 +130,27 @@ dqo.ai> connection add [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
 |`--postgresql-ssl`<br/>|Connect to PostgreSQL using SSL| ||
 |`--postgresql-user`<br/>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
 |`-t`<br/>`--provider`<br/>|Connection provider type| |bigquery<br/>snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>|
-|`--redshift-database`<br/>|Redshift database name.  The value can be in the null format to use dynamic substitution.| ||
+|`--redshift-database`<br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |`--redshift-host`<br/>|Redshift host name| ||
 |`--redshift-options`<br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|`--redshift-password`<br/>|Redshift database password.  The value can be in the null format to use dynamic substitution.| ||
+|`--redshift-password`<br/>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
 |`--redshift-port`<br/>|Redshift port number| ||
 |`--redshift-ssl`<br/>|Connect to Redshift using SSL| ||
-|`--redshift-user`<br/>|Redshift user name.  The value can be in the null format to use dynamic substitution.| ||
+|`--redshift-user`<br/>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
 |`--snowflake-account`<br/>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
-|`--snowflake-database`<br/>|Snowflake database name.  The value can be in the null format to use dynamic substitution.| ||
-|`--snowflake-password`<br/>|Snowflake database password.  The value can be in the null format to use dynamic substitution.| ||
+|`--snowflake-database`<br/>|Snowflake database name. The value can be in the null format to use dynamic substitution.| ||
+|`--snowflake-password`<br/>|Snowflake database password. The value can be in the null format to use dynamic substitution.| ||
 |`--snowflake-role`<br/>|Snowflake role name.| ||
-|`--snowflake-user`<br/>|Snowflake user name.  The value can be in the null format to use dynamic substitution.| ||
+|`--snowflake-user`<br/>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
 |`--snowflake-warehouse`<br/>|Snowflake warehouse name.| ||
-|`--sqlserver-database`<br/>|SQL Server database name. The value could be in the format null to use dynamic substitution.| ||
+|`--sqlserver-database`<br/>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
 |`--sqlserver-host`<br/>|SQL Server host name| ||
 |`--sqlserver-options`<br/>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|`--sqlserver-password`<br/>|SQL Server database password. The value could be in the format null to use dynamic substitution.| ||
+|`--sqlserver-password`<br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |`--sqlserver-port`<br/>|SQL Server port number| ||
 |`--sqlserver-properties`<br/>|SQL Server additional properties that are added to the JDBC connection string| ||
 |`--sqlserver-ssl`<br/>|Connecting to SQL Server with SSL disabled| ||
-|`--sqlserver-user`<br/>|SQL Server user name. The value could be in the format null to use dynamic substitution.| ||
+|`--sqlserver-user`<br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
 |`-F`<br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |`-P`<br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |`-R`<br/>|Redshift additional properties that are added to the JDBC connection string| ||
@@ -285,27 +285,27 @@ dqo.ai> connection update [-h] [-fw] [-hl] [--postgresql-ssl] [--redshift-ssl]
 |`--postgresql-port`<br/>|PostgreSQL port number| ||
 |`--postgresql-ssl`<br/>|Connect to PostgreSQL using SSL| ||
 |`--postgresql-user`<br/>|PostgreSQL user name. The value can be in the null format to use dynamic substitution.| ||
-|`--redshift-database`<br/>|Redshift database name.  The value can be in the null format to use dynamic substitution.| ||
+|`--redshift-database`<br/>|Redshift database name. The value can be in the null format to use dynamic substitution.| ||
 |`--redshift-host`<br/>|Redshift host name| ||
 |`--redshift-options`<br/>|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|`--redshift-password`<br/>|Redshift database password.  The value can be in the null format to use dynamic substitution.| ||
+|`--redshift-password`<br/>|Redshift database password. The value can be in the null format to use dynamic substitution.| ||
 |`--redshift-port`<br/>|Redshift port number| ||
 |`--redshift-ssl`<br/>|Connect to Redshift using SSL| ||
-|`--redshift-user`<br/>|Redshift user name.  The value can be in the null format to use dynamic substitution.| ||
+|`--redshift-user`<br/>|Redshift user name. The value can be in the null format to use dynamic substitution.| ||
 |`--snowflake-account`<br/>|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.| ||
-|`--snowflake-database`<br/>|Snowflake database name.  The value can be in the null format to use dynamic substitution.| ||
-|`--snowflake-password`<br/>|Snowflake database password.  The value can be in the null format to use dynamic substitution.| ||
+|`--snowflake-database`<br/>|Snowflake database name. The value can be in the null format to use dynamic substitution.| ||
+|`--snowflake-password`<br/>|Snowflake database password. The value can be in the null format to use dynamic substitution.| ||
 |`--snowflake-role`<br/>|Snowflake role name.| ||
-|`--snowflake-user`<br/>|Snowflake user name.  The value can be in the null format to use dynamic substitution.| ||
+|`--snowflake-user`<br/>|Snowflake user name. The value can be in the null format to use dynamic substitution.| ||
 |`--snowflake-warehouse`<br/>|Snowflake warehouse name.| ||
-|`--sqlserver-database`<br/>|SQL Server database name. The value could be in the format null to use dynamic substitution.| ||
+|`--sqlserver-database`<br/>|SQL Server database name. The value can be in the null format to use dynamic substitution.| ||
 |`--sqlserver-host`<br/>|SQL Server host name| ||
 |`--sqlserver-options`<br/>|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes.| ||
-|`--sqlserver-password`<br/>|SQL Server database password. The value could be in the format null to use dynamic substitution.| ||
+|`--sqlserver-password`<br/>|SQL Server database password. The value can be in the null format to use dynamic substitution.| ||
 |`--sqlserver-port`<br/>|SQL Server port number| ||
 |`--sqlserver-properties`<br/>|SQL Server additional properties that are added to the JDBC connection string| ||
 |`--sqlserver-ssl`<br/>|Connecting to SQL Server with SSL disabled| ||
-|`--sqlserver-user`<br/>|SQL Server user name. The value could be in the format null to use dynamic substitution.| ||
+|`--sqlserver-user`<br/>|SQL Server user name. The value can be in the null format to use dynamic substitution.| ||
 |`-F`<br/>|Snowflake additional properties that are added to the JDBC connection string| ||
 |`-P`<br/>|PostgreSQL additional properties that are added to the JDBC connection string| ||
 |`-R`<br/>|Redshift additional properties that are added to the JDBC connection string| ||
