@@ -193,7 +193,9 @@ nav:
         - standard table sensors: 'reference/sensors/table/standard-table-sensors.md'
         - timeliness table sensors: 'reference/sensors/table/timeliness-table-sensors.md'
       - column:
+        - accuracy column sensors: 'reference/sensors/column/accuracy-column-sensors.md'
         - bool column sensors: 'reference/sensors/column/bool-column-sensors.md'
+        - consistency column sensors: 'reference/sensors/column/consistency-column-sensors.md'
         - datetime column sensors: 'reference/sensors/column/datetime-column-sensors.md'
         - integrity column sensors: 'reference/sensors/column/integrity-column-sensors.md'
         - nulls column sensors: 'reference/sensors/column/nulls-column-sensors.md'

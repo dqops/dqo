@@ -51,7 +51,7 @@ dqo.ai> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
 |-----------------------------------------------|-------------|-----------------|-----------------|
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
-|`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |PROFILING<br/>CHECKPOINT<br/>PARTITIONED<br/>|
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
 |`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
 |`--daily-partitioning-include-today`<br/>|Analyze also today and later days when running daily partitioned checks. By default, daily partitioned checks will not analyze today and future dates. Setting true will disable filtering the end dates.| ||
@@ -72,11 +72,130 @@ dqo.ai> check run [-deh] [--daily-partitioning-include-today] [-fw] [-hl]
 |`--monthly-partitioning-recent-months`<br/>|The number of recent months to analyze incrementally by monthly partitioned data quality checks.| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
 |`-s`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
-|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
+|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
 |`-ts`<br/>`--time-scale`<br/>|Time scale for checkpoint and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
 |`--to-date`<br/>|Analyze the data until the given date (exclusive, the given date and the following dates are not analyzed). The date should be an ISO 8601 date (YYYY-MM-DD). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date overrides the parameters to disable analyzing today or the current month.| ||
 |`--to-date-time`<br/>|Analyze the data until the given date and time (exclusive). The date should be an ISO 8601 date (yyyy-MM-dd). The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.| ||
 |`--to-date-time-offset`<br/>|Analyze the data until the given date and time with a time zone offset (exclusive). The date and time should be an ISO 8601 date and time followed by a time zone offset (yyyy-MM-dd HH:mm:ss). For example: 2023-02-20 14:10:00+02. The analyzed table must have the timestamp column properly configured, it is the column that is used for filtering the date and time ranges. Setting the end date and time overrides the parameters to disable analyzing today or the current month.| ||
+
+
+
+
+___
+### **dqo check enable**
+
+**Description**
+
+Enable data quality checks matching specified filters
+
+
+**Command-line synopsis**
+```
+$ dqo [dqo options...] check enable [-hn] [-err] [-ftl] [-fw] [-hl] [-wrn] [-c=<connection>]
+              [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
+              [-ct=<checkType>] [-dt=<datatypeFilter>] [-of=<outputFormat>]
+              [-s=<sensor>] [-t=<table>] [-ts=<timeScale>]
+              [-E=<String=String>]... [-F=<String=String>]...
+              [-W=<String=String>]...
+
+```
+**DQO Shell synopsis**
+```
+dqo.ai> check enable [-hn] [-err] [-ftl] [-fw] [-hl] [-wrn] [-c=<connection>]
+              [-cat=<checkCategory>] [-ch=<check>] [-col=<column>]
+              [-ct=<checkType>] [-dt=<datatypeFilter>] [-of=<outputFormat>]
+              [-s=<sensor>] [-t=<table>] [-ts=<timeScale>]
+              [-E=<String=String>]... [-F=<String=String>]...
+              [-W=<String=String>]...
+
+```
+
+**Options**  
+  
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
+|`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
+|`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
+|`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
+|`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
+|`-dt`<br/>`--data-type`<br/>|Datatype of columns on which to enable checks.| ||
+|`-err`<br/>`--error`<br/>|Enable error rules on checks.| ||
+|`-E`<br/>`--error-rule`<br/>|Error level rule options.
+Usage:
+	-E&lt;rule_name&gt;,
+	-E&lt;rule_name&gt;&#x3D;false,
+	--error-rule&#x3D;&lt;rule_name&gt;,
+	--error-rule&#x3D;&lt;rule_name&gt;&#x3D;false.| ||
+|`-ftl`<br/>`--fatal`<br/>|Enable fatal rules on checks.| ||
+|`-F`<br/>`--fatal-rule`<br/>|Fatal level rule options.
+Usage:
+	-F&lt;rule_name&gt;,
+	-F&lt;rule_name&gt;&#x3D;false,
+	--fatal-rule&#x3D;&lt;rule_name&gt;,
+	--fatal-rule&#x3D;&lt;rule_name&gt;&#x3D;false.| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-n`<br/>`--nullable`<br/>|Enable check only on nullable columns (false for explicitly non-nullable columns).| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-s`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
+|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
+|`-ts`<br/>`--time-scale`<br/>|Time scale for checkpoint and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
+|`-wrn`<br/>`--warning`<br/>|Enable warning rules on checks.| ||
+|`-W`<br/>`--warning-rule`<br/>|Warning level rule options.
+Usage:
+	-W&lt;rule_name&gt;,
+	-W&lt;rule_name&gt;&#x3D;false,
+	--warning-rule&#x3D;&lt;rule_name&gt;,
+	--warning-rule&#x3D;&lt;rule_name&gt;&#x3D;false.| ||
+
+
+
+
+___
+### **dqo check disable**
+
+**Description**
+
+Disable data quality checks matching specified filters
+
+
+**Command-line synopsis**
+```
+$ dqo [dqo options...] check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+               [-ch=<check>] [-col=<column>] [-ct=<checkType>]
+               [-dt=<datatypeFilter>] [-of=<outputFormat>] [-s=<sensor>]
+               [-t=<table>] [-ts=<timeScale>]
+
+```
+**DQO Shell synopsis**
+```
+dqo.ai> check disable [-hn] [-fw] [-hl] [-c=<connection>] [-cat=<checkCategory>]
+               [-ch=<check>] [-col=<column>] [-ct=<checkType>]
+               [-dt=<datatypeFilter>] [-of=<outputFormat>] [-s=<sensor>]
+               [-t=<table>] [-ts=<timeScale>]
+
+```
+
+**Options**  
+  
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
+|`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
+|`-ch`<br/>`--check`<br/>|Data quality check name, supports patterns like &#x27;*_id&#x27;| ||
+|`-ct`<br/>`--check-type`<br/>|Data quality check type (profiling, checkpoint, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
+|`-col`<br/>`--column`<br/>|Column name, supports patterns like &#x27;*_id&#x27;| ||
+|`-c`<br/>`--connection`<br/>|Connection name, supports patterns like &#x27;conn*&#x27;| ||
+|`-dt`<br/>`--data-type`<br/>|Datatype of columns on which to disable checks.| ||
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-n`<br/>`--nullable`<br/>|Disable check only on nullable columns (false for explicitly non-nullable columns).| ||
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-s`<br/>`--sensor`<br/>|Data quality sensor name (sensor definition or sensor name), supports patterns like &#x27;table/validity/*&#x27;| ||
+|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports patterns like &#x27;sch*.tab*&#x27;| ||
+|`-ts`<br/>`--time-scale`<br/>|Time scale for checkpoint and partitioned checks (daily, monthly, etc.)| |daily<br/>monthly<br/>|
 
 
 

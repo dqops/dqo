@@ -52,16 +52,16 @@ public class SnowflakeParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("Snowflake warehouse name. Supports also a ${SNOWFLAKE_WAREHOUSE} configuration with a custom environment variable.")
     private String warehouse;
 
-    @CommandLine.Option(names = {"--snowflake-database"}, description = "Snowflake database name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Snowflake database name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--snowflake-database"}, description = "Snowflake database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Snowflake database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
 
-    @CommandLine.Option(names = {"--snowflake-user"}, description = "Snowflake user name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Snowflake user name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--snowflake-user"}, description = "Snowflake user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Snowflake user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String user;
 
-    @CommandLine.Option(names = {"--snowflake-password"}, description = "Snowflake database password.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
-    @JsonPropertyDescription("Snowflake database password.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @CommandLine.Option(names = {"--snowflake-password"}, description = "Snowflake database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("Snowflake database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
     @CommandLine.Option(names = {"--snowflake-role"}, description = "Snowflake role name.")

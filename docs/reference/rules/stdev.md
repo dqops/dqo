@@ -19,14 +19,25 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 30
     min_periods_with_readouts: 10
+  fields:
+  - field_name: percent_population_below
+    display_name: percent_population_below
+    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ below a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (warning, error, Fatal) at once. The\
+      \ default is a 14 time periods (days, etc.) time window, but at least 30 readout\
+      \ must exist to run the calculation.&quot;
+    data_type: double
 ```
 
 
@@ -118,14 +129,25 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
     min_periods_with_readouts: 20
+  fields:
+  - field_name: percent_population_below
+    display_name: percent_population_below
+    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ below a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (warning, error, fatal) at once. The\
+      \ default is a 14 time periods (days, etc.) time window, but at least 60 readouts\
+      \ must exist to run the calculation.&quot;
+    data_type: double
 ```
 
 
@@ -216,14 +238,25 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 7
     min_periods_with_readouts: 3
+  fields:
+  - field_name: percent_population_below
+    display_name: percent_population_below
+    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ below a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (warning, error, fatal) at once. The\
+      \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
+      \ must exist to run the calculation.&quot;
+    data_type: double
 ```
 
 
@@ -315,14 +348,25 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 30
     min_periods_with_readouts: 10
+  fields:
+  - field_name: stdev_multiplier_below
+    display_name: stdev_multiplier_below
+    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ below a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (warning, error, fatal) at once. The\
+      \ default is a 14 time periods (days, etc.) time window, but at least 30 readouts\
+      \ must exist to run the calculation.&quot;
+    data_type: double
 ```
 
 
@@ -420,14 +464,25 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 60
     min_periods_with_readouts: 20
+  fields:
+  - field_name: stdev_multiplier_below
+    display_name: stdev_multiplier_below
+    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ below a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (low, medium, high) at once. The default\
+      \ is a 14 time periods (days, etc.) time window, but at least 60 readouts must\
+      \ exist to run the calculation.&quot;
+    data_type: double
 ```
 
 
@@ -524,14 +579,25 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 7
     min_periods_with_readouts: 3
+  fields:
+  - field_name: stdev_multiplier_below
+    display_name: stdev_multiplier_below
+    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ below a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (low, medium, high) at once. The default\
+      \ is a 14 time periods (days, etc.) time window, but at least 7 readouts must\
+      \ exist to run the calculation.&quot;
+    data_type: double
 ```
 
 
@@ -630,14 +696,37 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 10
     min_periods_with_readouts: 5
+  fields:
+  - field_name: multiple_stdev_above
+    display_name: multiple_stdev_above
+    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ above a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (warning, error, fatal) at once. The\
+      \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
+      \ must exist to run the calculation.&quot;
+    data_type: double
+    sample_values:
+    - 1.5
+  - field_name: multiple_stdev_below
+    display_name: multiple_stdev_below
+    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ below a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (warning, error, fatal) at once. The\
+      \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
+      \ must exist to run the calculation.&quot;
+    data_type: double
+    sample_values:
+    - 2.5
 ```
 
 
@@ -741,14 +830,37 @@ Data quality rule that verifies if a data quality sensor readout value is not ab
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 10
     min_periods_with_readouts: 5
+  fields:
+  - field_name: percentile_stdev_above
+    display_name: percentile_stdev_above
+    help_text: &quot;Maximum percent (e.q. 3%) that the current sensor readout could be\
+      \ above a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (warning, error, fatal) at once. The\
+      \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
+      \ must exist to run the calculation.&quot;
+    data_type: double
+    sample_values:
+    - 5
+  - field_name: percentile_stdev_below
+    display_name: percentile_stdev_below
+    help_text: &quot;Maximum percent (e.q. 3%) that the current sensorreadout could be\
+      \ below a moving average within the time window. Set the time window at the\
+      \ threshold level for all severity levels (warning, error, fatal) at once. The\
+      \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
+      \ must exist to run the calculation.&quot;
+    data_type: double
+    sample_values:
+    - 5
 ```
 
 

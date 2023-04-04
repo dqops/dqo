@@ -20,11 +20,28 @@ Data quality rule that verifies if a data quality check readout is between from 
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: from
+    display_name: from
+    help_text: Minimum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 10.0
+  - field_name: to
+    display_name: to
+    help_text: Maximum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 20.5
 ```
 
 
@@ -115,11 +132,28 @@ Data quality rule that verifies if a data quality check readout is between begin
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: from
+    display_name: from
+    help_text: Minimum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: long
+    sample_values:
+    - 10
+  - field_name: to
+    display_name: to
+    help_text: Maximum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: long
+    sample_values:
+    - 20
 ```
 
 
@@ -192,6 +226,103 @@ def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionR
 ```
 ___
 
+## **diff percent**
+**Full rule name**
+```
+comparison/diff_percent
+```
+**Description**  
+Data quality rule that verifies if a data quality check readout is less or equal a maximum value.
+
+**Parameters**  
+  
+| Field name | Description | Allowed data type | Is it required? | Allowed values |
+|------------|-------------|-------------------|-----------------|----------------|
+|max_diff_percent|Maximum accepted value for the percentage of difference between expected_value and actual_value returned by the sensor (inclusive).|double| ||
+
+
+
+**Example**
+```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
+apiVersion: dqo/v1
+kind: rule
+spec:
+  type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
+  mode: current_value
+  fields:
+  - field_name: max_diff_percent
+    display_name: max_diff_percent
+    help_text: Maximum accepted value for the percentage of difference between expected_value
+      and actual_value returned by the sensor (inclusive).
+    data_type: double
+```
+
+
+
+**Rule implementation (Python)**
+```python
+from datetime import datetime
+from typing import Sequence
+
+
+# rule specific parameters object, contains values received from the quality check threshold configuration
+class DiffPercentRuleParametersSpec:
+    max_diff_percent: float
+
+
+class HistoricDataPoint:
+    timestamp_utc: datetime
+    local_datetime: datetime
+    back_periods_index: int
+    sensor_readout: float
+
+
+class RuleTimeWindowSettingsSpec:
+    prediction_time_window: int
+    min_periods_with_readouts: int
+
+
+# rule execution parameters, contains the sensor value (expected_value, actual_value) and the rule parameters
+class RuleExecutionRunParameters:
+    expected_value: float
+    actual_value: float
+    parameters: DiffPercentRuleParametersSpec
+    time_period_local: datetime
+    previous_readouts: Sequence[HistoricDataPoint]
+    time_window: RuleTimeWindowSettingsSpec
+
+
+# default object that should be returned to the dqo.io engine, specifies if the rule was passed or failed,
+# what is the expected value for the rule and what are the upper and lower boundaries of accepted values (optional)
+class RuleExecutionResult:
+    passed: bool
+    expected_value: float
+    lower_bound: float
+    upper_bound: float
+
+    def __init__(self, passed=True, expected_value=None, lower_bound=None, upper_bound=None):
+        self.passed = passed
+        self.expected_value = expected_value
+        self.lower_bound = lower_bound
+        self.upper_bound = upper_bound
+
+
+# rule evaluation method that should be modified for each type of rule
+def evaluate_rule(rule_parameters: RuleExecutionRunParameters) -> RuleExecutionResult:
+    if not hasattr(rule_parameters, 'expected_value') and hasattr(rule_parameters, 'actual_value'):
+        return RuleExecutionResult()
+
+    expected_value = rule_parameters.expected_value
+    lower_bound = rule_parameters.expected_value - (rule_parameters.parameters.max_diff_percent/100 * rule_parameters.expected_value)
+    upper_bound = rule_parameters.expected_value + (rule_parameters.parameters.max_diff_percent/100 * rule_parameters.expected_value)
+    passed = lower_bound <= rule_parameters.actual_value <= upper_bound
+
+    return RuleExecutionResult(passed, expected_value, lower_bound, upper_bound)
+```
+___
+
 ## **equals**
 **Full rule name**
 ```
@@ -211,11 +342,27 @@ Data quality rule that verifies that a data quality check readout equals a given
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: expected_value
+    display_name: expected_value
+    help_text: Expected value for the actual_value returned by the sensor. The sensor
+      value should equal expected_value +/- the error_margin.
+    data_type: double
+    sample_values:
+    - 10.0
+  - field_name: error_margin
+    display_name: error_margin
+    help_text: Error margin for comparison.
+    data_type: double
+    sample_values:
+    - 0.01
 ```
 
 
@@ -300,11 +447,21 @@ Data quality rule that verifies if a data quality check readsout is less or equa
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: max_value
+    display_name: max_value
+    help_text: Maximum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 1.5
 ```
 
 
@@ -389,11 +546,19 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: max_count
+    display_name: max_count
+    help_text: Maximum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: long
 ```
 
 
@@ -478,11 +643,19 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: max_days
+    display_name: max_days
+    help_text: Maximum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
 ```
 
 
@@ -567,14 +740,22 @@ Data quality rule that verifies if a data quality check (sensor) readout is less
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 30
     min_periods_with_readouts: 0
+  fields:
+  - field_name: max_failures
+    display_name: max_failures
+    help_text: Maximum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: long
 ```
 
 
@@ -674,11 +855,19 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: max_percent
+    display_name: max_percent
+    help_text: Maximum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
 ```
 
 
@@ -763,11 +952,21 @@ Data quality rule that verifies if a data quality check readout is less or equal
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: max_value
+    display_name: max_value
+    help_text: Maximum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 1.5
 ```
 
 
@@ -852,11 +1051,21 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: min_value
+    display_name: min_value
+    help_text: Minimum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 1.5
 ```
 
 
@@ -941,11 +1150,21 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: min_count
+    display_name: min_count
+    help_text: Minimum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: long
+    sample_values:
+    - 5
 ```
 
 
@@ -1030,11 +1249,19 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: min_percent
+    display_name: min_percent
+    help_text: Minimum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
 ```
 
 
@@ -1119,11 +1346,21 @@ Data quality rule that verifies if a data quality check readout is greater or eq
 
 **Example**
 ```yaml
+# yaml-language-server: $schema&#x3D;https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: current_value
+  fields:
+  - field_name: min_value
+    display_name: min_value
+    help_text: Minimum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: double
+    sample_values:
+    - 1.5
 ```
 
 

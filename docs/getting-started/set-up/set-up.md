@@ -5,6 +5,83 @@ Przygotuj sobie katalog gdzie zainstalujesz DQO
 Zainstalowac
 Uruchomic
 
+## Prerequisites
+
+To use DQO you need:
+  - Python version 3.6 or greater (for details see [Python's documentation](https://www.python.org/doc/) and [download sites](https://www.python.org/downloads/)).
+  - Ability to pip install Python packages 
+
+## Install DQO
+
+DQO is available on [PyPi repository](https://pypi.org/project/dqoai/). 
+
+If you prefer you can also 
+
+1. Create an empty catalogue where you want to install DQO.
+2. Open a terminal, navigate to the created directory, and create a [virtual environment](https://docs.python.org/3/library/venv.html) by running:
+
+    === "Windows"
+    ```python
+    py -m venv myvenv
+    ```
+    === "MacOS"
+    ``` python
+    python -m venv myvenv
+    ```
+    === "Linux"
+    ``` python
+    python -m venv myvenv
+    ```
+
+3. Activate it by changing directory to `myvenv/Scripts` and running
+=== "Windows"
+```python
+activate.bat
+```
+=== "MacOS"
+``` python
+activate
+```
+=== "Linux"
+```python
+activate
+```
+
+Install DQO via pip manager
+
+=== "Windows"
+```python
+py -m pip install dqoai
+```
+=== "MacOS"
+``` python
+pip install dqoai
+```
+=== "Linux"
+``` python
+pip install dqoai
+```
+
+and finally run
+
+=== "Windows"
+```python
+dqo
+```
+=== "MacOS"
+``` python
+./dqo
+```
+=== "Linux"
+``` python
+./dqo
+```
+
+
+### Install DQo using pip 
+
+
+
 This page walks you through the setup steps required to use DQO
 
 Since DQO.ai is available on:
@@ -18,7 +95,7 @@ Since DQO.ai is available on:
 feel free to navigate between chapters and choose the most suitable method for you.
 
 ### PyPi
-DQO.ai is available on [PyPi repository](https://pypi.org/project/dqoai/).
+
 
 !!! Info "Prerequisites"
     You will need `python >= 3.6`.
@@ -54,7 +131,7 @@ Once it is created, activate it by changing directory to `myvenv/Scripts` and ru
     activate
     ```
 
-Now install DQO.ai via pip manager
+Install DQO via pip manager
 
 === "Windows"
     ```python

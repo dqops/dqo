@@ -68,7 +68,7 @@ dqo.ai> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-t`<br/>`--table`<br/>|Full table name (schema.table)| ||
+|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
 
 
 

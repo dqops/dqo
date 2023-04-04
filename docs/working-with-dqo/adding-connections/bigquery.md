@@ -27,7 +27,7 @@ To add BigQuery data source connection to DQO you need the following:
 
     | BigQuery connection settings            | Property name in YAML configuration file | Description                                                                                                                                                                                                                              | 
     |-----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------|
-    | Connection name                         |                                         | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.   |
+    | Connection name|                                         | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters.   |
     | Source GCP project ID                   | source_project_id                       | Name of the project that has datasets that will be imported.                                                                                                                                                                              |
     | Billing GCP project ID                  | billing_project_id                      | Name of the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.                                                                                                        |
     | Authentication mode to the Google Cloud | authentication_mode                     | Type of authentication mode to the Google Cloud. You can select from the 3 options:<br/>- Google Application Credentials,<br/>- JSON Key Content<br/> - JSON Key Path                                                                     |
@@ -44,11 +44,11 @@ To add BigQuery data source connection to DQO you need the following:
 6. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables. 
 
-    ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
+    ![Importing schemas](https://docs.dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-   ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/importing-tables.jpg)
+   ![AImporting tables](https://docs.dqo.ai/docs/images/working-with-dqo/importing-tables.jpg)
 
 ## Adding BigQuery connection using DQO Shell
 

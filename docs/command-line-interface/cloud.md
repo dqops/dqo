@@ -45,13 +45,13 @@ Uploads any local changes to the cloud and downloads any changes made to the clo
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] cloud sync data [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+$ dqo [dqo options...] cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                  [-of=<outputFormat>]
 
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> cloud sync data [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+dqo.ai> cloud sync data [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                  [-of=<outputFormat>]
 
 ```
@@ -66,6 +66,7 @@ dqo.ai> cloud sync data [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-r`<br/>`--refresh-data-warehouse`<br/>|Force refresh a whole table in the data quality data warehouse| ||
 
 
 
@@ -182,6 +183,43 @@ dqo.ai> cloud sync rules [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 
 
 ___
+### **dqo cloud sync checks**
+
+Synchronize local &quot;checks&quot; folder with custom check definitions with DQO Cloud
+
+**Description**
+
+Uploads any local changes to the cloud and downloads any changes made to the cloud version of the &quot;checks&quot; folder.
+
+
+**Command-line synopsis**
+```
+$ dqo [dqo options...] cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                   [-of=<outputFormat>]
+
+```
+**DQO Shell synopsis**
+```
+dqo.ai> cloud sync checks [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+                   [-of=<outputFormat>]
+
+```
+
+**Options**  
+  
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
+|-----------------------------------------------|-------------|-----------------|-----------------|
+|`-d`<br/>`--direction`<br/>|File synchronization direction| |full<br/>download<br/>upload<br/>|
+|`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
+|`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
+|`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
+|`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
+|`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+
+
+
+
+___
 ### **dqo cloud sync all**
 
 Synchronize local files with DQO Cloud (sources, table rules, custom rules, custom sensors and data - sensor readouts and rule results)
@@ -193,13 +231,13 @@ Uploads any local changes to the cloud and downloads any changes made to the clo
 
 **Command-line synopsis**
 ```
-$ dqo [dqo options...] cloud sync all [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+$ dqo [dqo options...] cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                 [-of=<outputFormat>]
 
 ```
 **DQO Shell synopsis**
 ```
-dqo.ai> cloud sync all [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
+dqo.ai> cloud sync all [-hr] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
                 [-of=<outputFormat>]
 
 ```
@@ -214,6 +252,7 @@ dqo.ai> cloud sync all [-h] [-fw] [-hl] [-d=<direction>] [-m=<mode>]
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-m`<br/>`--mode`<br/>|Reporting mode (silent, summary, debug)| |silent<br/>summary<br/>debug<br/>|
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
+|`-r`<br/>`--refresh-data-warehouse`<br/>|Force refresh a whole table in the data quality data warehouse| ||
 
 
 
