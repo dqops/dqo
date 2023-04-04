@@ -3,7 +3,7 @@
 **Opisujemy na przykładzie GCP. Jak założyć konto na GCP, tworzenie połaczenia w UI.**
 
 
-In order to to successfully establish a connection with BigQuery couple of things need to be specified:
+In order to successfully establish a connection with BigQuery couple of things need to be specified:
 
 - connection name
 - provider name

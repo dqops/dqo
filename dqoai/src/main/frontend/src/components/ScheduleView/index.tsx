@@ -5,6 +5,7 @@ import NumberInput from "../NumberInput";
 import { RecurringScheduleSpec } from "../../api";
 import clsx from "clsx";
 import RadioButton from "../RadioButton";
+import { useParams } from "react-router-dom";
 
 interface IScheduleViewProps {
   schedule?: RecurringScheduleSpec;
@@ -15,19 +16,24 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   const [mode, setMode] = useState('');
   const [minutes, setMinutes] = useState(15);
   const [hour, setHour] = useState(15);
+  const { table, column }: { table: string, column: string } = useParams()
+
   const onChangeMode = (value: string) => {
     setMode(value);
 
     if (value === 'minutes') {
       handleChange({ cron_expression: `*/${minutes} * * * *` });
+      return;
     }
     if (value === 'hour') {
       handleChange({ cron_expression: `${minutes} * * * *` });
+      return;
     }
     if (value === 'day') {
       handleChange({ cron_expression: `${minutes} ${hour} * * *` });
+      return;
     }
-    if (value) {
+    if (!value) {
       handleChange({ cron_expression: '' });
     }
   };
@@ -56,10 +62,10 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
   };
 
   useEffect(() => {
-    if (!schedule?.cron_expression) return;
     const cron_expression = schedule?.cron_expression ?? "";
     if (!cron_expression) {
       setMode("");
+      return;
     }
     if (/^\*\/\d\d? \* \* \* \*$/.test(cron_expression)) {
       setMode('minutes');
@@ -117,6 +123,16 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
     }
   };
 
+  const getLabel = () => {
+    if (table && !column) {
+      return "Use scheduling configuration from the connection or table levels";
+    }
+    if (table && column) {
+      return "Use scheduling configuration from the connection or table levels";
+    }
+    return "Scheduled check execution not configured for all tables from this connection"
+  };
+
   return (
     <div>
       <table className="mb-6">
@@ -149,7 +165,7 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
       </table>
       <div className="flex flex-col">
         <RadioButton
-          label="Scheduled check execution not configured for all tables from this connection"
+          label={getLabel()}
           checked={mode === ''}
           onClick={() => onChangeMode('')}
           className="mb-4"

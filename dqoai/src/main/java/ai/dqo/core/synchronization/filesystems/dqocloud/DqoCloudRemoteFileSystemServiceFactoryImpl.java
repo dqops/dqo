@@ -17,8 +17,8 @@ package ai.dqo.core.synchronization.filesystems.dqocloud;
 
 import ai.dqo.core.dqocloud.buckets.DqoCloudBucketAccessProvider;
 import ai.dqo.core.dqocloud.buckets.DqoCloudRemoteBucket;
-import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import ai.dqo.core.synchronization.filesystems.gcp.GSFileSystemSynchronizationRoot;
 import ai.dqo.core.synchronization.filesystems.gcp.GSRemoteFileSystemSynchronizationOperations;
 import org.springframework.beans.factory.annotation.Autowired;

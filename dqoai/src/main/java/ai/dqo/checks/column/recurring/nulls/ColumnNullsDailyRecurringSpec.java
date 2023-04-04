@@ -16,7 +16,10 @@
 package ai.dqo.checks.column.recurring.nulls;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.nulls.*;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNotNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNotNullsPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsCountCheckSpec;
+import ai.dqo.checks.column.checkspecs.nulls.ColumnNullsPercentCheckSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;

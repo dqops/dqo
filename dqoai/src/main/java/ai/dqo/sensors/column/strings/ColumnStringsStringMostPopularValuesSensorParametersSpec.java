@@ -18,7 +18,7 @@ package ai.dqo.sensors.column.strings;
 import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -35,8 +35,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnStringsStringMostPopularValuesSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMostPopularValuesSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnStringsStringMostPopularValuesSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnStringsStringMostPopularValuesSensorParametersSpec> FIELDS =
+            new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };

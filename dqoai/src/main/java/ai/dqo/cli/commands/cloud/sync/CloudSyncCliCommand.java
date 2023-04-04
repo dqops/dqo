@@ -31,6 +31,7 @@ import picocli.CommandLine;
         CloudSyncSourcesCliCommand.class,
         CloudSyncSensorsCliCommand.class,
         CloudSyncRulesCliCommand.class,
+        CloudSyncChecksCliCommand.class,
         CloudSyncAllCliCommand.class
 })
 public class CloudSyncCliCommand extends BaseCommand {

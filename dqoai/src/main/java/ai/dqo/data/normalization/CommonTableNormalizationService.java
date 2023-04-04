@@ -2,7 +2,6 @@ package ai.dqo.data.normalization;
 
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import tech.tablesaw.api.*;
-import tech.tablesaw.columns.Column;
 
 /**
  * Table normalization service that provides basic features used for normalization of sensor readout results or profiler results.

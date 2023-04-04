@@ -112,8 +112,22 @@ public class FolderTreeNodeTests extends BaseTest {
     @Test
     void deriveChildFolderKind_whenHomeFolderAndAskingForChecks_thenReturnsChecks() {
         FolderTreeNode sut = FolderTreeNode.createRootFolderNode();
-        FolderKind folderKind = sut.deriveChildFolderKind(FolderName.fromObjectName(BuiltInFolderNames.SENSORS));
+        FolderKind folderKind = sut.deriveChildFolderKind(FolderName.fromObjectName(BuiltInFolderNames.CHECKS));
         Assertions.assertEquals(FolderKind.CHECKS, folderKind);
+    }
+
+    @Test
+    void deriveChildFolderKind_whenHomeFolderAndAskingForSensors_thenReturnsSensors() {
+        FolderTreeNode sut = FolderTreeNode.createRootFolderNode();
+        FolderKind folderKind = sut.deriveChildFolderKind(FolderName.fromObjectName(BuiltInFolderNames.SENSORS));
+        Assertions.assertEquals(FolderKind.SENSORS, folderKind);
+    }
+
+    @Test
+    void deriveChildFolderKind_whenHomeFolderAndAskingForRules_thenReturnsRules() {
+        FolderTreeNode sut = FolderTreeNode.createRootFolderNode();
+        FolderKind folderKind = sut.deriveChildFolderKind(FolderName.fromObjectName(BuiltInFolderNames.RULES));
+        Assertions.assertEquals(FolderKind.RULES, folderKind);
     }
 
     @Test

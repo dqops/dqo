@@ -20,7 +20,6 @@ import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobParameters;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.check.mapping.models.UICheckContainerTypeModel;
-import ai.dqo.services.check.mapping.models.UIQualityCategoryModel;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -28,9 +27,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**

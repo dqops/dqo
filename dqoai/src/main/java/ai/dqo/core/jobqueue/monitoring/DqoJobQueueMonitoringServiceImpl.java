@@ -16,11 +16,11 @@
 package ai.dqo.core.jobqueue.monitoring;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
-import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import ai.dqo.core.jobqueue.DqoJobIdGenerator;
 import ai.dqo.core.jobqueue.DqoJobQueueEntry;
 import ai.dqo.core.jobqueue.DqoQueueJobExecutionException;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
+import ai.dqo.core.synchronization.status.CloudSynchronizationFoldersStatusModel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

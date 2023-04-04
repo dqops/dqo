@@ -346,7 +346,8 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                             }
                         }
 
-                        final FileOutputStream fileOutputStream = new FileOutputStream(fullPathToFile.toFile());
+                        final Path fullPathToTempFile = Path.of(fullPathToFile.toString() + ".tmp");
+                        final FileOutputStream fileOutputStream = new FileOutputStream(fullPathToTempFile.toFile());
                         final ByteChannel outputByteChannel = fileOutputStream.getChannel();
                         return bytesFlux.doOnEach(byteBufSignal -> {
                             switch (byteBufSignal.getType()) {
@@ -355,6 +356,14 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                                         ByteBuf byteBuf = byteBufSignal.get();
                                         outputByteChannel.write(byteBuf.nioBuffer());
                                     } catch (Exception ex) {
+                                        try {
+                                            outputByteChannel.close();
+                                            fileOutputStream.close();
+                                            Files.delete(fullPathToTempFile);
+                                        }
+                                        catch (IOException ioe) {
+                                            // ignore
+                                        }
                                         throw new FileSystemChangeException(fullPathToFile, ex.getMessage(), ex);
                                     }
                                     break;
@@ -364,7 +373,7 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                                     try {
                                         outputByteChannel.close();
                                         fileOutputStream.close();
-                                        Files.delete(fullPathToFile);
+                                        Files.delete(fullPathToTempFile);
 
                                         // cleans old parquet-mr .crc files, to be deleted... it is here only for cleaning
                                         Path fileName = relativeFilePath.getFileName();
@@ -393,12 +402,28 @@ public class LocalFileSystemSynchronizationOperationsImpl implements LocalFileSy
                             }
                         }).then(Mono.fromCallable(() -> {
                             try {
-                                File file = fullPathToFile.toFile();
-                                if (!file.exists()) {
+                                File tempFile = fullPathToTempFile.toFile();
+                                if (!tempFile.exists()) {
                                     return null;
                                 }
 
-                                long lastModifiedMillis = file.lastModified();
+                                HashCode fileHashCode = com.google.common.io.Files.asByteSource(tempFile).hash(Hashing.md5());
+                                String downloadedFileMd5 = BaseEncoding.base64().encode(fileHashCode.asBytes());
+
+                                if (!Objects.equals(downloadedFileMd5, fileMetadata.getMd5()) || tempFile.length() != fileMetadata.getFileLength()) {
+                                    // file md5 or length do not match, ignoring the file (file download corrupted)
+                                    tempFile.delete();
+                                    return null;
+                                }
+
+                                File targetFile = fullPathToFile.toFile();
+                                if (targetFile.exists()) {
+                                    targetFile.delete();
+                                }
+
+                                tempFile.renameTo(targetFile);
+
+                                long lastModifiedMillis = targetFile.lastModified();
                                 long now = Instant.now().toEpochMilli();
                                 return new FileMetadata(relativeFilePath, lastModifiedMillis, fileMetadata.getMd5(), now, fileMetadata.getFileLength());
                             }

@@ -34,7 +34,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
 import java.util.Map;
-import java.util.TimeZone;
 
 /**
  * Settings management service.

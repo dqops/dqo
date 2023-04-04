@@ -16,7 +16,6 @@
 package ai.dqo.cli.exceptions;
 
 import ai.dqo.cli.terminal.TerminalFactory;
-import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoCoreConfigurationProperties;
 import org.apache.parquet.Strings;
 import org.jline.reader.UserInterruptException;

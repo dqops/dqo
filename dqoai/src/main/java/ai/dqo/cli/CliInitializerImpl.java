@@ -19,17 +19,13 @@ import ai.dqo.cli.commands.cloud.impl.CloudLoginService;
 import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
-import ai.dqo.core.configuration.DqoUserConfigurationProperties;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKey;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import ai.dqo.core.scheduler.JobSchedulerService;
 import ai.dqo.metadata.storage.localfiles.userhome.LocalUserHomeCreator;
 import ai.dqo.rest.server.LocalUrlAddresses;
-import ai.dqo.rest.server.SwaggerConfiguration;
 import ai.dqo.services.timezone.DefaultTimeZoneProvider;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;

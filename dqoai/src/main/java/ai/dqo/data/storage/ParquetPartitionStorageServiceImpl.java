@@ -16,16 +16,15 @@
 package ai.dqo.data.storage;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
-import ai.dqo.core.synchronization.contract.DqoRoot;
-import ai.dqo.core.synchronization.status.FolderSynchronizationStatus;
-import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.core.filesystem.virtual.FolderName;
 import ai.dqo.core.filesystem.virtual.HomeFilePath;
 import ai.dqo.core.filesystem.virtual.HomeFolderPath;
-import ai.dqo.core.filesystem.virtual.utility.HomeFolderPathUtility;
 import ai.dqo.core.locks.AcquiredExclusiveWriteLock;
 import ai.dqo.core.locks.AcquiredSharedReadLock;
 import ai.dqo.core.locks.UserHomeLockManager;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.status.FolderSynchronizationStatus;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.storage.parquet.DqoTablesawParquetReader;
 import ai.dqo.data.storage.parquet.DqoTablesawParquetWriteOptions;
@@ -47,22 +46,21 @@ import tech.tablesaw.io.RuntimeIOException;
 import tech.tablesaw.selection.Selection;
 
 import java.io.File;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Objects;
 
 /**
  * Service that supports reading and writing parquet file partitions from a local file system.
  */
 @Service
 public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStorageService {
+    private final ParquetPartitionMetadataService parquetPartitionMetadataService;
     private LocalDqoUserHomePathProvider localDqoUserHomePathProvider;
     private final UserHomeLockManager userHomeLockManager;
     private HadoopConfigurationProvider hadoopConfigurationProvider;
@@ -71,6 +69,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
     /**
      * Dependency injection constructor.
+     * @param parquetPartitionMetadataService Metadata service for READ info about the state in the storage.
      * @param localDqoUserHomePathProvider DQO User home finder.
      * @param userHomeLockManager User home lock manager.
      * @param hadoopConfigurationProvider Hadoop configuration provider.
@@ -79,11 +78,13 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
      */
     @Autowired
     public ParquetPartitionStorageServiceImpl(
+            ParquetPartitionMetadataService parquetPartitionMetadataService,
             LocalDqoUserHomePathProvider localDqoUserHomePathProvider,
             UserHomeLockManager userHomeLockManager,
             HadoopConfigurationProvider hadoopConfigurationProvider,
             LocalUserHomeFileStorageService localUserHomeFileStorageService,
             SynchronizationStatusTracker synchronizationStatusTracker) {
+        this.parquetPartitionMetadataService = parquetPartitionMetadataService;
         this.localDqoUserHomePathProvider = localDqoUserHomePathProvider;
         this.userHomeLockManager = userHomeLockManager;
         this.hadoopConfigurationProvider = hadoopConfigurationProvider;
@@ -190,7 +191,8 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
 
         LocalDate startNonNull = startBoundary;
         if (startNonNull == null) {
-            startNonNull = this.getOldestStoredPartitionMonth(connectionName, tableName, storageSettings).orElse(null);
+            startNonNull = this.parquetPartitionMetadataService.getOldestStoredPartitionMonth(
+                    connectionName, tableName, storageSettings).orElse(null);
         }
         if (startNonNull == null) {
             // No data stored for this table
@@ -219,54 +221,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
     }
 
     /**
-     * Get the month, furthest in the past, for which partition is stored, given the connection and table names, provided storage settings.
-     * @param connectionName  Connection name.
-     * @param tableName       Table name.
-     * @param storageSettings File storage settings.
-     * @return Optional with the oldest month as local date, if it exists. If not, <code>Optional.empty()</code>.
-     */
-    protected Optional<LocalDate> getOldestStoredPartitionMonth(String connectionName,
-                                                      PhysicalTableName tableName,
-                                                      FileStorageSettings storageSettings) {
-        List<LocalDate> storedPartitionMonths = getStoredPartitionMonths(connectionName, tableName, storageSettings);
-        if (storedPartitionMonths == null) {
-            return Optional.empty();
-        }
-        return storedPartitionMonths.stream().min(LocalDate::compareTo);
-    }
 
-    /**
-     * Gets months for which partitions are currently stored for a given connection and table names, provided storage settings to know where to look.
-     * @param connectionName  Connection name.
-     * @param tableName       Table name.
-     * @param storageSettings File storage settings.
-     * @return List of months given as local dates. Null if parameters are invalid (e.g. target directory doesn't exist).
-     */
-    protected List<LocalDate> getStoredPartitionMonths(String connectionName,
-                                                       PhysicalTableName tableName,
-                                                       FileStorageSettings storageSettings) {
-        try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
-            Path homeRelativeStoragePath = Path.of(BuiltInFolderNames.DATA, storageSettings.getDataSubfolderName());
-
-            String hivePartitionFolderName = HivePartitionPathUtility.makeHivePartitionPath(
-                    new ParquetPartitionId(storageSettings.getTableType(), connectionName, tableName, null));
-            Path tablePartitionsPath = homeRelativeStoragePath.resolve(hivePartitionFolderName);
-
-            List<HomeFolderPath> tableStoredFolders = this.localUserHomeFileStorageService.listFolders(
-                    HomeFolderPathUtility.createFromFilesystemPath(tablePartitionsPath));
-            if (tableStoredFolders == null) {
-                return null;
-            }
-
-            return tableStoredFolders.stream()
-                    .map(homeFolderPath -> homeFolderPath.getTopFolder().getFileSystemName())
-                    .filter(HivePartitionPathUtility::validHivePartitionMonthFolderName)
-                    .map(HivePartitionPathUtility::monthFromHivePartitionFolderName)
-                    .collect(Collectors.toList());
-        }
-    }
-
-    /**
      * Saves the data for a single monthly partition. Finds the range of data for that month in the <code>tableDataChanges</code>.
      * Also deletes rows that should be deleted. In case that the file was modified since it was loaded into the loaded partition
      * snapshot (parameter: <code>loadedPartition</code>), the partition is reloaded using an exclusive write lock and the changes
@@ -284,7 +239,6 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             this.synchronizationStatusTracker.changeFolderSynchronizationStatus(storageSettings.getTableType(), FolderSynchronizationStatus.changed);
         }
     }
-
 
     /**
      * Saves the data for a single monthly partition. Finds the range of data for that month in the <code>tableDataChanges</code>.

@@ -54,10 +54,10 @@ public class FieldInfoTests extends BaseTest {
         FieldInfo sut = this.reflectionService.makeFieldInfo(field.getDeclaringClass(), field);
 
         ParameterDefinitionSpec target = new ParameterDefinitionSpec();
-        target.setFieldName("some name");
+        target.setFieldName("some_name");
 
         Object fieldValue = sut.getFieldValue(target);
-        Assertions.assertEquals("some name", fieldValue);
+        Assertions.assertEquals("some_name", fieldValue);
     }
 
     @Test

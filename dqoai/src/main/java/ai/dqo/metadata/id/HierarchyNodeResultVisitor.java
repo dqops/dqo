@@ -18,13 +18,17 @@ package ai.dqo.metadata.id;
 import ai.dqo.checks.AbstractCheckCategorySpec;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
-import ai.dqo.checks.table.recurring.TableRecurringSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
+import ai.dqo.checks.custom.CustomCheckSpecMap;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.metadata.comments.CommentSpec;
 import ai.dqo.metadata.comments.CommentsListSpec;
 import ai.dqo.metadata.dashboards.*;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionListImpl;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionWrapperImpl;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
@@ -45,13 +49,13 @@ import ai.dqo.metadata.scheduling.RecurringSchedulesSpec;
 import ai.dqo.metadata.settings.SettingsSpec;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.userhome.UserHome;
+import ai.dqo.rules.AbstractRuleParametersSpec;
+import ai.dqo.rules.RuleTimeWindowSettingsSpec;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import ai.dqo.statistics.AbstractRootStatisticsCollectorsContainerSpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorCategorySpec;
 import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
-import ai.dqo.rules.AbstractRuleParametersSpec;
-import ai.dqo.rules.RuleTimeWindowSettingsSpec;
-import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
-import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
+
 
 /**
  * Hierarchy node visitor (for the visitor design pattern) whose "accept" methods return a result.
@@ -156,20 +160,12 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(AbstractRuleParametersSpec abstractRuleParametersSpec, P parameter);
 
     /**
-     * Accepts any table level sensor specification (sensor call parameters).
-     * @param abstractTableSensorParameters Table level sensor specification (parameters).
+     * Accepts any sensor specification (sensor call parameters).
+     * @param abstractSensorParameters Sensor specification (parameters).
      * @param parameter Additional parameter.
      * @return Accept's result.
      */
-    R accept(AbstractTableSensorParametersSpec abstractTableSensorParameters, P parameter);
-
-    /**
-     * Accepts any column level sensor specification (sensor call parameters).
-     * @param abstractColumnSensorParameters Column level sensor specification (parameters).
-     * @param parameter Additional parameter.
-     * @return Accept's result.
-     */
-    R accept(AbstractColumnSensorParametersSpec abstractColumnSensorParameters, P parameter);
+    R accept(AbstractSensorParametersSpec abstractSensorParameters, P parameter);
 
     /**
      * Accepts a list of sensor definitions.
@@ -524,10 +520,42 @@ public interface HierarchyNodeResultVisitor<P, R> {
     R accept(RecurringSchedulesSpec recurringSchedulesSpec, P parameter);
 
     /**
-     * Accepts a configuration of incremental partition checks..
+     * Accepts a configuration of incremental partition checks.
      * @param partitionIncrementalTimeWindowSpec Configuration of incremental partition checks.
      * @param parameter Additional visitor's parameter.
      * @return Accept's result.
      */
     R accept(PartitionIncrementalTimeWindowSpec partitionIncrementalTimeWindowSpec, P parameter);
+
+    /**
+     * Accepts a dictionary of custom checks. The keys must be names of configured custom checks.
+     * @param customCheckSpecMap Dictionary of custom checks.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(CustomCheckSpecMap customCheckSpecMap, P parameter);
+
+    /**
+     * Accepts a definition of a custom check.
+     * @param checkDefinitionSpec Custom check specification.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(CheckDefinitionSpec checkDefinitionSpec, P parameter);
+
+    /**
+     * Accepts a wrapper for a definition of a custom check.
+     * @param checkDefinitionWrapper Custom check specification wrapper.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(CheckDefinitionWrapperImpl checkDefinitionWrapper, P parameter);
+
+    /**
+     * Accepts a list of custom checks.
+     * @param checkDefinitionWrappers Custom check list.
+     * @param parameter Additional visitor's parameter.
+     * @return Accept's result.
+     */
+    R accept(CheckDefinitionListImpl checkDefinitionWrappers, P parameter);
 }

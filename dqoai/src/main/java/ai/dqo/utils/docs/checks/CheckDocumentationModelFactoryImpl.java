@@ -29,6 +29,7 @@ import ai.dqo.connectors.redshift.RedshiftParametersSpec;
 import ai.dqo.connectors.snowflake.SnowflakeConnectionProvider;
 import ai.dqo.connectors.snowflake.SnowflakeParametersSpec;
 import ai.dqo.connectors.sqlserver.SqlServerConnectionProvider;
+import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.execution.sensors.finder.SensorDefinitionFindResult;
 import ai.dqo.execution.sqltemplates.JinjaTemplateRenderParameters;
@@ -84,7 +85,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
     private static final CommentFormatter commentFormatter = new CommentFormatter();
 
-    private DqoHomeContext dqoHomeContext;
     private SimilarCheckMatchingService similarCheckMatchingService;
     private SensorDocumentationModelFactory sensorDocumentationModelFactory;
     private RuleDocumentationModelFactory ruleDocumentationModelFactory;
@@ -94,7 +94,6 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
     /**
      * Creates a check documentation service.
-     * @param dqoHomeContext DQO Home.
      * @param similarCheckMatchingService Service that finds all similar checks that share the same sensor and rule.
      * @param sensorDocumentationModelFactory Sensor documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the sensor.
      * @param ruleDocumentationModelFactory Rule documentation factory for generating the documentation for the sensor, maybe we want to pick some information about the rule.
@@ -103,14 +102,12 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
      * @param jinjaTemplateRenderService Jinja template rendering service. Used to render how the SQL template will be filled for the given parameters.
      */
     @Autowired
-    public CheckDocumentationModelFactoryImpl(DqoHomeContext dqoHomeContext,
-                                              SimilarCheckMatchingService similarCheckMatchingService,
+    public CheckDocumentationModelFactoryImpl(SimilarCheckMatchingService similarCheckMatchingService,
                                               SensorDocumentationModelFactory sensorDocumentationModelFactory,
                                               RuleDocumentationModelFactory ruleDocumentationModelFactory,
                                               UiToSpecCheckMappingService uiToSpecCheckMappingService,
                                               YamlSerializer yamlSerializer,
                                               JinjaTemplateRenderService jinjaTemplateRenderService) {
-        this.dqoHomeContext = dqoHomeContext;
         this.similarCheckMatchingService = similarCheckMatchingService;
         this.sensorDocumentationModelFactory = sensorDocumentationModelFactory;
         this.ruleDocumentationModelFactory = ruleDocumentationModelFactory;
@@ -291,7 +288,7 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
 
         AbstractRootChecksContainerSpec checkRootContainer =
             (similarCheckModel.getCheckTarget() == CheckTarget.table) ?
-                trimmedTableSpec.getTableCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale()) :
+                trimmedTableSpec.getTableCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), false) :
                 columnSpec.getColumnCheckRootContainer(similarCheckModel.getCheckType(), similarCheckModel.getTimeScale(), false);
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
             trimmedTableSpec.setTableCheckRootContainer(checkRootContainer);
@@ -374,8 +371,8 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
     private List<String> createCheckSample(String yamlSample, SimilarCheckModel similarCheckModel, CheckDocumentationModel checkDocumentationModel) {
         List<String> checkSample = new ArrayList<>();
         boolean isCheckSection = false;
-        String checkBeginMarker = "checks:";
-        String checkpointBeginMarker = "checkpoints:";
+        String checkBeginMarker = "profiling_checks:";
+        String checkpointBeginMarker = "recurring_checks:";
         String partitionedCheckBeginMarker = "partitioned_checks:";
         String checkEndMarker = "";
         if (similarCheckModel.getCheckTarget() == CheckTarget.table) {
@@ -476,12 +473,15 @@ public class CheckDocumentationModelFactoryImpl implements CheckDocumentationMod
                 TimeSeriesConfigurationProvider timeSeriesConfigurationProvider = (TimeSeriesConfigurationProvider)checkRootContainer;
                 ProviderDialectSettings providerDialectSettings = getProviderDialectSettings(providerType);
 
+                EffectiveSensorRuleNames effectiveSensorRuleNames = new EffectiveSensorRuleNames(
+                        sensorDocumentation.getSensorName(), null);
                 SensorExecutionRunParameters sensorRunParameters = new SensorExecutionRunParameters(
                         connectionSpec,
                         tableSpec,
                         tableSpec.getColumns().getAt(0),
                         checkSpec,
                         null,
+                        effectiveSensorRuleNames,
                         checkRootContainer.getCheckType(),
                         timeSeriesConfigurationProvider.getTimeSeriesConfiguration(tableSpec),
                         null,

@@ -196,11 +196,11 @@ public class UiToSpecCheckMappingServiceImpl implements UiToSpecCheckMappingServ
 
         for (UIFieldModel fieldModel : fieldModels) {
             ParameterDefinitionSpec fieldModelDefinition = fieldModel.getDefinition();
-            String fieldName = fieldModelDefinition.getFieldName();
-            FieldInfo fieldInfo = parametersClassInfo.getField(fieldName);
+            String yamlFieldName = fieldModelDefinition.getFieldName();
+            FieldInfo fieldInfo = parametersClassInfo.getFieldByYamlName(yamlFieldName);
 
             if (fieldInfo == null) {
-                throw new RuntimeException("Field " + fieldName + " was not found on the target class " + targetParametersSpec.getClass().getName());
+                throw new RuntimeException("Field " + yamlFieldName + " was not found on the target class " + targetParametersSpec.getClass().getName());
             }
 
             switch (fieldInfo.getDataType()) {

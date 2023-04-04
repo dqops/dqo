@@ -17,7 +17,7 @@ package ai.dqo.sensors.table.standard;
 
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.table.AbstractTableSensorParametersSpec;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
@@ -29,8 +29,9 @@ import lombok.EqualsAndHashCode;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class TableStandardRowCountSensorParametersSpec extends AbstractTableSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<TableStandardRowCountSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractTableSensorParametersSpec.FIELDS) {
+public class TableStandardRowCountSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<TableStandardRowCountSensorParametersSpec> FIELDS =
+            new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };

@@ -15,18 +15,18 @@
  */
 package ai.dqo.services.check.matching;
 
-import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
-import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
+import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
+import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
 import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
 import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
-import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.TableSpec;
@@ -65,17 +65,17 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
             // TODO: we could add additional filters on teh connection name and table name, extracted from the hierarchyId in the tableSpec
         }};
 
-        TableProfilingCheckCategoriesSpec adHocChecks = tableSpec.getChecks();
+        TableProfilingCheckCategoriesSpec adHocChecks = tableSpec.getProfilingChecks();
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(adHocChecks,
                 checkSearchFilters, null, tableSpec, null, null),
                 adHocChecks.getCheckTarget(), adHocChecks.getCheckType(), adHocChecks.getCheckTimeScale());
 
-        TableDailyRecurringCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurring().getDaily(), TableDailyRecurringCategoriesSpec::new);
+        TableDailyRecurringCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurringChecks().getDaily(), TableDailyRecurringCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
                 dailyRecurring.getCheckTarget(), dailyRecurring.getCheckType(), dailyRecurring.getCheckTimeScale());
 
-        TableMonthlyRecurringCategoriesSpec monthlyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurring().getMonthly(), TableMonthlyRecurringCategoriesSpec::new);
+        TableMonthlyRecurringCategoriesSpec monthlyRecurring = Objects.requireNonNullElseGet(tableSpec.getRecurringChecks().getMonthly(), TableMonthlyRecurringCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(monthlyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),
                 monthlyRecurring.getCheckTarget(), monthlyRecurring.getCheckType(), monthlyRecurring.getCheckTimeScale());
@@ -107,12 +107,12 @@ public class SimilarCheckMatchingServiceImpl implements SimilarCheckMatchingServ
             // TODO: we could add additional filters on teh connection name and table name, extracted from the hierarchyId in the tableSpec
         }};
 
-        ColumnProfilingCheckCategoriesSpec adHocChecks = Objects.requireNonNullElseGet(columnSpec.getChecks(), ColumnProfilingCheckCategoriesSpec::new);
+        ColumnProfilingCheckCategoriesSpec adHocChecks = Objects.requireNonNullElseGet(columnSpec.getProfilingChecks(), ColumnProfilingCheckCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(adHocChecks,
                         checkSearchFilters, null, tableSpec,null, null),
                 adHocChecks.getCheckTarget(), adHocChecks.getCheckType(), adHocChecks.getCheckTimeScale());
 
-        ColumnRecurringSpec recurring = Objects.requireNonNullElseGet(columnSpec.getRecurring(), ColumnRecurringSpec::new);
+        ColumnRecurringSpec recurring = Objects.requireNonNullElseGet(columnSpec.getRecurringChecks(), ColumnRecurringSpec::new);
         ColumnDailyRecurringCategoriesSpec dailyRecurring = Objects.requireNonNullElseGet(recurring.getDaily(), ColumnDailyRecurringCategoriesSpec::new);
         similarChecksContainer.appendAllChecks(this.specToUiCheckMappingService.createUiModel(dailyRecurring,
                         checkSearchFilters, null, tableSpec,null, null),

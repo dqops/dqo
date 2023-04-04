@@ -15,9 +15,12 @@
  */
 package ai.dqo.sensors;
 
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.core.secrets.SecretValueProvider;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
+import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
@@ -86,5 +89,17 @@ public abstract class AbstractSensorParametersSpec extends AbstractSpec {
         AbstractSensorParametersSpec cloned = (AbstractSensorParametersSpec)super.deepClone();
         cloned.filter = secretValueProvider.expandValue(cloned.filter);
         return cloned;
+    }
+
+    /**
+     * Calls a visitor (using a visitor design pattern) that returns a result.
+     *
+     * @param visitor   Visitor instance.
+     * @param parameter Additional parameter that will be passed back to the visitor.
+     * @return Result value returned by an "accept" method of the visitor.
+     */
+    @Override
+    public <P, R> R visit(HierarchyNodeResultVisitor<P, R> visitor, P parameter) {
+        return visitor.accept(this, parameter);
     }
 }

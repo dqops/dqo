@@ -21,11 +21,11 @@ import ai.dqo.execution.ExecutionContext;
 import ai.dqo.metadata.search.CheckSearchFilters;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.models.UIFieldModel;
-import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.rules.AbstractRuleParametersSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
+import ai.dqo.services.check.mapping.models.UIFieldModel;
 
 import java.util.List;
 

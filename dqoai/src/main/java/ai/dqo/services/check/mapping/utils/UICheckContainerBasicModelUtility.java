@@ -16,8 +16,8 @@
 
 package ai.dqo.services.check.mapping.utils;
 
-import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 import ai.dqo.services.check.mapping.basicmodels.UICheckBasicModel;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
 
 import java.util.List;
 import java.util.stream.Collectors;

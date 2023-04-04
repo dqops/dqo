@@ -7,7 +7,6 @@ import ai.dqo.utils.tables.TableColumnUtility;
 import com.google.common.base.Strings;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 import tech.tablesaw.api.*;
 import tech.tablesaw.columns.Column;

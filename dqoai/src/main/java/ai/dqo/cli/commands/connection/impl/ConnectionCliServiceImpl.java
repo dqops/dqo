@@ -450,7 +450,8 @@ public class ConnectionCliServiceImpl implements ConnectionCliService {
                 .map(spec -> connections.getByObjectName(spec.getConnectionName(), true))
                 .collect(Collectors.toList());
 
-        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.connectionService.deleteConnections(connectionWrappers);
+        List<PushJobResult<DeleteStoredDataQueueJobResult>> backgroundJobs = this.connectionService.deleteConnections(
+                connectionWrappers, userHomeContext);
 
         try {
             for (PushJobResult<DeleteStoredDataQueueJobResult> job: backgroundJobs) {

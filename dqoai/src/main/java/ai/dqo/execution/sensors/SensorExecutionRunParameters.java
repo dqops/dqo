@@ -18,13 +18,14 @@ package ai.dqo.execution.sensors;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.CheckType;
 import ai.dqo.connectors.ProviderDialectSettings;
+import ai.dqo.execution.checks.EffectiveSensorRuleNames;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.sources.ColumnSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;
-import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import ai.dqo.sensors.AbstractSensorParametersSpec;
+import ai.dqo.statistics.AbstractStatisticsCollectorSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -48,6 +49,7 @@ public class SensorExecutionRunParameters {
     private AbstractCheckSpec<?,?,?,?> check;
     @JsonIgnore
     private AbstractStatisticsCollectorSpec<?> profiler;
+    private EffectiveSensorRuleNames effectiveSensorRuleNames;
     private TimeSeriesConfigurationSpec timeSeries;
     private TimeWindowFilterParameters timeWindowFilter;
     private DataStreamMappingSpec dataStreams;
@@ -63,6 +65,7 @@ public class SensorExecutionRunParameters {
      * @param column Column specification.
      * @param check Check specification (when a quality check is executed).
      * @param profiler Profiler specification (when a profiler is executed).
+     * @param effectiveSensorRuleNames A pair of effective sensor names and rule names. The sensor name and rule name are retrieved from the check definition (for custom checks) or from the sensor parameters and rule parameters for built-in checks.
      * @param checkType Check type (profiling, recurring, partitioned).
      * @param timeSeries Effective time series configuration.
      * @param timeWindowFilter Time window filter (optional), configures the absolute time range of data to analyze and/or the time window (recent days/months) for incremental partition checks.
@@ -76,6 +79,7 @@ public class SensorExecutionRunParameters {
 			ColumnSpec column,
 			AbstractCheckSpec<?,?,?,?> check,
             AbstractStatisticsCollectorSpec<?> profiler,
+            EffectiveSensorRuleNames effectiveSensorRuleNames,
             CheckType checkType,
             TimeSeriesConfigurationSpec timeSeries,
             TimeWindowFilterParameters timeWindowFilter,
@@ -87,6 +91,7 @@ public class SensorExecutionRunParameters {
         this.column = column;
         this.check = check;
         this.profiler = profiler;
+        this.effectiveSensorRuleNames = effectiveSensorRuleNames;
         this.checkType = checkType;
         this.timeSeries = timeSeries;
         this.timeWindowFilter = timeWindowFilter;
@@ -173,6 +178,22 @@ public class SensorExecutionRunParameters {
      */
     public void setProfiler(AbstractStatisticsCollectorSpec<?> profiler) {
         this.profiler = profiler;
+    }
+
+    /**
+     * Returns the effective sensor and rule names.
+     * @return Effective sensor and rule names.
+     */
+    public EffectiveSensorRuleNames getEffectiveSensorRuleNames() {
+        return effectiveSensorRuleNames;
+    }
+
+    /**
+     * Sets the object that contains the effective sensor and rule names.
+     * @param effectiveSensorRuleNames Effective sensor and rule names.
+     */
+    public void setEffectiveSensorRuleNames(EffectiveSensorRuleNames effectiveSensorRuleNames) {
+        this.effectiveSensorRuleNames = effectiveSensorRuleNames;
     }
 
     /**

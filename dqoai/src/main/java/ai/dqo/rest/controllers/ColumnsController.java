@@ -18,13 +18,13 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
-import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
-import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.column.partitioned.ColumnPartitionedChecksRootSpec;
+import ai.dqo.checks.column.profiling.ColumnProfilingCheckCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnDailyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnMonthlyRecurringCategoriesSpec;
+import ai.dqo.checks.column.recurring.ColumnRecurringSpec;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
@@ -40,14 +40,14 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
-import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
 import ai.dqo.rest.models.metadata.ColumnBasicModel;
 import ai.dqo.rest.models.metadata.ColumnModel;
 import ai.dqo.rest.models.metadata.ColumnStatisticsModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
+import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.metadata.ColumnService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -414,7 +414,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnProfilingCheckCategoriesSpec checks = columnSpec.getChecks();
+        ColumnProfilingCheckCategoriesSpec checks = columnSpec.getProfilingChecks();
         return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
     }
 
@@ -445,7 +445,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurring();
+        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
         if (recurringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -481,7 +481,7 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurring();
+        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
         if (recurringSpec == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.OK); // 200
         }
@@ -1428,9 +1428,9 @@ public class ColumnsController {
         }
 
         if (columnCheckCategoriesSpec.isPresent()) {
-            columnSpec.setChecks(columnCheckCategoriesSpec.get());
+            columnSpec.setProfilingChecks(columnCheckCategoriesSpec.get());
         } else {
-            columnSpec.setChecks(null);
+            columnSpec.setProfilingChecks(null);
         }
 
         userHomeContext.flush();
@@ -1476,17 +1476,17 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurring();
+        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
         if (recurringSpec == null) {
             recurringSpec = new ColumnRecurringSpec();
         }
         
         if (columnDailyRecurringSpec.isPresent()) {
             recurringSpec.setDaily(columnDailyRecurringSpec.get());
-            columnSpec.setRecurring(recurringSpec);
+            columnSpec.setRecurringChecks(recurringSpec);
         } else if (recurringSpec.getMonthly() == null) {
             // If there is no monthly recurring, and it's been requested to delete daily recurring, then delete all.
-            columnSpec.setRecurring(null);
+            columnSpec.setRecurringChecks(null);
         } else {
             recurringSpec.setDaily(null);
         }
@@ -1533,17 +1533,17 @@ public class ColumnsController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        ColumnRecurringSpec recurringSpec = columnSpec.getRecurring();
+        ColumnRecurringSpec recurringSpec = columnSpec.getRecurringChecks();
         if (recurringSpec == null) {
             recurringSpec = new ColumnRecurringSpec();
         }
 
         if (columnMonthlyRecurringSpec.isPresent()) {
             recurringSpec.setMonthly(columnMonthlyRecurringSpec.get());
-            columnSpec.setRecurring(recurringSpec);
+            columnSpec.setRecurringChecks(recurringSpec);
         } else if (recurringSpec.getDaily() == null) {
             // If there is no daily recurring, and it's been requested to delete monthly recurring, then delete all.
-            columnSpec.setRecurring(null);
+            columnSpec.setRecurringChecks(null);
         } else {
             recurringSpec.setMonthly(null);
         }

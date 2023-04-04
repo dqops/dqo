@@ -213,7 +213,6 @@ public class GenerateDocumentationPostProcessor {
                 configurationProperties, pythonConfigurationProperties, new JsonSerializerImpl(), pythonVirtualEnvService);
 
         CheckDocumentationModelFactory checkDocumentationModelFactory = new CheckDocumentationModelFactoryImpl(
-                dqoHomeContext,
                 new SimilarCheckMatchingServiceImpl(specToUiCheckMappingService),
                 createSensorDocumentationModelFactory(dqoHomeContext),
                 createRuleDocumentationModelFactory(projectRoot, dqoHomeContext),

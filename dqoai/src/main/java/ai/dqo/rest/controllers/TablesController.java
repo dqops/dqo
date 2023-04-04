@@ -18,13 +18,13 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.checks.table.recurring.TableRecurringSpec;
-import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
-import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableDailyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TableMonthlyPartitionedCheckCategoriesSpec;
 import ai.dqo.checks.table.partitioned.TablePartitionedChecksRootSpec;
+import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableDailyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableMonthlyRecurringCategoriesSpec;
+import ai.dqo.checks.table.recurring.TableRecurringSpec;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
@@ -40,14 +40,14 @@ import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rest.models.metadata.TablePartitioningModel;
-import ai.dqo.services.check.mapping.models.UICheckContainerModel;
-import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
-import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
-import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
 import ai.dqo.rest.models.metadata.TableBasicModel;
 import ai.dqo.rest.models.metadata.TableModel;
+import ai.dqo.rest.models.metadata.TablePartitioningModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
+import ai.dqo.services.check.mapping.SpecToUiCheckMappingService;
+import ai.dqo.services.check.mapping.UiToSpecCheckMappingService;
+import ai.dqo.services.check.mapping.basicmodels.UICheckContainerBasicModel;
+import ai.dqo.services.check.mapping.models.UICheckContainerModel;
 import ai.dqo.services.metadata.TableService;
 import com.google.common.base.Strings;
 import io.swagger.annotations.*;
@@ -472,7 +472,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        TableProfilingCheckCategoriesSpec checks = tableSpec.getChecks();
+        TableProfilingCheckCategoriesSpec checks = tableSpec.getProfilingChecks();
         return new ResponseEntity<>(Mono.justOrEmpty(checks), HttpStatus.OK); // 200
     }
 
@@ -515,7 +515,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
         
-        TableDailyRecurringCategoriesSpec dailyRecurring = tableSpec.getRecurring().getDaily();
+        TableDailyRecurringCategoriesSpec dailyRecurring = tableSpec.getRecurringChecks().getDaily();
         return new ResponseEntity<>(Mono.justOrEmpty(dailyRecurring), HttpStatus.OK); // 200
     }
 
@@ -558,7 +558,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableMonthlyRecurringCategoriesSpec monthlyRecurring = tableSpec.getRecurring().getMonthly();
+        TableMonthlyRecurringCategoriesSpec monthlyRecurring = tableSpec.getRecurringChecks().getMonthly();
         return new ResponseEntity<>(Mono.justOrEmpty(monthlyRecurring), HttpStatus.OK); // 200
     }
     
@@ -687,7 +687,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
@@ -748,7 +748,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -808,7 +808,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -867,7 +867,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
         UICheckContainerBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
@@ -917,7 +917,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
         UICheckContainerBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
                 checks,
                 new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
@@ -967,7 +967,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         UICheckContainerBasicModel checksUiBasicModel = this.specToUiCheckMappingService.createUiBasicModel(
                 checks, new ExecutionContext(userHomeContext, this.dqoHomeContextFactory.openLocalDqoHome()),
                 connectionWrapper.getSpec().getProviderType());
@@ -1018,7 +1018,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
 
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
@@ -1086,7 +1086,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1153,7 +1153,7 @@ public class TablesController {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
         CheckSearchFilters checkSearchFilters = new CheckSearchFilters() {{
             setConnectionName(connectionWrapper.getName());
             setSchemaTableName(tableWrapper.getPhysicalTableName().toTableSearchFilter());
@@ -1713,7 +1713,7 @@ public class TablesController {
                     if (tableProfilingCheckCategoriesSpec.isPresent()) {
                         spec.setTableCheckRootContainer(tableProfilingCheckCategoriesSpec.get());
                     } else {
-                        spec.setChecks(new TableProfilingCheckCategoriesSpec()); // it is never empty...
+                        spec.setProfilingChecks(new TableProfilingCheckCategoriesSpec()); // it is never empty...
                     }
                 },
                 connectionName,
@@ -1760,7 +1760,7 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    TableRecurringSpec recurringSpec = spec.getRecurring();
+                    TableRecurringSpec recurringSpec = spec.getRecurringChecks();
                     
                     if (tableDailyRecurringSpec.isPresent()) {
                         recurringSpec.setDaily(tableDailyRecurringSpec.get());
@@ -1812,7 +1812,7 @@ public class TablesController {
 
         boolean success = this.updateTableGenericChecks(
                 spec -> {
-                    TableRecurringSpec recurringSpec = spec.getRecurring();
+                    TableRecurringSpec recurringSpec = spec.getRecurringChecks();
 
                     if (tableMonthlyRecurringSpec.isPresent()) {
                         recurringSpec.setMonthly(tableMonthlyRecurringSpec.get());
@@ -2005,7 +2005,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecksUI(
-                TableSpec::getChecks,
+                TableSpec::getProfilingChecks,
                 connectionName,
                 schemaName,
                 tableName,
@@ -2053,7 +2053,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecksUI(
-                spec -> spec.getTableCheckRootContainer(CheckType.RECURRING, timeScale),
+                spec -> spec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, true),
                 connectionName,
                 schemaName,
                 tableName,
@@ -2101,7 +2101,7 @@ public class TablesController {
         }
 
         boolean success = this.updateTableGenericChecksUI(
-                spec -> spec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale),
+                spec -> spec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, true),
                 connectionName,
                 schemaName,
                 tableName,

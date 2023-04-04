@@ -16,6 +16,7 @@
 package ai.dqo.metadata.search;
 
 import ai.dqo.checks.*;
+import ai.dqo.checks.custom.CustomCheckSpec;
 import ai.dqo.metadata.groupings.DataStreamMappingSpec;
 import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
@@ -249,7 +250,7 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
      * @return Accept's result.
      */
     @Override
-    public TreeNodeTraversalResult accept(AbstractCheckSpec abstractCheckSpec, SearchParameterObject parameter) {
+    public TreeNodeTraversalResult accept(AbstractCheckSpec<?,?,?,?> abstractCheckSpec, SearchParameterObject parameter) {
         Boolean enabledFilter = this.filters.getEnabled();
 
         DataStreamSearcherObject dataStreamSearcherObject = parameter.getDataStreamSearcherObject();
@@ -300,10 +301,18 @@ public class CheckSearchFiltersVisitor extends AbstractSearchVisitor<SearchParam
             if (sensorParameters == null) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN; // sensor is not configured (has no parameters, we don't know what to run)
             }
-            String sensorDefinitionName = sensorParameters.getSensorDefinitionName();
-            String sensorEntryName = sensorParameters.getHierarchyId().getLast().toString();
-            if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter) &&
-                    !StringPatternComparer.matchSearchPattern(sensorEntryName, sensorNameFilter)) {
+
+            String sensorDefinitionName;
+
+            if (abstractCheckSpec instanceof CustomCheckSpec) {
+                CustomCheckSpec customCheckSpec = (CustomCheckSpec) abstractCheckSpec;
+                sensorDefinitionName = customCheckSpec.getSensorName(); // we can filter by a sensor name only for custom checks that have an explicitly given a sensor name, user defined custom checks cannot be filtered this way
+            }
+            else {
+                sensorDefinitionName = sensorParameters.getSensorDefinitionName();
+            }
+
+            if (!StringPatternComparer.matchSearchPattern(sensorDefinitionName, sensorNameFilter)) {
                 return TreeNodeTraversalResult.SKIP_CHILDREN;
             }
         }

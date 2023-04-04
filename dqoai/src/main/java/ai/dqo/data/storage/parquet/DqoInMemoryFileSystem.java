@@ -36,18 +36,18 @@ package ai.dqo.data.storage.parquet;
  * limitations under the License.
  */
 
+import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.fs.*;
+import org.apache.hadoop.fs.permission.FsPermission;
+import org.apache.hadoop.io.DataInputBuffer;
+import org.apache.hadoop.util.Progressable;
+
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.URI;
 import java.util.*;
-
-import org.apache.hadoop.fs.*;
-import org.apache.hadoop.fs.permission.FsPermission;
-import org.apache.hadoop.io.DataInputBuffer;
-import org.apache.hadoop.conf.Configuration;
-import org.apache.hadoop.util.Progressable;
 
 /**
  * This is a copy of an old InMemoryFileSystem implementation that was depreciated in Hadoop, but serves the purpose

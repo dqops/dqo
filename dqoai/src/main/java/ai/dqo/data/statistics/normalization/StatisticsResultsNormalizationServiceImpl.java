@@ -2,9 +2,9 @@ package ai.dqo.data.statistics.normalization;
 
 import ai.dqo.core.configuration.DqoStatisticsCollectorConfigurationProperties;
 import ai.dqo.data.normalization.CommonTableNormalizationService;
-import ai.dqo.data.statistics.factory.*;
 import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.readouts.normalization.SensorResultNormalizeException;
+import ai.dqo.data.statistics.factory.*;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.utils.tables.TableColumnUtility;
@@ -241,7 +241,7 @@ public class StatisticsResultsNormalizationServiceImpl implements StatisticsResu
         normalizedResults.addColumns(collectorCategoryColumn);
 
         StringColumn sensorNameColumn = StringColumn.create(StatisticsColumnNames.SENSOR_NAME_COLUMN_NAME, resultRowCount);
-        String sensorDefinitionName = sensorRunParameters.getSensorParameters().getSensorDefinitionName();
+        String sensorDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getSensorName();
         sensorNameColumn.setMissingTo(sensorDefinitionName);
         normalizedResults.addColumns(sensorNameColumn);
 

@@ -22,7 +22,6 @@ import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshotFactory;
 import ai.dqo.data.storage.ParquetPartitionMetadataService;
 import ai.dqo.metadata.sources.PhysicalTableName;
-import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

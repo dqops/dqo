@@ -16,12 +16,12 @@
 package ai.dqo.core.scheduler;
 
 import ai.dqo.core.configuration.DqoSchedulerConfigurationProperties;
-import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.core.scheduler.quartz.*;
 import ai.dqo.core.scheduler.runcheck.RunScheduledChecksSchedulerJob;
 import ai.dqo.core.scheduler.scan.JobSchedulesDelta;
 import ai.dqo.core.scheduler.scan.SynchronizeMetadataSchedulerJob;
 import ai.dqo.core.scheduler.schedules.UniqueSchedulesCollection;
+import ai.dqo.core.synchronization.listeners.FileSystemSynchronizationReportingMode;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
 import ai.dqo.metadata.scheduling.RecurringScheduleSpec;
 import lombok.extern.slf4j.Slf4j;

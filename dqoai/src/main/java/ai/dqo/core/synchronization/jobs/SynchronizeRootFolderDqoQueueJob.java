@@ -15,9 +15,9 @@
  */
 package ai.dqo.core.synchronization.jobs;
 
-import ai.dqo.core.synchronization.service.DqoCloudSynchronizationService;
 import ai.dqo.core.jobqueue.*;
 import ai.dqo.core.jobqueue.monitoring.DqoJobEntryParametersModel;
+import ai.dqo.core.synchronization.service.DqoCloudSynchronizationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

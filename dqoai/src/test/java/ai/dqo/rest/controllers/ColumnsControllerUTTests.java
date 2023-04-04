@@ -161,7 +161,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(10, result.getCategories().size());
+        Assertions.assertEquals(11, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -179,7 +179,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(10, result.getCategories().size());
+        Assertions.assertEquals(11, result.getCategories().size());
     }
 
     @ParameterizedTest
@@ -197,7 +197,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(9, result.getCategories().size());
+        Assertions.assertEquals(10, result.getCategories().size());
     }
 
     @Test
@@ -213,7 +213,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(10, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(11, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -231,7 +231,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(10, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(11, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @ParameterizedTest
@@ -249,7 +249,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         UICheckContainerBasicModel result = responseEntity.getBody().block();
         Assertions.assertNotNull(result);
-        Assertions.assertEquals(9, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
+        Assertions.assertEquals(10, UICheckContainerBasicModelUtility.getCheckCategoryNames(result).size());
     }
 
     @Test
@@ -283,7 +283,7 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getChecks(), sampleProfilingCheck);
+        Assertions.assertSame(columnSpec.getProfilingChecks(), sampleProfilingCheck);
     }
 
     @Test
@@ -319,8 +319,8 @@ public class ColumnsControllerUTTests extends BaseTest {
 
         Object result = responseEntity.getBody().block();
         Assertions.assertNull(result);
-        Assertions.assertSame(columnSpec.getRecurring().getDaily(), sampleRecurring.getDaily());
-        Assertions.assertNull(columnSpec.getRecurring().getMonthly());
+        Assertions.assertSame(columnSpec.getRecurringChecks().getDaily(), sampleRecurring.getDaily());
+        Assertions.assertNull(columnSpec.getRecurringChecks().getMonthly());
     }
 
     @Test

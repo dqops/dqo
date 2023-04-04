@@ -66,7 +66,7 @@ const ConnectionPage = () => {
     isUpdatedDataStreamsMapping
   } = useSelector((state: IRootState) => state.connection);
   const location = useLocation() as any;
-  const { import_schema } = qs.parse(location.search);
+  const { import_schema, create_success } = qs.parse(location.search);
 
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.CONNECTION_DETAIL(checkTypes, connection, tab));
@@ -155,9 +155,11 @@ const ConnectionPage = () => {
             <div className="text-xl font-semibold truncate">{connection || ''}</div>
           </div>
         </div>
-        <div className="border-b border-gray-300">
-          <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
-        </div>
+        {create_success !== 'true' && (
+          <div className="border-b border-gray-300">
+            <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+          </div>
+        )}
         {activeTab === 'detail' && <ConnectionDetail />}
         {activeTab === 'schedule' && <ScheduleDetail />}
         {activeTab === 'comments' && <ConnectionCommentView />}

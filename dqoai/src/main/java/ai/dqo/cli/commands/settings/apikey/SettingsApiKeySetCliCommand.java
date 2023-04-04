@@ -23,7 +23,6 @@ import ai.dqo.cli.terminal.TerminalReader;
 import ai.dqo.cli.terminal.TerminalWriter;
 import ai.dqo.core.dqocloud.apikey.DqoCloudApiKeyProvider;
 import com.google.common.base.Strings;
-import org.apache.commons.codec.DecoderException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Scope;

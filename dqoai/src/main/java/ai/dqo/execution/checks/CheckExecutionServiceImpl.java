@@ -18,10 +18,13 @@ package ai.dqo.execution.checks;
 import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckType;
+import ai.dqo.checks.custom.CustomCheckSpec;
 import ai.dqo.connectors.ConnectionProvider;
 import ai.dqo.connectors.ConnectionProviderRegistry;
 import ai.dqo.connectors.ProviderDialectSettings;
 import ai.dqo.core.notifications.NotificationService;
+import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
+import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.data.errors.normalization.ErrorsNormalizationService;
 import ai.dqo.data.errors.normalization.ErrorsNormalizedResult;
 import ai.dqo.data.errors.snapshot.ErrorsSnapshot;
@@ -30,8 +33,6 @@ import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizationService;
 import ai.dqo.data.readouts.normalization.SensorReadoutsNormalizedResult;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshot;
 import ai.dqo.data.readouts.snapshot.SensorReadoutsSnapshotFactory;
-import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
-import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshotFactory;
 import ai.dqo.execution.ExecutionContext;
 import ai.dqo.execution.checks.progress.*;
 import ai.dqo.execution.checks.ruleeval.RuleEvaluationResult;
@@ -45,6 +46,7 @@ import ai.dqo.execution.sensors.*;
 import ai.dqo.execution.sensors.progress.ExecutingSensorEvent;
 import ai.dqo.execution.sensors.progress.SensorExecutedEvent;
 import ai.dqo.execution.sensors.progress.SensorFailedEvent;
+import ai.dqo.metadata.definitions.checks.CheckDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
@@ -306,7 +308,7 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
                 LocalDateTime maxTimePeriod = normalizedSensorResults.getTimePeriodColumn().max(); // most recent time period that was captured
                 LocalDateTime minTimePeriod = normalizedSensorResults.getTimePeriodColumn().min(); // oldest time period that was captured
 
-                String ruleDefinitionName = checkSpec.getRuleDefinitionName();
+                String ruleDefinitionName = sensorRunParameters.getEffectiveSensorRuleNames().getRuleName();
 
                 if (ruleDefinitionName == null) {
                     // no rule to run, just the sensor...
@@ -427,9 +429,18 @@ public class CheckExecutionServiceImpl implements CheckExecutionService {
         assert checkCategoryRootProvider.isPresent();
         AbstractRootChecksContainerSpec rootChecksContainerSpec = (AbstractRootChecksContainerSpec)checkCategoryRootProvider.get();
         CheckType checkType = rootChecksContainerSpec.getCheckType();
+        CheckDefinitionSpec customCheckDefinitionSpec = null;
+
+        if (checkSpec instanceof CustomCheckSpec) {
+            CustomCheckSpec customCheckSpec = (CustomCheckSpec)checkSpec;
+            customCheckDefinitionSpec = userHome.getChecks().getCheckDefinitionSpec(
+                    rootChecksContainerSpec.getCheckTarget(),checkType,
+                    rootChecksContainerSpec.getCheckTimeScale(), customCheckSpec.getCheckName());
+        }
 
         SensorExecutionRunParameters sensorRunParameters = this.sensorExecutionRunParametersFactory.createSensorParameters(
-                connectionSpec, tableSpec, columnSpec, checkSpec, checkType, timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
+                connectionSpec, tableSpec, columnSpec, checkSpec, customCheckDefinitionSpec, checkType,
+                timeSeriesConfigurationSpec, userTimeWindowFilters, dialectSettings);
         return sensorRunParameters;
     }
 }

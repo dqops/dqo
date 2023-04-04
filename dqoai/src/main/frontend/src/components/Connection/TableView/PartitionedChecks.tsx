@@ -132,7 +132,7 @@ const TablePartitionedChecksView = () => {
 
   useEffect(() => {
     if (tab !== 'daily' && tab !== 'monthly') {
-      history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, tab));
+      history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connectionName, schemaName, tableName, 'daily'));
     }
   }, [tab]);
 

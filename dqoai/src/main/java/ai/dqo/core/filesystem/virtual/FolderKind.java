@@ -70,6 +70,12 @@ public enum FolderKind {
     SOURCE_SUBFOLDER,
 
     /**
+     * Custom sensor definition folder.
+     */
+    @JsonProperty("sensors")
+    SENSORS,
+
+    /**
      * Custom rules definition folder.
      */
     @JsonProperty("rules")

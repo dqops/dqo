@@ -3,11 +3,9 @@ package ai.dqo.rest.controllers;
 import ai.dqo.checks.AbstractRootChecksContainerSpec;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
-import ai.dqo.checks.table.profiling.TableProfilingCheckCategoriesSpec;
-import ai.dqo.data.checkresults.services.CheckResultsOverviewParameters;
 import ai.dqo.data.checkresults.services.CheckResultsDataService;
+import ai.dqo.data.checkresults.services.CheckResultsOverviewParameters;
 import ai.dqo.data.checkresults.services.models.CheckResultsOverviewDataModel;
-import ai.dqo.metadata.id.HierarchyId;
 import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
@@ -19,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
-
-import java.util.Objects;
 
 /**
  * Controller that returns the overview of the recent results and errors on tables and columns.
@@ -86,13 +82,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        TableProfilingCheckCategoriesSpec checks = Objects.requireNonNullElseGet(
-                tableSpec.getChecks(),
-                () -> {
-                    TableProfilingCheckCategoriesSpec container = new TableProfilingCheckCategoriesSpec();
-                    container.setHierarchyId(new HierarchyId(tableSpec.getHierarchyId(), "checks"));
-                    return container;
-                });
+        AbstractRootChecksContainerSpec checks = tableSpec.getTableCheckRootContainer(CheckType.PROFILING, null, false);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checks, new CheckResultsOverviewParameters());
@@ -142,7 +132,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale);
+        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.RECURRING, timeScale, false);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());
@@ -192,7 +182,7 @@ public class CheckResultsOverviewController {
             return new ResponseEntity<>(Flux.empty(), HttpStatus.NOT_FOUND); // 404
         }
 
-        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale);
+        AbstractRootChecksContainerSpec checkRootContainer = tableSpec.getTableCheckRootContainer(CheckType.PARTITIONED, timeScale, false);
 
         CheckResultsOverviewDataModel[] checkResultsOverviewDataModels = this.checkResultsDataService.readMostRecentCheckStatuses(
                 checkRootContainer, new CheckResultsOverviewParameters());

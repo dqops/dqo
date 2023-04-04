@@ -15,6 +15,7 @@
  */
 package ai.dqo.metadata.userhome;
 
+import ai.dqo.metadata.definitions.checks.CheckDefinitionListImpl;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionList;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionListImpl;
 import ai.dqo.metadata.definitions.sensors.SensorDefinitionListImpl;
@@ -35,6 +36,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
 			put("connections", o -> o.connections);
 			put("sensors", o -> o.sensors);
 			put("rules", o -> o.rules);
+            put("checks", o -> o.checks);
             put("settings", o -> o.settings);
             put("file_indices", o -> o.fileIndices);
         }
@@ -43,8 +45,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
     @JsonIgnore
     private HierarchyId hierarchyId = HierarchyId.getRoot();
     private ConnectionListImpl connections;
-    private RuleDefinitionListImpl rules;
     private SensorDefinitionListImpl sensors;
+    private RuleDefinitionListImpl rules;
+    private CheckDefinitionListImpl checks;
     private SettingsWrapperImpl settings;
     private FileIndexList fileIndices;
     @JsonIgnore
@@ -57,6 +60,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
 		this.setConnections(new ConnectionListImpl());
 		this.setSensors(new SensorDefinitionListImpl());
 		this.setRules(new RuleDefinitionListImpl());
+        this.setChecks(new CheckDefinitionListImpl());
         this.setSettings(new SettingsWrapperImpl());
         this.setFileIndices(new FileIndexListImpl());
     }
@@ -66,15 +70,20 @@ public class UserHomeImpl implements UserHome, Cloneable {
      * @param connections Collection of connections.
      * @param sensors Collection of sensor definitions.
      * @param rules Collection of custom rule definitions.
+     * @param checks Collection of custom check definitions.
+     * @param settings user local settings.
+     * @param fileIndices File synchronization indexes.
      */
     public UserHomeImpl(ConnectionListImpl connections,
                         SensorDefinitionListImpl sensors,
                         RuleDefinitionListImpl rules,
+                        CheckDefinitionListImpl checks,
                         SettingsWrapperImpl settings,
                         FileIndexListImpl fileIndices) {
 		this.setConnections(connections);
 		this.setSensors(sensors);
 		this.setRules(rules);
+        this.setChecks(checks);
         this.setSettings(settings);
         this.setFileIndices(fileIndices);
     }
@@ -144,6 +153,28 @@ public class UserHomeImpl implements UserHome, Cloneable {
     }
 
     /**
+     * Returns a collection of custom check definitions.
+     * @return Collection of custom check definitions.
+     */
+    @Override
+    public CheckDefinitionListImpl getChecks() {
+        return checks;
+    }
+
+    /**
+     * Changes the collection of custom check definitions.
+     * @param checks New collection of custom check definitions.
+     */
+    public void setChecks(CheckDefinitionListImpl checks) {
+        this.checks = checks;
+        if (checks != null) {
+            HierarchyId childHierarchyId = new HierarchyId(this.hierarchyId, "checks");
+            checks.setHierarchyId(childHierarchyId);
+            assert FIELDS.get("checks").apply(this).getHierarchyId().equals(childHierarchyId);
+        }
+    }
+
+    /**
      * Returns settings.
      * @return Settings.
      */
@@ -196,6 +227,7 @@ public class UserHomeImpl implements UserHome, Cloneable {
 		this.getConnections().flush();
 		this.getSensors().flush();
 		this.getRules().flush();
+        this.getChecks().flush();
         this.getSettings().flush();
         this.getFileIndices().flush();
 
@@ -386,6 +418,9 @@ public class UserHomeImpl implements UserHome, Cloneable {
             }
             if (cloned.rules != null) {
                 cloned.rules = (RuleDefinitionListImpl) cloned.rules.deepClone();
+            }
+            if (cloned.checks != null) {
+                cloned.checks = (CheckDefinitionListImpl) cloned.checks.deepClone();
             }
             if (cloned.connections != null) {
                 cloned.connections = (ConnectionListImpl) cloned.connections.deepClone();

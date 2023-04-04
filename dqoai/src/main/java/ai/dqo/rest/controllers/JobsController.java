@@ -16,13 +16,6 @@
 package ai.dqo.rest.controllers;
 
 import ai.dqo.core.configuration.DqoQueueConfigurationProperties;
-import ai.dqo.core.synchronization.contract.DqoRoot;
-import ai.dqo.core.synchronization.jobs.SynchronizeMultipleFoldersJobModel;
-import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
-import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJobParameters;
-import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderParameters;
-import ai.dqo.core.synchronization.listeners.SilentFileSystemSynchronizationListener;
-import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.core.jobqueue.DqoJobQueue;
 import ai.dqo.core.jobqueue.DqoQueueJobFactory;
 import ai.dqo.core.jobqueue.DqoQueueJobId;
@@ -36,6 +29,13 @@ import ai.dqo.core.jobqueue.jobs.table.ImportTablesQueueJobResult;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueIncrementalSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueInitialSnapshotModel;
 import ai.dqo.core.jobqueue.monitoring.DqoJobQueueMonitoringService;
+import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.jobs.SynchronizeMultipleFoldersJobModel;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJob;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderDqoQueueJobParameters;
+import ai.dqo.core.synchronization.jobs.SynchronizeRootFolderParameters;
+import ai.dqo.core.synchronization.listeners.SilentFileSystemSynchronizationListener;
+import ai.dqo.core.synchronization.status.SynchronizationStatusTracker;
 import ai.dqo.data.statistics.factory.StatisticsDataScope;
 import ai.dqo.execution.checks.CheckExecutionSummary;
 import ai.dqo.execution.checks.RunChecksQueueJob;
@@ -43,9 +43,9 @@ import ai.dqo.execution.checks.RunChecksQueueJobParameters;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListener;
 import ai.dqo.execution.checks.progress.CheckExecutionProgressListenerProvider;
 import ai.dqo.execution.checks.progress.CheckRunReportingMode;
-import ai.dqo.execution.statistics.StatisticsCollectionExecutionSummary;
 import ai.dqo.execution.statistics.CollectStatisticsCollectionQueueJob;
 import ai.dqo.execution.statistics.RunStatisticsCollectionQueueJobParameters;
+import ai.dqo.execution.statistics.StatisticsCollectionExecutionSummary;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListener;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionProgressListenerProvider;
 import ai.dqo.execution.statistics.progress.StatisticsCollectorExecutionReportingMode;
@@ -310,6 +310,11 @@ public class JobsController {
 
         if (synchronizeFolderParameters.isRules()) {
             jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.rules,
+                    synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
+        }
+
+        if (synchronizeFolderParameters.isChecks()) {
+            jobParametersList.add(new SynchronizeRootFolderParameters(DqoRoot.checks,
                     synchronizeFolderParameters.getDirection(), synchronizeFolderParameters.isForceRefreshNativeTables()));
         }
 

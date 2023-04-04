@@ -20,9 +20,10 @@ import ai.dqo.checks.CheckTarget;
 import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.partitioned.accuracy.ColumnAccuracyMonthlyPartitionedChecksSpec;
-import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.bool.ColumnBoolMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.consistency.ColumnConsistencyMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.datetime.ColumnDatetimeMonthlyPartitionedChecksSpec;
+import ai.dqo.checks.column.partitioned.integrity.ColumnIntegrityMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.nulls.ColumnNullsMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.numeric.ColumnNumericMonthlyPartitionedChecksSpec;
 import ai.dqo.checks.column.partitioned.pii.ColumnPiiMonthlyPartitionedChecksSpec;
@@ -67,6 +68,7 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
             put("bool", o -> o.bool);
             put("integrity", o -> o.integrity);
             put("accuracy", o -> o.accuracy);
+            put("consistency", o -> o.consistency);
 
         }
     };
@@ -120,6 +122,11 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyMonthlyPartitionedChecksSpec accuracy;
+
+    @JsonPropertyDescription("Monthly partitioned checks for consistency in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnConsistencyMonthlyPartitionedChecksSpec consistency;
 
     /**
      * Returns the container of monthly null data quality partitioned checks.
@@ -299,6 +306,24 @@ public class ColumnMonthlyPartitionedCheckCategoriesSpec extends AbstractRootChe
         this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
         this.accuracy = accuracy;
         propagateHierarchyIdToField(accuracy, "accuracy");
+    }
+
+    /**
+     * Returns a container of custom consistency checks on a column.
+     * @return Custom consistency checks.
+     */
+    public ColumnConsistencyMonthlyPartitionedChecksSpec getConsistency() {
+        return consistency;
+    }
+
+    /**
+     * Sets a reference to a container of custom consistency checks.
+     * @param consistency Custom consistency checks.
+     */
+    public void setConsistency(ColumnConsistencyMonthlyPartitionedChecksSpec consistency) {
+        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
+        this.consistency = consistency;
+        propagateHierarchyIdToField(consistency, "consistency");
     }
 
 

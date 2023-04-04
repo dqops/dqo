@@ -1,8 +1,16 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/RuleDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: rule
 spec:
   type: python
+  java_class_name: ai.dqo.execution.rules.runners.python.PythonRuleRunner
   mode: previous_readouts
   time_window:
     prediction_time_window: 30
     min_periods_with_readouts: 0
+  fields:
+  - field_name: max_failures
+    display_name: max_failures
+    help_text: Maximum accepted value for the actual_value returned by the sensor
+      (inclusive).
+    data_type: long

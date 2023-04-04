@@ -53,4 +53,9 @@ public enum ConcurrentJobType {
      * Delete data from user's ".data" folders, given some specifying parameters.
      */
     DELETE_STORED_DATA,
+
+    /**
+     * Repair data from user's ".data" folders, given connection name and optional table name.
+     */
+    REPAIR_STORED_DATA,
 }

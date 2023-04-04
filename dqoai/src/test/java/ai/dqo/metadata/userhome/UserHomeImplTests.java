@@ -53,7 +53,7 @@ public class UserHomeImplTests extends BaseTest {
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
         TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
 
@@ -68,7 +68,7 @@ public class UserHomeImplTests extends BaseTest {
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
         TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
 
@@ -83,7 +83,7 @@ public class UserHomeImplTests extends BaseTest {
         TableWrapper tableWrapper = connectionWrapper.getTables().createAndAddNew(new PhysicalTableName("schema", "table"));
         TableSpec tableSpec = tableWrapper.getSpec();
         TableProfilingStandardChecksSpec standard = new TableProfilingStandardChecksSpec();
-        tableSpec.getChecks().setStandard(standard);
+        tableSpec.getProfilingChecks().setStandard(standard);
         TableRowCountCheckSpec check = new TableRowCountCheckSpec();
         standard.setRowCount(check);
 

@@ -41,7 +41,6 @@ public class CheckDocumentationModelFactoryImplTests extends BaseTest {
         DqoHomeContext dqoHomeContext = DqoHomeContextObjectMother.getRealDqoHomeContext();
         UiToSpecCheckMappingServiceImpl uiToSpecCheckMappingService = new UiToSpecCheckMappingServiceImpl(reflectionService);
         this.sut = new CheckDocumentationModelFactoryImpl(
-                dqoHomeContext,
                 similarCheckMatchingService,
                 new SensorDocumentationModelFactoryImpl(dqoHomeContext, specToUiCheckMappingService),
                 new RuleDocumentationModelFactoryImpl(projectRoot, dqoHomeContext, specToUiCheckMappingService),

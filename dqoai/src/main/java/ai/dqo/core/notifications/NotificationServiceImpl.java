@@ -1,8 +1,8 @@
 package ai.dqo.core.notifications;
 
-import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.checkresults.factory.CheckResultsColumnNames;
 import ai.dqo.data.checkresults.snapshot.CheckResultsSnapshot;
+import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.metadata.notifications.NotificationSettingsSpec;
 import ai.dqo.metadata.sources.ConnectionSpec;
 import ai.dqo.metadata.sources.TableSpec;

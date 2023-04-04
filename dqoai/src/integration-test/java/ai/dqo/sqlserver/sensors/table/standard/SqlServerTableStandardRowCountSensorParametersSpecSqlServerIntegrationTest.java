@@ -53,7 +53,7 @@ public class SqlServerTableStandardRowCountSensorParametersSpecSqlServerIntegrat
         this.checkSpec = new TableRowCountCheckSpec();
         this.checkSpec.setParameters(this.sut);
         TableProfilingStandardChecksSpec category = new TableProfilingStandardChecksSpec();
-        this.sampleTableMetadata.getTableSpec().getChecks().setStandard(category);
+        this.sampleTableMetadata.getTableSpec().getProfilingChecks().setStandard(category);
         category.setRowCount(this.checkSpec);
     }
 

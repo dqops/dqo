@@ -33,12 +33,12 @@ import io.netty.handler.codec.http.HttpHeaderNames;
 import io.netty.handler.codec.http.HttpHeaders;
 import io.netty.handler.codec.http.HttpResponseStatus;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.netty.ByteBufFlux;
-import reactor.netty.http.client.HttpClientResponse;
 
 import java.io.InputStream;
 import java.io.PipedInputStream;
@@ -46,7 +46,10 @@ import java.io.PipedOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.file.Path;
 import java.time.Instant;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -149,17 +152,7 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                         HttpHeaders headers = httpClientResponse.responseHeaders();
                         Integer fileLength = headers.getInt(HttpHeaderNames.CONTENT_LENGTH);
                         Long lastModified = headers.getTimeMillis(HttpHeaderNames.LAST_MODIFIED);
-                        List<String> googleHashHeaderValues = headers.getAllAsString("x-goog-hash");
-                        String md5Base64 = null;
-                        for (String googleHashHeaderValue :  googleHashHeaderValues) {
-                            String[] hashEntries = StringUtils.split(googleHashHeaderValue, ',');
-                            for (String hashEntry : hashEntries) {
-                                if (hashEntry.startsWith("md5=")) {
-                                    md5Base64 = hashEntry.substring("md5=".length());
-                                    break;
-                                }
-                            }
-                        }
+                        String md5Base64 = extractMd5Header(headers);
 
                         long statusCheckedAt = Instant.now().toEpochMilli();
                         FileMetadata fileMetadata = new FileMetadata(relativeFilePath, lastModified, md5Base64, statusCheckedAt, fileLength);
@@ -171,6 +164,27 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                 });
 
         return fileMetadataMono;
+    }
+
+    /**
+     * Retrieves the MD5 hash from the response returned by google cloud rest api.
+     * @param headers Headers returned by a request.
+     * @return MD5 hash of the file.
+     */
+    @Nullable
+    private String extractMd5Header(HttpHeaders headers) {
+        List<String> googleHashHeaderValues = headers.getAllAsString("x-goog-hash");
+        String md5Base64 = null;
+        for (String googleHashHeaderValue :  googleHashHeaderValues) {
+            String[] hashEntries = StringUtils.split(googleHashHeaderValue, ',');
+            for (String hashEntry : hashEntries) {
+                if (hashEntry.startsWith("md5=")) {
+                    md5Base64 = hashEntry.substring("md5=".length());
+                    break;
+                }
+            }
+        }
+        return md5Base64;
     }
 
     /**
@@ -470,20 +484,16 @@ public class GSRemoteFileSystemSynchronizationOperationsImpl implements GSRemote
                 )
                 .get()
                 .uri(String.format("https://%s.storage.googleapis.com/%s", gsFileSystemRoot.getBucketName(), linuxStyleFullFileInBucket))
-//                .responseSingle(((httpClientResponse, byteBufMono) -> {
-//                    if (httpClientResponse.status() == HttpResponseStatus.OK) {
-//                        return byteBufMono.flatMap(byteBuf ->
-//                                Mono.just(new DownloadFileResponse(lastKnownFileMetadata, ByteBufFlux.fromInbound(Mono.just(byteBuf)))));
-//                    }
-//                    else {
-//                        return byteBufMono.then(Mono.error(new FileSystemChangeException(relativeFilePath,
-//                                "Cannot download file " + linuxStyleFullFileInBucket + ", error: " + httpClientResponse.status().code())));
-//                    }
-//                }));
-
                 .responseConnection(((httpClientResponse, connection) -> {
                     if (httpClientResponse.status() == HttpResponseStatus.OK) {
-                        return Mono.just(new DownloadFileResponse(lastKnownFileMetadata, connection.inbound().receive()));
+                        HttpHeaders headers = httpClientResponse.responseHeaders();
+                        Integer fileLength = headers.getInt(HttpHeaderNames.CONTENT_LENGTH);
+                        Long lastModified = headers.getTimeMillis(HttpHeaderNames.LAST_MODIFIED);
+                        String md5Base64 = extractMd5Header(headers);
+
+                        long statusCheckedAt = Instant.now().toEpochMilli();
+                        FileMetadata currentFileMetadata = new FileMetadata(relativeFilePath, lastModified, md5Base64, statusCheckedAt, fileLength);
+                        return Mono.just(new DownloadFileResponse(currentFileMetadata, connection.inbound().receive()));
                     }
                     else {
                         return connection.inbound().receive().then(Mono.error(new FileSystemChangeException(relativeFilePath,

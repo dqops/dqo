@@ -50,4 +50,7 @@ public enum DqoJobType {
 
     @JsonProperty("delete stored data")
     DELETE_STORED_DATA,
+
+    @JsonProperty("repair stored data")
+    REPAIR_STORED_DATA,
 }

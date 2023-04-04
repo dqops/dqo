@@ -21,14 +21,15 @@ import ai.dqo.checks.CheckTimeScale;
 import ai.dqo.checks.CheckType;
 import ai.dqo.checks.column.recurring.accuracy.ColumnAccuracyMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.bool.ColumnBoolMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.consistency.ColumnConsistencyMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.datetime.ColumnDatetimeMonthlyRecurringSpec;
+import ai.dqo.checks.column.recurring.integrity.ColumnIntegrityMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.nulls.ColumnNullsMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.numeric.ColumnNumericMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.pii.ColumnPiiMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.sql.ColumnSqlMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.strings.ColumnStringsMonthlyRecurringSpec;
 import ai.dqo.checks.column.recurring.uniqueness.ColumnUniquenessMonthlyRecurringSpec;
-import ai.dqo.checks.column.recurring.integrity.ColumnIntegrityMonthlyRecurringSpec;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationProvider;
 import ai.dqo.metadata.groupings.TimeSeriesConfigurationSpec;
 import ai.dqo.metadata.groupings.TimeSeriesGradient;
@@ -67,6 +68,7 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
            put("bool", o -> o.bool);
            put("integrity", o -> o.integrity);
            put("accuracy", o -> o.accuracy);
+           put("consistency", o -> o.consistency);
 
         }
     };
@@ -120,6 +122,11 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
     private ColumnAccuracyMonthlyRecurringSpec accuracy;
+
+    @JsonPropertyDescription("Monthly recurring of consistency in the column")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    @JsonSerialize(using = IgnoreEmptyYamlSerializer.class)
+    private ColumnConsistencyMonthlyRecurringSpec consistency;
 
     /**
      * Returns the container of recurring for standard data quality checks.
@@ -299,6 +306,24 @@ public class ColumnMonthlyRecurringCategoriesSpec extends AbstractRootChecksCont
         this.setDirtyIf(!Objects.equals(this.accuracy, accuracy));
         this.accuracy = accuracy;
         this.propagateHierarchyIdToField(accuracy, "accuracy");
+    }
+
+    /**
+     * Returns the container of recurring for standard data quality checks.
+     * @return Container of row standard data quality recurring.
+     */
+    public ColumnConsistencyMonthlyRecurringSpec getConsistency() {
+        return consistency;
+    }
+
+    /**
+     * Sets the container of consistency data quality checks (recurring).
+     * @param consistency New consistency checks.
+     */
+    public void setConsistency(ColumnConsistencyMonthlyRecurringSpec consistency) {
+        this.setDirtyIf(!Objects.equals(this.consistency, consistency));
+        this.consistency = consistency;
+        this.propagateHierarchyIdToField(consistency, "consistency");
     }
 
     /**

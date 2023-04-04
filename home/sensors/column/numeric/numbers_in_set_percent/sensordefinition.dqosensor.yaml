@@ -1,3 +1,12 @@
+# yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/SensorDefinitionYaml-schema.json
 apiVersion: dqo/v1
 kind: sensor
-spec: {}
+spec:
+  fields:
+  - field_name: values
+    display_name: values
+    help_text: Provided list of values to match the data.
+    data_type: integer_list
+    sample_values:
+    - 2
+    - 3

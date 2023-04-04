@@ -18,10 +18,19 @@ package ai.dqo.metadata.fields;
 import ai.dqo.metadata.basespecs.AbstractDirtyTrackingSpecList;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
 
+import java.util.Collection;
+
 /**
  * List of parameter definitions - the parameters for custom sensors or custom rules.
  */
 public class ParameterDefinitionsListSpec extends AbstractDirtyTrackingSpecList<ParameterDefinitionSpec> {
+    public ParameterDefinitionsListSpec() {
+    }
+
+    public ParameterDefinitionsListSpec(Collection<ParameterDefinitionSpec> parameters) {
+        this.addAll(parameters);
+    }
+
     /**
      * Calls a visitor (using a visitor design pattern) that returns a result.
      *

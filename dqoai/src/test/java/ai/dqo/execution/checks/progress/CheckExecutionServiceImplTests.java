@@ -60,7 +60,6 @@ import ai.dqo.metadata.sources.*;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalker;
 import ai.dqo.metadata.traversal.HierarchyNodeTreeWalkerImpl;
 import ai.dqo.metadata.userhome.UserHome;
-import ai.dqo.rules.comparison.MaxCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MaxCountRule10ParametersSpec;
 import ai.dqo.rules.comparison.MinCountRule0ParametersSpec;
 import ai.dqo.rules.comparison.MinPercentRule99ParametersSpec;
@@ -91,18 +90,18 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         TableSpec tableSpec = this.tableWrapper.getSpec();
 
         // Table level checks
-        tableSpec.setChecks(new TableProfilingCheckCategoriesSpec());
-        tableSpec.getChecks().setStandard(new TableProfilingStandardChecksSpec());
-        tableSpec.getChecks().getStandard().setRowCount(new TableRowCountCheckSpec());
-        tableSpec.getChecks().getStandard().getRowCount().setError(new MinCountRule0ParametersSpec(5L));
+        tableSpec.setProfilingChecks(new TableProfilingCheckCategoriesSpec());
+        tableSpec.getProfilingChecks().setStandard(new TableProfilingStandardChecksSpec());
+        tableSpec.getProfilingChecks().getStandard().setRowCount(new TableRowCountCheckSpec());
+        tableSpec.getProfilingChecks().getStandard().getRowCount().setError(new MinCountRule0ParametersSpec(5L));
 
-        tableSpec.setRecurring(new TableRecurringSpec());
-        tableSpec.getRecurring().setDaily(new TableDailyRecurringCategoriesSpec());
-        tableSpec.getRecurring().getDaily().setSql(new TableSqlDailyRecurringSpec());
+        tableSpec.setRecurringChecks(new TableRecurringSpec());
+        tableSpec.getRecurringChecks().setDaily(new TableDailyRecurringCategoriesSpec());
+        tableSpec.getRecurringChecks().getDaily().setSql(new TableSqlDailyRecurringSpec());
         TableSqlConditionPassedPercentCheckSpec sqlCheckSpec = new TableSqlConditionPassedPercentCheckSpec();
         sqlCheckSpec.setError(new MinPercentRule99ParametersSpec(99.5));
         sqlCheckSpec.getParameters().setSqlCondition("nonexistent_column = 42");
-        tableSpec.getRecurring().getDaily().getSql().setDailySqlConditionPassedPercentOnTable(sqlCheckSpec);
+        tableSpec.getRecurringChecks().getDaily().getSql().setDailySqlConditionPassedPercentOnTable(sqlCheckSpec);
 
         // Column level checks
         ColumnSpec columnSpec = new ColumnSpec(ColumnTypeSnapshotSpec.fromType("INTEGER"));
@@ -112,7 +111,7 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         columnNullsCountCheckSpec.setError(new MaxCountRule10ParametersSpec());
         columnProfilingNullsChecksSpec.setNullsCount(columnNullsCountCheckSpec);
         columnProfilingCheckCategoriesSpec.setNulls(columnProfilingNullsChecksSpec);
-        columnSpec.setChecks(columnProfilingCheckCategoriesSpec);
+        columnSpec.setProfilingChecks(columnProfilingCheckCategoriesSpec);
         tableWrapper.getSpec().getColumns().put("col1", columnSpec);
 
         // Sut
@@ -186,11 +185,11 @@ public class CheckExecutionServiceImplTests extends BaseTest {
         Assertions.assertEquals(1, recurringSummary.getTotalChecksExecutedCount());
 
 
-        Assertions.assertEquals(1.0, profilingSummary.getValidResultsColumn().sum());
+        Assertions.assertEquals(2.0, profilingSummary.getValidResultsColumn().sum());
         Assertions.assertEquals(0.0, recurringSummary.getValidResultsColumn().sum());
         Assertions.assertEquals(0.0, partitionedSummary.getValidResultsColumn().sum());
 
-        Assertions.assertEquals(1, profilingSummary.getErrorSeverityIssuesCount());
+        Assertions.assertEquals(0, profilingSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(1, recurringSummary.getErrorSeverityIssuesCount());
         Assertions.assertEquals(0, partitionedSummary.getErrorSeverityIssuesCount());
 

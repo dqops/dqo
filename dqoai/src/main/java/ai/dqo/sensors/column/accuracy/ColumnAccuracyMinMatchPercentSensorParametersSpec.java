@@ -19,7 +19,7 @@ package ai.dqo.sensors.column.accuracy;
 import ai.dqo.metadata.fields.SampleValues;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
-import ai.dqo.sensors.column.AbstractColumnSensorParametersSpec;
+import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
@@ -34,8 +34,9 @@ import java.util.Objects;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class ColumnAccuracyMinMatchPercentSensorParametersSpec extends AbstractColumnSensorParametersSpec {
-    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyMinMatchPercentSensorParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractColumnSensorParametersSpec.FIELDS) {
+public class ColumnAccuracyMinMatchPercentSensorParametersSpec extends AbstractSensorParametersSpec {
+    public static final ChildHierarchyNodeFieldMapImpl<ColumnAccuracyMinMatchPercentSensorParametersSpec> FIELDS =
+            new ChildHierarchyNodeFieldMapImpl<>(AbstractSensorParametersSpec.FIELDS) {
         {
         }
     };

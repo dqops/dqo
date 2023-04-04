@@ -15,7 +15,6 @@
  */
 package ai.dqo.execution.checks.progress;
 
-import ai.dqo.execution.checks.progress.CheckExecutionProgressEvent;
 import ai.dqo.execution.sensors.SensorExecutionResult;
 import ai.dqo.execution.sensors.SensorExecutionRunParameters;
 import ai.dqo.metadata.sources.TableSpec;

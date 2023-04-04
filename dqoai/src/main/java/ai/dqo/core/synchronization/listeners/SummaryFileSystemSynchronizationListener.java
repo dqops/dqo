@@ -16,8 +16,8 @@
 package ai.dqo.core.synchronization.listeners;
 
 import ai.dqo.cli.terminal.TerminalWriter;
-import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

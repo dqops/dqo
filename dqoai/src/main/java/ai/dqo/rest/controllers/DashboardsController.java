@@ -17,12 +17,12 @@ package ai.dqo.rest.controllers;
 
 import ai.dqo.core.dqocloud.dashboards.LookerStudioUrlService;
 import ai.dqo.metadata.dashboards.DashboardSpec;
+import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
+import ai.dqo.metadata.dashboards.DashboardsFolderSpec;
 import ai.dqo.metadata.dqohome.DqoHome;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContext;
 import ai.dqo.metadata.storage.localfiles.dqohome.DqoHomeContextFactory;
 import ai.dqo.rest.models.dashboards.AuthenticatedDashboardModel;
-import ai.dqo.metadata.dashboards.DashboardsFolderListSpec;
-import ai.dqo.metadata.dashboards.DashboardsFolderSpec;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;

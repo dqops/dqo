@@ -63,7 +63,7 @@ public class CheckResultsDeleteServiceImpl implements CheckResultsDeleteService 
         if (filter.getTableSearchFilters().getSchemaTableName() == null) {
             tablesToDelete = this.parquetPartitionMetadataService.listTablesForConnection(
                     filter.getTableSearchFilters().getConnectionName(),
-                    CheckResultsSnapshot.createRuleResultsStorageSettings()
+                    CheckResultsSnapshot.createCheckResultsStorageSettings()
             );
         } else {
             tablesToDelete = new LinkedList<>();

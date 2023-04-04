@@ -44,6 +44,6 @@ public class RuleDocumentationModelFactoryImplTests extends BaseTest {
 
         Assertions.assertNotNull(ruleDocumentation.getDefinition());
         Assertions.assertEquals(2, ruleDocumentation.getDefinition().getSpec().getFields().size());
-        Assertions.assertTrue(ruleDocumentation.getDefinition().getSpec().getFields().stream().anyMatch(f -> Objects.equals("maxPercentAbove", f.getFieldName())));
+        Assertions.assertTrue(ruleDocumentation.getDefinition().getSpec().getFields().stream().anyMatch(f -> Objects.equals("max_percent_above", f.getFieldName())));
     }
 }

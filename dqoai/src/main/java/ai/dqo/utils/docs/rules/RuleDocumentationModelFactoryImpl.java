@@ -83,6 +83,7 @@ public class RuleDocumentationModelFactoryImpl implements RuleDocumentationModel
             System.err.println("Rule definition for Rule " + ruleDefinitionName + " was not found");
             return null;
         }
+        ruleDefinitionWrapper = ruleDefinitionWrapper.clone();
 
         documentationModel.setRuleExample(loadRuleExample(ruleParts[0], ruleParts[1]));
 

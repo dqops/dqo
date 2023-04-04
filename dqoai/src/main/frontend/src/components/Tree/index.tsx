@@ -17,7 +17,7 @@ const Tree = () => {
   const [selectedNode, setSelectedNode] = useState<CustomTreeNode>();
 
   const handleNodeClick = (node: CustomTreeNode) => {
-    switchTab(node);
+    switchTab(node, sourceRoute);
     changeActiveTab(node, true);
   };
 

@@ -15,8 +15,8 @@
  */
 package ai.dqo.core.synchronization.filesystems.local;
 
-import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 import ai.dqo.core.synchronization.contract.DqoRoot;
+import ai.dqo.core.synchronization.contract.SynchronizationRoot;
 
 /**
  * DQO file system that accesses local files (selected folders) in the DQO_USER_HOME.

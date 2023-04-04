@@ -22,7 +22,7 @@ import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.rules.comparison.MaxPercentRule1ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule2ParametersSpec;
 import ai.dqo.rules.comparison.MaxPercentRule5ParametersSpec;
-import ai.dqo.sensors.column.integrity.*;
+import ai.dqo.sensors.column.integrity.ColumnIntegrityForeignKeyMatchPercentSensorParametersSpec;
 import ai.dqo.utils.serialization.IgnoreEmptyYamlSerializer;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;

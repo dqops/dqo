@@ -19,13 +19,11 @@ import ai.dqo.metadata.fields.ParameterDefinitionSpec;
 import ai.dqo.utils.exceptions.DqoRuntimeException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
-import org.apache.arrow.flatbuf.Int;
 
 import java.time.Instant;
 import java.time.LocalDate;

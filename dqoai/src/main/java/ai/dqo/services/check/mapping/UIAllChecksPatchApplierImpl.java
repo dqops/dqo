@@ -133,7 +133,8 @@ public class UIAllChecksPatchApplierImpl implements UIAllChecksPatchApplier {
             UICheckContainerTypeModel checkTypeTarget = checkContainerPatchPair.getKey();
             UICheckContainerModel checkPatch = checkContainerPatchPair.getValue();
 
-            AbstractRootChecksContainerSpec toPatch = tableWrapper.getSpec().getTableCheckRootContainer(checkTypeTarget.getCheckType(), checkTypeTarget.getCheckTimeScale());
+            AbstractRootChecksContainerSpec toPatch = tableWrapper.getSpec().getTableCheckRootContainer(
+                    checkTypeTarget.getCheckType(), checkTypeTarget.getCheckTimeScale(), true);
             this.uiToSpecCheckMappingService.updateCheckContainerSpec(checkPatch, toPatch);
         }
     }

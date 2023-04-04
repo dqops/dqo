@@ -22,7 +22,6 @@ import org.apache.hadoop.fs.Path;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Objects;
 
 /**
  * Custom hadoop path to access files in the in-memory file system.

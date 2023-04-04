@@ -15,10 +15,10 @@
  */
 package ai.dqo.rules;
 
+import ai.dqo.checks.AbstractCheckSpec;
 import ai.dqo.metadata.basespecs.AbstractSpec;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import ai.dqo.metadata.id.HierarchyNodeResultVisitor;
-import ai.dqo.sensors.AbstractSensorParametersSpec;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;

@@ -62,6 +62,11 @@ public enum DqoRoot {
     rules,
 
     /**
+     * User custom check definition files.
+     */
+    checks,
+
+    /**
      * Local file indexes.
      */
     _indexes,
@@ -92,6 +97,10 @@ public enum DqoRoot {
 
         if (Objects.equals(folder1, BuiltInFolderNames.RULES)) {
             return rules;
+        }
+
+        if (Objects.equals(folder1, BuiltInFolderNames.CHECKS)) {
+            return checks;
         }
 
         if (Objects.equals(folder1, BuiltInFolderNames.INDEX)) {
