@@ -57,73 +57,80 @@ const ConnectionPage = () => {
   const { connection, tab: activeTab, checkTypes }: { connection: string, tab: string, checkTypes: string } = useParams();
   const [tabs, setTabs] = useState(checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs);
   const history = useHistory();
-  const { tabMap, setTabMap, activeTab: pageTab } = useTree();
+  const { tabMap, setTabMap, sourceRoute } = useTree();
+  const location = useLocation() as any;
+  const { import_schema, create_success } = qs.parse(location.search);
+  const { activeTab: pageTab, tabs: pageTabs } = useSelector((state: IRootState) => state.source[sourceRoute as CheckTypes || CheckTypes.SOURCES]);
+
+  const activePageTabContent = pageTabs.find((item) => item.url === pageTab);
+
   const {
     isUpdatedConnectionBasic,
     isUpdatedSchedule,
     isUpdatedComments,
     isUpdatedLabels,
     isUpdatedDataStreamsMapping
-  } = useSelector((state: IRootState) => state.connection);
-  const location = useLocation() as any;
-  const { import_schema, create_success } = qs.parse(location.search);
+  } = activePageTabContent?.state || {}
 
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.CONNECTION_DETAIL(checkTypes, connection, tab));
 
-    setTabMap({
-      ...tabMap,
-      [pageTab]: tab
-    });
+    // setTabMap({
+    //   ...tabMap,
+    //   [pageTab]: tab
+    // });
   };
 
   useEffect(() => {
-    setTabs(
-      tabs.map((item) =>
-        item.value === 'detail'
-          ? { ...item, isUpdated: isUpdatedConnectionBasic }
-          : item
-      )
-    );
+    if (isUpdatedConnectionBasic && tabs.length) {
+      console.log('isUpdatedConnectionBasic', isUpdatedConnectionBasic);
+      setTabs(
+        tabs.map((item) =>
+          item.value === 'detail'
+            ? { ...item, isUpdated: isUpdatedConnectionBasic }
+            : item
+        )
+      );
+    }
   }, [isUpdatedConnectionBasic]);
 
-  useEffect(() => {
-    setTabs(
-      tabs.map((item) =>
-        item.value === 'schedule'
-          ? { ...item, isUpdated: isUpdatedSchedule }
-          : item
-      )
-    );
-  }, [isUpdatedSchedule]);
-
-  useEffect(() => {
-    setTabs(
-      tabs.map((item) =>
-        item.value === 'comments'
-          ? { ...item, isUpdated: isUpdatedComments }
-          : item
-      )
-    );
-  }, [isUpdatedComments]);
-
-  useEffect(() => {
-    setTabs(
-      tabs.map((item) =>
-        item.value === 'labels' ? { ...item, isUpdated: isUpdatedLabels } : item
-      )
-    );
-  }, [isUpdatedLabels]);
-
-  useEffect(() => {
-    setTabs(
-      tabs.map((item) =>
-        item.value === 'data-streams'
-          ? { ...item, isUpdated: isUpdatedDataStreamsMapping }
-          : item
-      )
-    );
-  }, [isUpdatedDataStreamsMapping]);
+  // useEffect(() => {
+  //   setTabs(
+  //     tabs.map((item) =>
+  //       item.value === 'schedule'
+  //         ? { ...item, isUpdated: isUpdatedSchedule }
+  //         : item
+  //     )
+  //   );
+  // }, [isUpdatedSchedule, tabs]);
+  //
+  // useEffect(() => {
+  //   setTabs(
+  //     tabs.map((item) =>
+  //       item.value === 'comments'
+  //         ? { ...item, isUpdated: isUpdatedComments }
+  //         : item
+  //     )
+  //   );
+  // }, [isUpdatedComments, tabs]);
+  //
+  // useEffect(() => {
+  //   setTabs(
+  //     tabs.map((item) =>
+  //       item.value === 'labels' ? { ...item, isUpdated: isUpdatedLabels } : item
+  //     )
+  //   );
+  // }, [isUpdatedLabels, tabs]);
+  //
+  // useEffect(() => {
+  //   setTabs(
+  //     tabs.map((item) =>
+  //       item.value === 'data-streams'
+  //         ? { ...item, isUpdated: isUpdatedDataStreamsMapping }
+  //         : item
+  //     )
+  //   );
+  // }, [isUpdatedDataStreamsMapping, tabs]);
 
   useEffect(() => {
     setTabs(checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs)
@@ -145,6 +152,8 @@ const ConnectionPage = () => {
       setTabs(initCheckTabs)
     }
   }, [import_schema, checkTypes]);
+
+  console.log('tabs', tabs);
 
   return (
     <ConnectionLayout>

@@ -17,7 +17,7 @@
 import { Dispatch } from 'redux';
 
 import { ConnectionApiClient } from '../../services/apiClient';
-import { CONNECTION_ACTION } from '../types';
+import { CONNECTION_ACTION, SOURCE_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import {
   CommentSpec,
@@ -26,6 +26,7 @@ import {
   RecurringScheduleSpec
 } from '../../api';
 import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
+import { CheckTypes } from "../../shared/routes";
 
 export const getConnectionsRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTIONS
@@ -61,8 +62,10 @@ export const getConnectionBasicRequest = () => ({
   type: CONNECTION_ACTION.GET_CONNECTION_BASIC
 });
 
-export const getConnectionBasicSuccess = (data: ConnectionBasicModel) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_BASIC_SUCCESS,
+export const getConnectionBasicSuccess = (checkType: CheckTypes, activeTab: string, data: ConnectionBasicModel) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_BASIC_SUCCESS,
+  checkType,
+  activeTab,
   data
 });
 
@@ -72,22 +75,26 @@ export const getConnectionBasicFailed = (error: unknown) => ({
 });
 
 export const getConnectionBasic =
-  (connectionName: string) => async (dispatch: Dispatch) => {
+  (checkType: CheckTypes, activeTab: string, connectionName: string) => async (dispatch: Dispatch) => {
     dispatch(getConnectionBasicRequest());
     try {
       const res = await ConnectionApiClient.getConnectionBasic(connectionName);
-      dispatch(getConnectionBasicSuccess(res.data));
+      dispatch(getConnectionBasicSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getConnectionsFailed(err));
     }
   };
 
-export const updateConnectionBasicRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_BASIC
+export const updateConnectionBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_BASIC,
+  checkType,
+  activeTab,
 });
 
-export const updateConnectionBasicSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_BASIC_SUCCESS
+export const updateConnectionBasicSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_BASIC_SUCCESS,
+  checkType,
+  activeTab
 });
 
 export const updateConnectionBasicFailed = (error: unknown) => ({
@@ -96,12 +103,12 @@ export const updateConnectionBasicFailed = (error: unknown) => ({
 });
 
 export const updateConnectionBasic =
-  (connectionName: string, data: ConnectionBasicModel) =>
+  (checkTypes: CheckTypes, activeTab: string, connectionName: string, data: ConnectionBasicModel) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateConnectionBasicRequest());
+    dispatch(updateConnectionBasicRequest(checkTypes, activeTab));
     try {
       await ConnectionApiClient.updateConnectionBasic(connectionName, data);
-      dispatch(updateConnectionBasicSuccess());
+      dispatch(updateConnectionBasicSuccess(checkTypes, activeTab));
     } catch (err) {
       dispatch(updateConnectionBasicFailed(err));
     }
@@ -329,15 +336,21 @@ export const updateConnectionDefaultDataStreamsMapping =
   };
 
 export const setConnectionBasic = (
+  checkType: CheckTypes,
+  activeTab: string,
   connectionBasic?: ConnectionBasicModel
 ) => ({
-  type: CONNECTION_ACTION.SET_UPDATED_CONNECTION_BASIC,
-  connectionBasic
+  type: SOURCE_ACTION.SET_UPDATED_CONNECTION_BASIC,
+  checkType,
+  activeTab,
+  data: connectionBasic
 });
 
-export const setIsUpdatedConnectionBasic = (isUpdated: boolean) => ({
-  type: CONNECTION_ACTION.SET_IS_UPDATED_CONNECTION_BASIC,
-  isUpdated
+export const setIsUpdatedConnectionBasic = (checkType: CheckTypes, activeTab: string, isUpdated: boolean) => ({
+  type: SOURCE_ACTION.SET_IS_UPDATED_CONNECTION_BASIC,
+  checkType,
+  activeTab,
+  data: isUpdated
 });
 
 export const setUpdatedSchedule = (schedule?: RecurringScheduleSpec) => ({

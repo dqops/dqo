@@ -14,10 +14,13 @@
 /// limitations under the License.
 ///
 
-export * from './connection.types';
-export * from './schema.types';
-export * from './table.types';
-export * from './column.types';
-export * from './job.types';
-export * from './dashboard.types';
-export * from './source.types';
+export enum SOURCE_ACTION {
+  ADD_FIRST_LEVEL_TAB = 'SOURCE_ACTION/ADD_FIRST_LEVEL_TAB',
+  SET_ACTIVE_FIRST_LEVEL_TAB = 'SOURCE_ACTION/SET_ACTIVE_FIRST_LEVEL_TAB',
+  GET_CONNECTION_BASIC_SUCCESS = 'SOURCE_ACTION/GET_CONNECTION_BASIC_SUCCESS',
+  SET_UPDATED_CONNECTION_BASIC = 'SOURCE_ACTION/SET_UPDATED_CONNECTION_BASIC',
+
+  SET_IS_UPDATED_CONNECTION_BASIC = 'SOURCE_ACTION/SET_IS_UPDATED_CONNECTION_BASIC',
+  UPDATE_CONNECTION_BASIC = 'SOURCE_ACTION/UPDATE_CONNECTION_BASIC',
+  UPDATE_CONNECTION_BASIC_SUCCESS = 'SOURCE_ACTION/UPDATE_CONNECTION_BASIC_SUCCESS',
+}

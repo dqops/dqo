@@ -21,6 +21,8 @@ import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { findTreeNode } from '../utils/tree';
 import { CheckTypes, ROUTES } from "../shared/routes";
 import { useHistory, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { addFirstLevelTab } from "../redux/actions/source.actions";
 
 const TreeContext = React.createContext({} as any);
 
@@ -66,6 +68,7 @@ function TreeProvider(props: any) {
   const [sidebarWidth, setSidebarWidth] = useState(280);
   const [selectedTreeNode, setSelectedTreeNode] = useState<CustomTreeNode>();
   const history = useHistory();
+  const dispatch = useDispatch();
 
   const getConnections = async () => {
     const res: AxiosResponse<ConnectionBasicModel[]> =
@@ -831,12 +834,17 @@ function TreeProvider(props: any) {
     history.push(path);
   }
 
-  const switchTab = async (node: CustomTreeNode, sourceRoute: string) => {
+  const switchTab = async (node: CustomTreeNode, sourceRoute: CheckTypes) => {
     if (!node) return;
 
     setSelectedTreeNode(node);
     const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
+      dispatch(addFirstLevelTab(sourceRoute, {
+        url: ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || defaultConnectionTab),
+        state: {},
+        label: node.label
+      }));
       pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || defaultConnectionTab));
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       const connectionNode = findTreeNode(treeData, node.parentId ?? '');
@@ -956,7 +964,7 @@ function TreeProvider(props: any) {
     if (_activeTab) {
       const node = findTreeNode(treeData, _activeTab);
       if (node) {
-        switchTab(node, sourceRoute);
+        switchTab(node, sourceRoute as CheckTypes);
       }
     }
   }, [sourceRoute]);

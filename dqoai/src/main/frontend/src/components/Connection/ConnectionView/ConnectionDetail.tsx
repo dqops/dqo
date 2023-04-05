@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import {
+  ConnectionBasicModel,
   ConnectionRemoteModel,
   ConnectionRemoteModelConnectionStatusEnum,
   ConnectionSpecProviderTypeEnum
@@ -10,8 +11,8 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionBasic,
-  setIsUpdatedConnectionBasic,
   setConnectionBasic,
+  setIsUpdatedConnectionBasic,
   updateConnectionBasic
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
@@ -25,15 +26,23 @@ import ConfirmErrorModal from "../../Dashboard/DatabaseConnection/ConfirmErrorMo
 import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLConnection";
 import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
 import SqlServerConnection from "../../Dashboard/DatabaseConnection/SqlServerConnection";
+import { CheckTypes } from "../../../shared/routes";
 
 const ConnectionDetail = () => {
-  const { connection }: { connection: string } = useParams();
+  const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
 
-  const { connectionBasic, isUpdatedConnectionBasic } = useSelector(
-    (state: IRootState) => state.connection
+  const { tabs, activeTab = '' } = useSelector(
+    (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
   );
 
-  const { isUpdating } = useSelector((state: IRootState) => state.connection);
+  const firstLevelState = tabs.find((item) => item.url === activeTab)?.state || {};
+
+  const { connectionBasic, isUpdatedConnectionBasic, isUpdating }: {
+    connectionBasic?: ConnectionBasicModel
+    isUpdatedConnectionBasic?: boolean;
+    isUpdating?: boolean;
+  } = firstLevelState;
+
   const dispatch = useActionDispatch();
   const [isTesting, setIsTesting] = useState(false);
   const [testResult, setTestResult] = useState<ConnectionRemoteModel>();
@@ -43,18 +52,18 @@ const ConnectionDetail = () => {
 
   useEffect(() => {
     if (connectionBasic?.connection_name !== connection) {
-      dispatch(getConnectionBasic(connection));
+      dispatch(getConnectionBasic(checkTypes, activeTab, connection));
     }
   }, [connection]);
 
   const onChange = (obj: any) => {
     dispatch(
-      setConnectionBasic({
+      setConnectionBasic(checkTypes, activeTab, {
         ...connectionBasic,
         ...obj
       })
     );
-    dispatch(setIsUpdatedConnectionBasic(true));
+    dispatch(setIsUpdatedConnectionBasic(checkTypes, activeTab, true));
   };
 
   const onConfirmSave = async () => {
@@ -63,10 +72,14 @@ const ConnectionDetail = () => {
     }
 
     await dispatch(
-      updateConnectionBasic(connection, connectionBasic)
+      updateConnectionBasic(checkTypes, activeTab, connection, connectionBasic)
     );
-    await dispatch(getConnectionBasic(connection));
-    dispatch(setIsUpdatedConnectionBasic(false));
+
+    if (connectionBasic?.connection_name !== connection) {
+      dispatch(getConnectionBasic(checkTypes, activeTab, connection));
+    }
+
+    dispatch(setIsUpdatedConnectionBasic(checkTypes, activeTab, false));
     setShowConfirm(false);
   };
 

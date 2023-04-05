@@ -13,16 +13,22 @@ import { useSelector } from 'react-redux';
 import { IRootState } from '../../../redux/reducers';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useParams } from "react-router-dom";
+import { CheckTypes } from "../../../shared/routes";
 
 const ConnectionDataStream = () => {
-  const { connection }: { connection: string } = useParams();
+  const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
   const { connectionBasic, isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
     useSelector((state: IRootState) => state.connection);
+  const { tabs, activeTab } = useSelector(
+    (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
+  );
+
+  const firstLevelState = tabs.find((item) => item.url === activeTab)?.state || {};
 
   useEffect(() => {
     if (connectionBasic?.connection_name !== connection) {
-      dispatch(getConnectionBasic(connection));
+      dispatch(getConnectionBasic(checkTypes, activeTab || '', connection));
       dispatch(getConnectionDefaultDataStreamsMapping(connection));
     }
   }, [connection]);
