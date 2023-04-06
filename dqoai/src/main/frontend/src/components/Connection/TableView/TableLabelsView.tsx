@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import {
   getTableLabels,
   setUpdatedLabels,
@@ -10,14 +9,12 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ActionGroup from './TableActionGroup';
 import LabelsView from '../LabelsView';
 import { useParams } from "react-router-dom";
-import { getFirstLevelActiveTab } from "../../../redux/selectors";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 import { CheckTypes } from "../../../shared/routes";
 
 const TableLabelsView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
-  const { labels, isUpdating, isUpdatedLabels, tableBasic } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { labels, isUpdating, isUpdatedLabels, tableBasic } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 

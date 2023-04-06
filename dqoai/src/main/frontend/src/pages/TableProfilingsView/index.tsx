@@ -14,15 +14,13 @@ import { isEqual } from 'lodash';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import { useParams } from "react-router-dom";
-import { getFirstLevelActiveTab } from "../../redux/selectors";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
 
 const TableProfilingsView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
 
-  const { checksUI, isUpdating, loading } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { checksUI, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);

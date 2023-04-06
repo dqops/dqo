@@ -11,13 +11,12 @@ import {
   updateTableMonthlyPartitionedChecks
 } from '../../../redux/actions/table.actions';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../../api';
 import TableActionGroup from './TableActionGroup';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { useHistory, useParams } from "react-router-dom";
 import { CheckTypes, ROUTES } from "../../../shared/routes";
-import { getFirstLevelActiveTab } from "../../../redux/selectors";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 
 const initTabs = [
   {
@@ -47,7 +46,7 @@ const TablePartitionedChecksView = () => {
     isUpdatedMonthlyPartitionedChecks,
     isUpdating,
     loading,
-  } = useSelector((state: IRootState) => state.table);
+  } = useSelector(getFirstLevelState(checkTypes));
 
   useEffect(() => {
     if (

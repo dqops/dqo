@@ -6,7 +6,6 @@ import { useHistory, useParams } from "react-router-dom";
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import { useTree } from "../../contexts/treeContext";
 import { useSelector } from "react-redux";
-import { IRootState } from "../../redux/reducers";
 import TableDetails from "../../components/Connection/TableView/TableDetails";
 import ScheduleDetail from "../../components/Connection/TableView/ScheduleDetail";
 import ProfilingView from "../../components/Connection/TableView/ProfilingView";
@@ -18,6 +17,7 @@ import TableDataStream from "../../components/Connection/TableView/TableDataStre
 import TimestampsView from "../../components/Connection/TableView/TimestampsView";
 import { findTreeNode } from "../../utils/tree";
 import clsx from "clsx";
+import { getFirstLevelState } from "../../redux/selectors";
 
 const initTabs = [
   {
@@ -71,15 +71,12 @@ const navigations: NavigationMenu[] = [
 ];
 
 const TablePage = () => {
-  const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: string } = useParams();
+  const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: CheckTypes } = useParams();
   const {
     activeTab: pageTab,
     tabMap,
     setTabMap,
     treeData,
-    selectedTreeNode,
-    switchTab,
-    changeActiveTab
   } = useTree();
   const history = useHistory();
   const [tabs, setTabs] = useState(initTabs);
@@ -94,7 +91,7 @@ const TablePage = () => {
     isUpdatedMonthlyPartitionedChecks,
     isUpdatedSchedule,
     isUpdatedDataStreamsMapping
-  } = useSelector((state: IRootState) => state.table);
+  } = useSelector(getFirstLevelState(checkTypes));
   const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.RECURRING, [checkTypes]);
   const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITIONED, [checkTypes]);
   const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);

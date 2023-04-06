@@ -8,7 +8,6 @@ import {
 import BigqueryConnection from '../../Dashboard/DatabaseConnection/BigqueryConnection';
 import SnowflakeConnection from '../../Dashboard/DatabaseConnection/SnowflakeConnection';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import {
   getConnectionBasic,
   setConnectionBasic,

@@ -14,13 +14,11 @@ import { CheckResultOverviewApi } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import { CheckTypes } from "../../shared/routes";
-import { getFirstLevelActiveTab } from "../../redux/selectors";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 
 const TableDailyChecksView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
-  const { dailyRecurring, isUpdating, loading } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { dailyRecurring, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
@@ -13,14 +12,12 @@ import Button from '../../components/Button';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
-import { getFirstLevelActiveTab } from "../../redux/selectors";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 import { CheckTypes } from "../../shared/routes";
 
 const TableMonthlyChecksView = () => {
   const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
-  const { monthlyRecurring, isUpdating, loading } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { monthlyRecurring, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
