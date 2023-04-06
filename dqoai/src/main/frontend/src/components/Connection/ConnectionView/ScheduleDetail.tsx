@@ -6,13 +6,13 @@ import {
 } from '../../../redux/actions/connection.actions';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useParams } from "react-router-dom";
 import ScheduleView from "../../ScheduleView";
 import Tabs from "../../Tabs";
 import { CheckRunRecurringScheduleGroup } from "../../../shared/enums/scheduling.enum";
-import { useTree } from "../../../contexts/treeContext";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { CheckTypes } from "../../../shared/routes";
 
 const pageTabs = [
   {
@@ -38,26 +38,30 @@ const pageTabs = [
 ]
 
 const ScheduleDetail = () => {
-  const { connection }: { connection: string } = useParams();
+  const { connection, checkTypes }: { checkTypes: CheckTypes, connection: string } = useParams();
   const [tabs, setTabs] = useState(pageTabs);
   const [activeTab, setActiveTab] = useState<CheckRunRecurringScheduleGroup>(CheckRunRecurringScheduleGroup.profiling);
   const dispatch = useActionDispatch();
-  const { scheduleGroups } = useSelector(
-    (state: IRootState) => state.connection
-  );
+
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+
+  const { scheduleGroups, isUpdating }: {
+    scheduleGroups?: any;
+    isUpdating?: boolean;
+  } = useSelector(getFirstLevelState(checkTypes));
+
+
   const updatedSchedule = scheduleGroups?.[activeTab]?.updatedSchedule;
   const isUpdatedSchedule = scheduleGroups?.[activeTab]?.isUpdatedSchedule;
-  const { isUpdating } = useSelector((state: IRootState) => state.connection);
-  const { sourceRoute } = useTree();
 
   const onChangeTab = (tab: CheckRunRecurringScheduleGroup) => {
     setActiveTab(tab);
   }
 
   const handleChange = (obj: any) => {
-    dispatch(setIsUpdatedSchedulingGroup(activeTab, true));
+    dispatch(setIsUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, true));
     dispatch(
-      setUpdatedSchedulingGroup(activeTab, {
+      setUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, {
         ...updatedSchedule,
         ...obj
       })
@@ -66,7 +70,7 @@ const ScheduleDetail = () => {
 
   useEffect(() => {
     if (updatedSchedule === null || updatedSchedule === undefined) {
-      dispatch(getConnectionSchedulingGroup(connection, activeTab));
+      dispatch(getConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab));
     }
   }, [connection, activeTab, updatedSchedule]);
 
@@ -74,9 +78,9 @@ const ScheduleDetail = () => {
     if (updatedSchedule === null || updatedSchedule === undefined) {
       return;
     }
-    await dispatch(updateConnectionSchedulingGroup(connection, activeTab, updatedSchedule));
-    await dispatch(getConnectionSchedulingGroup(connection, activeTab));
-    dispatch(setIsUpdatedSchedulingGroup(activeTab, false));
+    await dispatch(updateConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab, updatedSchedule));
+    await dispatch(getConnectionSchedulingGroup(checkTypes, firstLevelActiveTab, connection, activeTab));
+    dispatch(setIsUpdatedSchedulingGroup(checkTypes, firstLevelActiveTab, activeTab, false));
   };
 
   useEffect(() => {
@@ -85,11 +89,11 @@ const ScheduleDetail = () => {
 
   useEffect(() => {
     setTabs(prev => prev.map(tab => ({ ...tab, isUpdate: false })))
-    dispatch(resetConnectionSchedulingGroup());
+    dispatch(resetConnectionSchedulingGroup(checkTypes, firstLevelActiveTab));
   }, [connection]);
 
   useEffect(() => {
-    if (sourceRoute === 'profiling') {
+    if (checkTypes === 'profiling') {
       setTabs([
         {
           label: 'Profiling',
@@ -97,7 +101,7 @@ const ScheduleDetail = () => {
         },
       ]);
       setActiveTab(CheckRunRecurringScheduleGroup.profiling);
-    } else if (sourceRoute === 'recurring') {
+    } else if (checkTypes === 'recurring') {
       setTabs([
         {
           label: 'Recurring Daily',
@@ -109,7 +113,7 @@ const ScheduleDetail = () => {
         },
       ]);
       setActiveTab(CheckRunRecurringScheduleGroup.recurring_daily);
-    } else if (sourceRoute === 'partitioned') {
+    } else if (checkTypes === 'partitioned') {
       setTabs([
         {
           label: 'Partitioned Daily',
@@ -146,7 +150,7 @@ const ScheduleDetail = () => {
       ]);
       setActiveTab(CheckRunRecurringScheduleGroup.profiling);
     }
-  }, [sourceRoute]);
+  }, [checkTypes]);
 
   return (
     <div className="py-4 px-8">

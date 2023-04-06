@@ -4,9 +4,7 @@ import SvgIcon from "../../components/SvgIcon";
 import Tabs from "../../components/Tabs";
 import { useHistory, useLocation, useParams } from "react-router-dom";
 import { CheckTypes, ROUTES } from "../../shared/routes";
-import { useTree } from "../../contexts/treeContext";
 import { useSelector } from "react-redux";
-import { IRootState } from "../../redux/reducers";
 import ConnectionDetail from "../../components/Connection/ConnectionView/ConnectionDetail";
 import ScheduleDetail from "../../components/Connection/ConnectionView/ScheduleDetail";
 import ConnectionCommentView from "../../components/Connection/ConnectionView/ConnectionCommentView";
@@ -15,6 +13,7 @@ import SourceSchemasView from "../../components/Connection/ConnectionView/Source
 import SchemasView from "../../components/Connection/ConnectionView/SchemasView";
 import ConnectionDataStream from "../../components/Connection/ConnectionView/ConnectionDataStream";
 import qs from 'query-string';
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 
 const initSourceTabs = [
   {
@@ -54,15 +53,11 @@ const initCheckTabs = [
 ];
 
 const ConnectionPage = () => {
-  const { connection, tab: activeTab, checkTypes }: { connection: string, tab: string, checkTypes: string } = useParams();
+  const { connection, tab: activeTab, checkTypes }: { connection: string, tab: string, checkTypes: CheckTypes } = useParams();
   const [tabs, setTabs] = useState(checkTypes === CheckTypes.SOURCES ? initSourceTabs : initCheckTabs);
   const history = useHistory();
-  const { tabMap, setTabMap, sourceRoute } = useTree();
   const location = useLocation() as any;
   const { import_schema, create_success } = qs.parse(location.search);
-  const { activeTab: pageTab, tabs: pageTabs } = useSelector((state: IRootState) => state.source[sourceRoute as CheckTypes || CheckTypes.SOURCES]);
-
-  const activePageTabContent = pageTabs.find((item) => item.url === pageTab);
 
   const {
     isUpdatedConnectionBasic,
@@ -70,7 +65,7 @@ const ConnectionPage = () => {
     isUpdatedComments,
     isUpdatedLabels,
     isUpdatedDataStreamsMapping
-  } = activePageTabContent?.state || {}
+  } = useSelector(getFirstLevelState(checkTypes));
 
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.CONNECTION_DETAIL(checkTypes, connection, tab));
@@ -152,8 +147,6 @@ const ConnectionPage = () => {
       setTabs(initCheckTabs)
     }
   }, [import_schema, checkTypes]);
-
-  console.log('tabs', tabs);
 
   return (
     <ConnectionLayout>

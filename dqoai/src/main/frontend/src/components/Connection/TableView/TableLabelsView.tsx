@@ -10,13 +10,16 @@ import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import ActionGroup from './TableActionGroup';
 import LabelsView from '../LabelsView';
 import { useParams } from "react-router-dom";
+import { getFirstLevelActiveTab } from "../../../redux/selectors";
+import { CheckTypes } from "../../../shared/routes";
 
 const TableLabelsView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
   const { labels, isUpdating, isUpdatedLabels, tableBasic } = useSelector(
     (state: IRootState) => state.table
   );
   const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (
@@ -25,19 +28,19 @@ const TableLabelsView = () => {
       tableBasic?.target?.schema_name !== schemaName ||
       tableBasic?.target?.table_name !== tableName
     ) {
-      dispatch(getTableLabels(connectionName, schemaName, tableName));
+      dispatch(getTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
     }
   }, [connectionName, schemaName, tableName, tableBasic]);
 
   const onUpdate = async () => {
     await dispatch(
-      updateTableLabels(connectionName, schemaName, tableName, labels)
+      updateTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, labels)
     );
-    await dispatch(getTableLabels(connectionName, schemaName, tableName));
+    await dispatch(getTableLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   };
 
   const handleChange = (value: string[]) => {
-    dispatch(setUpdatedLabels(value));
+    dispatch(setUpdatedLabels(checkTypes, firstLevelActiveTab, value));
   };
 
   return (

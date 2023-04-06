@@ -13,9 +13,11 @@ import Button from '../../components/Button';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
+import { CheckTypes } from "../../shared/routes";
+import { getFirstLevelActiveTab } from "../../redux/selectors";
 
 const TableDailyChecksView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
   const { dailyRecurring, isUpdating, loading } = useSelector(
     (state: IRootState) => state.table
   );
@@ -23,6 +25,7 @@ const TableDailyChecksView = () => {
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, 'daily').then((res) => {
@@ -35,7 +38,7 @@ const TableDailyChecksView = () => {
   }, [dailyRecurring]);
 
   useEffect(() => {
-    dispatch(getTableDailyRecurring(connectionName, schemaName, tableName));
+    dispatch(getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
@@ -43,6 +46,8 @@ const TableDailyChecksView = () => {
 
     await dispatch(
       updateTableDailyRecurring(
+        checkTypes,
+        firstLevelActiveTab,
         connectionName,
         schemaName,
         tableName,
@@ -50,7 +55,7 @@ const TableDailyChecksView = () => {
       )
     );
     await dispatch(
-      getTableDailyRecurring(connectionName, schemaName, tableName)
+      getTableDailyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
     );
     setIsUpdated(false);
   };

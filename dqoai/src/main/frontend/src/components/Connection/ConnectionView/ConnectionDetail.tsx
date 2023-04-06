@@ -27,21 +27,18 @@ import PostgreSQLConnection from "../../Dashboard/DatabaseConnection/PostgreSQLC
 import RedshiftConnection from "../../Dashboard/DatabaseConnection/RedshiftConnection";
 import SqlServerConnection from "../../Dashboard/DatabaseConnection/SqlServerConnection";
 import { CheckTypes } from "../../../shared/routes";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 
 const ConnectionDetail = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
 
-  const { tabs, activeTab = '' } = useSelector(
-    (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
-  );
-
-  const firstLevelState = tabs.find((item) => item.url === activeTab)?.state || {};
+  const activeTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const { connectionBasic, isUpdatedConnectionBasic, isUpdating }: {
     connectionBasic?: ConnectionBasicModel
     isUpdatedConnectionBasic?: boolean;
     isUpdating?: boolean;
-  } = firstLevelState;
+  } = useSelector(getFirstLevelState(checkTypes));
 
   const dispatch = useActionDispatch();
   const [isTesting, setIsTesting] = useState(false);

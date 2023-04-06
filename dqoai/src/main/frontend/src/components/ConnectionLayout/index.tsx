@@ -8,14 +8,14 @@ import { CheckTypes } from "../../shared/routes";
 import { CustomTreeNode } from "../../shared/interfaces";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootState } from "../../redux/reducers";
-import { setActiveFirstLevelTab } from "../../redux/actions/source.actions";
+import { closeFirstLevelTab, setActiveFirstLevelTab } from "../../redux/actions/source.actions";
 
 interface ConnectionLayoutProps {
   children: any;
 }
 
 const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
-  const { tabs, setActiveTab, closeTab, treeData, refreshNode, changeActiveTab, switchTab, activeNode, sourceRoute } = useTree();
+  const { changeActiveTab, activeNode, sourceRoute } = useTree();
 
   const { tabs: pageTabs, activeTab } = useSelector((state: IRootState) => state.source[sourceRoute as CheckTypes || CheckTypes.SOURCES]);
   const dispatch= useDispatch();
@@ -216,10 +216,11 @@ const ConnectionLayout = ({ children }: ConnectionLayoutProps) => {
 
   const handleChange = (value: string) => {
     dispatch(setActiveFirstLevelTab(sourceRoute, value));
-    // const node = findTreeNode(treeData, value);
-    // switchTab(node, sourceRoute);
-    // setActiveTab(value);
-  }
+  };
+
+  const closeTab = (value: string) => {
+    dispatch(closeFirstLevelTab(sourceRoute, value))
+  };
 
   const tabOptions = useMemo(() => {
     return pageTabs.map((item) => ({

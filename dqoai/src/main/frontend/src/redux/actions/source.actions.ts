@@ -33,3 +33,8 @@ export const setActiveFirstLevelTab = (checkType: CheckTypes, data: any) => ({
   data
 });
 
+export const closeFirstLevelTab = (checkType: CheckTypes, data: any) => ({
+  type: SOURCE_ACTION.CLOSE_FIRST_LEVEL_TAB,
+  checkType,
+  data,
+});

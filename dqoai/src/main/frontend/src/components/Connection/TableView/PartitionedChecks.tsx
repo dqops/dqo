@@ -16,7 +16,8 @@ import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../../a
 import TableActionGroup from './TableActionGroup';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { useHistory, useParams } from "react-router-dom";
-import { ROUTES } from "../../../shared/routes";
+import { CheckTypes, ROUTES } from "../../../shared/routes";
+import { getFirstLevelActiveTab } from "../../../redux/selectors";
 
 const initTabs = [
   {
@@ -30,12 +31,13 @@ const initTabs = [
 ];
 
 const TablePartitionedChecksView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName, tab, checkTypes }: { checkTypes: string, connection: string, schema: string, table: string, tab: string } = useParams();
+  const { connection: connectionName, schema: schemaName, table: tableName, tab, checkTypes }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, tab: string } = useParams();
   const [tabs, setTabs] = useState(initTabs);
   const [dailyCheckResultsOverview, setDailyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [monthlyCheckResultsOverview, setMonthlyCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const history = useHistory();
   const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const {
     tableBasic,
@@ -55,7 +57,7 @@ const TablePartitionedChecksView = () => {
       tableBasic?.target?.table_name !== tableName
     ) {
       dispatch(
-        getTableDailyPartitionedChecks(connectionName, schemaName, tableName)
+        getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
       );
     }
     if (
@@ -65,7 +67,7 @@ const TablePartitionedChecksView = () => {
       tableBasic?.target?.table_name !== tableName
     ) {
       dispatch(
-        getTableMonthlyPartitionedChecks(connectionName, schemaName, tableName)
+        getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
       );
     }
   }, [connectionName, schemaName, tableName, tableName, tableBasic]);
@@ -76,6 +78,8 @@ const TablePartitionedChecksView = () => {
 
       await dispatch(
         updateTableDailyPartitionedChecks(
+          checkTypes,
+          firstLevelActiveTab,
           connectionName,
           schemaName,
           tableName,
@@ -83,13 +87,15 @@ const TablePartitionedChecksView = () => {
         )
       );
       await dispatch(
-        getTableDailyPartitionedChecks(connectionName, schemaName, tableName)
+        getTableDailyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
       );
     } else {
       if (!monthlyPartitionedChecks) return;
 
       await dispatch(
         updateTableMonthlyPartitionedChecks(
+          checkTypes,
+          firstLevelActiveTab,
           connectionName,
           schemaName,
           tableName,
@@ -97,17 +103,17 @@ const TablePartitionedChecksView = () => {
         )
       );
       await dispatch(
-        getTableMonthlyPartitionedChecks(connectionName, schemaName, tableName)
+        getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
       );
     }
   };
 
   const onDailyPartitionedChecksChange = (ui: UICheckContainerModel) => {
-    dispatch(setUpdatedDailyPartitionedChecks(ui));
+    dispatch(setUpdatedDailyPartitionedChecks(checkTypes, firstLevelActiveTab, ui));
   };
 
   const onMonthlyPartitionedChecksChange = (ui: UICheckContainerModel) => {
-    dispatch(setUpdatedMonthlyPartitionedChecks(ui));
+    dispatch(setUpdatedMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, ui));
   };
 
   useEffect(() => {

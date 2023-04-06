@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
 import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import {
   getTableTimestamps, setUpdatedTablePartitioning,
   updateTableTimestamps
@@ -12,16 +11,17 @@ import { useParams } from "react-router-dom";
 import SectionWrapper from "../../Dashboard/SectionWrapper";
 import NumberInput from "../../NumberInput";
 import Checkbox from "../../Checkbox";
+import { CheckTypes } from "../../../shared/routes";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 
 const TimestampsView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
-  const { tablePartitioning, updatingTablePartitioning, isUpdatedTablePartitioning } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes:CheckTypes, connection: string, schema: string, table: string } = useParams();
+  const { tablePartitioning, updatingTablePartitioning, isUpdatedTablePartitioning } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const handleChangeTimestamps = (obj: any) => {
-    dispatch(setUpdatedTablePartitioning({
+    dispatch(setUpdatedTablePartitioning(checkTypes, firstLevelActiveTab, {
       ...tablePartitioning,
       timestamp_columns: {
         ...tablePartitioning?.timestamp_columns,
@@ -31,7 +31,7 @@ const TimestampsView = () => {
   };
 
   const handleChangeIncremental = (obj: any) => {
-    dispatch(setUpdatedTablePartitioning({
+    dispatch(setUpdatedTablePartitioning(checkTypes, firstLevelActiveTab,{
       ...tablePartitioning,
       incremental_time_window: {
         ...tablePartitioning?.incremental_time_window,
@@ -41,16 +41,16 @@ const TimestampsView = () => {
   };
 
   useEffect(() => {
-    dispatch(getTableTimestamps(connectionName, schemaName, tableName));
+    dispatch(getTableTimestamps(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (!tablePartitioning) return;
 
     await dispatch(
-      updateTableTimestamps(connectionName, schemaName, tableName, tablePartitioning)
+      updateTableTimestamps(checkTypes, firstLevelActiveTab,connectionName, schemaName, tableName, tablePartitioning)
     );
-    dispatch(getTableTimestamps(connectionName, schemaName, tableName));
+    dispatch(getTableTimestamps(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   };
 
   const isDisabled = !isUpdatedTablePartitioning;

@@ -13,9 +13,11 @@ import Button from '../../components/Button';
 import { CheckResultOverviewApi } from "../../services/apiClient";
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
+import { getFirstLevelActiveTab } from "../../redux/selectors";
+import { CheckTypes } from "../../shared/routes";
 
 const TableMonthlyChecksView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
   const { monthlyRecurring, isUpdating, loading } = useSelector(
     (state: IRootState) => state.table
   );
@@ -23,6 +25,7 @@ const TableMonthlyChecksView = () => {
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, 'monthly').then((res) => {
@@ -35,7 +38,7 @@ const TableMonthlyChecksView = () => {
   }, [monthlyRecurring]);
 
   useEffect(() => {
-    dispatch(getTableMonthlyRecurring(connectionName, schemaName, tableName));
+    dispatch(getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
@@ -43,6 +46,8 @@ const TableMonthlyChecksView = () => {
 
     await dispatch(
       updateTableMonthlyRecurring(
+        checkTypes,
+        firstLevelActiveTab,
         connectionName,
         schemaName,
         tableName,
@@ -52,7 +57,7 @@ const TableMonthlyChecksView = () => {
     setIsUpdated(false);
 
     await dispatch(
-      getTableMonthlyRecurring(connectionName, schemaName, tableName)
+      getTableMonthlyRecurring(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
     );
   };
 

@@ -10,32 +10,29 @@ import {
 } from '../../../redux/actions/connection.actions';
 import { DataStreamMappingSpec } from '../../../api';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import ConnectionActionGroup from './ConnectionActionGroup';
 import { useParams } from "react-router-dom";
 import { CheckTypes } from "../../../shared/routes";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 
 const ConnectionDataStream = () => {
   const { connection, checkTypes }: { connection: string, checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
   const { connectionBasic, isUpdating, updatedDataStreamsMapping, isUpdatedDataStreamsMapping } =
-    useSelector((state: IRootState) => state.connection);
-  const { tabs, activeTab } = useSelector(
-    (state: IRootState) => state.source[checkTypes || CheckTypes.SOURCES]
-  );
+    useSelector(getFirstLevelState(checkTypes));
 
-  const firstLevelState = tabs.find((item) => item.url === activeTab)?.state || {};
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (connectionBasic?.connection_name !== connection) {
-      dispatch(getConnectionBasic(checkTypes, activeTab || '', connection));
-      dispatch(getConnectionDefaultDataStreamsMapping(connection));
+      dispatch(getConnectionBasic(checkTypes, firstLevelActiveTab, connection));
+      dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
     }
   }, [connection]);
 
   useEffect(() => {
     if (!updatedDataStreamsMapping || (connectionBasic && connectionBasic?.connection_name !== connection)) {
-      dispatch(getConnectionDefaultDataStreamsMapping(connection));
+      dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
     }
   }, [connection, connectionBasic]);
 
@@ -45,17 +42,19 @@ const ConnectionDataStream = () => {
     }
     await dispatch(
       updateConnectionDefaultDataStreamsMapping(
+        checkTypes,
+        firstLevelActiveTab,
         connection,
         updatedDataStreamsMapping
       )
     );
-    await dispatch(getConnectionDefaultDataStreamsMapping(connection));
-    dispatch(setIsUpdatedDataStreamsMapping(false));
+    await dispatch(getConnectionDefaultDataStreamsMapping(checkTypes, firstLevelActiveTab, connection));
+    dispatch(setIsUpdatedDataStreamsMapping(checkTypes, firstLevelActiveTab,false));
   };
 
   const handleChange = (value: DataStreamMappingSpec) => {
-    dispatch(setUpdatedDataStreamsMapping(value));
-    dispatch(setIsUpdatedDataStreamsMapping(true));
+    dispatch(setUpdatedDataStreamsMapping(checkTypes, firstLevelActiveTab, value));
+    dispatch(setIsUpdatedDataStreamsMapping(checkTypes, firstLevelActiveTab,true));
   };
 
   return (

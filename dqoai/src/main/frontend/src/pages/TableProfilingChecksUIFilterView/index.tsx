@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTableProfilingChecksUIFilter, setTableUpdatedCheckUiFilter,
@@ -12,15 +11,16 @@ import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import Button from "../../components/Button";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckTypes } from "../../shared/routes";
 
 const TableProfilingChecksUIFilterView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName, category, checkName }: { connection: string, schema: string, table: string, category: string, checkName: string } = useParams();
-  const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, category, checkName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, category: string, checkName: string } = useParams();
+  const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getTableProfilingChecksOverview(connectionName, schemaName, tableName).then((res) => {
@@ -30,7 +30,7 @@ const TableProfilingChecksUIFilterView = () => {
 
   useEffect(() => {
     dispatch(
-      getTableProfilingChecksUIFilter(connectionName, schemaName, tableName, category, checkName)
+      getTableProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
@@ -43,13 +43,13 @@ const TableProfilingChecksUIFilterView = () => {
       checksUIFilter
     );
     dispatch(
-      getTableProfilingChecksUIFilter(connectionName, schemaName, tableName, category, checkName)
+      getTableProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName)
     );
     setIsUpdating(false);
   };
 
   const onChange = (data: UICheckContainerModel) => {
-    dispatch(setTableUpdatedCheckUiFilter(data));
+    dispatch(setTableUpdatedCheckUiFilter(checkTypes, firstLevelActiveTab, data));
   };
 
   return (
