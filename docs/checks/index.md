@@ -6,7 +6,7 @@
 
 
 ###availability  
-
+Checks whether the table is accessible and available for use.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -19,7 +19,7 @@
 
 
 ###sql  
-
+Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -52,7 +52,7 @@
 
 
 ###standard  
-
+Evaluates the overall quality of the table by verifying the number of rows.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -67,7 +67,7 @@
 
 
 ###timeliness  
-
+Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -188,7 +188,7 @@
 
 
 ###bool  
-
+Calculates the percentage of data in a Boolean format.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -227,7 +227,7 @@
 
 
 ###datetime  
-
+Validates that the data in a date or time column is in the expected format and within predefined ranges.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -251,7 +251,7 @@
 
 
 ###integrity  
-
+Checks the referential integrity of a column against a column in another table.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -275,7 +275,7 @@
 
 
 ###nulls  
-
+Checks for the presence of null or missing values in a column.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -317,7 +317,7 @@
 
 
 ###numeric  
-
+Validates that the data in a numeric column is in the expected format or within predefined ranges.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -573,7 +573,7 @@
 
 
 ###pii  
-
+Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -669,7 +669,7 @@
 
 
 ###sql  
-
+Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -702,7 +702,7 @@
 
 
 ###strings  
-
+Validates that the data in a string column match the expected format or pattern.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
@@ -1032,7 +1032,7 @@
 
 
 ###uniqueness  
-
+Counts the number or percent of duplicate or unique values in a column.
 
 | Check name | Check type | Description |
 |------------|------------|-------------|
