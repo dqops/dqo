@@ -74,22 +74,22 @@ import java.util.*;
 @Component
 public class CheckDocumentationModelFactoryImpl implements CheckDocumentationModelFactory {
     private static final Map<String, String> TABLE_CATEGORY_HELP = new LinkedHashMap<>() {{
-       put("Standard", "Evaluates the overall quality of the table by verifying the number of rows.");
-       put("Timeliness", "Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.");
-       put("SQL", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
-       put("Availability", "Checks whether the table is accessible and available for use.");
+       put("standard", "Evaluates the overall quality of the table by verifying the number of rows.");
+       put("timeliness", "Assesses the freshness and staleness of data, as well as data ingestion delay and reload lag for partitioned data.");
+       put("sql", "Validate data against user-defined SQL queries at the table level. Checks in this group allow for validation that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
+       put("availability", "Checks whether the table is accessible and available for use.");
     }};
 
     private static final Map<String, String> COLUMN_CATEGORY_HELP = new LinkedHashMap<>() {{
-        put("Nulls", "Checks for the presence of null or missing values in a column.");
-        put("Numeric", "Validates that the data in a numeric column is in the expected format or within predefined ranges.");
-        put("Strings", "Validates that the data in a string column match the expected format or pattern.");
-        put("Uniqueness", "Counts the number or percent of duplicate or unique values in a column.");
-        put("DateTime", "Validates that the data in a date or time column is in the expected format and within predefined ranges.");
-        put("PII", "Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.");
-        put("SQL", "Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
-        put("Bool", "Calculates the percentage of data in a Boolean format.");
-        put("Integrity", "Checks the referential integrity of a column against a column in another table.");
+        put("nulls", "Checks for the presence of null or missing values in a column.");
+        put("numeric", "Validates that the data in a numeric column is in the expected format or within predefined ranges.");
+        put("strings", "Validates that the data in a string column match the expected format or pattern.");
+        put("uniqueness", "Counts the number or percent of duplicate or unique values in a column.");
+        put("datetime", "Validates that the data in a date or time column is in the expected format and within predefined ranges.");
+        put("pii", "Checks for the presence of sensitive or personally identifiable information (PII) in a column such as email, phone, zip code, IP4 and IP6 addresses.");
+        put("sql", "Validate data against user-defined SQL queries at the column level. Checks in this group allows to validate that the set percentage of rows passed a custom SQL expression or that the custom SQL expression is not outside the set range.");
+        put("bool", "Calculates the percentage of data in a Boolean format.");
+        put("integrity", "Checks the referential integrity of a column against a column in another table.");
     }};
 
     private static final CommentFormatter commentFormatter = new CommentFormatter();

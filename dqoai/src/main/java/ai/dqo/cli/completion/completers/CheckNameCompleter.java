@@ -47,7 +47,7 @@ public class CheckNameCompleter implements Iterable<String> {
     @Override
     public Iterator<String> iterator() {
         BeanFactory beanFactory = StaticBeanFactory.getBeanFactory();
-        if (builtInCheckNames == null) {
+        if (builtInCheckNames == null && beanFactory != null) {
             SimilarCheckMatchingService similarCheckMatchingService = beanFactory.getBean(SimilarCheckMatchingService.class);
             SimilarChecksContainer similarTableChecks = similarCheckMatchingService.findSimilarTableChecks(new TableSpec());
             SimilarChecksContainer similarColumnChecks = similarCheckMatchingService.findSimilarColumnChecks(new TableSpec(), new ColumnSpec());
