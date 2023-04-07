@@ -14,6 +14,11 @@ Verifies that the percentage of valid UUID in a column does not exceed the minim
 |----------|----------|----------|-----------|-------------|
 |string_valid_uuid_percent|profiling| |[string_valid_uuid_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-uuid-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_valid_uuid_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -579,6 +584,11 @@ Verifies that the percentage of valid UUID in a column does not exceed the minim
 |----------|----------|----------|-----------|-------------|
 |daily_string_valid_uuid_percent|recurring|daily|[string_valid_uuid_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-uuid-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_valid_uuid_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1147,6 +1157,11 @@ Verifies that the percentage of valid UUID in a column does not exceed the minim
 |----------|----------|----------|-----------|-------------|
 |monthly_string_valid_uuid_percent|recurring|monthly|[string_valid_uuid_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-uuid-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_valid_uuid_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1715,6 +1730,11 @@ Verifies that the percentage of valid UUID in a column does not exceed the minim
 |----------|----------|----------|-----------|-------------|
 |daily_partition_valid_uuid_percent|partitioned|daily|[string_valid_uuid_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-uuid-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_valid_uuid_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2284,6 +2304,11 @@ Verifies that the percentage of valid UUID in a column does not exceed the minim
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_valid_uuid_percent|partitioned|monthly|[string_valid_uuid_percent](../../../../reference/sensors/column/strings-column-sensors/#string-valid-uuid-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_valid_uuid_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

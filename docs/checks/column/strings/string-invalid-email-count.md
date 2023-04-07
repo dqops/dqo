@@ -14,6 +14,11 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
 |----------|----------|----------|-----------|-------------|
 |string_invalid_email_count|profiling| |[string_invalid_email_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_invalid_email_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -519,6 +524,11 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
 |----------|----------|----------|-----------|-------------|
 |daily_string_invalid_email_count|recurring|daily|[string_invalid_email_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_invalid_email_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1027,6 +1037,11 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
 |----------|----------|----------|-----------|-------------|
 |monthly_string_invalid_email_count|recurring|monthly|[string_invalid_email_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_invalid_email_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1535,6 +1550,11 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_invalid_email_count|partitioned|daily|[string_invalid_email_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_invalid_email_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2044,6 +2064,11 @@ Verifies that the number of invalid emails in a column does not exceed the maxim
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_invalid_email_count|partitioned|monthly|[string_invalid_email_count](../../../../reference/sensors/column/strings-column-sensors/#string-invalid-email-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_invalid_email_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

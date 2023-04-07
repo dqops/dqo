@@ -14,6 +14,11 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |----------|----------|----------|-----------|-------------|
 |sql_aggregate_expr_column|profiling| |[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=sql_aggregate_expr_column
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -368,6 +373,11 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |----------|----------|----------|-----------|-------------|
 |daily_sql_aggregate_expr_column|recurring|daily|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_sql_aggregate_expr_column
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -725,6 +735,11 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |----------|----------|----------|-----------|-------------|
 |monthly_sql_aggregate_expr_column|recurring|monthly|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_sql_aggregate_expr_column
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1082,6 +1097,11 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |----------|----------|----------|-----------|-------------|
 |daily_partition_sql_aggregate_expr_column|partitioned|daily|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_sql_aggregate_expr_column
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1439,6 +1459,11 @@ Verifies that a custom aggregated SQL expression (MIN, MAX, etc.) is not outside
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_sql_aggregate_expr_column|partitioned|monthly|[sql_aggregated_expression](../../../../reference/sensors/column/sql-column-sensors/#sql-aggregated-expression)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_sql_aggregate_expr_column
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

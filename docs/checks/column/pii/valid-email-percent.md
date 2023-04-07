@@ -14,6 +14,11 @@ Verifies that the percentage of valid emails in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |valid_email_percent|profiling| |[valid_email_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=valid_email_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -489,6 +494,11 @@ Verifies that the percentage of valid emails in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |daily_valid_email_percent|recurring|daily|[valid_email_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_valid_email_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -967,6 +977,11 @@ Verifies that the percentage of valid emails in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |monthly_valid_email_percent|recurring|monthly|[valid_email_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_valid_email_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1445,6 +1460,11 @@ Verifies that the percentage of valid emails in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |daily_partition_valid_email_percent|partitioned|daily|[valid_email_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_valid_email_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1923,6 +1943,11 @@ Verifies that the percentage of valid emails in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_valid_email_percent|partitioned|monthly|[valid_email_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-email-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_valid_email_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

@@ -14,6 +14,11 @@ Verifies that the percentage of difference in max of a column in a table and max
 |----------|----------|----------|-----------|-------------|
 |max_match_percent|profiling| |[max_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#max-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=max_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -398,6 +403,11 @@ Verifies that the percentage of difference in max of a column in a table and max
 |----------|----------|----------|-----------|-------------|
 |daily_max_match_percent|recurring|daily|[max_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#max-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_max_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -785,6 +795,11 @@ Verifies that the percentage of difference in max of a column in a table and max
 |----------|----------|----------|-----------|-------------|
 |monthly_max_match_percent|recurring|monthly|[max_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#max-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_max_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

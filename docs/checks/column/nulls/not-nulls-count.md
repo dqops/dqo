@@ -14,6 +14,11 @@ Verifies that the number of not null values in a column does not exceed the maxi
 |----------|----------|----------|-----------|-------------|
 |not_nulls_count|profiling| |[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=not_nulls_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -407,6 +412,11 @@ Verifies that the number of not null values in a column does not exceed the maxi
 |----------|----------|----------|-----------|-------------|
 |daily_not_nulls_count|recurring|daily|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_not_nulls_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -803,6 +813,11 @@ Verifies that the number of not null values in a column does not exceed the maxi
 |----------|----------|----------|-----------|-------------|
 |monthly_not_nulls_count|recurring|monthly|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_not_nulls_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1199,6 +1214,11 @@ Verifies that the number of not null values in a column does not exceed the set 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_not_nulls_count|partitioned|daily|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_not_nulls_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1596,6 +1616,11 @@ Verifies that the number of not null values in a column does not exceed the set 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_not_nulls_count|partitioned|monthly|[not_null_count](../../../../reference/sensors/column/nulls-column-sensors/#not-null-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_not_nulls_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

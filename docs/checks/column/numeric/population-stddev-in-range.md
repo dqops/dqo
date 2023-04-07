@@ -14,6 +14,11 @@ Verifies that the population standard deviation of all values in a column is not
 |----------|----------|----------|-----------|-------------|
 |population_stddev_in_range|profiling| |[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=population_stddev_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -408,6 +413,11 @@ Verifies that the population standard deviation of all values in a column is not
 |----------|----------|----------|-----------|-------------|
 |daily_population_stddev_in_range|recurring|daily|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_population_stddev_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -805,6 +815,11 @@ Verifies that the population standard deviation of all values in a column is not
 |----------|----------|----------|-----------|-------------|
 |monthly_population_stddev_in_range|recurring|monthly|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_population_stddev_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1202,6 +1217,11 @@ Verifies that the population standard deviation of all values in a column is not
 |----------|----------|----------|-----------|-------------|
 |daily_partition_population_stddev_in_range|partitioned|daily|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_population_stddev_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1600,6 +1620,11 @@ Verifies that the population standard deviation of all values in a column is not
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_population_stddev_in_range|partitioned|monthly|[population_stddev](../../../../reference/sensors/column/numeric-column-sensors/#population-stddev)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_population_stddev_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

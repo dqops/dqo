@@ -14,6 +14,11 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |string_most_popular_values|profiling| |[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_most_popular_values
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1278,6 +1283,11 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_string_most_popular_values|recurring|daily|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_most_popular_values
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2545,6 +2555,11 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_string_most_popular_values|recurring|monthly|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_most_popular_values
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -3812,6 +3827,11 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_most_popular_values|partitioned|daily|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_most_popular_values
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -5080,6 +5100,11 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_most_popular_values|partitioned|monthly|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_most_popular_values
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

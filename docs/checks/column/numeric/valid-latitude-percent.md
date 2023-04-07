@@ -14,6 +14,11 @@ Verifies that the percentage of valid latitude values in a column does not excee
 |----------|----------|----------|-----------|-------------|
 |valid_latitude_percent|profiling| |[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=valid_latitude_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -499,6 +504,11 @@ Verifies that the percentage of valid latitude values in a column does not excee
 |----------|----------|----------|-----------|-------------|
 |daily_valid_latitude_percent|recurring|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_valid_latitude_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -987,6 +997,11 @@ Verifies that the percentage of valid latitude values in a column does not excee
 |----------|----------|----------|-----------|-------------|
 |monthly_valid_latitude_percent|recurring|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_valid_latitude_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1475,6 +1490,11 @@ Verifies that the percentage of valid latitude values in a column does not excee
 |----------|----------|----------|-----------|-------------|
 |daily_partition_valid_latitude_percent|partitioned|daily|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_valid_latitude_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1964,6 +1984,11 @@ Verifies that the percentage of valid latitude values in a column does not excee
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_valid_latitude_percent|partitioned|monthly|[valid_latitude_percent](../../../../reference/sensors/column/numeric-column-sensors/#valid-latitude-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_valid_latitude_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

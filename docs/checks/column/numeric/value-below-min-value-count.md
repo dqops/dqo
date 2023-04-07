@@ -14,6 +14,11 @@ The check counts those values with value below the one provided by the user in a
 |----------|----------|----------|-----------|-------------|
 |value_below_min_value_count|profiling| |[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=value_below_min_value_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -507,6 +512,11 @@ The check counts those values with value below the one provided by the user in a
 |----------|----------|----------|-----------|-------------|
 |daily_value_below_min_value_count|recurring|daily|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_value_below_min_value_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1003,6 +1013,11 @@ The check counts those values with value below the one provided by the user in a
 |----------|----------|----------|-----------|-------------|
 |monthly_value_below_min_value_count|recurring|monthly|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_value_below_min_value_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1499,6 +1514,11 @@ The check counts those values with value below the one provided by the user in a
 |----------|----------|----------|-----------|-------------|
 |daily_partition_value_below_min_value_count|partitioned|daily|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_value_below_min_value_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1996,6 +2016,11 @@ The check counts those values with value below the one provided by the user in a
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_value_below_min_value_count|partitioned|monthly|[value_below_min_value_count](../../../../reference/sensors/column/numeric-column-sensors/#value-below-min-value-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_value_below_min_value_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

@@ -14,6 +14,11 @@ Verifies that the number of numbers from set in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |numbers_in_set_count|profiling| |[numbers_in_set_count](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=numbers_in_set_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -751,6 +756,11 @@ Verifies that the number of Numbers from set in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |daily_numbers_in_set_count|recurring|daily|[numbers_in_set_count](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_numbers_in_set_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1491,6 +1501,11 @@ Verifies that the number of Numbers from set in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |monthly_numbers_in_set_count|recurring|monthly|[numbers_in_set_count](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_numbers_in_set_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2231,6 +2246,11 @@ Verifies that the number of Numbers from set in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |daily_partition_numbers_in_set_count|partitioned|daily|[numbers_in_set_count](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_numbers_in_set_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2972,6 +2992,11 @@ Verifies that the number of Numbers from set in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_numbers_in_set_count|partitioned|monthly|[numbers_in_set_count](../../../../reference/sensors/column/numeric-column-sensors/#numbers-in-set-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_numbers_in_set_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

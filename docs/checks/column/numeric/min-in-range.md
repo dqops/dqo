@@ -14,6 +14,11 @@ Verifies that the minimal value in a column is not outside the set range.
 |----------|----------|----------|-----------|-------------|
 |min_in_range|profiling| |[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=min_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -408,6 +413,11 @@ Verifies that the minimal value in a column is not outside the set range. Stores
 |----------|----------|----------|-----------|-------------|
 |daily_min_in_range|recurring|daily|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_min_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -805,6 +815,11 @@ Verifies that the minimal value in a column does not exceed the set range. Store
 |----------|----------|----------|-----------|-------------|
 |monthly_min_in_range|recurring|monthly|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_min_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1202,6 +1217,11 @@ Verifies that the minimal value in a column is not outside the set range. Create
 |----------|----------|----------|-----------|-------------|
 |daily_partition_min_in_range|partitioned|daily|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_min_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1600,6 +1620,11 @@ Verifies that the minimal value in a column is not outside the set range. Create
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_min_in_range|partitioned|monthly|[min_value](../../../../reference/sensors/column/range-column-sensors/#min-value)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_min_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

@@ -14,6 +14,11 @@ Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - times
 |----------|----------|----------|-----------|-------------|
 |string_datatype_detect|profiling| |[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_datatype_detect
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1572,6 +1577,11 @@ Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - times
 |----------|----------|----------|-----------|-------------|
 |daily_string_datatype_detect|recurring|daily|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_datatype_detect
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -3133,6 +3143,11 @@ Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - times
 |----------|----------|----------|-----------|-------------|
 |monthly_string_datatype_detect|recurring|monthly|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_datatype_detect
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -4694,6 +4709,11 @@ Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - times
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_datatype_detect|partitioned|daily|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_datatype_detect
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -6255,6 +6275,11 @@ Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - times
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_datatype_detect|partitioned|monthly|[string_datatype_detect](../../../../reference/sensors/column/strings-column-sensors/#string-datatype-detect)|[value_changed](../../../../reference/rules/comparison/#value-changed)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_datatype_detect
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

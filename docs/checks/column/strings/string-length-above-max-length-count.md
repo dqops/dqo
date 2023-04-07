@@ -14,6 +14,11 @@ The check counts those strings with length above the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |string_length_above_max_length_count|profiling| |[string_length_above_max_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_length_above_max_length_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -613,6 +618,11 @@ The check counts those strings with length above the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |daily_string_length_above_max_length_count|recurring|daily|[string_length_above_max_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_length_above_max_length_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1215,6 +1225,11 @@ The check counts those strings with length above the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |monthly_string_length_above_max_length_count|recurring|monthly|[string_length_above_max_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_length_above_max_length_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1817,6 +1832,11 @@ The check counts those strings with length above the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_length_above_max_length_count|partitioned|daily|[string_length_above_max_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_length_above_max_length_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2420,6 +2440,11 @@ The check counts those strings with length above the one provided by the user in
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_length_above_max_length_count|partitioned|monthly|[string_length_above_max_length_count](../../../../reference/sensors/column/strings-column-sensors/#string-length-above-max-length-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_length_above_max_length_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

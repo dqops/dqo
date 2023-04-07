@@ -14,6 +14,11 @@ Verifies that the number of strings surrounded by whitespace in a column does no
 |----------|----------|----------|-----------|-------------|
 |string_surrounded_by_whitespace_count|profiling| |[string_surrounded_by_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_surrounded_by_whitespace_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -647,6 +652,11 @@ Verifies that the number of strings surrounded by whitespace in a column does no
 |----------|----------|----------|-----------|-------------|
 |daily_string_surrounded_by_whitespace_count|recurring|daily|[string_surrounded_by_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_surrounded_by_whitespace_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1283,6 +1293,11 @@ Verifies that the number of strings surrounded by whitespace in a column does no
 |----------|----------|----------|-----------|-------------|
 |monthly_string_surrounded_by_whitespace_count|recurring|monthly|[string_surrounded_by_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_surrounded_by_whitespace_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1919,6 +1934,11 @@ Verifies that the number of strings surrounded by whitespace in a column does no
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_surrounded_by_whitespace_count|partitioned|daily|[string_surrounded_by_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_surrounded_by_whitespace_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2556,6 +2576,11 @@ Verifies that the number of strings surrounded by whitespace in a column does no
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_surrounded_by_whitespace_count|partitioned|monthly|[string_surrounded_by_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_surrounded_by_whitespace_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

@@ -14,6 +14,11 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |----------|----------|----------|-----------|-------------|
 |string_parsable_to_float_percent|profiling| |[string_parsable_to_float_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_parsable_to_float_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -503,6 +508,11 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |----------|----------|----------|-----------|-------------|
 |daily_string_parsable_to_float_percent|recurring|daily|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_parsable_to_float_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -995,6 +1005,11 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |----------|----------|----------|-----------|-------------|
 |monthly_string_parsable_to_float_percent|recurring|monthly|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_parsable_to_float_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1487,6 +1502,11 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_parsable_to_float_percent|partitioned|daily|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_parsable_to_float_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1980,6 +2000,11 @@ Verifies that the percentage of parsable to float string in a column does not ex
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_parsable_to_float_percent|partitioned|monthly|[string_parsable_to_float_percent](../../../../reference/sensors/column/strings-column-sensors/#string-parsable-to-float-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_parsable_to_float_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

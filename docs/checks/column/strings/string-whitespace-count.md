@@ -14,6 +14,11 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |string_whitespace_count|profiling| |[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_whitespace_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -645,6 +650,11 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |daily_string_whitespace_count|recurring|daily|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_whitespace_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1279,6 +1289,11 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |monthly_string_whitespace_count|recurring|monthly|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_whitespace_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1913,6 +1928,11 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_whitespace_count|partitioned|daily|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_whitespace_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2548,6 +2568,11 @@ Verifies that the number of whitespace strings in a column does not exceed the m
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_whitespace_count|partitioned|monthly|[string_whitespace_count](../../../../reference/sensors/column/strings-column-sensors/#string-whitespace-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_whitespace_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

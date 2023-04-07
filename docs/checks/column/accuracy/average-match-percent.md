@@ -14,6 +14,11 @@ Verifies that the percentage of difference in average of a column in a table and
 |----------|----------|----------|-----------|-------------|
 |average_match_percent|profiling| |[average_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#average-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=average_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -398,6 +403,11 @@ Verifies that the percentage of difference in average of a column in a table and
 |----------|----------|----------|-----------|-------------|
 |daily_average_match_percent|recurring|daily|[average_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#average-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_average_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -785,6 +795,11 @@ Verifies that the percentage of difference in average of a column in a table and
 |----------|----------|----------|-----------|-------------|
 |monthly_average_match_percent|recurring|monthly|[average_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#average-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_average_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

@@ -14,6 +14,11 @@ Verifies that the percentage of rows that contains valid IP4 address in a column
 |----------|----------|----------|-----------|-------------|
 |contains_ip4_percent|profiling| |[contains_ip4_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip4-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=contains_ip4_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -489,6 +494,11 @@ Verifies that the percentage of rows that contains IP4 address in a column does 
 |----------|----------|----------|-----------|-------------|
 |daily_contains_ip4_percent|recurring|daily|[contains_ip4_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip4-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_contains_ip4_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -967,6 +977,11 @@ Verifies that the percentage of rows that contains IP4 address in a column does 
 |----------|----------|----------|-----------|-------------|
 |monthly_contains_ip4_percent|recurring|monthly|[contains_ip4_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip4-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_contains_ip4_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1445,6 +1460,11 @@ Verifies that the percentage of rows that contains IP4 address in a column does 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_contains_ip4_percent|partitioned|daily|[contains_ip4_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip4-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_contains_ip4_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1923,6 +1943,11 @@ Verifies that the percentage of rows that contains IP4 address in a column does 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_contains_ip4_percent|partitioned|monthly|[contains_ip4_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-ip4-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_contains_ip4_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

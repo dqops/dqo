@@ -14,6 +14,11 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 |----------|----------|----------|-----------|-------------|
 |string_surrounded_by_whitespace_percent|profiling| |[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_surrounded_by_whitespace_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -709,6 +714,11 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 |----------|----------|----------|-----------|-------------|
 |daily_string_surrounded_by_whitespace_percent|recurring|daily|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_surrounded_by_whitespace_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1407,6 +1417,11 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 |----------|----------|----------|-----------|-------------|
 |monthly_string_surrounded_by_whitespace_percent|recurring|monthly|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_surrounded_by_whitespace_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2105,6 +2120,11 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_surrounded_by_whitespace_percent|partitioned|daily|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_surrounded_by_whitespace_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2804,6 +2824,11 @@ Verifies that the percentage of strings surrounded by whitespace in a column doe
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_surrounded_by_whitespace_percent|partitioned|monthly|[string_surrounded_by_whitespace_percent](../../../../reference/sensors/column/strings-column-sensors/#string-surrounded-by-whitespace-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_surrounded_by_whitespace_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

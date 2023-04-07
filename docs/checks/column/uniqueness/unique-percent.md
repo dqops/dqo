@@ -14,6 +14,11 @@ Verifies that the percentage of unique values in a column does not exceed the mi
 |----------|----------|----------|-----------|-------------|
 |unique_percent|profiling| |[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=unique_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -479,6 +484,11 @@ Verifies that the percentage of unique values in a column does not exceed the mi
 |----------|----------|----------|-----------|-------------|
 |daily_unique_percent|recurring|daily|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_unique_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -947,6 +957,11 @@ Verifies that the percentage of unique values in a column does not exceed the mi
 |----------|----------|----------|-----------|-------------|
 |monthly_unique_percent|recurring|monthly|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_unique_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1415,6 +1430,11 @@ Verifies that the percentage of unique values in a column does not exceed the mi
 |----------|----------|----------|-----------|-------------|
 |daily_partition_unique_percent|partitioned|daily|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_unique_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1884,6 +1904,11 @@ Verifies that the percentage of unique values in a column does not exceed the mi
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_unique_percent|partitioned|monthly|[unique_percent](../../../../reference/sensors/column/uniqueness-column-sensors/#unique-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_unique_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

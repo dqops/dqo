@@ -14,6 +14,11 @@ Verifies that the percentage of values from range in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |values_in_range_integers_percent|profiling| |[values_in_range_integers_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=values_in_range_integers_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -517,6 +522,11 @@ Verifies that the percentage of values from range in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_values_in_range_integers_percent|recurring|daily|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_values_in_range_integers_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1023,6 +1033,11 @@ Verifies that the percentage of values from range in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_values_in_range_integers_percent|recurring|monthly|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_values_in_range_integers_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1529,6 +1544,11 @@ Verifies that the percentage of values from range in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_partition_values_in_range_integers_percent|partitioned|daily|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_values_in_range_integers_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2036,6 +2056,11 @@ Verifies that the percentage of values from range in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_values_in_range_integers_percent|partitioned|monthly|[values_in_range_integers_percent](../../../../reference/sensors/column/numeric-column-sensors/#values-in-range-integers-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_values_in_range_integers_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
