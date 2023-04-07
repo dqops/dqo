@@ -14,6 +14,11 @@ The check counts percentage of those strings with length below the one provided 
 |----------|----------|----------|-----------|-------------|
 |string_length_below_min_length_percent|profiling| |[string_length_below_min_length_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_length_below_min_length_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -673,6 +678,11 @@ The check counts percentage of those strings with length below the one provided 
 |----------|----------|----------|-----------|-------------|
 |daily_string_length_below_min_length_percent|recurring|daily|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_length_below_min_length_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1335,6 +1345,11 @@ The check counts percentage of those strings with length below the one provided 
 |----------|----------|----------|-----------|-------------|
 |monthly_string_length_below_min_length_percent|recurring|monthly|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_length_below_min_length_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1997,6 +2012,11 @@ The check counts percentage of those strings with length below the one provided 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_length_below_min_length_percent|partitioned|daily|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_length_below_min_length_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2660,6 +2680,11 @@ The check counts percentage of those strings with length below the one provided 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_length_below_min_length_percent|partitioned|monthly|[string_length_below_min_length_percent](../../../../reference/sensors/column/strings-column-sensors/#string-length-below-min-length-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_length_below_min_length_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

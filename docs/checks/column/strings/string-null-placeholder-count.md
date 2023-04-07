@@ -14,6 +14,11 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |string_null_placeholder_count|profiling| |[string_null_placeholder_count](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_null_placeholder_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -611,6 +616,11 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |daily_string_null_placeholder_count|recurring|daily|[string_null_placeholder_count](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_null_placeholder_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1211,6 +1221,11 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |monthly_string_null_placeholder_count|recurring|monthly|[string_null_placeholder_count](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_null_placeholder_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1811,6 +1826,11 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_null_placeholder_count|partitioned|daily|[string_null_placeholder_count](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_null_placeholder_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2412,6 +2432,11 @@ Verifies that the number of null placeholders in a column does not exceed the ma
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_null_placeholder_count|partitioned|monthly|[string_null_placeholder_count](../../../../reference/sensors/column/strings-column-sensors/#string-null-placeholder-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_null_placeholder_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

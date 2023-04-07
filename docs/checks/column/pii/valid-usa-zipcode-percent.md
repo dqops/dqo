@@ -14,6 +14,11 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |valid_usa_zipcode_percent|profiling| |[valid_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-usa-zipcode-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=valid_usa_zipcode_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -497,6 +502,11 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |daily_valid_usa_zipcode_percent|recurring|daily|[valid_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-usa-zipcode-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_valid_usa_zipcode_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -983,6 +993,11 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |monthly_valid_usa_zipcode_percent|recurring|monthly|[valid_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-usa-zipcode-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_valid_usa_zipcode_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1469,6 +1484,11 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |daily_partition_valid_usa_zipcode_percent|partitioned|daily|[valid_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-usa-zipcode-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_valid_usa_zipcode_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1955,6 +1975,11 @@ Verifies that the percentage of valid USA zip code in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_valid_usa_zipcode_percent|partitioned|monthly|[valid_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#valid-usa-zipcode-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_valid_usa_zipcode_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

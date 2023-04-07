@@ -1,46 +1,46 @@
-**min match percent** checks  
+**row count match percent** checks  
 
 **Description**  
-Column level check that ensures that there are no more than a maximum percentage of difference of min of a table column and of a min of another table column.
+Column level check that ensures that there are no more than a maximum percentage of difference of row count of a table column and of an row count of another table column.
 
 ___
 
-## **min match percent**  
+## **row count match percent**  
   
 **Check description**  
-Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number.  
+Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|min_match_percent|profiling| |[min_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#min-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
+|row_count_match_percent|profiling| |[row_count_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#row-count-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=min_match_percent
+dqo.ai> check enable -c=connection_name -ch=row_count_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=min_match_percent
+dqo.ai> check run -ch=row_count_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=min_match_percent
+dqo.ai> check run -c=connection_name -ch=row_count_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=min_match_percent
+dqo.ai> check run -c=connection_name -t=table_name -ch=row_count_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=min_match_percent
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=row_count_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
       profiling_checks:
         accuracy:
-          min_match_percent:
+          row_count_match_percent:
             parameters:
               referenced_table: dim_customer
               referenced_column: customer_id
@@ -67,7 +67,7 @@ spec:
     target_column:
       profiling_checks:
         accuracy:
-          min_match_percent:
+          row_count_match_percent:
             parameters:
               referenced_table: dim_customer
               referenced_column: customer_id
@@ -99,10 +99,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -111,10 +111,10 @@ spec:
     ```
     SELECT
         (SELECT
-            MIN(referenced_table.`customer_id`)
+            COUNT(referenced_table.`customer_id`)
         FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table.`target_column`) AS actual_value
+        COUNT(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
 ### **Snowflake**
@@ -129,10 +129,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -143,10 +143,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table."customer_id")
+            COUNT(referenced_table."customer_id")
         FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table."target_column") AS actual_value
+        COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **PostgreSQL**
@@ -161,10 +161,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -175,10 +175,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table."customer_id")
+            COUNT(referenced_table."customer_id")
         FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table."target_column") AS actual_value
+        COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **Redshift**
@@ -193,10 +193,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -207,10 +207,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table."customer_id")
+            COUNT(referenced_table."customer_id")
         FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table."target_column") AS actual_value
+        COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
@@ -239,7 +239,7 @@ spec:
         target_column:
           profiling_checks:
             accuracy:
-              min_match_percent:
+              row_count_match_percent:
                 parameters:
                   referenced_table: dim_customer
                   referenced_column: customer_id
@@ -276,10 +276,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -287,10 +287,10 @@ spec:
         ```
         SELECT
             (SELECT
-                MIN(referenced_table.`customer_id`)
+                COUNT(referenced_table.`customer_id`)
             FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table.`target_column`) AS actual_value
+            COUNT(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
     **Snowflake**  
@@ -305,10 +305,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -318,10 +318,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table."customer_id")
+                COUNT(referenced_table."customer_id")
             FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table."target_column") AS actual_value
+            COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     **PostgreSQL**  
@@ -336,10 +336,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -349,10 +349,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table."customer_id")
+                COUNT(referenced_table."customer_id")
             FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table."target_column") AS actual_value
+            COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     **Redshift**  
@@ -367,10 +367,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -380,10 +380,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table."customer_id")
+                COUNT(referenced_table."customer_id")
             FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table."target_column") AS actual_value
+            COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     
@@ -394,43 +394,43 @@ spec:
 
 ___
 
-## **daily min match percent**  
+## **daily row count match percent**  
   
 **Check description**  
-Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.  
+Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_min_match_percent|recurring|daily|[min_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#min-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
+|daily_row_count_match_percent|recurring|daily|[row_count_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#row-count-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=daily_min_match_percent
+dqo.ai> check enable -c=connection_name -ch=daily_row_count_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_min_match_percent
+dqo.ai> check run -ch=daily_row_count_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_min_match_percent
+dqo.ai> check run -c=connection_name -ch=daily_row_count_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_min_match_percent
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_row_count_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_min_match_percent
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_row_count_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
       recurring_checks:
         daily:
           accuracy:
-            daily_min_match_percent:
+            daily_row_count_match_percent:
               parameters:
                 referenced_table: dim_customer
                 referenced_column: customer_id
@@ -458,7 +458,7 @@ spec:
       recurring_checks:
         daily:
           accuracy:
-            daily_min_match_percent:
+            daily_row_count_match_percent:
               parameters:
                 referenced_table: dim_customer
                 referenced_column: customer_id
@@ -490,10 +490,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -502,10 +502,10 @@ spec:
     ```
     SELECT
         (SELECT
-            MIN(referenced_table.`customer_id`)
+            COUNT(referenced_table.`customer_id`)
         FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table.`target_column`) AS actual_value
+        COUNT(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
 ### **Snowflake**
@@ -520,10 +520,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -534,10 +534,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table."customer_id")
+            COUNT(referenced_table."customer_id")
         FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table."target_column") AS actual_value
+        COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **PostgreSQL**
@@ -552,10 +552,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -566,10 +566,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table."customer_id")
+            COUNT(referenced_table."customer_id")
         FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table."target_column") AS actual_value
+        COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **Redshift**
@@ -584,10 +584,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -598,10 +598,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table."customer_id")
+            COUNT(referenced_table."customer_id")
         FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table."target_column") AS actual_value
+        COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
@@ -631,7 +631,7 @@ spec:
           recurring_checks:
             daily:
               accuracy:
-                daily_min_match_percent:
+                daily_row_count_match_percent:
                   parameters:
                     referenced_table: dim_customer
                     referenced_column: customer_id
@@ -668,10 +668,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -679,10 +679,10 @@ spec:
         ```
         SELECT
             (SELECT
-                MIN(referenced_table.`customer_id`)
+                COUNT(referenced_table.`customer_id`)
             FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table.`target_column`) AS actual_value
+            COUNT(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
     **Snowflake**  
@@ -697,10 +697,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -710,10 +710,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table."customer_id")
+                COUNT(referenced_table."customer_id")
             FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table."target_column") AS actual_value
+            COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     **PostgreSQL**  
@@ -728,10 +728,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -741,10 +741,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table."customer_id")
+                COUNT(referenced_table."customer_id")
             FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table."target_column") AS actual_value
+            COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     **Redshift**  
@@ -759,10 +759,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -772,10 +772,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table."customer_id")
+                COUNT(referenced_table."customer_id")
             FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table."target_column") AS actual_value
+            COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     
@@ -786,43 +786,43 @@ spec:
 
 ___
 
-## **monthly min match percent**  
+## **monthly row count match percent**  
   
 **Check description**  
-Verifies that the percentage of difference in min of a column in a table and min of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.  
+Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_min_match_percent|recurring|monthly|[min_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#min-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
+|monthly_row_count_match_percent|recurring|monthly|[row_count_match_percent](../../../../reference/sensors/column/accuracy-column-sensors/#row-count-match-percent)|[diff_percent](../../../../reference/rules/comparison/#diff-percent)|
   
 **Enable check (Shell)**  
 To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
 ```
-dqo.ai> check enable -c=connection_name -ch=monthly_min_match_percent
+dqo.ai> check enable -c=connection_name -ch=monthly_row_count_match_percent
 ```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_min_match_percent
+dqo.ai> check run -ch=monthly_row_count_match_percent
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_min_match_percent
+dqo.ai> check run -c=connection_name -ch=monthly_row_count_match_percent
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_min_match_percent
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_row_count_match_percent
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_min_match_percent
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_row_count_match_percent
 ```
 **Check structure (Yaml)**
 ```yaml
       recurring_checks:
         monthly:
           accuracy:
-            monthly_min_match_percent:
+            monthly_row_count_match_percent:
               parameters:
                 referenced_table: dim_customer
                 referenced_column: customer_id
@@ -850,7 +850,7 @@ spec:
       recurring_checks:
         monthly:
           accuracy:
-            monthly_min_match_percent:
+            monthly_row_count_match_percent:
               parameters:
                 referenced_table: dim_customer
                 referenced_column: customer_id
@@ -882,10 +882,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -894,10 +894,10 @@ spec:
     ```
     SELECT
         (SELECT
-            MIN(referenced_table.`customer_id`)
+            COUNT(referenced_table.`customer_id`)
         FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table.`target_column`) AS actual_value
+        COUNT(analyzed_table.`target_column`) AS actual_value
     FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     ```
 ### **Snowflake**
@@ -912,10 +912,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -926,10 +926,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table."customer_id")
+            COUNT(referenced_table."customer_id")
         FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table."target_column") AS actual_value
+        COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **PostgreSQL**
@@ -944,10 +944,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -958,10 +958,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table."customer_id")
+            COUNT(referenced_table."customer_id")
         FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table."target_column") AS actual_value
+        COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **Redshift**
@@ -976,10 +976,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+            COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
         FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
         ) AS expected_value,
-        MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+        COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
     FROM {{ lib.render_target_table() }} AS analyzed_table
     {{- lib.render_where_clause() -}}
     ```
@@ -990,10 +990,10 @@ spec:
     
     SELECT
         (SELECT
-            MIN(referenced_table."customer_id")
+            COUNT(referenced_table."customer_id")
         FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
         ) AS expected_value,
-        MIN(analyzed_table."target_column") AS actual_value
+        COUNT(analyzed_table."target_column") AS actual_value
     FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     ```
 ### **Configuration with a data stream segmentation**  
@@ -1023,7 +1023,7 @@ spec:
           recurring_checks:
             monthly:
               accuracy:
-                monthly_min_match_percent:
+                monthly_row_count_match_percent:
                   parameters:
                     referenced_table: dim_customer
                     referenced_column: customer_id
@@ -1060,10 +1060,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -1071,10 +1071,10 @@ spec:
         ```
         SELECT
             (SELECT
-                MIN(referenced_table.`customer_id`)
+                COUNT(referenced_table.`customer_id`)
             FROM `your-google-project-id`.`<target_schema>`.`dim_customer` AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table.`target_column`) AS actual_value
+            COUNT(analyzed_table.`target_column`) AS actual_value
         FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         ```
     **Snowflake**  
@@ -1089,10 +1089,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -1102,10 +1102,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table."customer_id")
+                COUNT(referenced_table."customer_id")
             FROM "your_snowflake_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table."target_column") AS actual_value
+            COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     **PostgreSQL**  
@@ -1120,10 +1120,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -1133,10 +1133,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table."customer_id")
+                COUNT(referenced_table."customer_id")
             FROM "your_postgresql_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table."target_column") AS actual_value
+            COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     **Redshift**  
@@ -1151,10 +1151,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
+                COUNT(referenced_table.{{ lib.quote_identifier(parameters.referenced_column) }})
             FROM {{ render_referenced_table(parameters.referenced_table) }} AS referenced_table
             ) AS expected_value,
-            MIN({{ lib.render_target_column('analyzed_table')}}) AS actual_value
+            COUNT({{ lib.render_target_column('analyzed_table')}}) AS actual_value
         FROM {{ lib.render_target_table() }} AS analyzed_table
         {{- lib.render_where_clause() -}}
         ```
@@ -1164,10 +1164,10 @@ spec:
         
         SELECT
             (SELECT
-                MIN(referenced_table."customer_id")
+                COUNT(referenced_table."customer_id")
             FROM "your_redshift_database"."<target_schema>"."dim_customer" AS referenced_table
             ) AS expected_value,
-            MIN(analyzed_table."target_column") AS actual_value
+            COUNT(analyzed_table."target_column") AS actual_value
         FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         ```
     

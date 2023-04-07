@@ -14,6 +14,11 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
 |----------|----------|----------|-----------|-------------|
 |row_count|profiling| |[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=row_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -393,6 +398,11 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
 |----------|----------|----------|-----------|-------------|
 |daily_row_count|recurring|daily|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_row_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -775,6 +785,11 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
 |----------|----------|----------|-----------|-------------|
 |monthly_row_count|recurring|monthly|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_row_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1157,6 +1172,11 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
 |----------|----------|----------|-----------|-------------|
 |daily_partition_row_count|partitioned|daily|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_row_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1540,6 +1560,11 @@ Verifies that the number of rows in a table does not exceed the minimum accepted
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_min_row_count|partitioned|monthly|[row_count](../../../../reference/sensors/table/standard-table-sensors/#row-count)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_min_row_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

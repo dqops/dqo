@@ -14,6 +14,11 @@ Verifies that the percentage of strings matching the name regex in a column does
 |----------|----------|----------|-----------|-------------|
 |string_match_name_regex_percent|profiling| |[string_match_name_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-name-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_match_name_regex_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -575,6 +580,11 @@ Verifies that the percentage of strings matching the name format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |daily_string_match_name_regex_percent|recurring|daily|[string_match_name_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-name-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_match_name_regex_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1139,6 +1149,11 @@ Verifies that the percentage of strings matching the name regex in a column does
 |----------|----------|----------|-----------|-------------|
 |monthly_string_match_name_regex_percent|recurring|monthly|[string_match_name_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-name-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_match_name_regex_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1703,6 +1718,11 @@ Verifies that the percentage of strings matching the name format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_match_name_regex_percent|partitioned|daily|[string_match_name_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-name-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_match_name_regex_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2268,6 +2288,11 @@ Verifies that the percentage of strings matching the name format regex in a colu
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_match_name_regex_percent|partitioned|monthly|[string_match_name_regex_percent](../../../../reference/sensors/column/strings-column-sensors/#string-match-name-regex-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_match_name_regex_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

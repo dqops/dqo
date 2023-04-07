@@ -14,6 +14,11 @@ Verifies that the number of negative values in a column does not exceed the maxi
 |----------|----------|----------|-----------|-------------|
 |negative_count|profiling| |[negative_count](../../../../reference/sensors/column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=negative_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -499,6 +504,11 @@ Verifies that the number of negative values in a column does not exceed the maxi
 |----------|----------|----------|-----------|-------------|
 |daily_negative_count|recurring|daily|[negative_count](../../../../reference/sensors/column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_negative_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -987,6 +997,11 @@ Verifies that the number of negative values in a column does not exceed the maxi
 |----------|----------|----------|-----------|-------------|
 |monthly_negative_count|recurring|monthly|[negative_count](../../../../reference/sensors/column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_negative_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1475,6 +1490,11 @@ Verifies that the number of negative values in a column does not exceed the maxi
 |----------|----------|----------|-----------|-------------|
 |daily_partition_negative_count|partitioned|daily|[negative_count](../../../../reference/sensors/column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_negative_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1964,6 +1984,11 @@ Verifies that the number of negative values in a column does not exceed the maxi
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_negative_count|partitioned|monthly|[negative_count](../../../../reference/sensors/column/numeric-column-sensors/#negative-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_negative_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

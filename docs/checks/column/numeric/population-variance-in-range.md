@@ -14,6 +14,11 @@ Verifies that the population variance of all values in a column is not outside t
 |----------|----------|----------|-----------|-------------|
 |population_variance_in_range|profiling| |[population_variance](../../../../reference/sensors/column/numeric-column-sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=population_variance_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -408,6 +413,11 @@ Verifies that the population variance of all values in a column is not outside t
 |----------|----------|----------|-----------|-------------|
 |daily_population_variance_in_range|recurring|daily|[population_variance](../../../../reference/sensors/column/numeric-column-sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_population_variance_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -805,6 +815,11 @@ Verifies that the population variance of all values in a column is not outside t
 |----------|----------|----------|-----------|-------------|
 |monthly_population_variance_in_range|recurring|monthly|[population_variance](../../../../reference/sensors/column/numeric-column-sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_population_variance_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1202,6 +1217,11 @@ Verifies that the population Variance of all values in a column is not outside t
 |----------|----------|----------|-----------|-------------|
 |daily_partition_population_variance_in_range|partitioned|daily|[population_variance](../../../../reference/sensors/column/numeric-column-sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_population_variance_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1600,6 +1620,11 @@ Verifies that the population variance of all values in a column is not outside t
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_population_variance_in_range|partitioned|monthly|[population_variance](../../../../reference/sensors/column/numeric-column-sensors/#population-variance)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_population_variance_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

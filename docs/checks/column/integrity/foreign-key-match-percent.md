@@ -14,6 +14,11 @@ Verifies that the percentage of values in a column that matches values in anothe
 |----------|----------|----------|-----------|-------------|
 |foreign_key_match_percent|profiling| |[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=foreign_key_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -538,6 +543,11 @@ Verifies that the percentage of values in a column that matches values in anothe
 |----------|----------|----------|-----------|-------------|
 |daily_foreign_key_match_percent|recurring|daily|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_foreign_key_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1065,6 +1075,11 @@ Verifies that the percentage of values in a column that matches values in anothe
 |----------|----------|----------|-----------|-------------|
 |monthly_foreign_key_match_percent|recurring|monthly|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_foreign_key_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1592,6 +1607,11 @@ Verifies that the percentage of values in a column that matches values in anothe
 |----------|----------|----------|-----------|-------------|
 |daily_partition_foreign_key_match_percent|partitioned|daily|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_foreign_key_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2119,6 +2139,11 @@ Verifies that the percentage of values in a column that matches values in anothe
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_foreign_key_match_percent|partitioned|monthly|[foreign_key_match_percent](../../../../reference/sensors/column/integrity-column-sensors/#foreign-key-match-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_foreign_key_match_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

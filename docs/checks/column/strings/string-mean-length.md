@@ -14,6 +14,11 @@ Verifies that the length of string in a column does not exceed the mean accepted
 |----------|----------|----------|-----------|-------------|
 |string_mean_length|profiling| |[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_mean_length
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -534,6 +539,11 @@ Verifies that the length of string in a column does not exceed the mean accepted
 |----------|----------|----------|-----------|-------------|
 |daily_string_mean_length|recurring|daily|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_mean_length
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1057,6 +1067,11 @@ Verifies that the length of string in a column does not exceed the mean accepted
 |----------|----------|----------|-----------|-------------|
 |monthly_string_mean_length|recurring|monthly|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_mean_length
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1580,6 +1595,11 @@ Verifies that the length of string in a column does not exceed the maximum accep
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_mean_length|partitioned|daily|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_mean_length
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2104,6 +2124,11 @@ Verifies that the length of string in a column does not exceed the mean accepted
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_mean_length|partitioned|monthly|[string_mean_length](../../../../reference/sensors/column/strings-column-sensors/#string-mean-length)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_mean_length
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

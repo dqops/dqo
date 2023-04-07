@@ -14,6 +14,11 @@ Verifies that a maximum number of rows failed a custom SQL condition (expression
 |----------|----------|----------|-----------|-------------|
 |sql_condition_failed_count_on_column|profiling| |[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=sql_condition_failed_count_on_column
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -471,6 +476,11 @@ Verifies that a maximum number of rows failed a custom SQL condition (expression
 |----------|----------|----------|-----------|-------------|
 |daily_sql_condition_failed_count_on_column|recurring|daily|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_sql_condition_failed_count_on_column
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -931,6 +941,11 @@ Verifies that a maximum number of rows failed a custom SQL condition (expression
 |----------|----------|----------|-----------|-------------|
 |monthly_sql_condition_failed_count_on_column|recurring|monthly|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_sql_condition_failed_count_on_column
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1391,6 +1406,11 @@ Verifies that a maximum number of rows failed a custom SQL condition (expression
 |----------|----------|----------|-----------|-------------|
 |daily_partition_sql_condition_failed_count_on_column|partitioned|daily|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_sql_condition_failed_count_on_column
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1851,6 +1871,11 @@ Verifies that a maximum number of rows failed a custom SQL condition (expression
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_sql_condition_failed_count_on_column|partitioned|monthly|[sql_condition_failed_count](../../../../reference/sensors/column/sql-column-sensors/#sql-condition-failed-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_sql_condition_failed_count_on_column
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

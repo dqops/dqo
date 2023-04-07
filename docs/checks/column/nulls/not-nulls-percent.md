@@ -14,6 +14,11 @@ Verifies that the percent of not null values in a column does not exceed the max
 |----------|----------|----------|-----------|-------------|
 |not_nulls_percent|profiling| |[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=not_nulls_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -459,6 +464,11 @@ Verifies that the percentage of not nulls in a column does not exceed the maximu
 |----------|----------|----------|-----------|-------------|
 |daily_not_nulls_percent|recurring|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_not_nulls_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -907,6 +917,11 @@ Verifies that the percentage of not nulls in a column does not exceed the maximu
 |----------|----------|----------|-----------|-------------|
 |monthly_not_nulls_percent|recurring|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_not_nulls_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1355,6 +1370,11 @@ Verifies that the percentage of not null values in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_not_nulls_percent|partitioned|daily|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_not_nulls_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1804,6 +1824,11 @@ Verifies that the percentage of not null values in a column does not exceed the 
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_not_nulls_percent|partitioned|monthly|[not_null_percent](../../../../reference/sensors/column/nulls-column-sensors/#not-null-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_not_nulls_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

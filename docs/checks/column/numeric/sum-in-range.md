@@ -14,6 +14,11 @@ Verifies that the sum of all values in a column is not outside the set range.
 |----------|----------|----------|-----------|-------------|
 |sum_in_range|profiling| |[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=sum_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -408,6 +413,11 @@ Verifies that the sum of all values in a column is not outside the set range. St
 |----------|----------|----------|-----------|-------------|
 |daily_sum_in_range|recurring|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_sum_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -805,6 +815,11 @@ Verifies that the sum of all values in a column does not exceed the set range. S
 |----------|----------|----------|-----------|-------------|
 |monthly_sum_in_range|recurring|monthly|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_sum_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1202,6 +1217,11 @@ Verifies that the sum of all values in a column is not outside the set range. Cr
 |----------|----------|----------|-----------|-------------|
 |daily_partition_sum_in_range|partitioned|daily|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_sum_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1600,6 +1620,11 @@ Verifies that the sum of all values in a column is not outside the set range. Cr
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_sum_in_range|partitioned|monthly|[sum](../../../../reference/sensors/column/numeric-column-sensors/#sum)|[between_floats](../../../../reference/rules/comparison/#between-floats)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_sum_in_range
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

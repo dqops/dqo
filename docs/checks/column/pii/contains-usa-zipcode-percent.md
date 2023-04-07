@@ -14,6 +14,11 @@ Verifies that the percentage of rows that contains USA zip code in a column does
 |----------|----------|----------|-----------|-------------|
 |contains_usa_zipcode_percent|profiling| |[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=contains_usa_zipcode_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -497,6 +502,11 @@ Verifies that the percentage of rows that contains a USA zip code in a column do
 |----------|----------|----------|-----------|-------------|
 |daily_contains_usa_zipcode_percent|recurring|daily|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_contains_usa_zipcode_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -983,6 +993,11 @@ Verifies that the percentage of rows that contains a USA zip code in a column do
 |----------|----------|----------|-----------|-------------|
 |monthly_contains_usa_zipcode_percent|recurring|monthly|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_contains_usa_zipcode_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1469,6 +1484,11 @@ Verifies that the percentage of rows that contains USA zip code in a column does
 |----------|----------|----------|-----------|-------------|
 |daily_partition_contains_usa_zipcode_percent|partitioned|daily|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_contains_usa_zipcode_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1955,6 +1975,11 @@ Verifies that the percentage of rows that contains USA zip code in a column does
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_contains_usa_zipcode_percent|partitioned|monthly|[contains_usa_zipcode_percent](../../../../reference/sensors/column/pii-column-sensors/#contains-usa-zipcode-percent)|[max_percent](../../../../reference/rules/comparison/#max-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_contains_usa_zipcode_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

@@ -14,6 +14,11 @@ Verifies that the number of invalid longitude values in a column does not exceed
 |----------|----------|----------|-----------|-------------|
 |invalid_longitude_count|profiling| |[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=invalid_longitude_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -499,6 +504,11 @@ Verifies that the number of invalid longitude values in a column does not exceed
 |----------|----------|----------|-----------|-------------|
 |daily_invalid_longitude_count|recurring|daily|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_invalid_longitude_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -987,6 +997,11 @@ Verifies that the number of invalid longitude values in a column does not exceed
 |----------|----------|----------|-----------|-------------|
 |monthly_invalid_longitude_count|recurring|monthly|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_invalid_longitude_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1475,6 +1490,11 @@ Verifies that the number of invalid longitude values in a column does not exceed
 |----------|----------|----------|-----------|-------------|
 |daily_partition_invalid_longitude_count|partitioned|daily|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_invalid_longitude_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1964,6 +1984,11 @@ Verifies that the number of invalid longitude values in a column does not exceed
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_invalid_longitude_count|partitioned|monthly|[invalid_longitude_count](../../../../reference/sensors/column/numeric-column-sensors/#invalid-longitude-count)|[max_count](../../../../reference/rules/comparison/#max-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_invalid_longitude_count
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

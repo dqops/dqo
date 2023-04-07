@@ -14,6 +14,11 @@ Verifies that the percentage of false values in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |false_percent|profiling| |[false_percent](../../../../reference/sensors/column/bool-column-sensors/#false-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=false_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -579,6 +584,11 @@ Verifies that the percentage of false values in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |daily_false_percent|recurring|daily|[false_percent](../../../../reference/sensors/column/bool-column-sensors/#false-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_false_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1147,6 +1157,11 @@ Verifies that the percentage of false values in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |monthly_false_percent|recurring|monthly|[false_percent](../../../../reference/sensors/column/bool-column-sensors/#false-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_false_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1715,6 +1730,11 @@ Verifies that the percentage of false values in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |daily_partition_false_percent|partitioned|daily|[false_percent](../../../../reference/sensors/column/bool-column-sensors/#false-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_false_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2284,6 +2304,11 @@ Verifies that the percentage of false values in a column does not exceed the min
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_false_percent|partitioned|monthly|[false_percent](../../../../reference/sensors/column/bool-column-sensors/#false-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_false_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

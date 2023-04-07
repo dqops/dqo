@@ -14,6 +14,11 @@ Calculates the time difference in days between the current date and the most rec
 |----------|----------|----------|-----------|-------------|
 |days_since_most_recent_ingestion|profiling| |[days_since_most_recent_ingestion](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=days_since_most_recent_ingestion
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -681,6 +686,11 @@ Daily  calculating the time difference in days between the current date and the 
 |----------|----------|----------|-----------|-------------|
 |daily_days_since_most_recent_ingestion|recurring|daily|[days_since_most_recent_ingestion](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_days_since_most_recent_ingestion
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1351,6 +1361,11 @@ Monthly recurring calculating the time difference in days between the current da
 |----------|----------|----------|-----------|-------------|
 |monthly_days_since_most_recent_ingestion|recurring|monthly|[days_since_most_recent_ingestion](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_days_since_most_recent_ingestion
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2021,6 +2036,11 @@ Daily partition checkpoint calculating the time difference in days between the c
 |----------|----------|----------|-----------|-------------|
 |daily_partition_days_since_most_recent_ingestion|partitioned|daily|[days_since_most_recent_ingestion](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_days_since_most_recent_ingestion
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2692,6 +2712,11 @@ Monthly partition checkpoint calculating the time difference in days between the
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_days_since_most_recent_ingestion|partitioned|monthly|[days_since_most_recent_ingestion](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-ingestion)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_days_since_most_recent_ingestion
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

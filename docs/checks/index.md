@@ -184,6 +184,13 @@ Assesses the freshness and staleness of data, as well as data ingestion delay an
 |[monthly_average_match_percent](./column/accuracy/average-match-percent/#monthly-average-match-percent)|recurring|Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
 
 
+| Check name | Check type | Description |
+|------------|------------|-------------|
+|[row_count_match_percent](./column/accuracy/row-count-match-percent/#row-count-match-percent)|profiling|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[daily_row_count_match_percent](./column/accuracy/row-count-match-percent/#daily-row-count-match-percent)|recurring|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.|
+|[monthly_row_count_match_percent](./column/accuracy/row-count-match-percent/#monthly-row-count-match-percent)|recurring|Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.|
+
+
 
 
 

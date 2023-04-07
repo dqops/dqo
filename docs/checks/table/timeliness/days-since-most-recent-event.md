@@ -14,6 +14,11 @@ Calculates the number of days since the most recent event timestamp (freshness)
 |----------|----------|----------|-----------|-------------|
 |days_since_most_recent_event|profiling| |[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=days_since_most_recent_event
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -679,6 +684,11 @@ Daily  calculating the number of days since the most recent event timestamp (fre
 |----------|----------|----------|-----------|-------------|
 |daily_days_since_most_recent_event|recurring|daily|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_days_since_most_recent_event
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1347,6 +1357,11 @@ Monthly recurring calculating the number of days since the most recent event tim
 |----------|----------|----------|-----------|-------------|
 |monthly_days_since_most_recent_event|recurring|monthly|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_days_since_most_recent_event
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2015,6 +2030,11 @@ Daily partition checkpoint calculating the number of days since the most recent 
 |----------|----------|----------|-----------|-------------|
 |daily_partition_days_since_most_recent_event|partitioned|daily|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_days_since_most_recent_event
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2684,6 +2704,11 @@ Monthly partition checkpoint calculating the number of days since the most recen
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_days_since_most_recent_event|partitioned|monthly|[days_since_most_recent_event](../../../../reference/sensors/table/timeliness-table-sensors/#days-since-most-recent-event)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_days_since_most_recent_event
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

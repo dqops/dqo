@@ -14,6 +14,11 @@ Daily partition checkpoint calculating the longest time a row waited to be load
 |----------|----------|----------|-----------|-------------|
 |daily_partition_reload_lag|partitioned|daily|[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors/#partition-reload-lag)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_reload_lag
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -801,6 +806,11 @@ Monthly partition checkpoint calculating the longest time a row waited to be loa
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_reload_lag|partitioned|monthly|[partition_reload_lag](../../../../reference/sensors/table/timeliness-table-sensors/#partition-reload-lag)|[max_days](../../../../reference/rules/comparison/#max-days)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_reload_lag
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

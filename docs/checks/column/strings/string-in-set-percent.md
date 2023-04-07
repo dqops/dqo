@@ -14,6 +14,11 @@ Verifies that the percentage of strings from a set in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |string_in_set_percent|profiling| |[string_in_set_percent](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_in_set_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -784,6 +789,11 @@ Verifies that the percentage of strings from a set in a column does not exceed t
 |----------|----------|----------|-----------|-------------|
 |daily_string_in_set_percent|recurring|daily|[string_in_set_percent](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_in_set_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1557,6 +1567,11 @@ Verifies that the percentage of strings from set in a column does not exceed the
 |----------|----------|----------|-----------|-------------|
 |monthly_string_in_set_percent|recurring|monthly|[string_in_set_percent](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_in_set_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2330,6 +2345,11 @@ Verifies that the percentage of strings from set in a column does not exceed the
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_in_set_percent|partitioned|daily|[string_in_set_percent](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_in_set_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -3104,6 +3124,11 @@ Verifies that the percentage of strings from set in a column does not exceed the
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_in_set_percent|partitioned|monthly|[string_in_set_percent](../../../../reference/sensors/column/strings-column-sensors/#string-in-set-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_in_set_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```

@@ -14,6 +14,11 @@ The check percentage of those values with value above the one provided by the us
 |----------|----------|----------|-----------|-------------|
 |value_above_max_value_percent|profiling| |[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=value_above_max_value_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -519,6 +524,11 @@ The check percentage of those values with value below the one provided by the us
 |----------|----------|----------|-----------|-------------|
 |daily_value_above_max_value_percent|recurring|daily|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_value_above_max_value_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1027,6 +1037,11 @@ The check percentage of those values with value below the one provided by the us
 |----------|----------|----------|-----------|-------------|
 |monthly_value_above_max_value_percent|recurring|monthly|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_value_above_max_value_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -1535,6 +1550,11 @@ The check percentage of those values with value above the one provided by the us
 |----------|----------|----------|-----------|-------------|
 |daily_partition_value_above_max_value_percent|partitioned|daily|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_value_above_max_value_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -2044,6 +2064,11 @@ The check percentage of those values with value above the one provided by the us
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_value_above_max_value_percent|partitioned|monthly|[value_above_max_value_percent](../../../../reference/sensors/column/numeric-column-sensors/#value-above-max-value-percent)|[min_percent](../../../../reference/rules/comparison/#min-percent)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_value_above_max_value_percent
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
