@@ -39,6 +39,8 @@ import ai.dqo.services.check.mapping.UIAllChecksPatchFactory;
 import ai.dqo.services.check.mapping.models.*;
 import ai.dqo.services.check.models.UIAllChecksPatchParameters;
 import ai.dqo.utils.conversion.StringTypeCaster;
+import org.apache.arrow.flatbuf.Bool;
+import org.apache.hadoop.hdfs.protocol.datatransfer.Op;
 import org.apache.parquet.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -130,11 +132,6 @@ public class CheckServiceImpl implements CheckService {
                 || parameters.getCheckSearchFilters() == null
                 || Strings.isNullOrEmpty(parameters.getCheckSearchFilters().getConnectionName())
                 || Strings.isNullOrEmpty(parameters.getCheckSearchFilters().getCheckName())
-                || (
-                        parameters.getWarningLevelOptions() == null
-                                && parameters.getErrorLevelOptions() == null
-                                && parameters.getFatalLevelOptions() == null
-                )
         ) {
             // Successfully updated nothing.
             return new ArrayList<>();
@@ -183,12 +180,41 @@ public class CheckServiceImpl implements CheckService {
     protected void patchUICheckModel(UICheckModel model,
                                      UIAllChecksPatchParameters parameters) {
         UIRuleThresholdsModel ruleThresholdsModel = model.getRule();
-
         if (ruleThresholdsModel == null) {
             ruleThresholdsModel = new UIRuleThresholdsModel();
             model.setRule(ruleThresholdsModel);
         }
+        patchRuleThresholdsModel(ruleThresholdsModel, parameters);
 
+        List<UIFieldModel> sensorParametersPatches = parameters.getSensorOptions() != null
+                ? optionMapToFields(parameters.getSensorOptions())
+                : new ArrayList<>();
+        patchSensorParametersInModel(model, sensorParametersPatches);
+
+        model.setConfigured((ruleThresholdsModel.getWarning() != null && ruleThresholdsModel.getWarning().isConfigured())
+                || (ruleThresholdsModel.getError() != null && ruleThresholdsModel.getError().isConfigured())
+                || (ruleThresholdsModel.getFatal() != null && ruleThresholdsModel.getFatal().isConfigured()));
+
+        model.setDisabled((ruleThresholdsModel.getWarning() == null || ruleThresholdsModel.getWarning().isDisabled())
+                && (ruleThresholdsModel.getError() == null || ruleThresholdsModel.getError().isDisabled())
+                && (ruleThresholdsModel.getFatal() == null || ruleThresholdsModel.getFatal().isDisabled()));
+    }
+
+    protected void patchSensorParametersInModel(UICheckModel model,
+                                                List<UIFieldModel> sensorPatches) {
+        Map<String, UIFieldModel> modelSensorParamsByName = new HashMap<>();
+        for (UIFieldModel fieldModel: model.getSensorParameters()) {
+            modelSensorParamsByName.put(fieldModel.getDefinition().getDisplayName(), fieldModel);
+        }
+
+        for (UIFieldModel patch: sensorPatches) {
+            modelSensorParamsByName.put(patch.getDefinition().getDisplayName(), patch);
+        }
+
+        model.setSensorParameters(new ArrayList<>(modelSensorParamsByName.values()));
+    }
+
+    protected void patchRuleThresholdsModel(UIRuleThresholdsModel ruleThresholdsModel, UIAllChecksPatchParameters parameters) {
         if (parameters.getWarningLevelOptions() != null) {
             Map<String, String> options = parameters.getWarningLevelOptions();
             List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
@@ -226,28 +252,15 @@ public class CheckServiceImpl implements CheckService {
             this.patchRuleParameters(ruleParametersModel, newParameterFields);
         }
 
-        model.setConfigured(ruleThresholdsModel.getWarning().isConfigured()
-                || ruleThresholdsModel.getError().isConfigured()
-                || ruleThresholdsModel.getFatal().isConfigured());
-
-        boolean wholeCheckDisabled = true;
-        if (parameters.getDisableWarningLevel() != null && ruleThresholdsModel.getWarning() != null) {
-            wholeCheckDisabled &= parameters.getDisableWarningLevel();
-            ruleThresholdsModel.getWarning().setDisabled(parameters.getDisableWarningLevel());
+        if (ruleThresholdsModel.getWarning() != null) {
+            ruleThresholdsModel.getWarning().setDisabled(parameters.isDisableWarningLevel());
         }
-        if (parameters.getDisableErrorLevel() != null && ruleThresholdsModel.getError() != null) {
-            wholeCheckDisabled &= parameters.getDisableErrorLevel();
-            ruleThresholdsModel.getError().setDisabled(parameters.getDisableErrorLevel());
+        if (ruleThresholdsModel.getError() != null) {
+            ruleThresholdsModel.getError().setDisabled(parameters.isDisableErrorLevel());
         }
-        if (parameters.getDisableFatalLevel() != null && ruleThresholdsModel.getFatal() != null) {
-            wholeCheckDisabled &= parameters.getDisableFatalLevel();
-            ruleThresholdsModel.getFatal().setDisabled(parameters.getDisableFatalLevel());
+        if (ruleThresholdsModel.getFatal() != null) {
+            ruleThresholdsModel.getFatal().setDisabled(parameters.isDisableFatalLevel());
         }
-
-        model.setDisabled(wholeCheckDisabled);
-
-        AbstractCheckSpec checkSpec = model.getCheckSpec();
-        checkSpec.setDisabled(model.isDisabled());
     }
 
     protected void patchRuleParameters(UIRuleParametersModel ruleParametersModel, List<UIFieldModel> patches) {
@@ -281,6 +294,7 @@ public class CheckServiceImpl implements CheckService {
             UIFieldModel uiFieldModel = new UIFieldModel();
             ParameterDefinitionSpec parameterDefinition = new ParameterDefinitionSpec();
             parameterDefinition.setDisplayName(option.getKey());
+            parameterDefinition.setFieldName(option.getKey());
             uiFieldModel.setDefinition(parameterDefinition);
 
             this.assignUiFieldModelValue(uiFieldModel, option.getValue());
