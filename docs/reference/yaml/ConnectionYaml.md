@@ -51,9 +51,9 @@ ___
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |account|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.. Supports also a ${SNOWFLAKE_ACCOUNT} configuration with a custom environment variable.|string| | | |
 |warehouse|Snowflake warehouse name. Supports also a ${SNOWFLAKE_WAREHOUSE} configuration with a custom environment variable.|string| | | |
-|database|Snowflake database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|Snowflake user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|Snowflake database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|database|Snowflake database name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Snowflake user name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Snowflake database password.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
 |role|Snowflake role name. Supports also ${SNOWFLAKE_ROLE} configuration with a custom environment variable.|string| | | |
 
 ___  
@@ -80,9 +80,9 @@ ___
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |host|Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.|string| | | |
 |port|Redshift port name. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.|string| | | |
-|database|Redshift database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|Redshift user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|Redshift database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|database|Redshift database name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Redshift user name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Redshift database password.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
 |options|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|string| | | |
 |ssl|Connect to Redshift using SSL. The default value is false.|boolean| | | |
 
@@ -95,9 +95,9 @@ ___
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |host|SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.|string| | | |
 |port|SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.|string| | | |
-|database|SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|user|SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
-|password|SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|database|SQL Server database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
+|user|SQL Server user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
+|password|SQL Server database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
 |options|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.|string| | | |
 |ssl|Connecting to SQL Server with SSL disabled. The default value is false.|boolean| | | |
 
@@ -138,10 +138,8 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[profiling](#recurringschedulespec)|Schedule for running profiling data quality checks.|object| | | |
-|[recurring_daily](#recurringschedulespec)|Schedule for running daily recurring checks.|object| | | |
-|[recurring_monthly](#recurringschedulespec)|Schedule for running monthly recurring checks.|object| | | |
-|[partitioned_daily](#recurringschedulespec)|Schedule for running daily partitioned checks.|object| | | |
-|[partitioned_monthly](#recurringschedulespec)|Schedule for running monthly partitioned checks.|object| | | |
+|[daily](#recurringschedulespec)|Schedule for running daily whole table checks and day level time period checks.|object| | | |
+|[monthly](#recurringschedulespec)|Schedule for running monthly whole table checks and month level time period checks.|object| | | |
 
 ___  
 

@@ -77,6 +77,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
             put("monthly_partition_string_match_name_regex_percent", o -> o.monthlyPartitionStringMatchNameRegexPercent);
 
             put("monthly_partition_string_most_popular_values", o -> o.monthlyPartitionStringMostPopularValues);
+
+            put("monthly_partition_string_datatype_detect", o -> o.monthlyPartitionStringDatatypeDetect);
+
         }
     };
 
@@ -185,6 +188,9 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
     @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
     private ColumnStringMostPopularValuesCheckSpec monthlyPartitionStringMostPopularValues;
 
+    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Creates a separate data quality check (and an alert) for each monthly partition.")
+    private ColumnStringDatatypeDetectCheckSpec monthlyPartitionStringDatatypeDetect;
+    
     /**
      * Returns a maximum string length below check.
      * @return Maximum string length below check.
@@ -818,6 +824,24 @@ public class ColumnStringsMonthlyPartitionedChecksSpec extends AbstractCheckCate
         this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringMostPopularValues, monthlyPartitionStringMostPopularValues));
         this.monthlyPartitionStringMostPopularValues = monthlyPartitionStringMostPopularValues;
         propagateHierarchyIdToField(monthlyPartitionStringMostPopularValues, "monthly_partition_string_most_popular_values");
+    }
+
+    /**
+     * Returns a count of expected values in datatype detect check.
+     * @return Datatype detect check.
+     */
+    public ColumnStringDatatypeDetectCheckSpec getMonthlyPartitionStringDatatypeDetect() {
+        return monthlyPartitionStringDatatypeDetect;
+    }
+
+    /**
+     * Sets a new definition of a datatype detect check.
+     * @param monthlyPartitionStringDatatypeDetect Datatype detect check.
+     */
+    public void setMonthlyPartitionStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec monthlyPartitionStringDatatypeDetect) {
+        this.setDirtyIf(!Objects.equals(this.monthlyPartitionStringDatatypeDetect, monthlyPartitionStringDatatypeDetect));
+        this.monthlyPartitionStringDatatypeDetect = monthlyPartitionStringDatatypeDetect;
+        propagateHierarchyIdToField(monthlyPartitionStringDatatypeDetect, "monthly_partition_string_datatype_detect");
     }
 
     /**

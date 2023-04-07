@@ -33,17 +33,17 @@ dqo.ai> data clean [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -b=<begin> -c=<conne
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
-|`-b`<br/>`--begin`<br/>|Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD|Yes||
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
+|`-b`<br/>`--begin`<br/>|Beginning of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD|:material-check-bold:||
 |`-cat`<br/>`--category`<br/>|Check category name (standard, nulls, numeric, etc.)| ||
 |`-ch`<br/>`--check`<br/>|Data quality check name| ||
 |`-cr`<br/>`--check-results`<br/>|Delete the check results| ||
 |`-ct`<br/>`--check-type`<br/>|Data quality check type (adhoc, checkpoint, partitioned)| |PROFILING<br/>RECURRING<br/>PARTITIONED<br/>|
 |`-col`<br/>`--column`<br/>|Column name| ||
-|`-c`<br/>`--connection`<br/>|Connection name|Yes||
+|`-c`<br/>`--connection`<br/>|Connection name|:material-check-bold:||
 |`-ds`<br/>`--data-stream`<br/>|Data stream hierarchy level filter (tag)| ||
-|`-e`<br/>`--end`<br/>|End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD|Yes||
+|`-e`<br/>`--end`<br/>|End of the period for deletion. Date in format YYYY.MM or YYYY.MM.DD|:material-check-bold:||
 |`-er`<br/>`--errors`<br/>|Delete the errors| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
@@ -56,7 +56,7 @@ dqo.ai> data clean [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -b=<begin> -c=<conne
 |`-stc`<br/>`--statistics-category`<br/>|Statistics category name (standard, nulls, numeric, etc.)| ||
 |`-sc`<br/>`--statistics-collector`<br/>|Data quality statistics collector name| ||
 |`-stt`<br/>`--statistics-target`<br/>|Data quality statistics target (table, column)| |table<br/>column<br/>|
-|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;|Yes||
+|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;|:material-check-bold:||
 |`-tg`<br/>`--time-gradient`<br/>|Time gradient of the sensor| ||
 
 
@@ -87,10 +87,10 @@ dqo.ai> data repair [-h] [-cr] [-er] [-fw] [-hl] [-sr] [-st] -c=<connection>
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-cr`<br/>`--check-results`<br/>|Repair the check results| ||
-|`-c`<br/>`--connection`<br/>|Connection name|Yes||
+|`-c`<br/>`--connection`<br/>|Connection name|:material-check-bold:||
 |`-er`<br/>`--errors`<br/>|Repair the errors| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||

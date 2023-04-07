@@ -77,6 +77,8 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
             put("string_match_name_regex_percent", o -> o.stringMatchNameRegexPercent);
 
             put("string_most_popular_values", o -> o.stringMostPopularValues);
+
+            put("string_datatype_detect", o -> o.stringDatatypeDetect);
         }
     };
 
@@ -184,6 +186,9 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
 
     @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
     private ColumnStringMostPopularValuesCheckSpec stringMostPopularValues;
+
+    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype.")
+    private ColumnStringDatatypeDetectCheckSpec stringDatatypeDetect;
 
     /**
      * Returns a maximum string length below check.
@@ -813,6 +818,24 @@ public class ColumnProfilingStringsChecksSpec extends AbstractCheckCategorySpec 
         this.setDirtyIf(!Objects.equals(this.stringMostPopularValues, stringMostPopularValues));
         this.stringMostPopularValues = stringMostPopularValues;
         propagateHierarchyIdToField(stringMostPopularValues, "string_most_popular_values");
+    }
+
+    /**
+     * Returns a count of expected values in datatype detect check.
+     * @return Datatype detect check.
+     */
+    public ColumnStringDatatypeDetectCheckSpec getStringDatatypeDetect() {
+        return stringDatatypeDetect;
+    }
+
+    /**
+     * Sets a new definition of a datatype detect check.
+     * @param stringDatatypeDetect Datatype detect check.
+     */
+    public void setStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec stringDatatypeDetect) {
+        this.setDirtyIf(!Objects.equals(this.stringDatatypeDetect, stringDatatypeDetect));
+        this.stringDatatypeDetect = stringDatatypeDetect;
+        propagateHierarchyIdToField(stringDatatypeDetect, "string_datatype_detect");
     }
 
     /**

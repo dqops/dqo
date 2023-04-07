@@ -77,6 +77,8 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
             put("monthly_string_match_name_regex_percent", o -> o.monthlyStringMatchNameRegexPercent);
 
             put("monthly_string_most_popular_values", o -> o.monthlyStringMostPopularValues);
+
+            put("monthly_string_datatype_detect", o -> o.monthlyStringDatatypeDetect);
         }
     };
 
@@ -184,6 +186,9 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
     private ColumnStringMostPopularValuesCheckSpec monthlyStringMostPopularValues;
+
+    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringDatatypeDetectCheckSpec monthlyStringDatatypeDetect;
 
     /**
      * Returns a maximum string length below check.
@@ -813,6 +818,24 @@ public class ColumnStringsMonthlyRecurringSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.monthlyStringMostPopularValues, monthlyStringMostPopularValues));
         this.monthlyStringMostPopularValues = monthlyStringMostPopularValues;
         propagateHierarchyIdToField(monthlyStringMostPopularValues, "monthly_string_most_popular_values");
+    }
+
+    /**
+     * Returns a count of expected values in datatype detect check.
+     * @return Datatype detect check.
+     */
+    public ColumnStringDatatypeDetectCheckSpec getMonthlyStringDatatypeDetect() {
+        return monthlyStringDatatypeDetect;
+    }
+
+    /**
+     * Sets a new definition of a datatype detect check.
+     * @param monthlyStringDatatypeDetect Datatype detect check.
+     */
+    public void setMonthlyStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec monthlyStringDatatypeDetect) {
+        this.setDirtyIf(!Objects.equals(this.monthlyStringDatatypeDetect, monthlyStringDatatypeDetect));
+        this.monthlyStringDatatypeDetect = monthlyStringDatatypeDetect;
+        propagateHierarchyIdToField(monthlyStringDatatypeDetect, "monthly_string_datatype_detect");
     }
 
     /**

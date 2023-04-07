@@ -1,0 +1,33 @@
+# Checks
+
+**This is a list of the checks in DQO broken down by category and a brief description of what they do.**
+
+## **Table checks**
+{{#each checks}}
+{{#if ( eq target "table")}}
+###{{categoryName}}{{#with "  "}}{{.}}{{/with}}
+{{categoryHelp}}
+{{#each checkGroups}}
+| Check name | Check type | Description |
+|------------|------------|-------------|
+{{#each allChecks}}|[{{checkName}}](./{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}/#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|
+{{/each}}
+{{/each}}
+{{else}}
+{{/if}}
+{{/each}}
+
+## **Column checks**
+{{#each checks}}
+{{#if ( eq target "column")}}
+###{{categoryName}}{{#with "  "}}{{.}}{{/with}}
+{{categoryHelp}}
+{{#each checkGroups}}
+| Check name | Check type | Description |
+|------------|------------|-------------|
+{{#each allChecks}}|[{{checkName}}](./{{target}}/{{categoryName}}/{{replace primaryCheckName " " "-"}}/#{{replace checkName "_" "-"}})|{{checkType}}|{{checkHelp}}|
+{{/each}}
+{{/each}}
+{{else}}
+{{/if}}
+{{/each}}

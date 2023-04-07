@@ -16,10 +16,7 @@
 package ai.dqo.checks.column.profiling;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyAverageMatchPercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyMaxMatchPercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyMinMatchPercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyTotalSumMatchPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.accuracy.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,6 +40,7 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
             put("min_match_percent", o -> o.minMatchPercent);
             put("max_match_percent", o -> o.maxMatchPercent);
             put("average_match_percent", o -> o.averageMatchPercent);
+            put("row_count_match_percent", o -> o.rowCountMatchPercent);
         }
     };
 
@@ -57,6 +55,9 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
 
     @JsonPropertyDescription("Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number.")
     private ColumnAccuracyAverageMatchPercentCheckSpec averageMatchPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnAccuracyRowCountMatchPercentCheckSpec rowCountMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
@@ -128,6 +129,24 @@ public class ColumnProfilingAccuracyChecksSpec extends AbstractCheckCategorySpec
         this.setDirtyIf(!Objects.equals(this.averageMatchPercent, averageMatchPercent));
         this.averageMatchPercent = averageMatchPercent;
         propagateHierarchyIdToField(averageMatchPercent, "average_match_percent");
+    }
+
+    /**
+     * Returns an accuracy row count percent check specification.
+     * @return Accuracy row count percent check specification.
+     */
+    public ColumnAccuracyRowCountMatchPercentCheckSpec getRowCountMatchPercent() {
+        return rowCountMatchPercent;
+    }
+
+    /**
+     * Sets a new definition of an accuracy row count percent check.
+     * @param rowCountMatchPercent Accuracy row count percent check specification.
+     */
+    public void setRowCountMatchPercent(ColumnAccuracyRowCountMatchPercentCheckSpec rowCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.rowCountMatchPercent, rowCountMatchPercent));
+        this.rowCountMatchPercent = rowCountMatchPercent;
+        propagateHierarchyIdToField(rowCountMatchPercent, "row_count_match_percent");
     }
 
     /**

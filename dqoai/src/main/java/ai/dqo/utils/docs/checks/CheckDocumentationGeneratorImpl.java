@@ -48,10 +48,21 @@ public class CheckDocumentationGeneratorImpl implements CheckDocumentationGenera
         rulesFolder.setLinkName("Checks");
         rulesFolder.setDirectPath(projectRootPath.resolve("../docs/checks").toAbsolutePath().normalize());
 
-        Template template = HandlebarsDocumentationUtilities.compileTemplate("checks/check_documentation");
-
         List<CheckCategoryDocumentationModel> checkCategoryDocumentationModels = Stream.concat(this.checkDocumentationModelFactory.makeDocumentationForTableChecks().stream(),
                 this.checkDocumentationModelFactory.makeDocumentationForColumnChecks().stream()).collect(Collectors.toList());
+
+        MainPageCheckDocumentationModel mainPageCheckDocumentationModel = new MainPageCheckDocumentationModel();
+        mainPageCheckDocumentationModel.setChecks(checkCategoryDocumentationModels);
+
+        Template main_page_template = HandlebarsDocumentationUtilities.compileTemplate("checks/main_page_documentation");
+        DocumentationMarkdownFile mainPageDocumentationMarkdownFile = rulesFolder.addNestedFile("index" + ".md");
+        mainPageDocumentationMarkdownFile.setRenderContext(mainPageCheckDocumentationModel);
+
+        String renderedMainPageDocument = HandlebarsDocumentationUtilities.renderTemplate(main_page_template, mainPageCheckDocumentationModel);
+        mainPageDocumentationMarkdownFile.setFileContent(renderedMainPageDocument);
+
+
+        Template template = HandlebarsDocumentationUtilities.compileTemplate("checks/check_documentation");
 
         List<SimilarChecksDocumentationModel> allChecksDocumentationModels = new ArrayList<>();
 
