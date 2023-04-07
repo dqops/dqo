@@ -6,10 +6,13 @@ In DQO, the check is a data quality test, which consists of a [data quality sens
 Partition checks measure data quality for each daily or monthly partition by creating a separate data quality score. 
 To run a partition check, you need to select a data column that is the time partitioning key for the table.
 
-
 ## Setting up date or datetime column name
-In order to enable time partition check, set a column that contains date or datetime or timestamp. 
-You can add it in UI 
+In order to enable time partition check, set a column that contains date, datetime or timestamp. 
+
+1. Go to Data Source section
+2. On a tree view select table of interest.
+3. Go to the **Date and Time Columns** tag
+4. In the dropdown menu under D**ATE or DATETIME column name for partition checks** select a column that contains date, datetime or timestamp.
 
 ## Checks configuration in YAML file
 Partition data quality checks, like other data quality checks in DQO, are defined as YAML files.

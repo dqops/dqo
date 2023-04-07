@@ -8,10 +8,8 @@ nav:
   - What is DQO?: 'index.md'
   - Getting started:
     - 'getting-started/index.md'
-    - Set up: 'getting-started/set-up/set-up.md'
-    - Start DQO: 'getting-started/start-dqo/start-dqo.md'
-    - Connect to a data source: 'getting-started/connect-to-a-data-source/connect-to-a-data-source.md'
-    - Import metadata: 'getting-started/import-metadata/import-metadata.md'
+    - Installation: 'getting-started/set-up/installation.md'
+    - Connect to a data source: 'getting-started/connect-to-a-data-source/adding-data-source-connection.md'
     - Run initial profiling: 'getting-started/run-initial-profiling/run-initial-profiling.md'
     - Run data quality checks: 'getting-started/run-data-quality-checks/run-data-quality-checks.md'
     - Inspect results: 'getting-started/inspect-results/inspect-results.md'
@@ -34,6 +32,9 @@ nav:
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
   - Working with DQO:
     - 'working-with-dqo/index.md'
+    - Installation:
+      - Install DQO from Git: 'working-with-dqo/install-dqo-from-git/install-dqo-from-git.md'
+      - Log in to DQO Cloud: 'working-with-dqo/login-to-dqo-cloud/log-in-to-dqo-cloud.md'
     - Adding connections:
       - 'working-with-dqo/adding-connections/index.md'
       - BigQuery: 'working-with-dqo/adding-connections/bigquery.md'

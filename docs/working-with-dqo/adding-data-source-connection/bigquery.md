@@ -15,15 +15,15 @@ To add BigQuery data source connection to DQO you need the following:
 
 1. Go to Data Sources section and click **+ Add connection** button in the upper left corner.
 
-    ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection.jpg)
+    ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connections/adding-connection.jpg)
 
 2. Select BiqQuery database type.
 
-    ![Selecting BigQuery database type](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connection-bigquery.jpg)
+    ![Selecting BigQuery database type](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connections/adding-connection-bigquery.jpg)
 
 3. Add connection settings.
 
-    ![Adding connection settings](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-bigquery.jpg)
+    ![Adding connection settings](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connections/connection-settings-bigquery.jpg)
 
     | BigQuery connection settings            | Property name in YAML configuration file | Description                                                                                                                                                                                                                              | 
     |-----------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------------------------------------|
@@ -37,18 +37,18 @@ To add BigQuery data source connection to DQO you need the following:
     change "clear text" to ${ENV_VAR} using the drop-down menu at the end of the variable entry field and type your variable.
 
     For example:
-    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/connection-settings-bigquery-envvar.jpg)
+    ![Adding connection settings - environmental variables](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connections/connection-settings-bigquery-envvar.jpg)
 
 4. After filling in the connection settings, click the **Test Connection** button to test the connection.
 5. Click the **Save** connection button when the test is successful otherwise you can check the details of what went wrong.
 6. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables. 
 
-    ![Importing schemas](https://docs.dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
+    ![Importing schemas](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connections/importing-schemas.jpg)
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-   ![AImporting tables](https://docs.dqo.ai/docs/images/working-with-dqo/importing-tables.jpg)
+   ![AImporting tables](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connections/importing-tables.jpg)
 
 ## Adding BigQuery connection using DQO Shell
 

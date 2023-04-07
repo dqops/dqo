@@ -1,0 +1,157 @@
+# Adding data source connection
+
+In the Getting started example, we describe how to add a connection to [BigQuery public dataset Austin Crime Data](https://console.cloud.google.com/marketplace/details/city-of-austin/austin-crime) 
+using graphic interface.
+
+For a full description of how to add a data source connection to other providers or add connection using CLI, see [Working with DQO](../../working-with-dqo/adding-data-source-connection/index.md).
+
+## Prerequisite credentials
+
+To add BigQuery data source connection to DQO you need the following:
+
+- A BiqQuery service account with **BigQuery > BigQuery Job User** permission. [You can create a free trial Google Cloud account here](https://cloud.google.com/free).
+- A service account key in JSON format for JSON key authentication. For details refer to [Create and delete service account keys](https://cloud.google.com/iam/docs/keys-create-delete).
+- A working [Google Cloud CLI](https://cloud.google.com/sdk/docs/install) if you want to use [Google Application Credentials authentication](./#using-google-application-credentials-authentication).
+
+## Adding BigQuery connection using graphic interface
+
+1. In DQO User Interface Console go to Data Sources section and click **+ Add connection** button in the upper left corner.
+
+    ![Adding connection](https://docs.dqo.ai/docs/images/getting-started/adding-test-connection-test-connection.jpg)
+   
+2. Select BiqQuery database type.
+
+    ![Selecting BigQuery database type](https://docs.dqo.ai/docs/images/working-with-dqo/adding-connections/adding-connection-bigquery.jpg)
+
+3. Add connection settings.
+
+    ![Adding connection settings](https://docs.dqo.ai/docs/images/getting-started/adding-test-connection-parameters.jpg)
+
+   | BigQuery connection settings            | Description                                                                                                                                                                                                                                                           | 
+   |-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+   | Connection name                         | The name of the connection that will be created in DQO. This will also be the name of the folder where the connection configuration files are stored. The name of the connection must be unique and consist of alphanumeric characters. For example, "testconnection" |
+   | Source GCP project ID                   | Name of the project that has datasets that will be imported. In our example it would be "big-query-public-data".                                                                                                                                                      |
+   | Billing GCP project ID                  | Name of the project used as the default GCP project. The calling user must have a bigquery.jobs.create permission in this project.                                                                                                                                    |
+   | Authentication mode to the Google Cloud | Type of authentication mode to the Google Cloud. You can select from the 3 options:<br/>- Google Application Credentials,<br/>- JSON Key Content<br/> - JSON Key Path                                                                                                 |
+   | Quota GCP project ID                    | The Google Cloud Platform project ID which is used for invocation.                                                                                                                                                                                                    |
+
+4. After filling in the connection settings, click the **Test Connection** button to test the connection.
+
+5. Click the **Save** connection button when the test is successful otherwise you can check the details of what went wrong.
+
+6. Import the "austin_crime" schema by clicking on the **Import Tables** button.
+
+    ![Importing schemas](https://docs.dqo.ai/docs/images/getting-started/importing-schema-austin-crime.jpg)
+
+7. There is only one table in the dataset. Import table by clicking **Import all tables** buttons in the upper right corner.
+
+    ![Importing tables](https://docs.dqo.ai/docs/images/getting-started/importing-tables-austin-crime.jpg)
+
+8. You can check the details of the imported table by expanding the tree view on the left and selecting the Table icon.
+        
+     ![Viewing table details](https://docs.dqo.ai/docs/images/getting-started/austin-crime-table-view.jpg)
+
+    Here you have several tabs:
+      - Table - provide details about the table and allows adding filters or name of the stage (for example, "Ingestion")
+      - Schedule - allows setting schedule for running checks. For more information how to set a schedule go to [Working with DQO section](../../working-with-dqo/scheduler/index.md). 
+      - Comments - allows adding comments to your tables
+      - Labels - allows adding labels to your tables
+      - Data streams - allows configuring columns for data streams segmentation. Learn more about [data streams segmentation in Concept section](../../dqo-concepts/data-stream-segmentation/data-stream-segmentation.md). 
+      - Date and time columns - allows setting date and time columns for [Partition checks type](../../dqo-concepts/checks/partition-checks/partition-checks.md) and [table timeliness checks subcategory](../..//working-with-dqo/adding-data-quality-checks/adding-timeliness-data-quality-checks.md) and . 
+
+## Next step
+
+Now that you have connected a data source, it is time to [run data quality checks](../../getting-started/run-data-quality-checks/run-data-quality-checks.md).
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+**Opisujemy na przykładzie GCP. Jak założyć konto na GCP, tworzenie połaczenia w UI.**
+
+
+In order to successfully establish a connection with BigQuery couple of things need to be specified:
+
+- connection name
+- provider name
+- source GCP project ID
+- billing project ID
+- authentication mode (we recommend using `google_application_credentials`)
+- quota project ID
+
+In the following example we use our project `dqo-ai-testing`, where
+
+- connection name = `connection_1`
+- provider name = `bigquery`
+- source GCP project ID = `bigquery-public-data`
+- billing project ID = `dqo-ai-testing`
+- authentication mode = `google_application_credentials`
+- quota project ID = `dqo-ai-testing`
+
+To add a connection start by running following command:
+```
+connection add
+```
+
+and follow the instruction
+
+``` 
+dqo.ai> dqo.ai> connection add
+Connection name (--name): connection_1
+Database provider type (--provider):
+ [ 1] bigquery
+ [ 2] snowflake
+Please enter one of the [] values: 1
+Source GCP project ID (-P=bigquery-source-project-id) [dqo-ai]: bigquery-public-data
+Billing GCP project ID (-P=bigquery-billing-project-id) [dqo-ai]: dqo-ai-testing
+GCP Authentication Mode [google_application_credentials]:
+ [ 1] google_application_credentials (default)
+ [ 2] json_key_content
+ [ 3] json_key_path
+Please enter one of the [] values: 1
+GCP quota (billing) project ID (-P=bigquery-quota-project-id) [dqo-ai-testing]: dqo-ai-testing
+Connection connection_1 was successfully added.
+Run 'table import -c=connection_1' to import tables.
+dqo.ai>
+```
+
+Here is the whole command in a headless mode that enables adding a connection at once:
+
+```
+connection add --name=connection_1 --provider=bigquery -P=bigquery-source-project-id=bigquery-public-data -P=bigquery-billing-project-id=dqo-ai-testing -P=bigquery-quota-project-id=dqo-ai-testing -P=bigquery-authentication-mode=google_application_credentials
+```
+
+To see the list of all connections use the command :
+
+```
+connection list
+```
+
+```
+dqo.ai> connection list
++-------------------+---------------+---------------+--------+----------------------+
+|Hash Id            |Connection Name|Connection Type|JDBC Url|Physical Database Name|
++-------------------+---------------+---------------+--------+----------------------+
+|1846543424268075406|connection_1   |bigquery       |        |                      |
++-------------------+---------------+---------------+--------+----------------------+
+```
+
+### Connection YAML file 
+Here is a sample connection YAML file configuration:
+```yaml linenums="1" hl_lines="16-26"
+--8<-- "docs/getting_started/yamls/connection_yaml_file_example.yaml"
+```
+
+This file contains information about the configuration of the connection that was created.
+The file is completed with the information that was provided when adding a new connection.
+It contains information about the provider , the source of the GCP project ID , the GCP project ID for billing and the authentication mode on the GCP.
