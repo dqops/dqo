@@ -138,10 +138,8 @@ ___
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |[profiling](#recurringschedulespec)|Schedule for running profiling data quality checks.|object| | | |
-|[recurring_daily](#recurringschedulespec)|Schedule for running daily recurring checks.|object| | | |
-|[recurring_monthly](#recurringschedulespec)|Schedule for running monthly recurring checks.|object| | | |
-|[partitioned_daily](#recurringschedulespec)|Schedule for running daily partitioned checks.|object| | | |
-|[partitioned_monthly](#recurringschedulespec)|Schedule for running monthly partitioned checks.|object| | | |
+|[daily](#recurringschedulespec)|Schedule for running daily whole table checks and day level time period checks.|object| | | |
+|[monthly](#recurringschedulespec)|Schedule for running monthly whole table checks and month level time period checks.|object| | | |
 
 ___  
 

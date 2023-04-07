@@ -15,7 +15,7 @@ DQO is an DataOps friendly data quality monitoring tool with customizable data q
 
 ## Supported providers
 
-You can use DQO with the most popular databases. [Learn here how to connect data source to DQO](working-with-dqo/adding-connections/bigquery.md)
+You can use DQO with the most popular databases. [Learn here how to connect data source to DQO](working-with-dqo/adding-data-source-connection/bigquery.md)
 
 ![Google BigQuery](./images/connections/google-bigquery.png) &nbsp; &nbsp; &nbsp; ![Snowflake](./images/connections/snowflake.png) &nbsp; &nbsp; &nbsp;  ![Amazon Redshift](./images/connections/amazon-redshift.png) &nbsp; &nbsp; &nbsp; ![PostgreSQL](./images/connections/postgresql.png) &nbsp; &nbsp; &nbsp; ![Microsoft SQL Server](./images/connections/microsoft-sql-server.png)
 

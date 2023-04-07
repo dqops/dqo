@@ -52,16 +52,16 @@ public class SqlServerParametersSpec extends BaseProviderParametersSpec
     @JsonPropertyDescription("SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.")
     private String port;
 
-    @CommandLine.Option(names = {"--sqlserver-database"}, description = "SQL Server database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    @JsonPropertyDescription("SQL Server database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @CommandLine.Option(names = {"--sqlserver-database"}, description = "SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("SQL Server database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String database;
 
-    @CommandLine.Option(names = {"--sqlserver-user"}, description = "SQL Server user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    @JsonPropertyDescription("SQL Server user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @CommandLine.Option(names = {"--sqlserver-user"}, description = "SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("SQL Server user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String user;
 
-    @CommandLine.Option(names = {"--sqlserver-password"}, description = "SQL Server database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
-    @JsonPropertyDescription("SQL Server database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.")
+    @CommandLine.Option(names = {"--sqlserver-password"}, description = "SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
+    @JsonPropertyDescription("SQL Server database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.")
     private String password;
 
     @CommandLine.Option(names = {"--sqlserver-options"}, description = "SQL Server connection 'options' initialization parameter. For example setting this to -c statement_timeout=5min would set the statement timeout parameter for this session to 5 minutes.")
