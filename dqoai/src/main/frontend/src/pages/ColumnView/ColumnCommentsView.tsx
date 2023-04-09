@@ -2,7 +2,6 @@ import React, {useEffect, useState} from 'react';
 import CommentsView from '../../components/Connection/CommentsView';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { CommentSpec } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
@@ -11,6 +10,9 @@ import {
   setUpdatedComments,
   updateColumnComments
 } from '../../redux/actions/column.actions';
+import { CheckTypes } from "../../shared/routes";
+import { useParams } from "react-router-dom";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 
 interface IColumnCommentsViewProps {
   connectionName: string;
@@ -25,11 +27,11 @@ const ColumnCommentsView = ({
   tableName,
   columnName
 }: IColumnCommentsViewProps) => {
-  const { columnBasic, comments, isUpdating, isUpdatedComments } = useSelector(
-    (state: IRootState) => state.column
-  );
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { columnBasic, comments, isUpdating, isUpdatedComments } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [text, setText] = useState('');
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (
@@ -40,7 +42,7 @@ const ColumnCommentsView = ({
       columnBasic.column_name !== columnName
     ) {
       dispatch(
-        getColumnComments(connectionName, schemaName, tableName, columnName)
+        getColumnComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
       );
     }
   }, [connectionName, schemaName, columnName, tableName, columnBasic]);
@@ -48,6 +50,8 @@ const ColumnCommentsView = ({
   const onUpdate = async () => {
     await dispatch(
       updateColumnComments(
+        checkTypes,
+        firstLevelActiveTab,
         connectionName,
         schemaName,
         tableName,
@@ -60,12 +64,12 @@ const ColumnCommentsView = ({
       )
     );
     await dispatch(
-      getColumnComments(connectionName, schemaName, tableName, columnName)
+      getColumnComments(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
     );
   };
 
   const handleChange = (value: CommentSpec[]) => {
-    dispatch(setUpdatedComments(value));
+    dispatch(setUpdatedComments(checkTypes, firstLevelActiveTab, value));
   };
 
   return (
@@ -79,7 +83,7 @@ const ColumnCommentsView = ({
         text={text}
         setText={setText}
         isUpdated={isUpdatedComments}
-        setIsUpdated={(value) => dispatch(setIsUpdatedComments(value))}
+        setIsUpdated={(value) => dispatch(setIsUpdatedComments(checkTypes, firstLevelActiveTab, value))}
         comments={comments}
         onChange={handleChange}
       />

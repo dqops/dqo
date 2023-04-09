@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import Button from '../../components/Button';
@@ -13,18 +12,19 @@ import {
 import { CheckResultOverviewApi } from '../../services/apiClient';
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckTypes } from "../../shared/routes";
 
 const ColumnDailyChecksView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { connection: string, schema: string, table: string, column: string } = useParams();
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, column: string } = useParams();
 
-  const { dailyRecurring, isUpdating, loading } = useSelector(
-    (state: IRootState) => state.column
-  );
+  const { dailyRecurring, isUpdating, loading } = useSelector(getFirstLevelState(checkTypes));
   const [updatedChecksUI, setUpdatedChecksUI] = useState<UICheckContainerModel>();
   const [isUpdated, setIsUpdated] = useState(false);
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
-  
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
+
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnRecurringOverview(connectionName, schemaName, tableName, columnName, 'daily').then((res) => {
       setCheckResultsOverview(res.data);
@@ -38,6 +38,8 @@ const ColumnDailyChecksView = () => {
   useEffect(() => {
     dispatch(
       getColumnDailyRecurring(
+        checkTypes,
+        firstLevelActiveTab,
         connectionName,
         schemaName,
         tableName,
@@ -51,6 +53,8 @@ const ColumnDailyChecksView = () => {
 
     await dispatch(
       updateColumnDailyRecurring(
+        checkTypes,
+        firstLevelActiveTab,
         connectionName,
         schemaName,
         tableName,
@@ -60,6 +64,8 @@ const ColumnDailyChecksView = () => {
     );
     await dispatch(
       getColumnDailyRecurring(
+        checkTypes,
+        firstLevelActiveTab,
         connectionName,
         schemaName,
         tableName,
