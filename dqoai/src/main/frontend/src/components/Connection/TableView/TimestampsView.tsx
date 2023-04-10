@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
 import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
@@ -105,9 +105,10 @@ const TimestampsView = () => {
 
       <SectionWrapper className="mb-8" title="Incremental daily partitioned checks time window">
         <div className="flex mb-4">
-          <span className="w-80">Recent days</span>
+          <span className="w-80 text-sm">Recent days</span>
 
           <NumberInput
+            className="!text-sm"
             onChange={(value) =>
               handleChangeIncremental({
                 daily_partitioning_recent_days: value
@@ -118,7 +119,7 @@ const TimestampsView = () => {
         </div>
 
         <div className="flex">
-          <span className="w-80">Run checks also for today</span>
+          <span className="w-80 text-sm">Run checks also for today</span>
 
           <Checkbox
             onChange={(checked) =>
@@ -132,10 +133,11 @@ const TimestampsView = () => {
       </SectionWrapper>
 
       <SectionWrapper title="Incremental monthly partitioned checks time window">
-        <div className="flex mb-4">
+        <div className="flex mb-4 text-sm">
           <span className="w-80">Recent months</span>
 
           <NumberInput
+            className="!text-sm"
             onChange={(value) =>
               handleChangeIncremental({
                 monthly_partitioning_recent_months: value
@@ -145,10 +147,11 @@ const TimestampsView = () => {
           />
         </div>
 
-        <div className="flex">
+        <div className="flex text-sm">
           <span className="w-80">Run checks also for current month</span>
 
           <Checkbox
+            className="!text-sm"
             onChange={(checked) =>
               handleChangeIncremental({
                 monthly_partitioning_include_current_month: checked
