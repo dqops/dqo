@@ -138,21 +138,22 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
       <table className="mb-6">
         <tbody>
           <tr>
-            <td className="pr-4 py-2">
+            <td className="pr-4 py-4 text-sm">
               <div>Unix cron expression:</div>
             </td>
-            <td className="px-4 py-2">
+            <td className="px-4 py-4 text-sm">
               <Input
+                className="!text-sm"
                 value={schedule?.cron_expression}
                 onChange={onChangeCronExpression}
               />
             </td>
           </tr>
           <tr>
-            <td className="pr-4 py-2">
+            <td className="pr-4 py-2 text-sm">
               <div>Disable schedule:</div>
             </td>
-            <td className="px-4 py-2">
+            <td className="px-4 py-2 text-sm">
               <div className="flex">
                 <Checkbox
                   checked={schedule?.disabled}
@@ -163,63 +164,73 @@ const ScheduleView = ({ schedule, handleChange }: IScheduleViewProps) => {
           </tr>
         </tbody>
       </table>
-      <div className="flex flex-col">
+      <div className="flex flex-col text-sm">
         <RadioButton
           label={getLabel()}
           checked={mode === ''}
           onClick={() => onChangeMode('')}
           className="mb-4"
         />
-        <RadioButton
-          label="Run every X minutes"
-          checked={mode === 'minutes'}
-          onClick={() => onChangeMode('minutes')}
-        />
-        <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "minutes" && "opacity-60")}>
-          <div>Run every</div>
-          <NumberInput
-            min={0}
-            max={60}
-            value={minutes}
-            onChange={onChangeMinutes}
+        <div className="flex items-center">
+          <RadioButton
+            label="Run every X minutes"
+            checked={mode === 'minutes'}
+            onClick={() => onChangeMode('minutes')}
           />
-          <div>minutes</div>
+          <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "minutes" && "opacity-60")}>
+            <div>Run every</div>
+            <NumberInput
+              className="!text-sm"
+              min={0}
+              max={60}
+              value={minutes}
+              onChange={onChangeMinutes}
+            />
+            <div>minutes</div>
+          </div>
         </div>
-        <RadioButton
-          label="Run every hour"
-          checked={mode === 'hour'}
-          onClick={() => onChangeMode('hour')}
-        />
-        <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "hour" && "opacity-60")}>
-          <div>At</div>
-          <NumberInput
-            min={0}
-            max={60}
-            value={minutes}
-            onChange={onChangeMinutes}
+        <div className="flex items-center text-sm">
+          <RadioButton
+            label="Run every hour"
+            checked={mode === 'hour'}
+            onClick={() => onChangeMode('hour')}
           />
-          <div>minutes past hour</div>
+          <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "hour" && "opacity-60")}>
+            <div>At</div>
+            <NumberInput
+              className="!text-sm"
+              min={0}
+              max={60}
+              value={minutes}
+              onChange={onChangeMinutes}
+            />
+            <div>minutes past hour</div>
+          </div>
         </div>
-        <RadioButton
-          label="Run every day"
-          checked={mode === 'day'}
-          onClick={() => onChangeMode('day')}
-        />
-        <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "day" && "opacity-60")}>
-          <div>At</div>
-          <NumberInput
-            min={0}
-            max={60}
-            value={hour}
-            onChange={onChangeHour}
+        <div className="flex items-center text-sm">
+          <RadioButton
+            label="Run every day"
+            checked={mode === 'day'}
+            onClick={() => onChangeMode('day')}
           />
-          <div>:</div>
-          <NumberInput
-            min={0}
-            max={60}
-            value={minutes}
-            onChange={onChangeMinutes}
-          />
+          <div className={clsx("flex px-4 my-4 items-center space-x-3 text-gray-700", mode !== "day" && "opacity-60")}>
+            <div>At</div>
+            <NumberInput
+              className="!text-sm"
+              min={0}
+              max={60}
+              value={hour}
+              onChange={onChangeHour}
+            />
+            <div>:</div>
+            <NumberInput
+              className="!text-sm"
+              min={0}
+              max={60}
+              value={minutes}
+              onChange={onChangeMinutes}
+            />
+          </div>
         </div>
       </div>
     </div>
