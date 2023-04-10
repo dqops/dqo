@@ -83,7 +83,7 @@ const CommentsView = ({
             ))}
         </tbody>
       </table>
-      <div className="flex items-center">
+      <div className="flex items-center py-2">
         <div className="flex-1 pr-4">
           <Input className="h-10 focus:!ring-0 focus:!border" value={text} onChange={onChangeText} />
         </div>
