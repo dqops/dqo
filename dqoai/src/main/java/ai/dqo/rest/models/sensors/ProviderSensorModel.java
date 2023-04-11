@@ -23,20 +23,23 @@ import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
 /**
- * Sensor basic model returned from REST API.
+ * Provider sensor model returned from REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(value = "SensorBasicModel", description = "Sensor basic model")
-public class SensorBasicModel {
+public class ProviderSensorModel {
 
     @JsonPropertyDescription("Provider Sensor definition spec")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private ProviderSensorDefinitionSpec providerSensorDefinitionSpec;
 
     @JsonPropertyDescription("Provider Sql template")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private String sqlTemplate;
 
-    @JsonPropertyDescription("Whether the sensor is a User Home sensor.")
+    @JsonPropertyDescription("Whether the provider sensor is a User Home sensor")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private boolean custom;
-
+    public ProviderSensorModel(){}
 }

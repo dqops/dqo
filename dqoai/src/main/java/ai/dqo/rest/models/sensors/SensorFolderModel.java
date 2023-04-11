@@ -16,7 +16,6 @@
 
 package ai.dqo.rest.models.sensors;
 
-import ai.dqo.connectors.ProviderType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonPropertyDescription;
 import io.swagger.annotations.ApiModel;
@@ -38,7 +37,7 @@ public class SensorFolderModel {
 
     @JsonPropertyDescription("Sensor map")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
-    private Map<ProviderType, SensorBasicModel> sensors;
+    private SensorModel sensor;
 
     @JsonPropertyDescription("Sub-folders")
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -46,19 +45,8 @@ public class SensorFolderModel {
 
     public SensorFolderModel(String folderName) {
         this.folderName = folderName;
-        this.sensors = new HashMap<>();
+        this.sensor = null;
         this.folders = new HashMap<>();
-    }
-
-    public SensorFolderModel(String folderName, Map<ProviderType, SensorBasicModel> sensors, Map<String, SensorFolderModel> folders) {
-        this.folderName = folderName;
-        this.sensors = sensors;
-        this.folders = folders;
-    }
-
-
-    public void setSensors(Map<ProviderType, SensorBasicModel> sensors) {
-        this.sensors = sensors;
     }
 
     public void setFolderName(String folderName) {
@@ -69,65 +57,27 @@ public class SensorFolderModel {
         this.folders = folders;
     }
 
+    public void setSensor(SensorModel sensor) {
+        this.sensor = sensor;
+    }
+
     public String getFolderName() {
         return folderName;
     }
-
-    public Map<ProviderType, SensorBasicModel> getSensors() {
-        return sensors;
-    }
-
     public Map<String, SensorFolderModel> getFolders() {
         return folders;
     }
 
-    /**
-     * Adds a DQO sensor to the Sensor Folder Model.
-     * @param sensorPath The path of the DQO sensor to add.
-     * @param sensors A map containing the ProviderType and SensorBasicModel of each sensor to add.
-     * @return The updated Sensor Folder Model.
-     */
-    public SensorFolderModel withDqoSensor(String sensorPath, Map<ProviderType, SensorBasicModel> sensors) {
-        if (sensorPath == null || sensorPath.isEmpty()) {
-            return this;
-        }
-
-        String[] folders = sensorPath.split("/");
-        SensorFolderModel current = this;
-
-        for (int i = 0; i < folders.length - 1; i++) {
-            String folder = folders[i];
-
-            if (!current.folders.containsKey(folder)) {
-                current.folders.put(folder, new SensorFolderModel(folder));
-            }
-
-            current = current.folders.get(folder);
-        }
-
-        String lastFolder = folders[folders.length - 1];
-        if (!current.folders.containsKey(lastFolder)) {
-            current.folders.put(lastFolder, new SensorFolderModel(lastFolder));
-        }
-
-        current = current.folders.get(lastFolder);
-
-        for (ProviderType provider : sensors.keySet()) {
-            if (!current.sensors.containsKey(provider)) {
-                current.sensors.put(provider, sensors.get(provider));
-            }
-        }
-
-        return this;
+    public SensorModel getSensor() {
+        return sensor;
     }
 
     /**
-     Retrieves the SensorBasicModel of the specified folder(s) within the Sensor Folder Model.
-     @param folderNames The names of the folders to retrieve the SensorBasicModel from.
-     @return A map containing the ProviderType and SensorBasicModel of each sensor in the specified folder(s),
-     or null if the folder(s) does not exist.
+     * Returns a sensor model located in a specific folder identified by an array of folder names.
+     * @param folderNames an array of folder names representing the path to the desired sensor model
+     * @return the sensor model if found, or null if not found
      */
-    public Map<ProviderType, SensorBasicModel> getSensorBasicModel(String[] folderNames) {
+    public SensorModel getSensorModel(String[] folderNames) {
         SensorFolderModel current = this;
         for (String folder : folderNames) {
             if (current.folders.containsKey(folder)) {
@@ -136,6 +86,44 @@ public class SensorFolderModel {
                 return null;
             }
         }
-        return current.sensors;
+        return current.sensor;
+    }
+
+    /**
+     * Adds a sensor model to the sensor folder model hierarchy.
+     * @param sensorModel the sensor model to be added
+     * @return the updated sensor folder model
+     */
+    public SensorFolderModel addSensor(SensorModel sensorModel) {
+        if (sensorModel == null || sensorModel.getSensorName() == null || sensorModel.getSensorName().isEmpty()) {
+            return this;
+        }
+
+        String[] sensorPath = sensorModel.getSensorName().split("/");
+        SensorFolderModel currentFolder = this;
+
+        for (int i = 0; i < sensorPath.length; i++) {
+            String folderName = sensorPath[i];
+            if (i == sensorPath.length - 1) {
+                if (!currentFolder.folders.containsKey(folderName)) {
+                    currentFolder.folders.put(folderName, new SensorFolderModel(folderName));
+                }
+                currentFolder = currentFolder.folders.get(folderName);
+
+                if (currentFolder.sensor != null) {
+                    currentFolder.sensor.setCustom(sensorModel.isCustom());
+                    currentFolder.sensor.setSensorDefinitionSpec(sensorModel.getSensorDefinitionSpec());
+                    currentFolder.sensor.getSensors().putAll(sensorModel.getSensors());
+                } else {
+                    currentFolder.sensor = sensorModel;
+                }
+            } else {
+                if (!currentFolder.folders.containsKey(folderName)) {
+                    currentFolder.folders.put(folderName, new SensorFolderModel(folderName));
+                }
+                currentFolder = currentFolder.folders.get(folderName);
+            }
+        }
+        return this;
     }
 }
