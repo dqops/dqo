@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ColumnSelect from '../../DataQualityChecks/ColumnSelect';
 import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import {
   getTableTimestamps, setUpdatedTablePartitioning,
   updateTableTimestamps
@@ -12,16 +11,17 @@ import { useParams } from "react-router-dom";
 import SectionWrapper from "../../Dashboard/SectionWrapper";
 import NumberInput from "../../NumberInput";
 import Checkbox from "../../Checkbox";
+import { CheckTypes } from "../../../shared/routes";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
 
 const TimestampsView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
-  const { tablePartitioning, updatingTablePartitioning, isUpdatedTablePartitioning } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes:CheckTypes, connection: string, schema: string, table: string } = useParams();
+  const { tablePartitioning, updatingTablePartitioning, isUpdatedTablePartitioning } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const handleChangeTimestamps = (obj: any) => {
-    dispatch(setUpdatedTablePartitioning({
+    dispatch(setUpdatedTablePartitioning(checkTypes, firstLevelActiveTab, {
       ...tablePartitioning,
       timestamp_columns: {
         ...tablePartitioning?.timestamp_columns,
@@ -31,7 +31,7 @@ const TimestampsView = () => {
   };
 
   const handleChangeIncremental = (obj: any) => {
-    dispatch(setUpdatedTablePartitioning({
+    dispatch(setUpdatedTablePartitioning(checkTypes, firstLevelActiveTab,{
       ...tablePartitioning,
       incremental_time_window: {
         ...tablePartitioning?.incremental_time_window,
@@ -41,16 +41,16 @@ const TimestampsView = () => {
   };
 
   useEffect(() => {
-    dispatch(getTableTimestamps(connectionName, schemaName, tableName));
+    dispatch(getTableTimestamps(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   }, [connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (!tablePartitioning) return;
 
     await dispatch(
-      updateTableTimestamps(connectionName, schemaName, tableName, tablePartitioning)
+      updateTableTimestamps(checkTypes, firstLevelActiveTab,connectionName, schemaName, tableName, tablePartitioning)
     );
-    dispatch(getTableTimestamps(connectionName, schemaName, tableName));
+    dispatch(getTableTimestamps(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
   };
 
   const isDisabled = !isUpdatedTablePartitioning;
@@ -105,9 +105,10 @@ const TimestampsView = () => {
 
       <SectionWrapper className="mb-8" title="Incremental daily partitioned checks time window">
         <div className="flex mb-4">
-          <span className="w-80">Recent days</span>
+          <span className="w-80 text-sm">Recent days</span>
 
           <NumberInput
+            className="!text-sm"
             onChange={(value) =>
               handleChangeIncremental({
                 daily_partitioning_recent_days: value
@@ -118,7 +119,7 @@ const TimestampsView = () => {
         </div>
 
         <div className="flex">
-          <span className="w-80">Run checks also for today</span>
+          <span className="w-80 text-sm">Run checks also for today</span>
 
           <Checkbox
             onChange={(checked) =>
@@ -132,10 +133,11 @@ const TimestampsView = () => {
       </SectionWrapper>
 
       <SectionWrapper title="Incremental monthly partitioned checks time window">
-        <div className="flex mb-4">
+        <div className="flex mb-4 text-sm">
           <span className="w-80">Recent months</span>
 
           <NumberInput
+            className="!text-sm"
             onChange={(value) =>
               handleChangeIncremental({
                 monthly_partitioning_recent_months: value
@@ -145,10 +147,11 @@ const TimestampsView = () => {
           />
         </div>
 
-        <div className="flex">
+        <div className="flex text-sm">
           <span className="w-80">Run checks also for current month</span>
 
           <Checkbox
+            className="!text-sm"
             onChange={(checked) =>
               handleChangeIncremental({
                 monthly_partitioning_include_current_month: checked

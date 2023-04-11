@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import ColumnActionGroup from './ColumnActionGroup';
 import LabelsView from '../../components/Connection/LabelsView';
@@ -9,6 +8,9 @@ import {
   setUpdatedLabels,
   updateColumnLabels
 } from '../../redux/actions/column.actions';
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckTypes } from "../../shared/routes";
+import { useParams } from "react-router-dom";
 
 interface IColumnLabelsViewProps {
   connectionName: string;
@@ -23,10 +25,10 @@ const ColumnLabelsView = ({
   tableName,
   columnName
 }: IColumnLabelsViewProps) => {
-  const { labels, isUpdating, isUpdatedLabels, columnBasic } = useSelector(
-    (state: IRootState) => state.column
-  );
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { labels, isUpdating, isUpdatedLabels, columnBasic } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (
@@ -37,14 +39,16 @@ const ColumnLabelsView = ({
       columnBasic.column_name !== columnName
     ) {
       dispatch(
-        getColumnLabels(connectionName, schemaName, tableName, columnName)
+        getColumnLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
       );
     }
-  }, [labels, connectionName, schemaName, columnName, tableName, columnBasic]);
+  }, [checkTypes, firstLevelActiveTab, labels, connectionName, schemaName, columnName, tableName, columnBasic]);
 
   const onUpdate = async () => {
     await dispatch(
       updateColumnLabels(
+        checkTypes,
+        firstLevelActiveTab,
         connectionName,
         schemaName,
         tableName,
@@ -53,12 +57,12 @@ const ColumnLabelsView = ({
       )
     );
     await dispatch(
-      getColumnLabels(connectionName, schemaName, tableName, columnName)
+      getColumnLabels(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
     );
   };
 
   const handleChange = (value: string[]) => {
-    dispatch(setUpdatedLabels(value));
+    dispatch(setUpdatedLabels(checkTypes, firstLevelActiveTab, value));
   };
 
   return (

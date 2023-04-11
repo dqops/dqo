@@ -17,8 +17,7 @@
 import { Dispatch } from 'redux';
 
 import { TableApiClient } from '../../services/apiClient';
-import { TABLE_ACTION } from '../types';
-import { AxiosResponse } from 'axios';
+import { SOURCE_ACTION } from '../types';
 import {
   CommentSpec,
   DataStreamMappingSpec,
@@ -28,86 +27,66 @@ import {
   UICheckContainerModel, TablePartitioningModel
 } from '../../api';
 import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
+import { CheckTypes } from "../../shared/routes";
 
-export const getTablesRequest = () => ({
-  type: TABLE_ACTION.GET_TABLES
+export const getTableBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_BASIC,
+  checkType, activeTab,
 });
 
-export const getTablesSuccess = (data: TableBasicModel[]) => ({
-  type: TABLE_ACTION.GET_TABLES_SUCCESS,
-  data
-});
-
-export const getTablesFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLES_ERROR,
-  error
-});
-
-export const getAllTables =
-  (connectionName: string, schemaName: string) =>
-  async (dispatch: Dispatch) => {
-    dispatch(getTablesRequest());
-    try {
-      const res: AxiosResponse<TableBasicModel[]> =
-        await TableApiClient.getTables(connectionName, schemaName);
-      dispatch(getTablesSuccess(res.data));
-    } catch (err) {
-      dispatch(getTablesFailed(err));
-    }
-  };
-
-export const getTableBasicRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_BASIC
-});
-
-export const getTableBasicSuccess = (data: TableBasicModel) => ({
-  type: TABLE_ACTION.GET_TABLE_BASIC_SUCCESS,
+export const getTableBasicSuccess = (checkType: CheckTypes, activeTab: string, data: TableBasicModel) => ({
+  type: SOURCE_ACTION.GET_TABLE_BASIC_SUCCESS,
+  checkType, activeTab,
   data
 });
 
 export const getTableBasicFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_BASIC_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_BASIC_ERROR,
   error
 });
 
 export const getTableBasic =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableBasicRequest());
+    dispatch(getTableBasicRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTableBasic(
         connectionName,
         schemaName,
         tableName
       );
-      dispatch(getTableBasicSuccess(res.data));
+      dispatch(getTableBasicSuccess(checkType, activeTab, res.data));
     } catch (err) {
-      dispatch(getTablesFailed(err));
+      dispatch(getTableBasicFailed(err));
     }
   };
 
-export const updateTableBasicRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_BASIC
+export const updateTableBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_BASIC,
+  checkType, activeTab,
 });
 
-export const updateTableBasicSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_BASIC_SUCCESS
+export const updateTableBasicSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_BASIC_SUCCESS,
+  checkType, activeTab,
 });
 
 export const updateTableBasicFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_BASIC_ERROR,
+  type: SOURCE_ACTION.UPDATE_TABLE_BASIC_ERROR,
   error
 });
 
 export const updateTableBasic =
   (
+    checkType: CheckTypes,
+    activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
     data: TableBasicModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableBasicRequest());
+    dispatch(updateTableBasicRequest(checkType, activeTab));
     try {
       await TableApiClient.updateTableBasic(
         connectionName,
@@ -115,35 +94,38 @@ export const updateTableBasic =
         tableName,
         data
       );
-      dispatch(updateTableBasicSuccess());
+      dispatch(updateTableBasicSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateTableBasicFailed(err));
     }
   };
 
-export const resetTableSchedulingGroup = () => ({
-  type: TABLE_ACTION.RESET_TABLE_SCHEDULE_GROUP
+export const resetTableSchedulingGroup = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.RESET_TABLE_SCHEDULE_GROUP,
+  checkType, activeTab,
 });
 
-export const getTableSchedulingGroupRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP
+export const getTableSchedulingGroupRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_SCHEDULE_GROUP,
+  checkType, activeTab,
 });
 
-export const getTableSchedulingGroupSuccess = (schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) => ({
-  type: TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP_SUCCESS,
+export const getTableSchedulingGroupSuccess = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) => ({
+  type: SOURCE_ACTION.GET_TABLE_SCHEDULE_GROUP_SUCCESS,
+  checkType, activeTab,
   schedulingGroup,
   data
 });
 
 export const getTableSchedulingGroupFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_SCHEDULE_GROUP_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_SCHEDULE_GROUP_ERROR,
   error
 });
 
 export const getTableSchedulingGroup =
-  (connectionName: string, schemaName: string, tableName: string, schedulingGroup: CheckRunRecurringScheduleGroup) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, schedulingGroup: CheckRunRecurringScheduleGroup) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableSchedulingGroupRequest());
+    dispatch(getTableSchedulingGroupRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTableSchedulingGroupOverride(
         connectionName,
@@ -151,27 +133,31 @@ export const getTableSchedulingGroup =
         tableName,
         schedulingGroup
       );
-      dispatch(getTableSchedulingGroupSuccess(schedulingGroup, res.data));
+      dispatch(getTableSchedulingGroupSuccess(checkType, activeTab, schedulingGroup, res.data));
     } catch (err) {
       dispatch(getTableSchedulingGroupFailed(err));
     }
   };
 
-export const updateTableSchedulingGroupRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP
+export const updateTableSchedulingGroupRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP,
+  checkType, activeTab,
 });
 
-export const updateTableSchedulingGroupSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP_SUCCESS
+export const updateTableSchedulingGroupSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP_SUCCESS,
+  checkType, activeTab,
 });
 
 export const updateTableSchedulingGroupFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP_ERROR,
+  type: SOURCE_ACTION.UPDATE_TABLE_SCHEDULE_GROUP_ERROR,
   error
 });
 
 export const updateTableSchedulingGroup =
   (
+    checkType: CheckTypes,
+    activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
@@ -179,7 +165,7 @@ export const updateTableSchedulingGroup =
     data: RecurringScheduleSpec
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableSchedulingGroupRequest());
+    dispatch(updateTableSchedulingGroupRequest(checkType, activeTab));
     try {
       await TableApiClient.updateTableSchedulingGroupOverride (
         connectionName,
@@ -188,64 +174,69 @@ export const updateTableSchedulingGroup =
         schedulingGroup,
         data
       );
-      dispatch(updateTableSchedulingGroupSuccess());
+      dispatch(updateTableSchedulingGroupSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateTableSchedulingGroupFailed(err));
     }
   };
 
-export const getTableCommentsRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_COMMENTS
+export const getTableCommentsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_COMMENTS,
+  checkType, activeTab,
 });
 
-export const getTableCommentsSuccess = (data: CommentSpec[]) => ({
-  type: TABLE_ACTION.GET_TABLE_COMMENTS_SUCCESS,
+export const getTableCommentsSuccess = (checkType: CheckTypes, activeTab: string, data: CommentSpec[]) => ({
+  type: SOURCE_ACTION.GET_TABLE_COMMENTS_SUCCESS,
+  checkType, activeTab,
   data
 });
 
 export const getTableCommentsFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_COMMENTS_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_COMMENTS_ERROR,
   error
 });
 
 export const getTableComments =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableCommentsRequest());
+    dispatch(getTableCommentsRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTableComments(
         connectionName,
         schemaName,
         tableName
       );
-      dispatch(getTableCommentsSuccess(res.data));
+      dispatch(getTableCommentsSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getTableCommentsFailed(err));
     }
   };
 
-export const updateTableCommentsRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_COMMENTS
+export const updateTableCommentsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_COMMENTS,
+  checkType, activeTab,
 });
 
-export const updateTableCommentsSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_COMMENTS_SUCCESS
+export const updateTableCommentsSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_COMMENTS_SUCCESS,
+  checkType, activeTab,
 });
 
 export const updateTableCommentsFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_COMMENTS_ERROR,
+  type: SOURCE_ACTION.UPDATE_TABLE_COMMENTS_ERROR,
   error
 });
 
 export const updateTableComments =
   (
+    checkType: CheckTypes, activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
     data: CommentSpec[]
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableCommentsRequest());
+    dispatch(updateTableCommentsRequest(checkType, activeTab));
     try {
       await TableApiClient.updateTableComments(
         connectionName,
@@ -253,64 +244,70 @@ export const updateTableComments =
         tableName,
         data
       );
-      dispatch(updateTableCommentsSuccess());
+      dispatch(updateTableCommentsSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateTableCommentsFailed(err));
     }
   };
 
-export const getTableLabelsRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_LABELS
+export const getTableLabelsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_LABELS,
+  checkType, activeTab,
 });
 
-export const getTableLabelsSuccess = (data: string[]) => ({
-  type: TABLE_ACTION.GET_TABLE_LABELS_SUCCESS,
+export const getTableLabelsSuccess = (checkType: CheckTypes, activeTab: string, data: string[]) => ({
+  type: SOURCE_ACTION.GET_TABLE_LABELS_SUCCESS,
+  checkType, activeTab,
   data
 });
 
 export const getTableLabelsFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_LABELS_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_LABELS_ERROR,
   error
 });
 
 export const getTableLabels =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableLabelsRequest());
+    dispatch(getTableLabelsRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTableLabels(
         connectionName,
         schemaName,
         tableName
       );
-      dispatch(getTableLabelsSuccess(res.data || []));
+      dispatch(getTableLabelsSuccess(checkType, activeTab,res.data || []));
     } catch (err) {
       dispatch(getTableLabelsFailed(err));
     }
   };
 
-export const updateTableLabelsRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_LABELS
+export const updateTableLabelsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_LABELS,
+  checkType, activeTab,
 });
 
-export const updateTableLabelsSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_LABELS_SUCCESS
+export const updateTableLabelsSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_LABELS_SUCCESS,
+  checkType, activeTab,
 });
 
 export const updateTableLabelsFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_LABELS_ERROR,
+  type: SOURCE_ACTION.UPDATE_TABLE_LABELS_ERROR,
   error
 });
 
 export const updateTableLabels =
   (
+    checkType: CheckTypes,
+    activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
     data: string[]
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableLabelsRequest());
+    dispatch(updateTableLabelsRequest(checkType, activeTab));
     try {
       await TableApiClient.updateTableLabels(
         connectionName,
@@ -318,94 +315,102 @@ export const updateTableLabels =
         tableName,
         data
       );
-      dispatch(updateTableLabelsSuccess());
+      dispatch(updateTableLabelsSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateTableLabelsFailed(err));
     }
   };
 // TODO: getTableChecks -> getTableProfilingChecks. Also getTableRecurring and getTablePartitionedChecks for CheckTimePartition
-export const getTableChecksRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS
+export const getTableChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS,
+  checkType, activeTab,
 });
 
-export const getTableChecksSuccess = (data: TableProfilingCheckCategoriesSpec) => ({
-  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_SUCCESS,
+export const getTableChecksSuccess = (checkType: CheckTypes, activeTab: string, data: TableProfilingCheckCategoriesSpec) => ({
+  type: SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_SUCCESS,
+  checkType, activeTab,
   data
 });
 
 export const getTableChecksFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_ERROR,
   error
 });
 
 export const getTableProfilingChecks =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableChecksRequest());
+    dispatch(getTableChecksRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTableProfilingChecks(
         connectionName,
         schemaName,
         tableName
       );
-      dispatch(getTableChecksSuccess(res.data));
+      dispatch(getTableChecksSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getTableChecksFailed(err));
     }
   };
 
-export const getTableChecksUiRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI
+export const getTableChecksUiRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI,
+  checkType, activeTab,
 });
 
-export const getTableChecksUiSuccess = (data: UICheckContainerModel) => ({
-  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS,
+export const getTableChecksUiSuccess = (checkType: CheckTypes, activeTab: string, data: UICheckContainerModel) => ({
+  type: SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS,
+  checkType, activeTab,
   data
 });
 
 export const getTableChecksUiFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_DATA_QUALITY_CHECKS_UI_ERROR,
   error
 });
 
 export const getTableProfilingChecksUI =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableChecksUiRequest());
+    dispatch(getTableChecksUiRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTableProfilingChecksUI(
         connectionName,
         schemaName,
         tableName
       );
-      dispatch(getTableChecksUiSuccess(res.data));
+      dispatch(getTableChecksUiSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getTableChecksUiFailed(err));
     }
   };
 
-export const updateTableChecksUIRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI
+export const updateTableChecksUIRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI,
+  checkType, activeTab,
 });
 
-export const updateTableChecksUISuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS
+export const updateTableChecksUISuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI_SUCCESS,
+  checkType, activeTab,
 });
 
 export const updateTableChecksUIFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI_ERROR,
+  type: SOURCE_ACTION.UPDATE_TABLE_DATA_QUALITY_CHECKS_UI_ERROR,
   error
 });
 
 export const updateTableProfilingChecksUI =
   (
+    checkType: CheckTypes,
+    activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
     data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableChecksUIRequest());
+    dispatch(updateTableChecksUIRequest(checkType, activeTab));
     try {
       await TableApiClient.updateTableProfilingChecksUI(
         connectionName,
@@ -413,66 +418,72 @@ export const updateTableProfilingChecksUI =
         tableName,
         data
       );
-      dispatch(updateTableChecksUISuccess());
+      dispatch(updateTableChecksUISuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateTableChecksUIFailed(err));
     }
   };
 
-export const getTableDefaultDataStreamsMappingRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING
+export const getTableDefaultDataStreamsMappingRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING,
+  checkType, activeTab,
 });
 
 export const getTableDefaultDataStreamsMappingSuccess = (
-  data: DataStreamMappingSpec
+  checkType: CheckTypes, activeTab: string, data: DataStreamMappingSpec
 ) => ({
-  type: TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
+  type: SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
+  checkType, activeTab,
   data
 });
 
 export const getTableDefaultDataStreamsMappingFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
 export const getTableDefaultDataStreamMapping =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableDefaultDataStreamsMappingRequest());
+    dispatch(getTableDefaultDataStreamsMappingRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTableDefaultDataStreamsMapping(
         connectionName,
         schemaName,
         tableName
       );
-      dispatch(getTableDefaultDataStreamsMappingSuccess(res.data));
+      dispatch(getTableDefaultDataStreamsMappingSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getTableDefaultDataStreamsMappingFailed(err));
     }
   };
 
-export const updateTableDefaultDataStreamsMappingRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING
+export const updateTableDefaultDataStreamsMappingRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING,
+  checkType, activeTab,
 });
 
-export const updateTableDefaultDataStreamsSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS
+export const updateTableDefaultDataStreamsSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
+  checkType, activeTab,
 });
 
 export const updateTableDefaultDataStreamsMappingFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
+  type: SOURCE_ACTION.UPDATE_TABLE_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
 export const updateTableDefaultDataStreamMapping =
   (
+    checkType: CheckTypes,
+    activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
     data: DataStreamMappingSpec
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableDefaultDataStreamsMappingRequest());
+    dispatch(updateTableDefaultDataStreamsMappingRequest(checkType, activeTab));
     try {
       await TableApiClient.updateTableDefaultDataStreamsMapping(
         connectionName,
@@ -480,30 +491,32 @@ export const updateTableDefaultDataStreamMapping =
         tableName,
         data
       );
-      dispatch(updateTableDefaultDataStreamsSuccess());
+      dispatch(updateTableDefaultDataStreamsSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateTableDefaultDataStreamsMappingFailed(err));
     }
   };
 
-export const getTableDailyRecurringRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_DAILY_RECURRING
+export const getTableDailyRecurringRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_DAILY_RECURRING,
+  checkType, activeTab,
 });
 
-export const getTableDailyRecurringSuccess = (data: UICheckContainerModel) => ({
-  type: TABLE_ACTION.GET_TABLE_DAILY_RECURRING_SUCCESS,
+export const getTableDailyRecurringSuccess = (checkType: CheckTypes, activeTab: string, data: UICheckContainerModel) => ({
+  type: SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_SUCCESS,
+  checkType, activeTab,
   data
 });
 
 export const getTableDailyRecurringFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_DAILY_RECURRING_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_DAILY_RECURRING_ERROR,
   error
 });
 
 export const getTableDailyRecurring =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableDailyRecurringRequest());
+    dispatch(getTableDailyRecurringRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTableRecurringUI(
         connectionName,
@@ -511,34 +524,38 @@ export const getTableDailyRecurring =
         tableName,
         'daily'
       );
-      dispatch(getTableDailyRecurringSuccess(res.data));
+      dispatch(getTableDailyRecurringSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getTableDailyRecurringFailed(err));
     }
   };
 
-export const updateTableDailyRecurringRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DAILY_RECURRING
+export const updateTableDailyRecurringRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING,
+  checkType, activeTab
 });
 
-export const updateTableDailyRecurringSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DAILY_RECURRING_SUCCESS
+export const updateTableDailyRecurringSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_SUCCESS,
+  checkType, activeTab
 });
 
 export const updateTableDailyRecurringFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_DAILY_RECURRING_ERROR,
+  type: SOURCE_ACTION.UPDATE_TABLE_DAILY_RECURRING_ERROR,
   error
 });
 
 export const updateTableDailyRecurring =
   (
+    checkType: CheckTypes,
+    activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
     data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableDailyRecurringRequest());
+    dispatch(updateTableDailyRecurringRequest(checkType, activeTab));
     try {
       await TableApiClient.updateTableRecurringUI(
         connectionName,
@@ -547,30 +564,32 @@ export const updateTableDailyRecurring =
         'daily',
         data
       );
-      dispatch(updateTableDailyRecurringSuccess());
+      dispatch(updateTableDailyRecurringSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateTableDailyRecurringFailed(err));
     }
   };
 
-export const getTableMonthlyRecurringRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING
+export const getTableMonthlyRecurringRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING,
+  checkType, activeTab
 });
 
-export const getTableMonthlyRecurringSuccess = (data: UICheckContainerModel) => ({
-  type: TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING_SUCCESS,
-  data
+export const getTableMonthlyRecurringSuccess = (checkType: CheckTypes, activeTab: string, data: UICheckContainerModel) => ({
+  type: SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_SUCCESS,
+  data,
+  checkType, activeTab
 });
 
 export const getTableMonthlyRecurringFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_MONTHLY_RECURRING_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_MONTHLY_RECURRING_ERROR,
   error
 });
 
 export const getTableMonthlyRecurring =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableMonthlyRecurringRequest());
+    dispatch(getTableMonthlyRecurringRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTableRecurringUI(
         connectionName,
@@ -578,34 +597,40 @@ export const getTableMonthlyRecurring =
         tableName,
         'monthly'
       );
-      dispatch(getTableMonthlyRecurringSuccess(res.data));
+      dispatch(getTableMonthlyRecurringSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getTableMonthlyRecurringFailed(err));
     }
   };
 
-export const updateTableMonthlyRecurringRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING
+export const updateTableMonthlyRecurringRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING,
+  checkType,
+  activeTab
 });
 
-export const updateTableMonthlyRecurringSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_SUCCESS
+export const updateTableMonthlyRecurringSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_SUCCESS,
+  checkType,
+  activeTab
 });
 
 export const updateTableMonthlyRecurringFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_ERROR,
+  type: SOURCE_ACTION.UPDATE_TABLE_MONTHLY_RECURRING_ERROR,
   error
 });
 
 export const updateTableMonthlyRecurring =
   (
+    checkType: CheckTypes,
+    activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
     data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableMonthlyRecurringRequest());
+    dispatch(updateTableMonthlyRecurringRequest(checkType, activeTab));
     try {
       await TableApiClient.updateTableRecurringUI(
         connectionName,
@@ -614,32 +639,36 @@ export const updateTableMonthlyRecurring =
         'monthly',
         data
       );
-      dispatch(updateTableMonthlyRecurringSuccess());
+      dispatch(updateTableMonthlyRecurringSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateTableMonthlyRecurringFailed(err));
     }
   };
 
-export const getTableDailyPartitionedChecksRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS
+export const getTableDailyPartitionedChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS,
+  checkType,
+  activeTab
 });
 
 export const getTableDailyPartitionedChecksSuccess = (
-  data: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
 ) => ({
-  type: TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS,
-  data
+  type: SOURCE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS,
+  data,
+  checkType,
+  activeTab
 });
 
 export const getTableDailyPartitionedChecksFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_PARTITIONED_DAILY_CHECKS_ERROR,
   error
 });
 
 export const getTableDailyPartitionedChecks =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableDailyPartitionedChecksRequest());
+    dispatch(getTableDailyPartitionedChecksRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTablePartitionedChecksUI(
         connectionName,
@@ -647,34 +676,40 @@ export const getTableDailyPartitionedChecks =
         tableName,
         'daily'
       );
-      dispatch(getTableDailyPartitionedChecksSuccess(res.data));
+      dispatch(getTableDailyPartitionedChecksSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getTableDailyPartitionedChecksFailed(err));
     }
   };
 
-export const updateTableDailyPartitionedChecksRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS
+export const updateTableDailyPartitionedChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS,
+  checkType,
+  activeTab
 });
 
-export const updateTableDailyPartitionedChecksSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS
+export const updateTableDailyPartitionedChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS_SUCCESS,
+  checkType,
+  activeTab
 });
 
 export const updateTableDailyPartitionedChecksFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS_ERROR,
+  type: SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_DAILY_CHECKS_ERROR,
   error
 });
 
 export const updateTableDailyPartitionedChecks =
   (
+    checkType: CheckTypes,
+    activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
     data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableDailyPartitionedChecksRequest());
+    dispatch(updateTableDailyPartitionedChecksRequest(checkType, activeTab));
     try {
       await TableApiClient.updateTablePartitionedChecksUI(
         connectionName,
@@ -683,32 +718,36 @@ export const updateTableDailyPartitionedChecks =
         'daily',
         data
       );
-      dispatch(updateTableDailyPartitionedChecksSuccess());
+      dispatch(updateTableDailyPartitionedChecksSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateTableDailyPartitionedChecksFailed(err));
     }
   };
 
-export const getTableMonthlyPartitionedChecksRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS
+export const getTableMonthlyPartitionedChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS,
+  checkType,
+  activeTab
 });
 
 export const getTableMonthlyPartitionedChecksSuccess = (
-  data: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
 ) => ({
-  type: TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
-  data
+  type: SOURCE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
+  data,
+  checkType,
+  activeTab
 });
 
 export const getTableMonthlyPartitionedChecksFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR,
   error
 });
 
 export const getTableMonthlyPartitionedChecks =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
   async (dispatch: Dispatch) => {
-    dispatch(getTableMonthlyPartitionedChecksRequest());
+    dispatch(getTableMonthlyPartitionedChecksRequest(checkType, activeTab));
     try {
       const res = await TableApiClient.getTablePartitionedChecksUI(
         connectionName,
@@ -716,34 +755,40 @@ export const getTableMonthlyPartitionedChecks =
         tableName,
         'monthly'
       );
-      dispatch(getTableMonthlyPartitionedChecksSuccess(res.data));
+      dispatch(getTableMonthlyPartitionedChecksSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getTableMonthlyPartitionedChecksFailed(err));
     }
   };
 
-export const updateTableMonthlyPartitionedChecksRequest = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS
+export const updateTableMonthlyPartitionedChecksRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS,
+  checkType,
+  activeTab
 });
 
-export const updateTableMonthlyPartitionedChecksSuccess = () => ({
-  type: TABLE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS
+export const updateTableMonthlyPartitionedChecksSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS_SUCCESS,
+  checkType,
+  activeTab
 });
 
 export const updateTableMonthlyPartitionedChecksFailed = (error: unknown) => ({
-  type: TABLE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR,
+  type: SOURCE_ACTION.UPDATE_TABLE_PARTITIONED_MONTHLY_CHECKS_ERROR,
   error
 });
 
 export const updateTableMonthlyPartitionedChecks =
   (
+    checkType: CheckTypes,
+    activeTab: string,
     connectionName: string,
     schemaName: string,
     tableName: string,
     data: UICheckContainerModel
   ) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateTableMonthlyPartitionedChecksRequest());
+    dispatch(updateTableMonthlyPartitionedChecksRequest(checkType, activeTab));
     try {
       await TableApiClient.updateTablePartitionedChecksUI(
         connectionName,
@@ -752,103 +797,137 @@ export const updateTableMonthlyPartitionedChecks =
         'monthly',
         data
       );
-      dispatch(updateTableMonthlyPartitionedChecksSuccess());
+      dispatch(updateTableMonthlyPartitionedChecksSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateTableMonthlyPartitionedChecksFailed(err));
     }
   };
 
-export const setUpdatedTableBasic = (table?: TableBasicModel) => ({
-  type: TABLE_ACTION.SET_UPDATED_TABLE_BASIC,
-  table
+export const setUpdatedTableBasic = (checkType: CheckTypes, activeTab: string, table?: TableBasicModel) => ({
+  type: SOURCE_ACTION.SET_UPDATED_TABLE_BASIC,
+  data: table,
+  checkType,
+  activeTab
 });
 
-export const setUpdatedSchedule = (schedule?: RecurringScheduleSpec) => ({
-  type: TABLE_ACTION.SET_UPDATED_SCHEDULE,
-  schedule
+export const setUpdatedSchedule = (checkType: CheckTypes, activeTab: string, schedule?: RecurringScheduleSpec) => ({
+  type: SOURCE_ACTION.SET_UPDATED_SCHEDULE,
+  data: schedule,
+  checkType,
+  activeTab
 });
-export const setUpdatedSchedulingGroup = (schedulingGroup: CheckRunRecurringScheduleGroup, schedule?: RecurringScheduleSpec) => ({
-  type: TABLE_ACTION.SET_UPDATED_SCHEDULE_GROUP,
-  schedulingGroup,
-  schedule
+export const setUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, schedule?: RecurringScheduleSpec) => ({
+  type: SOURCE_ACTION.SET_UPDATED_SCHEDULE_GROUP,
+  data: {
+    schedulingGroup,
+    schedule,
+  },
+  checkType,
+  activeTab
 });
-export const setIsUpdatedSchedulingGroup = (schedulingGroup: CheckRunRecurringScheduleGroup, isUpdated: boolean) => ({
-  type: TABLE_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP,
-  isUpdated,
-  schedulingGroup
-});
-
-export const setUpdatedComments = (comments?: CommentSpec[]) => ({
-  type: TABLE_ACTION.SET_UPDATED_COMMENTS,
-  comments
-});
-
-export const setIsUpdatedComments = (isUpdated?: boolean) => ({
-  type: TABLE_ACTION.SET_IS_UPDATED_COMMENTS,
-  isUpdated
-});
-
-export const setUpdatedLabels = (labels?: string[]) => ({
-  type: TABLE_ACTION.SET_UPDATED_LABELS,
-  labels
+export const setIsUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, isUpdated: boolean) => ({
+  type: SOURCE_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP,
+  data: {
+    isUpdated,
+    schedulingGroup,
+  },
+  checkType,
+  activeTab
 });
 
-export const setUpdatedChecksUi = (checksUI?: UICheckContainerModel) => ({
-  type: TABLE_ACTION.SET_UPDATED_CHECKS_UI,
-  checksUI
+export const setUpdatedComments = (checkType: CheckTypes, activeTab: string, comments?: CommentSpec[]) => ({
+  type: SOURCE_ACTION.SET_UPDATED_COMMENTS,
+  data: comments,
+  checkType,
+  activeTab
 });
 
-export const setUpdatedDailyRecurring = (checksUI?: UICheckContainerModel) => ({
-  type: TABLE_ACTION.SET_TABLE_DAILY_RECURRING,
-  checksUI
+export const setIsUpdatedComments = (checkType: CheckTypes, activeTab: string, isUpdated?: boolean) => ({
+  type: SOURCE_ACTION.SET_IS_UPDATED_COMMENTS,
+  data: isUpdated,
+  checkType,
+  activeTab
 });
 
-export const setUpdatedMonthlyRecurring = (checksUI?: UICheckContainerModel) => ({
-  type: TABLE_ACTION.SET_TABLE_MONTHLY_RECURRING,
-  checksUI
+export const setUpdatedLabels = (checkType: CheckTypes, activeTab: string, labels?: string[]) => ({
+  type: SOURCE_ACTION.SET_UPDATED_LABELS,
+  data: labels,
+  checkType,
+  activeTab
+});
+
+export const setUpdatedChecksUi = (checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_UPDATED_CHECKS_UI,
+  data: checksUI,
+  checkType,
+  activeTab
+});
+
+export const setUpdatedDailyRecurring = (checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_TABLE_DAILY_RECURRING,
+  data: checksUI,
+  checkType,
+  activeTab
+});
+
+export const setUpdatedMonthlyRecurring = (checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_TABLE_MONTHLY_RECURRING,
+  data: checksUI,
+  checkType,
+  activeTab
 });
 
 export const setUpdatedDailyPartitionedChecks = (
-  checksUI?: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel
 ) => ({
-  type: TABLE_ACTION.SET_TABLE_PARTITIONED_DAILY_CHECKS,
-  checksUI
+  type: SOURCE_ACTION.SET_TABLE_PARTITIONED_DAILY_CHECKS,
+  data: checksUI,
+  checkType,
+  activeTab
 });
 
 export const setUpdatedMonthlyPartitionedChecks = (
-  checksUI?: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, checksUI?: UICheckContainerModel
 ) => ({
-  type: TABLE_ACTION.SET_TABLE_PARTITIONED_MONTHLY_CHECKS,
-  checksUI
+  type: SOURCE_ACTION.SET_TABLE_PARTITIONED_MONTHLY_CHECKS,
+  data: checksUI,
+  checkType,
+  activeTab
 });
 
 export const setUpdatedTableDataStreamsMapping = (
-  dataStreamsMapping?: DataStreamMappingSpec
+  checkType: CheckTypes, activeTab: string, dataStreamsMapping?: DataStreamMappingSpec
 ) => ({
-  type: TABLE_ACTION.SET_TABLE_DEFAULT_DATA_STREAMS_MAPPING,
-  dataStreamsMapping
+  type: SOURCE_ACTION.SET_TABLE_DEFAULT_DATA_STREAMS_MAPPING,
+  data: dataStreamsMapping,
+  checkType,
+  activeTab,
 });
 
-export const getTableProfilingChecksUIFilterRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER
+export const getTableProfilingChecksUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER,
+  checkType,
+  activeTab
 });
 
 export const getTableProfilingChecksUIFilterSuccess = (
-  data: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
 ) => ({
-  type: TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
+  type: SOURCE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_SUCCESS,
+  checkType,
+  activeTab,
   data
 });
 
 export const getTableProfilingChecksUIFilterFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_PROFILINGS_CHECKS_UI_FILTER_ERROR,
   error
 });
 
 export const getTableProfilingChecksUIFilter =
-  (connectionName: string, schemaName: string, tableName: string, category: string, checkName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, category: string, checkName: string) =>
     async (dispatch: Dispatch) => {
-      dispatch(getTableProfilingChecksUIFilterRequest());
+      dispatch(getTableProfilingChecksUIFilterRequest(checkType, activeTab));
       try {
         const res = await TableApiClient.getTableProfilingChecksUIFilter(
           connectionName,
@@ -857,32 +936,36 @@ export const getTableProfilingChecksUIFilter =
           category,
           checkName
         );
-        dispatch(getTableProfilingChecksUIFilterSuccess(res.data));
+        dispatch(getTableProfilingChecksUIFilterSuccess(checkType, activeTab, res.data));
       } catch (err) {
         dispatch(getTableProfilingChecksUIFilterFailed(err));
       }
     };
 
-export const getTableRecurringUIFilterRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER
+export const getTableRecurringUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER,
+  checkType,
+  activeTab
 });
 
 export const getTableRecurringUIFilterSuccess = (
-  data: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
 ) => ({
-  type: TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER_SUCCESS,
+  type: SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER_SUCCESS,
+  checkType,
+  activeTab,
   data
 });
 
 export const getTableRecurringUIFilterFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_RECURRING_UI_FILTER_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_RECURRING_UI_FILTER_ERROR,
   error
 });
 
 export const getTableRecurringUIFilter =
-  (connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
     async (dispatch: Dispatch) => {
-      dispatch(getTableRecurringUIFilterRequest());
+      dispatch(getTableRecurringUIFilterRequest(checkType, activeTab));
       try {
         const res = await TableApiClient.getTableRecurringUIFilter(
           connectionName,
@@ -892,32 +975,36 @@ export const getTableRecurringUIFilter =
           category,
           checkName
         );
-        dispatch(getTableRecurringUIFilterSuccess(res.data));
+        dispatch(getTableRecurringUIFilterSuccess(checkType, activeTab, res.data));
       } catch (err) {
         dispatch(getTableRecurringUIFilterFailed(err));
       }
     };
 
-export const getTablePartitionedChecksUIFilterRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER
+export const getTablePartitionedChecksUIFilterRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER,
+  checkType,
+  activeTab
 });
 
 export const getTablePartitionedChecksUIFilterSuccess = (
-  data: UICheckContainerModel
+  checkType: CheckTypes, activeTab: string, data: UICheckContainerModel
 ) => ({
-  type: TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_SUCCESS,
+  type: SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_SUCCESS,
+  checkType,
+  activeTab,
   data
 });
 
 export const getTablePartitionedChecksUIFilterFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_PARTITIONED_CHECKS_UI_FILTER_ERROR,
   error
 });
 
 export const getTablePartitionedChecksUIFilter =
-  (connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string) =>
     async (dispatch: Dispatch) => {
-      dispatch(getTablePartitionedChecksUIFilterRequest());
+      dispatch(getTablePartitionedChecksUIFilterRequest(checkType, activeTab));
       try {
         const res = await TableApiClient.getTablePartitionedChecksUIFilter(
           connectionName,
@@ -927,74 +1014,88 @@ export const getTablePartitionedChecksUIFilter =
           category,
           checkName
         );
-        dispatch(getTablePartitionedChecksUIFilterSuccess(res.data));
+        dispatch(getTablePartitionedChecksUIFilterSuccess(checkType, activeTab, res.data));
       } catch (err) {
         dispatch(getTablePartitionedChecksUIFilterFailed(err));
       }
     };
 
-export const setTableUpdatedCheckUiFilter = (ui: UICheckContainerModel) => ({
-  type: TABLE_ACTION.SET_UPDATED_CHECKS_UI_FILTER,
+export const setTableUpdatedCheckUiFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_UPDATED_CHECKS_UI_FILTER,
+  checkType,
+  activeTab,
   data: ui
 });
 
-export const setTableUpdatedRecurringUIFilter = (ui: UICheckContainerModel) => ({
-  type: TABLE_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
+export const setTableUpdatedRecurringUIFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_UPDATED_RECURRING_UI_FILTER,
+  checkType,
+  activeTab,
   data: ui
 });
-export const setTableUpdatedPartitionedChecksUiFilter = (ui: UICheckContainerModel) => ({
-  type: TABLE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
+export const setTableUpdatedPartitionedChecksUiFilter = (checkType: CheckTypes, activeTab: string, ui: UICheckContainerModel) => ({
+  type: SOURCE_ACTION.SET_UPDATED_PARTITIONED_CHECKS_UI_FILTER,
+  checkType,
+  activeTab,
   data: ui
 });
 
-export const getTableTimestampsRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS
+export const getTableTimestampsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_TABLE_TIME_STAMPS,
+  checkType,
+  activeTab
 });
 
-export const getTableTimestampsSuccess = (data: TablePartitioningModel) => ({
-  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS_SUCCESS,
+export const getTableTimestampsSuccess = (checkType: CheckTypes, activeTab: string, data: TablePartitioningModel) => ({
+  type: SOURCE_ACTION.GET_TABLE_TIME_STAMPS_SUCCESS,
+  checkType,
+  activeTab,
   data
 });
 
 export const getTableTimestampsFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_TIME_STAMPS_ERROR,
   error
 });
 
 export const getTableTimestamps =
-  (connectionName: string, schemaName: string, tableName: string) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string) =>
     async (dispatch: Dispatch) => {
-      dispatch(getTableTimestampsRequest());
+      dispatch(getTableTimestampsRequest(checkType, activeTab));
       try {
         const res = await TableApiClient.getTablePartitioning(
           connectionName,
           schemaName,
           tableName
         );
-        dispatch(getTableTimestampsSuccess(res.data));
+        dispatch(getTableTimestampsSuccess(checkType, activeTab, res.data));
       } catch (err) {
         dispatch(getTableTimestampsFailed(err));
       }
     };
 
-export const updateTableTimestampsRequest = () => ({
-  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS
+export const updateTableTimestampsRequest = (checkType: CheckTypes, activeTab: string, ) => ({
+  type: SOURCE_ACTION.GET_TABLE_TIME_STAMPS,
+  checkType,
+  activeTab
 });
 
-export const updateTableTimestampsSuccess = (data: TablePartitioningModel) => ({
-  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS_SUCCESS,
+export const updateTableTimestampsSuccess = (checkType: CheckTypes, activeTab: string, data: TablePartitioningModel) => ({
+  type: SOURCE_ACTION.GET_TABLE_TIME_STAMPS_SUCCESS,
+  checkType,
+  activeTab,
   data
 });
 
 export const updateTableTimestampsFailed = (error: unknown) => ({
-  type: TABLE_ACTION.GET_TABLE_TIME_STAMPS_ERROR,
+  type: SOURCE_ACTION.GET_TABLE_TIME_STAMPS_ERROR,
   error
 });
 
 export const updateTableTimestamps =
-  (connectionName: string, schemaName: string, tableName: string, data: TablePartitioningModel) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schemaName: string, tableName: string, data: TablePartitioningModel) =>
     async (dispatch: Dispatch) => {
-      dispatch(updateTableTimestampsRequest());
+      dispatch(updateTableTimestampsRequest(checkType, activeTab));
       try {
         const res = await TableApiClient.updateTablePartitioning(
           connectionName,
@@ -1002,13 +1103,15 @@ export const updateTableTimestamps =
           tableName,
           data
         );
-        dispatch(updateTableTimestampsSuccess(res.data));
+        dispatch(updateTableTimestampsSuccess(checkType, activeTab, res.data));
       } catch (err) {
         dispatch(updateTableTimestampsFailed(err));
       }
     };
 
-export const setUpdatedTablePartitioning = (data: TablePartitioningModel) => ({
-  type: TABLE_ACTION.SET_UPDATED_TABLE_TIME_STAMPS,
+export const setUpdatedTablePartitioning = (checkType: CheckTypes, activeTab: string, data: TablePartitioningModel) => ({
+  type: SOURCE_ACTION.SET_UPDATED_TABLE_TIME_STAMPS,
+  checkType,
+  activeTab,
   data
 });

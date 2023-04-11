@@ -22,6 +22,7 @@ import tableReducer, { ITableState } from './table.reducer';
 import columnReducer, { IColumnState } from './column.reducer';
 import jobReducer, { IJobsState } from './job.reducer';
 import dashboardReducer, { IDashboardState } from "./dashboard.reducer";
+import sourceReducer, { ISourceState } from "./source.reducer";
 
 export interface IRootState {
   connection: IConnectionState;
@@ -30,6 +31,7 @@ export interface IRootState {
   column: IColumnState;
   job: IJobsState;
   dashboard: IDashboardState;
+  source: ISourceState;
 }
 
 const rootReducer = combineReducers<IRootState>({
@@ -38,7 +40,8 @@ const rootReducer = combineReducers<IRootState>({
   table: tableReducer,
   column: columnReducer,
   job: jobReducer,
-  dashboard: dashboardReducer
+  dashboard: dashboardReducer,
+  source: sourceReducer,
 });
 
 export default rootReducer;

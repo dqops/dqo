@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
   getTableRecurringUIFilter, setTableUpdatedRecurringUIFilter,
@@ -12,15 +11,16 @@ import { CheckResultOverviewApi, TableApiClient } from "../../services/apiClient
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import Button from "../../components/Button";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckTypes } from "../../shared/routes";
 
 const TableRecurringUIFilterView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName, timePartitioned, category, checkName }: { connection: string, schema: string, table: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
-  const { recurringUIFilter, isUpdatedRecurringUIFilter, loading } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, timePartitioned, category, checkName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
+  const { recurringUIFilter, isUpdatedRecurringUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getTableRecurringOverview(connectionName, schemaName, tableName, timePartitioned).then((res) => {
@@ -30,7 +30,7 @@ const TableRecurringUIFilterView = () => {
 
   useEffect(() => {
     dispatch(
-      getTableRecurringUIFilter(connectionName, schemaName, tableName, timePartitioned, category, checkName)
+      getTableRecurringUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
     );
   }, [connectionName, schemaName, tableName, category, checkName]);
 
@@ -45,13 +45,13 @@ const TableRecurringUIFilterView = () => {
     );
 
     await dispatch(
-      getTableRecurringUIFilter(connectionName, schemaName, tableName, timePartitioned, category, checkName)
+      getTableRecurringUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, timePartitioned, category, checkName)
     );
     setIsUpdating(false);
   };
 
   const onChange = (ui: UICheckContainerModel) => {
-    dispatch(setTableUpdatedRecurringUIFilter(ui));
+    dispatch(setTableUpdatedRecurringUIFilter(checkTypes, firstLevelActiveTab, ui));
   };
 
   return (
