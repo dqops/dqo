@@ -17,7 +17,7 @@
 import { Dispatch } from 'redux';
 
 import { ConnectionApiClient } from '../../services/apiClient';
-import { CONNECTION_ACTION } from '../types';
+import { SOURCE_ACTION } from '../types';
 import { AxiosResponse } from 'axios';
 import {
   CommentSpec,
@@ -26,18 +26,19 @@ import {
   RecurringScheduleSpec
 } from '../../api';
 import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.enum";
+import { CheckTypes } from "../../shared/routes";
 
 export const getConnectionsRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTIONS
+  type: SOURCE_ACTION.GET_CONNECTIONS
 });
 
 export const getConnectionsSuccess = (data: ConnectionBasicModel[]) => ({
-  type: CONNECTION_ACTION.GET_CONNECTIONS_SUCCESS,
+  type: SOURCE_ACTION.GET_CONNECTIONS_SUCCESS,
   data
 });
 
 export const getConnectionsFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.GET_CONNECTIONS_ERROR,
+  type: SOURCE_ACTION.GET_CONNECTIONS_ERROR,
   error
 });
 
@@ -52,344 +53,401 @@ export const getAllConnections = () => async (dispatch: Dispatch) => {
   }
 };
 
-export const setActiveConnection = (activeConnection: string) => ({
-  type: CONNECTION_ACTION.SET_ACTIVE_CONNECTION,
-  activeConnection
+export const getConnectionBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_BASIC,
+  checkType,
+  activeTab,
 });
 
-export const getConnectionBasicRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_BASIC
-});
-
-export const getConnectionBasicSuccess = (data: ConnectionBasicModel) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_BASIC_SUCCESS,
+export const getConnectionBasicSuccess = (checkType: CheckTypes, activeTab: string, data: ConnectionBasicModel) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_BASIC_SUCCESS,
+  checkType,
+  activeTab,
   data
 });
 
 export const getConnectionBasicFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_BASIC_ERROR,
+  type: SOURCE_ACTION.GET_CONNECTION_BASIC_ERROR,
   error
 });
 
 export const getConnectionBasic =
-  (connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionBasicRequest());
+  (checkType: CheckTypes, activeTab: string, connectionName: string) => async (dispatch: Dispatch) => {
+    dispatch(getConnectionBasicRequest(checkType, activeTab));
     try {
       const res = await ConnectionApiClient.getConnectionBasic(connectionName);
-      dispatch(getConnectionBasicSuccess(res.data));
+      dispatch(getConnectionBasicSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getConnectionsFailed(err));
     }
   };
 
-export const updateConnectionBasicRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_BASIC
+export const updateConnectionBasicRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_BASIC,
+  checkType,
+  activeTab,
 });
 
-export const updateConnectionBasicSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_BASIC_SUCCESS
+export const updateConnectionBasicSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_BASIC_SUCCESS,
+  checkType,
+  activeTab
 });
 
 export const updateConnectionBasicFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_BASIC_ERROR,
+  type: SOURCE_ACTION.UPDATE_CONNECTION_BASIC_ERROR,
   error
 });
 
 export const updateConnectionBasic =
-  (connectionName: string, data: ConnectionBasicModel) =>
+  (checkTypes: CheckTypes, activeTab: string, connectionName: string, data: ConnectionBasicModel) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateConnectionBasicRequest());
+    dispatch(updateConnectionBasicRequest(checkTypes, activeTab));
     try {
       await ConnectionApiClient.updateConnectionBasic(connectionName, data);
-      dispatch(updateConnectionBasicSuccess());
+      dispatch(updateConnectionBasicSuccess(checkTypes, activeTab));
     } catch (err) {
       dispatch(updateConnectionBasicFailed(err));
     }
   };
 
-export const resetConnectionSchedulingGroup = () => ({
-  type: CONNECTION_ACTION.RESET_CONNECTION_SCHEDULE_GROUP
+export const resetConnectionSchedulingGroup = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.RESET_CONNECTION_SCHEDULE_GROUP,
+  checkType,
+  activeTab,
 })
 
-export const getConnectionSchedulingGroupRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP
+export const getConnectionSchedulingGroupRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_SCHEDULE_GROUP,
+  checkType,
+  activeTab,
 });
 
-export const getConnectionSchedulingGroupSuccess = (schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP_SUCCESS,
+export const getConnectionSchedulingGroupSuccess = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_SCHEDULE_GROUP_SUCCESS,
+  checkType,
+  activeTab,
   data,
   schedulingGroup
 });
 
 export const getConnectionSchedulingGroupFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_SCHEDULE_GROUP_ERROR,
+  type: SOURCE_ACTION.GET_CONNECTION_SCHEDULE_GROUP_ERROR,
   error
 });
 
 export const getConnectionSchedulingGroup =
-  (connectionName: string, schedulingGroup: CheckRunRecurringScheduleGroup) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionSchedulingGroupRequest());
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schedulingGroup: CheckRunRecurringScheduleGroup) => async (dispatch: Dispatch) => {
+    dispatch(getConnectionSchedulingGroupRequest(checkType, activeTab));
     try {
       const res = await ConnectionApiClient.getConnectionSchedulingGroup(
         connectionName,
         schedulingGroup
       );
-      dispatch(getConnectionSchedulingGroupSuccess(schedulingGroup, res.data));
+      dispatch(getConnectionSchedulingGroupSuccess(checkType, activeTab, schedulingGroup, res.data));
     } catch (err) {
       dispatch(getConnectionSchedulingGroupFailed(err));
     }
   };
 
-export const updateConnectionSchedulingGroupRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP
+export const updateConnectionSchedulingGroupRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP,
+  checkType,
+  activeTab,
 });
 
-export const updateConnectionSchedulingGroupSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP_SUCCESS
+export const updateConnectionSchedulingGroupSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP_SUCCESS,
+  checkType,
+  activeTab,
 });
 
 export const updateConnectionSchedulingGroupFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP_ERROR,
+  type: SOURCE_ACTION.UPDATE_CONNECTION_SCHEDULE_GROUP_ERROR,
   error
 });
 
 export const updateConnectionSchedulingGroup =
-  (connectionName: string, schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, schedulingGroup: CheckRunRecurringScheduleGroup, data: RecurringScheduleSpec) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateConnectionSchedulingGroupRequest());
+    dispatch(updateConnectionSchedulingGroupRequest(checkType, activeTab));
     try {
       await ConnectionApiClient.updateConnectionSchedulingGroup(connectionName, schedulingGroup, data);
-      dispatch(updateConnectionSchedulingGroupSuccess());
+      dispatch(updateConnectionSchedulingGroupSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateConnectionSchedulingGroupFailed(err));
     }
   };
 
-export const getConnectionCommentsRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_COMMENTS
+export const getConnectionCommentsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_COMMENTS,
+  checkType,
+  activeTab,
 });
 
-export const getConnectionCommentsSuccess = (data: CommentSpec[]) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_COMMENTS_SUCCESS,
+export const getConnectionCommentsSuccess = (checkType: CheckTypes, activeTab: string, data: CommentSpec[]) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_COMMENTS_SUCCESS,
+  checkType,
+  activeTab,
   data
 });
 
 export const getConnectionCommentsFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_COMMENTS_ERROR,
+  type: SOURCE_ACTION.GET_CONNECTION_COMMENTS_ERROR,
   error
 });
 
 export const getConnectionComments =
-  (connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionCommentsRequest());
+  (checkType: CheckTypes, activeTab: string, connectionName: string) => async (dispatch: Dispatch) => {
+    dispatch(getConnectionCommentsRequest(checkType, activeTab));
     try {
       const res = await ConnectionApiClient.getConnectionComments(
         connectionName
       );
-      dispatch(getConnectionCommentsSuccess(res.data));
+      dispatch(getConnectionCommentsSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getConnectionCommentsFailed(err));
     }
   };
 
-export const updateConnectionCommentsRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_COMMENTS
+export const updateConnectionCommentsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_COMMENTS,
+  checkType,
+  activeTab
 });
 
-export const updateConnectionCommentsSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_COMMENTS_SUCCESS
+export const updateConnectionCommentsSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_COMMENTS_SUCCESS,
+  checkType,
+  activeTab,
 });
 
 export const updateConnectionCommentsFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_COMMENTS_ERROR,
+  type: SOURCE_ACTION.UPDATE_CONNECTION_COMMENTS_ERROR,
   error
 });
 
 export const updateConnectionComments =
-  (connectionName: string, data: CommentSpec[]) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, data: CommentSpec[]) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateConnectionCommentsRequest());
+    dispatch(updateConnectionCommentsRequest(checkType, activeTab));
     try {
       await ConnectionApiClient.updateConnectionComments(connectionName, data);
-      dispatch(updateConnectionCommentsSuccess());
+      dispatch(updateConnectionCommentsSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateConnectionCommentsFailed(err));
     }
   };
 
-export const getConnectionLabelsRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_LABELS
+export const getConnectionLabelsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_LABELS,
+  checkType,
+  activeTab,
 });
 
-export const getConnectionLabelsSuccess = (data: string[]) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_LABELS_SUCCESS,
-  data
+export const getConnectionLabelsSuccess = (checkType: CheckTypes, activeTab: string, data: string[]) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_LABELS_SUCCESS,
+  data,
+  checkType,
+  activeTab,
 });
 
 export const getConnectionLabelsFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_LABELS_ERROR,
+  type: SOURCE_ACTION.GET_CONNECTION_LABELS_ERROR,
   error
 });
 
 export const getConnectionLabels =
-  (connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionLabelsRequest());
+  (checkType: CheckTypes, activeTab: string, connectionName: string) => async (dispatch: Dispatch) => {
+    dispatch(getConnectionLabelsRequest(checkType, activeTab));
     try {
       const res = await ConnectionApiClient.getConnectionLabels(connectionName);
-      dispatch(getConnectionLabelsSuccess(res.data || []));
+      dispatch(getConnectionLabelsSuccess(checkType, activeTab, res.data || []));
     } catch (err) {
       dispatch(getConnectionLabelsFailed(err));
     }
   };
 
-export const updateConnectionLabelsRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_LABELS
+export const updateConnectionLabelsRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_LABELS,
+  checkType,
+  activeTab
 });
 
-export const updateConnectionLabelsSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_LABELS_SUCCESS
+export const updateConnectionLabelsSuccess = (checkType: CheckTypes, activeTab: string, ) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_LABELS_SUCCESS,
+  checkType,
+  activeTab
 });
 
 export const updateConnectionLabelsFailed = (error: unknown) => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_LABELS_ERROR,
-  error
+  type: SOURCE_ACTION.UPDATE_CONNECTION_LABELS_ERROR,
+  error,
 });
 
 export const updateConnectionLabels =
-  (connectionName: string, data: string[]) => async (dispatch: Dispatch) => {
-    dispatch(updateConnectionLabelsRequest());
+  (checkType: CheckTypes, activeTab: string, connectionName: string, data: string[]) => async (dispatch: Dispatch) => {
+    dispatch(updateConnectionLabelsRequest(checkType, activeTab));
     try {
       await ConnectionApiClient.updateConnectionLabels(connectionName, data);
-      dispatch(updateConnectionLabelsSuccess());
+      dispatch(updateConnectionLabelsSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateConnectionLabelsFailed(err));
     }
   };
 
-export const getConnectionDefaultDataStreamsMappingRequest = () => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING
+export const getConnectionDefaultDataStreamsMappingRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING,
+  checkType,
+  activeTab
 });
 
 export const getConnectionDefaultDataStreamsMappingSuccess = (
+  checkType: CheckTypes,
+  activeTab: string,
   data: DataStreamMappingSpec
 ) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
-  data
+  type: SOURCE_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
+  data,
+  checkType,
+  activeTab
 });
 
 export const getConnectionDefaultDataStreamsMappingFailed = (
   error: unknown
 ) => ({
-  type: CONNECTION_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
+  type: SOURCE_ACTION.GET_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
 export const getConnectionDefaultDataStreamsMapping =
-  (connectionName: string) => async (dispatch: Dispatch) => {
-    dispatch(getConnectionDefaultDataStreamsMappingRequest());
+  (checkType: CheckTypes, activeTab: string, connectionName: string) => async (dispatch: Dispatch) => {
+    dispatch(getConnectionDefaultDataStreamsMappingRequest(checkType, activeTab));
     try {
       const res =
         await ConnectionApiClient.getConnectionDefaultDataStreamsMapping(
           connectionName
         );
-      dispatch(getConnectionDefaultDataStreamsMappingSuccess(res.data));
+      dispatch(getConnectionDefaultDataStreamsMappingSuccess(checkType, activeTab, res.data));
     } catch (err) {
       dispatch(getConnectionDefaultDataStreamsMappingFailed(err));
     }
   };
 
-export const updateConnectionDefaultDataStreamsMappingRequest = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING
+export const updateConnectionDefaultDataStreamsMappingRequest = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING,
+  checkType,
+  activeTab
 });
 
-export const updateConnectionDefaultDataStreamsMappingSuccess = () => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS
+export const updateConnectionDefaultDataStreamsMappingSuccess = (checkType: CheckTypes, activeTab: string) => ({
+  type: SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_SUCCESS,
+  checkType,
+  activeTab
 });
 
 export const updateConnectionDefaultDataStreamsMappingFailed = (
   error: unknown
 ) => ({
-  type: CONNECTION_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
+  type: SOURCE_ACTION.UPDATE_CONNECTION_DEFAULT_DATA_STREAMS_MAPPING_ERROR,
   error
 });
 
 export const updateConnectionDefaultDataStreamsMapping =
-  (connectionName: string, data: DataStreamMappingSpec) =>
+  (checkType: CheckTypes, activeTab: string, connectionName: string, data: DataStreamMappingSpec) =>
   async (dispatch: Dispatch) => {
-    dispatch(updateConnectionDefaultDataStreamsMappingRequest());
+    dispatch(updateConnectionDefaultDataStreamsMappingRequest(checkType, activeTab));
     try {
       await ConnectionApiClient.updateConnectionDefaultDataStreamsMapping(
         connectionName,
         data
       );
-      dispatch(updateConnectionDefaultDataStreamsMappingSuccess());
+      dispatch(updateConnectionDefaultDataStreamsMappingSuccess(checkType, activeTab));
     } catch (err) {
       dispatch(updateConnectionDefaultDataStreamsMappingFailed(err));
     }
   };
 
 export const setConnectionBasic = (
+  checkType: CheckTypes,
+  activeTab: string,
   connectionBasic?: ConnectionBasicModel
 ) => ({
-  type: CONNECTION_ACTION.SET_UPDATED_CONNECTION_BASIC,
-  connectionBasic
+  type: SOURCE_ACTION.SET_UPDATED_CONNECTION_BASIC,
+  checkType,
+  activeTab,
+  data: connectionBasic
 });
 
-export const setIsUpdatedConnectionBasic = (isUpdated: boolean) => ({
-  type: CONNECTION_ACTION.SET_IS_UPDATED_CONNECTION_BASIC,
-  isUpdated
+export const setIsUpdatedConnectionBasic = (checkType: CheckTypes, activeTab: string, isUpdated: boolean) => ({
+  type: SOURCE_ACTION.SET_IS_UPDATED_CONNECTION_BASIC,
+  checkType,
+  activeTab,
+  data: isUpdated
 });
 
-export const setUpdatedSchedule = (schedule?: RecurringScheduleSpec) => ({
-  type: CONNECTION_ACTION.SET_UPDATED_SCHEDULE,
-  schedule
+export const setUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, schedule?: RecurringScheduleSpec) => ({
+  type: SOURCE_ACTION.SET_UPDATED_SCHEDULE_GROUP,
+  checkType,
+  activeTab,
+  data: {
+    schedule,
+    schedulingGroup,
+  }
 });
 
-export const setIsUpdatedSchedule = (isUpdated: boolean) => ({
-  type: CONNECTION_ACTION.SET_IS_UPDATED_SCHEDULE,
-  isUpdated
+export const setIsUpdatedSchedulingGroup = (checkType: CheckTypes, activeTab: string, schedulingGroup: CheckRunRecurringScheduleGroup, isUpdated: boolean) => ({
+  type: SOURCE_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP,
+  checkType,
+  activeTab,
+  data: {
+    isUpdated,
+    schedulingGroup,
+  }
 });
 
-export const setUpdatedSchedulingGroup = (schedulingGroup: CheckRunRecurringScheduleGroup, schedule?: RecurringScheduleSpec) => ({
-  type: CONNECTION_ACTION.SET_UPDATED_SCHEDULE_GROUP,
-  schedule,
-  schedulingGroup
+export const setUpdatedComments = (checkType: CheckTypes, activeTab: string, comments?: CommentSpec[]) => ({
+  type: SOURCE_ACTION.SET_UPDATED_COMMENTS,
+  checkType,
+  activeTab,
+  data: comments,
 });
 
-export const setIsUpdatedSchedulingGroup = (schedulingGroup: CheckRunRecurringScheduleGroup, isUpdated: boolean) => ({
-  type: CONNECTION_ACTION.SET_IS_UPDATED_SCHEDULE_GROUP,
-  isUpdated,
-  schedulingGroup
+export const setIsUpdatedComments = (checkType: CheckTypes, activeTab: string, isUpdated: boolean) => ({
+  type: SOURCE_ACTION.SET_IS_UPDATED_COMMENTS,
+  data: isUpdated,
+  checkType,
+  activeTab
 });
 
-export const setUpdatedComments = (comments?: CommentSpec[]) => ({
-  type: CONNECTION_ACTION.SET_UPDATED_COMMENTS,
-  comments
+export const setLabels = (checkType: CheckTypes, activeTab: string, labels?: string[]) => ({
+  type: SOURCE_ACTION.SET_UPDATED_LABELS,
+  data: labels,
+  checkType,
+  activeTab
 });
 
-export const setIsUpdatedComments = (isUpdated: boolean) => ({
-  type: CONNECTION_ACTION.SET_IS_UPDATED_COMMENTS,
-  isUpdated
-});
-
-export const setLabels = (labels?: string[]) => ({
-  type: CONNECTION_ACTION.SET_UPDATED_LABELS,
-  labels
-});
-
-export const setIsUpdatedLabels = (isUpdated: boolean) => ({
-  type: CONNECTION_ACTION.SET_IS_UPDATED_LABELS,
-  isUpdated
+export const setIsUpdatedLabels = (checkType: CheckTypes, activeTab: string, isUpdated: boolean) => ({
+  type: SOURCE_ACTION.SET_IS_UPDATED_LABELS,
+  data: isUpdated,
+  checkType,
+  activeTab
 });
 
 export const setUpdatedDataStreamsMapping = (
+  checkType: CheckTypes,
+  activeTab: string,
   dataStreamsMapping?: DataStreamMappingSpec
 ) => ({
-  type: CONNECTION_ACTION.SET_UPDATED_DATA_STREAMS,
-  dataStreamsMapping
+  type: SOURCE_ACTION.SET_UPDATED_DATA_STREAMS,
+  data: dataStreamsMapping,
+  checkType,
+  activeTab
 });
 
-export const setIsUpdatedDataStreamsMapping = (isUpdated: boolean) => ({
-  type: CONNECTION_ACTION.SET_IS_UPDATED_DATA_STREAMS,
-  isUpdated
+export const setIsUpdatedDataStreamsMapping = (checkType: CheckTypes, activeTab: string, isUpdated: boolean) => ({
+  type: SOURCE_ACTION.SET_IS_UPDATED_DATA_STREAMS,
+  data: isUpdated,
+  checkType,
+  activeTab
 });

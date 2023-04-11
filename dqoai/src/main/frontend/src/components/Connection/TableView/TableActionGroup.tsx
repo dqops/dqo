@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import Button from '../../Button';
 import ConfirmDialog from './ConfirmDialog';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import { TableApiClient } from '../../../services/apiClient';
 import { useTree } from "../../../contexts/treeContext";
+import { getFirstLevelState } from "../../../redux/selectors";
+import { useParams } from "react-router-dom";
+import { CheckTypes } from "../../../shared/routes";
 
 interface ITableActionGroupProps {
   isDisabled?: boolean;
@@ -21,8 +23,9 @@ const TableActionGroup = ({
   onUpdate,
   shouldDelete = true
 }: ITableActionGroupProps) => {
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams()
   const [isOpen, setIsOpen] = useState(false);
-  const { tableBasic } = useSelector((state: IRootState) => state.table);
+  const { tableBasic } = useSelector(getFirstLevelState(checkTypes));
   const { deleteData } = useTree();
 
   const removeTable = async () => {

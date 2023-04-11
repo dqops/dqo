@@ -10,7 +10,9 @@ import {
 } from '../../redux/actions/column.actions';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
+import { CheckTypes } from "../../shared/routes";
+import { useParams } from "react-router-dom";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 
 interface IColumnDetailsProps {
   connectionName: string;
@@ -25,15 +27,15 @@ const TableDetails = ({
   tableName,
   columnName
 }: IColumnDetailsProps) => {
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
-  const { columnBasic, isUpdating, isUpdatedColumnBasic } = useSelector(
-    (state: IRootState) => state.column
-  );
+  const { columnBasic, isUpdating, isUpdatedColumnBasic } = useSelector(getFirstLevelState(checkTypes));
 
   const handleChange = (obj: any) => {
     dispatch(
-      setUpdatedColumnBasic({
+      setUpdatedColumnBasic(checkTypes, firstLevelActiveTab, {
         ...columnBasic,
         ...obj
       })
@@ -42,7 +44,7 @@ const TableDetails = ({
 
   const handleSnapTypeChange = (obj: any) => {
     dispatch(
-      setUpdatedColumnBasic({
+      setUpdatedColumnBasic(checkTypes, firstLevelActiveTab, {
         ...columnBasic,
         type_snapshot: {
           ...columnBasic?.type_snapshot,
@@ -60,10 +62,10 @@ const TableDetails = ({
       columnBasic.column_name !== columnName
     ) {
       dispatch(
-        getColumnBasic(connectionName, schemaName, tableName, columnName)
+        getColumnBasic(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
       );
     }
-  }, [connectionName, schemaName, columnName, tableName, columnBasic]);
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName, columnBasic]);
 
   const onUpdate = async () => {
     if (!columnBasic) {
@@ -71,6 +73,8 @@ const TableDetails = ({
     }
     await dispatch(
       updateColumnBasic(
+        checkTypes,
+        firstLevelActiveTab,
         connectionName,
         schemaName,
         tableName,
@@ -78,7 +82,7 @@ const TableDetails = ({
         columnBasic
       )
     );
-    dispatch(getColumnBasic(connectionName, schemaName, tableName, columnName));
+    dispatch(getColumnBasic(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName));
   };
 
   return (

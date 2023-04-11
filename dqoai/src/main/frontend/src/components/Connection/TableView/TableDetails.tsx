@@ -3,7 +3,6 @@ import Input from '../../Input';
 import Checkbox from '../../Checkbox';
 import ActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import {
   getTableBasic,
@@ -11,13 +10,14 @@ import {
   updateTableBasic
 } from '../../../redux/actions/table.actions';
 import { useParams } from "react-router-dom";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { CheckTypes } from "../../../shared/routes";
 
 const TableDetails = () => {
-  const { connection, schema, table }: { connection: string, schema: string, table: string } = useParams();
-  const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { checkTypes, connection, schema, table }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
+  const { tableBasic, isUpdating, isUpdatedTableBasic } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (
@@ -26,13 +26,13 @@ const TableDetails = () => {
       tableBasic?.target?.schema_name !== schema ||
       tableBasic?.target?.table_name !== table
     ) {
-      dispatch(getTableBasic(connection, schema, table));
+      dispatch(getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table));
     }
   }, [connection, schema, table, tableBasic]);
 
   const handleChange = (obj: any) => {
     dispatch(
-      setUpdatedTableBasic({
+      setUpdatedTableBasic(checkTypes, firstLevelActiveTab, {
         ...tableBasic,
         ...obj
       })
@@ -44,9 +44,9 @@ const TableDetails = () => {
       return;
     }
     await dispatch(
-      updateTableBasic(connection, schema, table, tableBasic)
+      updateTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table, tableBasic)
     );
-    await dispatch(getTableBasic(connection, schema, table));
+    await dispatch(getTableBasic(checkTypes, firstLevelActiveTab, connection, schema, table));
   };
 
   return (

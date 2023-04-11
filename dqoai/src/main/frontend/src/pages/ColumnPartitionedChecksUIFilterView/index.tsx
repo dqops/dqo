@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
@@ -12,16 +11,26 @@ import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClien
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import Button from "../../components/Button";
+import { CheckTypes } from "../../shared/routes";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
 
 const ColumnPartitionedChecksUIFilterView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, timePartitioned, category, checkName }: { connection: string, schema: string, table: string, column: string, timePartitioned: 'daily' | 'monthly', category: string, checkName: string } = useParams();
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName, timePartitioned, category, checkName }: {
+    checkTypes: CheckTypes,
+    connection: string,
+    schema: string,
+    table: string,
+    column: string,
+    timePartitioned: 'daily' | 'monthly',
+    category: string,
+    checkName: string
+  } = useParams();
 
-  const { partitionedChecksUIFilter, isUpdatedPartitionedChecksUIFilter, loading } = useSelector(
-    (state: IRootState) => state.column
-  );
+  const { partitionedChecksUIFilter, isUpdatedPartitionedChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnPartitionedChecksOverview(connectionName, schemaName, tableName, columnName, timePartitioned).then((res) => {
@@ -40,19 +49,19 @@ const ColumnPartitionedChecksUIFilterView = () => {
     );
 
     await dispatch(
-      getColumnPartitionedChecksUIFilter(connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
+      getColumnPartitionedChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
     );
     setIsUpdating(false);
   };
 
   useEffect(() => {
     dispatch(
-      getColumnPartitionedChecksUIFilter(connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
+      getColumnPartitionedChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, timePartitioned, category, checkName)
     );
-  }, [connectionName, schemaName, tableName, columnName, category, checkName]);
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName]);
 
   const onChange = (ui: UICheckContainerModel) => {
-    dispatch(setColumnUpdatedPartitionedChecksUiFilter(ui));
+    dispatch(setColumnUpdatedPartitionedChecksUiFilter(checkTypes, firstLevelActiveTab, ui));
   };
 
   return (

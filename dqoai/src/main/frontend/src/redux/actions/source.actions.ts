@@ -1,3 +1,7 @@
+
+
+
+
 ///
 /// Copyright © 2021 DQO.ai (support@dqo.ai)
 ///
@@ -14,10 +18,23 @@
 /// limitations under the License.
 ///
 
-export * from './connection.types';
-export * from './schema.types';
-export * from './table.types';
-export * from './column.types';
-export * from './job.types';
-export * from './dashboard.types';
-export * from './source.types';
+import { SOURCE_ACTION } from '../types';
+import { CheckTypes } from "../../shared/routes";
+
+export const addFirstLevelTab = (checkType: CheckTypes, data: any) => ({
+  type: SOURCE_ACTION.ADD_FIRST_LEVEL_TAB,
+  checkType,
+  data
+});
+
+export const setActiveFirstLevelTab = (checkType: CheckTypes, data: any) => ({
+  type: SOURCE_ACTION.SET_ACTIVE_FIRST_LEVEL_TAB,
+  checkType,
+  data
+});
+
+export const closeFirstLevelTab = (checkType: CheckTypes, data: any) => ({
+  type: SOURCE_ACTION.CLOSE_FIRST_LEVEL_TAB,
+  checkType,
+  data,
+});
