@@ -5,7 +5,7 @@
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |api_version||string| | | |
-|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
+|kind||enum|table<br/>dashboards<br/>source<br/>sensor<br/>check<br/>rule<br/>file_index<br/>settings<br/>provider_sensor<br/>| | |
 |[spec](#connectionspec)||object| | | |
 
 ___  
@@ -15,11 +15,12 @@ ___
   
 |&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
-|provider_type|Database provider type (required). Accepts: bigquery, snowflake.|enum|snowflake<br/>postgresql<br/>redshift<br/>bigquery<br/>| | |
+|provider_type|Database provider type (required). Accepts: bigquery, snowflake.|enum|snowflake<br/>postgresql<br/>redshift<br/>sqlserver<br/>bigquery<br/>| | |
 |[bigquery](#bigqueryparametersspec)|BigQuery connection parameters. Specify parameters in the bigquery section.|object| | | |
 |[snowflake](#snowflakeparametersspec)|Snowflake connection parameters. Specify parameters in the snowflake section or set the url (which is the Snowflake JDBC url).|object| | | |
 |[postgresql](#postgresqlparametersspec)|PostgreSQL connection parameters. Specify parameters in the postgresql section or set the url (which is the Snowflake JDBC url).|object| | | |
-|[redshift](#redshiftparametersspec)|Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Snowflake JDBC url).|object| | | |
+|[redshift](#redshiftparametersspec)|Redshift connection parameters. Specify parameters in the redshift section or set the url (which is the Redshift JDBC url).|object| | | |
+|[sqlserver](#sqlserverparametersspec)|SQL Server connection parameters. Specify parameters in the sqlserver section or set the url (which is the SQL Server JDBC url).|object| | | |
 |parallel_runs_limit|The concurrency limit for the maximum number of parallel executions of checks on this connection.|integer| | | |
 |[default_data_stream_mapping](#datastreammappingspec)|Default data streams configuration for all tables. The configuration may be overridden on table, column and check level. Data streams are configured in two cases: (1) a static dimension is assigned to a table, when the data is partitioned at a table level (similar tables store the same information, but for different countries, etc.). (2) the data in the table should be analyzed with a GROUP BY condition, to analyze different datasets using separate time series, for example a table contains data from multiple countries and there is a &#x27;country&#x27; column used for partitioning.|object| | | |
 |[schedules](#recurringschedulesspec)|Configuration of the job scheduler that runs data quality checks. The scheduler configuration is divided into types of checks that have different schedules.|object| | | |
@@ -50,10 +51,10 @@ ___
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |account|Snowflake account name, e.q. &lt;account&gt;, &lt;account&gt;-&lt;locator&gt;, &lt;account&gt;.&lt;region&gt; or &lt;account&gt;.&lt;region&gt;.&lt;platform&gt;.. Supports also a ${SNOWFLAKE_ACCOUNT} configuration with a custom environment variable.|string| | | |
 |warehouse|Snowflake warehouse name. Supports also a ${SNOWFLAKE_WAREHOUSE} configuration with a custom environment variable.|string| | | |
-|database|Snowflake database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
-|user|Snowflake user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
-|password|Snowflake database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
-|role|Snowflake role name. Supports also a ${SNOWFLAKE_ROLE} configuration with a custom environment variable.|string| | | |
+|database|Snowflake database name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Snowflake user name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Snowflake database password.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|role|Snowflake role name. Supports also ${SNOWFLAKE_ROLE} configuration with a custom environment variable.|string| | | |
 
 ___  
 
@@ -64,9 +65,9 @@ ___
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |host|PostgreSQL host name. Supports also a ${POSTGRESQL_HOST} configuration with a custom environment variable.|string| | | |
 |port|PostgreSQL port name. The default port is 5432. Supports also a ${POSTGRESQL_PORT} configuration with a custom environment variable.|string| | | |
-|database|PostgreSQL database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
-|user|PostgreSQL user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
-|password|PostgreSQL database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
+|database|PostgreSQL database name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|PostgreSQL user name. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|PostgreSQL database password. The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
 |options|PostgreSQL connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${POSTGRESQL_OPTIONS} configuration with a custom environment variable.|string| | | |
 |ssl|Connect to PostgreSQL using SSL. The default value is false.|boolean| | | |
 
@@ -79,11 +80,26 @@ ___
 |---------------|---------------------------------|-----------|-------------|---------------|---------------|
 |host|Redshift host name. Supports also a ${REDSHIFT_HOST} configuration with a custom environment variable.|string| | | |
 |port|Redshift port name. The default port is 5432. Supports also a ${REDSHIFT_PORT} configuration with a custom environment variable.|string| | | |
-|database|Redshift database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
-|user|Redshift user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
-|password|Redshift database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
+|database|Redshift database name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|user|Redshift user name.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
+|password|Redshift database password.  The value can be in the ${ENVIRONMENT_VARIABLE_NAME} format to use dynamic substitution.|string| | | |
 |options|Redshift connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${REDSHIFT_OPTIONS} configuration with a custom environment variable.|string| | | |
 |ssl|Connect to Redshift using SSL. The default value is false.|boolean| | | |
+
+___  
+
+## SqlServerParametersSpec  
+**The structure of this object is described below**  
+  
+|&nbsp;Property&nbsp;name&nbsp;|&nbsp;Description&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;Data&nbsp;type&nbsp;|&nbsp;Enum&nbsp;values&nbsp;|&nbsp;Default&nbsp;value&nbsp;|&nbsp;Sample&nbsp;values&nbsp;|
+|---------------|---------------------------------|-----------|-------------|---------------|---------------|
+|host|SQL Server host name. Supports also a ${SQLSERVER_HOST} configuration with a custom environment variable.|string| | | |
+|port|SQL Server port name. The default port is 1433. Supports also a ${SQLSERVER_PORT} configuration with a custom environment variable.|string| | | |
+|database|SQL Server database name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
+|user|SQL Server user name. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
+|password|SQL Server database password. The value could be in the format ${ENVIRONMENT_VARIABLE_NAME} to use dynamic substitution.|string| | | |
+|options|SQL Server connection &#x27;options&#x27; initialization parameter. For example setting this to -c statement_timeout&#x3D;5min would set the statement timeout parameter for this session to 5 minutes. Supports also a ${SQLSERVER_OPTIONS} configuration with a custom environment variable.|string| | | |
+|ssl|Connecting to SQL Server with SSL disabled. The default value is false.|boolean| | | |
 
 ___  
 

@@ -52,11 +52,11 @@ policies that restrict this communication.
 6. Import the selected data resources (source schemas and tables) by clicking on the **Import Tables** button next to
    the name of the source schema from which you want to import tables.
 
-   ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
+   ![Importing schemas](https://docs.dqo.ai/docs/images/working-with-dqo/importing-schemas.jpg)
 
 7. Select the tables you want to import or import all tables using the buttons in the upper right corner.
 
-   ![Adding connection](https://docs.dqo.ai/docs/images/working-with-dqo/importing-tables.jpg)
+   ![AImporting tables](https://docs.dqo.ai/docs/images/working-with-dqo/importing-tables.jpg))
 
 ## Adding Snowflake connection using DQO Shell
 

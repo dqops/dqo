@@ -21,8 +21,8 @@ $ dqo --dqo.cloud.api-key=3242424324242 check run -c=connection_name
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`--dqo.cloud.api-key`<br/>|DQO cloud api key. Log in to https://cloud.dqo.ai/ to get the key.<br/>This parameter could be also configured by setting DQO_CLOUD_API_KEY  environment variable.| ||
 |`--dqo.cloud.parallel-file-downloads`<br/>|The number of files that are downloaded from DQO Cloud in parallel using HTTP/2 multiplexing.<br/>This parameter could be also configured by setting DQO_CLOUD_PARALLEL_FILE_DOWNLOADS  environment variable.| ||
 |`--dqo.cloud.parallel-file-uploads`<br/>|The number of files that are uploaded to DQO Cloud in parallel using HTTP/2 multiplexing.<br/>This parameter could be also configured by setting DQO_CLOUD_PARALLEL_FILE_UPLOADS  environment variable.| ||

@@ -16,10 +16,7 @@
 package ai.dqo.checks.column.recurring.accuracy;
 
 import ai.dqo.checks.AbstractCheckCategorySpec;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyAverageMatchPercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyMaxMatchPercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyMinMatchPercentCheckSpec;
-import ai.dqo.checks.column.checkspecs.accuracy.ColumnAccuracyTotalSumMatchPercentCheckSpec;
+import ai.dqo.checks.column.checkspecs.accuracy.*;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMap;
 import ai.dqo.metadata.id.ChildHierarchyNodeFieldMapImpl;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -43,6 +40,7 @@ public class ColumnAccuracyMonthlyRecurringSpec extends AbstractCheckCategorySpe
             put("monthly_min_match_percent", o -> o.monthlyMinMatchPercent);
             put("monthly_max_match_percent", o -> o.monthlyMaxMatchPercent);
             put("monthly_average_match_percent", o -> o.monthlyAverageMatchPercent);
+            put("monthly_row_count_match_percent", o -> o.monthlyRowCountMatchPercent);
 
         }
     };
@@ -58,6 +56,9 @@ public class ColumnAccuracyMonthlyRecurringSpec extends AbstractCheckCategorySpe
 
     @JsonPropertyDescription("Verifies that the percentage of difference in average of a column in a table and average of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.")
     private ColumnAccuracyAverageMatchPercentCheckSpec monthlyAverageMatchPercent;
+
+    @JsonPropertyDescription("Verifies that the percentage of difference in row count of a column in a table and row count of a column of another table does not exceed the set number. Stores the most recent row count for each month when the data quality check was evaluated.")
+    private ColumnAccuracyRowCountMatchPercentCheckSpec monthlyRowCountMatchPercent;
 
     /**
      * Returns an accuracy total sum match percent check specification.
@@ -129,6 +130,24 @@ public class ColumnAccuracyMonthlyRecurringSpec extends AbstractCheckCategorySpe
         this.setDirtyIf(!Objects.equals(this.monthlyAverageMatchPercent, monthlyAverageMatchPercent));
         this.monthlyAverageMatchPercent = monthlyAverageMatchPercent;
         propagateHierarchyIdToField(monthlyAverageMatchPercent, "monthly_average_match_percent");
+    }
+
+    /**
+     * Returns an accuracy row count percent check specification.
+     * @return Accuracy row count percent check specification.
+     */
+    public ColumnAccuracyRowCountMatchPercentCheckSpec getMonthlyRowCountMatchPercent() {
+        return monthlyRowCountMatchPercent;
+    }
+
+    /**
+     * Sets a new definition of an accuracy row count percent check.
+     * @param monthlyRowCountMatchPercent Accuracy row count percent check specification.
+     */
+    public void setMonthlyRowCountMatchPercent(ColumnAccuracyRowCountMatchPercentCheckSpec monthlyRowCountMatchPercent) {
+        this.setDirtyIf(!Objects.equals(this.monthlyRowCountMatchPercent, monthlyRowCountMatchPercent));
+        this.monthlyRowCountMatchPercent = monthlyRowCountMatchPercent;
+        propagateHierarchyIdToField(monthlyRowCountMatchPercent, "monthly_row_count_match_percent");
     }
 
     /**

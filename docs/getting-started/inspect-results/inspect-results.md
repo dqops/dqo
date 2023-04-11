@@ -1,3 +1,3 @@
 # Inspect results
 
-Opis jak obejrzeć tabele z wynikami oraz jak obejrzec wyniki na dashbordzie.
+Describe how to display results of run check and how to view dashbords

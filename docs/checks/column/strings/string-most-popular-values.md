@@ -14,6 +14,11 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |string_most_popular_values|profiling| |[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=string_most_popular_values
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -33,7 +38,7 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_m
 ```
 **Check structure (Yaml)**
 ```yaml
-      checks:
+      profiling_checks:
         strings:
           string_most_popular_values:
             parameters:
@@ -41,22 +46,19 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=string_m
               - USD
               - GBP
               - EUR
+            warning:
+              min_count: 0
             error:
               min_count: 5
-            warning:
-              min_count: 5
             fatal:
-              min_count: 5
+              min_count: 100
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-29"
+```yaml hl_lines="13-26"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -65,7 +67,7 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      checks:
+      profiling_checks:
         strings:
           string_most_popular_values:
             parameters:
@@ -73,12 +75,12 @@ spec:
               - USD
               - GBP
               - EUR
+            warning:
+              min_count: 0
             error:
               min_count: 5
-            warning:
-              min_count: 5
             fatal:
-              min_count: 5
+              min_count: 100
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -191,7 +193,7 @@ spec:
             COUNT(*) AS total_values,
         CURRENT_TIMESTAMP() AS time_period,
         TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-            FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) top_col_values
@@ -302,7 +304,7 @@ spec:
             COUNT(*) AS total_values,
         TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
         TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) top_col_values
@@ -413,7 +415,7 @@ spec:
             COUNT(*) AS total_values,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) AS top_col_values
@@ -524,7 +526,7 @@ spec:
                 COUNT(*) AS total_values,
         LOCALTIMESTAMP AS time_period,
         CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+               FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
              ) AS top_col_values
@@ -533,17 +535,122 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### ****
+=== "Sensor template for "
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    {%- macro top_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        NULL AS actual_value,
+        {{parameters.expected_values|length}}
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period
+    {{ top_values_column() }}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro top_values_column() -%}
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            {{- render_data_stream('top_col_values') }}
+            ORDER BY top_col_values.total_values) as top_values_rank
+            {{- render_data_stream('top_col_values') }}
+        FROM (
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
+    WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for "
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            ORDER BY top_col_values.total_values) as top_values_rank
+        FROM (
+            SELECT
+            analyzed_table.[target_column] AS top_values,
+            COUNT(*) AS total_values,
+        SYSDATETIMEOFFSET() AS time_period,
+        CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+    , top_values
+    , total_values
+        ) top_col_values
+    )
+    WHERE top_values_rank <= 
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 46-51"
+    ```yaml hl_lines="11-18 43-48"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -560,7 +667,7 @@ spec:
             column: state
       columns:
         target_column:
-          checks:
+          profiling_checks:
             strings:
               string_most_popular_values:
                 parameters:
@@ -568,12 +675,12 @@ spec:
                   - USD
                   - GBP
                   - EUR
+                warning:
+                  min_count: 0
                 error:
                   min_count: 5
-                warning:
-                  min_count: 5
                 fatal:
-                  min_count: 5
+                  min_count: 100
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -692,7 +799,7 @@ spec:
             analyzed_table.`state` AS stream_level_2,
             CURRENT_TIMESTAMP() AS time_period,
             TIMESTAMP(CURRENT_TIMESTAMP()) AS time_period_utc
-                FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) top_col_values
@@ -804,7 +911,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS time_period,
             TO_TIMESTAMP(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP())) AS time_period_utc
-                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) top_col_values
@@ -916,7 +1023,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -1028,7 +1135,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             LOCALTIMESTAMP AS time_period,
             CAST((LOCALTIMESTAMP) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                   FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+                   FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
                  ) AS top_col_values
@@ -1036,6 +1143,128 @@ spec:
         WHERE top_values_rank <= 
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    ****  
+      
+    === "Sensor template for "
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        {%- macro top_value() -%}
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+            NULL AS actual_value,
+            {{parameters.expected_values|length}}
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else -%}
+            SUM(
+                CASE
+                    WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period
+        {{ top_values_column() }}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro top_values_column() -%}
+        FROM(
+            SELECT
+                top_col_values.top_values as top_values,
+                top_col_values.time_period as time_period, time_period_utc,
+                RANK() OVER(partition by top_col_values.time_period
+                {{- render_data_stream('top_col_values') }}
+                ORDER BY top_col_values.total_values) as top_values_rank
+                {{- render_data_stream('top_col_values') }}
+            FROM (
+                SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_values,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause() }}
+                {{- lib.render_group_by() }}, top_values
+                {{- lib.render_order_by() }}, total_values
+            ) top_col_values
+        )
+        WHERE top_values_rank <= {{ parameters.top_values }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_stream(table_alias_prefix = '') -%}
+            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+                {%- for attribute in lib.data_streams -%}
+                    {{ ', ' }}
+                    {%- with data_stream_level = lib.data_streams[attribute] -%}
+                        {%- if data_stream_level.source == 'tag' -%}
+                            {{ make_text_constant(data_stream_level.tag) }}
+                        {%- elif data_stream_level.source == 'column_value' -%}
+                            {{ table_alias_prefix }}.stream_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            {{ top_value() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for "
+        ```
+        SELECT
+            SUM(
+                CASE
+                    WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period
+        FROM(
+            SELECT
+                top_col_values.top_values as top_values,
+                top_col_values.time_period as time_period, time_period_utc,
+                RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+                ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
+            FROM (
+                SELECT
+                analyzed_table.[target_column] AS top_values,
+                COUNT(*) AS total_values,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            SYSDATETIMEOFFSET() AS time_period,
+            CAST((SYSDATETIMEOFFSET()) AS DATETIME) AS time_period_utc
+                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        , top_valuesORDER BY level_1, level_2
+                , 
+            
+        
+            
+        , total_values
+            ) top_col_values
+        )
+        WHERE top_values_rank <= , 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
         ```
     
 
@@ -1045,59 +1274,61 @@ spec:
 
 ___
 
-## **daily checkpoint string most popular values**  
+## **daily string most popular values**  
   
 **Check description**  
 Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|daily_checkpoint_string_most_popular_values|checkpoint|daily|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|daily_string_most_popular_values|recurring|daily|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_string_most_popular_values
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=daily_checkpoint_string_most_popular_values
+dqo.ai> check run -ch=daily_string_most_popular_values
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=daily_checkpoint_string_most_popular_values
+dqo.ai> check run -c=connection_name -ch=daily_string_most_popular_values
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=daily_checkpoint_string_most_popular_values
+dqo.ai> check run -c=connection_name -t=table_name -ch=daily_string_most_popular_values
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_checkpoint_string_most_popular_values
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_string_most_popular_values
 ```
 **Check structure (Yaml)**
 ```yaml
-      checkpoints:
+      recurring_checks:
         daily:
           strings:
-            daily_checkpoint_string_most_popular_values:
+            daily_string_most_popular_values:
               parameters:
                 expected_values:
                 - USD
                 - GBP
                 - EUR
+              warning:
+                min_count: 0
               error:
                 min_count: 5
-              warning:
-                min_count: 5
               fatal:
-                min_count: 5
+                min_count: 100
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-30"
+```yaml hl_lines="13-27"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -1106,21 +1337,21 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      checkpoints:
+      recurring_checks:
         daily:
           strings:
-            daily_checkpoint_string_most_popular_values:
+            daily_string_most_popular_values:
               parameters:
                 expected_values:
                 - USD
                 - GBP
                 - EUR
+              warning:
+                min_count: 0
               error:
                 min_count: 5
-              warning:
-                min_count: 5
               fatal:
-                min_count: 5
+                min_count: 100
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -1233,7 +1464,7 @@ spec:
             COUNT(*) AS total_values,
         CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
         TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-            FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) top_col_values
@@ -1344,7 +1575,7 @@ spec:
             COUNT(*) AS total_values,
         CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
         TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) top_col_values
@@ -1455,7 +1686,7 @@ spec:
             COUNT(*) AS total_values,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) AS top_col_values
@@ -1566,7 +1797,7 @@ spec:
                 COUNT(*) AS total_values,
         CAST(LOCALTIMESTAMP AS date) AS time_period,
         CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+               FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
              ) AS top_col_values
@@ -1575,17 +1806,122 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### ****
+=== "Sensor template for "
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    {%- macro top_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        NULL AS actual_value,
+        {{parameters.expected_values|length}}
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period
+    {{ top_values_column() }}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro top_values_column() -%}
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            {{- render_data_stream('top_col_values') }}
+            ORDER BY top_col_values.total_values) as top_values_rank
+            {{- render_data_stream('top_col_values') }}
+        FROM (
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
+    WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for "
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            ORDER BY top_col_values.total_values) as top_values_rank
+        FROM (
+            SELECT
+            analyzed_table.[target_column] AS top_values,
+            COUNT(*) AS total_values,
+        CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+        CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+    , top_values
+    , total_values
+        ) top_col_values
+    )
+    WHERE top_values_rank <= 
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 47-52"
+    ```yaml hl_lines="11-18 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -1602,21 +1938,21 @@ spec:
             column: state
       columns:
         target_column:
-          checkpoints:
+          recurring_checks:
             daily:
               strings:
-                daily_checkpoint_string_most_popular_values:
+                daily_string_most_popular_values:
                   parameters:
                     expected_values:
                     - USD
                     - GBP
                     - EUR
+                  warning:
+                    min_count: 0
                   error:
                     min_count: 5
-                  warning:
-                    min_count: 5
                   fatal:
-                    min_count: 5
+                    min_count: 100
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -1735,7 +2071,7 @@ spec:
             analyzed_table.`state` AS stream_level_2,
             CAST(CURRENT_TIMESTAMP() AS DATE) AS time_period,
             TIMESTAMP(CAST(CURRENT_TIMESTAMP() AS DATE)) AS time_period_utc
-                FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) top_col_values
@@ -1847,7 +2183,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date) AS time_period,
             TO_TIMESTAMP(CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period_utc
-                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) top_col_values
@@ -1959,7 +2295,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -2071,7 +2407,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(LOCALTIMESTAMP AS date) AS time_period,
             CAST((CAST(LOCALTIMESTAMP AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                   FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+                   FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
                  ) AS top_col_values
@@ -2079,6 +2415,128 @@ spec:
         WHERE top_values_rank <= 
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    ****  
+      
+    === "Sensor template for "
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        {%- macro top_value() -%}
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+            NULL AS actual_value,
+            {{parameters.expected_values|length}}
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else -%}
+            SUM(
+                CASE
+                    WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period
+        {{ top_values_column() }}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro top_values_column() -%}
+        FROM(
+            SELECT
+                top_col_values.top_values as top_values,
+                top_col_values.time_period as time_period, time_period_utc,
+                RANK() OVER(partition by top_col_values.time_period
+                {{- render_data_stream('top_col_values') }}
+                ORDER BY top_col_values.total_values) as top_values_rank
+                {{- render_data_stream('top_col_values') }}
+            FROM (
+                SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_values,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause() }}
+                {{- lib.render_group_by() }}, top_values
+                {{- lib.render_order_by() }}, total_values
+            ) top_col_values
+        )
+        WHERE top_values_rank <= {{ parameters.top_values }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_stream(table_alias_prefix = '') -%}
+            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+                {%- for attribute in lib.data_streams -%}
+                    {{ ', ' }}
+                    {%- with data_stream_level = lib.data_streams[attribute] -%}
+                        {%- if data_stream_level.source == 'tag' -%}
+                            {{ make_text_constant(data_stream_level.tag) }}
+                        {%- elif data_stream_level.source == 'column_value' -%}
+                            {{ table_alias_prefix }}.stream_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            {{ top_value() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for "
+        ```
+        SELECT
+            SUM(
+                CASE
+                    WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period
+        FROM(
+            SELECT
+                top_col_values.top_values as top_values,
+                top_col_values.time_period as time_period, time_period_utc,
+                RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+                ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
+            FROM (
+                SELECT
+                analyzed_table.[target_column] AS top_values,
+                COUNT(*) AS total_values,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            CAST(SYSDATETIMEOFFSET() AS date) AS time_period,
+            CAST((CAST(SYSDATETIMEOFFSET() AS date)) AS DATETIME) AS time_period_utc
+                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        , top_valuesORDER BY level_1, level_2
+                , 
+            
+        
+            
+        , total_values
+            ) top_col_values
+        )
+        WHERE top_values_rank <= , 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
         ```
     
 
@@ -2088,59 +2546,61 @@ spec:
 
 ___
 
-## **monthly checkpoint string most popular values**  
+## **monthly string most popular values**  
   
 **Check description**  
 Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.  
   
 |Check name|Check type|Time scale|Sensor definition|Quality rule|
 |----------|----------|----------|-----------|-------------|
-|monthly_checkpoint_string_most_popular_values|checkpoint|monthly|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
+|monthly_string_most_popular_values|recurring|monthly|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_string_most_popular_values
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
-dqo.ai> check run -ch=monthly_checkpoint_string_most_popular_values
+dqo.ai> check run -ch=monthly_string_most_popular_values
 ```
 It is also possible to run this check on a specific connection. In order to do this, add the connection name to the below
 ```
-dqo.ai> check run -c=connection_name -ch=monthly_checkpoint_string_most_popular_values
+dqo.ai> check run -c=connection_name -ch=monthly_string_most_popular_values
 ```
 It is additionally feasible to run this check on a specific table. In order to do this, add the table name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_checkpoint_string_most_popular_values
+dqo.ai> check run -c=connection_name -t=table_name -ch=monthly_string_most_popular_values
 ```
 It is furthermore viable to combine run this check on a specific column. In order to do this, add the column name to the below
 ```
-dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_checkpoint_string_most_popular_values
+dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_string_most_popular_values
 ```
 **Check structure (Yaml)**
 ```yaml
-      checkpoints:
+      recurring_checks:
         monthly:
           strings:
-            monthly_checkpoint_string_most_popular_values:
+            monthly_string_most_popular_values:
               parameters:
                 expected_values:
                 - USD
                 - GBP
                 - EUR
+              warning:
+                min_count: 0
               error:
                 min_count: 5
-              warning:
-                min_count: 5
               fatal:
-                min_count: 5
+                min_count: 100
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-30"
+```yaml hl_lines="13-27"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -2149,21 +2609,21 @@ spec:
     monthly_partitioning_recent_months: 1
   columns:
     target_column:
-      checkpoints:
+      recurring_checks:
         monthly:
           strings:
-            monthly_checkpoint_string_most_popular_values:
+            monthly_string_most_popular_values:
               parameters:
                 expected_values:
                 - USD
                 - GBP
                 - EUR
+              warning:
+                min_count: 0
               error:
                 min_count: 5
-              warning:
-                min_count: 5
               fatal:
-                min_count: 5
+                min_count: 100
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -2276,7 +2736,7 @@ spec:
             COUNT(*) AS total_values,
         DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-            FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) top_col_values
@@ -2387,7 +2847,7 @@ spec:
             COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) top_col_values
@@ -2498,7 +2958,7 @@ spec:
             COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) AS top_col_values
@@ -2609,7 +3069,7 @@ spec:
                 COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+               FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
              ) AS top_col_values
@@ -2618,17 +3078,122 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### ****
+=== "Sensor template for "
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    {%- macro top_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        NULL AS actual_value,
+        {{parameters.expected_values|length}}
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period
+    {{ top_values_column() }}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro top_values_column() -%}
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            {{- render_data_stream('top_col_values') }}
+            ORDER BY top_col_values.total_values) as top_values_rank
+            {{- render_data_stream('top_col_values') }}
+        FROM (
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
+    WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for "
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            ORDER BY top_col_values.total_values) as top_values_rank
+        FROM (
+            SELECT
+            analyzed_table.[target_column] AS top_values,
+            COUNT(*) AS total_values,
+        DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+        CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+    , top_values
+    , total_values
+        ) top_col_values
+    )
+    WHERE top_values_rank <= 
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 47-52"
+    ```yaml hl_lines="11-18 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -2645,21 +3210,21 @@ spec:
             column: state
       columns:
         target_column:
-          checkpoints:
+          recurring_checks:
             monthly:
               strings:
-                monthly_checkpoint_string_most_popular_values:
+                monthly_string_most_popular_values:
                   parameters:
                     expected_values:
                     - USD
                     - GBP
                     - EUR
+                  warning:
+                    min_count: 0
                   error:
                     min_count: 5
-                  warning:
-                    min_count: 5
                   fatal:
-                    min_count: 5
+                    min_count: 100
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -2778,7 +3343,7 @@ spec:
             analyzed_table.`state` AS stream_level_2,
             DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(CURRENT_TIMESTAMP() AS DATE), MONTH)) AS time_period_utc
-                FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) top_col_values
@@ -2890,7 +3455,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(TO_TIMESTAMP_NTZ(LOCALTIMESTAMP()) AS date))) AS time_period_utc
-                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) top_col_values
@@ -3002,7 +3567,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -3114,7 +3679,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(LOCALTIMESTAMP AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                   FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+                   FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
                  ) AS top_col_values
@@ -3122,6 +3687,128 @@ spec:
         WHERE top_values_rank <= 
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    ****  
+      
+    === "Sensor template for "
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        {%- macro top_value() -%}
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+            NULL AS actual_value,
+            {{parameters.expected_values|length}}
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else -%}
+            SUM(
+                CASE
+                    WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period
+        {{ top_values_column() }}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro top_values_column() -%}
+        FROM(
+            SELECT
+                top_col_values.top_values as top_values,
+                top_col_values.time_period as time_period, time_period_utc,
+                RANK() OVER(partition by top_col_values.time_period
+                {{- render_data_stream('top_col_values') }}
+                ORDER BY top_col_values.total_values) as top_values_rank
+                {{- render_data_stream('top_col_values') }}
+            FROM (
+                SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_values,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause() }}
+                {{- lib.render_group_by() }}, top_values
+                {{- lib.render_order_by() }}, total_values
+            ) top_col_values
+        )
+        WHERE top_values_rank <= {{ parameters.top_values }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_stream(table_alias_prefix = '') -%}
+            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+                {%- for attribute in lib.data_streams -%}
+                    {{ ', ' }}
+                    {%- with data_stream_level = lib.data_streams[attribute] -%}
+                        {%- if data_stream_level.source == 'tag' -%}
+                            {{ make_text_constant(data_stream_level.tag) }}
+                        {%- elif data_stream_level.source == 'column_value' -%}
+                            {{ table_alias_prefix }}.stream_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            {{ top_value() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for "
+        ```
+        SELECT
+            SUM(
+                CASE
+                    WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period
+        FROM(
+            SELECT
+                top_col_values.top_values as top_values,
+                top_col_values.time_period as time_period, time_period_utc,
+                RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+                ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
+            FROM (
+                SELECT
+                analyzed_table.[target_column] AS top_values,
+                COUNT(*) AS total_values,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0) AS time_period,
+            CAST((DATEADD(month, DATEDIFF(month, 0, SYSDATETIMEOFFSET()), 0)) AS DATETIME) AS time_period_utc
+                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+                , 
+            
+        , top_valuesORDER BY level_1, level_2
+                , 
+            
+        
+            
+        , total_values
+            ) top_col_values
+        )
+        WHERE top_values_rank <= , 
+                , 
+            
+        ORDER BY level_1, level_2
+                , 
+            
+        
+            
         ```
     
 
@@ -3140,6 +3827,11 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |daily_partition_string_most_popular_values|partitioned|daily|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=daily_partition_string_most_popular_values
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -3168,22 +3860,19 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=daily_pa
                 - USD
                 - GBP
                 - EUR
+              warning:
+                min_count: 0
               error:
                 min_count: 5
-              warning:
-                min_count: 5
               fatal:
-                min_count: 5
+                min_count: 100
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-30"
+```yaml hl_lines="13-27"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -3201,12 +3890,12 @@ spec:
                 - USD
                 - GBP
                 - EUR
+              warning:
+                min_count: 0
               error:
                 min_count: 5
-              warning:
-                min_count: 5
               fatal:
-                min_count: 5
+                min_count: 100
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -3319,7 +4008,7 @@ spec:
             COUNT(*) AS total_values,
         CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
         TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
-            FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) top_col_values
@@ -3430,7 +4119,7 @@ spec:
             COUNT(*) AS total_values,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
-            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) top_col_values
@@ -3541,7 +4230,7 @@ spec:
             COUNT(*) AS total_values,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) AS top_col_values
@@ -3652,7 +4341,7 @@ spec:
                 COUNT(*) AS total_values,
         CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
         CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+               FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
              ) AS top_col_values
@@ -3661,17 +4350,129 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### ****
+=== "Sensor template for "
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    {%- macro top_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        NULL AS actual_value,
+        {{parameters.expected_values|length}}
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period
+    {{ top_values_column() }}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro top_values_column() -%}
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            {{- render_data_stream('top_col_values') }}
+            ORDER BY top_col_values.total_values) as top_values_rank
+            {{- render_data_stream('top_col_values') }}
+        FROM (
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
+    WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for "
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            ORDER BY top_col_values.total_values) as top_values_rank
+        FROM (
+            SELECT
+            analyzed_table.[target_column] AS top_values,
+            COUNT(*) AS total_values,
+        CAST([col_event_timestamp] AS date) AS time_period,
+        CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
+            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
+    , top_valuesORDER BY CAST([col_event_timestamp] AS date)
+    
+        
+    , total_values
+        ) top_col_values
+    )
+    WHERE top_values_rank <= 
+    GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
+    ORDER BY CAST([col_event_timestamp] AS date)
+    
+        
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 47-52"
+    ```yaml hl_lines="11-18 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -3697,12 +4498,12 @@ spec:
                     - USD
                     - GBP
                     - EUR
+                  warning:
+                    min_count: 0
                   error:
                     min_count: 5
-                  warning:
-                    min_count: 5
                   fatal:
-                    min_count: 5
+                    min_count: 100
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -3821,7 +4622,7 @@ spec:
             analyzed_table.`state` AS stream_level_2,
             CAST(analyzed_table.`col_event_timestamp` AS DATE) AS time_period,
             TIMESTAMP(CAST(analyzed_table.`col_event_timestamp` AS DATE)) AS time_period_utc
-                FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) top_col_values
@@ -3933,7 +4734,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
             TO_TIMESTAMP(CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period_utc
-                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) top_col_values
@@ -4045,7 +4846,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
             CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -4157,7 +4958,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             CAST(analyzed_table."col_event_timestamp" AS date) AS time_period,
             CAST((CAST(analyzed_table."col_event_timestamp" AS date)) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                   FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+                   FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
                  ) AS top_col_values
@@ -4165,6 +4966,122 @@ spec:
         WHERE top_values_rank <= 
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    ****  
+      
+    === "Sensor template for "
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        {%- macro top_value() -%}
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+            NULL AS actual_value,
+            {{parameters.expected_values|length}}
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else -%}
+            SUM(
+                CASE
+                    WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period
+        {{ top_values_column() }}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro top_values_column() -%}
+        FROM(
+            SELECT
+                top_col_values.top_values as top_values,
+                top_col_values.time_period as time_period, time_period_utc,
+                RANK() OVER(partition by top_col_values.time_period
+                {{- render_data_stream('top_col_values') }}
+                ORDER BY top_col_values.total_values) as top_values_rank
+                {{- render_data_stream('top_col_values') }}
+            FROM (
+                SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_values,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause() }}
+                {{- lib.render_group_by() }}, top_values
+                {{- lib.render_order_by() }}, total_values
+            ) top_col_values
+        )
+        WHERE top_values_rank <= {{ parameters.top_values }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_stream(table_alias_prefix = '') -%}
+            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+                {%- for attribute in lib.data_streams -%}
+                    {{ ', ' }}
+                    {%- with data_stream_level = lib.data_streams[attribute] -%}
+                        {%- if data_stream_level.source == 'tag' -%}
+                            {{ make_text_constant(data_stream_level.tag) }}
+                        {%- elif data_stream_level.source == 'column_value' -%}
+                            {{ table_alias_prefix }}.stream_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            {{ top_value() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for "
+        ```
+        SELECT
+            SUM(
+                CASE
+                    WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period
+        FROM(
+            SELECT
+                top_col_values.top_values as top_values,
+                top_col_values.time_period as time_period, time_period_utc,
+                RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+                ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
+            FROM (
+                SELECT
+                analyzed_table.[target_column] AS top_values,
+                COUNT(*) AS total_values,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            CAST([col_event_timestamp] AS date) AS time_period,
+            CAST((CAST([col_event_timestamp] AS date)) AS DATETIME) AS time_period_utc
+                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+        GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
+        , top_valuesORDER BY level_1, level_2CAST([col_event_timestamp] AS date)
+        
+            
+        , total_values
+            ) top_col_values
+        )
+        WHERE top_values_rank <= , 
+        GROUP BY CAST([col_event_timestamp] AS date), CAST([col_event_timestamp] AS date)
+        ORDER BY level_1, level_2CAST([col_event_timestamp] AS date)
+        
+            
         ```
     
 
@@ -4183,6 +5100,11 @@ Verifies that the number of top values from a set in a column does not exceed th
 |----------|----------|----------|-----------|-------------|
 |monthly_partition_string_most_popular_values|partitioned|monthly|[string_most_popular_values](../../../../reference/sensors/column/strings-column-sensors/#string-most-popular-values)|[min_count](../../../../reference/rules/comparison/#min-count)|
   
+**Enable check (Shell)**  
+To enable this check provide connection name and check name in [check enable command](../../../../command_line_interface/check/#dqo-check-enable)
+```
+dqo.ai> check enable -c=connection_name -ch=monthly_partition_string_most_popular_values
+```
 **Run check (Shell)**  
 To run this check provide check name in [check run command](../../../../command_line_interface/check/#dqo-check-run)
 ```
@@ -4211,22 +5133,19 @@ dqo.ai> check run -c=connection_name -t=table_name -col=column_name -ch=monthly_
                 - USD
                 - GBP
                 - EUR
+              warning:
+                min_count: 0
               error:
                 min_count: 5
-              warning:
-                min_count: 5
               fatal:
-                min_count: 5
+                min_count: 100
 ```
 **Sample configuration (Yaml)**  
-```yaml hl_lines="16-30"
+```yaml hl_lines="13-27"
 # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
 apiVersion: dqo/v1
 kind: table
 spec:
-  target:
-    schema_name: target_schema
-    table_name: target_table
   timestamp_columns:
     event_timestamp_column: col_event_timestamp
     ingestion_timestamp_column: col_inserted_at
@@ -4244,12 +5163,12 @@ spec:
                 - USD
                 - GBP
                 - EUR
+              warning:
+                min_count: 0
               error:
                 min_count: 5
-              warning:
-                min_count: 5
               fatal:
-                min_count: 5
+                min_count: 100
       labels:
       - This is the column that is analyzed for data quality issues
     col_event_timestamp:
@@ -4362,7 +5281,7 @@ spec:
             COUNT(*) AS total_values,
         DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
         TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
-            FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+            FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) top_col_values
@@ -4473,7 +5392,7 @@ spec:
             COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
-            FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) top_col_values
@@ -4584,7 +5503,7 @@ spec:
             COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-            FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+            FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
         ) AS top_col_values
@@ -4695,7 +5614,7 @@ spec:
                 COUNT(*) AS total_values,
         DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
         CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-               FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+               FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
     GROUP BY time_period, time_period_utc, top_values
     ORDER BY time_period, time_period_utc, total_values
              ) AS top_col_values
@@ -4704,17 +5623,129 @@ spec:
     GROUP BY time_period, time_period_utc
     ORDER BY time_period, time_period_utc
     ```
+### ****
+=== "Sensor template for "
+      
+    ```
+    {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+    {%- macro top_value() -%}
+        {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+        NULL AS actual_value,
+        {{parameters.expected_values|length}}
+        {{- lib.render_data_stream_projections('analyzed_table') }}
+        {{- lib.render_time_dimension_projection('analyzed_table') }}
+        FROM {{ lib.render_target_table() }} AS analyzed_table
+        {%- else -%}
+        SUM(
+            CASE
+                WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period
+    {{ top_values_column() }}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    {%- macro extract_in_list(values_list) -%}
+        {%- for i in values_list -%}
+            {%- if not loop.last -%}
+                {{lib.make_text_constant(i)}}{{", "}}
+            {%- else -%}
+                {{lib.make_text_constant(i)}}
+            {%- endif -%}
+        {%- endfor -%}
+    {%- endmacro -%}
+    
+    {%- macro top_values_column() -%}
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            {{- render_data_stream('top_col_values') }}
+            ORDER BY top_col_values.total_values) as top_values_rank
+            {{- render_data_stream('top_col_values') }}
+        FROM (
+            SELECT
+            {{ lib.render_target_column('analyzed_table') }} AS top_values,
+            COUNT(*) AS total_values
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {{- lib.render_where_clause() }}
+            {{- lib.render_group_by() }}, top_values
+            {{- lib.render_order_by() }}, total_values
+        ) top_col_values
+    )
+    WHERE top_values_rank <= {{ parameters.top_values }}
+    {%- endmacro -%}
+    
+    {%- macro render_data_stream(table_alias_prefix = '') -%}
+        {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+            {%- for attribute in lib.data_streams -%}
+                {{ ', ' }}
+                {%- with data_stream_level = lib.data_streams[attribute] -%}
+                    {%- if data_stream_level.source == 'tag' -%}
+                        {{ make_text_constant(data_stream_level.tag) }}
+                    {%- elif data_stream_level.source == 'column_value' -%}
+                        {{ table_alias_prefix }}.stream_{{ attribute }}
+                    {%- endif -%}
+                {%- endwith %}
+            {%- endfor -%}
+        {%- endif -%}
+    {%- endmacro -%}
+    
+    SELECT
+        {{ top_value() -}}
+    {{- lib.render_group_by() -}}
+    {{- lib.render_order_by() -}}
+    ```
+=== "Rendered SQL for "
+      
+    ```
+    SELECT
+        SUM(
+            CASE
+                WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
+                ELSE 0
+            END
+        ) AS actual_value,
+        time_period
+    FROM(
+        SELECT
+            top_col_values.top_values as top_values,
+            top_col_values.time_period as time_period, time_period_utc,
+            RANK() OVER(partition by top_col_values.time_period
+            ORDER BY top_col_values.total_values) as top_values_rank
+        FROM (
+            SELECT
+            analyzed_table.[target_column] AS top_values,
+            COUNT(*) AS total_values,
+        DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
+        CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
+            FROM [].[<target_schema>].[<target_table>] AS analyzed_table
+    GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
+    , top_valuesORDER BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
+    
+        
+    , total_values
+        ) top_col_values
+    )
+    WHERE top_values_rank <= 
+    GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
+    ORDER BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
+    
+        
+    ```
 ### **Configuration with a data stream segmentation**  
 ??? info "Click to see more"  
     **Sample configuration (Yaml)**  
-    ```yaml hl_lines="14-21 47-52"
+    ```yaml hl_lines="11-18 44-49"
     # yaml-language-server: $schema=https://cloud.dqo.ai/dqo-yaml-schema/TableYaml-schema.json
     apiVersion: dqo/v1
     kind: table
     spec:
-      target:
-        schema_name: target_schema
-        table_name: target_table
       timestamp_columns:
         event_timestamp_column: col_event_timestamp
         ingestion_timestamp_column: col_inserted_at
@@ -4740,12 +5771,12 @@ spec:
                     - USD
                     - GBP
                     - EUR
+                  warning:
+                    min_count: 0
                   error:
                     min_count: 5
-                  warning:
-                    min_count: 5
                   fatal:
-                    min_count: 5
+                    min_count: 100
           labels:
           - This is the column that is analyzed for data quality issues
         col_event_timestamp:
@@ -4864,7 +5895,7 @@ spec:
             analyzed_table.`state` AS stream_level_2,
             DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH) AS time_period,
             TIMESTAMP(DATE_TRUNC(CAST(analyzed_table.`col_event_timestamp` AS DATE), MONTH)) AS time_period_utc
-                FROM `your-google-project-id`.`target_schema`.`target_table` AS analyzed_table
+                FROM `your-google-project-id`.`<target_schema>`.`<target_table>` AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) top_col_values
@@ -4976,7 +6007,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
             TO_TIMESTAMP(DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS time_period_utc
-                FROM "your_snowflake_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_snowflake_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) top_col_values
@@ -5088,7 +6119,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                FROM "your_postgresql_database"."target_schema"."target_table" AS analyzed_table
+                FROM "your_postgresql_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
             ) AS top_col_values
@@ -5200,7 +6231,7 @@ spec:
             analyzed_table."state" AS stream_level_2,
             DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date)) AS time_period,
             CAST((DATE_TRUNC('MONTH', CAST(analyzed_table."col_event_timestamp" AS date))) AS TIMESTAMP WITH TIME ZONE) AS time_period_utc
-                   FROM "your_redshift_database"."target_schema"."target_table" AS analyzed_table
+                   FROM "your_redshift_database"."<target_schema>"."<target_table>" AS analyzed_table
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc, top_values
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc, total_values
                  ) AS top_col_values
@@ -5208,6 +6239,122 @@ spec:
         WHERE top_values_rank <= 
         GROUP BY stream_level_1, stream_level_2, time_period, time_period_utc
         ORDER BY stream_level_1, stream_level_2, time_period, time_period_utc
+        ```
+    ****  
+      
+    === "Sensor template for "
+        ```
+        {% import '/dialects/sqlserver.sql.jinja2' as lib with context -%}
+        {%- macro top_value() -%}
+            {%- if 'expected_values' not in parameters or parameters.expected_values|length == 0 -%}
+            NULL AS actual_value,
+            {{parameters.expected_values|length}}
+            {{- lib.render_data_stream_projections('analyzed_table') }}
+            {{- lib.render_time_dimension_projection('analyzed_table') }}
+            FROM {{ lib.render_target_table() }} AS analyzed_table
+            {%- else -%}
+            SUM(
+                CASE
+                    WHEN top_values IN ({{ extract_in_list(parameters['expected_values']) }}) THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period
+        {{ top_values_column() }}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        {%- macro extract_in_list(values_list) -%}
+            {%- for i in values_list -%}
+                {%- if not loop.last -%}
+                    {{lib.make_text_constant(i)}}{{", "}}
+                {%- else -%}
+                    {{lib.make_text_constant(i)}}
+                {%- endif -%}
+            {%- endfor -%}
+        {%- endmacro -%}
+        
+        {%- macro top_values_column() -%}
+        FROM(
+            SELECT
+                top_col_values.top_values as top_values,
+                top_col_values.time_period as time_period, time_period_utc,
+                RANK() OVER(partition by top_col_values.time_period
+                {{- render_data_stream('top_col_values') }}
+                ORDER BY top_col_values.total_values) as top_values_rank
+                {{- render_data_stream('top_col_values') }}
+            FROM (
+                SELECT
+                {{ lib.render_target_column('analyzed_table') }} AS top_values,
+                COUNT(*) AS total_values
+                {{- lib.render_data_stream_projections('analyzed_table') }}
+                {{- lib.render_time_dimension_projection('analyzed_table') }}
+                FROM {{ lib.render_target_table() }} AS analyzed_table
+                {{- lib.render_where_clause() }}
+                {{- lib.render_group_by() }}, top_values
+                {{- lib.render_order_by() }}, total_values
+            ) top_col_values
+        )
+        WHERE top_values_rank <= {{ parameters.top_values }}
+        {%- endmacro -%}
+        
+        {%- macro render_data_stream(table_alias_prefix = '') -%}
+            {%- if lib.data_streams is not none and (lib.data_streams | length()) > 0 -%}
+                {%- for attribute in lib.data_streams -%}
+                    {{ ', ' }}
+                    {%- with data_stream_level = lib.data_streams[attribute] -%}
+                        {%- if data_stream_level.source == 'tag' -%}
+                            {{ make_text_constant(data_stream_level.tag) }}
+                        {%- elif data_stream_level.source == 'column_value' -%}
+                            {{ table_alias_prefix }}.stream_{{ attribute }}
+                        {%- endif -%}
+                    {%- endwith %}
+                {%- endfor -%}
+            {%- endif -%}
+        {%- endmacro -%}
+        
+        SELECT
+            {{ top_value() -}}
+        {{- lib.render_group_by() -}}
+        {{- lib.render_order_by() -}}
+        ```
+    === "Rendered SQL for "
+        ```
+        SELECT
+            SUM(
+                CASE
+                    WHEN top_values IN ('USD', 'GBP', 'EUR') THEN 1
+                    ELSE 0
+                END
+            ) AS actual_value,
+            time_period
+        FROM(
+            SELECT
+                top_col_values.top_values as top_values,
+                top_col_values.time_period as time_period, time_period_utc,
+                RANK() OVER(partition by top_col_values.time_period, top_col_values.stream_level_1, top_col_values.stream_level_2
+                ORDER BY top_col_values.total_values) as top_values_rank, top_col_values.stream_level_1, top_col_values.stream_level_2
+            FROM (
+                SELECT
+                analyzed_table.[target_column] AS top_values,
+                COUNT(*) AS total_values,
+            analyzed_table.[country] AS stream_level_1,
+            analyzed_table.[state] AS stream_level_2,
+            DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1) AS time_period,
+            CAST((DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)) AS DATETIME) AS time_period_utc
+                FROM [].[<target_schema>].[<target_table>] AS analyzed_table, 
+        GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
+        , top_valuesORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
+        
+            
+        , total_values
+            ) top_col_values
+        )
+        WHERE top_values_rank <= , 
+        GROUP BY DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1), DATEADD(month, DATEDIFF(month, 0, [col_event_timestamp]), 0)
+        ORDER BY level_1, level_2DATEFROMPARTS(YEAR(CAST([col_event_timestamp] AS date)), MONTH(CAST([col_event_timestamp] AS date)), 1)
+        
+            
         ```
     
 

@@ -78,6 +78,8 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
             put("daily_string_match_name_regex_percent", o -> o.dailyStringMatchNameRegexPercent);
 
             put("daily_string_most_popular_values", o -> o.dailyStringMostPopularValues);
+
+            put("daily_string_datatype_detect", o -> o.dailyStringDatatypeDetect);
         }
     };
 
@@ -185,6 +187,9 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
 
     @JsonPropertyDescription("Verifies that the number of top values from a set in a column does not exceed the minimum accepted count.")
     private ColumnStringMostPopularValuesCheckSpec dailyStringMostPopularValues;
+
+    @JsonPropertyDescription("Returns the datatype of a column: 1 - integers, 2 - floats, 3 - dates, 4 - timestamps, 5 - booleans, 6 - strings, 7 mixed datatype. Stores the most recent row count for each day when the data quality check was evaluated.")
+    private ColumnStringDatatypeDetectCheckSpec dailyStringDatatypeDetect;
 
     /**
      * Returns a maximum string length below check.
@@ -814,6 +819,24 @@ public class ColumnStringsDailyRecurringSpec extends AbstractCheckCategorySpec {
         this.setDirtyIf(!Objects.equals(this.dailyStringMostPopularValues, dailyStringMostPopularValues));
         this.dailyStringMostPopularValues = dailyStringMostPopularValues;
         propagateHierarchyIdToField(dailyStringMostPopularValues, "daily_string_most_popular_values");
+    }
+
+    /**
+     * Returns a count of expected values in datatype detect check.
+     * @return Datatype detect check.
+     */
+    public ColumnStringDatatypeDetectCheckSpec getDailyStringDatatypeDetect() {
+        return dailyStringDatatypeDetect;
+    }
+
+    /**
+     * Sets a new definition of a datatype detect check.
+     * @param dailyStringDatatypeDetect Datatype detect check.
+     */
+    public void setDailyStringDatatypeDetect(ColumnStringDatatypeDetectCheckSpec dailyStringDatatypeDetect) {
+        this.setDirtyIf(!Objects.equals(this.dailyStringDatatypeDetect, dailyStringDatatypeDetect));
+        this.dailyStringDatatypeDetect = dailyStringDatatypeDetect;
+        propagateHierarchyIdToField(dailyStringDatatypeDetect, "daily_string_datatype_detect");
     }
 
     /**

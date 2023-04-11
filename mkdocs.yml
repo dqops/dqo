@@ -8,10 +8,8 @@ nav:
   - What is DQO?: 'index.md'
   - Getting started:
     - 'getting-started/index.md'
-    - Set up: 'getting-started/set-up/set-up.md'
-    - Start DQO: 'getting-started/start-dqo/start-dqo.md'
-    - Connect to a data source: 'getting-started/connect-to-a-data-source/connect-to-a-data-source.md'
-    - Import metadata: 'getting-started/import-metadata/import-metadata.md'
+    - Installation: 'getting-started/set-up/installation.md'
+    - Connect to a data source: 'getting-started/connect-to-a-data-source/adding-data-source-connection.md'
     - Run initial profiling: 'getting-started/run-initial-profiling/run-initial-profiling.md'
     - Run data quality checks: 'getting-started/run-data-quality-checks/run-data-quality-checks.md'
     - Inspect results: 'getting-started/inspect-results/inspect-results.md'
@@ -34,6 +32,9 @@ nav:
     - Working with CLI: 'dqo-concepts/working-with-cli/working-with-cli.md'
   - Working with DQO:
     - 'working-with-dqo/index.md'
+    - Installation:
+      - Install DQO from Git: 'working-with-dqo/install-dqo-from-git/install-dqo-from-git.md'
+      - Log in to DQO Cloud: 'working-with-dqo/login-to-dqo-cloud/log-in-to-dqo-cloud.md'
     - Adding connections:
       - 'working-with-dqo/adding-connections/index.md'
       - BigQuery: 'working-with-dqo/adding-connections/bigquery.md'
@@ -89,9 +90,17 @@ nav:
         - days since most recent ingestion: 'checks/table/timeliness/days-since-most-recent-ingestion.md'
         - daily partition reload lag: 'checks/table/timeliness/daily-partition-reload-lag.md'
     - column:
+      - accuracy:
+        - total sum match percent: 'checks/column/accuracy/total-sum-match-percent.md'
+        - min match percent: 'checks/column/accuracy/min-match-percent.md'
+        - max match percent: 'checks/column/accuracy/max-match-percent.md'
+        - average match percent: 'checks/column/accuracy/average-match-percent.md'
+        - row count match percent: 'checks/column/accuracy/row-count-match-percent.md'
       - bool:
         - true percent: 'checks/column/bool/true-percent.md'
         - false percent: 'checks/column/bool/false-percent.md'
+      - consistency:
+        - date match format percent: 'checks/column/consistency/date-match-format-percent.md'
       - datetime:
         - date values in future percent: 'checks/column/datetime/date-values-in-future-percent.md'
         - datetime value in range date percent: 'checks/column/datetime/datetime-value-in-range-date-percent.md'
@@ -137,7 +146,9 @@ nav:
         - valid email percent: 'checks/column/pii/valid-email-percent.md'
         - contains email percent: 'checks/column/pii/contains-email-percent.md'
         - valid ip4 address percent: 'checks/column/pii/valid-ip4-address-percent.md'
+        - contains ip4 percent: 'checks/column/pii/contains-ip4-percent.md'
         - valid ip6 address percent: 'checks/column/pii/valid-ip6-address-percent.md'
+        - contains ip6 percent: 'checks/column/pii/contains-ip6-percent.md'
       - sql:
         - sql condition passed percent on column: 'checks/column/sql/sql-condition-passed-percent-on-column.md'
         - sql condition failed count on column: 'checks/column/sql/sql-condition-failed-count-on-column.md'
@@ -178,11 +189,13 @@ nav:
         - string match date regex percent: 'checks/column/strings/string-match-date-regex-percent.md'
         - string match name regex percent: 'checks/column/strings/string-match-name-regex-percent.md'
         - string most popular values: 'checks/column/strings/string-most-popular-values.md'
+        - string datatype detect: 'checks/column/strings/string-datatype-detect.md'
       - uniqueness:
         - unique count: 'checks/column/uniqueness/unique-count.md'
         - unique percent: 'checks/column/uniqueness/unique-percent.md'
         - duplicate count: 'checks/column/uniqueness/duplicate-count.md'
         - duplicate percent: 'checks/column/uniqueness/duplicate-percent.md'
+    - index: 'checks/index.md'
 ########## END INCLUDE CHECK REFERENCE
   - Reference:
 ########## INCLUDE SENSOR REFERENCE - DO NOT MODIFY MANUALLY
@@ -193,7 +206,9 @@ nav:
         - standard table sensors: 'reference/sensors/table/standard-table-sensors.md'
         - timeliness table sensors: 'reference/sensors/table/timeliness-table-sensors.md'
       - column:
+        - accuracy column sensors: 'reference/sensors/column/accuracy-column-sensors.md'
         - bool column sensors: 'reference/sensors/column/bool-column-sensors.md'
+        - consistency column sensors: 'reference/sensors/column/consistency-column-sensors.md'
         - datetime column sensors: 'reference/sensors/column/datetime-column-sensors.md'
         - integrity column sensors: 'reference/sensors/column/integrity-column-sensors.md'
         - nulls column sensors: 'reference/sensors/column/nulls-column-sensors.md'

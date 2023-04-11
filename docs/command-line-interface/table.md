@@ -25,8 +25,8 @@ dqo.ai> table import [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>]
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-c`<br/>`--connection`<br/>|Connection Name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
@@ -61,14 +61,14 @@ dqo.ai> table edit [-h] [-fw] [-hl] [-c=<connection>] [-of=<outputFormat>] [-t=<
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-c`<br/>`--connection`<br/>|Connection Name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
 |`-h`<br/>`--help`<br/>|Show the help for the command and parameters| ||
 |`-of`<br/>`--output-format`<br/>|Output format for tabular responses| |TABLE<br/>CSV<br/>JSON<br/>|
-|`-t`<br/>`--table`<br/>|Full table name (schema.table)| ||
+|`-t`<br/>`--table`<br/>|Full table name (schema.table), supports wildcard patterns &#x27;sch*.tab*&#x27;| ||
 
 
 
@@ -98,8 +98,8 @@ dqo.ai> table add [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-c`<br/>`--connection`<br/>|Connection Name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
@@ -135,8 +135,8 @@ dqo.ai> table remove [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-c`<br/>`--connection`<br/>|Connection Name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
@@ -172,8 +172,8 @@ dqo.ai> table update [-h] [-fw] [-hl] [-c=<connectionName>] [-n=<newTableName>]
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-c`<br/>`--connection`<br/>|Connection Name| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||
 |`-hl`<br/>`--headless`<br/>|Run the command in an headless (no user input allowed) mode| ||
@@ -210,8 +210,8 @@ dqo.ai> table list [-h] [-fw] [-hl] [-c=<connectionName>] [-of=<outputFormat>]
 
 **Options**  
   
-| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Is it required? | Accepted values |
-|-----------------------------------------------|-------------|-----------------|-----------------|
+| Command&nbsp;argument&nbsp;&nbsp;&nbsp;&nbsp; | Description | Required | Accepted values |
+|-----------------------------------------------|-------------|:-----------------:|-----------------|
 |`-c`<br/>`--connection`<br/>|Connection name| ||
 |`-d`<br/>`--dimension`<br/>|Dimension filter| ||
 |`-fw`<br/>`--file-write`<br/>|Write command response to a file| ||

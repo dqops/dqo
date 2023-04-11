@@ -1,6 +1,6 @@
 # Data storage
 
-In DQO, sensor readouts and rule results (data quality results) are stored as Apache Parquet files following the Apache
+In DQO, sensor readouts and check results are stored as Apache Parquet files following the Apache
 Hive compatible folder tree, partitioned by connection name, table name, and month.
 For example, rule results for February 2023 for a single table would be stored in a file
 `userhome/.data/rule_results/c=bigquery-public-data/t=america_health_rankings.ahr/m=2023-02-01/rule_results.0.parquet`.
