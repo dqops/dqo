@@ -556,7 +556,19 @@ function TreeProvider(props: any) {
 
   const removeNode = async (node: CustomTreeNode) => {
     setOpenNodes(openNodes.filter((item) => item.id !== node.id));
-    setTreeData(treeData.filter((item) => item.id !== node.id));
+
+    const newTreeDataMaps = [
+      CheckTypes.RECURRING,
+      CheckTypes.SOURCES,
+      CheckTypes.PROFILING,
+      CheckTypes.PARTITIONED,
+    ].reduce((acc, cur) => ({
+      ...acc,
+      [cur]: treeDataMaps[cur].filter((item) => item.id !== node.id)
+    }), {});
+
+    setTreeDataMaps(newTreeDataMaps);
+
     const tabIndex = tabs.findIndex((tab) => tab.value === node.id);
     if (tabIndex > -1) {
       const newActiveTab = tabs[(tabIndex + 1) % tabs.length]?.value;
@@ -1068,6 +1080,7 @@ function TreeProvider(props: any) {
     setTreeData(treeData.filter((item) => item.id.toString().indexOf(identify) === -1));
   };
 
+  console.log('treedata', treeData, treeDataMaps);
   return (
     <TreeContext.Provider
       value={{
