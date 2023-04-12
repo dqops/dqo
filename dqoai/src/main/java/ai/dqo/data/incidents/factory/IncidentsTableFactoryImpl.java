@@ -37,9 +37,9 @@ public class IncidentsTableFactoryImpl implements IncidentsTableFactory {
                 StringColumn.create(IncidentsColumnNames.SCHEMA_NAME_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.TABLE_NAME_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.DATA_STREAM_NAME_COLUMN_NAME),
-                StringColumn.create(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME),
-                StringColumn.create(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.QUALITY_DIMENSION_COLUMN_NAME),
+                StringColumn.create(IncidentsColumnNames.CHECK_CATEGORY_COLUMN_NAME),
+                StringColumn.create(IncidentsColumnNames.CHECK_TYPE_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.CHECK_NAME_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.COLUMN_NAME_COLUMN_NAME),
                 IntColumn.create(IncidentsColumnNames.HIGHEST_SEVERITY_COLUMN_NAME),
@@ -49,7 +49,6 @@ public class IncidentsTableFactoryImpl implements IncidentsTableFactory {
                 StringColumn.create(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.CREATED_BY_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.RESOLVED_BY_COLUMN_NAME),
-                StringColumn.create(IncidentsColumnNames.ISSUE_URL_COLUMN_NAME),
                 StringColumn.create(IncidentsColumnNames.STATUS_COLUMN_NAME));
 
         return table;

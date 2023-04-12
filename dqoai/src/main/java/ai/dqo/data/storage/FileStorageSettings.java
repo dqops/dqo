@@ -16,7 +16,6 @@
 package ai.dqo.data.storage;
 
 import ai.dqo.core.synchronization.contract.DqoRoot;
-import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 
 /**
  * Configuration for the parquet file storage for each type of supported table (sensor readouts, rule results, etc.)
@@ -27,6 +26,7 @@ public class FileStorageSettings {
     private String parquetFileName;
     private String timePeriodColumnName;
     private String idStringColumnName;
+    private TablePartitioningPattern partitioningPattern;
 
     /**
      * Creates a file storage configuration for a single type of table that is stored as parquet files.
@@ -36,17 +36,20 @@ public class FileStorageSettings {
      * @param timePeriodColumnName {@link tech.tablesaw.api.DateTimeColumn} that stores the exact time that is used for monthly partitioning
      *                             (but it is not the column that stores date of the first day of the month).
      * @param idStringColumnName Column name (of String type) that stores the primary key for each row, that is used to find rows to be deleted.
+     * @param partitioningPattern Table partitioning format.
      */
     public FileStorageSettings(DqoRoot tableType,
                                String dataSubfolderName,
                                String parquetFileName,
                                String timePeriodColumnName,
-                               String idStringColumnName) {
+                               String idStringColumnName,
+                               TablePartitioningPattern partitioningPattern) {
         this.tableType = tableType;
         this.dataSubfolderName = dataSubfolderName;
         this.parquetFileName = parquetFileName;
         this.timePeriodColumnName = timePeriodColumnName;
         this.idStringColumnName = idStringColumnName;
+        this.partitioningPattern = partitioningPattern;
     }
 
     /**
@@ -89,5 +92,13 @@ public class FileStorageSettings {
      */
     public String getIdStringColumnName() {
         return idStringColumnName;
+    }
+
+    /**
+     * Returns the table partitioning mode. Supported modes are CTM (connection/table/month) and CM (connection/month).
+     * @return Table partitioning mode.
+     */
+    public TablePartitioningPattern getPartitioningPattern() {
+        return partitioningPattern;
     }
 }

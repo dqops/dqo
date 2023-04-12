@@ -17,7 +17,10 @@ package ai.dqo.data.storage;
 
 import ai.dqo.metadata.sources.PhysicalTableName;
 import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
+import ai.dqo.utils.exceptions.DqoRuntimeException;
+import tech.tablesaw.api.DateColumn;
 import tech.tablesaw.api.DateTimeColumn;
+import tech.tablesaw.api.InstantColumn;
 import tech.tablesaw.api.Table;
 import tech.tablesaw.columns.Column;
 import tech.tablesaw.selection.Selection;
@@ -25,6 +28,8 @@ import tech.tablesaw.selection.Selection;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 
@@ -477,8 +482,22 @@ public class TableDataSnapshot {
             }
         }
 
-        DateTimeColumn newResultsTimePeriodColumn = (DateTimeColumn) this.tableDataChanges.getNewOrChangedRows()
+        Column<?> datePartitioningColumnOriginal = this.tableDataChanges.getNewOrChangedRows()
                 .column(this.storageSettings.getTimePeriodColumnName());
+        DateTimeColumn newResultsTimePeriodColumn = null;
+        if (datePartitioningColumnOriginal instanceof DateTimeColumn) {
+            newResultsTimePeriodColumn = (DateTimeColumn) datePartitioningColumnOriginal;
+        }
+        else if (datePartitioningColumnOriginal instanceof InstantColumn) {
+            newResultsTimePeriodColumn = ((InstantColumn)datePartitioningColumnOriginal).asLocalDateTimeColumn(ZoneOffset.UTC);
+        }
+        else if (datePartitioningColumnOriginal instanceof DateColumn) {
+            newResultsTimePeriodColumn = ((DateColumn)datePartitioningColumnOriginal).atTime(LocalTime.MIDNIGHT);
+        }
+        else {
+            throw new DqoRuntimeException("Time partitioning column " + storageSettings.getTimePeriodColumnName() + " is not a date/datetime/instant column.");
+        }
+
         LocalDateTime minDateNewResults = newResultsTimePeriodColumn.min();
         LocalDate startMonth = minDateNewResults != null ?
                 LocalDateTimeTruncateUtility.truncateMonth(minDateNewResults.toLocalDate()) : this.firstLoadedMonth;

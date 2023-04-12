@@ -47,9 +47,9 @@ public final class IncidentsColumnNames {
     public static final String DATA_STREAM_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a check type (adhoc, checkpoint, partitioned).
+     * Column name for a data quality dimension.
      */
-    public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
+    public static final String QUALITY_DIMENSION_COLUMN_NAME = "quality_dimension";
 
     /**
      * Column name for a check category.
@@ -57,9 +57,9 @@ public final class IncidentsColumnNames {
     public static final String CHECK_CATEGORY_COLUMN_NAME = "check_category";
 
     /**
-     * Column name for a data quality dimension.
+     * Column name for a check type (adhoc, checkpoint, partitioned).
      */
-    public static final String QUALITY_DIMENSION_COLUMN_NAME = "quality_dimension";
+    public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
 
     /**
      * Column name for a check name.

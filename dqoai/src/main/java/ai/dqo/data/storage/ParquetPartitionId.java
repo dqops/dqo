@@ -19,6 +19,7 @@ import ai.dqo.core.synchronization.contract.DqoRoot;
 import ai.dqo.metadata.sources.PhysicalTableName;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 /**
  * Identifies a single partition for hive partitioned tables stored as parquet files.
@@ -78,16 +79,20 @@ public class ParquetPartitionId {
         ParquetPartitionId that = (ParquetPartitionId) o;
 
         if (tableType != that.tableType) return false;
-        if (!connectionName.equals(that.connectionName)) return false;
-        if (!tableName.equals(that.tableName)) return false;
+        if (!Objects.equals(connectionName, that.connectionName)) return false;
+        if (!Objects.equals(tableName, that.tableName)) return false;
         return month.equals(that.month);
     }
 
     @Override
     public int hashCode() {
         int result = tableType.hashCode();
-        result = 31 * result + connectionName.hashCode();
-        result = 31 * result + tableName.hashCode();
+        if (connectionName != null) {
+            result = 31 * result + connectionName.hashCode();
+        }
+        if (tableName != null) {
+            result = 31 * result + tableName.hashCode();
+        }
         result = 31 * result + month.hashCode();
         return result;
     }

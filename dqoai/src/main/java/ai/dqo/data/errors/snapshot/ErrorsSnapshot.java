@@ -21,6 +21,7 @@ import ai.dqo.data.errors.factory.ErrorsColumnNames;
 import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionStorageService;
 import ai.dqo.data.storage.TableDataSnapshot;
+import ai.dqo.data.storage.TablePartitioningPattern;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import tech.tablesaw.api.Table;
@@ -71,6 +72,7 @@ public class ErrorsSnapshot extends TableDataSnapshot {
                 BuiltInFolderNames.ERRORS,
                 PARQUET_FILE_NAME,
                 ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME,
-                ErrorsColumnNames.ID_COLUMN_NAME);
+                ErrorsColumnNames.ID_COLUMN_NAME,
+                TablePartitioningPattern.CTM);
     }
 }

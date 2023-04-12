@@ -21,6 +21,7 @@ import ai.dqo.data.readouts.factory.SensorReadoutsColumnNames;
 import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionStorageService;
 import ai.dqo.data.storage.TableDataSnapshot;
+import ai.dqo.data.storage.TablePartitioningPattern;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import tech.tablesaw.api.Table;
@@ -72,6 +73,7 @@ public class CheckResultsSnapshot extends TableDataSnapshot {
                 BuiltInFolderNames.CHECK_RESULTS,
                 PARQUET_FILE_NAME,
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME,
-                SensorReadoutsColumnNames.ID_COLUMN_NAME);
+                SensorReadoutsColumnNames.ID_COLUMN_NAME,
+                TablePartitioningPattern.CTM);
     }
 }

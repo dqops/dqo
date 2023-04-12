@@ -65,7 +65,7 @@ public final class BuiltInFolderNames {
     public static final String ERRORS = "errors";
 
     /**
-     * Subfolder name inside the {@link BuiltInFolderNames#INCIDENTS} folder where the incidents are stored.
+     * Subfolder name inside the {@link BuiltInFolderNames#DATA} folder where the incidents are stored.
      */
     public static final String INCIDENTS = "incidents";
 

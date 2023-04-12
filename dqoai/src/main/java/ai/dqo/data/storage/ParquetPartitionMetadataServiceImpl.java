@@ -116,20 +116,28 @@ public class ParquetPartitionMetadataServiceImpl implements ParquetPartitionMeta
     public List<ParquetPartitionId> getStoredPartitionsIds(String connectionName,
                                                            FileStorageSettings storageSettings) {
         try (AcquiredSharedReadLock lock = this.userHomeLockManager.lockSharedRead(storageSettings.getTableType())) {
-            List<PhysicalTableName> tablesForConnection = listTablesForConnection(connectionName, storageSettings);
-            if (tablesForConnection == null) {
-                return null;
-            }
-
-            List<ParquetPartitionId> result = new ArrayList<>();
-            for (PhysicalTableName tableName: tablesForConnection) {
-                List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings);
-                if (tablePartitions == null) {
-                    continue;
+            if (storageSettings.getPartitioningPattern() == TablePartitioningPattern.CTM) {
+                List<PhysicalTableName> tablesForConnection = listTablesForConnection(connectionName, storageSettings);
+                if (tablesForConnection == null) {
+                    return null;
                 }
-                result.addAll(tablePartitions);
+
+                List<ParquetPartitionId> result = new ArrayList<>();
+                for (PhysicalTableName tableName: tablesForConnection) {
+                    List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, tableName, storageSettings);
+                    if (tablePartitions == null) {
+                        continue;
+                    }
+                    result.addAll(tablePartitions);
+                }
+                return result;
             }
-            return result;
+            else if (storageSettings.getPartitioningPattern() == TablePartitioningPattern.CM) {
+                List<ParquetPartitionId> tablePartitions = getStoredPartitionsIds(connectionName, null, storageSettings);
+                return tablePartitions;
+            } else {
+                throw new IllegalArgumentException("Partitioning pattern " + storageSettings.getPartitioningPattern() + "  not supported.");
+            }
         }
     }
 

@@ -59,15 +59,13 @@ public class HivePartitionPathUtility {
         stringBuilder.append('/');
 
         PhysicalTableName tableName = partitionId.getTableName();
-        if (tableName == null) {
-            return stringBuilder.toString();
+        if (tableName != null) {
+            stringBuilder.append(ParquetPartitioningKeys.TARGET);
+            stringBuilder.append('=');
+            String encodedTable = URLEncoder.encode(tableName.toString(), StandardCharsets.UTF_8);
+            stringBuilder.append(encodedTable);
+            stringBuilder.append('/');
         }
-
-        stringBuilder.append(ParquetPartitioningKeys.TARGET);
-        stringBuilder.append('=');
-        String encodedTable = URLEncoder.encode(tableName.toString(), StandardCharsets.UTF_8);
-        stringBuilder.append(encodedTable);
-        stringBuilder.append('/');
 
         LocalDate month = partitionId.getMonth();
         if (month == null) {
