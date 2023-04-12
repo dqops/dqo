@@ -350,6 +350,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
         UIAllChecksPatchParameters patchParameters = new UIAllChecksPatchParameters() {{
             setCheckSearchFilters(filters);
             setSensorOptions(sensorParams);
+            setOverrideConflicts(override);
 
             setWarningLevelOptions(warningLevelOptions);
             setErrorLevelOptions(errorLevelOptions);

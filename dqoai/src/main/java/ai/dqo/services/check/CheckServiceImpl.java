@@ -189,7 +189,7 @@ public class CheckServiceImpl implements CheckService {
         List<UIFieldModel> sensorParametersPatches = parameters.getSensorOptions() != null
                 ? optionMapToFields(parameters.getSensorOptions())
                 : new ArrayList<>();
-        patchSensorParametersInModel(model, sensorParametersPatches);
+        patchSensorParametersInModel(model, sensorParametersPatches, parameters.isOverrideConflicts());
 
         model.setConfigured((ruleThresholdsModel.getWarning() != null && ruleThresholdsModel.getWarning().isConfigured())
                 || (ruleThresholdsModel.getError() != null && ruleThresholdsModel.getError().isConfigured())
@@ -201,20 +201,29 @@ public class CheckServiceImpl implements CheckService {
     }
 
     protected void patchSensorParametersInModel(UICheckModel model,
-                                                List<UIFieldModel> sensorPatches) {
+                                                List<UIFieldModel> sensorPatches,
+                                                boolean overrideConflicts) {
         Map<String, UIFieldModel> modelSensorParamsByName = new HashMap<>();
         for (UIFieldModel fieldModel: model.getSensorParameters()) {
             modelSensorParamsByName.put(fieldModel.getDefinition().getDisplayName(), fieldModel);
         }
 
         for (UIFieldModel patch: sensorPatches) {
-            modelSensorParamsByName.put(patch.getDefinition().getDisplayName(), patch);
+            String paramName = patch.getDefinition().getDisplayName();
+            if (!modelSensorParamsByName.containsKey(paramName)) {
+                throw new IllegalArgumentException(String.format("Check %s doesn't have field %s.", model.getCheckName(), paramName));
+            }
+            if (modelSensorParamsByName.get(paramName).getValue() == null || overrideConflicts) {
+                modelSensorParamsByName.put(paramName, patch);
+            }
         }
 
         model.setSensorParameters(new ArrayList<>(modelSensorParamsByName.values()));
     }
 
     protected void patchRuleThresholdsModel(UIRuleThresholdsModel ruleThresholdsModel, UIAllChecksPatchParameters parameters) {
+        boolean isOverride = parameters.isOverrideConflicts();
+
         if (parameters.getWarningLevelOptions() != null) {
             Map<String, String> options = parameters.getWarningLevelOptions();
             List<UIFieldModel> newParameterFields = this.optionMapToFields(options);
@@ -225,7 +234,7 @@ public class CheckServiceImpl implements CheckService {
                 ruleThresholdsModel.setWarning(ruleParametersModel);
             }
 
-            this.patchRuleParameters(ruleParametersModel, newParameterFields);
+            this.patchRuleParameters(ruleParametersModel, newParameterFields, isOverride);
         }
         if (parameters.getErrorLevelOptions() != null) {
             Map<String, String> options = parameters.getErrorLevelOptions();
@@ -237,7 +246,7 @@ public class CheckServiceImpl implements CheckService {
                 ruleThresholdsModel.setError(ruleParametersModel);
             }
 
-            this.patchRuleParameters(ruleParametersModel, newParameterFields);
+            this.patchRuleParameters(ruleParametersModel, newParameterFields, isOverride);
         }
         if (parameters.getFatalLevelOptions() != null) {
             Map<String, String> options = parameters.getFatalLevelOptions();
@@ -249,7 +258,7 @@ public class CheckServiceImpl implements CheckService {
                 ruleThresholdsModel.setFatal(ruleParametersModel);
             }
 
-            this.patchRuleParameters(ruleParametersModel, newParameterFields);
+            this.patchRuleParameters(ruleParametersModel, newParameterFields, isOverride);
         }
 
         if (ruleThresholdsModel.getWarning() != null) {
@@ -263,7 +272,9 @@ public class CheckServiceImpl implements CheckService {
         }
     }
 
-    protected void patchRuleParameters(UIRuleParametersModel ruleParametersModel, List<UIFieldModel> patches) {
+    protected void patchRuleParameters(UIRuleParametersModel ruleParametersModel,
+                                       List<UIFieldModel> patches,
+                                       boolean overrideConflicts) {
         List<UIFieldModel> ruleParameterFields = ruleParametersModel.getRuleParameters();
         if (ruleParameterFields == null) {
             ruleParameterFields = new ArrayList<>();
@@ -272,13 +283,15 @@ public class CheckServiceImpl implements CheckService {
 
         for (UIFieldModel patch: patches) {
             String patchName = patch.getDefinition().getDisplayName();
-            Optional<UIFieldModel> shouldSubstitute = ruleParameterFields.stream()
+            Optional<UIFieldModel> shouldOverride = ruleParameterFields.stream()
                     .filter(field -> field.getDefinition().getDisplayName().equals(patchName))
                     .findAny();
 
-            if (shouldSubstitute.isPresent()) {
-                UIFieldModel substitute = shouldSubstitute.get();
-                substitute.setValue(patch.getValue());
+            if (shouldOverride.isPresent()) {
+                if (overrideConflicts) {
+                    UIFieldModel substitute = shouldOverride.get();
+                    substitute.setValue(patch.getValue());
+                }
             } else {
                 ruleParameterFields.add(patch);
             }
