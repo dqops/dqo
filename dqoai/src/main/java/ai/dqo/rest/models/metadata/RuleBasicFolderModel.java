@@ -26,23 +26,23 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Rule basic tree model that is returned by the REST API.
+ * Rule basic folder model that is returned by the REST API.
  */
 @Data
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
-@ApiModel(value = "RuleBasicTreeModel", description = "Rule basic tree model")
-public class RuleBasicTreeModel {
+@ApiModel(value = "RuleBasicFolderModel", description = "Rule basic folder model")
+public class RuleBasicFolderModel {
 
     @JsonPropertyDescription("A map of folder-level children rules.")
-    private Map<String, RuleBasicTreeModel> folders;
+    private Map<String, RuleBasicFolderModel> folders;
 
     @JsonPropertyDescription("Whether the rule is a User Home rule.")
     private Boolean custom = null;
 
-    public RuleBasicTreeModel() {}
+    public RuleBasicFolderModel() {}
 
-    public RuleBasicTreeModel(Map<String, RuleBasicTreeModel> folders, Boolean custom) {
+    public RuleBasicFolderModel(Map<String, RuleBasicFolderModel> folders, Boolean custom) {
         this.folders = folders;
     }
 
@@ -58,9 +58,9 @@ public class RuleBasicTreeModel {
         String[] parts = path.split("/", 2);
         String name = parts[0];
         String childFolder = parts.length > 1 ? parts[1] : null;
-        RuleBasicTreeModel child = this.folders.get(name);
+        RuleBasicFolderModel child = this.folders.get(name);
         if (child == null) {
-            child = new RuleBasicTreeModel();
+            child = new RuleBasicFolderModel();
             this.folders.put(name, child);
         }
         if (childFolder != null) {
@@ -71,7 +71,7 @@ public class RuleBasicTreeModel {
         }
     }
 
-    public Map<String, RuleBasicTreeModel> getFolders() {
+    public Map<String, RuleBasicFolderModel> getFolders() {
         return folders;
     }
 
@@ -79,7 +79,7 @@ public class RuleBasicTreeModel {
         return custom;
     }
 
-    public void setFolders(Map<String, RuleBasicTreeModel> folders) {
+    public void setFolders(Map<String, RuleBasicFolderModel> folders) {
         this.folders = folders;
     }
 

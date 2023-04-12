@@ -18,7 +18,7 @@ package ai.dqo.services.rule;
 import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionSpec;
 import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
-import ai.dqo.rest.models.metadata.RuleBasicModel;
+import ai.dqo.rest.models.metadata.RuleModel;
 
 /**
  * Interface for mapping a RuleBasicModel (REST model) object to a RuleDefinitionWrapper object.
@@ -27,24 +27,24 @@ public interface RuleMappingService {
 
     /**
      * Returns the rule definition wrapper object.
-     * @param ruleBasicModel Rule basic model.
+     * @param ruleModel Rule basic model.
      * @return rule definition wrapper object.
      */
-    RuleDefinitionWrapper toRuleDefinitionWrapper(RuleBasicModel ruleBasicModel);
+    RuleDefinitionWrapper toRuleDefinitionWrapper(RuleModel ruleModel);
 
     /**
      * Returns the rule definition spec object.
-     * @param ruleBasicModel Rule basic model.
+     * @param ruleModel Rule basic model.
      * @return the rule definition spec object.
      */
-    RuleDefinitionSpec withRuleDefinitionSpec(RuleBasicModel ruleBasicModel);
+    RuleDefinitionSpec withRuleDefinitionSpec(RuleModel ruleModel);
 
     /**
      * Returns the file content object with Python module content.
-     * @param ruleBasicModel Rule basic model.
+     * @param ruleModel Rule basic model.
      * @return file content object with Python module content.
      */
-    FileContent withRuleDefinitionPythonModuleContent(RuleBasicModel ruleBasicModel);
+    FileContent withRuleDefinitionPythonModuleContent(RuleModel ruleModel);
 
     /**
      * Returns the rule basic model object.
@@ -53,5 +53,5 @@ public interface RuleMappingService {
      * @param builtIn This rule is provided as part of DQO.
      * @return rule basic model object.
      */
-    RuleBasicModel toRuleBasicModel(RuleDefinitionWrapper ruleDefinitionWrapper, boolean custom, boolean builtIn);
+    RuleModel toRuleBasicModel(RuleDefinitionWrapper ruleDefinitionWrapper, boolean custom, boolean builtIn);
 }
