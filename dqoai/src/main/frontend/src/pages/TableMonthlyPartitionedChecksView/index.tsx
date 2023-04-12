@@ -38,7 +38,7 @@ const TableMonthlyPartitionedChecksView = () => {
     dispatch(
       getTableMonthlyPartitionedChecks(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
     );
-  }, [connectionName, schemaName, tableName]);
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName]);
 
   const onUpdate = async () => {
     if (!updatedChecksUI) return;

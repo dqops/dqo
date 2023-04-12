@@ -51,7 +51,7 @@ const ProfilingView = ({
         getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
       );
     }
-  }, [connectionName, schemaName, columnName, tableName, columnBasic]);
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName, columnBasic]);
 
   const onUpdate = async () => {
     if (!checksUI) {

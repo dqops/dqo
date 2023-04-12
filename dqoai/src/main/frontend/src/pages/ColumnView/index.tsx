@@ -10,9 +10,9 @@ import RecurringView from './RecurringView';
 import ColumnProfilingView from './ColumnProfilingView';
 import ColumnPartitionedChecksView from './ColumnPartitionedChecksView';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import ConnectionLayout from "../../components/ConnectionLayout";
+import { getFirstLevelState } from "../../redux/selectors";
 
 const initTabs = [
   {
@@ -30,7 +30,7 @@ const initTabs = [
 ];
 
 const ColumnView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, column: string, tab: string, checkTypes: string } = useParams();
+  const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, column: string, tab: string, checkTypes: CheckTypes } = useParams();
   const [tabs, setTabs] = useState(initTabs);
 
   const history = useHistory();
@@ -44,7 +44,7 @@ const ColumnView = () => {
     isUpdatedMonthlyRecurring,
     isUpdatedDailyPartitionedChecks,
     isUpdatedMonthlyPartitionedChecks
-  } = useSelector((state: IRootState) => state.column);
+  } = useSelector(getFirstLevelState(checkTypes));
   const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.RECURRING, [checkTypes]);
   const isPartitionCheckOnly = useMemo(() => checkTypes === CheckTypes.PARTITIONED, [checkTypes]);
   const isProfilingCheckOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);

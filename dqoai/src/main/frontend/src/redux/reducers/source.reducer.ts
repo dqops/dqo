@@ -20,6 +20,7 @@ import { CheckRunRecurringScheduleGroup } from "../../shared/enums/scheduling.en
 
 export interface INestTab {
   url: string;
+  value: string;
   state: Record<string, unknown>;
   label: string;
 }
@@ -89,7 +90,7 @@ const setActiveTabState = (state: ISourceState, action: Action, data: Record<str
 const connectionReducer = (state = initialState, action: Action) => {
   switch (action.type) {
     case SOURCE_ACTION.ADD_FIRST_LEVEL_TAB: {
-      const existing = state[action.checkType].tabs.find((item) => item.url === action.data.url);
+      const existing = state[action.checkType].tabs.find((item) => item.value === action.data.value);
 
       if (existing) {
         return {
