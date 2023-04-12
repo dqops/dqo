@@ -20,7 +20,7 @@ import { CustomTreeNode, ITab } from '../shared/interfaces';
 import { TreeNodeId } from '@naisutech/react-tree/types/Tree';
 import { findTreeNode } from '../utils/tree';
 import { CheckTypes, ROUTES } from "../shared/routes";
-import { useHistory, useParams } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { addFirstLevelTab } from "../redux/actions/source.actions";
 
@@ -1092,14 +1092,25 @@ function TreeProvider(props: any) {
       newTabMaps[sourceRoute] = [newTab];
     }
 
+    const newTreeDataMaps = [
+      CheckTypes.RECURRING,
+      CheckTypes.SOURCES,
+      CheckTypes.PROFILING,
+      CheckTypes.PARTITIONED,
+    ].reduce((acc, cur) => ({
+      ...acc,
+      [cur]: treeDataMaps[cur].filter((item) => item.id !== identify)
+    }), {});
+
+    setTreeDataMaps(newTreeDataMaps);
+
+
     setActiveTabMaps(prev => ({
       ...prev,
       [sourceRoute]: newTabMaps[sourceRoute][0].value
     }));
 
     setTabMaps(newTabMaps);
-
-    setTreeData(treeData.filter((item) => item.id.toString().indexOf(identify) === -1));
   };
 
   return (
