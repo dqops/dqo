@@ -853,12 +853,12 @@ function TreeProvider(props: any) {
     const defaultConnectionTab = sourceRoute === CheckTypes.SOURCES ? 'detail' : 'schedule';
     if (node.level === TREE_LEVEL.DATABASE) {
       dispatch(addFirstLevelTab(sourceRoute, {
-        url: ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || defaultConnectionTab),
+        url: ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, defaultConnectionTab),
         value: ROUTES.CONNECTION_LEVEL_VALUE(sourceRoute, node.label),
         state: {},
         label: node.label
       }));
-      pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, subTabMap[node.label] || defaultConnectionTab));
+      pushHistory(ROUTES.CONNECTION_DETAIL(sourceRoute, node.label, defaultConnectionTab));
     } else if (node.level === TREE_LEVEL.SCHEMA) {
       const connectionNode = findTreeNode(treeData, node.parentId ?? '');
 

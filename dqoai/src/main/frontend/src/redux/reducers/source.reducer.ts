@@ -98,6 +98,10 @@ const connectionReducer = (state = initialState, action: Action) => {
           [action.checkType]: {
             ...state[action.checkType],
             activeTab: action.data.url,
+            tabs: state[action.checkType].tabs.map((item) => item.value === action.data.value ? ({
+              ...item,
+              ...action.data,
+            }) : item)
           }
         };
       }
