@@ -47,11 +47,6 @@ public final class IncidentsColumnNames {
     public static final String DATA_STREAM_NAME_COLUMN_NAME = CommonColumnNames.DATA_STREAM_NAME_COLUMN_NAME;
 
     /**
-     * Column name for a check name.
-     */
-    public static final String CHECK_NAME_COLUMN_NAME = "check_name";
-
-    /**
      * Column name for a check type (adhoc, checkpoint, partitioned).
      */
     public static final String CHECK_TYPE_COLUMN_NAME = "check_type";
@@ -65,6 +60,11 @@ public final class IncidentsColumnNames {
      * Column name for a data quality dimension.
      */
     public static final String QUALITY_DIMENSION_COLUMN_NAME = "quality_dimension";
+
+    /**
+     * Column name for a check name.
+     */
+    public static final String CHECK_NAME_COLUMN_NAME = "check_name";
 
     /**
      * Column name for a column name.
@@ -96,15 +96,15 @@ public final class IncidentsColumnNames {
      */
     public static final String ISSUE_URL_COLUMN_NAME = "issue_url";
 
-//    /**
-//     * Column name that stores the login of the user who created the incident by running a check.
-//     */
-//    public static final String CREATED_BY_COLUMN_NAME = "created_by";
-//
-//    /**
-//     * Column name that stores the login of the user who resolved the incident.
-//     */
-//    public static final String RESOLVED_BY_COLUMN_NAME = "resolved_by";
+    /**
+     * Column name that stores the login of the user who created the incident by running a check.
+     */
+    public static final String CREATED_BY_COLUMN_NAME = "created_by";
+
+    /**
+     * Column name that stores the login of the user who resolved the incident.
+     */
+    public static final String RESOLVED_BY_COLUMN_NAME = "resolved_by";
 
     /**
      * Column name that stores the current status of the incident. The statuses are described in the {@link IncidentStatus} enumeration.

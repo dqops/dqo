@@ -27,7 +27,6 @@ public class FileStorageSettings {
     private String parquetFileName;
     private String timePeriodColumnName;
     private String idStringColumnName;
-    private TablesawParquetWriteOptions.CompressionCodec compressionCodec;
 
     /**
      * Creates a file storage configuration for a single type of table that is stored as parquet files.
@@ -37,20 +36,17 @@ public class FileStorageSettings {
      * @param timePeriodColumnName {@link tech.tablesaw.api.DateTimeColumn} that stores the exact time that is used for monthly partitioning
      *                             (but it is not the column that stores date of the first day of the month).
      * @param idStringColumnName Column name (of String type) that stores the primary key for each row, that is used to find rows to be deleted.
-     * @param compressionCodec Compression codec to apply on the parquet files.
      */
     public FileStorageSettings(DqoRoot tableType,
                                String dataSubfolderName,
                                String parquetFileName,
                                String timePeriodColumnName,
-                               String idStringColumnName,
-                               TablesawParquetWriteOptions.CompressionCodec compressionCodec) {
+                               String idStringColumnName) {
         this.tableType = tableType;
         this.dataSubfolderName = dataSubfolderName;
         this.parquetFileName = parquetFileName;
         this.timePeriodColumnName = timePeriodColumnName;
         this.idStringColumnName = idStringColumnName;
-        this.compressionCodec = compressionCodec;
     }
 
     /**
@@ -93,13 +89,5 @@ public class FileStorageSettings {
      */
     public String getIdStringColumnName() {
         return idStringColumnName;
-    }
-
-    /**
-     * Compression codec to apply on the parquet files.
-     * @return Compression codec.
-     */
-    public TablesawParquetWriteOptions.CompressionCodec getCompressionCodec() {
-        return compressionCodec;
     }
 }

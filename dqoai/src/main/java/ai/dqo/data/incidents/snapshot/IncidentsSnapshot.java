@@ -13,64 +13,62 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package ai.dqo.data.statistics.snapshot;
+package ai.dqo.data.incidents.snapshot;
 
 import ai.dqo.core.filesystem.BuiltInFolderNames;
 import ai.dqo.core.synchronization.contract.DqoRoot;
-import ai.dqo.data.statistics.factory.StatisticsColumnNames;
+import ai.dqo.data.incidents.factory.IncidentsColumnNames;
 import ai.dqo.data.storage.FileStorageSettings;
 import ai.dqo.data.storage.ParquetPartitionStorageService;
 import ai.dqo.data.storage.TableDataSnapshot;
 import ai.dqo.metadata.sources.PhysicalTableName;
 import tech.tablesaw.api.Table;
 
-
 /**
- * Profiling results snapshot that contains an in-memory statistics' results snapshot
- * for a single table and selected time ranges.
+ * Stores incidents for one month (based on the first_seen) timestamp.
  */
-public class StatisticsSnapshot extends TableDataSnapshot {
-    public static final String PARQUET_FILE_NAME = "statistics.0.parquet";
+public class IncidentsSnapshot extends TableDataSnapshot {
+    public static final String PARQUET_FILE_NAME = "incidents.0.parquet";
 
     /**
      * Default constructor that creates a snapshot.
      * @param connectionName Connection name.
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
-     * @param newResults Empty normalized table that will be appended with new statistics results (captured during the current sensor execution).
+     * @param newResults Empty normalized table that will be appended with new incidents.
      */
-    public StatisticsSnapshot(String connectionName,
-                              PhysicalTableName tableName,
-                              ParquetPartitionStorageService storageService,
-                              Table newResults) {
-        super(connectionName, tableName, storageService, createStatisticsStorageSettings(), newResults);
+    public IncidentsSnapshot(String connectionName,
+                             PhysicalTableName tableName,
+                             ParquetPartitionStorageService storageService,
+                             Table newResults) {
+        super(connectionName, tableName, storageService, createIncidentsStorageSettings(), newResults);
     }
 
     /**
-     * Creates a read-only statistics results snapshot limited to a set of columns.
+     * Creates a read-only incident results snapshot limited to a set of columns.
      * @param connectionName Connection name.
      * @param tableName Table name (schema.table).
      * @param storageService Backend storage service used to load missing data and save the results.
      * @param columnNames Column names that will be loaded.
      * @param tableResultsSample Empty table with the expected schema (columns).
      */
-    public StatisticsSnapshot(String connectionName,
-                              PhysicalTableName tableName,
-                              ParquetPartitionStorageService storageService,
-                              String[] columnNames,
-                              Table tableResultsSample) {
-        super(connectionName, tableName, storageService, createStatisticsStorageSettings(), columnNames, tableResultsSample);
+    public IncidentsSnapshot(String connectionName,
+                             PhysicalTableName tableName,
+                             ParquetPartitionStorageService storageService,
+                             String[] columnNames,
+                             Table tableResultsSample) {
+        super(connectionName, tableName, storageService, createIncidentsStorageSettings(), columnNames, tableResultsSample);
     }
 
     /**
-     * Creates the storage settings for storing the statistics results.
+     * Creates the storage settings for storing the incidents.
      * @return Storage settings.
      */
-    public static FileStorageSettings createStatisticsStorageSettings() {
+    public static FileStorageSettings createIncidentsStorageSettings() {
         return new FileStorageSettings(DqoRoot.data_statistics,
-                BuiltInFolderNames.STATISTICS,
+                BuiltInFolderNames.INCIDENTS,
                 PARQUET_FILE_NAME,
-                StatisticsColumnNames.COLLECTED_AT_COLUMN_NAME,
-                StatisticsColumnNames.ID_COLUMN_NAME);
+                IncidentsColumnNames.FIRST_SEEN_UTC_COLUMN_NAME,
+                IncidentsColumnNames.ID_COLUMN_NAME);
     }
 }

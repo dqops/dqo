@@ -36,6 +36,7 @@ import ai.dqo.utils.datetime.LocalDateTimeTruncateUtility;
 import ai.dqo.utils.tables.TableMergeUtility;
 import net.tlabs.tablesaw.parquet.TablesawParquetReadOptions;
 import net.tlabs.tablesaw.parquet.TablesawParquetReader;
+import net.tlabs.tablesaw.parquet.TablesawParquetWriteOptions;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.ChecksumException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -334,7 +335,7 @@ public class ParquetPartitionStorageServiceImpl implements ParquetPartitionStora
             DqoTablesawParquetWriteOptions writeOptions = DqoTablesawParquetWriteOptions
                     .dqoBuilder(targetParquetFile)
                     .withOverwrite(true)
-                    .withCompressionCode(storageSettings.getCompressionCodec())
+                    .withCompressionCode(TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED)
                     .build();
 
             Configuration hadoopConfiguration = this.hadoopConfigurationProvider.getHadoopConfiguration();

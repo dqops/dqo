@@ -72,7 +72,6 @@ public class CheckResultsSnapshot extends TableDataSnapshot {
                 BuiltInFolderNames.CHECK_RESULTS,
                 PARQUET_FILE_NAME,
                 SensorReadoutsColumnNames.TIME_PERIOD_COLUMN_NAME,
-                SensorReadoutsColumnNames.ID_COLUMN_NAME,
-                TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED);
+                SensorReadoutsColumnNames.ID_COLUMN_NAME);
     }
 }

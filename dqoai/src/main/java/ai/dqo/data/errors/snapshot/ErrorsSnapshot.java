@@ -71,7 +71,6 @@ public class ErrorsSnapshot extends TableDataSnapshot {
                 BuiltInFolderNames.ERRORS,
                 PARQUET_FILE_NAME,
                 ErrorsColumnNames.ERROR_TIMESTAMP_COLUMN_NAME,
-                ErrorsColumnNames.ID_COLUMN_NAME,
-                TablesawParquetWriteOptions.CompressionCodec.UNCOMPRESSED);
+                ErrorsColumnNames.ID_COLUMN_NAME);
     }
 }
