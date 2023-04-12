@@ -227,21 +227,25 @@ const TablePage = () => {
     if (item.value === CheckTypes.SOURCES) {
       dispatch(addFirstLevelTab(item.value, {
         url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'),
+        value: `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}`,
       }))
       history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'))
     } else if (item.value === CheckTypes.PROFILING) {
       dispatch(addFirstLevelTab(item.value, {
         url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'),
+        value: `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}`,
       }))
       history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
     } else if (item.value === CheckTypes.RECURRING) {
       dispatch(addFirstLevelTab(item.value, {
         url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'),
+        value: `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}`,
       }))
       history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
     } else if (item.value === CheckTypes.PARTITIONED) {
       dispatch(addFirstLevelTab(item.value, {
         url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'),
+        value: `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}`,
       }))
       history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
     }

@@ -78,7 +78,6 @@ const ConnectionPage = () => {
 
   useEffect(() => {
     if (isUpdatedConnectionBasic && tabs.length) {
-      console.log('isUpdatedConnectionBasic', isUpdatedConnectionBasic);
       setTabs(
         tabs.map((item) =>
           item.value === 'detail'
