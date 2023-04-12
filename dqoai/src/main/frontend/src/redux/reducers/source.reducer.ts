@@ -429,7 +429,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.GET_TABLE_COMMENTS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        comments: action.data,
+        updatedComments: action.data,
         isUpdatedComments: false,
         error: null
       });
@@ -838,7 +838,7 @@ const connectionReducer = (state = initialState, action: Action) => {
     case SOURCE_ACTION.GET_COLUMN_COMMENTS_SUCCESS:
       return setActiveTabState(state, action, {
         loading: false,
-        comments: action.data,
+        updatedComments: action.data,
         isUpdatedComments: false,
         error: null
       });
