@@ -48,7 +48,7 @@ const initTabs = [
 
 type NavigationMenu = {
   label: string;
-  value: string;
+  value: CheckTypes;
 }
 
 const navigations: NavigationMenu[] = [
@@ -224,31 +224,14 @@ const TablePage = () => {
     return navigations.findIndex((item) => item.value === checkTypes);
   }, [checkTypes]);
   const onChangeNavigation = async (item: NavigationMenu) => {
-    if (item.value === CheckTypes.SOURCES) {
-      dispatch(addFirstLevelTab(item.value, {
-        url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'),
-        value: `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}`,
-      }))
-      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'))
-    } else if (item.value === CheckTypes.PROFILING) {
-      dispatch(addFirstLevelTab(item.value, {
-        url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'),
-        value: `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}`,
-      }))
-      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
-    } else if (item.value === CheckTypes.RECURRING) {
-      dispatch(addFirstLevelTab(item.value, {
-        url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'),
-        value: `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}`,
-      }))
-      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
-    } else if (item.value === CheckTypes.PARTITIONED) {
-      dispatch(addFirstLevelTab(item.value, {
-        url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'),
-        value: `/${checkTypes}/connection/${connection}/schema/${schema}/table/${table}`,
-      }))
-      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
-    }
+    const tab = item.value === CheckTypes.RECURRING || item.value === CheckTypes.PARTITIONED ? 'daily' : 'detail';
+    dispatch(addFirstLevelTab(item.value, {
+      url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab),
+      value: ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table),
+      state: {},
+      label: table
+    }))
+    history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab));
   };
 
   return (
