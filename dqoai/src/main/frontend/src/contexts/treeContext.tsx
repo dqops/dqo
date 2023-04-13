@@ -6,7 +6,8 @@ import {
   ColumnBasicModel,
   ConnectionBasicModel,
   SchemaModel,
-  TableBasicModel, UICheckBasicModel
+  TableBasicModel,
+  UICheckBasicModel
 } from '../api';
 import {
   ColumnApiClient,
@@ -122,6 +123,14 @@ function TreeProvider(props: any) {
     }), {});
 
     setTreeDataMaps(newTreeDataMaps);
+
+    dispatch(addFirstLevelTab(CheckTypes.SOURCES, {
+      url: `${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection.connection_name ?? '', 'schemas')}?import_schema=true&create_success=true`,
+      value: ROUTES.CONNECTION_LEVEL_VALUE(sourceRoute, connection.connection_name ?? ''),
+      state: {},
+      label: connection.connection_name ?? ''
+    }));
+    pushHistory(`${ROUTES.CONNECTION_DETAIL(CheckTypes.SOURCES, connection.connection_name ?? '', 'schemas')}?import_schema=true&create_success=true`);
   };
 
   useEffect(() => {
