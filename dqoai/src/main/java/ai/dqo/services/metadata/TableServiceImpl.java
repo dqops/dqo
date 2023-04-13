@@ -121,14 +121,27 @@ public class TableServiceImpl implements TableService {
             }
         }
 
-        userHomeContext.flush();
-
         List<PushJobResult<DeleteStoredDataQueueJobResult>> results = new ArrayList<>();
         for (DeleteStoredDataQueueJobParameters param : deleteStoredDataParameters) {
             DeleteStoredDataQueueJob deleteStoredDataJob = this.dqoQueueJobFactory.createDeleteStoredDataJob();
             deleteStoredDataJob.setDeletionParameters(param);
             PushJobResult<DeleteStoredDataQueueJobResult> jobResult = this.dqoJobQueue.pushJob(deleteStoredDataJob);
             results.add(jobResult);
+        }
+
+        // TODO: Diagnose the underlying problem and fix.
+        int tries = 0;
+        for (;;) {
+            try {
+                userHomeContext.flush();
+                break;
+            }
+            catch (ConcurrentModificationException e) {
+                if (tries >= 5) {
+                    throw e;
+                }
+                ++tries;
+            }
         }
         return results;
     }

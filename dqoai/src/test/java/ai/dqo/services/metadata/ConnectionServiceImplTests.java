@@ -35,10 +35,8 @@ import ai.dqo.core.synchronization.status.SynchronizationStatusTrackerStub;
 import ai.dqo.data.local.LocalDqoUserHomePathProvider;
 import ai.dqo.data.local.LocalDqoUserHomePathProviderObjectMother;
 import ai.dqo.metadata.basespecs.InstanceStatus;
+import ai.dqo.metadata.sources.ConnectionList;
 import ai.dqo.metadata.sources.ConnectionWrapper;
-import ai.dqo.metadata.sources.PhysicalTableName;
-import ai.dqo.metadata.sources.TableList;
-import ai.dqo.metadata.sources.TableWrapper;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactory;
 import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContextFactoryObjectMother;
@@ -50,14 +48,12 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 @SpringBootTest
-public class TableServiceImplTests extends BaseTest {
-    private TableServiceImpl sut;
+public class ConnectionServiceImplTests extends BaseTest {
+    private ConnectionServiceImpl sut;
     private UserHomeContextFactory userHomeContextFactory;
     private DqoJobQueue dqoJobQueue;
 
@@ -91,7 +87,7 @@ public class TableServiceImplTests extends BaseTest {
                 dqoJobQueueMonitoringService,
                 fileSynchronizationChangeDetectionService);
 
-        this.sut = new TableServiceImpl(
+        this.sut = new ConnectionServiceImpl(
                 this.userHomeContextFactory,
                 dqoQueueJobFactory,
                 this.dqoJobQueue
@@ -101,146 +97,114 @@ public class TableServiceImplTests extends BaseTest {
     private UserHome createHierarchyTree() {
         UserHomeContext userHomeContext = userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        ConnectionWrapper connectionWrapper = userHome.getConnections().createAndAddNew("conn");
-        TableWrapper table1 = connectionWrapper.getTables().createAndAddNew(
-                new PhysicalTableName("sch", "tab1"));
-        TableWrapper table2 = connectionWrapper.getTables().createAndAddNew(
-                new PhysicalTableName("sch", "tab2"));
-
+        ConnectionWrapper connectionWrapper1 = userHome.getConnections().createAndAddNew("conn1");
+        ConnectionWrapper connectionWrapper2 = userHome.getConnections().createAndAddNew("conn2");
         userHomeContext.flush();
         return userHome;
     }
 
     @Test
-    void getTable_whenConnectionAndTableExists_getsRequestedTable() {
+    void getConnection_whenConnectionExists_getsRequestedConnection() {
         UserHome userHome = createHierarchyTree();
         this.dqoJobQueue.start();
 
-        String connectionName = "conn";
-        PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
-        TableWrapper tableWrapper = this.sut.getTable(userHome, connectionName, tableName);
+        String connectionName = "conn1";
+        ConnectionWrapper connectionWrapper = this.sut.getConnection(userHome, connectionName);
 
-        Assertions.assertNotNull(tableWrapper);
+        Assertions.assertNotNull(connectionWrapper);
         this.dqoJobQueue.stop();
     }
 
     @Test
-    void getTable_whenTableDoesntExist_getsNull() {
+    void getConnection_whenConnectionDoesntExist_getsNull() {
         UserHome userHome = createHierarchyTree();
         this.dqoJobQueue.start();
 
-        String connectionName = "conn";
-        PhysicalTableName tableName = new PhysicalTableName("sch", "tab3");
-        TableWrapper tableWrapper = this.sut.getTable(userHome, connectionName, tableName);
+        String connectionName = "conn3";
+        ConnectionWrapper connectionWrapper = this.sut.getConnection(userHome, connectionName);
 
-        Assertions.assertNull(tableWrapper);
+        Assertions.assertNull(connectionWrapper);
         this.dqoJobQueue.stop();
     }
 
     @Test
-    void getTable_whenConnectionDoesntExist_getsNull() {
-        UserHome userHome = createHierarchyTree();
-        this.dqoJobQueue.start();
-
-        String connectionName = "con";
-        PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
-        TableWrapper tableWrapper = this.sut.getTable(userHome, connectionName, tableName);
-
-        Assertions.assertNull(tableWrapper);
-        this.dqoJobQueue.stop();
-    }
-
-    @Test
-    void deleteTable_whenConnectionAndTableExists_deletesTable() {
+    void deleteConnection_whenConnectionExists_deletesConnection() {
         createHierarchyTree();
         this.dqoJobQueue.start();
 
-        String connectionName = "conn";
-        PhysicalTableName tableName = new PhysicalTableName("sch", "tab1");
-        this.sut.deleteTable(connectionName, tableName);
+        String connectionName = "conn1";
+        this.sut.deleteConnection(connectionName);
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
-        TableList tableList = connectionWrapper.getTables();
-        TableWrapper deletedTable = tableList.getByObjectName(tableName, true);
-        TableWrapper otherTable = tableList.getByObjectName(
-                new PhysicalTableName("sch", "tab2"), true);
-        Assertions.assertTrue(deletedTable == null || deletedTable.getStatus() == InstanceStatus.DELETED);
-        Assertions.assertTrue(otherTable != null && otherTable.getStatus() == InstanceStatus.UNCHANGED);
+        ConnectionList connectionList = userHome.getConnections();
+        ConnectionWrapper deletedConnection = connectionList.getByObjectName(connectionName, true);
+        ConnectionWrapper otherConnection = connectionList.getByObjectName("conn2", true);
+        Assertions.assertTrue(deletedConnection == null || deletedConnection.getStatus() == InstanceStatus.DELETED);
+        Assertions.assertTrue(otherConnection != null && otherConnection.getStatus() == InstanceStatus.UNCHANGED);
         this.dqoJobQueue.stop();
     }
 
     @Test
-    void deleteTable_whenTableDoesntExist_doNothing() {
+    void deleteConnection_whenConnectionDoesntExist_doNothing() {
         createHierarchyTree();
         this.dqoJobQueue.start();
 
-        String connectionName = "conn";
-        PhysicalTableName tableName = new PhysicalTableName("sch", "tab3");
-        this.sut.deleteTable(connectionName, tableName);
+        String connectionName = "conn3";
+        this.sut.deleteConnection(connectionName);
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
-        List<TableWrapper> tableList = this.filterDeletedTables(connectionWrapper.getTables());
-        Assertions.assertEquals(2, tableList.size());
+        List<ConnectionWrapper> connectionList = this.filterDeletedConnections(userHome.getConnections());
+        Assertions.assertEquals(2, connectionList.size());
         this.dqoJobQueue.stop();
     }
 
     @Test
-    void deleteTables_whenTablesExist_deletesTables() {
+    void deleteConnections_whenConnectionsExist_deletesConnections() {
         createHierarchyTree();
         this.dqoJobQueue.start();
 
-        String connectionName = "conn";
-        List<PhysicalTableName> tableNames = new ArrayList<>();
-        tableNames.add(new PhysicalTableName("sch", "tab1"));
-        tableNames.add(new PhysicalTableName("sch", "tab2"));
-        Map<String, Iterable<PhysicalTableName>> connToTablesMap = new HashMap<>();
-        connToTablesMap.put(connectionName, tableNames);
+        List<String> connectionNames = new ArrayList<>();
+        connectionNames.add("conn1");
+        connectionNames.add("conn2");
 
-        this.sut.deleteTables(connToTablesMap);
+        this.sut.deleteConnections(connectionNames);
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
-        List<TableWrapper> tableList = this.filterDeletedTables(connectionWrapper.getTables());
-        Assertions.assertEquals(0, tableList.size());
+        List<ConnectionWrapper> connectionList = this.filterDeletedConnections(userHome.getConnections());
+        Assertions.assertEquals(0, connectionList.size());
         this.dqoJobQueue.stop();
     }
 
     @Test
-    void deleteTables_whenSomeTableDoesntExist_deletesTablesThatExist() {
+    void deleteConnections_whenSomeConnectionDoesntExist_deletesConnectionsThatExist() {
         createHierarchyTree();
         this.dqoJobQueue.start();
 
-        String connectionName = "conn";
-        List<PhysicalTableName> tableNames = new ArrayList<>();
-        tableNames.add(new PhysicalTableName("sch", "tab1"));
-        tableNames.add(new PhysicalTableName("sch", "tab3"));
-        Map<String, Iterable<PhysicalTableName>> connToTablesMap = new HashMap<>();
-        connToTablesMap.put(connectionName, tableNames);
+        List<String> connectionNames = new ArrayList<>();
+        connectionNames.add("conn1");
+        connectionNames.add("conn3");
 
-        this.sut.deleteTables(connToTablesMap);
+        this.sut.deleteConnections(connectionNames);
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        ConnectionWrapper connectionWrapper = userHome.getConnections().getByObjectName(connectionName, true);
 
-        List<TableWrapper> tableList = this.filterDeletedTables(connectionWrapper.getTables());
-        Assertions.assertEquals(1, tableList.size());
-        TableWrapper remainingTable = tableList.get(0);
-        Assertions.assertEquals(new PhysicalTableName("sch", "tab2"), remainingTable.getPhysicalTableName());
+        List<ConnectionWrapper> connectionList = this.filterDeletedConnections(userHome.getConnections());
+        Assertions.assertEquals(1, connectionList.size());
+        ConnectionWrapper remainingConnection = connectionList.get(0);
+        Assertions.assertEquals("conn2", remainingConnection.getName());
         this.dqoJobQueue.stop();
     }
 
-    private List<TableWrapper> filterDeletedTables(TableList tableList) {
-        return tableList.toList().stream()
-                .filter(tableWrapper -> tableWrapper.getStatus() != InstanceStatus.DELETED)
+    private List<ConnectionWrapper> filterDeletedConnections(ConnectionList connectionList) {
+        return connectionList.toList().stream()
+                .filter(connectionWrapper -> connectionWrapper.getStatus() != InstanceStatus.DELETED)
                 .collect(Collectors.toList());
     }
 }
