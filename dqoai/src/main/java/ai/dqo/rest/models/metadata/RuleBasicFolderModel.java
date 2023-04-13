@@ -22,7 +22,9 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import io.swagger.annotations.ApiModel;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -33,57 +35,59 @@ import java.util.Map;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @ApiModel(value = "RuleBasicFolderModel", description = "Rule basic folder model")
 public class RuleBasicFolderModel {
-
     @JsonPropertyDescription("A map of folder-level children rules.")
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
     private Map<String, RuleBasicFolderModel> folders;
 
     @JsonPropertyDescription("Whether the rule is a User Home rule.")
-    private Boolean custom = null;
+    @JsonInclude(JsonInclude.Include.NON_EMPTY)
+    private List<RuleBasicModel> rules;
 
-    public RuleBasicFolderModel() {}
-
-    public RuleBasicFolderModel(Map<String, RuleBasicFolderModel> folders, Boolean custom) {
-        this.folders = folders;
+    /**
+     * Creates a new instance of RuleBasicFolderModel with empty lists.
+     */
+    public RuleBasicFolderModel() {
+        rules = new ArrayList<>();
+        folders = new HashMap<>();
     }
 
     /**
-     * Adds a child rule to the folder-level map.
-     * @param path     The path of the child rule.
-     * @param custom Whether the child rule is User Home or not.
+     * Adds a rule to this folder based on the given path.
+     * @param path the path of the rule
      */
-    public void addChild(String path, Boolean custom) {
-        if (this.folders == null) {
-            this.folders = new HashMap<>();
-        }
-        String[] parts = path.split("/", 2);
-        String name = parts[0];
-        String childFolder = parts.length > 1 ? parts[1] : null;
-        RuleBasicFolderModel child = this.folders.get(name);
-        if (child == null) {
-            child = new RuleBasicFolderModel();
-            this.folders.put(name, child);
-        }
-        if (childFolder != null) {
-            child.addChild(childFolder, custom);
-        }
-        if (child.getFolders() == null && childFolder == null) {
-            child.setCustom(custom);
-        }
-    }
+    public void addRule(String path) {
 
-    public Map<String, RuleBasicFolderModel> getFolders() {
-        return folders;
-    }
+        String[] ruleFolders = path.split("/");
+        String ruleName = ruleFolders[ruleFolders.length - 1];
+        RuleBasicFolderModel folderModel = this;
 
-    public Boolean getCustom() {
-        return custom;
-    }
+        for (int i = 0; i < ruleFolders.length - 1; i++) {
+            String name = ruleFolders[i];
+            RuleBasicFolderModel nextRuleFolder = folderModel.folders.get(name);
+            if (nextRuleFolder == null) {
+                nextRuleFolder = new RuleBasicFolderModel();
+                folderModel.folders.put(name, nextRuleFolder);
+            }
+            folderModel = nextRuleFolder;
+        }
 
-    public void setFolders(Map<String, RuleBasicFolderModel> folders) {
-        this.folders = folders;
-    }
-
-    public void setCustom(Boolean custom) {
-        this.custom = custom;
+        boolean ruleExists = false;
+        if (folderModel.rules != null) {
+            for (RuleBasicModel rule : folderModel.rules) {
+                if (rule.getRuleName().equals(ruleName)) {
+                    rule.setCustom(true);
+                    ruleExists = true;
+                    break;
+                }
+            }
+        } else {
+            folderModel.rules = new ArrayList<>();
+        }
+        if (!ruleExists) {
+            RuleBasicModel ruleBasicModel = new RuleBasicModel();
+            ruleBasicModel.setRuleName(ruleName);
+            ruleBasicModel.setCustom(false);
+            folderModel.rules.add(ruleBasicModel);
+        }
     }
 }

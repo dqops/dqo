@@ -19,30 +19,9 @@ public class RuleBasicModel {
     @JsonPropertyDescription("Rule name")
     private String ruleName;
 
-    @JsonPropertyDescription("This rule has a custom (user level) definition.")
+    @JsonPropertyDescription("This rule has is a built-in rule.")
     public boolean custom;
 
     public RuleBasicModel(){}
-
-    public RuleBasicModel(String ruleName, boolean custom) {
-        this.ruleName = ruleName;
-        this.custom = custom;
-    }
-
-    public String getRuleName() {
-        return ruleName;
-    }
-
-    public boolean isCustom() {
-        return custom;
-    }
-
-    public void setRuleName(String ruleName) {
-        this.ruleName = ruleName;
-    }
-
-    public void setCustom(boolean custom) {
-        this.custom = custom;
-    }
 
 }

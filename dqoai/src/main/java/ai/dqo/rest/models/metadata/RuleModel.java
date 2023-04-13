@@ -15,10 +15,9 @@
  */
 package ai.dqo.rest.models.metadata;
 
+import ai.dqo.core.filesystem.virtual.FileContent;
 import ai.dqo.execution.rules.runners.python.PythonRuleRunner;
-import ai.dqo.metadata.definitions.rules.RuleDefinitionWrapper;
-import ai.dqo.metadata.definitions.rules.RuleRunnerType;
-import ai.dqo.metadata.definitions.rules.RuleTimeWindowMode;
+import ai.dqo.metadata.definitions.rules.*;
 import ai.dqo.metadata.fields.ParameterDefinitionsListSpec;
 import ai.dqo.rules.RuleTimeWindowSettingsSpec;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -71,46 +70,37 @@ public class RuleModel {
     @JsonPropertyDescription("This rule has is a built-in rule.")
     public boolean builtIn;
 
-    public RuleModel withRuleName(String ruleName) {
-        this.ruleName = ruleName;
-        return this;
+    /**
+     * Default constructor for RuleModel.
+     */
+    public RuleModel(){}
+
+    /**
+     * Constructor for RuleModel with a given {@link RuleDefinitionWrapper}, custom flag, and built-in flag.
+     * Sets the properties of the rule based on the given {@link RuleDefinitionWrapper}.
+     * @param ruleDefinitionWrapper The RuleDefinitionWrapper to use.
+     * @param custom Whether the rule is a custom rule.
+     * @param builtIn Whether the rule is a built-in rule.
+     */
+    public RuleModel(RuleDefinitionWrapper ruleDefinitionWrapper, boolean custom, boolean builtIn) {
+        this.ruleName = ruleDefinitionWrapper.getRuleName();
+        this.rulePythonModuleContent = ruleDefinitionWrapper.getRulePythonModuleContent().getTextContent();
+        this.type = ruleDefinitionWrapper.getSpec().getType();
+        this.javaClassName = ruleDefinitionWrapper.getSpec().getJavaClassName();
+        this.mode = ruleDefinitionWrapper.getSpec().getMode();
+        this.timeWindow = ruleDefinitionWrapper.getSpec().getTimeWindow();
+        this.fields = ruleDefinitionWrapper.getSpec().getFields();
+        this.parameters = ruleDefinitionWrapper.getSpec().getParameters();
+        this.custom = custom;
+        this.builtIn = builtIn;
     }
 
-    public RuleModel withRulePythonModuleContent(String rulePythonModuleContent) {
-        this.rulePythonModuleContent = rulePythonModuleContent;
-        return this;
-    }
 
-    public RuleModel withType(RuleRunnerType type) {
-        this.type = type;
-        return this;
-    }
-
-    public RuleModel withJavaClassName(String javaClassName) {
-        this.javaClassName = javaClassName;
-        return this;
-    }
-
-    public RuleModel withMode(RuleTimeWindowMode mode) {
-        this.mode = mode;
-        return this;
-    }
-
-    public RuleModel withTimeWindow(RuleTimeWindowSettingsSpec timeWindow) {
-        this.timeWindow = timeWindow;
-        return this;
-    }
-
-    public RuleModel withFields(ParameterDefinitionsListSpec fields) {
-        this.fields = fields;
-        return this;
-    }
-
-    public RuleModel withParameters(Map<String, String> parameters) {
-        this.parameters = parameters;
-        return this;
-    }
-
+    /**
+     * Checks whether the RuleModel is equal to a given {@link RuleDefinitionWrapper}.
+     * @param ruleDefinitionWrapper The RuleDefinitionWrapper to compare.
+     * @return true if the RuleModel is equal to the RuleDefinitionWrapper, false otherwise.
+     */
     public boolean equalsRuleDqo(RuleDefinitionWrapper ruleDefinitionWrapper) {
         if (ruleDefinitionWrapper == null) {
             return false;
@@ -148,5 +138,30 @@ public class RuleModel {
         }
 
         return true;
+    }
+
+    /**
+     * Returns the rule definition spec object.
+     * @return the rule definition spec object.
+     */
+    public RuleDefinitionSpec withRuleDefinitionSpec() {
+
+        RuleDefinitionSpec ruleDefinitionSpec = new RuleDefinitionSpec();
+        ruleDefinitionSpec.setType(type);
+        ruleDefinitionSpec.setJavaClassName(javaClassName);
+        ruleDefinitionSpec.setMode(mode);
+        ruleDefinitionSpec.setTimeWindow(timeWindow);
+        ruleDefinitionSpec.setFields(fields);
+        ruleDefinitionSpec.setParameters(parameters);
+
+        return ruleDefinitionSpec;
+    }
+
+    /**
+     * Returns the file content object with Python module content.
+     * @return file content object with Python module content.
+     */
+    public FileContent withRuleDefinitionPythonModuleContent() {
+        return new FileContent(rulePythonModuleContent);
     }
 }

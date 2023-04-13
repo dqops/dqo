@@ -27,7 +27,6 @@ import ai.dqo.metadata.userhome.UserHome;
 import ai.dqo.rest.models.metadata.RuleModel;
 import ai.dqo.rest.models.metadata.RuleBasicFolderModel;
 import ai.dqo.rest.models.platform.SpringErrorPayload;
-import ai.dqo.services.rule.RuleMappingService;
 import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -49,28 +48,24 @@ public class RuleController {
 
     private DqoHomeContextFactory dqoHomeContextFactory;
     private UserHomeContextFactory userHomeContextFactory;
-    private RuleMappingService ruleMappingService;
 
     /**
      * Creates an instance of a controller by injecting dependencies.
      * @param dqoHomeContextFactory  Dqo home context factory.
      * @param userHomeContextFactory User home context factory.
-     * @param ruleMappingService Rule mapper service.
      */
     @Autowired
-    public RuleController(DqoHomeContextFactory dqoHomeContextFactory, UserHomeContextFactory userHomeContextFactory,
-                          RuleMappingService ruleMappingService) {
+    public RuleController(DqoHomeContextFactory dqoHomeContextFactory, UserHomeContextFactory userHomeContextFactory) {
         this.dqoHomeContextFactory = dqoHomeContextFactory;
         this.userHomeContextFactory = userHomeContextFactory;
-        this.ruleMappingService = ruleMappingService;
     }
 
     /**
      * Returns the configuration of a rule, first checking if it is a custom rule, then checking if it is a built-in rule.
-     * @param ruleName Rule name.
+     * @param rulePath rule path folder.
      * @return Model of the rule with specific rule name.
      */
-    @GetMapping("{ruleName}")
+    @GetMapping("{rulePath}")
     @ApiOperation(value = "getRule", notes = "Returns a rule definition", response = RuleModel.class)
     @ResponseStatus(HttpStatus.OK)
     @ApiResponses(value = {
@@ -79,15 +74,22 @@ public class RuleController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<RuleModel>> getRule(
-            @ApiParam("Rule name") @PathVariable String ruleName
+            @ApiParam("Rule name") @PathVariable String[] rulePath
     ) {
+
+        StringBuilder ruleName = new StringBuilder();
+        ruleName.append(rulePath[0]);
+        for (int i = 1; i < rulePath.length; i++) {
+            ruleName.append("/").append(rulePath[i]);
+        }
+
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
-        RuleDefinitionWrapper userRuleDefinitionWrapper = userHome.getRules().getByObjectName(ruleName, true);
+        RuleDefinitionWrapper userRuleDefinitionWrapper = userHome.getRules().getByObjectName(ruleName.toString(), true);
 
         DqoHomeContext dqoHomeContext = this.dqoHomeContextFactory.openLocalDqoHome();
         DqoHome dqoHome = dqoHomeContext.getDqoHome();
-        RuleDefinitionWrapper builtinRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(ruleName, true);
+        RuleDefinitionWrapper builtinRuleDefinitionWrapper = dqoHome.getRules().getByObjectName(ruleName.toString(), true);
 
         if (userRuleDefinitionWrapper == null && builtinRuleDefinitionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND);
@@ -97,7 +99,7 @@ public class RuleController {
 
         boolean isCustom = userRuleDefinitionWrapper != null;
         boolean isBuiltIn = builtinRuleDefinitionWrapper != null;
-        RuleModel ruleModel = ruleMappingService.toRuleBasicModel(effectiveRuleDefinition, isCustom, isBuiltIn);
+        RuleModel ruleModel = new RuleModel(effectiveRuleDefinition, isCustom, isBuiltIn);
 
         return new ResponseEntity<>(Mono.just(ruleModel), HttpStatus.OK);
     }
@@ -139,8 +141,8 @@ public class RuleController {
         }
 
         RuleDefinitionWrapper ruleDefinitionWrapper = ruleDefinitionList.createAndAddNew(ruleModel.getRuleName());
-        ruleDefinitionWrapper.setSpec(ruleMappingService.withRuleDefinitionSpec(ruleModel));
-        ruleDefinitionWrapper.setRulePythonModuleContent(ruleMappingService.withRuleDefinitionPythonModuleContent(ruleModel));
+        ruleDefinitionWrapper.setSpec(ruleModel.withRuleDefinitionSpec());
+        ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.withRuleDefinitionPythonModuleContent());
         userHomeContext.flush();
 
         return new ResponseEntity<>(Mono.empty(), HttpStatus.CREATED);
@@ -187,15 +189,15 @@ public class RuleController {
 
         if (existingUserRuleDefinitionWrapper == null && !ruleModel.equalsRuleDqo(builtinRuleDefinitionWrapper)) {
             RuleDefinitionWrapper ruleDefinitionWrapper = userRuleDefinitionList.createAndAddNew(ruleModel.getRuleName());
-            ruleDefinitionWrapper.setSpec(ruleMappingService.withRuleDefinitionSpec(ruleModel));
-            ruleDefinitionWrapper.setRulePythonModuleContent(ruleMappingService.withRuleDefinitionPythonModuleContent(ruleModel));
+            ruleDefinitionWrapper.setSpec(ruleModel.withRuleDefinitionSpec());
+            ruleDefinitionWrapper.setRulePythonModuleContent(ruleModel.withRuleDefinitionPythonModuleContent());
             userHomeContext.flush();
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NO_CONTENT);
         }
 
         if(existingUserRuleDefinitionWrapper != null && !ruleModel.equalsRuleDqo(builtinRuleDefinitionWrapper)){
-            existingUserRuleDefinitionWrapper.setSpec(ruleMappingService.withRuleDefinitionSpec(ruleModel));
-            existingUserRuleDefinitionWrapper.setRulePythonModuleContent(ruleMappingService.withRuleDefinitionPythonModuleContent(ruleModel));
+            existingUserRuleDefinitionWrapper.setSpec(ruleModel.withRuleDefinitionSpec());
+            existingUserRuleDefinitionWrapper.setRulePythonModuleContent(ruleModel.withRuleDefinitionPythonModuleContent());
             userHomeContext.flush();
         }
 
@@ -204,10 +206,10 @@ public class RuleController {
 
     /**
      * Deletes a custom rule definition.
-     * @param ruleName  Rule name.
+     * @param rulePath  Rule path folder.
      * @return Empty response.
      */
-    @DeleteMapping("{ruleName}")
+    @DeleteMapping("{rulePath}")
     @ApiOperation(value = "deleteRule", notes = "Deletes a custom rule definition")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @ApiResponses(value = {
@@ -216,12 +218,19 @@ public class RuleController {
             @ApiResponse(code = 500, message = "Internal Server Error", response = SpringErrorPayload.class)
     })
     public ResponseEntity<Mono<?>> deleteRule(
-            @ApiParam("Rule name") @PathVariable String ruleName) {
+            @ApiParam("Rule name") @PathVariable String[] rulePath) {
+
+        StringBuilder ruleName = new StringBuilder();
+        ruleName.append(rulePath[0]);
+        for (int i = 1; i < rulePath.length; i++) {
+            ruleName.append("/").append(rulePath[i]);
+        }
+
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
         UserHome userHome = userHomeContext.getUserHome();
 
         RuleDefinitionList userRuleDefinitionList = userHome.getRules();
-        RuleDefinitionWrapper existingUserRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(ruleName, true);
+        RuleDefinitionWrapper existingUserRuleDefinitionWrapper = userRuleDefinitionList.getByObjectName(ruleName.toString(), true);
 
         if (existingUserRuleDefinitionWrapper == null) {
             return new ResponseEntity<>(Mono.empty(), HttpStatus.NOT_FOUND); // 404
@@ -254,7 +263,7 @@ public class RuleController {
 
         for (RuleDefinitionWrapper ruleDefinitionWrapperDqoHome : ruleDefinitionWrapperListDqoHome) {
             String ruleNameDqoHome = ruleDefinitionWrapperDqoHome.getRuleName();
-            ruleBasicFolderModel.addChild(ruleNameDqoHome, false);
+            ruleBasicFolderModel.addRule(ruleNameDqoHome);
         }
 
         UserHomeContext userHomeContext = this.userHomeContextFactory.openLocalUserHome();
@@ -264,7 +273,7 @@ public class RuleController {
 
         for (RuleDefinitionWrapper ruleDefinitionWrapperUserHome : ruleDefinitionWrapperListUserHome) {
             String ruleNameUserHome = ruleDefinitionWrapperUserHome.getRuleName();
-            ruleBasicFolderModel.addChild(ruleNameUserHome, true);
+            ruleBasicFolderModel.addRule(ruleNameUserHome);
         }
 
         return new ResponseEntity<>(Mono.just(ruleBasicFolderModel), HttpStatus.OK);
