@@ -10,23 +10,25 @@ spec:
     min_periods_with_readouts: 5
     historic_data_point_grouping: day
   fields:
-  - field_name: percentile_stdev_above
-    display_name: percentile_stdev_above
-    help_text: "Maximum percent (e.q. 3%) that the current sensor readout could be\
-      \ above a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (warning, error, fatal) at once. The\
-      \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
-      \ must exist to run the calculation."
+  - field_name: percentile_above
+    display_name: percentile_above
+    help_text: "Probability that the current sensor readout will achieve values greater\
+      \ than it would be expected from the estimated distribution based on the previous values\
+      \ gathered within the time window. In other words, the upper quantile of the estimated\
+      \ normal distribution. Set the time window at the threshold level for all severity\
+      \ levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.)\
+      \ time window, but at least 7 readouts must exist to run the calculation."
     data_type: double
     sample_values:
     - 5
-  - field_name: percentile_stdev_below
-    display_name: percentile_stdev_below
-    help_text: "Maximum percent (e.q. 3%) that the current sensorreadout could be\
-      \ below a moving average within the time window. Set the time window at the\
-      \ threshold level for all severity levels (warning, error, fatal) at once. The\
-      \ default is a 14 time periods (days, etc.) time window, but at least 7 readouts\
-      \ must exist to run the calculation."
+  - field_name: percentile_below
+    display_name: percentile_below
+    help_text: "Probability that the current sensor readout will achieve values lesser \
+      \ than it would be expected from the estimated distribution based on the previous values \
+      \ gathered within the time window. In other words, the lower quantile of the estimated \
+      \ normal distribution. Set the time window at the threshold level for all severity \
+      \ levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) \
+      \ time window, but at least 7 readouts must exist to run the calculation."
     data_type: double
     sample_values:
     - 5

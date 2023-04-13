@@ -28,7 +28,8 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+ * Data quality rule that verifies if a data quality sensor readout value is probable under
+ * the estimated normal distribution based on the previous values gathered within a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
@@ -40,54 +41,68 @@ public class PercentileMovingStdevRuleParametersSpec extends AbstractRuleParamet
     };
 
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    @JsonPropertyDescription("Probability that the current sensor readout will achieve values greater" +
+            " than it would be expected from the estimated distribution based on the previous values" +
+            " gathered within the time window. In other words, the upper quantile of the estimated" +
+            " normal distribution. Set the time window at the threshold level for all severity" +
+            " levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.)" +
+            " time window, but at least 7 readouts must exist to run the calculation.")
     @SampleValues(values = "5")
-    private Double percentileStdevAbove;
+    private Double percentileAbove;
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensorreadout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    @JsonPropertyDescription("Probability that the current sensor readout will achieve values lesser" +
+            " than it would be expected from the estimated distribution based on the previous values" +
+            " gathered within the time window. In other words, the lower quantile of the estimated" +
+            " normal distribution. Set the time window at the threshold level for all severity" +
+            " levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.)" +
+            " time window, but at least 7 readouts must exist to run the calculation.")
     @SampleValues(values = "5")
-    private Double percentileStdevBelow;
+    private Double percentileBelow;
 
     /**
      * Default constructor.
      */
     public PercentileMovingStdevRuleParametersSpec() {
-        this.percentileStdevBelow = null;
-        this.percentileStdevAbove = null;
+        this.percentileBelow = null;
+        this.percentileAbove = null;
     }
 
     /**
-     *
-     * @return Multiple factor to calculate multiplied stdev.
+     * Probability that the current sensor readout will achieve values greater
+     * than it would be expected from the estimated distribution based on
+     * the previous values gathered within the time window.
+     * @return The upper percentile of the estimated normal distribution.
      */
-    public Double getPercentileStdevAbove() {
-        return percentileStdevAbove;
+    public Double getPercentileAbove() {
+        return percentileAbove;
     }
 
     /**
-     *  Sets a multiple factor to calculate multiplied stdev.
-     * @param percentileStdevAbove Multiple factor.
+     * Sets the upper percentile threshold of the estimated normal distribution.
+     * @param percentileAbove Percentage of values in the right tail that should be considered erroneous.
      */
-    public void setPercentileStdevAbove(Double percentileStdevAbove) {
-        this.setDirtyIf(!Objects.equals(this.percentileStdevAbove, percentileStdevAbove));
-        this.percentileStdevAbove = percentileStdevAbove;
+    public void setPercentileAbove(Double percentileAbove) {
+        this.setDirtyIf(!Objects.equals(this.percentileAbove, percentileAbove));
+        this.percentileAbove = percentileAbove;
     }
 
     /**
-     * Multiplied factor used to calculate a multiplied stdev.
-     * @return Multiple factor used to calculate a multiplied stdev.
+     * Probability that the current sensor readout will achieve values lesser
+     * than it would be expected from the estimated distribution based on
+     * the previous values gathered within the time window.
+     * @return The lower percentile of the estimated normal distribution.
      */
-    public Double getPercentileStdevBelow() {
-        return percentileStdevBelow;
+    public Double getPercentileBelow() {
+        return percentileBelow;
     }
 
     /**
-     * Sets multiple factor to calculate multiplied stdev.
-     * @param percentileStdevBelow Multiple factor.
+     * Sets the upper percentile threshold of the estimated normal distribution.
+     * @param percentileBelow Percentage of values in the left tail that should be considered erroneous.
      */
-    public void setPercentileStdevBelow(Double percentileStdevBelow) {
-        this.setDirtyIf(!Objects.equals(this.percentileStdevBelow, percentileStdevBelow));
-        this.percentileStdevBelow = percentileStdevBelow;
+    public void setPercentileBelow(Double percentileBelow) {
+        this.setDirtyIf(!Objects.equals(this.percentileBelow, percentileBelow));
+        this.percentileBelow = percentileBelow;
     }
 
 

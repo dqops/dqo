@@ -28,28 +28,37 @@ import lombok.EqualsAndHashCode;
 import java.util.Objects;
 
 /**
- * Data quality rule that verifies if a data quality sensor readout value is not above X percent of the moving average of a time window.
+ * Data quality rule that verifies if a data quality sensor readout value
+ * doesn't excessively deviate from the moving average of a time window.
  */
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 @EqualsAndHashCode(callSuper = true)
-public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParametersSpec {
-    private static final ChildHierarchyNodeFieldMapImpl<PercentMovingStdevRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
+public class MultipleMovingStdevRuleParametersSpec extends AbstractRuleParametersSpec {
+    private static final ChildHierarchyNodeFieldMapImpl<MultipleMovingStdevRuleParametersSpec> FIELDS = new ChildHierarchyNodeFieldMapImpl<>(AbstractRuleParametersSpec.FIELDS) {
         {
         }
     };
 
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be above a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    @JsonPropertyDescription("How many multiples of the estimated standard deviation the current" +
+            " sensor readout could be above the moving average within the time window. Set" +
+            " the time window at the threshold level for all severity levels (warning, error," +
+            " fatal) at once. The default is a 14 time periods (days, etc.) time window," +
+            " but at least 7 readouts must exist to run the calculation.")
     @SampleValues(values = "1.5")
     private Double multipleStdevAbove;
 
-    @JsonPropertyDescription("Maximum percent (e.q. 3%) that the current sensor readout could be below a moving average within the time window. Set the time window at the threshold level for all severity levels (warning, error, fatal) at once. The default is a 14 time periods (days, etc.) time window, but at least 7 readouts must exist to run the calculation.")
+    @JsonPropertyDescription("How many multiples of the estimated standard deviation the current" +
+            " sensor readout could be below the moving average within the time window. Set" +
+            " the time window at the threshold level for all severity levels (warning, error," +
+            " fatal) at once. The default is a 14 time periods (days, etc.) time window," +
+            " but at least 7 readouts must exist to run the calculation.")
     @SampleValues(values = "2.5")
     private Double multipleStdevBelow;
 
     /**
-     *
+     * Multiplied factor used to calculate a multiplied stdev.
      * @return Multiple factor to calculate multiplied stdev.
      */
     public Double getMultipleStdevAbove() {
@@ -100,6 +109,6 @@ public class PercentMovingStdevRuleParametersSpec extends AbstractRuleParameters
      */
     @Override
     public String getRuleDefinitionName() {
-        return "stdev/percent_moving_stdev";
+        return "stdev/multiple_moving_stdev";
     }
 }

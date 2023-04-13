@@ -37,8 +37,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import java.time.LocalDateTime;
 
 @SpringBootTest
-public class PercentMovingStdevRuleParametersSpecTests extends BaseTest {
-    private PercentMovingStdevRuleParametersSpec sut;
+public class MultipleMovingStdevRuleParametersSpecTests extends BaseTest {
+    private MultipleMovingStdevRuleParametersSpec sut;
     private RuleTimeWindowSettingsSpec timeWindowSettings;
     private LocalDateTime readoutTimestamp;
     private Double[] sensorReadouts;
@@ -48,11 +48,11 @@ public class PercentMovingStdevRuleParametersSpecTests extends BaseTest {
 
     @BeforeEach
     void setUp() {
-        this.sut = new PercentMovingStdevRuleParametersSpec();
+        this.sut = new MultipleMovingStdevRuleParametersSpec();
         this.sampleTableMetadata = SampleTableMetadataObjectMother.createSampleTableMetadataForCsvFile(SampleCsvFileNames.continuous_days_date_and_string_formats, ProviderType.bigquery);
         this.userHomeContext = UserHomeContextObjectMother.createInMemoryFileHomeContextForSampleTable(sampleTableMetadata);
         this.timeWindowSettings = RuleTimeWindowSettingsSpecObjectMother.getRealTimeWindowSettings(this.sut.getRuleDefinitionName());
-        this.readoutTimestamp = LocalDateTime.of(2022, 02, 15, 0, 0);
+        this.readoutTimestamp = LocalDateTime.of(2022, 2, 15, 0, 0);
         this.sensorReadouts = new Double[this.timeWindowSettings.getPredictionTimeWindow()];
     }
 
