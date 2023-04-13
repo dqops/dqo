@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import SvgIcon from '../../components/SvgIcon';
 import DataQualityChecks from '../../components/DataQualityChecks';
@@ -10,15 +9,24 @@ import { CheckResultOverviewApi, ColumnApiClient } from "../../services/apiClien
 import { useParams } from "react-router-dom";
 import ConnectionLayout from "../../components/ConnectionLayout";
 import Button from "../../components/Button";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckTypes } from "../../shared/routes";
 
 const ColumnProfilingChecksUIFilterView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName, column: columnName, category, checkName }: { connection: string, schema: string, table: string, column: string, category: string, checkName: string } = useParams();
-  const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(
-    (state: IRootState) => state.column
-  );
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName, column: columnName, category, checkName }: {
+    checkTypes: CheckTypes,
+    connection: string,
+    schema: string,
+    table: string,
+    column: string,
+    category: string,
+    checkName: string
+  } = useParams();
+  const { checksUIFilter, isUpdatedChecksUIFilter, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
   const [isUpdating, setIsUpdating] = useState(false);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnProfilingChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
@@ -36,19 +44,19 @@ const ColumnProfilingChecksUIFilterView = () => {
       checksUIFilter
     );
     await dispatch(
-      getColumnProfilingChecksUIFilter(connectionName, schemaName, tableName, columnName, category, checkName)
+      getColumnProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName)
     );
     setIsUpdating(false);
   };
 
   useEffect(() => {
     dispatch(
-      getColumnProfilingChecksUIFilter(connectionName, schemaName, tableName, columnName, category, checkName)
+      getColumnProfilingChecksUIFilter(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName, category, checkName)
     );
-  }, [connectionName, schemaName, tableName, category, checkName]);
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, category, checkName]);
 
   const onChange = (ui: UICheckContainerModel) => {
-    dispatch(setColumnUpdatedCheckUiFilter(ui));
+    dispatch(setColumnUpdatedCheckUiFilter(checkTypes, firstLevelActiveTab, ui));
   };
 
   return (

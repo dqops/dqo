@@ -5,8 +5,7 @@ import Tabs from "../../components/Tabs";
 import { useHistory, useParams } from "react-router-dom";
 import { CheckTypes, ROUTES } from "../../shared/routes";
 import { useTree } from "../../contexts/treeContext";
-import { useSelector } from "react-redux";
-import { IRootState } from "../../redux/reducers";
+import { useDispatch, useSelector } from "react-redux";
 import TableDetails from "../../components/Connection/TableView/TableDetails";
 import ScheduleDetail from "../../components/Connection/TableView/ScheduleDetail";
 import ProfilingView from "../../components/Connection/TableView/ProfilingView";
@@ -16,8 +15,9 @@ import TableCommentView from "../../components/Connection/TableView/TableComment
 import TableLabelsView from "../../components/Connection/TableView/TableLabelsView";
 import TableDataStream from "../../components/Connection/TableView/TableDataStream";
 import TimestampsView from "../../components/Connection/TableView/TimestampsView";
-import { findTreeNode } from "../../utils/tree";
 import clsx from "clsx";
+import { getFirstLevelState } from "../../redux/selectors";
+import { addFirstLevelTab } from "../../redux/actions/source.actions";
 
 const initTabs = [
   {
@@ -48,7 +48,7 @@ const initTabs = [
 
 type NavigationMenu = {
   label: string;
-  value: string;
+  value: CheckTypes;
 }
 
 const navigations: NavigationMenu[] = [
@@ -71,15 +71,11 @@ const navigations: NavigationMenu[] = [
 ];
 
 const TablePage = () => {
-  const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: string } = useParams();
+  const { connection, schema, table, tab: activeTab, checkTypes }: { connection: string, schema: string, table: string, tab: string, checkTypes: CheckTypes } = useParams();
   const {
     activeTab: pageTab,
     tabMap,
     setTabMap,
-    treeData,
-    selectedTreeNode,
-    switchTab,
-    changeActiveTab
   } = useTree();
   const history = useHistory();
   const [tabs, setTabs] = useState(initTabs);
@@ -94,7 +90,7 @@ const TablePage = () => {
     isUpdatedMonthlyPartitionedChecks,
     isUpdatedSchedule,
     isUpdatedDataStreamsMapping
-  } = useSelector((state: IRootState) => state.table);
+  } = useSelector(getFirstLevelState(checkTypes));
   const isRecurringOnly = useMemo(() => checkTypes === CheckTypes.RECURRING, [checkTypes]);
   const isPartitionChecksOnly = useMemo(() => checkTypes === CheckTypes.PARTITIONED, [checkTypes]);
   const isProfilingChecksOnly = useMemo(() => checkTypes === CheckTypes.PROFILING, [checkTypes]);
@@ -102,6 +98,7 @@ const TablePage = () => {
     () => !isRecurringOnly && !isPartitionChecksOnly && !isProfilingChecksOnly,
     [isRecurringOnly, isPartitionChecksOnly, isProfilingChecksOnly]
   );
+  const dispatch = useDispatch();
 
   const onChangeTab = (tab: string) => {
     history.push(ROUTES.TABLE_LEVEL_PAGE(checkTypes, connection, schema, table, tab));
@@ -198,8 +195,6 @@ const TablePage = () => {
     );
   }, [isUpdatedDailyPartitionedChecks, isUpdatedMonthlyPartitionedChecks]);
 
-  const activeNode = findTreeNode(treeData, pageTab);
-
   const description = useMemo(() => {
     if (isProfilingChecksOnly) {
       return 'Advanced profiling for ';
@@ -229,79 +224,73 @@ const TablePage = () => {
     return navigations.findIndex((item) => item.value === checkTypes);
   }, [checkTypes]);
   const onChangeNavigation = async (item: NavigationMenu) => {
-    if (item.value === CheckTypes.SOURCES) {
-      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'))
-    } else if (item.value === CheckTypes.PROFILING) {
-      console.log('')
-      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
-    } else if (item.value === CheckTypes.RECURRING) {
-      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
-    } else if (item.value === CheckTypes.PARTITIONED) {
-      history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, 'detail'));
-    }
+    const tab = item.value === CheckTypes.RECURRING || item.value === CheckTypes.PARTITIONED ? 'daily' : 'detail';
+    dispatch(addFirstLevelTab(item.value, {
+      url: ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab),
+      value: ROUTES.TABLE_LEVEL_VALUE(item.value, connection, schema, table),
+      state: {},
+      label: table
+    }))
+    history.push(ROUTES.TABLE_LEVEL_PAGE(item.value, connection, schema, table, tab));
   };
 
   return (
     <ConnectionLayout>
-      {!activeNode ? (
-        <div />
-      ) : (
-        <div className="relative h-full flex flex-col">
-          <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0 pr-[340px]">
-            <div className="flex items-center space-x-2 max-w-full">
-              <SvgIcon name="table" className="w-5 h-5 shrink-0" />
-              <div className="text-xl font-semibold truncate">{`${description}${connection}.${schema}.${table}`}</div>
-            </div>
+      <div className="relative h-full flex flex-col">
+        <div className="flex justify-between px-4 py-2 border-b border-gray-300 mb-2 h-14 items-center flex-shrink-0 pr-[340px]">
+          <div className="flex items-center space-x-2 max-w-full">
+            <SvgIcon name="table" className="w-5 h-5 shrink-0" />
+            <div className="text-xl font-semibold truncate">{`${description}${connection}.${schema}.${table}`}</div>
           </div>
-          <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
-            {navigations.map((item, index) => (
-              <div
-                className={clsx("flex items-center cursor-pointer w-70", activeIndex === index ? "font-bold" : "")}
-                key={item.value}
-                onClick={() => onChangeNavigation(item)}
-              >
-                {activeIndex > index ? <SvgIcon name="chevron-left" className="w-3 mr-2" /> : ''}
-                <span>{item.label}</span>
-                {activeIndex < index ? <SvgIcon name="chevron-right" className="w-6 ml-2" /> : ''}
-              </div>
-            ))}
-          </div>
-          {isProfilingChecksOnly && (
-            <ProfilingView />
-          )}
-          {isRecurringOnly && (
-            <RecurringView />
-          )}
-          {isPartitionChecksOnly && (
-            <PartitionedChecks />
-          )}
-          {showAllSubTabs && (
-            <>
-              <div className="border-b border-gray-300">
-                <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
-              </div>
-              <div>
-                {activeTab === 'detail' && <TableDetails />}
-              </div>
-              <div>
-                {activeTab === 'schedule' && <ScheduleDetail />}
-              </div>
-              <div>
-                {activeTab === 'comments' && <TableCommentView />}
-              </div>
-              <div>
-                {activeTab === 'labels' && <TableLabelsView />}
-              </div>
-              <div>
-                {activeTab === 'data-streams' && <TableDataStream />}
-              </div>
-              <div>
-                {activeTab === 'timestamps' && <TimestampsView />}
-              </div>
-            </>
-          )}
         </div>
-      )}
+        <div className="flex space-x-3 px-4 pt-2 border-b border-gray-300 pb-4 mb-2">
+          {navigations.map((item, index) => (
+            <div
+              className={clsx("flex items-center cursor-pointer w-70", activeIndex === index ? "font-bold" : "")}
+              key={item.value}
+              onClick={() => onChangeNavigation(item)}
+            >
+              {activeIndex > index ? <SvgIcon name="chevron-left" className="w-3 mr-2" /> : ''}
+              <span>{item.label}</span>
+              {activeIndex < index ? <SvgIcon name="chevron-right" className="w-6 ml-2" /> : ''}
+            </div>
+          ))}
+        </div>
+        {isProfilingChecksOnly && (
+          <ProfilingView />
+        )}
+        {isRecurringOnly && (
+          <RecurringView />
+        )}
+        {isPartitionChecksOnly && (
+          <PartitionedChecks />
+        )}
+        {showAllSubTabs && (
+          <>
+            <div className="border-b border-gray-300">
+              <Tabs tabs={tabs} activeTab={activeTab} onChange={onChangeTab} />
+            </div>
+            <div>
+              {activeTab === 'detail' && <TableDetails />}
+            </div>
+            <div>
+              {activeTab === 'schedule' && <ScheduleDetail />}
+            </div>
+            <div>
+              {activeTab === 'comments' && <TableCommentView />}
+            </div>
+            <div>
+              {activeTab === 'labels' && <TableLabelsView />}
+            </div>
+            <div>
+              {activeTab === 'data-streams' && <TableDataStream />}
+            </div>
+            <div>
+              {activeTab === 'timestamps' && <TimestampsView />}
+            </div>
+          </>
+        )}
+      </div>
     </ConnectionLayout>
   );
 };

@@ -91,7 +91,7 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
             completionCandidates = CheckNameCompleter.class)
     private String check;
 
-    @CommandLine.Option(names = {"-s", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'",
+    @CommandLine.Option(names = {"-sn", "--sensor"}, description = "Data quality sensor name (sensor definition or sensor name), supports patterns like 'table/validity/*'",
             completionCandidates = SensorNameCompleter.class)
     private String sensor;
 
@@ -110,23 +110,19 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     @CommandLine.Option(names = {"-n", "--nullable"}, description = "Enable check only on nullable columns (false for explicitly non-nullable columns).")
     private Boolean columnNullable = null;
 
-    @CommandLine.Option(names = {"-wrn", "--warning"}, description = "Enable warning rules on checks.")
-    private Boolean warningLevelEnabled = false;
+    @CommandLine.Option(names = {"-o", "--override"}, description = "Override existing configuration of selected checks.")
+    private Boolean override = false;
 
-    // TODO: Explain how does the filtering work in level options, what is the difference between true, false and not considered (right now it's TBD tbh).
-    @CommandLine.Option(names = {"-W", "--warning-rule"}, mapFallbackValue = "true", description = "Warning level rule options.\nUsage:\n\t-W<rule_name>,\n\t-W<rule_name>=false,\n\t--warning-rule=<rule_name>,\n\t--warning-rule=<rule_name>=false.")
+    @CommandLine.Option(names = {"-S", "--sensor-param"}, description = "Configuration parameters for the sensor.\nUsage:\n\t-S<param_name>=<param_value>,\n\t--sensor-param=<param_name>=<param_value>")
+    private Map<String, String> sensorParams;
+
+    @CommandLine.Option(names = {"-W", "--warning-rule"}, description = "Warning level rule options.\nUsage:\n\t-W<rule_name>=<rule_value>,\n\t--warning-rule=<rule_name>=<rule_value>")
     private Map<String, String> warningLevelOptions;
 
-    @CommandLine.Option(names = {"-err", "--error"}, description = "Enable error rules on checks.")
-    private Boolean errorLevelEnabled = false;
-
-    @CommandLine.Option(names = {"-E", "--error-rule"}, mapFallbackValue = "true", description = "Error level rule options.\nUsage:\n\t-E<rule_name>,\n\t-E<rule_name>=false,\n\t--error-rule=<rule_name>,\n\t--error-rule=<rule_name>=false.")
+    @CommandLine.Option(names = {"-E", "--error-rule"}, description = "Error level rule options.\nUsage:\n\t-E<rule_name>=<rule_value>,\n\t--error-rule=<rule_name>=<rule_value>")
     private Map<String, String> errorLevelOptions;
 
-    @CommandLine.Option(names = {"-ftl", "--fatal"}, description = "Enable fatal rules on checks.")
-    private Boolean fatalLevelEnabled = false;
-
-    @CommandLine.Option(names = {"-F", "--fatal-rule"}, mapFallbackValue = "true", description = "Fatal level rule options.\nUsage:\n\t-F<rule_name>,\n\t-F<rule_name>=false,\n\t--fatal-rule=<rule_name>,\n\t--fatal-rule=<rule_name>=false.")
+    @CommandLine.Option(names = {"-F", "--fatal-rule"}, description = "Fatal level rule options.\nUsage:\n\t-F<rule_name>=<rule_value>,\n\t--fatal-rule=<rule_name>=<rule_value>")
     private Map<String, String> fatalLevelOptions;
 
     /**
@@ -266,6 +262,30 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
     }
 
     /**
+     * Gets the information whether the supplied parameters for the checks should substitute their current configuration.
+     * @return The "override" flag.
+     */
+    public Boolean getOverride() {
+        return override;
+    }
+
+    /**
+     * Set whether the supplied parameters for the checks should substitute their current configuration.
+     * @param override New value of the "override" flag.
+     */
+    public void setOverride(Boolean override) {
+        this.override = override;
+    }
+
+    /**
+     * Gets the sensor parameters map.
+     * @return Sensor parameters map.
+     */
+    public Map<String, String> getSensorParams() {
+        return sensorParams;
+    }
+
+    /**
      * Gets the warning level options map.
      * @return Warning level rule options map.
      */
@@ -318,16 +338,6 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
         filters.setColumnDataType(this.datatypeFilter);
         filters.setColumnNullable(this.columnNullable);
 
-        if (this.warningLevelEnabled && this.warningLevelOptions == null) {
-            this.warningLevelOptions = new HashMap<>();
-        }
-        if (this.errorLevelEnabled && this.errorLevelOptions == null) {
-            this.errorLevelOptions = new HashMap<>();
-        }
-        if (this.fatalLevelEnabled && this.fatalLevelOptions == null) {
-            this.fatalLevelOptions = new HashMap<>();
-        }
-
         if (this.warningLevelOptions == null
                 && this.errorLevelOptions == null
                 && this.fatalLevelOptions == null) {
@@ -339,19 +349,17 @@ public class CheckEnableCliCommand extends BaseCommand implements ICommand, ITab
 
         UIAllChecksPatchParameters patchParameters = new UIAllChecksPatchParameters() {{
             setCheckSearchFilters(filters);
+            setSensorOptions(sensorParams);
+            setOverrideConflicts(override);
+
             setWarningLevelOptions(warningLevelOptions);
             setErrorLevelOptions(errorLevelOptions);
             setFatalLevelOptions(fatalLevelOptions);
+
+            setDisableWarningLevel(false);
+            setDisableErrorLevel(false);
+            setDisableFatalLevel(false);
         }};
-        if (this.warningLevelOptions != null) {
-            patchParameters.setDisableWarningLevel(false);
-        }
-        if (this.errorLevelOptions != null) {
-            patchParameters.setDisableErrorLevel(false);
-        }
-        if (this.fatalLevelOptions != null) {
-            patchParameters.setDisableFatalLevel(false);
-        }
 
         this.checkService.updateAllChecksPatch(patchParameters);
 

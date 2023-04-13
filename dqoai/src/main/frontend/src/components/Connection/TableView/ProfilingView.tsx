@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import DataQualityChecks from '../../DataQualityChecks';
 import TableActionGroup from './TableActionGroup';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../../redux/reducers';
 import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../../api';
 import {
   getTableProfilingChecksUI,
@@ -12,14 +11,15 @@ import {
 import { useActionDispatch } from '../../../hooks/useActionDispatch';
 import { CheckResultOverviewApi } from '../../../services/apiClient';
 import { useParams } from "react-router-dom";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../../redux/selectors";
+import { CheckTypes } from "../../../shared/routes";
 
 const ProfilingView = () => {
-  const { connection: connectionName, schema: schemaName, table: tableName }: { connection: string, schema: string, table: string } = useParams();
-  const { checksUI, loading, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(
-    (state: IRootState) => state.table
-  );
+  const { checkTypes, connection: connectionName, schema: schemaName, table: tableName }: { checkTypes: CheckTypes, connection: string, schema: string, table: string } = useParams();
+  const { checksUI, loading, isUpdating, isUpdatedChecksUi, tableBasic } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   useEffect(() => {
     if (
@@ -28,7 +28,7 @@ const ProfilingView = () => {
       tableBasic?.target?.schema_name !== schemaName ||
       tableBasic?.target?.table_name !== tableName
     ) {
-      dispatch(getTableProfilingChecksUI(connectionName, schemaName, tableName));
+      dispatch(getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName));
     }
   }, [connectionName, schemaName, tableName, tableBasic]);
 
@@ -37,15 +37,15 @@ const ProfilingView = () => {
       return;
     }
     await dispatch(
-      updateTableProfilingChecksUI(connectionName, schemaName, tableName, checksUI)
+      updateTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, checksUI)
     );
     await dispatch(
-      getTableProfilingChecksUI(connectionName, schemaName, tableName)
+      getTableProfilingChecksUI(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName)
     );
   };
 
   const handleChange = (value: UICheckContainerModel) => {
-    dispatch(setUpdatedChecksUi(value));
+    dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
   };
 
   const getCheckOverview = () => {

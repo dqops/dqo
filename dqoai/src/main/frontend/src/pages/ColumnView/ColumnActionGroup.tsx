@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import Button from '../../components/Button';
 import ConfirmDialog from './ConfirmDialog';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { ColumnApiClient } from '../../services/apiClient';
+import { getFirstLevelState } from "../../redux/selectors";
+import { useParams } from "react-router-dom";
+import { CheckTypes } from "../../shared/routes";
 
 interface IActionGroupProps {
   isDisabled?: boolean;
@@ -20,8 +22,9 @@ const ColumnActionGroup = ({
   onUpdate,
   shouldDelete = true
 }: IActionGroupProps) => {
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
   const [isOpen, setIsOpen] = useState(false);
-  const { columnBasic } = useSelector((state: IRootState) => state.column);
+  const { columnBasic } = useSelector(getFirstLevelState(checkTypes));
 
   const removeColumn = async () => {
     if (columnBasic) {

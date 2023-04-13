@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import DataQualityChecks from '../../components/DataQualityChecks';
 import ColumnActionGroup from './ColumnActionGroup';
 import { useSelector } from 'react-redux';
-import { IRootState } from '../../redux/reducers';
 import { CheckResultsOverviewDataModel, UICheckContainerModel } from '../../api';
 import { useActionDispatch } from '../../hooks/useActionDispatch';
 import {
@@ -11,6 +10,9 @@ import {
   updateColumnCheckUI
 } from '../../redux/actions/column.actions';
 import { CheckResultOverviewApi } from "../../services/apiClient";
+import { getFirstLevelActiveTab, getFirstLevelState } from "../../redux/selectors";
+import { CheckTypes } from "../../shared/routes";
+import { useParams } from "react-router-dom";
 
 interface IProfilingViewProps {
   connectionName: string;
@@ -25,11 +27,11 @@ const ProfilingView = ({
   tableName,
   columnName
 }: IProfilingViewProps) => {
-  const { columnBasic, checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(
-    (state: IRootState) => state.column
-  );
+  const { checkTypes }: { checkTypes: CheckTypes } = useParams();
+  const { columnBasic, checksUI, isUpdating, isUpdatedChecksUi, loading } = useSelector(getFirstLevelState(checkTypes));
   const dispatch = useActionDispatch();
   const [checkResultsOverview, setCheckResultsOverview] = useState<CheckResultsOverviewDataModel[]>([]);
+  const firstLevelActiveTab = useSelector(getFirstLevelActiveTab(checkTypes));
 
   const getCheckOverview = () => {
     CheckResultOverviewApi.getColumnProfilingChecksOverview(connectionName, schemaName, tableName, columnName).then((res) => {
@@ -46,10 +48,10 @@ const ProfilingView = ({
       columnBasic.column_name !== columnName
     ) {
       dispatch(
-        getColumnChecksUi(connectionName, schemaName, tableName, columnName)
+        getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
       );
     }
-  }, [connectionName, schemaName, columnName, tableName, columnBasic]);
+  }, [checkTypes, firstLevelActiveTab, connectionName, schemaName, columnName, tableName, columnBasic]);
 
   const onUpdate = async () => {
     if (!checksUI) {
@@ -57,6 +59,8 @@ const ProfilingView = ({
     }
     await dispatch(
       updateColumnCheckUI(
+        checkTypes,
+        firstLevelActiveTab,
         connectionName,
         schemaName,
         tableName,
@@ -65,12 +69,12 @@ const ProfilingView = ({
       )
     );
     await dispatch(
-      getColumnChecksUi(connectionName, schemaName, tableName, columnName)
+      getColumnChecksUi(checkTypes, firstLevelActiveTab, connectionName, schemaName, tableName, columnName)
     );
   };
 
   const handleChange = (value: UICheckContainerModel) => {
-    dispatch(setUpdatedChecksUi(value));
+    dispatch(setUpdatedChecksUi(checkTypes, firstLevelActiveTab, value));
   };
 
   return (
