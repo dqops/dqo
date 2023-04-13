@@ -18,27 +18,42 @@ package ai.dqo.services.metadata;
 
 import ai.dqo.core.jobqueue.PushJobResult;
 import ai.dqo.core.jobqueue.jobs.data.DeleteStoredDataQueueJobResult;
-import ai.dqo.metadata.sources.TableWrapper;
+import ai.dqo.metadata.sources.*;
+import ai.dqo.metadata.storage.localfiles.userhome.UserHomeContext;
+import ai.dqo.metadata.userhome.UserHome;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Service that performs table operations.
  */
 public interface TableService {
     /**
+     * Finds a table located in provided user home.
+     * @param userHome       User home.
+     * @param connectionName Connection name.
+     * @param tableName      Table name.
+     * @return Table wrapper with the requested table.
+     */
+    TableWrapper getTable(UserHome userHome,
+                          String connectionName,
+                          PhysicalTableName tableName);
+
+    /**
      * Deletes table from metadata and flushes user context.
      * Cleans all stored data from .data folder related to this table.
-     * @param tableWrapper Table wrapper.
+     * @param connectionName Connection name
+     * @param tableName      Physical table name.
      * @return Asynchronous job result object for deferred background operations.
      */
-    PushJobResult<DeleteStoredDataQueueJobResult> deleteTable(TableWrapper tableWrapper);
+    PushJobResult<DeleteStoredDataQueueJobResult> deleteTable(String connectionName, PhysicalTableName tableName);
 
     /**
      * Deletes tables from metadata and flushes user context.
      * Cleans all stored data from .data folder related to these tables.
-     * @param tableWrappers Iterable of table wrappers.
-     * @return Asynchronous job result object for deferred background operations.
+     * @param connectionToTables Connection name to tables on that connection mapping.
+     * @return Asynchronous job result objects for deferred background operations.
      */
-    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteTables(Iterable<TableWrapper> tableWrappers);
+    List<PushJobResult<DeleteStoredDataQueueJobResult>> deleteTables(Map<String, Iterable<PhysicalTableName>> connectionToTables);
 }
