@@ -19,6 +19,9 @@ public class RuleBasicModel {
     @JsonPropertyDescription("Rule name")
     private String ruleName;
 
+    @JsonPropertyDescription("Full rule name")
+    private String fullRuleName;
+
     @JsonPropertyDescription("This rule has is a built-in rule.")
     public boolean custom;
 

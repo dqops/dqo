@@ -53,11 +53,11 @@ public class RuleBasicFolderModel {
 
     /**
      * Adds a rule to this folder based on the given path.
-     * @param path the path of the rule
+     * @param fullRuleName the path of the rule
      */
-    public void addRule(String path) {
+    public void addRule(String fullRuleName, boolean isCustom) {
 
-        String[] ruleFolders = path.split("/");
+        String[] ruleFolders = fullRuleName.split("/");
         String ruleName = ruleFolders[ruleFolders.length - 1];
         RuleBasicFolderModel folderModel = this;
 
@@ -75,7 +75,7 @@ public class RuleBasicFolderModel {
         if (folderModel.rules != null) {
             for (RuleBasicModel rule : folderModel.rules) {
                 if (rule.getRuleName().equals(ruleName)) {
-                    rule.setCustom(true);
+                    rule.setCustom(isCustom);
                     ruleExists = true;
                     break;
                 }
@@ -86,7 +86,8 @@ public class RuleBasicFolderModel {
         if (!ruleExists) {
             RuleBasicModel ruleBasicModel = new RuleBasicModel();
             ruleBasicModel.setRuleName(ruleName);
-            ruleBasicModel.setCustom(false);
+            ruleBasicModel.setFullRuleName(fullRuleName);
+            ruleBasicModel.setCustom(isCustom);
             folderModel.rules.add(ruleBasicModel);
         }
     }
