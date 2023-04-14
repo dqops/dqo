@@ -336,6 +336,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
                   handleChange({ sensor_parameters: parameters })
                 }
                 disabled={!check?.configured || check.disabled}
+                onUpdate={onUpdate}
               />
             </div>
           </div>
@@ -353,6 +354,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
               })
             }
             type="warning"
+            onUpdate={onUpdate}
           />
         </td>
         <td className="py-2 px-4 bg-orange-100">
@@ -368,6 +370,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
               })
             }
             type="error"
+            onUpdate={onUpdate}
           />
         </td>
         <td className="py-2 px-4 bg-red-100">
@@ -383,6 +386,7 @@ const CheckListItem = ({ check, onChange, checkResult, getCheckOverview, onUpdat
               })
             }
             type="fatal"
+            onUpdate={onUpdate}
           />
         </td>
       </tr>

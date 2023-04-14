@@ -6,12 +6,14 @@ interface ISensorParametersProps {
   parameters: UIFieldModel[];
   onChange: (parameters: UIFieldModel[]) => void;
   disabled?: boolean;
+  onUpdate: () => void;
 }
 
 const SensorParameters = ({
   parameters,
   onChange,
-  disabled
+  disabled,
+  onUpdate,
 }: ISensorParametersProps) => {
   const handleChange = (field: UIFieldModel, idx: number) => {
     const newParameters = parameters.map((item, index) =>
@@ -30,6 +32,7 @@ const SensorParameters = ({
                 field={item}
                 onChange={(field: UIFieldModel) => handleChange(field, index)}
                 disabled={disabled}
+                onSave={onUpdate}
               />
             </div>
           ))}

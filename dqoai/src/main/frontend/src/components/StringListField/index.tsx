@@ -11,15 +11,24 @@ interface IStringListFieldProps {
   value: string[];
   tooltipText?: string;
   onChange: (value: string[]) => void;
+  onSave?: () => void;
 }
 
 const StringListField = ({
   label,
   value,
   tooltipText,
-  onChange
+  onChange,
+  onSave,
 }: IStringListFieldProps) => {
   const [open, setOpen] = useState(false);
+
+  const handleSave = () => {
+    if (onSave) {
+      onSave();
+    }
+    setOpen(false);
+  };
 
   return (
     <div>
@@ -67,7 +76,7 @@ const StringListField = ({
               label="Save"
               color="primary"
               className="w-40"
-              onClick={() => setOpen(false)}
+              onClick={handleSave}
             />
           </div>
         </div>

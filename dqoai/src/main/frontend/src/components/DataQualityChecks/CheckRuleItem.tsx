@@ -11,6 +11,7 @@ interface CheckRuleItemProps {
   onChange: (parameters: UIRuleParametersModel) => void;
   type: 'error' | 'warning' | 'fatal';
   disabled?: boolean;
+  onUpdate: () => void;
 }
 
 const buttonLabelMap = {
@@ -29,7 +30,8 @@ const CheckRuleItem = ({
   parameters,
   onChange,
   type,
-  disabled
+  disabled,
+  onUpdate
 }: CheckRuleItemProps) => {
   const handleRuleParameterChange = (field: UIFieldModel, idx: number) => {
     const newParameters = parameters?.rule_parameters?.map((item, index) =>
@@ -85,6 +87,7 @@ const CheckRuleItem = ({
                 }
                 disabled={disabled}
                 className="!max-w-25 !min-w-25"
+                onSave={onUpdate}
               />
             </div>
           ))}
